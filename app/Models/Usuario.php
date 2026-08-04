@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class Usuario extends Authenticatable
 {
-    use HasRoles;
+    use HasRoles, Notifiable;
 
     protected $table = 'usuarios';
     protected $guard_name = 'web';
@@ -16,8 +17,39 @@ class Usuario extends Authenticatable
     const UPDATED_AT = 'actualizado_en';
 
     protected $fillable = [
-        'nombre', 'apellido', 'email', 'password_hash', 'telefono',
+        'nombre',
+        'apellido',
+        'email',
+        'password_hash',
+        'telefono',
     ];
 
-    protected $hidden = ['password_hash', 'remember_token'];
+    protected $hidden = [
+        'password_hash',
+        'remember_token',
+    ];
+
+    /**
+     * Obtiene el nombre del atributo de la contraseña para autenticación.
+     */
+    public function getAuthPasswordName(): string
+    {
+        return 'password_hash';
+    }
+
+    /**
+     * Obtiene el hash de la contraseña para autenticación.
+     */
+    public function getAuthPassword(): string
+    {
+        return (string) $this->password_hash;
+    }
+
+    /**
+     * Obtiene el nombre completo del usuario.
+     */
+    public function getNombreCompletoAttribute(): string
+    {
+        return trim("{$this->nombre} {$this->apellido}");
+    }
 }
