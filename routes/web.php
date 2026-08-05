@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,9 +28,7 @@ Route::get('/dashboard', function () {
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
 // Si un Cliente intenta entrar directamente a /admin/dashboard, recibe un error 403 (Prohibido).
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
 
 // 5. Gestión de Perfil de Usuario
