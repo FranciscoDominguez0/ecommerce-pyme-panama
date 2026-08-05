@@ -8,19 +8,11 @@
     <!-- ==========================================
          HERO SECTION: TIENDA DE TECNOLOGÍA & EQUIPOS IT
     =========================================== -->
-    <section class="relative max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-8 md:pt-14 pb-8">
+    <section class="relative max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-4 md:pt-8 pb-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             
             <!-- Left Column: Copy & Actions -->
             <div class="flex flex-col gap-stack-md sm:gap-stack-lg z-10 text-left">
-                
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-primary-fixed text-on-primary-fixed text-xs font-semibold w-fit">
-                    <span class="flex h-2 w-2 relative">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-                    </span>
-                    <span class="font-label-caps text-[11px] font-bold">🇵🇦 TECNOLOGÍA & EQUIPOS IT EN PANAMÁ</span>
-                </div>
 
                 <h1 class="font-headline-md text-3xl sm:text-4xl lg:text-5xl font-bold text-primary tracking-tight leading-tight">
                     Equipos tecnológicos e informática para tu empresa y hogar.
@@ -64,25 +56,27 @@
             </div>
 
             <!-- Right Column: Hero Visual Asset -->
-            <div class="relative w-full aspect-video lg:aspect-square rounded-2xl overflow-hidden border border-outline-variant/80 bg-surface-container shadow-xl group">
-                <img src="{{ asset('images/hero-tech-collection.png') }}" 
-                     alt="Equipos Tecnológicos e Informáticos en Panamá" 
-                     class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 block"/>
-                
-                <!-- Gradient overlay badge -->
-                <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md p-3.5 sm:p-4 rounded-xl border border-white/60 shadow-lg flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-[#002349] text-[#8af5be] flex items-center justify-center font-bold shadow-xs shrink-0">
-                            <span class="material-symbols-outlined text-[20px]">verified</span>
+            <div class="flex justify-center lg:justify-end">
+                <div class="relative w-full max-w-md lg:max-w-[460px] aspect-[4/3] rounded-2xl overflow-hidden border border-outline-variant/80 bg-surface-container shadow-lg group">
+                    <img src="{{ asset('images/hero-tech-collection.png') }}" 
+                         alt="Equipos Tecnológicos e Informáticos en Panamá" 
+                         class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 block"/>
+                    
+                    <!-- Floating overlay badge -->
+                    <div class="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3 rounded-xl border border-white/60 shadow-md flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-lg bg-[#002349] text-[#8af5be] flex items-center justify-center font-bold shadow-xs shrink-0">
+                                <span class="material-symbols-outlined text-[18px]">verified</span>
+                            </div>
+                            <div>
+                                <p class="font-headline-md text-xs font-bold text-primary">Equipos Garantizados</p>
+                                <p class="font-label-caps text-[9px] text-gray-500">Garantía local & Factura Fiscal</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-headline-md text-xs sm:text-sm font-bold text-primary">Equipos 100% Garantizados</p>
-                            <p class="font-label-caps text-[10px] text-gray-500">Garantía local & Factura Fiscal ITBMS (7%)</p>
-                        </div>
+                        <span class="font-label-caps text-[9px] bg-secondary text-on-secondary px-2.5 py-1 rounded font-bold shadow-xs shrink-0">
+                            Stock Local
+                        </span>
                     </div>
-                    <span class="font-label-caps text-[10px] bg-secondary text-on-secondary px-3 py-1.5 rounded-md font-bold shadow-xs shrink-0">
-                        Stock Local 🇵🇦
-                    </span>
                 </div>
             </div>
 
@@ -114,32 +108,6 @@
                 <span class="font-label-caps text-xs sm:text-label-caps font-bold text-primary">Envíos a las 10 Provincias</span>
             </div>
 
-        </div>
-    </section>
-
-    <!-- ==========================================
-         BENEFICIO DE BIENVENIDA (ENVÍO GRATIS)
-    =========================================== -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-        <div class="bg-primary text-on-primary rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left shadow-lg border border-primary-container">
-            <div class="flex items-center gap-3.5">
-                <div class="w-12 h-12 rounded-xl bg-secondary text-on-secondary flex items-center justify-center shrink-0 shadow-sm">
-                    <span class="material-symbols-outlined text-2xl">local_shipping</span>
-                </div>
-                <div>
-                    <h3 class="font-headline-md text-base sm:text-lg font-bold text-white">
-                        Envío GRATIS en tu primera compra superior a $35
-                    </h3>
-                    <p class="font-body-md text-xs sm:text-sm text-primary-fixed mt-0.5">
-                        Válido para laptops, accesorios, suministros y periféricos en todo Panamá.
-                    </p>
-                </div>
-            </div>
-
-            <a href="#catalogo" class="bg-secondary hover:bg-[#004f3b] text-on-secondary font-label-caps text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all shadow-sm font-bold shrink-0 inline-flex items-center gap-2">
-                <span>Ver Productos</span>
-                <span class="material-symbols-outlined text-base">arrow_forward</span>
-            </a>
         </div>
     </section>
 
@@ -319,6 +287,83 @@
     </section>
 
     <!-- ==========================================
+         CARRUSEL DE MARCAS (MANUAL)
+    =========================================== -->
+    <section class="py-10 bg-white border-b border-outline-variant/40">
+        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+
+            <p class="font-label-caps text-xs font-bold text-on-surface-variant tracking-widest uppercase text-center mb-7">Marcas que distribuimos</p>
+
+            <div class="brands-slider-outer">
+                <button class="brands-arrow brands-arrow-left" id="brandsPrev" aria-label="Anterior">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+
+                <div class="brands-viewport" id="brandsViewport">
+                    <div class="brands-track-manual" id="brandsTrack">
+                        @foreach ([
+                            'image.webp', 'image (1).webp', 'image (2).webp', 'image (3).webp',
+                            'image (4).webp', 'image (5).webp', 'image (6).webp', 'image (7).webp',
+                            'image (8).webp', 'image (9).webp', 'image (10).webp', 'image (11).webp',
+                            'image (12).webp', 'image (13).webp', 'image (14).webp', 'image (15).webp',
+                            'image (16).webp'
+                        ] as $brand)
+                        <div class="brand-logo-card-m">
+                            <img src="{{ asset('images/Marcas/' . $brand) }}" alt="Marca tecnológica" loading="lazy" class="brand-logo-img-m"/>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <button class="brands-arrow brands-arrow-right" id="brandsNext" aria-label="Siguiente">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <style>
+        .brands-slider-outer { position:relative; display:flex; align-items:center; gap:12px; }
+        .brands-viewport     { overflow:hidden; flex:1; min-width:0; }
+        .brands-track-manual { display:flex; align-items:center; gap:20px; transition:transform 0.45s cubic-bezier(.25,.46,.45,.94); will-change:transform; }
+        .brand-logo-card-m   { flex-shrink:0; width:160px; height:90px; background:#fff; border:1.5px solid #e5e7eb; border-radius:14px; display:flex; align-items:center; justify-content:center; padding:14px 18px; box-shadow:0 2px 8px rgba(0,0,0,.06); transition:box-shadow .25s ease,border-color .25s ease,transform .25s ease; cursor:default; }
+        .brand-logo-card-m:hover { box-shadow:0 6px 20px rgba(0,0,0,.11); border-color:#94a3b8; transform:translateY(-3px); }
+        .brand-logo-img-m    { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; }
+        .brands-arrow        { flex-shrink:0; width:44px; height:44px; border-radius:50%; border:1.5px solid #e2e8f0; background:#fff; color:#1e293b; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.08); transition:background .2s,box-shadow .2s,border-color .2s,transform .15s; z-index:10; }
+        .brands-arrow:hover  { background:#f8fafc; border-color:#94a3b8; box-shadow:0 4px 14px rgba(0,0,0,.12); transform:scale(1.07); }
+        .brands-arrow:active { transform:scale(0.96); }
+        .brands-arrow:disabled { opacity:.35; cursor:not-allowed; transform:none; }
+        .brands-arrow .material-symbols-outlined { font-size:22px; line-height:1; }
+    </style>
+
+    <script>
+        (function () {
+            const track = document.getElementById('brandsTrack');
+            const vp    = document.getElementById('brandsViewport');
+            const prev  = document.getElementById('brandsPrev');
+            const next  = document.getElementById('brandsNext');
+            if (!track || !prev || !next) return;
+            const GAP = 20, CW = 160, STEP = CW + GAP;
+            const total = track.querySelectorAll('.brand-logo-card-m').length;
+            let cur = 0;
+            const vis = () => Math.floor((vp.offsetWidth + GAP) / STEP) || 1;
+            const max = () => Math.max(0, total - vis());
+            const upd = (a = true) => {
+                if (!a) track.style.transition = 'none';
+                track.style.transform = `translateX(-${cur * STEP}px)`;
+                if (!a) requestAnimationFrame(() => { track.style.transition = ''; });
+                prev.disabled = cur === 0;
+                next.disabled = cur >= max();
+            };
+            prev.addEventListener('click', () => { if (cur > 0)      { cur--; upd(); } });
+            next.addEventListener('click', () => { if (cur < max())  { cur++; upd(); } });
+            window.addEventListener('resize', () => { cur = Math.min(cur, max()); upd(false); });
+            upd(false);
+        })();
+    </script>
+
+    <!-- ==========================================
          PROCESO FÁCIL & TRANSPARENTE
     =========================================== -->
     <section class="bg-surface-container-low py-14 border-y border-outline-variant/60">
@@ -465,31 +510,67 @@
     </section>
 
     <!-- ==========================================
-         CALL TO ACTION FINAL
+         CUPÓN DE BIENVENIDA (PREMIUM)
     =========================================== -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-        <div class="bg-primary text-on-primary py-12 sm:py-16 px-6 sm:px-12 rounded-3xl text-center shadow-xl relative overflow-hidden">
-            <div class="max-w-2xl mx-auto space-y-4">
-                <h2 class="font-headline-md text-2xl sm:text-4xl font-bold text-white tracking-tight">
-                    Equipa tu negocio con tecnología confiable
-                </h2>
-                <p class="font-body-lg text-xs sm:text-sm text-primary-fixed leading-relaxed">
-                    Encuentra las mejores marcas de computación, accesorios y servicios informáticos con el respaldo, rapidez y seguridad de PayMe Panamá.
-                </p>
-                <div class="pt-3 flex flex-wrap justify-center gap-3.5">
-                    @guest
-                        <a href="{{ route('register') }}" class="bg-secondary hover:bg-[#004f3b] text-on-secondary font-label-caps text-xs sm:text-sm px-8 py-3.5 rounded-xl shadow-md hover:scale-105 transition-all font-bold">
-                            Crear Cuenta de Cliente
-                        </a>
-                        <a href="{{ route('login') }}" class="bg-transparent border border-on-primary text-on-primary hover:bg-white/10 font-label-caps text-xs sm:text-sm px-8 py-3.5 rounded-xl transition-colors font-semibold">
-                            Ingresar
-                        </a>
-                    @else
-                        <a href="{{ route('dashboard') }}" class="bg-secondary hover:bg-[#004f3b] text-on-secondary font-label-caps text-xs sm:text-sm px-8 py-3.5 rounded-xl shadow-md hover:scale-105 transition-all font-bold">
-                            Ir a Mi Panel de Control
-                        </a>
-                    @endguest
+    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4 sm:py-6">
+        <div class="relative overflow-hidden rounded-2xl shadow-lg border border-white/[0.06]" 
+             style="background: linear-gradient(135deg, #0a1628 0%, #0d2140 45%, #052318 100%);">
+            
+            <!-- Subtle noise/grain overlay -->
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E&quot;); background-size: 128px;"></div>
+            
+            <!-- Accent glow blobs -->
+            <div class="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10 pointer-events-none" style="background: radial-gradient(circle, #34d399 0%, transparent 70%); transform: translate(30%, -40%);"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10 pointer-events-none" style="background: radial-gradient(circle, #60a5fa 0%, transparent 70%); transform: translate(-30%, 40%);"></div>
+
+            <!-- Left accent border -->
+            <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style="background: linear-gradient(to bottom, #34d399, #10b981, #059669);"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 px-6 sm:px-8 py-5 md:py-4">
+                
+                <!-- Left: Icon + Text -->
+                <div class="flex items-center gap-4 text-center md:text-left">
+                    <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
+                         style="background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(16,185,129,0.08)); border: 1px solid rgba(52,211,153,0.25);">
+                        <span class="material-symbols-outlined text-emerald-400" style="font-size:22px; font-variation-settings: 'FILL' 1;">local_activity</span>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300/90">
+                                Cupón de Bienvenida
+                            </span>
+                            <span class="hidden sm:flex items-center gap-1 text-[10px] font-medium text-slate-400">
+                                <span class="w-0.5 h-0.5 rounded-full bg-slate-500 inline-block"></span>
+                                Por tiempo limitado · 10 Provincias
+                            </span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug">
+                            Envío Gratis en tu Primera Compra
+                        </h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                            Laptops, periféricos y accesorios informáticos en todo Panamá.
+                        </p>
+                    </div>
                 </div>
+
+                <!-- Right: Code + Copy -->
+                <div class="flex items-stretch gap-0 shrink-0 rounded-xl overflow-hidden border border-white/[0.1] shadow-inner"
+                     style="background: rgba(0,0,0,0.35);">
+                    <div class="px-4 py-2.5 flex flex-col justify-center border-r border-white/[0.08]">
+                        <span class="text-[9px] uppercase tracking-widest font-bold text-slate-500 leading-none mb-1">Código</span>
+                        <span class="font-mono text-xs sm:text-sm font-extrabold text-emerald-300 tracking-widest select-all leading-tight">
+                            ENVIOGRATIS-PTY
+                        </span>
+                    </div>
+                    <button type="button"
+                            onclick="copyCouponCode('ENVIOGRATIS-PTY')"
+                            class="px-4 py-2.5 flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white hover:bg-white/[0.06] active:bg-emerald-500/20 transition-all cursor-pointer group">
+                        <span class="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform">content_copy</span>
+                        <span class="text-[9px] font-semibold uppercase tracking-wider">Copiar</span>
+                    </button>
+                </div>
+
             </div>
         </div>
     </section>
@@ -519,6 +600,18 @@
 
     function addToCart(name, price) {
         showToast(`¡"${name}" ($${price.toFixed(2)}) añadido a tu orden!`);
+    }
+
+    function copyCouponCode(code) {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`¡Cupón "${code}" copiado al portapapeles!`);
+            }).catch(() => {
+                showToast(`¡Cupón "${code}" listo para usar!`);
+            });
+        } else {
+            showToast(`¡Cupón "${code}" listo para usar!`);
+        }
     }
 </script>
 @endpush

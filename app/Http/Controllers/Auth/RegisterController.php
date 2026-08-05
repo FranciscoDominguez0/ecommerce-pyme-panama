@@ -70,7 +70,7 @@ class RegisterController extends Controller
             \Illuminate\Support\Facades\DB::table('usuario_roles')->insertOrIgnore([
                 'usuario_id' => $usuario->id,
                 'rol_id' => 5, // ID rol cliente
-                'model_type' => \App\Models\Usuario::class,
+                'model_type' => Usuario::class,
                 'asignado_en' => now(),
             ]);
         }

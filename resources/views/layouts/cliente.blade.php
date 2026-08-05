@@ -7,13 +7,20 @@
 
     <title>{{ config('app.name', 'PayMe Panamá') }} - @yield('title', 'Tienda Online')</title>
 
+    <!-- Favicon & Iconos Oficiales -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-192.png') }}">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 
     <!-- Tipografía Oficial de Laravel: Figtree & Material Symbols -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:300,400,500,600,700,800,900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet"/>
 
     <script>
         tailwind.config = {
@@ -93,8 +100,16 @@
             font-style: normal;
             font-size: 20px;
             line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
             display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
             -webkit-font-smoothing: antialiased;
+            font-feature-settings: 'liga';
+            text-rendering: optimizeLegibility;
         }
         .whatsapp-float {
             position: fixed;
@@ -126,10 +141,10 @@
 
     <!-- Top Notification Banner -->
     <div class="bg-[#002349] text-white text-[11px] font-semibold py-1.5 px-4 text-center flex items-center justify-center gap-2">
-        <span>🇵🇦 Envíos rápidos en todo Panamá</span>
+        <span>Envíos a todo Panamá</span>
         <span class="opacity-40">•</span>
         <span class="flex items-center gap-1 text-[#8af5be]">
-            <span class="material-symbols-outlined text-[13px]">verified_user</span> Pagos Seguros con Yappy, Tarjeta & ACH
+            <span class="material-symbols-outlined text-[13px]">verified_user</span> Pagos con Yappy, Tarjeta & ACH
         </span>
     </div>
 
@@ -266,7 +281,7 @@
                         
                         <!-- Yappy Official Logo -->
                         <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0" title="Yappy Comercial Panamá">
-                            <img src="{{ asset('images/yappy-logo.png') }}" alt="Yappy Panamá" class="max-h-full max-w-full w-auto h-auto object-contain block"/>
+                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy Panamá" class="max-h-full max-w-full w-auto h-auto object-contain block"/>
                         </div>
 
                         <!-- Visa Official Logo -->

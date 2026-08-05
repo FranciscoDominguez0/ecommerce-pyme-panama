@@ -7,13 +7,20 @@
 
     <title>{{ config('app.name', 'PayMe Panamá') }} - @yield('title', 'Panel de Administración')</title>
 
+    <!-- Favicon & Iconos Oficiales -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo-192.png') }}">
+
     <!-- Tailwind CSS CDN con plugins -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     
     <!-- Fuente Oficial de Laravel: Figtree & Material Symbols -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
 
     <script>
         tailwind.config = {
@@ -57,10 +64,10 @@
             display: inline-block;
             -webkit-font-smoothing: antialiased;
         }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
         .card-elevated {
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
@@ -73,134 +80,170 @@
 <body class="bg-[#f8fafc] text-[#0f172a] min-h-screen flex text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
     <!-- Mobile Sidebar Drawer (Overlay) -->
-    <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-[#0c1b2f]/70 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
+    <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-[#070d18]/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
 
-    <!-- Sidebar Admin Ejecutivo (Midnight Oxford Navy - Tono Azul de Alta Gama) -->
-    <aside id="admin-sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#0c1b2f] text-[#eaf1ff] py-5 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out border-r border-[#172c49] shadow-2xl flex flex-col justify-between">
+    <!-- Sidebar Admin Ejecutivo (Deep Slate Navy & Emerald Accents) -->
+    <aside id="admin-sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#09111e] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out border-r border-slate-800/80 shadow-2xl flex flex-col justify-between select-none">
         
-        <!-- Logo & Header -->
-        <div>
-            <div class="px-5 mb-6 flex items-center justify-between">
+        <!-- Header & Navigation -->
+        <div class="flex flex-col flex-1 min-h-0">
+            
+            <!-- Brand Logo Header -->
+            <div class="px-5 py-4 border-b border-slate-800/80 flex items-center justify-between bg-gradient-to-b from-white/[0.03] to-transparent">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                    <x-application-logo size="default" class="group-hover:scale-105 transition-transform" />
+                    <div class="p-1.5 rounded-xl bg-gradient-to-br from-emerald-500/20 to-blue-500/10 border border-emerald-500/30 group-hover:border-emerald-400/60 transition-all shadow-inner">
+                        <x-application-logo size="default" class="group-hover:scale-105 transition-transform" />
+                    </div>
                     <div>
-                        <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight flex items-center gap-1">
+                        <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">
                             PayMe <span class="text-emerald-400 font-bold">Panamá</span>
                         </h1>
-                        <span class="text-[10px] font-semibold text-[#8ca4c4] tracking-wider uppercase block">Panel PyME</span>
+                        <span class="text-[10px] font-medium text-slate-400 tracking-wide block">Panel Administrativo</span>
                     </div>
                 </a>
-                <button onclick="toggleSidebar()" class="md:hidden text-[#8ca4c4] hover:text-white p-1">
-                    <span class="material-symbols-outlined">close</span>
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
             </div>
 
-            <!-- Navigation Links -->
-            <div class="px-3 flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-210px)]">
-                <div class="text-[10px] font-bold text-[#627d9f] uppercase tracking-widest mb-1.5 px-3">Módulos</div>
+            <!-- Navigation Links (Scrollable with custom scrollbar) -->
+            <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-4">
+                
+                <!-- Grupo 1: General -->
+                <div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                        General
+                    </div>
+                    <div class="space-y-0.5">
+                        <!-- Dashboard -->
+                        <a href="{{ route('admin.dashboard') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
+                            <span class="truncate">Dashboard</span>
+                        </a>
 
-                <!-- Dashboard -->
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-[#183358] text-white shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->routeIs('admin.dashboard') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
-                    <span>Dashboard</span>
-                </a>
+                        <!-- Pedidos & Ventas -->
+                        <a href="{{ url('/admin/pedidos') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/pedidos*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">shopping_bag</span>
+                            <span class="truncate">Pedidos & Ventas</span>
+                        </a>
+                    </div>
+                </div>
 
-                <!-- Pedidos / Ventas -->
-                <a href="{{ url('/admin/pedidos') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/pedidos*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">sync_alt</span>
-                    <span>Pedidos & Ventas</span>
-                </a>
+                <!-- Grupo 2: Catálogo & Stock -->
+                <div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                        Catálogo & Stock
+                    </div>
+                    <div class="space-y-0.5">
+                        <!-- Productos -->
+                        <a href="{{ url('/admin/productos') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/productos*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/productos*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">inventory_2</span>
+                            <span class="truncate">Productos</span>
+                        </a>
 
-                <!-- Catálogo & Productos -->
-                <a href="{{ url('/admin/productos') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/productos*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/productos*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">inventory_2</span>
-                    <span>Productos</span>
-                </a>
+                        <!-- Categorías -->
+                        <a href="{{ url('/admin/categorias') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/categorias*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/categorias*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">category</span>
+                            <span class="truncate">Categorías</span>
+                        </a>
 
-                <!-- Categorías -->
-                <a href="{{ url('/admin/categorias') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/categorias*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/categorias*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">category</span>
-                    <span>Categorías</span>
-                </a>
+                        <!-- Inventario -->
+                        <a href="{{ url('/admin/inventario') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/inventario*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/inventario*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">warehouse</span>
+                            <span class="truncate">Inventario</span>
+                        </a>
+                    </div>
+                </div>
 
-                <!-- Inventario -->
-                <a href="{{ url('/admin/inventario') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/inventario*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/inventario*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">warehouse</span>
-                    <span>Inventario</span>
-                </a>
+                <!-- Grupo 3: Clientes & Facturación -->
+                <div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                        Clientes & Finanzas
+                    </div>
+                    <div class="space-y-0.5">
+                        <!-- Clientes / Usuarios -->
+                        <a href="{{ url('/admin/usuarios') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/usuarios*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">group</span>
+                            <span class="truncate">Clientes / Usuarios</span>
+                        </a>
 
-                <!-- Clientes & Usuarios -->
-                <a href="{{ url('/admin/usuarios') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/usuarios*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/usuarios*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">group</span>
-                    <span>Clientes / Usuarios</span>
-                </a>
+                        <!-- Facturación Fiscal -->
+                        <a href="{{ url('/admin/facturas') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/facturas*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/facturas*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">receipt_long</span>
+                            <span class="truncate">Facturación Fiscal</span>
+                        </a>
 
-                <!-- Facturación -->
-                <a href="{{ url('/admin/facturas') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/facturas*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/facturas*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">receipt_long</span>
-                    <span>Facturación</span>
-                </a>
+                        <!-- Cupones de Descuento -->
+                        <a href="{{ url('/admin/cupones') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/cupones*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/cupones*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">local_activity</span>
+                            <span class="truncate">Cupones</span>
+                        </a>
 
-                <!-- Cupones -->
-                <a href="{{ url('/admin/cupones') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/cupones*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/cupones*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">local_activity</span>
-                    <span>Cupones</span>
-                </a>
+                        <!-- Reportes -->
+                        <a href="{{ url('/admin/reportes') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/reportes*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/reportes*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">bar_chart</span>
+                            <span class="truncate">Reportes</span>
+                        </a>
+                    </div>
+                </div>
 
-                <!-- Reportes -->
-                <a href="{{ url('/admin/reportes') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/reportes*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/reportes*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">bar_chart</span>
-                    <span>Reportes</span>
-                </a>
+                <!-- Grupo 4: Sistema & Auditoría -->
+                <div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                        Sistema & Seguridad
+                    </div>
+                    <div class="space-y-0.5">
+                        <!-- Auditoría -->
+                        <a href="{{ url('/admin/auditoria') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/auditoria*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/auditoria*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">security</span>
+                            <span class="truncate">Auditoría</span>
+                        </a>
 
-                <div class="text-[10px] font-bold text-[#627d9f] uppercase tracking-widest mt-3 mb-1.5 px-3">Sistema</div>
+                        <!-- Configuración -->
+                        <a href="{{ url('/admin/configuracion') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/configuracion*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/configuracion*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">settings</span>
+                            <span class="truncate">Configuración</span>
+                        </a>
+                    </div>
+                </div>
 
-                <!-- Auditoría -->
-                <a href="{{ url('/admin/auditoria') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/auditoria*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/auditoria*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">security</span>
-                    <span>Auditoría</span>
-                </a>
-
-                <!-- Configuración -->
-                <a href="{{ url('/admin/configuracion') }}" 
-                   class="group flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all {{ request()->is('admin/configuracion*') ? 'bg-[#183358] text-white font-semibold shadow-xs border-l-4 border-emerald-400' : 'text-[#93a7c3] hover:bg-[#13263f] hover:text-white' }}">
-                    <span class="material-symbols-outlined text-[18px] {{ request()->is('admin/configuracion*') ? 'text-emerald-400' : 'text-[#728ba8] group-hover:text-[#93a7c3]' }}">settings</span>
-                    <span>Configuración</span>
-                </a>
-            </div>
+            </nav>
         </div>
 
-        <!-- Sidebar Footer -->
-        <div class="px-4 pt-3 border-t border-[#172c49] flex flex-col gap-1.5">
-            <!-- Link to Public Store -->
+        <!-- Sidebar Footer / Actions -->
+        <div class="p-3 border-t border-slate-800/80 bg-gradient-to-t from-black/20 to-transparent space-y-1.5">
+            
+            <!-- Quick Link: Ver Tienda Pública -->
             <a href="{{ url('/') }}" target="_blank" 
-               class="flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-[#eaf1ff] bg-[#13263f] hover:bg-[#183358] hover:text-white border border-[#1e3b63] transition-colors">
-                <span class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[16px] text-emerald-400">storefront</span>
-                    <span>Ver Tienda</span>
+               class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-white/[0.03] hover:bg-white/[0.08] hover:text-white border border-slate-800 hover:border-slate-700 transition-all group">
+                <span class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-[17px] text-emerald-400 group-hover:scale-110 transition-transform">storefront</span>
+                    <span>Ver Tienda Online</span>
                 </span>
-                <span class="material-symbols-outlined text-[14px] text-[#8ca4c4]">open_in_new</span>
+                <span class="material-symbols-outlined text-[15px] text-slate-400 group-hover:text-white">open_in_new</span>
             </a>
 
-            <!-- Logout -->
-            <form method="POST" action="{{ route('logout') }}">
+            <!-- Logout Button -->
+            <form method="POST" action="{{ route('logout') }}" class="w-full">
                 @csrf
                 <button type="submit" 
-                        class="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium text-rose-300 hover:text-rose-200 hover:bg-rose-500/10 transition-colors">
-                    <span class="material-symbols-outlined text-[16px]">logout</span>
+                        class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-300/90 hover:text-rose-200 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all group">
+                    <span class="material-symbols-outlined text-[17px] text-rose-400 group-hover:-translate-x-0.5 transition-transform">logout</span>
                     <span>Cerrar Sesión</span>
                 </button>
             </form>
+
         </div>
     </aside>
 
