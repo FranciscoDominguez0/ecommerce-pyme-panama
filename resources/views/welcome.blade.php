@@ -6,110 +6,119 @@
 <div class="space-y-12 sm:space-y-16 pb-16">
 
     <!-- ==========================================
-         HERO SECTION: TIENDA DE TECNOLOGÍA & EQUIPOS IT
+         HERO SECTION: DARK TECH STYLE
     =========================================== -->
-    <section class="relative max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-4 md:pt-8 pb-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            
-            <!-- Left Column: Copy & Actions -->
-            <div class="flex flex-col gap-stack-md sm:gap-stack-lg z-10 text-left">
+    <section class="relative w-full overflow-hidden" style="background: linear-gradient(135deg, #060d18 0%, #0b1628 40%, #091a10 100%); min-height: 420px;">
 
-                <h1 class="font-headline-md text-3xl sm:text-4xl lg:text-5xl font-bold text-primary tracking-tight leading-tight">
-                    Equipos tecnológicos e informática para tu empresa y hogar.
+        <!-- Glow blobs -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute top-[-80px] right-[-60px] w-[500px] h-[500px] rounded-full opacity-20" style="background: radial-gradient(circle, #22c55e 0%, transparent 65%);"></div>
+            <div class="absolute bottom-[-60px] left-[-40px] w-[300px] h-[300px] rounded-full opacity-10" style="background: radial-gradient(circle, #3b82f6 0%, transparent 65%);"></div>
+        </div>
+
+        <div class="relative z-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col lg:flex-row items-center gap-0 min-h-[420px]">
+
+            <!-- Left: Copy -->
+            <div class="flex-1 flex flex-col justify-center gap-6 py-10 lg:py-14 pr-0 lg:pr-10">
+
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight">
+                    Tecnología que impulsa<br>
+                    tu <span style="color: #22c55e;">productividad.</span>
                 </h1>
 
-                <p class="font-body-lg text-base sm:text-lg text-on-surface-variant max-w-xl leading-relaxed">
-                    Laptops empresariales, accesorios y componentes con garantía local, facturación fiscal <strong class="text-primary font-semibold">ITBMS (7%)</strong> y pagos seguros con <strong class="text-primary font-semibold">Yappy, Tarjetas & ACH</strong>.
+                <p class="text-sm sm:text-base text-slate-400 max-w-md leading-relaxed">
+                    Equipos de alto rendimiento, componentes originales,<br class="hidden sm:block"> accesorios y soporte local en Panamá.
                 </p>
 
+                <!-- Botones CTA originales -->
                 <div class="flex flex-wrap gap-3.5 pt-2">
-                    <a href="#catalogo" class="bg-primary hover:bg-primary-container text-on-primary font-label-caps text-xs sm:text-sm px-6 py-3.5 rounded shadow-sm hover:opacity-95 transition-all inline-flex items-center gap-2 font-semibold">
+                    <a href="#catalogo" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white transition-all shadow-lg hover:brightness-110 active:scale-95" style="background:#22c55e;">
                         <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
                         <span>Explorar Catálogo</span>
                     </a>
 
                     @guest
-                        <a href="{{ route('register') }}" class="bg-transparent border border-primary text-primary hover:bg-surface-container font-label-caps text-xs sm:text-sm px-6 py-3.5 rounded transition-colors inline-flex items-center gap-2 font-semibold">
+                        <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white border transition-all hover:bg-white/10 active:scale-95" style="border-color:rgba(255,255,255,0.3);">
                             <span class="material-symbols-outlined text-[18px]">person_add</span>
                             <span>Crear Cuenta</span>
                         </a>
                     @else
-                        <a href="{{ route('dashboard') }}" class="bg-transparent border border-primary text-primary hover:bg-surface-container font-label-caps text-xs sm:text-sm px-6 py-3.5 rounded transition-colors inline-flex items-center gap-2 font-semibold">
+                        <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white border transition-all hover:bg-white/10 active:scale-95" style="border-color:rgba(255,255,255,0.3);">
                             <span class="material-symbols-outlined text-[18px]">account_circle</span>
                             <span>Ir a Mi Cuenta</span>
                         </a>
                     @endguest
                 </div>
 
-                <!-- Trust Badges Small -->
-                <div class="pt-3 border-t border-outline-variant/60 flex flex-wrap items-center gap-4 text-xs font-medium text-on-surface-variant">
-                    <div class="flex items-center gap-1 text-secondary">
-                        <span class="material-symbols-outlined text-base">verified</span>
-                        <span class="font-label-caps text-[11px] text-primary">Garantía Local en Panamá</span>
+                <!-- Trust badges pequeños originales -->
+                <div class="pt-3 border-t flex flex-wrap items-center gap-4 text-xs" style="border-color:rgba(255,255,255,0.1);">
+                    <div class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base" style="color:#22c55e;">verified</span>
+                        <span class="text-slate-300 text-[11px] font-semibold">Garantía Local en Panamá</span>
                     </div>
-                    <div class="flex items-center gap-1 text-secondary">
-                        <span class="material-symbols-outlined text-base">local_shipping</span>
-                        <span class="font-label-caps text-[11px] text-primary">Envíos a las 10 Provincias</span>
+                    <div class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-base" style="color:#22c55e;">local_shipping</span>
+                        <span class="text-slate-300 text-[11px] font-semibold">Envíos a las 10 Provincias</span>
                     </div>
+                </div>
+
+
+            </div>
+
+            <!-- Right: GIF hero slider -->
+            <div class="w-full lg:w-[52%] shrink-0 self-stretch min-h-[320px] lg:min-h-full relative overflow-hidden" id="heroSlider">
+
+                <!-- Slide 1 -->
+                <img src="{{ asset('images/ARMA TU PC A MEDIDA (6).gif') }}"
+                     alt="Arma tu PC a Medida"
+                     class="hero-slide absolute inset-0 w-full h-full object-cover block transition-opacity duration-700"
+                     style="max-height:480px; object-position:center; opacity:1;"/>
+
+                <!-- Slide 2 -->
+                <img src="{{ asset('images/PORTATILES.gif') }}"
+                     alt="Portátiles en Panamá"
+                     class="hero-slide absolute inset-0 w-full h-full object-cover block transition-opacity duration-700"
+                     style="max-height:480px; object-position:center; opacity:0;"/>
+
+                <!-- Slide 3 -->
+                <img src="{{ asset('images/PERIFERICOS BAJA.gif') }}"
+                     alt="Periféricos en Panamá"
+                     class="hero-slide absolute inset-0 w-full h-full object-cover block transition-opacity duration-700"
+                     style="max-height:480px; object-position:center; opacity:0;"/>
+
+                <!-- Dot indicators -->
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="heroDots">
+                    <button class="hero-dot w-2.5 h-2.5 rounded-full border border-white/50 transition-all" style="background:#22c55e;" aria-label="Slide 1"></button>
+                    <button class="hero-dot w-2.5 h-2.5 rounded-full border border-white/50 transition-all" style="background:rgba(255,255,255,0.35);" aria-label="Slide 2"></button>
+                    <button class="hero-dot w-2.5 h-2.5 rounded-full border border-white/50 transition-all" style="background:rgba(255,255,255,0.35);" aria-label="Slide 3"></button>
                 </div>
 
             </div>
 
-            <!-- Right Column: Hero Visual Asset -->
-            <div class="flex justify-center lg:justify-end">
-                <div class="relative w-full max-w-md lg:max-w-[460px] aspect-[4/3] rounded-2xl overflow-hidden border border-outline-variant/80 bg-surface-container shadow-lg group">
-                    <img src="{{ asset('images/hero-tech-collection.png') }}" 
-                         alt="Equipos Tecnológicos e Informáticos en Panamá" 
-                         class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 block"/>
-                    
-                    <!-- Floating overlay badge -->
-                    <div class="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3 rounded-xl border border-white/60 shadow-md flex items-center justify-between">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-lg bg-[#002349] text-[#8af5be] flex items-center justify-center font-bold shadow-xs shrink-0">
-                                <span class="material-symbols-outlined text-[18px]">verified</span>
-                            </div>
-                            <div>
-                                <p class="font-headline-md text-xs font-bold text-primary">Equipos Garantizados</p>
-                                <p class="font-label-caps text-[9px] text-gray-500">Garantía local & Factura Fiscal</p>
-                            </div>
-                        </div>
-                        <span class="font-label-caps text-[9px] bg-secondary text-on-secondary px-2.5 py-1 rounded font-bold shadow-xs shrink-0">
-                            Stock Local
-                        </span>
-                    </div>
-                </div>
-            </div>
+            <script>
+                (function(){
+                    const slides = document.querySelectorAll('.hero-slide');
+                    const dots   = document.querySelectorAll('.hero-dot');
+                    let cur = 0;
+
+                    function goTo(n) {
+                        slides[cur].style.opacity = '0';
+                        dots[cur].style.background = 'rgba(255,255,255,0.35)';
+                        cur = (n + slides.length) % slides.length;
+                        slides[cur].style.opacity = '1';
+                        dots[cur].style.background = '#22c55e';
+                    }
+
+                    dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); goTo(i); timer = setInterval(() => goTo(cur + 1), 4000); }));
+
+                    let timer = setInterval(() => goTo(cur + 1), 4000);
+                })();
+            </script>
+
 
         </div>
     </section>
 
-    <!-- ==========================================
-         BARRA DE CONFIANZA INSTITUCIONAL (TRUST BAR)
-    =========================================== -->
-    <section class="bg-surface-container border-y border-outline-variant py-6">
-        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-stack-md">
-            
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">payments</span>
-                <span class="font-label-caps text-xs sm:text-label-caps font-bold text-primary">Pagos con Yappy & ACH</span>
-            </div>
-
-            <div class="hidden md:block w-px h-6 bg-outline-variant/60"></div>
-
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
-                <span class="font-label-caps text-xs sm:text-label-caps font-bold text-primary">Facturación Fiscal ITBMS (7%)</span>
-            </div>
-
-            <div class="hidden md:block w-px h-6 bg-outline-variant/60"></div>
-
-            <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
-                <span class="font-label-caps text-xs sm:text-label-caps font-bold text-primary">Envíos a las 10 Provincias</span>
-            </div>
-
-        </div>
-    </section>
 
     <!-- ==========================================
          PRODUCTOS DESTACADOS (SHOWCASE DE TECNOLOGÍA)
@@ -126,165 +135,156 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <!-- Product 1: Laptop Empresarial -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 flex flex-col hover:shadow-xl hover:border-secondary transition-all duration-300 group">
-                <div class="aspect-4/3 bg-white border border-gray-100 rounded-xl mb-4 overflow-hidden relative flex items-center justify-center p-3">
-                    <img alt="Laptop Empresarial 15.6 Core i5" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/products/laptop-hp.png') }}"/>
-                    <span class="absolute top-2.5 left-2.5 bg-primary text-on-primary font-label-caps text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                        Más Vendido
-                    </span>
+
+            <!-- Product 1: Laptop Asus Vivobook -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
+                    <span class="absolute top-3 left-3 bg-violet-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-8%</span>
+                    <img src="{{ asset('images/products/Laptop Asus Vivobook.webp') }}" alt="Laptop Asus Vivobook" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <h3 class="font-headline-md text-primary text-base font-bold mb-1 group-hover:text-secondary transition-colors">
-                    Laptop Empresarial 15.6" (Core i5 / 16GB / 512GB SSD)
-                </h3>
-                <p class="font-body-md text-xs text-on-surface-variant mb-4 flex-grow line-clamp-2">
-                    Potencia y portabilidad para teletrabajo, contabilidad y oficinas. Garantía local de 1 año con soporte directo en Panamá.
-                </p>
-                <div class="flex justify-between items-center pt-3 border-t border-outline-variant/40">
-                    <div>
-                        <span class="font-numeric-data text-lg text-primary font-bold block">$525.00</span>
-                        <span class="font-label-caps text-[9px] text-gray-400">+ ITBMS (7%)</span>
+                <div class="p-4 flex flex-col flex-grow">
+                    <p class="text-[10px] font-semibold text-violet-600 uppercase tracking-wide mb-1">ASUS</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Laptop Asus Vivobook 15</h3>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-amber-400 text-sm leading-none">★★★★★</span>
+                        <span class="text-xs text-gray-400">(47)</span>
                     </div>
-                    <button type="button" onclick="addToCart('Laptop Empresarial 15.6', 525.00)" class="bg-secondary text-on-secondary px-3.5 py-2 rounded-lg font-label-caps text-xs hover:opacity-90 transition-opacity flex items-center gap-1 shadow-xs font-semibold">
-                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                        <span>Comprar</span>
+                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
+                        <span class="text-xl font-extrabold text-gray-900">$525.00</span>
+                        <span class="text-sm text-gray-400 line-through">$569.00</span>
+                    </div>
+                    <button onclick="addToCart('Laptop Asus Vivobook', 525.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
+                        Agregar al carrito
                     </button>
                 </div>
             </div>
 
-            <!-- Product 2: Impresora EcoTank -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 flex flex-col hover:shadow-xl hover:border-secondary transition-all duration-300 group">
-                <div class="aspect-4/3 bg-white border border-gray-100 rounded-xl mb-4 overflow-hidden relative flex items-center justify-center p-3">
-                    <img alt="Impresora Multifuncional EcoTank WiFi" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/products/impresora-ecotank.png') }}"/>
-                    <span class="absolute top-2.5 left-2.5 bg-emerald-600 text-white font-label-caps text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                        Ahorro Oficina
-                    </span>
+            <!-- Product 2: Impresora HP Smart Tank 583 -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
+                    <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-12%</span>
+                    <img src="{{ asset('images/products/Impresora Multifuncional HP Smart Tank 583.webp') }}" alt="Impresora HP Smart Tank 583" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <h3 class="font-headline-md text-primary text-base font-bold mb-1 group-hover:text-secondary transition-colors">
-                    Impresora Multifuncional EcoTank WiFi
-                </h3>
-                <p class="font-body-md text-xs text-on-surface-variant mb-4 flex-grow line-clamp-2">
-                    Sistema continuo de tinta con impresión inalámbrica y escáner. Miles de páginas a costo ultra bajo para tu negocio.
-                </p>
-                <div class="flex justify-between items-center pt-3 border-t border-outline-variant/40">
-                    <div>
-                        <span class="font-numeric-data text-lg text-primary font-bold block">$195.00</span>
-                        <span class="font-label-caps text-[9px] text-gray-400">+ ITBMS (7%)</span>
+                <div class="p-4 flex flex-col flex-grow">
+                    <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">HP</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Impresora Multifuncional HP Smart Tank 583</h3>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-amber-400 text-sm leading-none">★★★★</span><span class="text-gray-300 text-sm leading-none">★</span>
+                        <span class="text-xs text-gray-400">(28)</span>
                     </div>
-                    <button type="button" onclick="addToCart('Impresora Multifuncional EcoTank', 195.00)" class="bg-secondary text-on-secondary px-3.5 py-2 rounded-lg font-label-caps text-xs hover:opacity-90 transition-opacity flex items-center gap-1 shadow-xs font-semibold">
-                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                        <span>Comprar</span>
+                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
+                        <span class="text-xl font-extrabold text-gray-900">$195.00</span>
+                        <span class="text-sm text-gray-400 line-through">$220.00</span>
+                    </div>
+                    <button onclick="addToCart('Impresora HP Smart Tank 583', 195.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
+                        Agregar al carrito
                     </button>
                 </div>
             </div>
 
-            <!-- Product 3: Monitor Profesional 27" -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 flex flex-col hover:shadow-xl hover:border-secondary transition-all duration-300 group">
-                <div class="aspect-4/3 bg-white border border-gray-100 rounded-xl mb-4 overflow-hidden relative flex items-center justify-center p-3">
-                    <img alt="Monitor Profesional 27 Full HD IPS" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/products/monitor-ips.png') }}"/>
-                    <span class="absolute top-2.5 left-2.5 bg-blue-600 text-white font-label-caps text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                        Garantía Local
-                    </span>
+            <!-- Product 3: Monitor TUF Gaming Asus -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
+                    <span class="absolute top-3 left-3 bg-blue-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-10%</span>
+                    <img src="{{ asset('images/products/Monitor Flat TUF Gaming Asus.webp') }}" alt="Monitor TUF Gaming Asus" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <h3 class="font-headline-md text-primary text-base font-bold mb-1 group-hover:text-secondary transition-colors">
-                    Monitor Profesional 27" IPS Full HD HDMI
-                </h3>
-                <p class="font-body-md text-xs text-on-surface-variant mb-4 flex-grow line-clamp-2">
-                    Pantalla ultradelgada antirreflejo con base ergonómica y protección ocular para máxima productividad diaria.
-                </p>
-                <div class="flex justify-between items-center pt-3 border-t border-outline-variant/40">
-                    <div>
-                        <span class="font-numeric-data text-lg text-primary font-bold block">$139.00</span>
-                        <span class="font-label-caps text-[9px] text-gray-400">+ ITBMS (7%)</span>
+                <div class="p-4 flex flex-col flex-grow">
+                    <p class="text-[10px] font-semibold text-blue-600 uppercase tracking-wide mb-1">ASUS TUF</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Monitor Flat TUF Gaming Asus</h3>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-amber-400 text-sm leading-none">★★★★★</span>
+                        <span class="text-xs text-gray-400">(63)</span>
                     </div>
-                    <button type="button" onclick="addToCart('Monitor Profesional 27 IPS', 139.00)" class="bg-secondary text-on-secondary px-3.5 py-2 rounded-lg font-label-caps text-xs hover:opacity-90 transition-opacity flex items-center gap-1 shadow-xs font-semibold">
-                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                        <span>Comprar</span>
+                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
+                        <span class="text-xl font-extrabold text-gray-900">$239.00</span>
+                        <span class="text-sm text-gray-400 line-through">$265.00</span>
+                    </div>
+                    <button onclick="addToCart('Monitor TUF Gaming Asus', 239.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
+                        Agregar al carrito
                     </button>
                 </div>
             </div>
 
-            <!-- Product 4: Combo Teclado & Mouse Inalámbrico -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 flex flex-col hover:shadow-xl hover:border-secondary transition-all duration-300 group">
-                <div class="aspect-4/3 bg-white border border-gray-100 rounded-xl mb-4 overflow-hidden relative flex items-center justify-center p-3">
-                    <img alt="Combo Teclado y Mouse Inalámbrico" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/products/combo-teclado-mouse.png') }}"/>
-                    <span class="absolute top-2.5 left-2.5 bg-secondary text-on-secondary font-label-caps text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                        Envío Rápido
-                    </span>
+            <!-- Product 4: Caja ATX Deepcool CH780 -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
+                    <span class="absolute top-3 left-3 bg-gray-800 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-5%</span>
+                    <img src="{{ asset('images/products/Caja ATX Deepcool CH780.webp') }}" alt="Caja ATX Deepcool CH780" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <h3 class="font-headline-md text-primary text-base font-bold mb-1 group-hover:text-secondary transition-colors">
-                    Combo Teclado & Mouse Inalámbrico
-                </h3>
-                <p class="font-body-md text-xs text-on-surface-variant mb-4 flex-grow line-clamp-2">
-                    Conexión confiable de 2.4GHz con receptor nano USB, diseño silencioso y durabilidad garantizada para oficinas.
-                </p>
-                <div class="flex justify-between items-center pt-3 border-t border-outline-variant/40">
-                    <div>
-                        <span class="font-numeric-data text-lg text-primary font-bold block">$32.00</span>
-                        <span class="font-label-caps text-[9px] text-gray-400">+ ITBMS (7%)</span>
+                <div class="p-4 flex flex-col flex-grow">
+                    <p class="text-[10px] font-semibold text-gray-600 uppercase tracking-wide mb-1">DEEPCOOL</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Caja ATX Deepcool CH780 Full Tower</h3>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-amber-400 text-sm leading-none">★★★★</span><span class="text-gray-300 text-sm leading-none">★</span>
+                        <span class="text-xs text-gray-400">(19)</span>
                     </div>
-                    <button type="button" onclick="addToCart('Combo Teclado y Mouse', 32.00)" class="bg-secondary text-on-secondary px-3.5 py-2 rounded-lg font-label-caps text-xs hover:opacity-90 transition-opacity flex items-center gap-1 shadow-xs font-semibold">
-                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                        <span>Comprar</span>
+                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
+                        <span class="text-xl font-extrabold text-gray-900">$189.00</span>
+                        <span class="text-sm text-gray-400 line-through">$199.00</span>
+                    </div>
+                    <button onclick="addToCart('Caja ATX Deepcool CH780', 189.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
+                        Agregar al carrito
                     </button>
                 </div>
             </div>
 
-            <!-- Product 5: Disco Sólido SSD 1TB -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 flex flex-col hover:shadow-xl hover:border-secondary transition-all duration-300 group">
-                <div class="aspect-4/3 bg-white border border-gray-100 rounded-xl mb-4 overflow-hidden relative flex items-center justify-center p-3">
-                    <img alt="Disco Sólido Externo SSD 1TB USB-C" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/products/disco-ssd.png') }}"/>
-                    <span class="absolute top-2.5 left-2.5 bg-purple-700 text-white font-label-caps text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                        Top Almacenamiento
-                    </span>
+            <!-- Product 5: Asus PRIME GeForce RTX 5070 -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
+                    <span class="absolute top-3 left-3 bg-purple-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-6%</span>
+                    <span class="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg z-10">NUEVO</span>
+                    <img src="{{ asset('images/products/Tarjeta de video Asus PRIME GeForce RTX 5070.webp') }}" alt="Asus PRIME GeForce RTX 5070" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <h3 class="font-headline-md text-primary text-base font-bold mb-1 group-hover:text-secondary transition-colors">
-                    Disco Sólido Externo SSD 1TB USB-C
-                </h3>
-                <p class="font-body-md text-xs text-on-surface-variant mb-4 flex-grow line-clamp-2">
-                    Velocidades de transferencia de hasta 1050 MB/s con carcasa resistente. Respaldos inmediatos y seguros para tu negocio.
-                </p>
-                <div class="flex justify-between items-center pt-3 border-t border-outline-variant/40">
-                    <div>
-                        <span class="font-numeric-data text-lg text-primary font-bold block">$79.00</span>
-                        <span class="font-label-caps text-[9px] text-gray-400">+ ITBMS (7%)</span>
+                <div class="p-4 flex flex-col flex-grow">
+                    <p class="text-[10px] font-semibold text-purple-700 uppercase tracking-wide mb-1">ASUS PRIME</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">GeForce RTX 5070 12GB GDDR7</h3>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-amber-400 text-sm leading-none">★★★★★</span>
+                        <span class="text-xs text-gray-400">(32)</span>
                     </div>
-                    <button type="button" onclick="addToCart('Disco Solido Externo SSD 1TB', 79.00)" class="bg-secondary text-on-secondary px-3.5 py-2 rounded-lg font-label-caps text-xs hover:opacity-90 transition-opacity flex items-center gap-1 shadow-xs font-semibold">
-                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                        <span>Comprar</span>
+                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
+                        <span class="text-xl font-extrabold text-gray-900">$749.00</span>
+                        <span class="text-sm text-gray-400 line-through">$799.00</span>
+                    </div>
+                    <button onclick="addToCart('Asus PRIME GeForce RTX 5070', 749.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
+                        Agregar al carrito
                     </button>
                 </div>
             </div>
 
-            <!-- Product 6: Router Gigabit WiFi 6 -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-5 flex flex-col hover:shadow-xl hover:border-secondary transition-all duration-300 group">
-                <div class="aspect-4/3 bg-white border border-gray-100 rounded-xl mb-4 overflow-hidden relative flex items-center justify-center p-3">
-                    <img alt="Router Gigabit Doble Banda WiFi 6" class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-500" src="{{ asset('images/products/router-wifi.png') }}"/>
-                    <span class="absolute top-2.5 left-2.5 bg-amber-600 text-white font-label-caps text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                        Redes & Conectividad
-                    </span>
+            <!-- Product 6: Enrutador Mercusys MR50G -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
+                    <span class="absolute top-3 left-3 bg-amber-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-15%</span>
+                    <img src="{{ asset('images/products/Enrutador Inalámbrico Mercusys MR50G.webp') }}" alt="Enrutador Mercusys MR50G" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
                 </div>
-                <h3 class="font-headline-md text-primary text-base font-bold mb-1 group-hover:text-secondary transition-colors">
-                    Router Gigabit Doble Banda WiFi 6
-                </h3>
-                <p class="font-body-md text-xs text-on-surface-variant mb-4 flex-grow line-clamp-2">
-                    Cobertura extendida para conectar múltiples equipos, impresoras en red y cajas registradoras con cero interrupciones.
-                </p>
-                <div class="flex justify-between items-center pt-3 border-t border-outline-variant/40">
-                    <div>
-                        <span class="font-numeric-data text-lg text-primary font-bold block">$58.00</span>
-                        <span class="font-label-caps text-[9px] text-gray-400">+ ITBMS (7%)</span>
+                <div class="p-4 flex flex-col flex-grow">
+                    <p class="text-[10px] font-semibold text-amber-600 uppercase tracking-wide mb-1">MERCUSYS</p>
+                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Enrutador Inalámbrico MR50G Doble Banda</h3>
+                    <div class="flex items-center gap-1 mb-3">
+                        <span class="text-amber-400 text-sm leading-none">★★★★</span><span class="text-gray-300 text-sm leading-none">★</span>
+                        <span class="text-xs text-gray-400">(41)</span>
                     </div>
-                    <button type="button" onclick="addToCart('Router Gigabit WiFi 6', 58.00)" class="bg-secondary text-on-secondary px-3.5 py-2 rounded-lg font-label-caps text-xs hover:opacity-90 transition-opacity flex items-center gap-1 shadow-xs font-semibold">
-                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                        <span>Comprar</span>
+                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
+                        <span class="text-xl font-extrabold text-gray-900">$58.00</span>
+                        <span class="text-sm text-gray-400 line-through">$68.00</span>
+                    </div>
+                    <button onclick="addToCart('Enrutador Mercusys MR50G', 58.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
+                        Agregar al carrito
                     </button>
                 </div>
             </div>
-
+        
         </div>
     </section>
+
+
 
     <!-- ==========================================
          CARRUSEL DE MARCAS (MANUAL)
@@ -364,47 +364,88 @@
     </script>
 
     <!-- ==========================================
-         PROCESO FÁCIL & TRANSPARENTE
+         CÓMO FUNCIONA / PROCESO
     =========================================== -->
-    <section class="bg-surface-container-low py-14 border-y border-outline-variant/60">
-        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-            <h2 class="font-headline-md text-primary text-center mb-10 text-2xl sm:text-3xl font-bold">
-                Proceso Fácil & Transparente
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <div class="text-center flex flex-col items-center p-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/60">
-                    <div class="w-16 h-16 bg-primary-fixed rounded-2xl flex items-center justify-center mb-4 text-primary shadow-xs">
-                        <span class="material-symbols-outlined text-3xl">laptop_chromebook</span>
-                    </div>
-                    <h3 class="font-headline-md text-primary text-lg font-bold mb-2">1. Elige tus Equipos</h3>
-                    <p class="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                        Explora nuestro catálogo de tecnología garantizada y añade a tu orden con un solo clic.
-                    </p>
+    <section class="relative py-12 overflow-hidden border-y border-outline-variant/30" id="proceso-section">
+
+        {{-- Fondo sutil --}}
+        <div class="absolute inset-0 bg-surface-container-low/60 pointer-events-none"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent"></div>
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-primary/25 to-transparent"></div>
+
+        <div class="relative max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+
+            {{-- Header compacto alineado a la izquierda en desktop --}}
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-10">
+                <div>
+                    <p class="text-[10px] font-bold tracking-[0.2em] uppercase text-primary mb-1.5">Cómo funciona</p>
+                    <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-on-surface leading-tight">
+                        De la selección a tu puerta<br class="hidden sm:block"> en minutos
+                    </h2>
+                </div>
+                <p class="text-xs text-on-surface-variant max-w-xs leading-relaxed md:text-right">
+                    Proceso 100% digital, sin filas ni papeleo.<br>Confirmación inmediata en cada etapa.
+                </p>
+            </div>
+
+            {{-- Steps: layout horizontal tipo pipeline --}}
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative">
+
+                {{-- Línea de progreso desktop --}}
+                <div class="hidden sm:block absolute top-5 left-[calc(16.5%+1.5rem)] right-[calc(16.5%+1.5rem)] h-[2px] z-0">
+                    <div class="h-full bg-gradient-to-r from-primary/20 via-primary/50 to-primary/20 rounded-full"></div>
                 </div>
 
-                <div class="text-center flex flex-col items-center p-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/60">
-                    <div class="w-16 h-16 bg-primary-fixed rounded-2xl flex items-center justify-center mb-4 text-primary shadow-xs">
-                        <span class="material-symbols-outlined text-3xl">credit_card</span>
-                    </div>
-                    <h3 class="font-headline-md text-primary text-lg font-bold mb-2">2. Paga con Yappy, ACH o Tarjeta</h3>
-                    <p class="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                        Transacciones seguras y al instante con bancos locales y confirmación inmediata.
-                    </p>
-                </div>
+                @php
+                $steps = [
+                    ['num'=>'01','icon'=>'manage_search','title'=>'Explora y elige','desc'=>'Filtra por categoría, marca o precio. Stock actualizado en tiempo real con ficha técnica completa.','tag'=>'Sin cuenta requerida'],
+                    ['num'=>'02','icon'=>'lock','title'=>'Pago seguro','desc'=>'Yappy, ACH, tarjeta o transferencia bancaria. Cifrado SSL con confirmación al instante.','tag'=>'Confirmación instantánea'],
+                    ['num'=>'03','icon'=>'local_shipping','title'=>'Recibe con garantía','desc'=>'Despacho el mismo día hábil. Tracking en tiempo real y factura fiscal con ITBMS incluida.','tag'=>'Garantía local'],
+                ];
+                @endphp
 
-                <div class="text-center flex flex-col items-center p-6 bg-surface-container-lowest rounded-2xl border border-outline-variant/60">
-                    <div class="w-16 h-16 bg-primary-fixed rounded-2xl flex items-center justify-center mb-4 text-primary shadow-xs">
-                        <span class="material-symbols-outlined text-3xl">local_shipping</span>
+                @foreach($steps as $step)
+                <div class="group relative flex flex-col p-5 bg-surface-container-lowest rounded-2xl border border-outline-variant/40 hover:border-primary/30 transition-all duration-300 hover:shadow-lg overflow-hidden z-10">
+                    {{-- Acento lateral izquierdo --}}
+                    <div class="absolute left-0 top-4 bottom-4 w-[3px] rounded-r-full bg-primary/20 group-hover:bg-primary/60 transition-colors duration-300"></div>
+
+                    {{-- Número grande de fondo --}}
+                    <span class="absolute top-2 right-3 text-5xl font-black text-outline-variant/15 select-none leading-none">{{ $step['num'] }}</span>
+
+                    {{-- Icono + número pequeño --}}
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary/15 transition-colors duration-300">
+                            <span class="material-symbols-outlined text-xl">{{ $step['icon'] }}</span>
+                        </div>
+                        <span class="text-[10px] font-black tracking-widest text-primary/50 uppercase">Paso {{ $step['num'] }}</span>
                     </div>
-                    <h3 class="font-headline-md text-primary text-lg font-bold mb-2">3. Recibe con Garantía Local</h3>
-                    <p class="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed">
-                        Envíos rápidos y asegurados a cualquier provincia de Panamá con factura fiscal.
-                    </p>
+
+                    <h3 class="text-sm font-bold text-on-surface mb-1.5 leading-snug">{{ $step['title'] }}</h3>
+                    <p class="text-xs text-on-surface-variant leading-relaxed flex-1">{{ $step['desc'] }}</p>
+
+                    <div class="mt-4 flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-primary/70 shrink-0"></span>
+                        <span class="text-[10px] font-semibold text-primary/80 tracking-wide">{{ $step['tag'] }}</span>
+                    </div>
                 </div>
+                @endforeach
 
             </div>
+
+            {{-- Trust strip --}}
+            <div class="mt-8 pt-6 border-t border-outline-variant/30 flex flex-wrap justify-center items-center gap-x-7 gap-y-2">
+                @foreach([
+                    ['receipt_long','Factura fiscal ITBMS'],
+                    ['support_agent','Soporte vía WhatsApp'],
+                    ['verified_user','Garantía oficial'],
+                ] as [$ico,$label])
+                <span class="flex items-center gap-1.5 text-[11px] text-on-surface-variant/80">
+                    <span class="material-symbols-outlined text-[14px] text-primary">{{ $ico }}</span>
+                    {{ $label }}
+                </span>
+                @endforeach
+            </div>
+
         </div>
     </section>
 
@@ -467,113 +508,120 @@
     </section>
 
     <!-- ==========================================
-         PREGUNTAS FRECUENTES (FAQ)
+         CARRUSEL DE BANNERS PROMOCIONALES
     =========================================== -->
-    <section class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop py-8">
-        <h2 class="font-headline-md text-primary text-center mb-8 text-2xl sm:text-3xl font-bold">
-            Preguntas Frecuentes (FAQ)
-        </h2>
-        
-        <div class="space-y-3.5">
-            
-            <details class="bg-surface-container-lowest border border-outline-variant rounded-xl group transition-all">
-                <summary class="font-headline-md text-xs sm:text-sm font-bold text-primary p-4 cursor-pointer flex justify-between items-center list-none">
-                    <span>¿Puedo adquirir equipos y pagar con Yappy o ACH como empresa?</span>
-                    <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-gray-400">expand_more</span>
-                </summary>
-                <div class="p-4 pt-0 font-body-md text-xs sm:text-sm text-on-surface-variant border-t border-outline-variant mt-2 leading-relaxed">
-                    Sí, aceptamos Yappy Comercial, Tarjetas Visa/Mastercard y transferencias bancarias directas ACH con emisión de factura fiscal detallando el ITBMS (7%).
-                </div>
-            </details>
+    <section class="w-full overflow-hidden relative" id="bannerCarousel" style="max-height:340px;">
 
-            <details class="bg-surface-container-lowest border border-outline-variant rounded-xl group transition-all">
-                <summary class="font-headline-md text-xs sm:text-sm font-bold text-primary p-4 cursor-pointer flex justify-between items-center list-none">
-                    <span>¿Cuánto tardan los envíos al interior del país?</span>
-                    <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-gray-400">expand_more</span>
-                </summary>
-                <div class="p-4 pt-0 font-body-md text-xs sm:text-sm text-on-surface-variant border-t border-outline-variant mt-2 leading-relaxed">
-                    Los envíos a provincias centrales tardan de 24 a 48 horas, y a Chiriquí o Bocas del Toro hasta 72 horas hábiles con número de seguimiento y empaque de protección.
-                </div>
-            </details>
-
-            <details class="bg-surface-container-lowest border border-outline-variant rounded-xl group transition-all">
-                <summary class="font-headline-md text-xs sm:text-sm font-bold text-primary p-4 cursor-pointer flex justify-between items-center list-none">
-                    <span>¿Los equipos cuentan con garantía local en Panamá?</span>
-                    <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-gray-400">expand_more</span>
-                </summary>
-                <div class="p-4 pt-0 font-body-md text-xs sm:text-sm text-on-surface-variant border-t border-outline-variant mt-2 leading-relaxed">
-                    Todos los equipos informáticos, laptops, componentes y periféricos cuentan con garantía local respaldada directamente en Panamá.
-                </div>
-            </details>
-
-        </div>
-    </section>
-
-    <!-- ==========================================
-         CUPÓN DE BIENVENIDA (PREMIUM)
-    =========================================== -->
-    <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-4 sm:py-6">
-        <div class="relative overflow-hidden rounded-2xl shadow-lg border border-white/[0.06]" 
-             style="background: linear-gradient(135deg, #0a1628 0%, #0d2140 45%, #052318 100%);">
-            
-            <!-- Subtle noise/grain overlay -->
-            <div class="absolute inset-0 opacity-[0.03]" style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E&quot;); background-size: 128px;"></div>
-            
-            <!-- Accent glow blobs -->
-            <div class="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10 pointer-events-none" style="background: radial-gradient(circle, #34d399 0%, transparent 70%); transform: translate(30%, -40%);"></div>
-            <div class="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10 pointer-events-none" style="background: radial-gradient(circle, #60a5fa 0%, transparent 70%); transform: translate(-30%, 40%);"></div>
-
-            <!-- Left accent border -->
-            <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style="background: linear-gradient(to bottom, #34d399, #10b981, #059669);"></div>
-
-            <!-- Content -->
-            <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 px-6 sm:px-8 py-5 md:py-4">
-                
-                <!-- Left: Icon + Text -->
-                <div class="flex items-center gap-4 text-center md:text-left">
-                    <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
-                         style="background: linear-gradient(135deg, rgba(52,211,153,0.2), rgba(16,185,129,0.08)); border: 1px solid rgba(52,211,153,0.25);">
-                        <span class="material-symbols-outlined text-emerald-400" style="font-size:22px; font-variation-settings: 'FILL' 1;">local_activity</span>
-                    </div>
-                    <div>
-                        <div class="flex flex-wrap items-center gap-2 mb-1">
-                            <span class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300/90">
-                                Cupón de Bienvenida
-                            </span>
-                            <span class="hidden sm:flex items-center gap-1 text-[10px] font-medium text-slate-400">
-                                <span class="w-0.5 h-0.5 rounded-full bg-slate-500 inline-block"></span>
-                                Por tiempo limitado · 10 Provincias
-                            </span>
-                        </div>
-                        <h3 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug">
-                            Envío Gratis en tu Primera Compra
-                        </h3>
-                        <p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
-                            Laptops, periféricos y accesorios informáticos en todo Panamá.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Right: Code + Copy -->
-                <div class="flex items-stretch gap-0 shrink-0 rounded-xl overflow-hidden border border-white/[0.1] shadow-inner"
-                     style="background: rgba(0,0,0,0.35);">
-                    <div class="px-4 py-2.5 flex flex-col justify-center border-r border-white/[0.08]">
-                        <span class="text-[9px] uppercase tracking-widest font-bold text-slate-500 leading-none mb-1">Código</span>
-                        <span class="font-mono text-xs sm:text-sm font-extrabold text-emerald-300 tracking-widest select-all leading-tight">
-                            ENVIOGRATIS-PTY
-                        </span>
-                    </div>
-                    <button type="button"
-                            onclick="copyCouponCode('ENVIOGRATIS-PTY')"
-                            class="px-4 py-2.5 flex flex-col items-center justify-center gap-0.5 text-slate-300 hover:text-white hover:bg-white/[0.06] active:bg-emerald-500/20 transition-all cursor-pointer group">
-                        <span class="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform">content_copy</span>
-                        <span class="text-[9px] font-semibold uppercase tracking-wider">Copiar</span>
-                    </button>
-                </div>
-
+        <!-- Slides wrapper -->
+        <div id="bannerTrack" class="flex transition-transform duration-700 ease-in-out" style="will-change:transform;">
+            @foreach ([
+                'BANNERS AGOSTO_Mesa de trabajo 1.webp',
+                'BANNERS ENERO 2_Mesa de trabajo.webp',
+                'BANNERS - COMPONENTES_Mesa de tr.webp',
+                'BANNERS - COMPONENTES_Mesa de tr (1).webp',
+            ] as $banner)
+            <div class="w-full shrink-0" style="min-width:100%;">
+                <img src="{{ asset('images/Banners/' . $banner) }}"
+                     alt="Banner promocional PayMe Panamá"
+                     class="w-full object-cover block"
+                     style="max-height:340px; object-position:center;"/>
             </div>
+            @endforeach
         </div>
+
+        <!-- Arrows -->
+        <button id="bannerPrev" aria-label="Anterior"
+                class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/65 text-white flex items-center justify-center transition-all backdrop-blur-sm">
+            <span class="material-symbols-outlined text-[22px]">chevron_left</span>
+        </button>
+        <button id="bannerNext" aria-label="Siguiente"
+                class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/65 text-white flex items-center justify-center transition-all backdrop-blur-sm">
+            <span class="material-symbols-outlined text-[22px]">chevron_right</span>
+        </button>
+
+        <!-- Dots -->
+        <div id="bannerDots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            @foreach ([
+                'BANNERS AGOSTO_Mesa de trabajo 1.webp',
+                'BANNERS ENERO 2_Mesa de trabajo.webp',
+                'BANNERS - COMPONENTES_Mesa de tr.webp',
+                'BANNERS - COMPONENTES_Mesa de tr (1).webp',
+            ] as $i => $b)
+            <button class="banner-dot w-2.5 h-2.5 rounded-full border border-white/60 transition-all"
+                    style="background: {{ $i === 0 ? '#22c55e' : 'rgba(255,255,255,0.4)' }};"
+                    aria-label="Slide {{ $i + 1 }}"></button>
+            @endforeach
+        </div>
+
     </section>
+
+    <script>
+        (function(){
+            const track  = document.getElementById('bannerTrack');
+            const dots   = document.querySelectorAll('.banner-dot');
+            const total  = dots.length;
+
+            // Clone first and last slides for infinite effect
+            const slides = Array.from(track.children);
+            const firstClone = slides[0].cloneNode(true);
+            const lastClone  = slides[total - 1].cloneNode(true);
+            track.appendChild(firstClone);
+            track.insertBefore(lastClone, slides[0]);
+
+            // Start at index 1 (real first slide, skipping the prepended clone)
+            let cur = 1;
+            track.style.transition = 'none';
+            track.style.transform  = `translateX(-${cur * 100}%)`;
+
+            function updateDots(realIdx) {
+                dots.forEach((d, i) => d.style.background = i === realIdx ? '#22c55e' : 'rgba(255,255,255,0.4)');
+            }
+
+            function goTo(n) {
+                cur = n;
+                track.style.transition = 'transform 0.7s ease-in-out';
+                track.style.transform  = `translateX(-${cur * 100}%)`;
+                // real index = cur - 1, clamped within [0, total-1]
+                const realIdx = Math.min(Math.max(cur - 1, 0), total - 1);
+                updateDots(realIdx);
+            }
+
+            // After transition ends: if we're on a clone, jump instantly to real counterpart
+            track.addEventListener('transitionend', () => {
+                if (cur === 0) {
+                    // Was on prepended clone of last → jump to real last
+                    track.style.transition = 'none';
+                    cur = total;
+                    track.style.transform = `translateX(-${cur * 100}%)`;
+                } else if (cur === total + 1) {
+                    // Was on appended clone of first → jump to real first
+                    track.style.transition = 'none';
+                    cur = 1;
+                    track.style.transform = `translateX(-${cur * 100}%)`;
+                }
+            });
+
+            document.getElementById('bannerPrev').addEventListener('click', () => {
+                clearInterval(timer);
+                goTo(cur - 1);
+                timer = setInterval(() => goTo(cur + 1), 5000);
+            });
+            document.getElementById('bannerNext').addEventListener('click', () => {
+                clearInterval(timer);
+                goTo(cur + 1);
+                timer = setInterval(() => goTo(cur + 1), 5000);
+            });
+            dots.forEach((d, i) => d.addEventListener('click', () => {
+                clearInterval(timer);
+                goTo(i + 1); // +1 because index 0 is the prepended clone
+                timer = setInterval(() => goTo(cur + 1), 5000);
+            }));
+
+            updateDots(0);
+            let timer = setInterval(() => goTo(cur + 1), 5000);
+        })();
+    </script>
+
 
 </div>
 
