@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,10 @@ Route::get('/dashboard', function () {
 // Si un Cliente intenta entrar directamente a /admin/dashboard, recibe un error 403 (Prohibido).
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Módulo de Categorías
+    Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');
+    Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
 });
 
 // 5. Gestión de Perfil de Usuario

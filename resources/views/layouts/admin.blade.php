@@ -49,6 +49,10 @@
     </script>
 
     <style>
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
         body { 
             font-family: 'Figtree', sans-serif; 
             letter-spacing: -0.011em;
@@ -66,8 +70,8 @@
         }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .card-elevated {
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
@@ -77,7 +81,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-[#f8fafc] text-[#0f172a] min-h-screen flex text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900">
+<body class="bg-[#f8fafc] text-[#0f172a] min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-hidden relative">
 
     <!-- Mobile Sidebar Drawer (Overlay) -->
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-[#070d18]/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
@@ -248,47 +252,67 @@
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen min-w-0 w-full max-w-full overflow-x-hidden">
         
-        <!-- TopNavBar -->
-        <header class="sticky top-0 z-30 w-full px-4 sm:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-4">
+        <!-- TopNavBar Ejecutivo (Fijo al ancho de pantalla del móvil) -->
+        <header class="sticky top-0 z-30 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
             
-            <!-- Left: Toggle & Search -->
-            <div class="flex items-center gap-4 flex-1">
+            <!-- Left: Toggle & Responsive Breadcrumbs -->
+            <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
                 <!-- Hamburger Button (Mobile) -->
-                <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg">
-                    <span class="material-symbols-outlined">menu</span>
+                <button onclick="toggleSidebar()" class="md:hidden p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Abrir menú">
+                    <span class="material-symbols-outlined text-[22px]">menu</span>
                 </button>
 
-                <!-- Search Input -->
-                <div class="hidden sm:flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 w-full max-w-md focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-900/5 transition-all">
-                    <span class="material-symbols-outlined text-slate-400 text-[18px]">search</span>
-                    <input type="text" 
-                           placeholder="Buscar pedidos, productos, clientes, facturas..." 
-                           class="bg-transparent border-none focus:ring-0 w-full text-xs text-slate-800 placeholder:text-slate-400 p-0 ml-2"/>
-                    <kbd class="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono font-medium text-slate-400 bg-white border border-slate-200 rounded">Ctrl+K</kbd>
-                </div>
+                <!-- Breadcrumbs de Navegación (Ultra-Responsive para celular) -->
+                <nav class="flex items-center gap-1 sm:gap-1.5 text-xs text-slate-500 font-medium min-w-0 flex-nowrap overflow-hidden" aria-label="Breadcrumb">
+                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors shrink-0" title="Panel Principal">
+                        <span class="material-symbols-outlined text-[17px] text-slate-400">home</span>
+                        <span class="hidden sm:inline">Panel</span>
+                    </a>
+                    
+                    @hasSection('breadcrumbs')
+                        @yield('breadcrumbs')
+                    @else
+                        @if(request()->segment(2))
+                            <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
+                            <span class="capitalize text-slate-600 truncate max-w-[90px] sm:max-w-none">{{ str_replace('-', ' ', request()->segment(2)) }}</span>
+                        @endif
+                        @if(request()->segment(3) && !is_numeric(request()->segment(3)))
+                            <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
+                            <span class="capitalize font-bold text-slate-900 truncate max-w-[90px] sm:max-w-none">{{ str_replace('-', ' ', request()->segment(3)) }}</span>
+                        @endif
+                    @endif
+                </nav>
             </div>
 
-            <!-- Right: Actions & User Info -->
-            <div class="flex items-center gap-3 text-slate-800">
+            <!-- Right: Live Clock, Notifications & User Profile (Siempre visible en el extremo derecho) -->
+            <div class="flex items-center gap-2 sm:gap-3 text-slate-800 shrink-0 ml-auto">
+                
+                <!-- Reloj / Fecha en Tiempo Real (Panamá GMT-5 / 12 Horas) -->
+                <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold select-none shadow-2xs" title="Hora Oficial de Panamá (GMT-5)">
+                    <span class="material-symbols-outlined text-[16px] text-emerald-600">schedule</span>
+                    <span id="topbar-live-clock">{{ \Carbon\Carbon::now('America/Panama')->locale('es')->isoFormat('ddd, D MMM · hh:mm A') }}</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">PA</span>
+                </div>
+
                 <!-- Notifications -->
-                <button class="relative p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors" title="Notificaciones">
+                <button class="relative p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0" title="Notificaciones">
                     <span class="material-symbols-outlined text-[18px]">notifications</span>
                     <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
                 </button>
 
-                <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
+                <div class="h-4 w-px bg-slate-200 shrink-0"></div>
 
                 <!-- User Profile Badge -->
-                <div class="flex items-center gap-2.5">
-                    <div class="w-7 h-7 rounded-full bg-[#0c1b2f] text-white font-bold flex items-center justify-center text-xs shadow-xs">
+                <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
+                    <div class="w-8 h-8 rounded-full bg-[#09111e] text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-slate-100 shrink-0">
                         {{ strtoupper(substr(Auth::user()->nombre ?? 'A', 0, 1)) }}
                     </div>
                     <div class="hidden sm:flex flex-col text-left">
-                        <span class="text-xs font-semibold text-slate-900 leading-tight">{{ Auth::user()->nombre_completo ?? Auth::user()->nombre ?? 'Administrador' }}</span>
+                        <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px] md:max-w-none">{{ Auth::user()->nombre_completo ?? Auth::user()->nombre ?? 'Administrador' }}</span>
                         <span class="text-[10px] font-semibold text-emerald-700 leading-tight">
-                            {{ Auth::user()->hasRole('super_admin') ? 'Super Administrador' : 'Administrador' }}
+                            {{ (Auth::user() && Auth::user()->hasRole('super_admin')) ? 'Super Administrador' : 'Administrador' }}
                         </span>
                     </div>
                 </div>
@@ -296,7 +320,7 @@
         </header>
 
         <!-- Main Body / Canvas -->
-        <main class="flex-1 px-4 sm:px-8 py-6 max-w-[1500px] w-full mx-auto">
+        <main class="flex-1 px-3.5 sm:px-8 py-6 max-w-[1500px] w-full min-w-0 mx-auto">
             @yield('content')
         </main>
 
@@ -308,7 +332,7 @@
         </footer>
     </div>
 
-    <!-- Toggle Sidebar Script -->
+    <!-- Scripts Globales del Layout Admin -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('admin-sidebar');
@@ -316,6 +340,35 @@
             sidebar.classList.toggle('-translate-x-full');
             backdrop.classList.toggle('hidden');
         }
+
+        // Reloj en vivo de Panamá (GMT-5, formato 12 horas en español)
+        function updatePanamaClock() {
+            const clockEl = document.getElementById('topbar-live-clock');
+            if (!clockEl) return;
+
+            try {
+                const now = new Date();
+                const formatter = new Intl.DateTimeFormat('es-PA', {
+                    timeZone: 'America/Panama',
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+
+                const formatted = formatter.format(now);
+                // Asegurar formato legible y capitalización correcta
+                const capitalized = formatted.charAt(0).toUpperCase() + formatted.slice(1).replace(/\./g, '');
+                clockEl.textContent = capitalized;
+            } catch (e) {
+                // Fallback silencioso
+            }
+        }
+
+        setInterval(updatePanamaClock, 1000);
+        updatePanamaClock();
     </script>
 
     @stack('scripts')
