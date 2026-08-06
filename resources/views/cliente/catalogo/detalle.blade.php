@@ -300,35 +300,38 @@
                 @endif
 
                 <!-- Metadatos del Producto -->
-                <div class="space-y-2 pt-2.5 mt-2.5 border-t border-slate-100">
-                    <!-- Código / SKU -->
-                    <div class="text-xs text-slate-800 font-medium">
-                        Código: <span class="text-blue-600 font-mono font-semibold">{{ $producto->sku ?: 'PTL-LEV-493' }}</span>
-                    </div>
-
-                    <!-- Marca con Logo en cajita blanca + Nombre -->
-                    <div class="flex items-center gap-3 py-0.5">
-                        <div class="h-9 px-3 min-w-[65px] rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs">
-                            {!! $producto->marca_logo_html !!}
+                <div class="space-y-2 pt-1.5 mt-1.5 border-t border-slate-100">
+                    <!-- Fila 1: Código y Categoría -->
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                        <div class="text-[11px] sm:text-xs text-slate-800 font-medium">
+                            Código: <span class="text-blue-600 font-mono font-semibold">{{ $producto->sku ?: 'PTL-LEV-493' }}</span>
                         </div>
-                        <span class="text-sm sm:text-base font-bold text-slate-900">
-                            {{ $producto->marca ?: 'Lenovo' }}
-                        </span>
+                        <div class="text-[11px] sm:text-xs text-slate-800 font-medium">
+                            Categoría: <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria?->slug ?? 'all']) }}" class="text-blue-600 hover:underline font-semibold">{{ $producto->categoria ? $producto->categoria->nombre : 'Portátiles' }}</a>
+                        </div>
                     </div>
 
-                    <!-- Categoría -->
-                    <div class="text-xs text-slate-800 font-medium">
-                        Categoría: <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria?->slug ?? 'all']) }}" class="text-blue-600 hover:underline font-semibold">{{ $producto->categoria ? $producto->categoria->nombre : 'Portátiles' }}</a>
-                    </div>
-
-                    <!-- Modelo -->
-                    <div class="text-xs text-slate-800 font-medium">
-                        Modelo : <span class="text-blue-600 font-mono font-semibold">{{ $producto->modelo ?: '82VG00WXUS' }}</span>
+                    <!-- Fila 2: Marca y Modelo (Misma altura) -->
+                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] sm:text-xs text-slate-800 font-medium">Marca:</span>
+                            @if($producto->marca_logo_html)
+                            <div class="h-6 px-1.5 rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs">
+                                {!! $producto->marca_logo_html !!}
+                            </div>
+                            @endif
+                            <span class="text-[11px] sm:text-xs font-bold text-slate-900">
+                                {{ $producto->marca ?: 'Lenovo' }}
+                            </span>
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-slate-800 font-medium">
+                            Modelo: <span class="text-blue-600 font-mono font-semibold">{{ $producto->modelo ?: '82VG00WXUS' }}</span>
+                        </div>
                     </div>
 
                     <!-- Términos y Condiciones -->
-                    <div class="text-xs text-slate-800 font-medium pt-0.5">
-                        <a href="#" class="text-slate-900 underline font-semibold hover:text-blue-600">
+                    <div class="text-[11px] sm:text-xs text-black font-medium pt-0.5">
+                        <a href="#" class="text-black underline hover:text-slate-700">
                             Términos y condiciones
                         </a>
                     </div>

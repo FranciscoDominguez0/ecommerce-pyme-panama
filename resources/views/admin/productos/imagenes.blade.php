@@ -14,9 +14,9 @@
         </span>
     </div>
 
-    <!-- Dropzone Visual para Cargar Archivos (Drag & Drop + Clic) -->
+    <!-- Dropzone Visual para Cargar Archivos (Drag & Drop + Clic) Compacto -->
     <div id="dropzone-imagenes" 
-         class="relative border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50/50 hover:bg-emerald-50/20 rounded-2xl p-6 text-center cursor-pointer transition-all group">
+         class="relative border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50/50 hover:bg-emerald-50/30 rounded-xl p-3.5 text-center cursor-pointer transition-all group">
         
         <input type="file" 
                id="input-archivos-imagenes" 
@@ -26,14 +26,16 @@
                onchange="handleSeleccionArchivos(this)"
                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
 
-        <div class="flex flex-col items-center justify-center space-y-2 pointer-events-none">
-            <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center text-slate-400 group-hover:text-emerald-600 group-hover:border-emerald-300 group-hover:scale-105 transition-all">
-                <span class="material-symbols-outlined text-[26px]">cloud_upload</span>
+        <div class="flex items-center justify-center gap-3 pointer-events-none">
+            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-emerald-600 group-hover:border-emerald-300 transition-all shrink-0">
+                <span class="material-symbols-outlined text-[20px]">cloud_upload</span>
             </div>
-            <div class="text-xs text-slate-700">
-                <span class="font-bold text-emerald-700 group-hover:underline">Haz clic para subir fotos</span> o arrastra y suelta tus archivos aquí
+            <div class="text-left">
+                <div class="text-xs text-slate-700 font-medium">
+                    <span class="font-bold text-emerald-700 group-hover:underline">Haz clic para subir fotos</span> o arrástralas aquí
+                </div>
+                <p class="text-[10px] text-slate-400">PNG, JPG, WebP o SVG (Máx 5MB)</p>
             </div>
-            <p class="text-[11px] text-slate-400">Formatos soportados: PNG, JPG, WebP o SVG. Resolución recomendada: 1000 x 1000 px.</p>
         </div>
     </div>
 
@@ -43,7 +45,7 @@
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]">link</span>
             <input type="text" 
                    id="input-url-imagen-rapida" 
-                   placeholder="O pega una URL de imagen o nombre de ícono (ej. https://... o laptop_mac)..." 
+                   placeholder="O pega una URL de imagen o ícono..." 
                    onkeydown="if(event.key==='Enter'){event.preventDefault(); agregarImagenPorUrl();}"
                    class="pl-8 text-xs py-1.5 px-3 rounded-xl border border-slate-200 bg-slate-50/50 w-full focus:bg-white focus:ring-emerald-500 focus:border-emerald-500 text-slate-800">
         </div>
@@ -59,19 +61,19 @@
     <input type="hidden" name="imagen_principal_id" id="input-imagen-principal-id" value="{{ optional($imagenes->where('es_principal', true)->first())->id ?? '' }}">
 
     <!-- Grid de Miniaturas de Imágenes (Full-Width Responsive) -->
-    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 pt-2">
+    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 pt-2">
         
         @forelse($imagenes ?? [] as $idx => $img)
             @php /** @var \App\Models\ImagenProducto $img */ @endphp
             {{-- Input oculto para marcar esta imagen como existente; si se elimina, el JS lo convierte a imagenes_eliminar[] --}}
-            <div class="relative group card-elevated rounded-xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-xs' : 'border border-slate-200 hover:border-slate-300 shadow-2xs' }} bg-white flex flex-col item-imagen" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
+            <div class="relative group card-elevated rounded-2xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200/90 hover:border-slate-300 shadow-2xs' }} bg-white flex flex-col item-imagen transition-all duration-200" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
                 
                 <!-- Badge de Portada / Principal -->
                 <div class="badge-principal-container {{ $img->es_principal ? '' : 'hidden' }}">
                     <div class="absolute top-2 left-2 z-10">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-600 text-white shadow-xs">
-                            <span class="material-symbols-outlined text-[12px]">star</span>
-                            <span>Principal</span>
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shadow-sm">
+                            <span class="material-symbols-outlined text-[11px]">star</span>
+                            <span>Portada</span>
                         </span>
                     </div>
                 </div>
@@ -80,52 +82,54 @@
                 <input type="hidden" name="imagenes_existentes[]" value="{{ $img->id }}" class="input-imagen-existente">
 
                 <!-- Botones de Acción Rápida -->
-                <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-lg backdrop-blur-xs">
+                <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-xl backdrop-blur-xs shadow-md">
                     <button type="button" 
                             onclick="moverImagenIzquierda(this)" 
                             title="Mover a la izquierda" 
-                            class="text-white hover:text-emerald-400 p-0.5">
+                            class="text-white hover:text-emerald-400 p-0.5 transition-colors">
                         <span class="material-symbols-outlined text-[14px]">arrow_back</span>
                     </button>
                     <button type="button" 
                             onclick="moverImagenDerecha(this)" 
                             title="Mover a la derecha" 
-                            class="text-white hover:text-emerald-400 p-0.5">
+                            class="text-white hover:text-emerald-400 p-0.5 transition-colors">
                         <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
                     </button>
                     <button type="button" 
                             onclick="eliminarCardImagenExistente(this)" 
                             title="Eliminar imagen" 
-                            class="text-rose-300 hover:text-rose-400 p-0.5 ml-0.5 border-l border-slate-700">
+                            class="text-rose-300 hover:text-rose-400 p-0.5 ml-0.5 border-l border-slate-700 transition-colors">
                         <span class="material-symbols-outlined text-[14px]">delete</span>
                     </button>
                 </div>
 
-                <!-- Contenedor de la Imagen -->
-                <div class="h-32 w-full bg-slate-50 flex items-center justify-center p-3">
+                <!-- Contenedor de la Imagen Elegante -->
+                <div class="h-32 w-full bg-slate-50/80 flex items-center justify-center p-3 group-hover:bg-slate-100/50 transition-colors">
                     <div class="w-full h-full flex items-center justify-center text-slate-700">
                         @if(!empty($img->ruta) && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'storage/')))
-                            <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain">
+                            <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain mix-blend-multiply transition-transform group-hover:scale-105">
                         @elseif(!empty($img->ruta) && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
                             <div class="w-full h-full flex items-center justify-center svg-container">{!! $img->ruta !!}</div>
                         @elseif(!empty($img->ruta))
-                            <span class="material-symbols-outlined text-[48px] text-slate-600">{{ $img->ruta }}</span>
+                            <span class="material-symbols-outlined text-[42px] text-slate-600">{{ $img->ruta }}</span>
                         @else
-                            <span class="material-symbols-outlined text-[48px] text-slate-400">image</span>
+                            <span class="material-symbols-outlined text-[42px] text-slate-400">image</span>
                         @endif
                     </div>
                 </div>
 
-                <!-- Footer con nombre corto y botón de portada -->
-                <div class="p-2 border-t border-slate-100 bg-white flex items-center justify-between text-[11px] card-footer-actions">
-                    <span class="text-slate-500 font-mono truncate text-[10px] nombre-archivo-imagen" title="{{ $img->ruta }}">{{ basename($img->ruta ?? 'foto-'.$idx.'.png') }}</span>
-                    <div class="estado-portada-container">
+                <!-- Footer sin nombre de archivo, centrado y limpio -->
+                <div class="p-1.5 border-t border-slate-100 bg-white flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
+                    <div class="estado-portada-container w-full text-center">
                         @if($img->es_principal)
-                            <span class="text-emerald-600 font-bold text-[10px] badge-texto-portada">Portada</span>
+                            <span class="text-emerald-600 font-extrabold text-[11px] badge-texto-portada flex items-center justify-center gap-1">
+                                <span class="material-symbols-outlined text-[13px]">check_circle</span>
+                                <span>Portada</span>
+                            </span>
                         @else
                             <button type="button" 
                                     onclick="hacerImagenPrincipal(this)" 
-                                    class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors btn-hacer-portada">
+                                    class="w-full text-[11px] font-bold text-slate-500 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
                                 Hacer Portada
                             </button>
                         @endif
@@ -191,15 +195,15 @@
     function crearCardImagenHtml(rutaOrBase64, nombreArchivo, esPrincipal, esUrl) {
         const grid = document.getElementById('grid-imagenes-producto');
         const div = document.createElement('div');
-        div.className = `relative group card-elevated rounded-xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-xs' : 'border border-slate-200 hover:border-slate-300 shadow-2xs'} bg-white flex flex-col item-imagen`;
+        div.className = `relative group card-elevated rounded-2xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200/90 hover:border-slate-300 shadow-2xs'} bg-white flex flex-col item-imagen transition-all duration-200`;
 
         let contentPreview = '';
         if (rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http') || rutaOrBase64.startsWith('/storage') || rutaOrBase64.startsWith('storage/')) {
-            contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain">`;
+            contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain mix-blend-multiply transition-transform group-hover:scale-105">`;
         } else if (rutaOrBase64.includes('<svg') || rutaOrBase64.includes('</svg>')) {
             contentPreview = `<div class="w-full h-full flex items-center justify-center svg-container">${rutaOrBase64}</div>`;
         } else {
-            contentPreview = `<span class="material-symbols-outlined text-[48px] text-slate-600">${rutaOrBase64}</span>`;
+            contentPreview = `<span class="material-symbols-outlined text-[42px] text-slate-600">${rutaOrBase64}</span>`;
         }
 
         // Input oculto para enviar al backend si fue ingresada por URL
@@ -214,38 +218,40 @@
 
             <div class="badge-principal-container ${esPrincipal ? '' : 'hidden'}">
                 <div class="absolute top-2 left-2 z-10">
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-600 text-white shadow-xs">
-                        <span class="material-symbols-outlined text-[12px]">star</span>
-                        <span>Principal</span>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shadow-sm">
+                        <span class="material-symbols-outlined text-[11px]">star</span>
+                        <span>Portada</span>
                     </span>
                 </div>
             </div>
 
-            <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-lg backdrop-blur-xs">
-                <button type="button" onclick="moverImagenIzquierda(this)" title="Mover a la izquierda" class="text-white hover:text-emerald-400 p-0.5">
+            <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-xl backdrop-blur-xs shadow-md">
+                <button type="button" onclick="moverImagenIzquierda(this)" title="Mover a la izquierda" class="text-white hover:text-emerald-400 p-0.5 transition-colors">
                     <span class="material-symbols-outlined text-[14px]">arrow_back</span>
                 </button>
-                <button type="button" onclick="moverImagenDerecha(this)" title="Mover a la derecha" class="text-white hover:text-emerald-400 p-0.5">
+                <button type="button" onclick="moverImagenDerecha(this)" title="Mover a la derecha" class="text-white hover:text-emerald-400 p-0.5 transition-colors">
                     <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
                 </button>
-                <button type="button" onclick="eliminarCardImagen(this)" title="Eliminar imagen" class="text-rose-300 hover:text-rose-400 p-0.5 ml-0.5 border-l border-slate-700">
+                <button type="button" onclick="eliminarCardImagen(this)" title="Eliminar imagen" class="text-rose-300 hover:text-rose-400 p-0.5 ml-0.5 border-l border-slate-700 transition-colors">
                     <span class="material-symbols-outlined text-[14px]">delete</span>
                 </button>
             </div>
 
-            <div class="h-32 w-full bg-slate-50 flex items-center justify-center p-3">
+            <div class="h-32 w-full bg-slate-50/80 flex items-center justify-center p-3 group-hover:bg-slate-100/50 transition-colors">
                 <div class="w-full h-full flex items-center justify-center text-slate-700">
                     ${contentPreview}
                 </div>
             </div>
 
-            <div class="p-2 border-t border-slate-100 bg-white flex items-center justify-between text-[11px] card-footer-actions">
-                <span class="text-slate-500 font-mono truncate text-[10px] nombre-archivo-imagen" title="${nombreArchivo}">${nombreArchivo}</span>
-                <div class="estado-portada-container">
+            <div class="p-1.5 border-t border-slate-100 bg-white flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
+                <div class="estado-portada-container w-full text-center">
                     ${esPrincipal ? `
-                        <span class="text-emerald-600 font-bold text-[10px] badge-texto-portada">Portada</span>
+                        <span class="text-emerald-600 font-extrabold text-[11px] badge-texto-portada flex items-center justify-center gap-1">
+                            <span class="material-symbols-outlined text-[13px]">check_circle</span>
+                            <span>Portada</span>
+                        </span>
                     ` : `
-                        <button type="button" onclick="hacerImagenPrincipal(this)" class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors btn-hacer-portada">
+                        <button type="button" onclick="hacerImagenPrincipal(this)" class="w-full text-[11px] font-bold text-slate-500 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
                             Hacer Portada
                         </button>
                     `}
@@ -269,8 +275,8 @@
 
         // Resetear todas las tarjetas
         grid.querySelectorAll('.item-imagen').forEach(card => {
-            card.classList.remove('border-2', 'border-emerald-500', 'shadow-xs');
-            card.classList.add('border', 'border-slate-200', 'shadow-2xs');
+            card.classList.remove('border-2', 'border-emerald-500', 'shadow-md', 'ring-2', 'ring-emerald-500/20');
+            card.classList.add('border', 'border-slate-200/90', 'shadow-2xs');
 
             // Ocultar badge principal
             const badgeContainer = card.querySelector('.badge-principal-container');
@@ -278,11 +284,11 @@
                 badgeContainer.classList.add('hidden');
             }
 
-            // Restablecer botón a "Hacer Portada"
+            // Restablecer botón a "Hacer Portada" (solo visible al pasar mouse)
             const estadoContainer = card.querySelector('.estado-portada-container');
             if (estadoContainer) {
                 estadoContainer.innerHTML = `
-                    <button type="button" onclick="hacerImagenPrincipal(this)" class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors btn-hacer-portada">
+                    <button type="button" onclick="hacerImagenPrincipal(this)" class="w-full text-[11px] font-bold text-slate-500 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
                         Hacer Portada
                     </button>
                 `;
@@ -290,8 +296,8 @@
         });
 
         // Activar borde y estilo de tarjeta seleccionada
-        cardActual.classList.remove('border', 'border-slate-200', 'shadow-2xs');
-        cardActual.classList.add('border-2', 'border-emerald-500', 'shadow-xs');
+        cardActual.classList.remove('border', 'border-slate-200/90', 'shadow-2xs');
+        cardActual.classList.add('border-2', 'border-emerald-500', 'shadow-md', 'ring-2', 'ring-emerald-500/20');
 
         // Mostrar badge principal en la seleccionada
         const badgeActual = cardActual.querySelector('.badge-principal-container');
@@ -302,7 +308,12 @@
         // Mostrar texto de "Portada" en la seleccionada
         const estadoActual = cardActual.querySelector('.estado-portada-container');
         if (estadoActual) {
-            estadoActual.innerHTML = `<span class="text-emerald-600 font-bold text-[10px] badge-texto-portada">Portada</span>`;
+            estadoActual.innerHTML = `
+                <span class="text-emerald-600 font-extrabold text-[11px] badge-texto-portada flex items-center justify-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">check_circle</span>
+                    <span>Portada</span>
+                </span>
+            `;
         }
     }
 
