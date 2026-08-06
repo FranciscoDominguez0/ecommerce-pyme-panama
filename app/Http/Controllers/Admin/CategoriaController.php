@@ -106,14 +106,14 @@ class CategoriaController extends Controller
             'descripcion' => 'nullable|string|max:1000',
             'orden_visualizacion' => 'nullable|integer|min:0',
             'activo' => 'nullable|boolean',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'imagen' => 'nullable|file|mimes:jpeg,png,jpg,webp,svg|max:2048',
         ], [
             'nombre.required' => 'El nombre de la categoría es obligatorio.',
             'nombre.max' => 'El nombre no debe superar los 100 caracteres.',
             'slug.unique' => 'El slug ingresado ya está en uso por otra categoría.',
             'padre_id.exists' => 'La categoría padre seleccionada no es válida.',
-            'imagen.image' => 'El archivo adjunto debe ser una imagen válida.',
-            'imagen.max' => 'La imagen no debe pesar más de 2MB.',
+            'imagen.mimes' => 'El formato de imagen/ícono debe ser SVG, PNG, JPG o WEBP.',
+            'imagen.max' => 'El archivo no debe pesar más de 2MB.',
         ]);
 
         // Generar slug automático si no fue provisto
@@ -210,15 +210,15 @@ class CategoriaController extends Controller
             'descripcion' => 'nullable|string|max:1000',
             'orden_visualizacion' => 'nullable|integer|min:0',
             'activo' => 'nullable|boolean',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'imagen' => 'nullable|file|mimes:jpeg,png,jpg,webp,svg|max:2048',
             'eliminar_imagen' => 'nullable|boolean',
         ], [
             'nombre.required' => 'El nombre de la categoría es obligatorio.',
             'nombre.max' => 'El nombre no debe superar los 100 caracteres.',
             'slug.unique' => 'El slug ingresado ya está en uso por otra categoría.',
             'padre_id.exists' => 'La categoría padre seleccionada no es válida.',
-            'imagen.image' => 'El archivo adjunto debe ser una imagen válida.',
-            'imagen.max' => 'La imagen no debe pesar más de 2MB.',
+            'imagen.mimes' => 'El formato de imagen/ícono debe ser SVG, PNG, JPG o WEBP.',
+            'imagen.max' => 'El archivo no debe pesar más de 2MB.',
         ]);
 
         $padreId = !empty($validated['padre_id']) ? (int) $validated['padre_id'] : null;

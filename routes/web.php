@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductoController;
+use App\Http\Controllers\Cliente\CatalogoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,10 +13,19 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// 1. Ruta pública principal (Catálogo / Tienda / Bienvenida)
+// 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida)
 Route::get('/', function () {
-    return view('welcome');
-});
+    $destacados = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes'])
+        ->sinEliminar()
+        ->where('activo', true)
+        ->where('destacado', true)
+        ->take(8)
+        ->get();
+    return view('welcome', compact('destacados'));
+})->name('inicio');
+
+Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
+Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
 
 // 2. Ruta /home para clientes autenticados (Redirección directa a dashboard)
 Route::get('/home', function () {
@@ -27,13 +38,21 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
-// Si un Cliente intenta entrar directamente a /admin/dashboard, recibe un error 403 (Prohibido).
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Módulo de Categorías
     Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');
     Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
+
+    // Módulo de Productos y Variantes
+    Route::get('/productos', [ProductoController::class, 'index'])->name('admin.productos.index');
+    Route::get('/productos/crear', [ProductoController::class, 'create'])->name('admin.productos.create');
+    Route::post('/productos', [ProductoController::class, 'store'])->name('admin.productos.store');
+    Route::get('/productos/{id}/editar', [ProductoController::class, 'edit'])->name('admin.productos.edit');
+    Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('admin.productos.update');
+    Route::patch('/productos/{id}', [ProductoController::class, 'update']);
+    Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('admin.productos.destroy');
 });
 
 // 5. Gestión de Perfil de Usuario

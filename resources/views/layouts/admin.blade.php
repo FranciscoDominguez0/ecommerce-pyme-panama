@@ -142,16 +142,16 @@
                     </div>
                     <div class="space-y-0.5">
                         <!-- Productos -->
-                        <a href="{{ url('/admin/productos') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/productos*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/productos*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">inventory_2</span>
+                        <a href="{{ route('admin.productos.index') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.productos*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.productos*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">inventory_2</span>
                             <span class="truncate">Productos</span>
                         </a>
 
                         <!-- Categorías -->
-                        <a href="{{ url('/admin/categorias') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/categorias*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/categorias*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">category</span>
+                        <a href="{{ route('admin.categorias.index') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.categorias*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.categorias*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">category</span>
                             <span class="truncate">Categorías</span>
                         </a>
 
@@ -325,7 +325,7 @@
         </main>
 
         <!-- Admin Footer -->
-        <footer class="px-4 sm:px-8 py-3 border-t border-slate-200/70 bg-white text-xs text-slate-500 flex items-center justify-between">
+        <footer class="px-4 sm:px-8 py-3.5 border-t border-slate-200/70 bg-white text-xs text-slate-500 flex items-center justify-center text-center w-full">
             <div>
                 © {{ date('Y') }} <span class="font-semibold text-slate-700">PayMe Panamá</span> — Sistema de Comercio Electrónico PyME.
             </div>

@@ -114,7 +114,7 @@
                 <thead>
                     <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                         <th class="py-3.5 px-4 sm:px-6">Nombre & Slug</th>
-                        <th class="py-3.5 px-4 text-center w-28">Imagen</th>
+                        <th class="py-3.5 px-3 text-center w-20">Ícono</th>
                         <th class="py-3.5 px-4 text-center w-44">Categoría Padre</th>
                         <th class="py-3.5 px-4 text-center w-28">Productos</th>
                         <th class="py-3.5 px-4 text-center w-28">Estado</th>
@@ -159,18 +159,17 @@
                                 </div>
                             </td>
 
-                            <!-- Imagen en su Columna Propia (Tamaño Más Grande y Mejor Presentación) -->
-                            <td class="py-3.5 px-4 text-center">
+                            <!-- Ícono SVG / Imagen Compacta -->
+                            <td class="py-3 px-3 text-center">
                                 @if($categoria->imagen_ruta)
-                                    <div class="w-14 h-14 rounded-xl bg-slate-100 border border-slate-200 shadow-2xs overflow-hidden mx-auto group-hover:border-slate-300 transition-all">
+                                    <div class="w-9 h-9 rounded-lg bg-white border border-slate-200 shadow-2xs overflow-hidden mx-auto group-hover:border-slate-300 transition-all flex items-center justify-center p-1.5" title="{{ $categoria->nombre }}">
                                         <img src="{{ asset($categoria->imagen_ruta) }}" 
                                              alt="{{ $categoria->nombre }}" 
-                                             class="w-full h-full object-cover group-hover:scale-108 transition-transform duration-300" />
+                                             class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-200" />
                                     </div>
                                 @else
-                                    <div class="w-14 h-14 rounded-xl bg-slate-100 border border-dashed border-slate-200 flex flex-col items-center justify-center mx-auto text-slate-300">
-                                        <span class="material-symbols-outlined text-[20px]">image</span>
-                                        <span class="text-[9px] font-medium text-slate-400 mt-0.5">Sin foto</span>
+                                    <div class="w-9 h-9 rounded-lg bg-slate-50 border border-dashed border-slate-200 flex items-center justify-center mx-auto text-slate-300" title="Sin ícono">
+                                        <span class="material-symbols-outlined text-[17px]">category</span>
                                     </div>
                                 @endif
                             </td>

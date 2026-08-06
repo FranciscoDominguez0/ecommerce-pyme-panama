@@ -112,8 +112,9 @@
                         </label>
                         <button type="button" 
                                 id="btn-regenerar-slug" 
-                                class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[13px]">autorenew</span>
+                                title="Recalcular el enlace amigable a partir del texto actual del nombre"
+                                class="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 active:scale-95 transition-all flex items-center gap-1 group/slugbtn">
+                            <span class="material-symbols-outlined text-[14px] transition-transform duration-300 group-hover/slugbtn:rotate-90" id="icon-autorenew">autorenew</span>
                             <span>Regenerar desde nombre</span>
                         </button>
                     </div>
@@ -241,12 +242,12 @@
                             <img id="image-preview" 
                                  src="{{ asset($categoria->imagen_ruta) }}" 
                                  alt="{{ $categoria->nombre }}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                 class="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-300" />
                         @else
                             <img id="image-preview" 
                                  src="" 
                                  alt="Vista previa" 
-                                 class="w-full h-full object-cover hidden" />
+                                 class="w-full h-full object-contain p-3 hidden" />
                             <div id="placeholder-icon" class="flex flex-col items-center text-slate-400 p-4 text-center">
                                 <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-2 text-slate-400">
                                     <span class="material-symbols-outlined text-[26px]">add_photo_alternate</span>
@@ -339,8 +340,20 @@
     });
 
     btnRegenerar.addEventListener('click', function() {
+        const icon = document.getElementById('icon-autorenew');
+        if (icon) {
+            icon.classList.add('rotate-180');
+            setTimeout(() => icon.classList.remove('rotate-180'), 350);
+        }
+        
         slugInput.value = convertirASlug(nombreInput.value);
         slugModificadoManualmente = false;
+
+        // Feedback visual inmediato en el input
+        slugInput.classList.add('ring-2', 'ring-emerald-500/40', 'bg-emerald-50/50');
+        setTimeout(() => {
+            slugInput.classList.remove('ring-2', 'ring-emerald-500/40', 'bg-emerald-50/50');
+        }, 600);
     });
 
     // Vista previa instantánea de imagen

@@ -134,153 +134,58 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-            <!-- Product 1: Laptop Asus Vivobook -->
+            @forelse($destacados as $prod)
             <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
-                    <span class="absolute top-3 left-3 bg-violet-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-8%</span>
-                    <img src="{{ asset('images/products/Laptop Asus Vivobook.webp') }}" alt="Laptop Asus Vivobook" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
-                </div>
+                <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" class="relative bg-gray-50 flex items-center justify-center h-52 p-5 block">
+                    @if($prod->tieneOfertaValida())
+                        <span class="absolute top-3 left-3 bg-rose-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">
+                            -{{ round((($prod->precio - $prod->precio_oferta) / $prod->precio) * 100) }}%
+                        </span>
+                    @endif
+                    
+                    @php $imgPrincipal = $prod->imagenPrincipal(); @endphp
+                    @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
+                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
+                    @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
+                        <div class="w-24 h-24 flex items-center justify-center text-gray-400 group-hover:scale-105 transition-transform duration-500">{!! $imgPrincipal->ruta !!}</div>
+                    @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
+                        <span class="material-symbols-outlined text-[64px] text-gray-400 group-hover:scale-105 transition-transform duration-500">{{ $imgPrincipal->ruta }}</span>
+                    @else
+                        <span class="material-symbols-outlined text-[64px] text-gray-300">image</span>
+                    @endif
+                </a>
+                
                 <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-[10px] font-semibold text-violet-600 uppercase tracking-wide mb-1">ASUS</p>
-                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Laptop Asus Vivobook 15</h3>
-                    <div class="flex items-center gap-1 mb-3">
-                        <span class="text-amber-400 text-sm leading-none">★★★★★</span>
-                        <span class="text-xs text-gray-400">(47)</span>
-                    </div>
+                    <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">{{ $prod->categoria->nombre ?? 'Catálogo' }}</p>
+                    <a href="{{ route('cliente.producto.detalle', $prod->slug) }}">
+                        <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2 hover:text-emerald-700 transition-colors">{{ $prod->nombre }}</h3>
+                    </a>
+                    
                     <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                        <span class="text-xl font-extrabold text-gray-900">$525.00</span>
-                        <span class="text-sm text-gray-400 line-through">$569.00</span>
+                        @if($prod->tieneOfertaValida())
+                            <span class="text-xl font-extrabold text-gray-900">${{ number_format($prod->precio_oferta, 2) }}</span>
+                            <span class="text-sm text-gray-400 line-through">${{ number_format($prod->precio, 2) }}</span>
+                        @else
+                            <span class="text-xl font-extrabold text-gray-900">${{ number_format($prod->precio, 2) }}</span>
+                        @endif
                     </div>
-                    <button onclick="addToCart('Laptop Asus Vivobook', 525.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
-                        Agregar al carrito
+                    
+                    <button onclick="window.location.href='{{ route('cliente.producto.detalle', $prod->slug) }}'" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
+                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">visibility</span>
+                        Ver detalles
                     </button>
                 </div>
             </div>
+            @empty
+                <div class="col-span-full py-16 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-2xl">
+                    <span class="material-symbols-outlined text-[48px] text-gray-300 mb-3">inventory_2</span>
+                    <p class="text-sm font-bold text-gray-500 mb-1">No hay productos destacados</p>
+                    <p class="text-xs text-gray-400">Activa la estrella de destacado en los productos del panel.</p>
+                </div>
+            @endforelse
 
-            <!-- Product 2: Impresora HP Smart Tank 583 -->
-            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
-                    <span class="absolute top-3 left-3 bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-12%</span>
-                    <img src="{{ asset('images/products/Impresora Multifuncional HP Smart Tank 583.webp') }}" alt="Impresora HP Smart Tank 583" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
-                </div>
-                <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">HP</p>
-                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Impresora Multifuncional HP Smart Tank 583</h3>
-                    <div class="flex items-center gap-1 mb-3">
-                        <span class="text-amber-400 text-sm leading-none">★★★★</span><span class="text-gray-300 text-sm leading-none">★</span>
-                        <span class="text-xs text-gray-400">(28)</span>
-                    </div>
-                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                        <span class="text-xl font-extrabold text-gray-900">$195.00</span>
-                        <span class="text-sm text-gray-400 line-through">$220.00</span>
-                    </div>
-                    <button onclick="addToCart('Impresora HP Smart Tank 583', 195.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
-                        Agregar al carrito
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 3: Monitor TUF Gaming Asus -->
-            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
-                    <span class="absolute top-3 left-3 bg-blue-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-10%</span>
-                    <img src="{{ asset('images/products/Monitor Flat TUF Gaming Asus.webp') }}" alt="Monitor TUF Gaming Asus" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
-                </div>
-                <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-[10px] font-semibold text-blue-600 uppercase tracking-wide mb-1">ASUS TUF</p>
-                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Monitor Flat TUF Gaming Asus</h3>
-                    <div class="flex items-center gap-1 mb-3">
-                        <span class="text-amber-400 text-sm leading-none">★★★★★</span>
-                        <span class="text-xs text-gray-400">(63)</span>
-                    </div>
-                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                        <span class="text-xl font-extrabold text-gray-900">$239.00</span>
-                        <span class="text-sm text-gray-400 line-through">$265.00</span>
-                    </div>
-                    <button onclick="addToCart('Monitor TUF Gaming Asus', 239.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
-                        Agregar al carrito
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 4: Caja ATX Deepcool CH780 -->
-            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
-                    <span class="absolute top-3 left-3 bg-gray-800 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-5%</span>
-                    <img src="{{ asset('images/products/Caja ATX Deepcool CH780.webp') }}" alt="Caja ATX Deepcool CH780" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
-                </div>
-                <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-[10px] font-semibold text-gray-600 uppercase tracking-wide mb-1">DEEPCOOL</p>
-                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Caja ATX Deepcool CH780 Full Tower</h3>
-                    <div class="flex items-center gap-1 mb-3">
-                        <span class="text-amber-400 text-sm leading-none">★★★★</span><span class="text-gray-300 text-sm leading-none">★</span>
-                        <span class="text-xs text-gray-400">(19)</span>
-                    </div>
-                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                        <span class="text-xl font-extrabold text-gray-900">$189.00</span>
-                        <span class="text-sm text-gray-400 line-through">$199.00</span>
-                    </div>
-                    <button onclick="addToCart('Caja ATX Deepcool CH780', 189.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
-                        Agregar al carrito
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 5: Asus PRIME GeForce RTX 5070 -->
-            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
-                    <span class="absolute top-3 left-3 bg-purple-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-6%</span>
-                    <span class="absolute top-3 right-3 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg z-10">NUEVO</span>
-                    <img src="{{ asset('images/products/Tarjeta de video Asus PRIME GeForce RTX 5070.webp') }}" alt="Asus PRIME GeForce RTX 5070" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
-                </div>
-                <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-[10px] font-semibold text-purple-700 uppercase tracking-wide mb-1">ASUS PRIME</p>
-                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">GeForce RTX 5070 12GB GDDR7</h3>
-                    <div class="flex items-center gap-1 mb-3">
-                        <span class="text-amber-400 text-sm leading-none">★★★★★</span>
-                        <span class="text-xs text-gray-400">(32)</span>
-                    </div>
-                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                        <span class="text-xl font-extrabold text-gray-900">$749.00</span>
-                        <span class="text-sm text-gray-400 line-through">$799.00</span>
-                    </div>
-                    <button onclick="addToCart('Asus PRIME GeForce RTX 5070', 749.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
-                        Agregar al carrito
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 6: Enrutador Mercusys MR50G -->
-            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="relative bg-gray-50 flex items-center justify-center h-52 p-5">
-                    <span class="absolute top-3 left-3 bg-amber-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">-15%</span>
-                    <img src="{{ asset('images/products/Enrutador Inalámbrico Mercusys MR50G.webp') }}" alt="Enrutador Mercusys MR50G" class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500"/>
-                </div>
-                <div class="p-4 flex flex-col flex-grow">
-                    <p class="text-[10px] font-semibold text-amber-600 uppercase tracking-wide mb-1">MERCUSYS</p>
-                    <h3 class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2">Enrutador Inalámbrico MR50G Doble Banda</h3>
-                    <div class="flex items-center gap-1 mb-3">
-                        <span class="text-amber-400 text-sm leading-none">★★★★</span><span class="text-gray-300 text-sm leading-none">★</span>
-                        <span class="text-xs text-gray-400">(41)</span>
-                    </div>
-                    <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                        <span class="text-xl font-extrabold text-gray-900">$58.00</span>
-                        <span class="text-sm text-gray-400 line-through">$68.00</span>
-                    </div>
-                    <button onclick="addToCart('Enrutador Mercusys MR50G', 58.00)" class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95" style="background:#22c55e;">
-                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_shopping_cart</span>
-                        Agregar al carrito
-                    </button>
-                </div>
-            </div>
-        
         </div>
     </section>
 
