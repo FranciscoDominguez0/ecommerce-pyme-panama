@@ -320,7 +320,7 @@
         </header>
 
         <!-- Main Body / Canvas -->
-        <main class="flex-1 px-3.5 sm:px-8 py-6 max-w-[1500px] w-full min-w-0 mx-auto">
+        <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto">
             @yield('content')
         </main>
 

@@ -22,17 +22,17 @@ class ProductoController extends Controller
      */
     public function index(Request $request): View
     {
-        $buscar     = $request->input('buscar', '');
-        $buscarSku  = $request->input('sku', '');
-        $categoriaId   = $request->input('categoria_id', 'all');
-        $filtroEstado  = $request->input('estado', 'all');
-        $filtroStock   = $request->input('stock', 'all');
+        $buscar = $request->input('buscar', '');
+        $buscarSku = $request->input('sku', '');
+        $categoriaId = $request->input('categoria_id', 'all');
+        $filtroEstado = $request->input('estado', 'all');
+        $filtroStock = $request->input('stock', 'all');
 
         // Métricas KPI
-        $kpiTotal       = Producto::sinEliminar()->count();
-        $kpiEnStock     = Producto::sinEliminar()->where('stock', '>', 5)->count();
-        $kpiStockBajo   = Producto::sinEliminar()->where('stock', '<=', 5)->count();
-        $kpiVariantes   = VarianteProducto::count();
+        $kpiTotal = Producto::sinEliminar()->count();
+        $kpiEnStock = Producto::sinEliminar()->where('stock', '>', 5)->count();
+        $kpiStockBajo = Producto::sinEliminar()->where('stock', '<=', 5)->count();
+        $kpiVariantes = VarianteProducto::count();
 
         // Categorías para el filtro
         $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
@@ -45,8 +45,8 @@ class ProductoController extends Controller
         if (!empty($buscar)) {
             $query->where(function ($q) use ($buscar) {
                 $q->where('nombre', 'like', "%{$buscar}%")
-                  ->orWhere('descripcion_corta', 'like', "%{$buscar}%")
-                  ->orWhere('descripcion', 'like', "%{$buscar}%");
+                    ->orWhere('descripcion_corta', 'like', "%{$buscar}%")
+                    ->orWhere('descripcion', 'like', "%{$buscar}%");
             });
         }
 
@@ -95,18 +95,18 @@ class ProductoController extends Controller
     public function create(): View
     {
         $esEdicion = false;
-        $producto  = new Producto([
-            'activo'      => true,
-            'destacado'   => false,
+        $producto = new Producto([
+            'activo' => true,
+            'destacado' => false,
             'aplica_itbms' => true,
             'oferta_activa' => false,
-            'stock'       => 0,
+            'stock' => 0,
             'stock_minimo' => 3,
-            'precio'      => 0.00,
+            'precio' => 0.00,
         ]);
         $imagenes = collect();
 
-        $categorias    = Categoria::sinEliminar()->orderBy('nombre')->get();
+        $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
         $tiposVariante = TipoVariante::with('opciones')->get();
 
         return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'tiposVariante', 'imagenes'));
@@ -118,39 +118,39 @@ class ProductoController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nombre'      => 'required|string|max:255',
-            'slug'        => 'required|string|max:255|unique:productos,slug',
-            'sku'         => 'required|string|max:100|unique:productos,sku',
+            'nombre' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:productos,slug',
+            'sku' => 'required|string|max:100|unique:productos,sku',
             'categoria_id' => 'required|exists:categorias,id',
-            'precio'      => 'required|numeric|min:0',
+            'precio' => 'required|numeric|min:0',
         ], [
-            'nombre.required'      => 'El nombre del producto es obligatorio.',
-            'slug.required'        => 'El slug del producto es obligatorio.',
-            'slug.unique'          => 'Ya existe un producto con ese slug. Regenera uno diferente.',
-            'sku.required'         => 'El SKU es obligatorio.',
-            'sku.unique'           => 'Ya existe un producto con ese SKU.',
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'slug.required' => 'El slug del producto es obligatorio.',
+            'slug.unique' => 'Ya existe un producto con ese slug. Regenera uno diferente.',
+            'sku.required' => 'El SKU es obligatorio.',
+            'sku.unique' => 'Ya existe un producto con ese SKU.',
             'categoria_id.required' => 'Debes seleccionar una categoría.',
-            'precio.required'      => 'El precio es obligatorio.',
+            'precio.required' => 'El precio es obligatorio.',
         ]);
 
         DB::transaction(function () use ($request) {
             $producto = Producto::create([
-                'categoria_id'    => $request->categoria_id,
-                'nombre'          => $request->nombre,
-                'slug'            => Str::slug($request->slug),
-                'descripcion'     => $request->descripcion ?? '',
+                'categoria_id' => $request->categoria_id,
+                'nombre' => $request->nombre,
+                'slug' => Str::slug($request->slug),
+                'descripcion' => $request->descripcion ?? '',
                 'descripcion_corta' => $request->descripcion_corta ?? '',
-                'sku'             => strtoupper($request->sku),
-                'precio'          => $request->precio,
-                'precio_oferta'   => $request->precio_oferta ?: null,
-                'oferta_activa'   => $request->boolean('oferta_activa'),
+                'sku' => strtoupper($request->sku),
+                'precio' => $request->precio,
+                'precio_oferta' => $request->precio_oferta ?: null,
+                'oferta_activa' => $request->boolean('oferta_activa'),
                 'oferta_inicio_en' => $request->oferta_inicio_en ?: null,
-                'oferta_fin_en'   => $request->oferta_fin_en ?: null,
-                'stock'           => (int) ($request->stock ?? 0),
-                'stock_minimo'    => (int) ($request->stock_minimo ?? 3),
-                'destacado'       => $request->boolean('destacado'),
-                'activo'          => $request->boolean('activo'),
-                'aplica_itbms'    => $request->boolean('aplica_itbms'),
+                'oferta_fin_en' => $request->oferta_fin_en ?: null,
+                'stock' => (int) ($request->stock ?? 0),
+                'stock_minimo' => (int) ($request->stock_minimo ?? 3),
+                'destacado' => $request->boolean('destacado'),
+                'activo' => $request->boolean('activo'),
+                'aplica_itbms' => $request->boolean('aplica_itbms'),
             ]);
 
             // Imágenes por URL ingresadas vía el campo de texto
@@ -158,7 +158,7 @@ class ProductoController extends Controller
 
             // Imágenes subidas por archivo
             $this->guardarImagenesArchivos($request, $producto);
-            
+
             // Guardar variantes si aplica
             $this->guardarVariantes($request, $producto);
         });
@@ -174,12 +174,12 @@ class ProductoController extends Controller
     public function edit(int $id): View
     {
         $esEdicion = true;
-        $producto  = Producto::with(['imagenes', 'variantes.opciones.tipo', 'categoria'])
+        $producto = Producto::with(['imagenes', 'variantes.opciones.tipo', 'categoria'])
             ->sinEliminar()
             ->findOrFail($id);
 
-        $imagenes      = $producto->imagenes;
-        $categorias    = Categoria::sinEliminar()->orderBy('nombre')->get();
+        $imagenes = $producto->imagenes;
+        $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
         $tiposVariante = TipoVariante::with('opciones')->get();
 
         return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'tiposVariante', 'id', 'imagenes'));
@@ -193,37 +193,37 @@ class ProductoController extends Controller
         $producto = Producto::sinEliminar()->findOrFail($id);
 
         $request->validate([
-            'nombre'      => 'required|string|max:255',
-            'slug'        => "required|string|max:255|unique:productos,slug,{$producto->id}",
-            'sku'         => "required|string|max:100|unique:productos,sku,{$producto->id}",
+            'nombre' => 'required|string|max:255',
+            'slug' => "required|string|max:255|unique:productos,slug,{$producto->id}",
+            'sku' => "required|string|max:100|unique:productos,sku,{$producto->id}",
             'categoria_id' => 'required|exists:categorias,id',
-            'precio'      => 'required|numeric|min:0',
+            'precio' => 'required|numeric|min:0',
         ], [
-            'nombre.required'      => 'El nombre del producto es obligatorio.',
-            'slug.unique'          => 'Ya existe otro producto con ese slug.',
-            'sku.unique'           => 'Ya existe otro producto con ese SKU.',
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'slug.unique' => 'Ya existe otro producto con ese slug.',
+            'sku.unique' => 'Ya existe otro producto con ese SKU.',
             'categoria_id.required' => 'Debes seleccionar una categoría.',
-            'precio.required'      => 'El precio es obligatorio.',
+            'precio.required' => 'El precio es obligatorio.',
         ]);
 
         DB::transaction(function () use ($request, $producto) {
             $producto->update([
-                'categoria_id'    => $request->categoria_id,
-                'nombre'          => $request->nombre,
-                'slug'            => Str::slug($request->slug),
-                'descripcion'     => $request->descripcion ?? '',
+                'categoria_id' => $request->categoria_id,
+                'nombre' => $request->nombre,
+                'slug' => Str::slug($request->slug),
+                'descripcion' => $request->descripcion ?? '',
                 'descripcion_corta' => $request->descripcion_corta ?? '',
-                'sku'             => strtoupper($request->sku),
-                'precio'          => $request->precio,
-                'precio_oferta'   => $request->precio_oferta ?: null,
-                'oferta_activa'   => $request->boolean('oferta_activa'),
+                'sku' => strtoupper($request->sku),
+                'precio' => $request->precio,
+                'precio_oferta' => $request->precio_oferta ?: null,
+                'oferta_activa' => $request->boolean('oferta_activa'),
                 'oferta_inicio_en' => $request->oferta_inicio_en ?: null,
-                'oferta_fin_en'   => $request->oferta_fin_en ?: null,
-                'stock'           => (int) ($request->stock ?? 0),
-                'stock_minimo'    => (int) ($request->stock_minimo ?? 3),
-                'destacado'       => $request->boolean('destacado'),
-                'activo'          => $request->boolean('activo'),
-                'aplica_itbms'    => $request->boolean('aplica_itbms'),
+                'oferta_fin_en' => $request->oferta_fin_en ?: null,
+                'stock' => (int) ($request->stock ?? 0),
+                'stock_minimo' => (int) ($request->stock_minimo ?? 3),
+                'destacado' => $request->boolean('destacado'),
+                'activo' => $request->boolean('activo'),
+                'aplica_itbms' => $request->boolean('aplica_itbms'),
             ]);
 
             // Eliminar imágenes marcadas para borrar
@@ -233,12 +233,26 @@ class ProductoController extends Controller
                     ->delete();
             }
 
+            // Actualizar imagen principal si se seleccionó una existente
+            if ($request->filled('imagen_principal_id')) {
+                $producto->imagenes()->update(['es_principal' => false]);
+                $producto->imagenes()->where('id', $request->imagen_principal_id)->update(['es_principal' => true]);
+            }
+
             // Agregar nuevas imágenes por URL
             $this->guardarImagenesUrl($request, $producto);
 
             // Agregar nuevas imágenes por archivo
             $this->guardarImagenesArchivos($request, $producto);
-            
+
+            // Asegurar que al menos una imagen sea principal si existen imágenes
+            if ($producto->imagenes()->exists() && !$producto->imagenes()->where('es_principal', true)->exists()) {
+                $primera = ImagenProducto::where('producto_id', $producto->id)->orderBy('orden')->first();
+                if ($primera) {
+                    $primera->update(['es_principal' => true]);
+                }
+            }
+
             // Guardar variantes si aplica
             $this->guardarVariantes($request, $producto);
         });
@@ -264,26 +278,49 @@ class ProductoController extends Controller
     // ─── Helpers Privados ─────────────────────────────────────────────────────
 
     /**
-     * Guarda imágenes enviadas como URL de texto (campo imagen_url).
+     * Guarda imágenes enviadas como URL (array imagenes_url[] o texto imagen_url).
      */
     private function guardarImagenesUrl(Request $request, Producto $producto): void
     {
-        if (!$request->filled('imagen_url')) {
+        $urls = [];
+
+        // 1. Array de URLs desde las tarjetas dinámicas de la galería
+        if ($request->has('imagenes_url') && is_array($request->imagenes_url)) {
+            foreach ($request->imagenes_url as $url) {
+                $url = trim($url);
+                if (!empty($url)) {
+                    $urls[] = $url;
+                }
+            }
+        }
+
+        // 2. Campo de texto directo (compatibilidad)
+        if ($request->filled('imagen_url')) {
+            $lineas = array_filter(array_map('trim', explode("\n", $request->imagen_url)));
+            foreach ($lineas as $l) {
+                if (!empty($l)) {
+                    $urls[] = $l;
+                }
+            }
+        }
+
+        if (empty($urls)) {
             return;
         }
 
-        $urls = array_filter(array_map('trim', explode("\n", $request->imagen_url)));
         $tienePrincipal = $producto->imagenes()->where('es_principal', true)->exists();
+        $maxOrden = (int) $producto->imagenes()->max('orden');
 
         foreach ($urls as $i => $url) {
-            if (empty($url)) continue;
             $esPrincipal = !$tienePrincipal && $i === 0;
             $producto->imagenes()->create([
-                'ruta'       => $url,
+                'ruta' => $url,
                 'es_principal' => $esPrincipal,
-                'orden'      => $producto->imagenes()->max('orden') + 1 + $i,
+                'orden' => $maxOrden + 1 + $i,
             ]);
-            if ($esPrincipal) $tienePrincipal = true;
+            if ($esPrincipal) {
+                $tienePrincipal = true;
+            }
         }
     }
 
@@ -300,18 +337,20 @@ class ProductoController extends Controller
         $maxOrden = (int) $producto->imagenes()->max('orden');
 
         foreach ($request->file('imagenes') as $i => $archivo) {
-            if (!$archivo->isValid()) continue;
+            if (!$archivo->isValid())
+                continue;
 
             $ruta = $archivo->store("productos/{$producto->id}", 'public');
             $esPrincipal = !$tienePrincipal && $i === 0;
 
             $producto->imagenes()->create([
-                'ruta'       => 'storage/' . $ruta,
+                'ruta' => 'storage/' . $ruta,
                 'es_principal' => $esPrincipal,
-                'orden'      => $maxOrden + 1 + $i,
+                'orden' => $maxOrden + 1 + $i,
             ]);
 
-            if ($esPrincipal) $tienePrincipal = true;
+            if ($esPrincipal)
+                $tienePrincipal = true;
         }
     }
 
@@ -327,13 +366,14 @@ class ProductoController extends Controller
         }
 
         $variantesData = $request->input('variantes', []);
-        
+
         // Estrategia simple: limpiar y recrear las variantes
         $producto->variantes()->delete();
 
         foreach ($variantesData as $data) {
-            if (!isset($data['sku'])) continue;
-            
+            if (!isset($data['sku']))
+                continue;
+
             $variante = VarianteProducto::create([
                 'producto_id' => $producto->id,
                 'sku' => $data['sku'],

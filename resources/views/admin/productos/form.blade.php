@@ -14,7 +14,7 @@
 @endsection
 
 @section('content')
-<div class="space-y-6 w-full min-w-0 max-w-full">
+<div class="space-y-5 w-full min-w-0 max-w-full">
 
     {{-- Alerta de éxito animada (Toast flotante) --}}
     @if(session('success'))
@@ -72,61 +72,61 @@
         <form id="form-producto" method="POST"
               action="{{ route('admin.productos.update', $id ?? $producto->id) }}"
               enctype="multipart/form-data"
-              class="space-y-6">
+              class="space-y-5">
             @csrf
             @method('PUT')
     @else
         <form id="form-producto" method="POST"
               action="{{ route('admin.productos.store') }}"
               enctype="multipart/form-data"
-              class="space-y-6">
+              class="space-y-5">
             @csrf
     @endif
         
         <!-- Header con Acciones Principales -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-200/80 pb-3">
             <div>
                 <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 shadow-xs">
-                        <span class="material-symbols-outlined text-[24px]">{{ ($esEdicion ?? false) ? 'edit_note' : 'add_box' }}</span>
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 shadow-xs shrink-0">
+                        <span class="material-symbols-outlined text-[22px]">{{ ($esEdicion ?? false) ? 'edit_note' : 'add_box' }}</span>
                     </div>
                     <div>
-                        <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                        <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
                             {{ ($esEdicion ?? false) ? 'Editar Producto & Variantes' : 'Crear Nuevo Producto' }}
                         </h1>
-                        <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+                        <p class="text-xs text-slate-500 mt-0.5">
                             Completa los detalles del artículo, atributos, precios e inventario para la tienda online.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="flex items-center gap-2.5 flex-wrap">
+            <div class="flex items-center gap-2 flex-wrap">
                 <a href="{{ route('admin.productos.index') }}" 
-                   class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-xs">
-                    <span class="material-symbols-outlined text-[18px] text-slate-400">arrow_back</span>
+                   class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-xs">
+                    <span class="material-symbols-outlined text-[17px] text-slate-400">arrow_back</span>
                     <span>Volver</span>
                 </a>
                 
                 @if(($esEdicion ?? false) && !empty($producto->slug))
                     <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" 
                        target="_blank"
-                       class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all shadow-xs">
-                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                       class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all shadow-xs">
+                        <span class="material-symbols-outlined text-[17px]">visibility</span>
                         <span>Ver en Tienda</span>
                     </a>
                 @endif
 
                 <button type="submit" 
-                        class="inline-flex items-center gap-1.5 px-5 py-2 bg-slate-900 hover:bg-slate-800 rounded-xl text-xs font-bold text-white shadow-sm transition-all transform active:scale-95">
-                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                        class="inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 bg-slate-900 hover:bg-slate-800 rounded-xl text-xs font-bold text-white shadow-sm transition-all transform active:scale-95">
+                    <span class="material-symbols-outlined text-[17px]">check_circle</span>
                     <span>{{ ($esEdicion ?? false) ? 'Actualizar Producto' : 'Publicar Producto' }}</span>
                 </button>
             </div>
         </div>
 
         <!-- Grid Principal: 2 Columnas (8 cols contenido / 4 cols lateral) -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             
             <!-- Columna Central / Izquierda (8 columnas) -->
             <div class="lg:col-span-8 space-y-6">
@@ -141,7 +141,7 @@
                     <div class="space-y-4">
                         <!-- Nombre del Producto -->
                         <div>
-                            <label for="nombre" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label for="nombre" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                 Nombre del Producto <span class="text-rose-500">*</span>
                             </label>
                             <input type="text" 
@@ -156,7 +156,7 @@
                         <!-- Slug / Enlace Permanente -->
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <label for="slug" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                                <label for="slug" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                                     Slug / Enlace Permanente <span class="text-rose-500">*</span>
                                 </label>
                                 <button type="button" 
@@ -181,7 +181,7 @@
                         <!-- SKU Base y Categoría -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <label for="sku" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                <label for="sku" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                     SKU Base <span class="text-rose-500">*</span>
                                 </label>
                                 <input type="text" 
@@ -194,7 +194,7 @@
                             </div>
 
                             <div>
-                                <label for="categoria_id" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                                <label for="categoria_id" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                     Categoría <span class="text-rose-500">*</span>
                                 </label>
                                 <select id="categoria_id" 
@@ -214,7 +214,7 @@
                         <!-- Descripción Corta -->
                         <div>
                             <div class="flex items-center justify-between mb-1">
-                                <label for="descripcion_corta" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                                <label for="descripcion_corta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                                     Descripción Corta (Resumen)
                                 </label>
                                 <span id="contador-desc-corta" class="text-[10px] text-slate-400">0 / 180 caracteres</span>
@@ -230,7 +230,7 @@
 
                         <!-- Descripción Detallada -->
                         <div>
-                            <label for="descripcion" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label for="descripcion" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                 Descripción Detallada & Especificaciones
                             </label>
                             
@@ -260,13 +260,13 @@
                             <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
                             <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Precios & Rentabilidad</h2>
                         </div>
-                        <span class="text-[11px] text-slate-400">Moneda oficial: USD ($ PAB)</span>
+                        <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">Moneda: USD ($)</span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <!-- Precio Base -->
                         <div>
-                            <label for="precio" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label for="precio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                 Precio Base <span class="text-rose-500">*</span>
                             </label>
                             <div class="relative flex items-center">
@@ -286,8 +286,8 @@
 
                         <!-- Precio Oferta -->
                         <div>
-                            <label for="precio_oferta" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                                Precio Oferta (Opcional)
+                            <label for="precio_oferta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                Precio Oferta (Descuento)
                             </label>
                             <div class="relative flex items-center">
                                 <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
@@ -299,13 +299,13 @@
                                        oninput="calcularMargen()"
                                        value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}" 
                                        placeholder="Opcional" 
-                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
                             </div>
                         </div>
 
                         <!-- Costo Unitario / Privado -->
                         <div>
-                            <label for="costo_unitario" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                            <label for="costo_unitario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                 Costo Unitario (Privado)
                             </label>
                             <div class="relative flex items-center">
@@ -324,28 +324,17 @@
                     </div>
 
                     <!-- Indicador en vivo de Margen de Ganancia -->
-                    <div id="badge-margen" class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-emerald-600 text-[18px]">query_stats</span>
-                            <span class="font-medium text-slate-600">Margen Bruto Estimado:</span>
+                    <div id="badge-margen" class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
+                        <div class="flex items-center gap-2 text-slate-600">
+                            <span class="material-symbols-outlined text-[18px] text-emerald-600">trending_up</span>
+                            <span class="font-medium">Rentabilidad calculada estimada:</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <span id="margen-monto" class="font-bold text-slate-900">+$0.00 por unidad</span>
-                            <span id="margen-porcentaje" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">0% margen</span>
+                            <span id="margen-porcentaje" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">0% margen</span>
                         </div>
                     </div>
                 </div>
-
-                <!-- CARD 3: Submódulo de Galería de Imágenes -->
-                @include('admin.productos.imagenes', ['imagenes' => $producto->imagenes ?? collect()])
-
-                <!-- CARD 4: Submódulo Constructor de Variantes -->
-                @include('admin.productos.variantes', [
-                    'variantes' => $producto->variantes ?? collect(),
-                    'tiposVariante' => $tiposVariante ?? collect()
-                ])
-
-
 
             </div>
 
@@ -367,40 +356,42 @@
                             </label>
                             <select id="activo" 
                                     name="activo" 
-                                    class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2 px-3">
+                                    class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                                 <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>🟢 Activo (Visible en tienda)</option>
                                 <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>⚪ Inactivo (Borrador oculto)</option>
                             </select>
                         </div>
 
-                        <!-- Switch de Producto Destacado -->
-                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                            <div class="space-y-0.5">
-                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
-                                    <span>Producto Destacado</span>
-                                </p>
-                                <p class="text-[10px] text-slate-500">Mostrar en la sección de destacados de la portada</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- Switch de Producto Destacado -->
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="space-y-0.5">
+                                    <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
+                                        <span>Destacado</span>
+                                    </p>
+                                    <p class="text-[9px] text-slate-500">Sección destacados</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="destacado" value="1" class="sr-only peer" @checked(old('destacado', $producto->destacado ?? false))>
+                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                                </label>
                             </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="destacado" value="1" class="sr-only peer" @checked(old('destacado', $producto->destacado ?? false))>
-                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-                            </label>
-                        </div>
 
-                        <!-- Switch de Aplicación de ITBMS 7% -->
-                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                            <div class="space-y-0.5">
-                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                                    <span class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
-                                    <span>Aplica ITBMS (7%)</span>
-                                </p>
-                                <p class="text-[10px] text-slate-500">Impuesto fiscal en Panamá</p>
+                            <!-- Switch de Aplicación de ITBMS 7% -->
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="space-y-0.5">
+                                    <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
+                                        <span>ITBMS (7%)</span>
+                                    </p>
+                                    <p class="text-[9px] text-slate-500">Impuesto Panamá</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer" @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
+                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                </label>
                             </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer" @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
-                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
-                            </label>
                         </div>
                     </div>
                 </div>
@@ -412,34 +403,48 @@
                         <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Inventario & Stock</h3>
                     </div>
 
-                    <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label for="stock" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Stock Total Disponible
+                                Stock Total
                             </label>
                             <input type="number" 
                                    id="stock" 
                                    name="stock" 
                                    min="0" 
                                    value="{{ old('stock', $producto->stock ?? 0) }}" 
-                                   class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2 px-3">
+                                   class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                         </div>
 
                         <div>
                             <label for="stock_minimo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Stock Mínimo para Alerta
+                                Mínimo Alerta
                             </label>
                             <input type="number" 
                                    id="stock_minimo" 
                                    name="stock_minimo" 
                                    min="0" 
                                    value="{{ old('stock_minimo', $producto->stock_minimo ?? 3) }}" 
-                                   class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2 px-3">
+                                   class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                         </div>
                     </div>
                 </div>
 
             </div>
+
+        </div>
+
+        <!-- SECCIÓN INFERIOR A ANCHO COMPLETO (100% Full Width) -->
+        <div class="space-y-6">
+
+            <!-- CARD FULL-WIDTH 1: Submódulo de Galería de Imágenes -->
+            @include('admin.productos.imagenes', ['imagenes' => $producto->imagenes ?? collect()])
+
+            <!-- CARD FULL-WIDTH 2: Submódulo Constructor de Variantes -->
+            @include('admin.productos.variantes', [
+                'variantes' => $producto->variantes ?? collect(),
+                'tiposVariante' => $tiposVariante ?? collect()
+            ])
 
         </div>
 
@@ -471,7 +476,6 @@
                 .replace(/-+/g, '-');
             
             slugInput.value = slugGenerado;
-            actualizarSerp();
         }
     }
 
@@ -500,21 +504,6 @@
                 pctEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800';
             }
         }
-    }
-
-    function actualizarSerp() {
-        const nombre = document.getElementById('nombre')?.value || 'Nombre del Producto';
-        const metaTitulo = document.getElementById('meta_titulo')?.value || nombre;
-        const slug = document.getElementById('slug')?.value || 'nuevo-producto';
-        const desc = document.getElementById('meta_descripcion')?.value || document.getElementById('descripcion_corta')?.value || 'Descripción del producto...';
-
-        const titleEl = document.getElementById('serp-title');
-        const urlEl = document.getElementById('serp-url');
-        const snipEl = document.getElementById('serp-snippet');
-
-        if (titleEl) titleEl.textContent = `${metaTitulo} | Tu Tienda Online`;
-        if (urlEl) urlEl.textContent = `https://tutienda.com/producto/${slug}`;
-        if (snipEl) snipEl.textContent = desc;
     }
 
     document.addEventListener('DOMContentLoaded', () => {

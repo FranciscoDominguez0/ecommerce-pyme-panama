@@ -19,6 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if ($this->app->runningInConsole()) {
+            @set_time_limit(0);
+            @ini_set('max_execution_time', '0');
+        } elseif ($this->app->environment('local')) {
+            @ini_set('max_execution_time', '120');
+        }
     }
 }

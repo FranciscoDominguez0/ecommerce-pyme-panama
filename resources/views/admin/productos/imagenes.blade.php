@@ -1,3 +1,7 @@
+@php
+    /** @var \Illuminate\Support\Collection<int, \App\Models\ImagenProducto>|\App\Models\ImagenProducto[] $imagenes */
+@endphp
+
 <!-- Submódulo: Galería de Imágenes del Producto -->
 <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
     <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -51,10 +55,14 @@
         </button>
     </div>
 
-    <!-- Grid de Miniaturas de Imágenes -->
-    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-2">
+    <!-- Input oculto para rastrear el ID de la imagen principal -->
+    <input type="hidden" name="imagen_principal_id" id="input-imagen-principal-id" value="{{ optional($imagenes->where('es_principal', true)->first())->id ?? '' }}">
+
+    <!-- Grid de Miniaturas de Imágenes (Full-Width Responsive) -->
+    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 pt-2">
         
         @forelse($imagenes ?? [] as $idx => $img)
+            @php /** @var \App\Models\ImagenProducto $img */ @endphp
             {{-- Input oculto para marcar esta imagen como existente; si se elimina, el JS lo convierte a imagenes_eliminar[] --}}
             <div class="relative group card-elevated rounded-xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-xs' : 'border border-slate-200 hover:border-slate-300 shadow-2xs' }} bg-white flex flex-col item-imagen" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
                 
@@ -150,7 +158,7 @@
             reader.onload = function(e) {
                 const src = e.target.result;
                 const isFirst = grid.querySelectorAll('.item-imagen').length === 0;
-                crearCardImagenHtml(src, file.name, isFirst);
+                crearCardImagenHtml(src, file.name, isFirst, false);
                 actualizarContadorGaleria();
             };
             reader.readAsDataURL(file);
@@ -171,19 +179,20 @@
         if (empty) empty.remove();
 
         const isFirst = grid.querySelectorAll('.item-imagen').length === 0;
-        crearCardImagenHtml(val, val.substring(0, 20), isFirst);
+        const nombreMostrar = val.length > 25 ? val.substring(0, 22) + '...' : val;
+        crearCardImagenHtml(val, nombreMostrar, isFirst, true);
         actualizarContadorGaleria();
         input.value = '';
     }
 
     // Crear el elemento HTML de miniatura de imagen
-    function crearCardImagenHtml(rutaOrBase64, nombreArchivo, esPrincipal) {
+    function crearCardImagenHtml(rutaOrBase64, nombreArchivo, esPrincipal, esUrl) {
         const grid = document.getElementById('grid-imagenes-producto');
         const div = document.createElement('div');
         div.className = `relative group card-elevated rounded-xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-xs' : 'border border-slate-200 hover:border-slate-300 shadow-2xs'} bg-white flex flex-col item-imagen`;
 
         let contentPreview = '';
-        if (rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http')) {
+        if (rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http') || rutaOrBase64.startsWith('/storage') || rutaOrBase64.startsWith('storage/')) {
             contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain">`;
         } else if (rutaOrBase64.includes('<svg') || rutaOrBase64.includes('</svg>')) {
             contentPreview = `<div class="w-full h-full flex items-center justify-center svg-container">${rutaOrBase64}</div>`;
@@ -191,7 +200,16 @@
             contentPreview = `<span class="material-symbols-outlined text-[48px] text-slate-600">${rutaOrBase64}</span>`;
         }
 
+        // Input oculto para enviar al backend si fue ingresada por URL
+        let hiddenInput = '';
+        if (esUrl) {
+            const escapedValue = rutaOrBase64.replace(/"/g, '&quot;');
+            hiddenInput = `<input type="hidden" name="imagenes_url[]" value="${escapedValue}">`;
+        }
+
         div.innerHTML = `
+            ${hiddenInput}
+
             ${esPrincipal ? `
                 <div class="absolute top-2 left-2 z-10 badge-principal">
                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-600 text-white shadow-xs">
@@ -238,6 +256,12 @@
         const grid = document.getElementById('grid-imagenes-producto');
         const cardActual = btn.closest('.item-imagen');
         if (!grid || !cardActual) return;
+
+        // Actualizar input oculto para ID de BD si aplica
+        const principalInput = document.getElementById('input-imagen-principal-id');
+        if (principalInput) {
+            principalInput.value = cardActual.dataset.dbId || '';
+        }
 
         grid.querySelectorAll('.item-imagen').forEach(card => {
             card.classList.remove('border-2', 'border-emerald-500');
