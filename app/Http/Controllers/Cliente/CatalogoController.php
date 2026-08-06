@@ -117,4 +117,41 @@ class CatalogoController extends Controller
 
         return view('cliente.catalogo.detalle', compact('producto', 'relacionados', 'categorias'));
     }
+
+    /**
+     * Registra el email de un cliente para avisarle cuando el producto vuelva a tener stock.
+     */
+    public function solicitarNotificacionStock(Request $request)
+    {
+        $validated = $request->validate([
+            'producto_id' => 'required|exists:productos,id',
+            'email' => 'required|email|max:255',
+        ], [
+            'email.required' => 'Por favor ingresa tu correo electrónico.',
+            'email.email' => 'Ingresa una dirección de correo válida.',
+            'producto_id.required' => 'El producto es requerido.',
+        ]);
+
+        $producto = Producto::sinEliminar()->findOrFail($validated['producto_id']);
+
+        \App\Models\NotificacionStock::firstOrCreate(
+            [
+                'producto_id' => $producto->id,
+                'email' => strtolower(trim($validated['email'])),
+                'notificado' => false,
+            ]
+        );
+
+        $mensaje = "¡Listo! Te enviaremos un correo a {$validated['email']} en cuanto tengamos stock de {$producto->nombre}.";
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $mensaje,
+            ]);
+        }
+
+        return back()->with('success', $mensaje);
+    }
 }
+

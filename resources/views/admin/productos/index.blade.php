@@ -14,39 +14,6 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Alerta de éxito animada (Toast flotante) --}}
-    @if(session('success'))
-        <div id="alerta-exito" class="fixed top-6 right-6 z-[100] flex items-center gap-3.5 px-4 py-4 rounded-2xl bg-white border border-emerald-100 shadow-2xl text-slate-700 text-sm font-bold animate-in fade-in slide-in-from-top-8 duration-500 max-w-sm overflow-hidden">
-            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-emerald-600 text-[24px]">check_circle</span>
-            </div>
-            <span class="flex-1">{{ session('success') }}</span>
-            <button type="button" onclick="cerrarAlerta()" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-100">
-                <span class="material-symbols-outlined text-[20px]">close</span>
-            </button>
-            <div class="absolute bottom-0 left-0 h-1 bg-emerald-500/20 w-full">
-                <div id="alerta-barra" class="h-full bg-emerald-500 w-full transition-all duration-[4000ms] ease-linear"></div>
-            </div>
-        </div>
-        <script>
-            function cerrarAlerta() {
-                const alerta = document.getElementById('alerta-exito');
-                if(!alerta) return;
-                alerta.classList.replace('animate-in', 'animate-out');
-                alerta.classList.replace('fade-in', 'fade-out');
-                alerta.classList.replace('slide-in-from-top-8', 'slide-out-to-top-8');
-                setTimeout(() => alerta.remove(), 300);
-            }
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    const barra = document.getElementById('alerta-barra');
-                    if(barra) barra.style.width = '0%';
-                }, 50);
-                setTimeout(() => cerrarAlerta(), 4000);
-            });
-        </script>
-    @endif
-
     <!-- Page Header & Action Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
         <div>

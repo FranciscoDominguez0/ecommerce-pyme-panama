@@ -16,11 +16,15 @@ class Producto extends Model
 
     protected $fillable = [
         'categoria_id',
+        'brand_id',
         'nombre',
         'slug',
         'descripcion',
         'descripcion_corta',
         'sku',
+        'marca',
+        'marca_logo',
+        'modelo',
         'precio',
         'precio_oferta',
         'oferta_activa',
@@ -46,6 +50,7 @@ class Producto extends Model
         'stock' => 'integer',
         'stock_minimo' => 'integer',
         'categoria_id' => 'integer',
+        'brand_id' => 'integer',
         'eliminado_en' => 'datetime',
         'creado_en' => 'datetime',
         'actualizado_en' => 'datetime',
@@ -57,6 +62,14 @@ class Producto extends Model
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
+
+    /**
+     * Marca oficial del producto.
+     */
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 
     /**
@@ -133,7 +146,26 @@ class Producto extends Model
         if ($this->oferta_fin_en && $ahora->gt($this->oferta_fin_en)) {
             return false;
         }
-
         return true;
+    }
+
+    /**
+     * Solicitudes de notificación cuando vuelva a haber stock.
+     */
+    public function notificacionesStock(): HasMany
+    {
+        return $this->hasMany(NotificacionStock::class, 'producto_id');
+    }
+
+    /**
+     * Retorna el HTML del logotipo oficial de la marca.
+     */
+    public function getMarcaLogoHtmlAttribute(): string
+    {
+        if ($this->brand) {
+            return $this->brand->logo_html;
+        }
+
+        return \App\Helpers\BrandHelper::getLogoHtml($this->marca, $this->marca_logo);
     }
 }

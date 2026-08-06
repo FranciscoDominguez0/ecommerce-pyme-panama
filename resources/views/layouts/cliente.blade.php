@@ -314,6 +314,9 @@
         </div>
     </footer>
 
+    <!-- Sistema Global de Alertas y Notificaciones Toast -->
+    <x-toast-alert />
+
     @stack('scripts')
 </body>
 </html>

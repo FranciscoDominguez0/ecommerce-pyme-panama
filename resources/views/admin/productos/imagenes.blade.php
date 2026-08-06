@@ -66,15 +66,15 @@
             {{-- Input oculto para marcar esta imagen como existente; si se elimina, el JS lo convierte a imagenes_eliminar[] --}}
             <div class="relative group card-elevated rounded-xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-xs' : 'border border-slate-200 hover:border-slate-300 shadow-2xs' }} bg-white flex flex-col item-imagen" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
                 
-                @if($img->es_principal)
-                    <!-- Badge de Portada / Principal -->
-                    <div class="absolute top-2 left-2 z-10 badge-principal">
+                <!-- Badge de Portada / Principal -->
+                <div class="badge-principal-container {{ $img->es_principal ? '' : 'hidden' }}">
+                    <div class="absolute top-2 left-2 z-10">
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-600 text-white shadow-xs">
                             <span class="material-symbols-outlined text-[12px]">star</span>
                             <span>Principal</span>
                         </span>
                     </div>
-                @endif
+                </div>
 
                 <!-- Input oculto: si el usuario elimina esta card, el JS agrega imagenes_eliminar[id] al form -->
                 <input type="hidden" name="imagenes_existentes[]" value="{{ $img->id }}" class="input-imagen-existente">
@@ -117,17 +117,19 @@
                 </div>
 
                 <!-- Footer con nombre corto y botón de portada -->
-                <div class="p-2 border-t border-slate-100 bg-white flex items-center justify-between text-[11px]">
-                    <span class="text-slate-500 font-mono truncate text-[10px]" title="{{ $img->ruta }}">{{ basename($img->ruta ?? 'foto-'.$idx.'.png') }}</span>
-                    @if($img->es_principal)
-                        <span class="text-emerald-600 font-bold text-[10px]">Portada</span>
-                    @else
-                        <button type="button" 
-                                onclick="hacerImagenPrincipal(this)" 
-                                class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors">
-                            Hacer Portada
-                        </button>
-                    @endif
+                <div class="p-2 border-t border-slate-100 bg-white flex items-center justify-between text-[11px] card-footer-actions">
+                    <span class="text-slate-500 font-mono truncate text-[10px] nombre-archivo-imagen" title="{{ $img->ruta }}">{{ basename($img->ruta ?? 'foto-'.$idx.'.png') }}</span>
+                    <div class="estado-portada-container">
+                        @if($img->es_principal)
+                            <span class="text-emerald-600 font-bold text-[10px] badge-texto-portada">Portada</span>
+                        @else
+                            <button type="button" 
+                                    onclick="hacerImagenPrincipal(this)" 
+                                    class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors btn-hacer-portada">
+                                Hacer Portada
+                            </button>
+                        @endif
+                    </div>
                 </div>
             </div>
         @empty
@@ -210,14 +212,14 @@
         div.innerHTML = `
             ${hiddenInput}
 
-            ${esPrincipal ? `
-                <div class="absolute top-2 left-2 z-10 badge-principal">
+            <div class="badge-principal-container ${esPrincipal ? '' : 'hidden'}">
+                <div class="absolute top-2 left-2 z-10">
                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-600 text-white shadow-xs">
                         <span class="material-symbols-outlined text-[12px]">star</span>
                         <span>Principal</span>
                     </span>
                 </div>
-            ` : ''}
+            </div>
 
             <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-lg backdrop-blur-xs">
                 <button type="button" onclick="moverImagenIzquierda(this)" title="Mover a la izquierda" class="text-white hover:text-emerald-400 p-0.5">
@@ -237,15 +239,17 @@
                 </div>
             </div>
 
-            <div class="p-2 border-t border-slate-100 bg-white flex items-center justify-between text-[11px]">
-                <span class="text-slate-500 font-mono truncate text-[10px]">${nombreArchivo}</span>
-                ${esPrincipal ? `
-                    <span class="text-emerald-600 font-bold text-[10px]">Portada</span>
-                ` : `
-                    <button type="button" onclick="hacerImagenPrincipal(this)" class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors">
-                        Hacer Portada
-                    </button>
-                `}
+            <div class="p-2 border-t border-slate-100 bg-white flex items-center justify-between text-[11px] card-footer-actions">
+                <span class="text-slate-500 font-mono truncate text-[10px] nombre-archivo-imagen" title="${nombreArchivo}">${nombreArchivo}</span>
+                <div class="estado-portada-container">
+                    ${esPrincipal ? `
+                        <span class="text-emerald-600 font-bold text-[10px] badge-texto-portada">Portada</span>
+                    ` : `
+                        <button type="button" onclick="hacerImagenPrincipal(this)" class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors btn-hacer-portada">
+                            Hacer Portada
+                        </button>
+                    `}
+                </div>
             </div>
         `;
 
@@ -263,42 +267,42 @@
             principalInput.value = cardActual.dataset.dbId || '';
         }
 
+        // Resetear todas las tarjetas
         grid.querySelectorAll('.item-imagen').forEach(card => {
-            card.classList.remove('border-2', 'border-emerald-500');
-            card.classList.add('border', 'border-slate-200');
-            const badge = card.querySelector('.badge-principal');
-            if (badge) badge.remove();
-            
-            const footerBtn = card.querySelector('div:last-child');
-            if (footerBtn) {
-                const nombreArchivo = footerBtn.querySelector('span')?.textContent || 'foto.png';
-                footerBtn.innerHTML = `
-                    <span class="text-slate-500 font-mono truncate text-[10px]">${nombreArchivo}</span>
-                    <button type="button" onclick="hacerImagenPrincipal(this)" class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors">Hacer Portada</button>
+            card.classList.remove('border-2', 'border-emerald-500', 'shadow-xs');
+            card.classList.add('border', 'border-slate-200', 'shadow-2xs');
+
+            // Ocultar badge principal
+            const badgeContainer = card.querySelector('.badge-principal-container');
+            if (badgeContainer) {
+                badgeContainer.classList.add('hidden');
+            }
+
+            // Restablecer botón a "Hacer Portada"
+            const estadoContainer = card.querySelector('.estado-portada-container');
+            if (estadoContainer) {
+                estadoContainer.innerHTML = `
+                    <button type="button" onclick="hacerImagenPrincipal(this)" class="text-[10px] font-semibold text-slate-400 hover:text-emerald-600 transition-colors btn-hacer-portada">
+                        Hacer Portada
+                    </button>
                 `;
             }
         });
 
-        cardActual.classList.remove('border', 'border-slate-200');
-        cardActual.classList.add('border-2', 'border-emerald-500');
+        // Activar borde y estilo de tarjeta seleccionada
+        cardActual.classList.remove('border', 'border-slate-200', 'shadow-2xs');
+        cardActual.classList.add('border-2', 'border-emerald-500', 'shadow-xs');
 
-        const badgePrincipal = document.createElement('div');
-        badgePrincipal.className = 'absolute top-2 left-2 z-10 badge-principal';
-        badgePrincipal.innerHTML = `
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-emerald-600 text-white shadow-xs">
-                <span class="material-symbols-outlined text-[12px]">star</span>
-                <span>Principal</span>
-            </span>
-        `;
-        cardActual.prepend(badgePrincipal);
+        // Mostrar badge principal en la seleccionada
+        const badgeActual = cardActual.querySelector('.badge-principal-container');
+        if (badgeActual) {
+            badgeActual.classList.remove('hidden');
+        }
 
-        const footerActual = cardActual.querySelector('div:last-child');
-        if (footerActual) {
-            const nombre = footerActual.querySelector('span')?.textContent || 'foto.png';
-            footerActual.innerHTML = `
-                <span class="text-slate-500 font-mono truncate text-[10px]">${nombre}</span>
-                <span class="text-emerald-600 font-bold text-[10px]">Portada</span>
-            `;
+        // Mostrar texto de "Portada" en la seleccionada
+        const estadoActual = cardActual.querySelector('.estado-portada-container');
+        if (estadoActual) {
+            estadoActual.innerHTML = `<span class="text-emerald-600 font-bold text-[10px] badge-texto-portada">Portada</span>`;
         }
     }
 

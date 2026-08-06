@@ -16,40 +16,6 @@
 @section('content')
 <div class="space-y-5 w-full min-w-0 max-w-full">
 
-    {{-- Alerta de éxito animada (Toast flotante) --}}
-    @if(session('success'))
-        <div id="alerta-exito" class="fixed top-6 right-6 z-[100] flex items-center gap-3.5 px-4 py-4 rounded-2xl bg-white border border-emerald-100 shadow-2xl text-slate-700 text-sm font-bold animate-in fade-in slide-in-from-top-8 duration-500 max-w-sm overflow-hidden">
-            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-emerald-600 text-[24px]">check_circle</span>
-            </div>
-            <span class="flex-1">{{ session('success') }}</span>
-            <button type="button" onclick="cerrarAlerta()" class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-100">
-                <span class="material-symbols-outlined text-[20px]">close</span>
-            </button>
-            <div class="absolute bottom-0 left-0 h-1 bg-emerald-500/20 w-full">
-                <div id="alerta-barra" class="h-full bg-emerald-500 w-full transition-all duration-[4000ms] ease-linear"></div>
-            </div>
-        </div>
-        <script>
-            function cerrarAlerta() {
-                const alerta = document.getElementById('alerta-exito');
-                if(!alerta) return;
-                alerta.classList.replace('animate-in', 'animate-out');
-                alerta.classList.replace('fade-in', 'fade-out');
-                alerta.classList.replace('slide-in-from-top-8', 'slide-out-to-top-8');
-                setTimeout(() => alerta.remove(), 300);
-            }
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => {
-                    const barra = document.getElementById('alerta-barra');
-                    if(barra) barra.style.width = '0%';
-                }, 50);
-                setTimeout(() => cerrarAlerta(), 4000);
-            });
-        </script>
-    @endif
-
-
     {{-- ── Errores de Validación ── --}}
     @if($errors->any())
         <div class="px-4 py-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm shadow-xs">
@@ -189,7 +155,7 @@
                                        name="sku" 
                                        required
                                        value="{{ old('sku', $producto->sku ?? '') }}" 
-                                       placeholder="PROD-001" 
+                                       placeholder="PTL-LEV-493" 
                                        class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                             </div>
 
@@ -208,6 +174,94 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- Marca y Modelo del Producto -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Marca (Fabricante)
+                                </label>
+
+                                <!-- Input oculto para enviar la marca seleccionada en el POST -->
+                                <input type="hidden" 
+                                       id="input-marca-valor" 
+                                       name="marca" 
+                                       value="{{ old('marca', $producto->brand->name ?? ($producto->marca ?? '')) }}">
+
+                                <!-- Tarjeta de Marca Seleccionada / Botón para Abrir Modal -->
+                                <div id="contenedor-marca-card" class="relative">
+                                    <!-- Estado 1: Marca Seleccionada (Compacto) -->
+                                    <div id="card-marca-activa" class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
+                                        <div class="flex items-center gap-2 min-w-0">
+                                            <div id="display-marca-logo" class="w-9 h-7 bg-white border border-slate-200/80 rounded-md flex items-center justify-center p-0.5 shadow-2xs shrink-0 overflow-hidden">
+                                                <!-- Logo dinámico -->
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div id="display-marca-nombre" class="text-xs font-bold text-slate-900 truncate">Lenovo</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-0.5 shrink-0">
+                                            <button type="button" 
+                                                    onclick="abrirModalMarcas()" 
+                                                    class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
+                                                <span class="material-symbols-outlined text-[13px]">sync_alt</span>
+                                                <span>Cambiar</span>
+                                            </button>
+                                            <button type="button" 
+                                                    onclick="deseleccionarMarca()" 
+                                                    class="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                                                    title="Quitar marca">
+                                                <span class="material-symbols-outlined text-[15px]">close</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Estado 2: Sin Marca Seleccionada (Compacto) -->
+                                    <button type="button" 
+                                            id="btn-abrir-modal-marcas" 
+                                            onclick="abrirModalMarcas()" 
+                                            class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">verified</span>
+                                            <span class="text-xs font-medium text-slate-600">Seleccionar Marca...</span>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
+                                            <span class="material-symbols-outlined text-[12px]">search</span>
+                                            <span>Explorar</span>
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <!-- Chips de acceso rápido para sugeridas (Compactos) -->
+                                @if(isset($marcas) && $marcas->where('is_suggested', true)->count() > 0)
+                                    <div class="flex items-center gap-1 mt-1.5 flex-wrap">
+                                        <span class="text-[9.5px] text-slate-400 font-medium">Populares:</span>
+                                        @foreach($marcas->where('is_suggested', true)->take(6) as $mSugerida)
+                                            <button type="button" 
+                                                    onclick="seleccionarMarca('{{ $mSugerida->name }}')" 
+                                                    class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-900 hover:text-white text-[9.5px] font-semibold text-slate-600 transition-all cursor-pointer">
+                                                {{ $mSugerida->name }}
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div>
+                                <label for="modelo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Modelo Técnico
+                                </label>
+                                <input type="text" 
+                                       id="modelo" 
+                                       name="modelo" 
+                                       value="{{ old('modelo', $producto->modelo ?? '') }}" 
+                                       placeholder="Ej: 82VG00WXUS, Archer AX23" 
+                                       class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 h-[44px] px-3">
+                                <p class="text-[10px] text-slate-400 mt-1.5">
+                                    Número de modelo de fábrica para búsqueda exacta.
+                                </p>
                             </div>
                         </div>
 
@@ -452,6 +506,106 @@
 
 </div>
 
+<!-- MODAL DE SELECCIÓN DE MARCAS CON BUSCADOR (COMPACTO) -->
+<div id="modal-marcas" 
+     class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4" 
+     style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);"
+     onclick="if(event.target === this) cerrarModalMarcas();">
+    
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+        
+        <!-- Modal Header Compacto -->
+        <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 shrink-0">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center shadow-xs">
+                    <span class="material-symbols-outlined text-[15px]">verified</span>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-slate-900">Seleccionar Marca</h3>
+                </div>
+            </div>
+            <button type="button" 
+                    onclick="cerrarModalMarcas()" 
+                    class="w-6 h-6 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-[16px]">close</span>
+            </button>
+        </div>
+
+        <!-- Buscador en Vivo y Tabs Compactos -->
+        <div class="p-3 border-b border-slate-100 bg-white shrink-0">
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]">
+                    search
+                </span>
+                <input type="text" 
+                       id="buscador-marcas-modal" 
+                       placeholder="Filtrar marca (ej: Lenovo, HP, ASUS, Apple, TP-Link)..." 
+                       oninput="filtrarMarcasModal(this.value)" 
+                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition-all">
+                <button type="button" 
+                        id="btn-limpiar-busqueda-marcas" 
+                        onclick="document.getElementById('buscador-marcas-modal').value = ''; filtrarMarcasModal('');" 
+                        class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">cancel</span>
+                </button>
+            </div>
+
+            <!-- Filtros rápidos por tab -->
+            <div class="flex items-center gap-1 mt-2 text-xs">
+                <button type="button" 
+                        id="tab-marcas-todas" 
+                        onclick="cambiarTabMarcas('todas')" 
+                        class="px-2.5 py-0.5 rounded-md font-bold text-[10.5px] bg-slate-900 text-white shadow-2xs transition-all cursor-pointer">
+                    Todas (<span id="contador-marcas-total">0</span>)
+                </button>
+                <button type="button" 
+                        id="tab-marcas-sugeridas" 
+                        onclick="cambiarTabMarcas('sugeridas')" 
+                        class="px-2.5 py-0.5 rounded-md font-semibold text-[10.5px] bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[12px] text-amber-500">star</span>
+                    <span>Sugeridas (<span id="contador-marcas-sugeridas">0</span>)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Grid de Tarjetas de Marcas Compacto -->
+        <div class="p-3 overflow-y-auto max-h-[300px] flex-1 bg-slate-50/40">
+            <div id="grid-marcas-modal" class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                <!-- Tarjetas generadas dinámicamente con JavaScript -->
+            </div>
+
+            <!-- Empty state / Opción para crear marca personalizada -->
+            <div id="empty-state-marcas" class="hidden text-center py-6 px-3">
+                <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-1.5">
+                    <span class="material-symbols-outlined text-[20px]">search_off</span>
+                </div>
+                <div class="text-xs font-bold text-slate-800">No se encontró en el catálogo</div>
+                <p class="text-[10.5px] text-slate-500 mt-0.5 mb-2.5">Puedes asignarla directamente como marca personalizada.</p>
+                <button type="button" 
+                        id="btn-usar-marca-personalizada" 
+                        onclick="usarMarcaPersonalizada()" 
+                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-xs transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">add_circle</span>
+                    <span>Usar «<span id="texto-marca-personalizada"></span>»</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-4 py-2.5 border-t border-slate-100 bg-white flex items-center justify-between shrink-0">
+            <div class="text-[10px] text-slate-400 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">touch_app</span>
+                <span>Clic en la marca para asignarla</span>
+            </div>
+            <button type="button" 
+                    onclick="cerrarModalMarcas()" 
+                    class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
     function regenerarSlugDesdeNombre() {
         const nombreInput = document.getElementById('nombre');
@@ -506,8 +660,214 @@
         }
     }
 
+    @php
+        $marcasArray = isset($marcas) 
+            ? $marcas->map(function($m) {
+                return [
+                    'id' => $m->id,
+                    'nombre' => $m->name,
+                    'slug' => $m->slug,
+                    'url' => $m->logo_url,
+                    'is_suggested' => (bool)$m->is_suggested,
+                    'verified' => (bool)$m->verified,
+                ];
+            })->values() 
+            : \App\Helpers\BrandHelper::getAvailableBrands();
+    @endphp
+    const marcasData = {!! json_encode($marcasArray) !!};
+    let activeTabMarcas = 'todas';
+
+    function getLogoHtmlForBrand(brand) {
+        if (brand && brand.url) {
+            return `<img src="${brand.url}" alt="${brand.nombre}" class="h-5 max-h-6 max-w-[70px] object-contain select-none">`;
+        }
+        if (brand && brand.slug === 'apple') {
+            return `<svg class="h-5 w-5 text-black fill-current" viewBox="0 0 170 170"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.7-7.88-12-14.52-6.55-10.13-11.49-21.36-14.81-33.7-3.32-12.33-4.99-23.77-4.99-34.3 0-14.61 3.73-26.68 11.2-36.21 7.46-9.53 16.73-14.39 27.79-14.57 4.89 0 10.36 1.34 16.4 4.02 6.04 2.68 9.77 4.07 11.19 4.17 1.12 0 5.09-1.52 11.91-4.57 6.83-3.04 12.63-4.37 17.41-3.99 13.25 1.13 23.36 5.86 30.34 14.18-11.83 7.15-17.61 16.89-17.33 29.2.29 9.69 4.15 17.65 11.58 23.87 7.43 6.22 16.27 9.78 26.51 10.68-2.6 7.82-5.74 15.65-9.41 23.49zm-38.64-106.8c0-7.39 2.65-14.18 7.95-20.36 5.3-6.19 11.75-9.83 19.34-10.93.9 4.02 1.35 7.82 1.35 11.4 0 7.39-2.78 14.35-8.33 20.88-5.55 6.53-12.31 10.23-20.31 11.1-.38-3.9-.38-7.93 0-12.09z"/></svg>`;
+        }
+        const name = brand ? brand.nombre : 'Marca';
+        return `<span class="px-1.5 py-0.5 rounded bg-slate-900 text-white text-[9px] font-black uppercase tracking-wider">${name}</span>`;
+    }
+
+    function abrirModalMarcas() {
+        const modal = document.getElementById('modal-marcas');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        
+        // Actualizar contadores
+        const totalEl = document.getElementById('contador-marcas-total');
+        const sugeridasEl = document.getElementById('contador-marcas-sugeridas');
+        if (totalEl) totalEl.textContent = marcasData.length;
+        if (sugeridasEl) sugeridasEl.textContent = marcasData.filter(m => m.is_suggested).length;
+
+        // Reset buscador
+        const input = document.getElementById('buscador-marcas-modal');
+        if (input) {
+            input.value = '';
+            setTimeout(() => input.focus(), 80);
+        }
+        
+        cambiarTabMarcas('todas');
+    }
+
+    function cerrarModalMarcas() {
+        const modal = document.getElementById('modal-marcas');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function cambiarTabMarcas(tab) {
+        activeTabMarcas = tab;
+        const tabTodas = document.getElementById('tab-marcas-todas');
+        const tabSugeridas = document.getElementById('tab-marcas-sugeridas');
+
+        if (tab === 'todas') {
+            tabTodas.className = 'px-2.5 py-0.5 rounded-md font-bold text-[10.5px] bg-slate-900 text-white shadow-2xs transition-all cursor-pointer';
+            tabSugeridas.className = 'px-2.5 py-0.5 rounded-md font-semibold text-[10.5px] bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-1';
+        } else {
+            tabTodas.className = 'px-2.5 py-0.5 rounded-md font-semibold text-[10.5px] bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer';
+            tabSugeridas.className = 'px-2.5 py-0.5 rounded-md font-bold text-[10.5px] bg-amber-500 text-white shadow-2xs transition-all cursor-pointer flex items-center gap-1';
+        }
+
+        const input = document.getElementById('buscador-marcas-modal');
+        filtrarMarcasModal(input ? input.value : '');
+    }
+
+    function filtrarMarcasModal(query) {
+        const grid = document.getElementById('grid-marcas-modal');
+        const empty = document.getElementById('empty-state-marcas');
+        const btnClear = document.getElementById('btn-limpiar-busqueda-marcas');
+        const txtPersonalizada = document.getElementById('texto-marca-personalizada');
+        const valorActual = (document.getElementById('input-marca-valor')?.value || '').trim().toLowerCase();
+
+        if (btnClear) {
+            btnClear.classList.toggle('hidden', !query);
+        }
+
+        const q = (query || '').trim().toLowerCase();
+        let lista = marcasData;
+
+        if (activeTabMarcas === 'sugeridas') {
+            lista = lista.filter(m => m.is_suggested);
+        }
+
+        if (q) {
+            lista = lista.filter(m => 
+                (m.nombre && m.nombre.toLowerCase().includes(q)) || 
+                (m.slug && m.slug.toLowerCase().includes(q))
+            );
+        }
+
+        grid.innerHTML = '';
+
+        if (lista.length === 0) {
+            grid.classList.add('hidden');
+            empty.classList.remove('hidden');
+            if (txtPersonalizada) {
+                txtPersonalizada.textContent = query.trim() || 'Nueva Marca';
+            }
+            return;
+        }
+
+        grid.classList.remove('hidden');
+        empty.classList.add('hidden');
+
+        lista.forEach(brand => {
+            const isSelected = valorActual && (brand.nombre.toLowerCase() === valorActual || brand.slug.toLowerCase() === valorActual);
+            
+            const card = document.createElement('div');
+            card.className = `p-2 rounded-xl border transition-all cursor-pointer text-center flex flex-col items-center justify-between group ${
+                isSelected 
+                    ? 'bg-emerald-50/80 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
+                    : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
+            }`;
+            card.onclick = () => seleccionarMarca(brand.nombre);
+
+            card.innerHTML = `
+                <div class="w-full h-9 rounded-lg bg-white border border-slate-100 flex items-center justify-center p-1 mb-1 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+                    ${getLogoHtmlForBrand(brand)}
+                </div>
+                <div class="w-full">
+                    <div class="text-[11px] font-bold text-slate-800 truncate group-hover:text-slate-900">${brand.nombre}</div>
+                    ${brand.is_suggested ? '<span class="inline-flex items-center gap-0.5 text-[8.5px] font-bold text-amber-600"><span class="material-symbols-outlined text-[9px]">star</span>Sugerida</span>' : ''}
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function seleccionarMarca(nombreMarca) {
+        const input = document.getElementById('input-marca-valor');
+        if (input) {
+            input.value = nombreMarca;
+        }
+        actualizarUIMarca(nombreMarca);
+        cerrarModalMarcas();
+    }
+
+    function deseleccionarMarca() {
+        const input = document.getElementById('input-marca-valor');
+        if (input) {
+            input.value = '';
+        }
+        actualizarUIMarca('');
+    }
+
+    function usarMarcaPersonalizada() {
+        const txt = document.getElementById('texto-marca-personalizada')?.textContent || '';
+        if (txt) {
+            seleccionarMarca(txt.trim());
+        }
+    }
+
+    function actualizarUIMarca(valor) {
+        const cardActiva = document.getElementById('card-marca-activa');
+        const btnAbrir = document.getElementById('btn-abrir-modal-marcas');
+        const displayNombre = document.getElementById('display-marca-nombre');
+        const displayLogo = document.getElementById('display-marca-logo');
+
+        const valorNorm = (valor || '').trim().toLowerCase();
+
+        if (!valorNorm) {
+            if (cardActiva) cardActiva.classList.add('hidden'), cardActiva.classList.remove('flex');
+            if (btnAbrir) btnAbrir.classList.remove('hidden');
+            return;
+        }
+
+        const brandEncontrada = marcasData.find(m => 
+            (m.nombre && m.nombre.toLowerCase() === valorNorm) || 
+            (m.slug && m.slug.toLowerCase() === valorNorm)
+        );
+
+        if (displayNombre) {
+            displayNombre.textContent = brandEncontrada ? brandEncontrada.nombre : valor;
+        }
+
+        if (displayLogo) {
+            displayLogo.innerHTML = getLogoHtmlForBrand(brandEncontrada || { nombre: valor });
+        }
+
+        if (btnAbrir) btnAbrir.classList.add('hidden');
+        if (cardActiva) {
+            cardActiva.classList.remove('hidden');
+            cardActiva.classList.add('flex');
+        }
+    }
+
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            cerrarModalMarcas();
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
         calcularMargen();
+        const valorInicial = document.getElementById('input-marca-valor')?.value;
+        if (valorInicial) {
+            actualizarUIMarca(valorInicial);
+        }
     });
 </script>
 @endsection

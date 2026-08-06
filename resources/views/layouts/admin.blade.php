@@ -155,6 +155,13 @@
                             <span class="truncate">Categorías</span>
                         </a>
 
+                        <!-- Marcas -->
+                        <a href="{{ route('admin.brands.index') }}" 
+                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.brands*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.brands*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">verified</span>
+                            <span class="truncate">Marcas & Logos</span>
+                        </a>
+
                         <!-- Inventario -->
                         <a href="{{ url('/admin/inventario') }}" 
                            class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/inventario*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
@@ -370,6 +377,9 @@
         setInterval(updatePanamaClock, 1000);
         updatePanamaClock();
     </script>
+
+    <!-- Sistema Global de Alertas y Notificaciones Toast -->
+    <x-toast-alert />
 
     @stack('scripts')
 </body>

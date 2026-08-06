@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Categoria;
 use App\Models\ImagenProducto;
 use App\Models\Producto;
@@ -38,7 +39,7 @@ class ProductoController extends Controller
         $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
 
         // Consulta base con eager loading
-        $query = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
+        $query = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo', 'brand'])
             ->withCount('variantes')
             ->sinEliminar();
 
@@ -107,9 +108,10 @@ class ProductoController extends Controller
         $imagenes = collect();
 
         $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
+        $marcas = Brand::orderBy('is_suggested', 'desc')->orderBy('name', 'asc')->get();
         $tiposVariante = TipoVariante::with('opciones')->get();
 
-        return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'tiposVariante', 'imagenes'));
+        return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'marcas', 'tiposVariante', 'imagenes'));
     }
 
     /**
@@ -133,14 +135,38 @@ class ProductoController extends Controller
             'precio.required' => 'El precio es obligatorio.',
         ]);
 
-        DB::transaction(function () use ($request) {
+        // Resolver marca y brand_id
+        $brandId = null;
+        $nombreMarca = null;
+
+        if ($request->filled('brand_id') && is_numeric($request->brand_id)) {
+            $brand = Brand::find($request->brand_id);
+            if ($brand) {
+                $brandId = $brand->id;
+                $nombreMarca = $brand->name;
+            }
+        } elseif ($request->filled('marca')) {
+            $nombreMarca = trim($request->marca);
+            $brand = Brand::where('name', 'ILIKE', $nombreMarca)
+                ->orWhere('slug', 'ILIKE', Str::slug($nombreMarca))
+                ->first();
+            if ($brand) {
+                $brandId = $brand->id;
+                $nombreMarca = $brand->name;
+            }
+        }
+
+        DB::transaction(function () use ($request, $brandId, $nombreMarca) {
             $producto = Producto::create([
                 'categoria_id' => $request->categoria_id,
+                'brand_id' => $brandId,
                 'nombre' => $request->nombre,
                 'slug' => Str::slug($request->slug),
                 'descripcion' => $request->descripcion ?? '',
                 'descripcion_corta' => $request->descripcion_corta ?? '',
                 'sku' => strtoupper($request->sku),
+                'marca' => $nombreMarca,
+                'modelo' => $request->modelo ? trim($request->modelo) : null,
                 'precio' => $request->precio,
                 'precio_oferta' => $request->precio_oferta ?: null,
                 'oferta_activa' => $request->boolean('oferta_activa'),
@@ -174,15 +200,16 @@ class ProductoController extends Controller
     public function edit(int $id): View
     {
         $esEdicion = true;
-        $producto = Producto::with(['imagenes', 'variantes.opciones.tipo', 'categoria'])
+        $producto = Producto::with(['imagenes', 'variantes.opciones.tipo', 'categoria', 'brand'])
             ->sinEliminar()
             ->findOrFail($id);
 
         $imagenes = $producto->imagenes;
         $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
+        $marcas = Brand::orderBy('is_suggested', 'desc')->orderBy('name', 'asc')->get();
         $tiposVariante = TipoVariante::with('opciones')->get();
 
-        return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'tiposVariante', 'id', 'imagenes'));
+        return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'marcas', 'tiposVariante', 'id', 'imagenes'));
     }
 
     /**
@@ -206,14 +233,38 @@ class ProductoController extends Controller
             'precio.required' => 'El precio es obligatorio.',
         ]);
 
-        DB::transaction(function () use ($request, $producto) {
+        // Resolver marca y brand_id
+        $brandId = null;
+        $nombreMarca = null;
+
+        if ($request->filled('brand_id') && is_numeric($request->brand_id)) {
+            $brand = Brand::find($request->brand_id);
+            if ($brand) {
+                $brandId = $brand->id;
+                $nombreMarca = $brand->name;
+            }
+        } elseif ($request->filled('marca')) {
+            $nombreMarca = trim($request->marca);
+            $brand = Brand::where('name', 'ILIKE', $nombreMarca)
+                ->orWhere('slug', 'ILIKE', Str::slug($nombreMarca))
+                ->first();
+            if ($brand) {
+                $brandId = $brand->id;
+                $nombreMarca = $brand->name;
+            }
+        }
+
+        DB::transaction(function () use ($request, $producto, $brandId, $nombreMarca) {
             $producto->update([
                 'categoria_id' => $request->categoria_id,
+                'brand_id' => $brandId,
                 'nombre' => $request->nombre,
                 'slug' => Str::slug($request->slug),
                 'descripcion' => $request->descripcion ?? '',
                 'descripcion_corta' => $request->descripcion_corta ?? '',
                 'sku' => strtoupper($request->sku),
+                'marca' => $nombreMarca,
+                'modelo' => $request->modelo ? trim($request->modelo) : null,
                 'precio' => $request->precio,
                 'precio_oferta' => $request->precio_oferta ?: null,
                 'oferta_activa' => $request->boolean('oferta_activa'),

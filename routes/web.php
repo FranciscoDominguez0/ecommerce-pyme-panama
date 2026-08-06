@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductoController;
@@ -26,6 +27,7 @@ Route::get('/', function () {
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
 Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
+Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
 
 // 2. Ruta /home para clientes autenticados (Redirección directa a dashboard)
 Route::get('/home', function () {
@@ -44,6 +46,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     // Módulo de Categorías
     Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');
     Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
+
+    // Módulo de Marcas (Brands)
+    Route::post('/brands/{brand}/toggle-suggested', [BrandController::class, 'toggleSuggested'])->name('admin.brands.toggle-suggested');
+    Route::resource('brands', BrandController::class)->names('admin.brands');
 
     // Módulo de Productos y Variantes
     Route::get('/productos', [ProductoController::class, 'index'])->name('admin.productos.index');

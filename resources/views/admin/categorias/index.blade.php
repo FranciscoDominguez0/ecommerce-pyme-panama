@@ -29,31 +29,6 @@
         </div>
     </div>
 
-    <!-- Alertas Flash -->
-    @if(session('success'))
-        <div id="flash-success" class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between shadow-xs transition-opacity duration-300">
-            <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-emerald-600 text-[20px]">check_circle</span>
-                <span class="font-semibold">{{ session('success') }}</span>
-            </div>
-            <button onclick="document.getElementById('flash-success').remove()" class="text-emerald-600 hover:text-emerald-900 p-1">
-                <span class="material-symbols-outlined text-[16px]">close</span>
-            </button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div id="flash-error" class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs flex items-center justify-between shadow-xs transition-opacity duration-300">
-            <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-red-600 text-[20px]">error</span>
-                <span class="font-semibold">{{ session('error') }}</span>
-            </div>
-            <button onclick="document.getElementById('flash-error').remove()" class="text-red-600 hover:text-red-900 p-1">
-                <span class="material-symbols-outlined text-[16px]">close</span>
-            </button>
-        </div>
-    @endif
-
     <!-- Filtros y Búsqueda -->
     <div class="card-elevated rounded-xl p-4 sm:p-5">
         <form method="GET" action="{{ route('admin.categorias.index') }}" class="flex flex-col sm:flex-row gap-3 items-center justify-between">
