@@ -10,7 +10,7 @@
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <a href="{{ route('admin.productos.index') }}" class="text-slate-500 hover:text-slate-900 transition-colors">Productos</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 truncate">{{ ($esEdicion ?? false) ? ($producto->nombre ?? 'Editar Producto') : 'Nuevo Producto' }}</span>
+    <span class="font-bold text-slate-900 truncate">{{ ($esEdicion ?? false) ? 'Editar' : 'Nuevo' }}</span>
 @endsection
 
 @section('content')
@@ -30,8 +30,6 @@
             </ul>
         </div>
     @endif
-
-
 
     <!-- Formulario Principal -->
     @if($esEdicion ?? false)
@@ -58,10 +56,10 @@
                     </div>
                     <div>
                         <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                            {{ ($esEdicion ?? false) ? 'Editar Producto & Variantes' : 'Crear Nuevo Producto' }}
+                            {{ ($esEdicion ?? false) ? 'Editar Registro de Artículo' : 'Nuevo Registro de Artículo' }}
                         </h1>
                         <p class="text-xs text-slate-500 mt-0.5">
-                            Completa los detalles del artículo, atributos, precios e inventario para la tienda online.
+                            Ficha técnica del producto, precios, inventario y variantes.
                         </p>
                     </div>
                 </div>
@@ -86,457 +84,521 @@
                 <button type="submit" 
                         class="inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 bg-slate-900 hover:bg-slate-800 rounded-xl text-xs font-bold text-white shadow-sm transition-all transform active:scale-95">
                     <span class="material-symbols-outlined text-[17px]">check_circle</span>
-                    <span>{{ ($esEdicion ?? false) ? 'Actualizar Producto' : 'Publicar Producto' }}</span>
+                    <span>{{ ($esEdicion ?? false) ? 'Guardar Cambios' : 'Publicar Artículo' }}</span>
                 </button>
             </div>
         </div>
 
-        <!-- Grid Principal: 2 Columnas Balanceadas (7 cols Contenido / 5 cols Ajustes y Precios) -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            
-            <!-- Columna Izquierda: Información y Descripciones (7 columnas) -->
-            <div class="lg:col-span-7 space-y-5">
-                
-                <!-- CARD 1: Información del Producto -->
-                <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-                    <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
-                        <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Información General</h2>
-                    </div>
+        <!-- Barra Superior de Pestañas (Registro de Artículo style) -->
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-1.5 shadow-xs overflow-x-auto no-scrollbar">
+            <div class="flex items-center gap-1 min-w-max">
+                <button type="button" 
+                        id="btn-tab-datos-generales" 
+                        onclick="cambiarTabProducto('datos-generales')"
+                        class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-slate-900 text-white shadow-xs">
+                    <span class="material-symbols-outlined text-[16px]">info</span>
+                    <span>DATOS GENERALES</span>
+                </button>
 
-                    <div class="space-y-4">
-                        <!-- Nombre del Producto -->
-                        <div>
-                            <label for="nombre" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Nombre del Producto <span class="text-rose-500">*</span>
-                            </label>
-                            <input type="text" 
-                                   id="nombre" 
-                                   name="nombre" 
-                                   required
-                                   value="{{ old('nombre', $producto->nombre ?? '') }}" 
-                                   placeholder="Ej. Portátil Lenovo IdeaPad 1 15.6'' FHD..." 
-                                   class="input-panama w-full text-sm rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                        </div>
+                <button type="button" 
+                        id="btn-tab-precios-inventario" 
+                        onclick="cambiarTabProducto('precios-inventario')"
+                        class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
+                    <span class="material-symbols-outlined text-[16px]">payments</span>
+                    <span>PRECIOS E INVENTARIO</span>
+                </button>
 
-                        <!-- Slug / Enlace Permanente -->
-                        <div>
-                            <div class="flex items-center justify-between mb-1">
-                                <label for="slug" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                                    Slug / Enlace Permanente <span class="text-rose-500">*</span>
-                                </label>
-                                <button type="button" 
-                                        onclick="regenerarSlugDesdeNombre()" 
-                                        class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 transition-colors cursor-pointer group">
-                                    <span id="icono-autorenew-slug" class="material-symbols-outlined text-[15px] group-hover:rotate-180 transition-transform duration-300">autorenew</span>
-                                    <span>Regenerar desde nombre</span>
-                                </button>
-                            </div>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs text-slate-400 pointer-events-none select-none font-mono hidden sm:inline">tutienda.com/producto/</span>
-                                <input type="text" 
-                                       id="slug" 
-                                       name="slug" 
-                                       required
-                                       value="{{ old('slug', $producto->slug ?? '') }}" 
-                                       placeholder="portatil-lenovo-ideapad-1" 
-                                       class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800">
-                            </div>
-                        </div>
+                <button type="button" 
+                        id="btn-tab-descripcion" 
+                        onclick="cambiarTabProducto('descripcion')"
+                        class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
+                    <span class="material-symbols-outlined text-[16px]">description</span>
+                    <span>DESCRIPCIÓN DETALLADA</span>
+                </button>
 
-                        <!-- SKU Base y Categoría -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label for="sku" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                    SKU Base <span class="text-rose-500">*</span>
-                                </label>
-                                <input type="text" 
-                                       id="sku" 
-                                       name="sku" 
-                                       required
-                                       value="{{ old('sku', $producto->sku ?? '') }}" 
-                                       placeholder="PTL-LEV-493" 
-                                       class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                            </div>
+                <button type="button" 
+                        id="btn-tab-imagenes" 
+                        onclick="cambiarTabProducto('imagenes')"
+                        class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
+                    <span class="material-symbols-outlined text-[16px]">photo_library</span>
+                    <span>IMÁGENES</span>
+                </button>
 
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                    Categoría <span class="text-rose-500">*</span>
-                                </label>
+                <button type="button" 
+                        id="btn-tab-variantes" 
+                        onclick="cambiarTabProducto('variantes')"
+                        class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
+                    <span class="material-symbols-outlined text-[16px]">style</span>
+                    <span>VARIANTES</span>
+                </button>
 
-                                <!-- Input oculto para enviar categoria_id en el POST -->
-                                <input type="hidden" 
-                                       id="input-categoria-valor" 
-                                       name="categoria_id" 
-                                       required 
-                                       value="{{ old('categoria_id', $producto->categoria_id ?? '') }}">
-
-                                <!-- Tarjeta de Categoría Seleccionada / Botón para Abrir Modal -->
-                                <div id="contenedor-categoria-card" class="relative">
-                                    <!-- Estado 1: Categoría Seleccionada -->
-                                    <div id="card-categoria-activa" class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
-                                        <div class="flex items-center gap-2 min-w-0">
-                                            <div class="w-8 h-8 rounded-lg bg-emerald-100/80 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                                                <span class="material-symbols-outlined text-[18px]">category</span>
-                                            </div>
-                                            <div class="min-w-0">
-                                                <div id="display-categoria-nombre" class="text-xs font-bold text-slate-900 truncate">Portatiles</div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center gap-0.5 shrink-0">
-                                            <button type="button" 
-                                                    onclick="abrirModalCategorias()" 
-                                                    class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
-                                                <span class="material-symbols-outlined text-[13px]">sync_alt</span>
-                                                <span>Cambiar</span>
-                                            </button>
-                                            <button type="button" 
-                                                    onclick="deseleccionarCategoria()" 
-                                                    class="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
-                                                    title="Quitar categoría">
-                                                <span class="material-symbols-outlined text-[15px]">close</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Estado 2: Sin Categoría Seleccionada -->
-                                    <button type="button" 
-                                            id="btn-abrir-modal-categorias" 
-                                            onclick="abrirModalCategorias()" 
-                                            class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
-                                        <div class="flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">category</span>
-                                            <span class="text-xs font-medium text-slate-600">Seleccionar Categoría...</span>
-                                        </div>
-                                        <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
-                                            <span class="material-symbols-outlined text-[12px]">search</span>
-                                            <span>Explorar</span>
-                                        </span>
-                                    </button>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Marca y Modelo del Producto -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                    Marca (Fabricante)
-                                </label>
-
-                                <!-- Input oculto para enviar la marca seleccionada en el POST -->
-                                <input type="hidden" 
-                                       id="input-marca-valor" 
-                                       name="marca" 
-                                       value="{{ old('marca', $producto->brand->name ?? ($producto->marca ?? '')) }}">
-
-                                <!-- Tarjeta de Marca Seleccionada / Botón para Abrir Modal -->
-                                <div id="contenedor-marca-card" class="relative">
-                                    <!-- Estado 1: Marca Seleccionada (Compacto) -->
-                                    <div id="card-marca-activa" class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
-                                        <div class="flex items-center gap-2 min-w-0">
-                                            <div id="display-marca-logo" class="w-9 h-7 bg-white border border-slate-200/80 rounded-md flex items-center justify-center p-0.5 shadow-2xs shrink-0 overflow-hidden">
-                                                <!-- Logo dinámico -->
-                                            </div>
-                                            <div class="min-w-0">
-                                                <div id="display-marca-nombre" class="text-xs font-bold text-slate-900 truncate">Lenovo</div>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center gap-0.5 shrink-0">
-                                            <button type="button" 
-                                                    onclick="abrirModalMarcas()" 
-                                                    class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
-                                                <span class="material-symbols-outlined text-[13px]">sync_alt</span>
-                                                <span>Cambiar</span>
-                                            </button>
-                                            <button type="button" 
-                                                    onclick="deseleccionarMarca()" 
-                                                    class="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
-                                                    title="Quitar marca">
-                                                <span class="material-symbols-outlined text-[15px]">close</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Estado 2: Sin Marca Seleccionada (Compacto) -->
-                                    <button type="button" 
-                                            id="btn-abrir-modal-marcas" 
-                                            onclick="abrirModalMarcas()" 
-                                            class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
-                                        <div class="flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">verified</span>
-                                            <span class="text-xs font-medium text-slate-600">Seleccionar Marca...</span>
-                                        </div>
-                                        <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
-                                            <span class="material-symbols-outlined text-[12px]">search</span>
-                                            <span>Explorar</span>
-                                        </span>
-                                    </button>
-                                </div>
-
-                            </div>
-
-                            <div>
-                                <label for="modelo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                    Modelo Técnico
-                                </label>
-                                <input type="text" 
-                                       id="modelo" 
-                                       name="modelo" 
-                                       value="{{ old('modelo', $producto->modelo ?? '') }}" 
-                                       placeholder="Ej: 82VG00WXUS, Archer AX23" 
-                                       class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 h-[44px] px-3">
-                                <p class="text-[10px] text-slate-400 mt-1.5">
-                                    Número de modelo de fábrica para búsqueda exacta.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Descripción Corta -->
-                        <div>
-                            <div class="flex items-center justify-between mb-1">
-                                <label for="descripcion_corta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
-                                    Descripción Corta (Resumen)
-                                </label>
-                                <span id="contador-desc-corta" class="text-[10px] text-slate-400">0 / 180 caracteres</span>
-                            </div>
-                            <textarea id="descripcion_corta" 
-                                      name="descripcion_corta" 
-                                      rows="2" 
-                                      maxlength="180" 
-                                      oninput="actualizarContador(this, 'contador-desc-corta', 180)"
-                                      placeholder="Breve descripción que aparecerá en los listados del catálogo..." 
-                                      class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
-                        </div>
-
-                        <!-- Descripción Detallada -->
-                        <div>
-                            <label for="descripcion" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Descripción Detallada & Especificaciones
-                            </label>
-                            
-                            <!-- Barra de herramientas simulada -->
-                            <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 border-b-0 rounded-t-xl px-3 py-1.5 text-slate-500 text-xs">
-                                <button type="button" class="p-1 hover:bg-slate-200 rounded font-bold">B</button>
-                                <button type="button" class="p-1 hover:bg-slate-200 rounded italic font-serif">I</button>
-                                <span class="text-slate-300 mx-1">|</span>
-                                <button type="button" class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">format_list_bulleted</button>
-                                <button type="button" class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">link</button>
-                                <button type="button" class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">image</button>
-                            </div>
-                            <textarea id="descripcion" 
-                                      name="descripcion" 
-                                      rows="5" 
-                                      placeholder="Escribe la descripción completa, características técnicas, contenido de la caja y garantía..." 
-                                      class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
-                        </div>
-
-                    </div>
-                </div>
-
+                <button type="button" 
+                        id="btn-tab-ver-todo" 
+                        onclick="cambiarTabProducto('ver-todo')"
+                        class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-500 hover:bg-slate-100 border-l border-slate-200 ml-auto">
+                    <span class="material-symbols-outlined text-[16px]">view_agenda</span>
+                    <span>VER TODO</span>
+                </button>
             </div>
-
-            <!-- Columna Derecha: Estado, Precios e Inventario (5 columnas) -->
-            <div class="lg:col-span-5 space-y-5">
-                
-                <!-- CARD LATERAL 1: Estado & Visibilidad -->
-                <div class="card-elevated p-5 rounded-2xl space-y-4">
-                    <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">toggle_on</span>
-                        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Estado & Visibilidad</h3>
-                    </div>
-
-                    <div class="space-y-4">
-                        <!-- Select de Estado sin Emojis -->
-                        <div>
-                            <label for="activo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Estado del Producto
-                            </label>
-                            <select id="activo" 
-                                    name="activo" 
-                                    class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                                <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>Activo (Visible en tienda)</option>
-                                <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>Inactivo (Borrador oculto)</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <!-- Switch de Producto Destacado -->
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                <div class="space-y-0.5">
-                                    <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
-                                        <span>Destacado</span>
-                                    </p>
-                                    <p class="text-[9px] text-slate-500">Sección destacados</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" name="destacado" value="1" class="sr-only peer" @checked(old('destacado', $producto->destacado ?? false))>
-                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
-                                </label>
-                            </div>
-
-                            <!-- Switch de Aplicación de ITBMS 7% -->
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                <div class="space-y-0.5">
-                                    <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
-                                        <span>ITBMS (7%)</span>
-                                    </p>
-                                    <p class="text-[9px] text-slate-500">Impuesto Panamá</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer" @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
-                                    <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CARD LATERAL 2: Precios & Rentabilidad -->
-                <div class="card-elevated p-5 rounded-2xl space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
-                            <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Precios & Rentabilidad</h2>
-                        </div>
-                        <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">USD ($)</span>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div class="grid grid-cols-2 gap-3">
-                            <!-- Precio Base -->
-                            <div>
-                                <label for="precio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                    Precio Base <span class="text-rose-500">*</span>
-                                </label>
-                                <div class="relative flex items-center">
-                                    <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
-                                    <input type="number" 
-                                           step="0.01" 
-                                           min="0" 
-                                           id="precio" 
-                                           name="precio" 
-                                           required
-                                           oninput="calcularMargen()"
-                                           value="{{ old('precio', $producto->precio ?? '0.00') }}" 
-                                           placeholder="0.00" 
-                                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
-                                </div>
-                            </div>
-
-                            <!-- Precio Oferta -->
-                            <div>
-                                <label for="precio_oferta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                    Precio Oferta
-                                </label>
-                                <div class="relative flex items-center">
-                                    <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
-                                    <input type="number" 
-                                           step="0.01" 
-                                           min="0" 
-                                           id="precio_oferta" 
-                                           name="precio_oferta" 
-                                           oninput="calcularMargen()"
-                                           value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}" 
-                                           placeholder="Opcional" 
-                                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Costo Unitario / Privado -->
-                        <div>
-                            <label for="costo_unitario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Costo Unitario (Privado)
-                            </label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
-                                <input type="number" 
-                                       step="0.01" 
-                                       min="0" 
-                                       id="costo_unitario" 
-                                       name="costo_unitario" 
-                                       oninput="calcularMargen()"
-                                       value="0.00" 
-                                       placeholder="0.00" 
-                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
-                            </div>
-                        </div>
-
-                        <!-- Indicador en vivo de Margen de Ganancia -->
-                        <div id="badge-margen" class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-1.5 text-xs">
-                            <div class="flex items-center gap-1.5 text-slate-600">
-                                <span class="material-symbols-outlined text-[16px] text-emerald-600">trending_up</span>
-                                <span class="font-medium text-[11px]">Rentabilidad calculada estimada:</span>
-                            </div>
-                            <div class="flex items-center justify-between pt-0.5">
-                                <span id="margen-monto" class="font-bold text-slate-900">+$0.00 por unidad</span>
-                                <span id="margen-porcentaje" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">0% margen</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CARD LATERAL 3: Inventario & Stock -->
-                <div class="card-elevated p-5 rounded-2xl space-y-4">
-                    <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">warehouse</span>
-                        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Inventario & Stock</h3>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label for="stock" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Stock Total
-                            </label>
-                            <input type="number" 
-                                   id="stock" 
-                                   name="stock" 
-                                   min="0" 
-                                   value="{{ old('stock', $producto->stock ?? 0) }}" 
-                                   class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                        </div>
-
-                        <div>
-                            <label for="stock_minimo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Mínimo Alerta
-                            </label>
-                            <input type="number" 
-                                   id="stock_minimo" 
-                                   name="stock_minimo" 
-                                   min="0" 
-                                   value="{{ old('stock_minimo', $producto->stock_minimo ?? 3) }}" 
-                                   class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
         </div>
 
-        <!-- SECCIÓN INFERIOR A ANCHO COMPLETO (100% Full Width) -->
-        <div class="space-y-6">
+        <!-- ── CONTENIDO DE PESTAÑAS ── -->
 
-            <!-- CARD FULL-WIDTH 1: Submódulo de Galería de Imágenes -->
+        <!-- Pestaña 1: DATOS GENERALES -->
+        <div id="tab-panel-datos-generales" class="tab-contenido-producto space-y-5">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                
+                <!-- Columna Izquierda: Datos de Ficha de Artículo (8 cols) -->
+                <div class="lg:col-span-8 space-y-5">
+                    <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
+                        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
+                            <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Información del Artículo</h2>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Fila 1: Nombre del Producto (8 cols) + SKU Base (4 cols) -->
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                <div class="md:col-span-8">
+                                    <label for="nombre" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        Nombre del Producto <span class="text-rose-500">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           id="nombre" 
+                                           name="nombre" 
+                                           required
+                                           value="{{ old('nombre', $producto->nombre ?? '') }}" 
+                                           placeholder="Ej. Enrutador Inalámbrico TP-Link ARCHER AX23" 
+                                           class="input-panama w-full text-sm rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-medium">
+                                </div>
+
+                                <div class="md:col-span-4">
+                                    <label for="sku" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        SKU Base <span class="text-rose-500">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           id="sku" 
+                                           name="sku" 
+                                           required
+                                           value="{{ old('sku', $producto->sku ?? '') }}" 
+                                           placeholder="PRDO-13" 
+                                           class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                </div>
+                            </div>
+
+                            <!-- Fila 2: Slug (8 cols) + Modelo Técnico (4 cols) -->
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                <div class="md:col-span-8">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label for="slug" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                                            Slug / Enlace Permanente <span class="text-rose-500">*</span>
+                                        </label>
+                                        <button type="button" 
+                                                onclick="regenerarSlugDesdeNombre()" 
+                                                class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 transition-colors cursor-pointer group">
+                                            <span id="icono-autorenew-slug" class="material-symbols-outlined text-[15px] group-hover:rotate-180 transition-transform duration-300">autorenew</span>
+                                            <span>Regenerar desde nombre</span>
+                                        </button>
+                                    </div>
+                                    <div class="relative flex items-center">
+                                        <span class="absolute left-3 text-xs text-slate-400 pointer-events-none select-none font-mono hidden sm:inline">tutienda.com/producto/</span>
+                                        <input type="text" 
+                                               id="slug" 
+                                               name="slug" 
+                                               required
+                                               value="{{ old('slug', $producto->slug ?? '') }}" 
+                                               placeholder="enrutador-inalambrico-tp-link-archer-ax23" 
+                                               class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800">
+                                    </div>
+                                </div>
+
+                                <div class="md:col-span-4">
+                                    <label for="modelo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        Modelo Técnico
+                                    </label>
+                                    <input type="text" 
+                                           id="modelo" 
+                                           name="modelo" 
+                                           value="{{ old('modelo', $producto->modelo ?? '') }}" 
+                                           placeholder="ARCHER AX23" 
+                                           class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                    <p class="text-[10px] text-slate-400 mt-1">
+                                        Modelo de fábrica exacto.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Fila 3: Categoría y Marca -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Categoría -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        Categoría <span class="text-rose-500">*</span>
+                                    </label>
+                                    <input type="hidden" 
+                                           id="input-categoria-valor" 
+                                           name="categoria_id" 
+                                           required 
+                                           value="{{ old('categoria_id', $producto->categoria_id ?? '') }}">
+
+                                    <div id="contenedor-categoria-card" class="relative">
+                                        <div id="card-categoria-activa" class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
+                                            <div class="flex items-center gap-2 min-w-0">
+                                                <div class="w-8 h-8 rounded-lg bg-emerald-100/80 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                                                    <span class="material-symbols-outlined text-[18px]">category</span>
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <div id="display-categoria-nombre" class="text-xs font-bold text-slate-900 truncate">Redes</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-0.5 shrink-0">
+                                                <button type="button" 
+                                                        onclick="abrirModalCategorias()" 
+                                                        class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
+                                                    <span class="material-symbols-outlined text-[13px]">sync_alt</span>
+                                                    <span>Cambiar</span>
+                                                </button>
+                                                <button type="button" 
+                                                        onclick="deseleccionarCategoria()" 
+                                                        class="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                                                        title="Quitar categoría">
+                                                    <span class="material-symbols-outlined text-[15px]">close</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" 
+                                                id="btn-abrir-modal-categorias" 
+                                                onclick="abrirModalCategorias()" 
+                                                class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
+                                            <div class="flex items-center gap-2">
+                                                <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">category</span>
+                                                <span class="text-xs font-medium text-slate-600">Seleccionar Categoría...</span>
+                                            </div>
+                                            <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
+                                                <span class="material-symbols-outlined text-[12px]">search</span>
+                                                <span>Explorar</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Marca -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        Marca (Fabricante)
+                                    </label>
+                                    <input type="hidden" 
+                                           id="input-marca-valor" 
+                                           name="marca" 
+                                           value="{{ old('marca', $producto->brand->name ?? ($producto->marca ?? '')) }}">
+
+                                    <div id="contenedor-marca-card" class="relative">
+                                        <div id="card-marca-activa" class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
+                                            <div class="flex items-center gap-2 min-w-0">
+                                                <div id="display-marca-logo" class="w-9 h-7 bg-white border border-slate-200/80 rounded-md flex items-center justify-center p-0.5 shadow-2xs shrink-0 overflow-hidden">
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <div id="display-marca-nombre" class="text-xs font-bold text-slate-900 truncate">Adata</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-0.5 shrink-0">
+                                                <button type="button" 
+                                                        onclick="abrirModalMarcas()" 
+                                                        class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
+                                                    <span class="material-symbols-outlined text-[13px]">sync_alt</span>
+                                                    <span>Cambiar</span>
+                                                </button>
+                                                <button type="button" 
+                                                        onclick="deseleccionarMarca()" 
+                                                        class="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                                                        title="Quitar marca">
+                                                    <span class="material-symbols-outlined text-[15px]">close</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" 
+                                                id="btn-abrir-modal-marcas" 
+                                                onclick="abrirModalMarcas()" 
+                                                class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
+                                            <div class="flex items-center gap-2">
+                                                <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">verified</span>
+                                                <span class="text-xs font-medium text-slate-600">Seleccionar Marca...</span>
+                                            </div>
+                                            <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
+                                                <span class="material-symbols-outlined text-[12px]">search</span>
+                                                <span>Explorar</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Estado & Visibilidad (4 cols) -->
+                <div class="lg:col-span-4 space-y-5">
+                    <div class="card-elevated p-5 rounded-2xl space-y-4">
+                        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">toggle_on</span>
+                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Estado & Visibilidad</h3>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label for="activo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Estado del Producto
+                                </label>
+                                <select id="activo" 
+                                        name="activo" 
+                                        class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold">
+                                    <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>Activo (Visible en tienda)</option>
+                                    <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>Inactivo (Borrador oculto)</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-2.5">
+                                <!-- Switch Destacado -->
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <div class="space-y-0.5">
+                                        <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
+                                            <span>Destacado</span>
+                                        </p>
+                                        <p class="text-[9px] text-slate-500">Sección destacados</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="destacado" value="1" class="sr-only peer" @checked(old('destacado', $producto->destacado ?? false))>
+                                        <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                                    </label>
+                                </div>
+
+                                <!-- Switch ITBMS 7% -->
+                                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                    <div class="space-y-0.5">
+                                        <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
+                                            <span>ITBMS (7%)</span>
+                                        </p>
+                                        <p class="text-[9px] text-slate-500">Impuesto Panamá</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer" @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
+                                        <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Pestaña 2: PRECIOS E INVENTARIO -->
+        <div id="tab-panel-precios-inventario" class="tab-contenido-producto space-y-5 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+                
+                <!-- Precios & Rentabilidad (7 Cols) -->
+                <div class="lg:col-span-7 space-y-5">
+                    <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
+                                <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Precios & Rentabilidad</h2>
+                            </div>
+                            <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">USD ($)</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Precio Base -->
+                                <div>
+                                    <label for="precio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        Precio Base <span class="text-rose-500">*</span>
+                                    </label>
+                                    <div class="relative flex items-center">
+                                        <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                                        <input type="number" 
+                                               step="0.01" 
+                                               min="0" 
+                                               id="precio" 
+                                               name="precio" 
+                                               required
+                                               oninput="calcularMargen()"
+                                               value="{{ old('precio', $producto->precio ?? '134.04') }}" 
+                                               placeholder="134.04" 
+                                               class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                    </div>
+                                </div>
+
+                                <!-- Precio Oferta -->
+                                <div>
+                                    <label for="precio_oferta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                        Precio Oferta
+                                    </label>
+                                    <div class="relative flex items-center">
+                                        <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                                        <input type="number" 
+                                               step="0.01" 
+                                               min="0" 
+                                               id="precio_oferta" 
+                                               name="precio_oferta" 
+                                               oninput="calcularMargen()"
+                                               value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}" 
+                                               placeholder="Opcional" 
+                                               class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Costo Unitario -->
+                            <div>
+                                <label for="costo_unitario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Costo Unitario (Privado)
+                                </label>
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                                    <input type="number" 
+                                           step="0.01" 
+                                           min="0" 
+                                           id="costo_unitario" 
+                                           name="costo_unitario" 
+                                           oninput="calcularMargen()"
+                                           value="{{ old('costo_unitario', $producto->costo_unitario ?? '0.00') }}" 
+                                           placeholder="0.00" 
+                                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                </div>
+                            </div>
+
+                            <!-- Indicator Margen -->
+                            <div id="badge-margen" class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-1 text-xs">
+                                <div class="flex items-center gap-1.5 text-slate-600">
+                                    <span class="material-symbols-outlined text-[16px] text-emerald-600">trending_up</span>
+                                    <span class="font-medium text-[11px]">Rentabilidad calculada estimada:</span>
+                                </div>
+                                <div class="flex items-center justify-between pt-0.5">
+                                    <span id="margen-monto" class="font-bold text-slate-900 text-sm">+$0.00 por unidad</span>
+                                    <span id="margen-porcentaje" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">0% margen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventario & Stock (5 Cols) -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
+                        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">warehouse</span>
+                            <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Inventario & Stock</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="stock" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Stock Total
+                                </label>
+                                <div class="relative flex items-center">
+                                    <input type="number" 
+                                           id="stock" 
+                                           name="stock" 
+                                           min="0" 
+                                           value="{{ old('stock', $producto->stock ?? 12) }}" 
+                                           class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="stock_minimo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                                    <span>Mínimo Alerta</span>
+                                    <span class="material-symbols-outlined text-[14px] text-amber-500" title="Alerta de stock bajo">warning</span>
+                                </label>
+                                <input type="number" 
+                                       id="stock_minimo" 
+                                       name="stock_minimo" 
+                                       min="0" 
+                                       value="{{ old('stock_minimo', $producto->stock_minimo ?? 3) }}" 
+                                       class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Pestaña 3: DESCRIPCIÓN DETALLADA -->
+        <div id="tab-panel-descripcion" class="tab-contenido-producto space-y-5 hidden">
+            <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="material-symbols-outlined text-emerald-600 text-[20px]">description</span>
+                    <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Descripciones & Especificaciones</h2>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Descripción Corta -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="descripcion_corta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                                Descripción Corta (Resumen)
+                            </label>
+                            <span id="contador-desc-corta" class="text-[10px] text-slate-400">0 / 180 caracteres</span>
+                        </div>
+                        <textarea id="descripcion_corta" 
+                                  name="descripcion_corta" 
+                                  rows="2" 
+                                  maxlength="180" 
+                                  oninput="actualizarContador(this, 'contador-desc-corta', 180)"
+                                  placeholder="Router WiFi 6 de alta velocidad con cobertura de hasta 150 m²..." 
+                                  class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
+                    </div>
+
+                    <!-- Descripción Detallada -->
+                    <div>
+                        <label for="descripcion" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                            Descripción Detallada & Especificaciones
+                        </label>
+                        
+                        <!-- Barra de herramientas simulada -->
+                        <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 border-b-0 rounded-t-xl px-3 py-1.5 text-slate-500 text-xs">
+                            <button type="button" class="p-1 hover:bg-slate-200 rounded font-bold">B</button>
+                            <button type="button" class="p-1 hover:bg-slate-200 rounded italic font-serif">I</button>
+                            <span class="text-slate-300 mx-1">|</span>
+                            <button type="button" class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">format_list_bulleted</button>
+                            <button type="button" class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">link</button>
+                            <button type="button" class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">image</button>
+                        </div>
+                        <textarea id="descripcion" 
+                                  name="descripcion" 
+                                  rows="8" 
+                                  placeholder="Escribe la descripción completa, características técnicas y especificaciones..." 
+                                  class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestaña 4: IMÁGENES -->
+        <div id="tab-panel-imagenes" class="tab-contenido-producto space-y-5 hidden">
             @include('admin.productos.imagenes', ['imagenes' => $producto->imagenes ?? collect()])
+        </div>
 
-            <!-- CARD FULL-WIDTH 2: Submódulo Constructor de Variantes -->
+        <!-- Pestaña 5: VARIANTES -->
+        <div id="tab-panel-variantes" class="tab-contenido-producto space-y-5 hidden">
             @include('admin.productos.variantes', [
                 'variantes' => $producto->variantes ?? collect(),
                 'tiposVariante' => $tiposVariante ?? collect()
             ])
-
         </div>
 
     </form>
 
 </div>
 
-<!-- MODAL DE SELECCIÓN DE MARCAS CON BUSCADOR (COMPACTO) -->
+<!-- MODAL DE SELECCIÓN DE MARCAS CON BUSCADOR -->
 <div id="modal-marcas" 
      class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4" 
      style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);"
@@ -544,10 +606,10 @@
     
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         
-        <!-- Modal Header Compacto -->
+        <!-- Modal Header -->
         <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 shrink-0">
             <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center shadow-xs">
+                <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center shadow-xs">
                     <span class="material-symbols-outlined text-[15px]">verified</span>
                 </div>
                 <div>
@@ -561,7 +623,7 @@
             </button>
         </div>
 
-        <!-- Buscador en Vivo y Tabs Compactos -->
+        <!-- Buscador -->
         <div class="p-3 border-b border-slate-100 bg-white shrink-0">
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]">
@@ -569,9 +631,9 @@
                 </span>
                 <input type="text" 
                        id="buscador-marcas-modal" 
-                       placeholder="Filtrar marca (ej: Lenovo, HP, ASUS, Apple, TP-Link)..." 
+                       placeholder="Filtrar marca (ej: Lenovo, HP, ASUS, Apple, TP-Link, Adata)..." 
                        oninput="filtrarMarcasModal(this.value)" 
-                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition-all">
+                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 <button type="button" 
                         id="btn-limpiar-busqueda-marcas" 
                         onclick="document.getElementById('buscador-marcas-modal').value = ''; filtrarMarcasModal('');" 
@@ -579,16 +641,14 @@
                     <span class="material-symbols-outlined text-[14px]">cancel</span>
                 </button>
             </div>
-
         </div>
 
-        <!-- Grid de Tarjetas de Marcas Compacto -->
+        <!-- Grid de Marcas -->
         <div class="p-3 overflow-y-auto max-h-[300px] flex-1 bg-slate-50/40">
             <div id="grid-marcas-modal" class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                <!-- Tarjetas generadas dinámicamente con JavaScript -->
             </div>
 
-            <!-- Empty state / Opción para crear marca personalizada -->
+            <!-- Empty state -->
             <div id="empty-state-marcas" class="hidden text-center py-6 px-3">
                 <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-1.5">
                     <span class="material-symbols-outlined text-[20px]">search_off</span>
@@ -620,7 +680,7 @@
     </div>
 </div>
 
-<!-- Modal Selector de Categorías (Optimizado para Búsqueda Masiva de Categorías) -->
+<!-- MODAL SELECTOR DE CATEGORÍAS -->
 <div id="modal-categorias" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity select-none">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
         
@@ -642,7 +702,7 @@
             </button>
         </div>
 
-        <!-- Buscador Interactivo -->
+        <!-- Buscador -->
         <div class="p-3 border-b border-slate-100 bg-white shrink-0">
             <div class="relative flex items-center">
                 <span class="material-symbols-outlined absolute left-2.5 text-slate-400 text-[16px]">search</span>
@@ -650,7 +710,7 @@
                        id="buscador-categorias-modal" 
                        oninput="filtrarCategoriasModal(this.value)" 
                        placeholder="Buscar por nombre o palabra clave..." 
-                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition-all">
+                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 <button type="button" 
                         id="btn-limpiar-busqueda-categorias" 
                         onclick="document.getElementById('buscador-categorias-modal').value = ''; filtrarCategoriasModal('');" 
@@ -660,10 +720,9 @@
             </div>
         </div>
 
-        <!-- Lista de Categorías con Scroll -->
+        <!-- Lista Categorías -->
         <div class="p-3 overflow-y-auto max-h-[320px] flex-1 bg-slate-50/40">
             <div id="grid-categorias-modal" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <!-- Se llena dinámicamente -->
             </div>
 
             <!-- Empty state -->
@@ -692,6 +751,31 @@
 </div>
 
 <script>
+    /* Cambio de Pestañas de la Ficha de Producto */
+    function cambiarTabProducto(tabId) {
+        const paneles = document.querySelectorAll('.tab-contenido-producto');
+        const botones = document.querySelectorAll('.btn-tab-producto');
+
+        if (tabId === 'ver-todo') {
+            paneles.forEach(p => p.classList.remove('hidden'));
+        } else {
+            paneles.forEach(p => p.classList.add('hidden'));
+            const target = document.getElementById('tab-panel-' + tabId);
+            if (target) target.classList.remove('hidden');
+        }
+
+        botones.forEach(btn => {
+            btn.classList.remove('bg-slate-900', 'text-white', 'shadow-xs');
+            btn.classList.add('bg-white', 'text-slate-600', 'hover:bg-slate-100');
+        });
+
+        const activeBtn = document.getElementById('btn-tab-' + tabId);
+        if (activeBtn) {
+            activeBtn.classList.remove('bg-white', 'text-slate-600', 'hover:bg-slate-100');
+            activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-xs');
+        }
+    }
+
     function regenerarSlugDesdeNombre() {
         const nombreInput = document.getElementById('nombre');
         const slugInput = document.getElementById('slug');
@@ -738,9 +822,9 @@
         if (pctEl) {
             pctEl.textContent = `${porcentaje}% margen`;
             if (margen >= 0) {
-                pctEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800';
+                pctEl.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800';
             } else {
-                pctEl.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800';
+                pctEl.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800';
             }
         }
     }
@@ -859,7 +943,7 @@
                         <span class="material-symbols-outlined text-[15px]">category</span>
                     </div>
                     <div class="min-w-0">
-                        <div class="text-xs font-bold text-slate-800 truncate group-hover:text-slate-900">${cat.nombre}</div>
+                        <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-slate-900'} truncate">${cat.nombre}</div>
                     </div>
                 </div>
                 ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
@@ -917,11 +1001,6 @@
         if (!modal) return;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
-        
-        const totalEl = document.getElementById('contador-marcas-total');
-        const sugeridasEl = document.getElementById('contador-marcas-sugeridas');
-        if (totalEl) totalEl.textContent = marcasData.length;
-        if (sugeridasEl) sugeridasEl.textContent = marcasData.filter(m => m.is_suggested).length;
 
         const input = document.getElementById('buscador-marcas-modal');
         if (input) {
@@ -929,7 +1008,7 @@
             setTimeout(() => input.focus(), 80);
         }
         
-        cambiarTabMarcas('todas');
+        filtrarMarcasModal('');
     }
 
     function cerrarModalMarcas() {
@@ -937,23 +1016,6 @@
         if (!modal) return;
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-    }
-
-    function cambiarTabMarcas(tab) {
-        activeTabMarcas = tab;
-        const tabTodas = document.getElementById('tab-marcas-todas');
-        const tabSugeridas = document.getElementById('tab-marcas-sugeridas');
-
-        if (tab === 'todas') {
-            tabTodas.className = 'px-2.5 py-0.5 rounded-md font-bold text-[10.5px] bg-slate-900 text-white shadow-2xs transition-all cursor-pointer';
-            tabSugeridas.className = 'px-2.5 py-0.5 rounded-md font-semibold text-[10.5px] bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-1';
-        } else {
-            tabTodas.className = 'px-2.5 py-0.5 rounded-md font-semibold text-[10.5px] bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer';
-            tabSugeridas.className = 'px-2.5 py-0.5 rounded-md font-bold text-[10.5px] bg-amber-500 text-white shadow-2xs transition-all cursor-pointer flex items-center gap-1';
-        }
-
-        const input = document.getElementById('buscador-marcas-modal');
-        filtrarMarcasModal(input ? input.value : '');
     }
 
     function filtrarMarcasModal(query) {
@@ -969,10 +1031,6 @@
 
         const q = (query || '').trim().toLowerCase();
         let lista = marcasData;
-
-        if (activeTabMarcas === 'sugeridas') {
-            lista = lista.filter(m => m.is_suggested);
-        }
 
         if (q) {
             lista = lista.filter(m => 
@@ -1001,7 +1059,7 @@
             const card = document.createElement('div');
             card.className = `p-2 rounded-xl border transition-all cursor-pointer text-center flex flex-col items-center justify-between group ${
                 isSelected 
-                    ? 'bg-emerald-50/80 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
+                    ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
                     : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
             }`;
             card.onclick = () => seleccionarMarca(brand.nombre);
@@ -1011,8 +1069,7 @@
                     ${getLogoHtmlForBrand(brand)}
                 </div>
                 <div class="w-full">
-                    <div class="text-[11px] font-bold text-slate-800 truncate group-hover:text-slate-900">${brand.nombre}</div>
-                    ${brand.is_suggested ? '<span class="inline-flex items-center gap-0.5 text-[8.5px] font-bold text-amber-600"><span class="material-symbols-outlined text-[9px]">star</span>Sugerida</span>' : ''}
+                    <div class="text-[11px] font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-slate-900'} truncate">${brand.nombre}</div>
                 </div>
             `;
             grid.appendChild(card);
@@ -1088,6 +1145,11 @@
     document.addEventListener('DOMContentLoaded', () => {
         calcularMargen();
 
+        const descCortaInput = document.getElementById('descripcion_corta');
+        if (descCortaInput) {
+            actualizarContador(descCortaInput, 'contador-desc-corta', 180);
+        }
+
         const marcaInicial = document.getElementById('input-marca-valor')?.value;
         if (marcaInicial) {
             actualizarUIMarca(marcaInicial);
@@ -1097,6 +1159,11 @@
         if (categoriaInicial) {
             actualizarUICategoria(categoriaInicial, '');
         }
+
+        @if($errors->any())
+            // En caso de errores de validación, mostrar todas las pestañas para ubicarlos rápido
+            cambiarTabProducto('ver-todo');
+        @endif
     });
 </script>
 @endsection

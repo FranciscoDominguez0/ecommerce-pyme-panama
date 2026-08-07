@@ -15,12 +15,12 @@
     <!-- Tailwind CSS CDN con plugins -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     
-    <!-- Fuente Oficial de Laravel: Figtree & Material Symbols -->
+    <!-- Fuente Oficial de Laravel & Business SaaS: Plus Jakarta Sans, Figtree & Material Symbols -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
     <script>
         tailwind.config = {
@@ -41,7 +41,7 @@
                         }
                     },
                     fontFamily: {
-                        sans: ["Figtree", "sans-serif"],
+                        sans: ["'Plus Jakarta Sans'", "Figtree", "sans-serif"],
                     }
                 }
             }
@@ -51,10 +51,10 @@
     <style>
         html, body {
             max-width: 100%;
-            overflow-x: hidden;
+            overflow-x: clip;
         }
         body { 
-            font-family: 'Figtree', sans-serif; 
+            font-family: 'Plus Jakarta Sans', 'Figtree', sans-serif; 
             letter-spacing: -0.011em;
             background-color: #F8FAFC;
             color: #111827;
@@ -81,7 +81,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-hidden relative">
+<body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
 
     <!-- Mobile Sidebar Drawer (Overlay) -->
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
@@ -93,10 +93,10 @@
         <div class="flex flex-col flex-1 min-h-0">
             
             <!-- Brand Logo Header -->
-            <div class="px-5 py-4 border-b border-gray-700/60 flex items-center justify-between bg-white/[0.02]">
+            <div class="px-5 py-4 border-b border-gray-700/60 flex items-center justify-between bg-black/20 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                    <div class="p-1.5 rounded-xl bg-[#059669]/20 border border-[#059669]/40 group-hover:border-[#059669] transition-all shadow-inner">
-                        <x-application-logo size="default" class="group-hover:scale-105 transition-transform" />
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#059669] to-[#047857] flex items-center justify-center text-white font-black text-sm shadow-md group-hover:scale-105 transition-transform">
+                        P
                     </div>
                     <div>
                         <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">
@@ -259,10 +259,10 @@
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 md:ml-64 flex flex-col min-h-screen min-w-0 w-full max-w-full overflow-x-hidden">
+    <div class="flex-1 md:ml-64 flex flex-col min-h-screen min-w-0 w-full max-w-full">
         
-        <!-- TopNavBar Ejecutivo (Fijo al ancho de pantalla del móvil) -->
-        <header class="sticky top-0 z-30 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+        <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
+        <header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
             
             <!-- Left: Toggle & Responsive Breadcrumbs -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
