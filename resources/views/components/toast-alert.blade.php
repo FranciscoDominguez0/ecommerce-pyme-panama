@@ -4,15 +4,26 @@
         $toasts = [];
         if (session('success')) {
             $toasts[] = ['tipo' => 'success', 'mensaje' => session('success')];
+        } elseif (session('toast_success')) {
+            $toasts[] = ['tipo' => 'success', 'mensaje' => session('toast_success')];
         }
+
         if (session('error')) {
             $toasts[] = ['tipo' => 'error', 'mensaje' => session('error')];
+        } elseif (session('toast_error')) {
+            $toasts[] = ['tipo' => 'error', 'mensaje' => session('toast_error')];
         }
+
         if (session('warning')) {
             $toasts[] = ['tipo' => 'warning', 'mensaje' => session('warning')];
+        } elseif (session('toast_warning')) {
+            $toasts[] = ['tipo' => 'warning', 'mensaje' => session('toast_warning')];
         }
+
         if (session('info')) {
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('info')];
+        } elseif (session('toast_info')) {
+            $toasts[] = ['tipo' => 'info', 'mensaje' => session('toast_info')];
         } elseif (session('status') && !in_array(session('status'), ['profile-updated', 'password-updated', 'verification-link-sent'])) {
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('status')];
         }

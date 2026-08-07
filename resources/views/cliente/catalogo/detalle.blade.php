@@ -225,9 +225,8 @@
                     <!-- Bloque de Fuera de Stock con Notificación por Email -->
                     <div class="space-y-3.5 pt-1">
                         
-                        <!-- 1. Fuera de stock -->
                         <div class="flex items-center gap-2 text-rose-600 font-extrabold text-sm sm:text-base">
-                            <span class="text-rose-600 text-lg leading-none font-black">✖</span>
+                            <span class="material-symbols-outlined text-[18px]">cancel</span>
                             <span>Fuera de stock</span>
                         </div>
 
@@ -299,39 +298,42 @@
                     </div>
                 @endif
 
-                <!-- Metadatos del Producto -->
-                <div class="space-y-2 pt-1.5 mt-1.5 border-t border-slate-100">
-                    <!-- Fila 1: Código y Categoría -->
-                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-                        <div class="text-[11px] sm:text-xs text-slate-800 font-medium">
-                            Código: <span class="text-blue-600 font-mono font-semibold">{{ $producto->sku ?: 'PTL-LEV-493' }}</span>
-                        </div>
-                        <div class="text-[11px] sm:text-xs text-slate-800 font-medium">
-                            Categoría: <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria?->slug ?? 'all']) }}" class="text-blue-600 hover:underline font-semibold">{{ $producto->categoria ? $producto->categoria->nombre : 'Portátiles' }}</a>
-                        </div>
+                <!-- Metadatos del Producto (Estilo apilado y tamaño equilibrado) -->
+                <div class="flex flex-col gap-2 pt-2.5 mt-2.5 border-t border-slate-100 text-xs sm:text-sm text-slate-900">
+                    <!-- Código -->
+                    <div>
+                        Código: <span class="text-blue-600 font-normal">{{ $producto->sku ?: 'PTL-LEV-493' }}</span>
                     </div>
 
-                    <!-- Fila 2: Marca y Modelo (Misma altura) -->
-                    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px] sm:text-xs text-slate-800 font-medium">Marca:</span>
-                            @if($producto->marca_logo_html)
-                            <div class="h-6 px-1.5 rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs">
+                    <!-- Marca (Logo en Recuadro + Nombre) -->
+                    <div class="flex items-center gap-3 my-0.5">
+                        @if($producto->marca_logo_html)
+                            <div class="h-9 w-20 px-1.5 py-0.5 rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs shrink-0">
                                 {!! $producto->marca_logo_html !!}
                             </div>
-                            @endif
-                            <span class="text-[11px] sm:text-xs font-bold text-slate-900">
-                                {{ $producto->marca ?: 'Lenovo' }}
-                            </span>
-                        </div>
-                        <div class="text-[11px] sm:text-xs text-slate-800 font-medium">
-                            Modelo: <span class="text-blue-600 font-mono font-semibold">{{ $producto->modelo ?: '82VG00WXUS' }}</span>
-                        </div>
+                        @else
+                            <div class="h-9 w-20 px-1.5 py-0.5 rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs shrink-0 text-slate-400 text-[11px] font-semibold">
+                                {{ $producto->marca ?: 'Marca' }}
+                            </div>
+                        @endif
+                        <span class="text-base font-semibold text-slate-900">
+                            {{ $producto->marca ?: 'Lenovo' }}
+                        </span>
+                    </div>
+
+                    <!-- Categoría -->
+                    <div>
+                        Categoría: <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria?->slug ?? 'all']) }}" class="text-blue-600 hover:underline font-normal">{{ $producto->categoria ? $producto->categoria->nombre : 'Portátiles' }}</a>
+                    </div>
+
+                    <!-- Modelo -->
+                    <div>
+                        Modelo : <span class="text-blue-600 font-normal">{{ $producto->modelo ?: '82VG00WXUS' }}</span>
                     </div>
 
                     <!-- Términos y Condiciones -->
-                    <div class="text-[11px] sm:text-xs text-black font-medium pt-0.5">
-                        <a href="#" class="text-black underline hover:text-slate-700">
+                    <div class="pt-0.5">
+                        <a href="{{ route('terminos') }}" target="_blank" class="text-slate-900 underline hover:text-blue-600 text-xs sm:text-sm font-normal">
                             Términos y condiciones
                         </a>
                     </div>

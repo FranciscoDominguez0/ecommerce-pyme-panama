@@ -28,6 +28,7 @@ Route::get('/', function () {
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
 Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
 Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
+Route::get('/terminos-y-condiciones', function () { return view('paginas.terminos'); })->name('terminos');
 
 // 2. Ruta /home para clientes autenticados (Redirección directa a dashboard)
 Route::get('/home', function () {

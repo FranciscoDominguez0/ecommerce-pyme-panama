@@ -29,15 +29,15 @@
                 extend: {
                     colors: {
                         brand: {
-                            sidebar: "#0c1b2f",
-                            surface: "#f8fafc",
-                            card: "#ffffff",
-                            border: "#e2e8f0",
-                            title: "#0f172a",
-                            muted: "#64748b",
-                            emerald: "#006c47",
-                            emeraldLight: "#ecfdf5",
-                            gold: "#d97706",
+                            sidebar: "#1F2937",
+                            surface: "#F8FAFC",
+                            card: "#FFFFFF",
+                            border: "#E5E7EB",
+                            title: "#111827",
+                            muted: "#6B7280",
+                            emerald: "#059669",
+                            emeraldLight: "#ECFDF5",
+                            gold: "#D97706",
                         }
                     },
                     fontFamily: {
@@ -56,8 +56,8 @@
         body { 
             font-family: 'Figtree', sans-serif; 
             letter-spacing: -0.011em;
-            background-color: #f8fafc;
-            color: #0f172a;
+            background-color: #F8FAFC;
+            color: #111827;
         }
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
@@ -70,37 +70,37 @@
         }
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
         .card-elevated {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03);
         }
     </style>
 
     @stack('styles')
 </head>
-<body class="bg-[#f8fafc] text-[#0f172a] min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-hidden relative">
+<body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-hidden relative">
 
     <!-- Mobile Sidebar Drawer (Overlay) -->
-    <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-[#070d18]/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
+    <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
 
-    <!-- Sidebar Admin Ejecutivo (Deep Slate Navy & Emerald Accents) -->
-    <aside id="admin-sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#09111e] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out border-r border-slate-800/80 shadow-2xl flex flex-col justify-between select-none">
+    <!-- Sidebar Admin (Fondo #1F2937, Bordes #E5E7EB/20) -->
+    <aside id="admin-sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out border-r border-gray-700/60 shadow-2xl flex flex-col justify-between select-none">
         
         <!-- Header & Navigation -->
         <div class="flex flex-col flex-1 min-h-0">
             
             <!-- Brand Logo Header -->
-            <div class="px-5 py-4 border-b border-slate-800/80 flex items-center justify-between bg-gradient-to-b from-white/[0.03] to-transparent">
+            <div class="px-5 py-4 border-b border-gray-700/60 flex items-center justify-between bg-white/[0.02]">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                    <div class="p-1.5 rounded-xl bg-gradient-to-br from-emerald-500/20 to-blue-500/10 border border-emerald-500/30 group-hover:border-emerald-400/60 transition-all shadow-inner">
+                    <div class="p-1.5 rounded-xl bg-[#059669]/20 border border-[#059669]/40 group-hover:border-[#059669] transition-all shadow-inner">
                         <x-application-logo size="default" class="group-hover:scale-105 transition-transform" />
                     </div>
                     <div>
                         <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">
-                            PayMe <span class="text-emerald-400 font-bold">Panamá</span>
+                            PayMe <span class="text-[#059669] font-bold">Panamá</span>
                         </h1>
                         <span class="text-[10px] font-medium text-slate-400 tracking-wide block">Panel Administrativo</span>
                     </div>
@@ -121,15 +121,15 @@
                     <div class="space-y-0.5">
                         <!-- Dashboard -->
                         <a href="{{ route('admin.dashboard') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
                             <span class="truncate">Dashboard</span>
                         </a>
 
                         <!-- Pedidos & Ventas -->
                         <a href="{{ url('/admin/pedidos') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/pedidos*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">shopping_bag</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
                             <span class="truncate">Pedidos & Ventas</span>
                         </a>
                     </div>
@@ -143,29 +143,29 @@
                     <div class="space-y-0.5">
                         <!-- Productos -->
                         <a href="{{ route('admin.productos.index') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.productos*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.productos*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">inventory_2</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.productos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.productos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">sell</span>
                             <span class="truncate">Productos</span>
                         </a>
 
                         <!-- Categorías -->
                         <a href="{{ route('admin.categorias.index') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.categorias*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.categorias*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">category</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.categorias*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.categorias*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">category</span>
                             <span class="truncate">Categorías</span>
                         </a>
 
                         <!-- Marcas -->
                         <a href="{{ route('admin.brands.index') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->routeIs('admin.brands*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->routeIs('admin.brands*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">verified</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.brands*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.brands*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">verified</span>
                             <span class="truncate">Marcas & Logos</span>
                         </a>
 
                         <!-- Inventario -->
                         <a href="{{ url('/admin/inventario') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/inventario*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/inventario*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">warehouse</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/inventario*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/inventario*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">warehouse</span>
                             <span class="truncate">Inventario</span>
                         </a>
                     </div>
@@ -179,29 +179,29 @@
                     <div class="space-y-0.5">
                         <!-- Clientes / Usuarios -->
                         <a href="{{ url('/admin/usuarios') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/usuarios*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">group</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/usuarios*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">group</span>
                             <span class="truncate">Clientes / Usuarios</span>
                         </a>
 
                         <!-- Facturación Fiscal -->
                         <a href="{{ url('/admin/facturas') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/facturas*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/facturas*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">receipt_long</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/facturas*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/facturas*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">receipt_long</span>
                             <span class="truncate">Facturación Fiscal</span>
                         </a>
 
                         <!-- Cupones de Descuento -->
                         <a href="{{ url('/admin/cupones') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/cupones*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/cupones*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">local_activity</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/cupones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/cupones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_activity</span>
                             <span class="truncate">Cupones</span>
                         </a>
 
                         <!-- Reportes -->
                         <a href="{{ url('/admin/reportes') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/reportes*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/reportes*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">bar_chart</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/reportes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/reportes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">bar_chart</span>
                             <span class="truncate">Reportes</span>
                         </a>
                     </div>
@@ -215,15 +215,15 @@
                     <div class="space-y-0.5">
                         <!-- Auditoría -->
                         <a href="{{ url('/admin/auditoria') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/auditoria*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/auditoria*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">security</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/auditoria*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/auditoria*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">security</span>
                             <span class="truncate">Auditoría</span>
                         </a>
 
                         <!-- Configuración -->
                         <a href="{{ url('/admin/configuracion') }}" 
-                           class="group relative flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all {{ request()->is('admin/configuracion*') ? 'bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-transparent text-white border-l-[3px] border-emerald-400 shadow-xs' : 'text-slate-300 hover:bg-white/[0.05] hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[18px] transition-colors {{ request()->is('admin/configuracion*') ? 'text-emerald-400' : 'text-slate-400 group-hover:text-emerald-400' }}">settings</span>
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/configuracion*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/configuracion*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">settings</span>
                             <span class="truncate">Configuración</span>
                         </a>
                     </div>
@@ -233,13 +233,13 @@
         </div>
 
         <!-- Sidebar Footer / Actions -->
-        <div class="p-3 border-t border-slate-800/80 bg-gradient-to-t from-black/20 to-transparent space-y-1.5">
+        <div class="p-3 border-t border-gray-700/60 bg-black/20 space-y-1.5">
             
             <!-- Quick Link: Ver Tienda Pública -->
             <a href="{{ url('/') }}" target="_blank" 
-               class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-white/[0.03] hover:bg-white/[0.08] hover:text-white border border-slate-800 hover:border-slate-700 transition-all group">
+               class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-white/[0.03] hover:bg-white/[0.08] hover:text-white border border-gray-700/60 hover:border-gray-600 transition-all group">
                 <span class="flex items-center gap-2.5">
-                    <span class="material-symbols-outlined text-[17px] text-emerald-400 group-hover:scale-110 transition-transform">storefront</span>
+                    <span class="material-symbols-outlined text-[17px] text-[#059669] group-hover:scale-110 transition-transform">storefront</span>
                     <span>Ver Tienda Online</span>
                 </span>
                 <span class="material-symbols-outlined text-[15px] text-slate-400 group-hover:text-white">open_in_new</span>
@@ -296,12 +296,15 @@
             <!-- Right: Live Clock, Notifications & User Profile (Siempre visible en el extremo derecho) -->
             <div class="flex items-center gap-2 sm:gap-3 text-slate-800 shrink-0 ml-auto">
                 
-                <!-- Reloj / Fecha en Tiempo Real (Panamá GMT-5 / 12 Horas) -->
-                <div class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold select-none shadow-2xs" title="Hora Oficial de Panamá (GMT-5)">
-                    <span class="material-symbols-outlined text-[16px] text-emerald-600">schedule</span>
-                    <span id="topbar-live-clock">{{ \Carbon\Carbon::now('America/Panama')->locale('es')->isoFormat('ddd, D MMM · hh:mm A') }}</span>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tight">PA</span>
-                </div>
+                <!-- Buscador Global en TopBar -->
+                <form action="{{ route('admin.productos.index') }}" method="GET" class="relative hidden sm:flex items-center w-56 md:w-72 lg:w-80">
+                    <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px] pointer-events-none">search</span>
+                    <input type="text" 
+                           name="buscar" 
+                           placeholder="Buscar productos, SKU, marca..." 
+                           class="w-full pl-9 pr-9 py-1.5 text-xs bg-slate-100/90 border border-slate-200/80 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 placeholder-slate-400 transition-all outline-none">
+                    <span class="absolute right-2.5 text-[10px] font-mono font-bold text-slate-400 bg-white px-1.5 py-0.5 rounded border border-slate-200 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
+                </form>
 
                 <!-- Notifications -->
                 <button class="relative p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0" title="Notificaciones">

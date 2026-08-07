@@ -190,13 +190,6 @@
                     {{ $productos->total() }} productos registrados
                 </span>
             </div>
-            
-            <div class="flex items-center gap-3">
-                <a href="{{ route('admin.productos.create') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[16px]">add_circle</span>
-                    <span>Crear Producto</span>
-                </a>
-            </div>
         </div>
 
         <!-- Tabla con Scroll Horizontal Suave -->

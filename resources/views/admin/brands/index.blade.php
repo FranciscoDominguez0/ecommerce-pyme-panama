@@ -52,28 +52,15 @@
                 </div>
             </div>
 
-            <!-- Filtros de Sugerida y Verificada -->
+            <!-- Filtros de Verificación -->
             <div class="w-full sm:w-auto flex items-center gap-2.5 flex-wrap">
-                <div class="relative w-full sm:w-40">
-                    <select name="sugerida" 
-                            onchange="this.form.submit()" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 font-medium focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
-                        <option value="all" {{ $filtroSugerida === 'all' ? 'selected' : '' }}>Todas las marcas</option>
-                        <option value="yes" {{ $filtroSugerida === 'yes' ? 'selected' : '' }}>Solo Sugeridas (⭐)</option>
-                        <option value="no" {{ $filtroSugerida === 'no' ? 'selected' : '' }}>No Sugeridas</option>
-                    </select>
-                    <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[16px]">
-                        expand_more
-                    </span>
-                </div>
-
-                <div class="relative w-full sm:w-40">
+                <div class="relative w-full sm:w-44">
                     <select name="verificada" 
                             onchange="this.form.submit()" 
                             class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 font-medium focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
-                        <option value="all" {{ $filtroVerificada === 'all' ? 'selected' : '' }}>Verificación</option>
-                        <option value="yes" {{ $filtroVerificada === 'yes' ? 'selected' : '' }}>Verificadas</option>
-                        <option value="no" {{ $filtroVerificada === 'no' ? 'selected' : '' }}>Sin verificar</option>
+                        <option value="all" {{ $filtroVerificada === 'all' ? 'selected' : '' }}>Todas (Verificación)</option>
+                        <option value="yes" {{ $filtroVerificada === 'yes' ? 'selected' : '' }}>Verificadas (Oficial)</option>
+                        <option value="no" {{ $filtroVerificada === 'no' ? 'selected' : '' }}>Sin verificar (Estándar)</option>
                     </select>
                     <span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[16px]">
                         expand_more
@@ -85,7 +72,7 @@
                     <span>Filtrar</span>
                 </button>
 
-                @if(!empty($busqueda) || $filtroSugerida !== 'all' || $filtroVerificada !== 'all')
+                @if(!empty($busqueda) || $filtroVerificada !== 'all')
                     <a href="{{ route('admin.brands.index') }}" class="px-3 py-2 text-xs text-slate-500 hover:text-slate-800 font-semibold transition-colors flex items-center gap-1 shrink-0">
                         <span class="material-symbols-outlined text-[15px]">restart_alt</span>
                         <span>Limpiar</span>
@@ -104,11 +91,10 @@
                 <thead>
                     <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                         <th class="py-3.5 px-4 sm:px-6">Marca & Fabricante</th>
-                        <th class="py-3.5 px-3 text-center w-28">Logotipo</th>
-                        <th class="py-3.5 px-4 text-center w-36">Slug</th>
-                        <th class="py-3.5 px-4 text-center w-28">Sugerida</th>
-                        <th class="py-3.5 px-4 text-center w-28">Productos</th>
-                        <th class="py-3.5 px-4 text-center w-28">Verificada</th>
+                        <th class="py-3.5 px-3 text-center w-32">Logotipo</th>
+                        <th class="py-3.5 px-4 text-center w-40">Slug</th>
+                        <th class="py-3.5 px-4 text-center w-32">Productos</th>
+                        <th class="py-3.5 px-4 text-center w-32">Verificada</th>
                         <th class="py-3.5 px-4 sm:px-6 text-right w-28">Acciones</th>
                     </tr>
                 </thead>
@@ -120,12 +106,6 @@
                             <td class="py-3.5 px-4 sm:px-6 font-semibold text-slate-900">
                                 <div class="flex items-center gap-2.5">
                                     <span class="font-bold text-slate-900 text-sm">{{ $brand->name }}</span>
-                                    @if($brand->is_suggested)
-                                        <span class="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold flex items-center gap-0.5" title="Marca Sugerida en formularios">
-                                            <span class="material-symbols-outlined text-[11px]">star</span>
-                                            <span>Sugerida</span>
-                                        </span>
-                                    @endif
                                 </div>
                             </td>
 
@@ -141,16 +121,6 @@
                                 <code class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono text-[11px]">
                                     {{ $brand->slug }}
                                 </code>
-                            </td>
-
-                            <!-- Sugerida Toggle -->
-                            <td class="py-3.5 px-4 text-center">
-                                <button type="button" 
-                                        onclick="toggleSugerida({{ $brand->id }}, this)" 
-                                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer {{ $brand->is_suggested ? 'bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100' : 'bg-slate-100 text-slate-400 border border-slate-200 hover:bg-slate-200 hover:text-slate-700' }}">
-                                    <span class="material-symbols-outlined text-[13px] {{ $brand->is_suggested ? 'text-amber-500' : '' }}" style="{{ $brand->is_suggested ? 'font-variation-settings: \'FILL\' 1;' : '' }}">star</span>
-                                    <span>{{ $brand->is_suggested ? 'Sí' : 'No' }}</span>
-                                </button>
                             </td>
 
                             <!-- Productos vinculados -->
@@ -195,7 +165,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-12 px-6 text-center text-slate-400">
+                            <td colspan="6" class="py-12 px-6 text-center text-slate-400">
                                 <div class="flex flex-col items-center justify-center max-w-sm mx-auto">
                                     <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mb-3 text-slate-400">
                                         <span class="material-symbols-outlined text-[24px]">search_off</span>

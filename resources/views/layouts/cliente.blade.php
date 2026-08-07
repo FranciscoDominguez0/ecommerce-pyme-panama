@@ -269,7 +269,7 @@
                     <ul class="space-y-1.5 text-xs text-gray-300">
                         <li><a href="#" class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Políticas de Envío</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Términos y Condiciones</a></li>
+                        <li><a href="{{ route('terminos') }}" class="hover:text-white transition-colors">Términos y Condiciones</a></li>
                     </ul>
                 </div>
 
@@ -308,8 +308,11 @@
             </div>
 
             <div class="border-t border-white/10 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-gray-400">
-                <p>© {{ date('Y') }} PayMe Panamá. Todos los derechos reservados.</p>
-                <p>Comercio Electrónico Seguro 🇵🇦</p>
+                <p class="flex items-center gap-1.5">
+                    <span>Comercio Electrónico Seguro</span>
+                    <span class="opacity-40">•</span>
+                    <span>República de Panamá</span>
+                </p>
             </div>
         </div>
     </footer>

@@ -117,25 +117,7 @@
             </div>
 
             <!-- Opciones y Destacados -->
-            <div class="border-t border-slate-100 pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                
-                <!-- Sugerida Checkbox Card -->
-                <label class="flex items-start gap-3 p-4 rounded-2xl border border-slate-200 hover:border-amber-300 hover:bg-amber-50/20 transition-all cursor-pointer group">
-                    <input type="checkbox" 
-                           name="is_suggested" 
-                           value="1" 
-                           {{ old('is_suggested') ? 'checked' : '' }}
-                           class="mt-0.5 w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300">
-                    <div>
-                        <span class="text-xs font-bold text-slate-900 group-hover:text-amber-900 flex items-center gap-1">
-                            <span>⭐ Marca Sugerida (Destacada)</span>
-                        </span>
-                        <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
-                            Aparecerá en la parte superior y como acceso rápido en los formularios de creación de productos.
-                        </p>
-                    </div>
-                </label>
-
+            <div class="border-t border-slate-100 pt-6">
                 <!-- Verificada Checkbox Card -->
                 <label class="flex items-start gap-3 p-4 rounded-2xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/20 transition-all cursor-pointer group">
                     <input type="checkbox" 
@@ -145,14 +127,13 @@
                            class="mt-0.5 w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
                     <div>
                         <span class="text-xs font-bold text-slate-900 group-hover:text-emerald-900 flex items-center gap-1">
-                            <span>🛡️ Marca Oficial Verificada</span>
+                            <span>Marca Oficial Verificada</span>
                         </span>
                         <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
                             Muestra el sello de autenticidad oficial en las fichas y filtros de la tienda.
                         </p>
                     </div>
                 </label>
-
             </div>
 
         </div>

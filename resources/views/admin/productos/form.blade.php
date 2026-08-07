@@ -91,13 +91,13 @@
             </div>
         </div>
 
-        <!-- Grid Principal: 2 Columnas (8 cols contenido / 4 cols lateral) -->
+        <!-- Grid Principal: 2 Columnas Balanceadas (7 cols Contenido / 5 cols Ajustes y Precios) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             
-            <!-- Columna Central / Izquierda (8 columnas) -->
-            <div class="lg:col-span-8 space-y-6">
+            <!-- Columna Izquierda: Información y Descripciones (7 columnas) -->
+            <div class="lg:col-span-7 space-y-5">
                 
-                <!-- CARD 1: Información General -->
+                <!-- CARD 1: Información del Producto -->
                 <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
                     <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                         <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
@@ -115,7 +115,7 @@
                                    name="nombre" 
                                    required
                                    value="{{ old('nombre', $producto->nombre ?? '') }}" 
-                                   placeholder="Ej. MacBook Air 13'' Apple M2..." 
+                                   placeholder="Ej. Portátil Lenovo IdeaPad 1 15.6'' FHD..." 
                                    class="input-panama w-full text-sm rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                         </div>
 
@@ -133,14 +133,14 @@
                                 </button>
                             </div>
                             <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs text-slate-400 pointer-events-none select-none font-mono">tutienda.com/producto/</span>
+                                <span class="absolute left-3 text-xs text-slate-400 pointer-events-none select-none font-mono hidden sm:inline">tutienda.com/producto/</span>
                                 <input type="text" 
                                        id="slug" 
                                        name="slug" 
                                        required
                                        value="{{ old('slug', $producto->slug ?? '') }}" 
-                                       placeholder="macbook-air-13-apple-m2" 
-                                       class="input-panama w-full pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800">
+                                       placeholder="portatil-lenovo-ideapad-1" 
+                                       class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800">
                             </div>
                         </div>
 
@@ -160,20 +160,61 @@
                             </div>
 
                             <div>
-                                <label for="categoria_id" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                     Categoría <span class="text-rose-500">*</span>
                                 </label>
-                                <select id="categoria_id" 
-                                        name="categoria_id" 
-                                        required 
-                                        class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                                    <option value="">Selecciona una categoría...</option>
-                                    @foreach($categorias as $cat)
-                                        <option value="{{ $cat->id }}" @selected(old('categoria_id', $producto->categoria_id ?? '') == $cat->id)>
-                                            {{ $cat->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
+
+                                <!-- Input oculto para enviar categoria_id en el POST -->
+                                <input type="hidden" 
+                                       id="input-categoria-valor" 
+                                       name="categoria_id" 
+                                       required 
+                                       value="{{ old('categoria_id', $producto->categoria_id ?? '') }}">
+
+                                <!-- Tarjeta de Categoría Seleccionada / Botón para Abrir Modal -->
+                                <div id="contenedor-categoria-card" class="relative">
+                                    <!-- Estado 1: Categoría Seleccionada -->
+                                    <div id="card-categoria-activa" class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
+                                        <div class="flex items-center gap-2 min-w-0">
+                                            <div class="w-8 h-8 rounded-lg bg-emerald-100/80 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+                                                <span class="material-symbols-outlined text-[18px]">category</span>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div id="display-categoria-nombre" class="text-xs font-bold text-slate-900 truncate">Portatiles</div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-0.5 shrink-0">
+                                            <button type="button" 
+                                                    onclick="abrirModalCategorias()" 
+                                                    class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
+                                                <span class="material-symbols-outlined text-[13px]">sync_alt</span>
+                                                <span>Cambiar</span>
+                                            </button>
+                                            <button type="button" 
+                                                    onclick="deseleccionarCategoria()" 
+                                                    class="p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+                                                    title="Quitar categoría">
+                                                <span class="material-symbols-outlined text-[15px]">close</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Estado 2: Sin Categoría Seleccionada -->
+                                    <button type="button" 
+                                            id="btn-abrir-modal-categorias" 
+                                            onclick="abrirModalCategorias()" 
+                                            class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">category</span>
+                                            <span class="text-xs font-medium text-slate-600">Seleccionar Categoría...</span>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
+                                            <span class="material-symbols-outlined text-[12px]">search</span>
+                                            <span>Explorar</span>
+                                        </span>
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
 
@@ -234,19 +275,6 @@
                                     </button>
                                 </div>
 
-                                <!-- Chips de acceso rápido para sugeridas (Compactos) -->
-                                @if(isset($marcas) && $marcas->where('is_suggested', true)->count() > 0)
-                                    <div class="flex items-center gap-1 mt-1.5 flex-wrap">
-                                        <span class="text-[9.5px] text-slate-400 font-medium">Populares:</span>
-                                        @foreach($marcas->where('is_suggested', true)->take(6) as $mSugerida)
-                                            <button type="button" 
-                                                    onclick="seleccionarMarca('{{ $mSugerida->name }}')" 
-                                                    class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-900 hover:text-white text-[9.5px] font-semibold text-slate-600 transition-all cursor-pointer">
-                                                {{ $mSugerida->name }}
-                                            </button>
-                                        @endforeach
-                                    </div>
-                                @endif
                             </div>
 
                             <div>
@@ -278,7 +306,7 @@
                                       rows="2" 
                                       maxlength="180" 
                                       oninput="actualizarContador(this, 'contador-desc-corta', 180)"
-                                      placeholder="Breve descripción que aparecerá en los listados del catálogo y tarjetas sociales..." 
+                                      placeholder="Breve descripción que aparecerá en los listados del catálogo..." 
                                       class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
                         </div>
 
@@ -307,93 +335,10 @@
                     </div>
                 </div>
 
-                <!-- CARD 2: Precios & Rentabilidad -->
-                <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
-                            <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Precios & Rentabilidad</h2>
-                        </div>
-                        <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">Moneda: USD ($)</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <!-- Precio Base -->
-                        <div>
-                            <label for="precio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Precio Base <span class="text-rose-500">*</span>
-                            </label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
-                                <input type="number" 
-                                       step="0.01" 
-                                       min="0" 
-                                       id="precio" 
-                                       name="precio" 
-                                       required
-                                       oninput="calcularMargen()"
-                                       value="{{ old('precio', $producto->precio ?? '0.00') }}" 
-                                       placeholder="0.00" 
-                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
-                            </div>
-                        </div>
-
-                        <!-- Precio Oferta -->
-                        <div>
-                            <label for="precio_oferta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Precio Oferta (Descuento)
-                            </label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
-                                <input type="number" 
-                                       step="0.01" 
-                                       min="0" 
-                                       id="precio_oferta" 
-                                       name="precio_oferta" 
-                                       oninput="calcularMargen()"
-                                       value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}" 
-                                       placeholder="Opcional" 
-                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
-                            </div>
-                        </div>
-
-                        <!-- Costo Unitario / Privado -->
-                        <div>
-                            <label for="costo_unitario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                Costo Unitario (Privado)
-                            </label>
-                            <div class="relative flex items-center">
-                                <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
-                                <input type="number" 
-                                       step="0.01" 
-                                       min="0" 
-                                       id="costo_unitario" 
-                                       name="costo_unitario" 
-                                       oninput="calcularMargen()"
-                                       value="0.00" 
-                                       placeholder="0.00" 
-                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Indicador en vivo de Margen de Ganancia -->
-                    <div id="badge-margen" class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs gap-2">
-                        <div class="flex items-center gap-2 text-slate-600">
-                            <span class="material-symbols-outlined text-[18px] text-emerald-600">trending_up</span>
-                            <span class="font-medium">Rentabilidad calculada estimada:</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span id="margen-monto" class="font-bold text-slate-900">+$0.00 por unidad</span>
-                            <span id="margen-porcentaje" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">0% margen</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-            <!-- Columna Lateral / Derecha (4 columnas) -->
-            <div class="lg:col-span-4 space-y-6">
+            <!-- Columna Derecha: Estado, Precios e Inventario (5 columnas) -->
+            <div class="lg:col-span-5 space-y-5">
                 
                 <!-- CARD LATERAL 1: Estado & Visibilidad -->
                 <div class="card-elevated p-5 rounded-2xl space-y-4">
@@ -403,7 +348,7 @@
                     </div>
 
                     <div class="space-y-4">
-                        <!-- Select de Estado -->
+                        <!-- Select de Estado sin Emojis -->
                         <div>
                             <label for="activo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
                                 Estado del Producto
@@ -411,8 +356,8 @@
                             <select id="activo" 
                                     name="activo" 
                                     class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
-                                <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>🟢 Activo (Visible en tienda)</option>
-                                <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>⚪ Inactivo (Borrador oculto)</option>
+                                <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>Activo (Visible en tienda)</option>
+                                <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>Inactivo (Borrador oculto)</option>
                             </select>
                         </div>
 
@@ -450,7 +395,92 @@
                     </div>
                 </div>
 
-                <!-- CARD LATERAL 2: Inventario & Stock -->
+                <!-- CARD LATERAL 2: Precios & Rentabilidad -->
+                <div class="card-elevated p-5 rounded-2xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
+                            <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Precios & Rentabilidad</h2>
+                        </div>
+                        <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">USD ($)</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Precio Base -->
+                            <div>
+                                <label for="precio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Precio Base <span class="text-rose-500">*</span>
+                                </label>
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                                    <input type="number" 
+                                           step="0.01" 
+                                           min="0" 
+                                           id="precio" 
+                                           name="precio" 
+                                           required
+                                           oninput="calcularMargen()"
+                                           value="{{ old('precio', $producto->precio ?? '0.00') }}" 
+                                           placeholder="0.00" 
+                                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                </div>
+                            </div>
+
+                            <!-- Precio Oferta -->
+                            <div>
+                                <label for="precio_oferta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    Precio Oferta
+                                </label>
+                                <div class="relative flex items-center">
+                                    <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                                    <input type="number" 
+                                           step="0.01" 
+                                           min="0" 
+                                           id="precio_oferta" 
+                                           name="precio_oferta" 
+                                           oninput="calcularMargen()"
+                                           value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}" 
+                                           placeholder="Opcional" 
+                                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Costo Unitario / Privado -->
+                        <div>
+                            <label for="costo_unitario" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                Costo Unitario (Privado)
+                            </label>
+                            <div class="relative flex items-center">
+                                <span class="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                                <input type="number" 
+                                       step="0.01" 
+                                       min="0" 
+                                       id="costo_unitario" 
+                                       name="costo_unitario" 
+                                       oninput="calcularMargen()"
+                                       value="0.00" 
+                                       placeholder="0.00" 
+                                       class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                            </div>
+                        </div>
+
+                        <!-- Indicador en vivo de Margen de Ganancia -->
+                        <div id="badge-margen" class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-1.5 text-xs">
+                            <div class="flex items-center gap-1.5 text-slate-600">
+                                <span class="material-symbols-outlined text-[16px] text-emerald-600">trending_up</span>
+                                <span class="font-medium text-[11px]">Rentabilidad calculada estimada:</span>
+                            </div>
+                            <div class="flex items-center justify-between pt-0.5">
+                                <span id="margen-monto" class="font-bold text-slate-900">+$0.00 por unidad</span>
+                                <span id="margen-porcentaje" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">0% margen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD LATERAL 3: Inventario & Stock -->
                 <div class="card-elevated p-5 rounded-2xl space-y-4">
                     <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                         <span class="material-symbols-outlined text-emerald-600 text-[20px]">warehouse</span>
@@ -550,22 +580,6 @@
                 </button>
             </div>
 
-            <!-- Filtros rápidos por tab -->
-            <div class="flex items-center gap-1 mt-2 text-xs">
-                <button type="button" 
-                        id="tab-marcas-todas" 
-                        onclick="cambiarTabMarcas('todas')" 
-                        class="px-2.5 py-0.5 rounded-md font-bold text-[10.5px] bg-slate-900 text-white shadow-2xs transition-all cursor-pointer">
-                    Todas (<span id="contador-marcas-total">0</span>)
-                </button>
-                <button type="button" 
-                        id="tab-marcas-sugeridas" 
-                        onclick="cambiarTabMarcas('sugeridas')" 
-                        class="px-2.5 py-0.5 rounded-md font-semibold text-[10.5px] bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[12px] text-amber-500">star</span>
-                    <span>Sugeridas (<span id="contador-marcas-sugeridas">0</span>)</span>
-                </button>
-            </div>
         </div>
 
         <!-- Grid de Tarjetas de Marcas Compacto -->
@@ -599,6 +613,77 @@
             </div>
             <button type="button" 
                     onclick="cerrarModalMarcas()" 
+                    class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Selector de Categorías (Optimizado para Búsqueda Masiva de Categorías) -->
+<div id="modal-categorias" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity select-none">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
+        
+        <!-- Modal Header -->
+        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shadow-2xs">
+                    <span class="material-symbols-outlined text-[16px]">category</span>
+                </div>
+                <div>
+                    <h3 class="text-xs font-extrabold text-slate-900 leading-tight">Explorar Categorías</h3>
+                    <p class="text-[10px] text-slate-500 font-medium leading-tight">Busca y asigna la categoría del producto</p>
+                </div>
+            </div>
+            <button type="button" 
+                    onclick="cerrarModalCategorias()" 
+                    class="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+        </div>
+
+        <!-- Buscador Interactivo -->
+        <div class="p-3 border-b border-slate-100 bg-white shrink-0">
+            <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-2.5 text-slate-400 text-[16px]">search</span>
+                <input type="text" 
+                       id="buscador-categorias-modal" 
+                       oninput="filtrarCategoriasModal(this.value)" 
+                       placeholder="Buscar por nombre o palabra clave..." 
+                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition-all">
+                <button type="button" 
+                        id="btn-limpiar-busqueda-categorias" 
+                        onclick="document.getElementById('buscador-categorias-modal').value = ''; filtrarCategoriasModal('');" 
+                        class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer">
+                    <span class="material-symbols-outlined text-[14px]">cancel</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista de Categorías con Scroll -->
+        <div class="p-3 overflow-y-auto max-h-[320px] flex-1 bg-slate-50/40">
+            <div id="grid-categorias-modal" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <!-- Se llena dinámicamente -->
+            </div>
+
+            <!-- Empty state -->
+            <div id="empty-state-categorias" class="hidden text-center py-6 px-3">
+                <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-1.5">
+                    <span class="material-symbols-outlined text-[20px]">search_off</span>
+                </div>
+                <div class="text-xs font-bold text-slate-800">No se encontraron categorías</div>
+                <p class="text-[10.5px] text-slate-500 mt-0.5">Intenta con otro término de búsqueda.</p>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-4 py-2.5 border-t border-slate-100 bg-white flex items-center justify-between shrink-0">
+            <div class="text-[10px] text-slate-400 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[13px]">info</span>
+                <span>Total: <strong id="contador-categorias-total" class="text-slate-700">0</strong> categorías</span>
+            </div>
+            <button type="button" 
+                    onclick="cerrarModalCategorias()" 
                     class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
                 Cerrar
             </button>
@@ -673,8 +758,20 @@
                 ];
             })->values() 
             : \App\Helpers\BrandHelper::getAvailableBrands();
+
+        $categoriasArray = isset($categorias) 
+            ? $categorias->map(function($c) {
+                return [
+                    'id' => (string)$c->id,
+                    'nombre' => $c->nombre,
+                    'slug' => $c->slug ?? '',
+                ];
+            })->values() 
+            : [];
     @endphp
     const marcasData = {!! json_encode($marcasArray) !!};
+    const categoriasData = {!! json_encode($categoriasArray) !!};
+
     let activeTabMarcas = 'todas';
 
     function getLogoHtmlForBrand(brand) {
@@ -688,19 +785,144 @@
         return `<span class="px-1.5 py-0.5 rounded bg-slate-900 text-white text-[9px] font-black uppercase tracking-wider">${name}</span>`;
     }
 
+    /* Modal Categorías Logic */
+    function abrirModalCategorias() {
+        const modal = document.getElementById('modal-categorias');
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        const totalEl = document.getElementById('contador-categorias-total');
+        if (totalEl) totalEl.textContent = categoriasData.length;
+
+        const input = document.getElementById('buscador-categorias-modal');
+        if (input) {
+            input.value = '';
+            setTimeout(() => input.focus(), 80);
+        }
+
+        filtrarCategoriasModal('');
+    }
+
+    function cerrarModalCategorias() {
+        const modal = document.getElementById('modal-categorias');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function filtrarCategoriasModal(query) {
+        const grid = document.getElementById('grid-categorias-modal');
+        const empty = document.getElementById('empty-state-categorias');
+        const btnClear = document.getElementById('btn-limpiar-busqueda-categorias');
+        const idActual = (document.getElementById('input-categoria-valor')?.value || '').toString().trim();
+
+        if (btnClear) {
+            btnClear.classList.toggle('hidden', !query);
+        }
+
+        const q = (query || '').trim().toLowerCase();
+        let lista = categoriasData;
+
+        if (q) {
+            lista = lista.filter(c => 
+                (c.nombre && c.nombre.toLowerCase().includes(q)) || 
+                (c.slug && c.slug.toLowerCase().includes(q))
+            );
+        }
+
+        grid.innerHTML = '';
+
+        if (lista.length === 0) {
+            grid.classList.add('hidden');
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        grid.classList.remove('hidden');
+        empty.classList.add('hidden');
+
+        lista.forEach(cat => {
+            const isSelected = idActual && (cat.id.toString() === idActual);
+
+            const card = document.createElement('div');
+            card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${
+                isSelected 
+                    ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
+                    : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
+            }`;
+            card.onclick = () => seleccionarCategoria(cat.id, cat.nombre);
+
+            card.innerHTML = `
+                <div class="flex items-center gap-2 min-w-0">
+                    <div class="w-7 h-7 rounded-lg ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-900 group-hover:text-white'} flex items-center justify-center shrink-0 transition-colors">
+                        <span class="material-symbols-outlined text-[15px]">category</span>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-xs font-bold text-slate-800 truncate group-hover:text-slate-900">${cat.nombre}</div>
+                    </div>
+                </div>
+                ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function seleccionarCategoria(id, nombre) {
+        const input = document.getElementById('input-categoria-valor');
+        if (input) {
+            input.value = id;
+        }
+        actualizarUICategoria(id, nombre);
+        cerrarModalCategorias();
+    }
+
+    function deseleccionarCategoria() {
+        const input = document.getElementById('input-categoria-valor');
+        if (input) {
+            input.value = '';
+        }
+        actualizarUICategoria('', '');
+    }
+
+    function actualizarUICategoria(id, nombre) {
+        const cardActiva = document.getElementById('card-categoria-activa');
+        const btnAbrir = document.getElementById('btn-abrir-modal-categorias');
+        const displayNombre = document.getElementById('display-categoria-nombre');
+
+        const idStr = (id || '').toString().trim();
+
+        if (!idStr) {
+            if (cardActiva) cardActiva.classList.add('hidden'), cardActiva.classList.remove('flex');
+            if (btnAbrir) btnAbrir.classList.remove('hidden');
+            return;
+        }
+
+        const catEncontrada = categoriasData.find(c => c.id.toString() === idStr);
+
+        if (displayNombre) {
+            displayNombre.textContent = catEncontrada ? catEncontrada.nombre : (nombre || 'Categoría');
+        }
+
+        if (btnAbrir) btnAbrir.classList.add('hidden');
+        if (cardActiva) {
+            cardActiva.classList.remove('hidden');
+            cardActiva.classList.add('flex');
+        }
+    }
+
+    /* Modal Marcas Logic */
     function abrirModalMarcas() {
         const modal = document.getElementById('modal-marcas');
         if (!modal) return;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         
-        // Actualizar contadores
         const totalEl = document.getElementById('contador-marcas-total');
         const sugeridasEl = document.getElementById('contador-marcas-sugeridas');
         if (totalEl) totalEl.textContent = marcasData.length;
         if (sugeridasEl) sugeridasEl.textContent = marcasData.filter(m => m.is_suggested).length;
 
-        // Reset buscador
         const input = document.getElementById('buscador-marcas-modal');
         if (input) {
             input.value = '';
@@ -855,18 +1077,25 @@
         }
     }
 
-    // Cerrar modal con tecla Escape
+    // Cerrar modales con tecla Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             cerrarModalMarcas();
+            cerrarModalCategorias();
         }
     });
 
     document.addEventListener('DOMContentLoaded', () => {
         calcularMargen();
-        const valorInicial = document.getElementById('input-marca-valor')?.value;
-        if (valorInicial) {
-            actualizarUIMarca(valorInicial);
+
+        const marcaInicial = document.getElementById('input-marca-valor')?.value;
+        if (marcaInicial) {
+            actualizarUIMarca(marcaInicial);
+        }
+
+        const categoriaInicial = document.getElementById('input-categoria-valor')?.value;
+        if (categoriaInicial) {
+            actualizarUICategoria(categoriaInicial, '');
         }
     });
 </script>

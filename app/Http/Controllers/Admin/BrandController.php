@@ -153,7 +153,7 @@ class BrandController extends Controller
             ->update(['brand_id' => $brand->id, 'marca' => $name]);
 
         return redirect()->route('admin.brands.index')
-            ->with('toast_success', "Marca «{$brand->name}» registrada exitosamente en el catálogo.");
+            ->with('success', "Marca «{$brand->name}» registrada exitosamente en el catálogo.");
     }
 
     /**
@@ -225,7 +225,7 @@ class BrandController extends Controller
         Producto::where('brand_id', $brand->id)->update(['marca' => $name]);
 
         return redirect()->route('admin.brands.index')
-            ->with('toast_success', "Marca «{$brand->name}» actualizada correctamente.");
+            ->with('success', "Marca «{$brand->name}» actualizada correctamente.");
     }
 
     /**
@@ -249,7 +249,7 @@ class BrandController extends Controller
         }
 
         return redirect()->route('admin.brands.index')
-            ->with('toast_success', "Marca «{$nombre}» eliminada del sistema." . ($totalProductos > 0 ? " Se desvincularon {$totalProductos} producto(s)." : ''));
+            ->with('success', "Marca «{$nombre}» eliminada del sistema." . ($totalProductos > 0 ? " Se desvincularon {$totalProductos} producto(s)." : ''));
     }
 
     /**
