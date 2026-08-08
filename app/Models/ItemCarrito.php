@@ -94,6 +94,31 @@ class ItemCarrito extends Model
     }
 
     /**
+     * Resuelve la URL completa de la imagen del item.
+     */
+    public function getImagenUrlAttribute(): string
+    {
+        $ruta = $this->imagen_ruta;
+        if (empty($ruta)) {
+            return asset('images/placeholder-product.png');
+        }
+        
+        if (str_starts_with($ruta, 'http://') || str_starts_with($ruta, 'https://') || str_starts_with($ruta, 'data:image')) {
+            return $ruta;
+        }
+
+        if (str_starts_with($ruta, 'storage/')) {
+            return asset($ruta);
+        }
+
+        if (str_starts_with($ruta, '/storage/')) {
+            return asset(ltrim($ruta, '/'));
+        }
+
+        return asset('storage/' . $ruta);
+    }
+
+    /**
      * Descripción de la variante en texto para mostrar en la interfaz (ej. "Negro / M").
      */
     public function getVarianteTextoAttribute(): ?string

@@ -645,6 +645,9 @@
                     window.location.href = "{{ route('cliente.carrito') }}";
                     return;
                 }
+                if (typeof window.abrirCarritoDrawer === 'function') {
+                    window.abrirCarritoDrawer();
+                }
                 if (window.mostrarToast) {
                     window.mostrarToast('success', data.mensaje);
                 }
@@ -684,6 +687,9 @@
         })
         .then(data => {
             if (data && data.exito) {
+                if (window.Livewire) {
+                    Livewire.dispatch('deseos-actualizado');
+                }
                 if (window.mostrarToast) {
                     window.mostrarToast('success', data.mensaje);
                 }

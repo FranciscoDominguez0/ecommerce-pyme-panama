@@ -61,7 +61,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($productos as $producto)
                 @php
-                    $imgRuta = $producto->imagenes->first() ? asset('storage/' . $producto->imagenes->first()->ruta) : asset('images/placeholder-product.png');
+                    $imgRuta = $producto->imagen_url;
                 @endphp
                 <div class="bg-white border border-gray-200/90 rounded-2xl p-4 sm:p-5 flex flex-col group hover:shadow-md hover:border-gray-300 transition-all">
                     

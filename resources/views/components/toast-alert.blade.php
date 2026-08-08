@@ -147,8 +147,8 @@
             }, 300);
         };
 
-        // API JavaScript Global reutilizable: window.mostrarToast("Mensaje", "success"|"error"|"warning"|"info", 4000)
-        window.mostrarToast = function(mensaje, tipo = 'success', duracion = 4000) {
+        // API JavaScript Global reutilizable e inteligente: window.mostrarToast(mensaje, tipo, duracion) o window.mostrarToast(tipo, mensaje, duracion)
+        window.mostrarToast = function(arg1, arg2 = 'success', duracion = 4000) {
             let container = document.getElementById('toast-container');
             if (!container) {
                 container = document.createElement('div');
@@ -156,6 +156,25 @@
                 container.className = 'fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-3 sm:px-0';
                 document.body.appendChild(container);
             }
+
+            const tiposValidos = ['success', 'error', 'fallo', 'warning', 'info'];
+            let mensaje = '';
+            let tipo = 'success';
+
+            if (typeof arg1 === 'object' && arg1 !== null) {
+                mensaje = arg1.mensaje || arg1.message || '';
+                tipo = arg1.tipo || arg1.type || 'success';
+                duracion = arg1.duracion || duracion;
+            } else if (tiposValidos.includes(String(arg1).toLowerCase())) {
+                tipo = String(arg1).toLowerCase();
+                mensaje = String(arg2 || '');
+            } else {
+                mensaje = String(arg1 || '');
+                tipo = (arg2 && tiposValidos.includes(String(arg2).toLowerCase())) ? String(arg2).toLowerCase() : 'success';
+            }
+
+            // Normalizar alias
+            if (tipo === 'fallo') tipo = 'error';
 
             const configs = {
                 success: {

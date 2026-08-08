@@ -109,20 +109,14 @@ class CarritoWidget extends Component
         $resultado = $carritoService->aplicarCupon($carrito, $this->codigoCupon, $usuarioId);
 
         if ($resultado['valido']) {
-            $this->mensajeCupon = $resultado['mensaje'];
+            $this->mensajeCupon = $resultado['mensaje']; // Mostrar mensaje inline para éxito
             $this->tipoMensajeCupon = 'success';
             $this->codigoCupon = '';
-            $this->dispatch('mostrar-toast', [
-                'tipo' => 'success',
-                'mensaje' => $resultado['mensaje'],
-            ]);
+            // No mostrar toast para éxito de cupón, solo mensaje inline
         } else {
             $this->mensajeCupon = $resultado['mensaje'];
             $this->tipoMensajeCupon = 'error';
-            $this->dispatch('mostrar-toast', [
-                'tipo' => 'error',
-                'mensaje' => $resultado['mensaje'],
-            ]);
+            // No mostrar toast para errores de cupón, solo mensaje inline
         }
     }
 
@@ -160,12 +154,15 @@ class CarritoWidget extends Component
                     ->where('usuario_id', $usuarioId)
                     ->where('producto_id', $productoId)
                     ->delete();
+                $this->dispatch('deseos-actualizado');
             }
 
             $this->dispatch('mostrar-toast', [
                 'tipo' => 'success',
                 'mensaje' => 'Producto movido al carrito.',
             ]);
+            
+            $this->dispatch('carrito-actualizado');
         } else {
             $this->dispatch('mostrar-toast', [
                 'tipo' => 'warning',
@@ -185,6 +182,8 @@ class CarritoWidget extends Component
                 ->where('usuario_id', $usuarioId)
                 ->where('producto_id', $productoId)
                 ->delete();
+
+            $this->dispatch('deseos-actualizado');
 
             $this->dispatch('mostrar-toast', [
                 'tipo' => 'info',

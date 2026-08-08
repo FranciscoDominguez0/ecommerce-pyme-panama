@@ -107,6 +107,32 @@ class Producto extends Model
     }
 
     /**
+     * URL completa y validada de la imagen principal del producto.
+     */
+    public function getImagenUrlAttribute(): string
+    {
+        $img = $this->imagenPrincipal();
+        if (!$img || empty($img->ruta)) {
+            return asset('images/placeholder-product.png');
+        }
+
+        $ruta = $img->ruta;
+        if (str_starts_with($ruta, 'http://') || str_starts_with($ruta, 'https://') || str_starts_with($ruta, 'data:image')) {
+            return $ruta;
+        }
+
+        if (str_starts_with($ruta, 'storage/')) {
+            return asset($ruta);
+        }
+
+        if (str_starts_with($ruta, '/storage/')) {
+            return asset(ltrim($ruta, '/'));
+        }
+
+        return asset('storage/' . $ruta);
+    }
+
+    /**
      * Scope para excluir eliminados suaves.
      */
     public function scopeSinEliminar(Builder $query): Builder

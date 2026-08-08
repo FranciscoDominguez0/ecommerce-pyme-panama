@@ -18,7 +18,7 @@
                         $producto = $item->producto;
                         $variante = $item->variante;
                         $stock = $item->stock_disponible;
-                        $imagenRuta = $item->imagen_ruta ? asset('storage/' . $item->imagen_ruta) : asset('images/placeholder-product.png');
+                        $imagenRuta = $item->imagen_url;
                     @endphp
 
                     <div wire:key="cart-item-{{ $item->id }}" 
@@ -276,7 +276,12 @@
 
                             <!-- Mensaje de feedback de cupón -->
                             @if($mensajeCupon)
-                                <div class="text-xs font-medium {{ $tipoMensajeCupon === 'success' ? 'text-emerald-700 bg-emerald-50 p-2 rounded-lg border border-emerald-200' : 'text-red-600 bg-red-50 p-2 rounded-lg border border-red-200' }}">
+                                <div wire:key="msg-{{ uniqid() }}"
+                                     x-data="{ show: true }" 
+                                     x-init="setTimeout(() => show = false, 4000)" 
+                                     x-show="show" 
+                                     x-transition.opacity.duration.500ms
+                                     class="text-xs font-medium {{ $tipoMensajeCupon === 'success' ? 'text-emerald-700 bg-emerald-50 p-2 rounded-lg border border-emerald-200' : 'text-red-600 bg-red-50 p-2 rounded-lg border border-red-200' }}">
                                     {{ $mensajeCupon }}
                                 </div>
                             @endif
@@ -354,7 +359,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($productosDeseos as $deseo)
                     @php
-                        $imgDeseo = $deseo->imagenes->first() ? asset('storage/' . $deseo->imagenes->first()->ruta) : asset('images/placeholder-product.png');
+                        $imgDeseo = $deseo->imagen_url;
                     @endphp
                     <div wire:key="wishlist-item-{{ $deseo->id }}" 
                          class="bg-white border border-gray-200/90 rounded-2xl p-4 flex flex-col group hover:shadow-md hover:border-gray-300 transition-all">

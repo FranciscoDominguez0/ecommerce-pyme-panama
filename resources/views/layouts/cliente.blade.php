@@ -172,16 +172,8 @@
 
                 <!-- Navigation Links & User Menu -->
                 <div class="flex items-center gap-3">
-                    
-                    <!-- Wishlist Link -->
-                    <a href="{{ route('cliente.lista-deseos') }}" class="p-1.5 text-gray-600 hover:text-red-500 transition-colors" title="Lista de Deseos">
-                        <span class="material-symbols-outlined text-[20px]">favorite</span>
-                    </a>
-
-                    <!-- Cart Link -->
-                    <a href="{{ route('cliente.carrito') }}" class="relative p-1.5 text-gray-600 hover:text-[#006148] transition-colors" title="Ver Carrito de Compras">
-                        <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
-                    </a>
+                    <!-- Badges y Enlaces Dinámicos de Carrito y Deseos -->
+                    <livewire:navbar-badges />
 
                     <!-- User Authentication -->
                     @auth
@@ -319,11 +311,22 @@
         </div>
     </footer>
 
+    <!-- Carrito Lateral Drawer Offcanvas -->
+    <livewire:carrito-drawer />
+
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
     <x-toast-alert />
 
     @livewireScripts
     <script>
+        window.abrirCarritoDrawer = function() {
+            if (window.Livewire) {
+                Livewire.dispatch('abrir-carrito-drawer');
+            } else {
+                window.dispatchEvent(new CustomEvent('abrir-carrito'));
+            }
+        };
+
         document.addEventListener('livewire:init', () => {
             Livewire.on('mostrar-toast', (event) => {
                 const data = Array.isArray(event) ? event[0] : (event.detail ? (Array.isArray(event.detail) ? event.detail[0] : event.detail) : event);
