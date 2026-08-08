@@ -1,0 +1,223 @@
+@props([
+    'id' => 'modal-selector',
+    'titulo' => 'Seleccionar',
+    'subtitulo' => 'Busca y selecciona una opción de la lista',
+    'icono' => 'search',
+    'placeholder' => 'Buscar...',
+    'porPagina' => 15,
+])
+
+<!-- Componente Reutilizable: Modal de Búsqueda Paginado (15 items por página con navegación) -->
+<div id="{{ $id }}" 
+     class="fixed inset-0 w-screen h-screen z-[9999] hidden items-center justify-center p-3 sm:p-4" 
+     style="background-color: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px);"
+     onclick="if(event.target === this) window.ModalBuscador.cerrar('{{ $id }}');">
+    
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150 relative z-10">
+        
+        <!-- Modal Header -->
+        <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-2xs">
+                    <span class="material-symbols-outlined text-[18px]">{{ $icono }}</span>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-slate-900" id="{{ $id }}-titulo-text">{{ $titulo }}</h3>
+                    <p class="text-[10px] text-slate-500">{{ $subtitulo }}</p>
+                </div>
+            </div>
+            <button type="button" 
+                    onclick="window.ModalBuscador.cerrar('{{ $id }}')" 
+                    class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+        </div>
+
+        <!-- Buscador y Acciones Superiores -->
+        <div class="p-3 border-b border-slate-100 bg-white shrink-0 space-y-2">
+            <div class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[16px]">search</span>
+                <input type="text" 
+                       id="{{ $id }}-input-buscar" 
+                       oninput="window.ModalBuscador.filtrar('{{ $id }}', this.value)" 
+                       placeholder="{{ $placeholder }}" 
+                       class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 text-slate-800 font-medium">
+            </div>
+
+            @if(isset($headerExtra))
+                <div class="pt-0.5">
+                    {{ $headerExtra }}
+                </div>
+            @endif
+        </div>
+
+        <!-- Contenedor Paginado de Resultados (15 items por página) -->
+        <div class="p-3 overflow-y-auto flex-1 space-y-1.5 max-h-[50vh]" id="{{ $id }}-lista-contenido" data-limit="{{ $porPagina }}">
+            {{ $slot ?? '' }}
+        </div>
+
+        <!-- Footer del Modal con Controles de Paginación (< Anterior | Pág X de Y | Siguiente >) -->
+        <div class="px-4 py-2.5 border-t border-slate-100 bg-slate-50/70 flex items-center justify-between shrink-0 flex-wrap gap-2">
+            <span class="text-[11px] font-medium text-slate-500" id="{{ $id }}-info-contador">Mostrando resultados</span>
+            
+            <div class="flex items-center gap-2">
+                <div id="{{ $id }}-paginacion-controles" class="flex items-center gap-1">
+                    <!-- Botones de navegación de página -->
+                </div>
+
+                @if(isset($footerExtra))
+                    {{ $footerExtra }}
+                @endif
+
+                <button type="button" 
+                        onclick="window.ModalBuscador.cerrar('{{ $id }}')" 
+                        class="px-3 py-1 text-xs font-semibold text-slate-600 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    if (!window.ModalBuscador) {
+        window.ModalBuscador = {
+            registros: {},
+
+            init(id, config) {
+                this.registros[id] = {
+                    items: config.items || [],
+                    pagina: 1,
+                    porPagina: config.porPagina || 15,
+                    filtro: '',
+                    render: config.render || null,
+                    onSelect: config.onSelect || null,
+                    emptyText: config.emptyText || 'No se encontraron resultados'
+                };
+            },
+
+            abrir(id) {
+                const modal = document.getElementById(id);
+                if (!modal) return;
+
+                // Mover el modal directamente al <body> para asegurar que cubra el 100% del viewport
+                if (modal.parentElement !== document.body) {
+                    document.body.appendChild(modal);
+                }
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+
+                const input = document.getElementById(`${id}-input-buscar`);
+                if (input) {
+                    input.value = '';
+                    setTimeout(() => input.focus(), 50);
+                }
+
+                if (this.registros[id]) {
+                    this.registros[id].filtro = '';
+                    this.registros[id].pagina = 1;
+                    this.renderizar(id);
+                }
+            },
+
+            cerrar(id) {
+                const modal = document.getElementById(id);
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            },
+
+            filtrar(id, texto) {
+                if (this.registros[id]) {
+                    this.registros[id].filtro = texto.trim().toLowerCase();
+                    this.registros[id].pagina = 1;
+                    this.renderizar(id);
+                }
+            },
+
+            cambiarPagina(id, nuevaPagina) {
+                if (this.registros[id]) {
+                    this.registros[id].pagina = nuevaPagina;
+                    this.renderizar(id);
+                }
+            },
+
+            renderizar(id) {
+                const reg = this.registros[id];
+                if (!reg) return;
+
+                const contenedor = document.getElementById(`${id}-lista-contenido`);
+                const contador = document.getElementById(`${id}-info-contador`);
+                const controles = document.getElementById(`${id}-paginacion-controles`);
+                if (!contenedor) return;
+
+                let filtrados = reg.items;
+                if (reg.filtro) {
+                    filtrados = reg.items.filter(item => {
+                        const texto = typeof item === 'string' ? item : (item.nombre || item.name || item.titulo || '');
+                        return texto.toLowerCase().includes(reg.filtro);
+                    });
+                }
+
+                const total = filtrados.length;
+                const limite = reg.porPagina || 15;
+                const totalPaginas = Math.ceil(total / limite) || 1;
+
+                if (reg.pagina > totalPaginas) reg.pagina = totalPaginas;
+                if (reg.pagina < 1) reg.pagina = 1;
+
+                const inicio = (reg.pagina - 1) * limite;
+                const fin = Math.min(inicio + limite, total);
+                const mostrados = filtrados.slice(inicio, fin);
+
+                if (contador) {
+                    contador.textContent = total > 0 
+                        ? `Mostrando ${inicio + 1} - ${fin} de ${total}`
+                        : '0 resultados';
+                }
+
+                if (controles) {
+                    controles.innerHTML = '';
+                    if (totalPaginas > 1) {
+                        controles.innerHTML = `
+                            <button type="button" 
+                                    onclick="window.ModalBuscador.cambiarPagina('${id}', ${reg.pagina - 1})" 
+                                    ${reg.pagina === 1 ? 'disabled' : ''} 
+                                    class="px-2 py-0.5 text-[11px] font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all">
+                                Anterior
+                            </button>
+                            <span class="text-[10.5px] font-bold text-slate-700 px-1">Pág. ${reg.pagina} de ${totalPaginas}</span>
+                            <button type="button" 
+                                    onclick="window.ModalBuscador.cambiarPagina('${id}', ${reg.pagina + 1})" 
+                                    ${reg.pagina === totalPaginas ? 'disabled' : ''} 
+                                    class="px-2 py-0.5 text-[11px] font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all">
+                                Siguiente
+                            </button>
+                        `;
+                    }
+                }
+
+                contenedor.innerHTML = '';
+
+                if (mostrados.length === 0) {
+                    contenedor.innerHTML = `
+                        <div class="py-6 text-center text-slate-400 text-xs">
+                            <p>${reg.emptyText} "${reg.filtro}".</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                mostrados.forEach((item, idx) => {
+                    if (reg.render) {
+                        const el = reg.render(item, idx);
+                        contenedor.appendChild(el);
+                    }
+                });
+            }
+        };
+    }
+</script>

@@ -284,6 +284,17 @@ class ProductoController extends Controller
                     ->delete();
             }
 
+            // Actualizar el orden de las imágenes existentes según el orden en que se enviaron
+            if ($request->has('orden_imagenes') && is_array($request->orden_imagenes)) {
+                foreach ($request->orden_imagenes as $posicion => $imagenId) {
+                    if (is_numeric($imagenId)) {
+                        ImagenProducto::where('id', $imagenId)
+                            ->where('producto_id', $producto->id)
+                            ->update(['orden' => $posicion + 1]);
+                    }
+                }
+            }
+
             // Actualizar imagen principal si se seleccionó una existente
             if ($request->filled('imagen_principal_id')) {
                 $producto->imagenes()->update(['es_principal' => false]);
@@ -417,6 +428,13 @@ class ProductoController extends Controller
         }
 
         $variantesData = $request->input('variantes', []);
+
+        if ($request->filled('variantes_json')) {
+            $decoded = json_decode($request->input('variantes_json'), true);
+            if (is_array($decoded) && count($decoded) > 0) {
+                $variantesData = $decoded;
+            }
+        }
 
         // Estrategia simple: limpiar y recrear las variantes
         $producto->variantes()->delete();

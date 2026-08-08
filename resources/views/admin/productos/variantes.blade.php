@@ -33,37 +33,13 @@
                     <p class="text-[11px] text-slate-500 mt-0.5">Selecciona un atributo de la lista para agregarlo y haz clic en las opciones que aplican a este producto.</p>
                 </div>
 
-                <!-- Selector de Atributos Principales -->
+                <!-- Selector de Atributos Principales (Modal) -->
                 <div class="flex items-center gap-2">
-                    <select id="selector-atributos-principales" 
-                            class="text-xs py-1.5 px-3 rounded-xl border-slate-200 bg-slate-50 font-medium text-slate-700 focus:ring-emerald-500 focus:border-emerald-500">
-                        <option value="">-- Seleccionar Atributo Principal --</option>
-                        <option value="Color">Color</option>
-                        <option value="Capacidad de almacenamiento">Capacidad de almacenamiento</option>
-                        <option value="Memoria RAM">Memoria RAM</option>
-                        <option value="Tamaño">Tamaño</option>
-                        <option value="Longitud">Longitud</option>
-                        <option value="Tipo de conexión">Tipo de conexión</option>
-                        <option value="Potencia">Potencia</option>
-                        <option value="Frecuencia">Frecuencia</option>
-                        <option value="Resolución">Resolución</option>
-                        <option value="Tamaño de pantalla">Tamaño de pantalla</option>
-                        <option value="Procesador">Procesador</option>
-                        <option value="Tarjeta gráfica">Tarjeta gráfica</option>
-                        <option value="Sistema operativo">Sistema operativo</option>
-                        <option value="Distribución del teclado">Distribución del teclado</option>
-                        <option value="Tipo de switch">Tipo de switch</option>
-                        <option value="Voltaje">Voltaje</option>
-                        <option value="Compatibilidad">Compatibilidad</option>
-                        <option value="Material">Material</option>
-                        <option value="Garantía">Garantía</option>
-                    </select>
-
                     <button type="button" 
-                            onclick="agregarAtributoDesdeSelector()" 
-                            class="inline-flex items-center gap-1 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 px-3.5 py-1.5 rounded-xl transition-all shadow-xs shrink-0">
-                        <span class="material-symbols-outlined text-[16px]">add</span>
-                        <span>Agregar</span>
+                            onclick="abrirModalAtributosPrincipales()" 
+                            class="inline-flex items-center gap-2 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 rounded-xl text-xs font-bold text-white shadow-xs transition-all cursor-pointer group shrink-0">
+                        <span class="material-symbols-outlined text-[16px] text-emerald-400 group-hover:rotate-90 transition-transform duration-200">add_circle</span>
+                        <span>Seleccionar Atributo Principal...</span>
                     </button>
                 </div>
             </div>
@@ -74,8 +50,10 @@
             </div>
         </div>
 
-        <!-- Bloque 2: Matriz de Combinaciones Generadas -->
+        <!-- Bloque 2: Matriz de Combinaciones Generadas (Optimizada & Paginada) -->
         <div class="space-y-3 pt-4 border-t border-slate-200/80">
+            <input type="hidden" name="variantes_json" id="input-variantes-json">
+
             <div class="flex items-center justify-between flex-wrap gap-2">
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
@@ -85,7 +63,17 @@
                     <p class="text-[11px] text-slate-500 mt-0.5">Asigna precios, SKU y stock individual para cada combinación.</p>
                 </div>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <!-- Buscador en tiempo real dentro de la matriz -->
+                    <div class="relative flex items-center">
+                        <span class="material-symbols-outlined absolute left-2.5 text-slate-400 text-[15px]">search</span>
+                        <input type="text" 
+                               id="input-buscar-matriz" 
+                               oninput="filtrarMatrizCombinaciones(this.value)" 
+                               placeholder="Filtrar variantes..." 
+                               class="text-xs py-1 pl-8 pr-2.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-emerald-500 w-40">
+                    </div>
+
                     <button type="button" 
                             onclick="regenerarMatrizCombinaciones()" 
                             class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors shadow-2xs">
@@ -95,8 +83,8 @@
                 </div>
             </div>
 
-            <!-- Tabla de Combinaciones -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs">
+            <!-- Tabla de Combinaciones Paginada -->
+            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs bg-white">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[720px]">
                         <thead>
@@ -110,9 +98,19 @@
                             </tr>
                         </thead>
                         <tbody id="tbody-matriz-variantes" class="text-xs divide-y divide-slate-100">
-                            <!-- Filas de variantes generadas en tiempo real -->
+                            <!-- Filas de variantes paginadas -->
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Footer de Paginación de la Matriz -->
+                <div id="footer-paginacion-matriz" class="px-4 py-2 bg-slate-50/70 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 flex-wrap gap-2">
+                    <div id="info-paginacion-matriz" class="font-medium text-[11px]">
+                        Mostrando 0 - 0 de 0 variantes
+                    </div>
+                    <div class="flex items-center gap-1.5" id="controles-paginacion-matriz">
+                        <!-- Botones Anterior / Siguiente dinámicos -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,80 +119,57 @@
 
 </div>
 
+<!-- MODAL DE SELECCIÓN DE ATRIBUTOS PRINCIPALES REUTILIZABLE -->
+<x-modal-busqueda 
+    id="modal-atributos-principales" 
+    titulo="Seleccionar Atributo Principal" 
+    subtitulo="Busca y elige una característica para las variantes del producto" 
+    icono="tune" 
+    placeholder="Buscar atributo (ej. Color, RAM, Capacidad)..."
+    :porPagina="15"
+>
+    <x-slot:headerExtra>
+        <div class="flex items-center gap-2">
+            <input type="text" 
+                   id="input-nuevo-atributo-modal" 
+                   placeholder="+ Crear atributo personalizado..." 
+                   onkeydown="if(event.key==='Enter'){event.preventDefault(); agregarAtributoPersonalizadoModal();}"
+                   class="w-full py-1 px-3 text-xs bg-slate-50 border border-dashed border-slate-300 rounded-xl focus:bg-white focus:border-solid focus:border-emerald-500 text-slate-800">
+            <button type="button" 
+                    onclick="agregarAtributoPersonalizadoModal()" 
+                    class="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shrink-0 transition-colors shadow-2xs cursor-pointer">
+                Añadir
+            </button>
+        </div>
+    </x-slot:headerExtra>
+</x-modal-busqueda>
+
 <!-- Datos y Lógica JavaScript del Constructor de Variantes -->
 <script>
-    // Catálogo Oficial de los 19 Atributos Principales con todas sus opciones y códigos HEX
-    const CATALOGO_ATRIBUTOS = {
-        'Color': {
-            opciones: ['Negro', 'Blanco', 'Plata', 'Gris', 'Azul', 'Rojo', 'Verde', 'Dorado', 'Morado', 'Rosa'],
-            hex: {
-                'Negro': '#0F172A',
-                'Blanco': '#F8FAFC',
-                'Plata': '#E2E8F0',
-                'Gris': '#64748B',
-                'Azul': '#2563EB',
-                'Rojo': '#DC2626',
-                'Verde': '#16A34A',
-                'Dorado': '#D97706',
-                'Morado': '#7C3AED',
-                'Rosa': '#DB2777'
+    @php
+        $tiposDb = isset($tiposVariante) && $tiposVariante->count() > 0 
+            ? $tiposVariante 
+            : \App\Models\TipoVariante::with('opciones')->get();
+
+        $catalogoDb = [];
+        foreach ($tiposDb as $tipo) {
+            $opcs = [];
+            $hexs = [];
+            foreach ($tipo->opciones as $opc) {
+                $opcs[] = $opc->valor;
+                if (!empty($opc->valor_hex)) {
+                    $hexs[$opc->valor] = $opc->valor_hex;
+                }
             }
-        },
-        'Capacidad de almacenamiento': {
-            opciones: ['64 GB', '128 GB', '256 GB', '512 GB', '1 TB', '2 TB', '4 TB']
-        },
-        'Memoria RAM': {
-            opciones: ['4 GB', '8 GB', '16 GB', '32 GB', '64 GB', '128 GB']
-        },
-        'Tamaño': {
-            opciones: ['XS', 'S', 'M', 'L', 'XL']
-        },
-        'Longitud': {
-            opciones: ['0.5 m', '1 m', '2 m', '3 m', '5 m', '10 m']
-        },
-        'Tipo de conexión': {
-            opciones: ['USB-A', 'USB-C', 'Micro USB', 'Lightning', 'HDMI', 'DisplayPort', 'VGA', 'DVI', 'RJ45']
-        },
-        'Potencia': {
-            opciones: ['18 W', '20 W', '25 W', '45 W', '65 W', '100 W', '120 W']
-        },
-        'Frecuencia': {
-            opciones: ['60 Hz', '75 Hz', '120 Hz', '144 Hz', '165 Hz', '240 Hz', '360 Hz']
-        },
-        'Resolución': {
-            opciones: ['HD', 'Full HD', '2K', 'QHD', '4K', '8K']
-        },
-        'Tamaño de pantalla': {
-            opciones: ['13"', '14"', '15.6"', '16"', '17.3"', '24"', '27"', '32"']
-        },
-        'Procesador': {
-            opciones: ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'Ryzen 3', 'Ryzen 5', 'Ryzen 7', 'Ryzen 9', 'Apple M1', 'Apple M2', 'Apple M3']
-        },
-        'Tarjeta gráfica': {
-            opciones: ['Integrada', 'RTX 3050', 'RTX 3060', 'RTX 4060', 'RTX 4070', 'RTX 4080', 'RTX 4090']
-        },
-        'Sistema operativo': {
-            opciones: ['Windows 11', 'Windows 10', 'Linux', 'macOS', 'FreeDOS', 'Android', 'iOS']
-        },
-        'Distribución del teclado': {
-            opciones: ['Español', 'Inglés', 'Inglés US', 'Mecánico', 'Membrana']
-        },
-        'Tipo de switch': {
-            opciones: ['Red', 'Blue', 'Brown', 'Black', 'Silver']
-        },
-        'Voltaje': {
-            opciones: ['110 V', '220 V', '110-220 V']
-        },
-        'Compatibilidad': {
-            opciones: ['iPhone', 'Android', 'Windows', 'macOS', 'Linux', 'PlayStation', 'Xbox', 'Nintendo Switch']
-        },
-        'Material': {
-            opciones: ['Plástico', 'Aluminio', 'Acero', 'Silicona', 'Vidrio', 'Cuero']
-        },
-        'Garantía': {
-            opciones: ['3 meses', '6 meses', '1 año', '2 años', '3 años']
+            $catalogoDb[$tipo->nombre] = [
+                'opciones' => $opcs,
+                'hex' => $hexs
+            ];
         }
-    };
+    @endphp
+
+    // Catálogo Oficial de Atributos cargado dinámicamente desde la Base de Datos
+    const CATALOGO_ATRIBUTOS = {!! json_encode($catalogoDb) !!};
 
     @php
         $atributosIniciales = [];
@@ -235,6 +210,53 @@
     let variantesExistentes = {!! json_encode($variantesExistentesData) !!};
 
     document.addEventListener('DOMContentLoaded', function() {
+        if (window.ModalBuscador) {
+            window.ModalBuscador.init('modal-atributos-principales', {
+                items: Object.keys(CATALOGO_ATRIBUTOS).map(n => ({ nombre: n })),
+                porPagina: 15,
+                emptyText: 'No se encontró el atributo',
+                render: (item) => {
+                    const nombre = item.nombre;
+                    const cat = CATALOGO_ATRIBUTOS[nombre] || { opciones: [] };
+                    const yaAgregado = atributosActivos.some(a => a.nombre.toLowerCase() === nombre.toLowerCase());
+                    const numOpciones = cat.opciones ? cat.opciones.length : 0;
+
+                    const div = document.createElement('div');
+                    div.onclick = () => {
+                        if (!yaAgregado) seleccionarAtributoDesdeModal(nombre);
+                    };
+                    div.className = `flex items-center justify-between p-3 rounded-xl border transition-all select-none ${
+                        yaAgregado 
+                        ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed' 
+                        : 'bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs cursor-pointer'
+                    }`;
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg ${yaAgregado ? 'bg-slate-200 text-slate-500' : 'bg-slate-900 text-white'} flex items-center justify-center font-bold text-xs shadow-2xs">
+                                ${nombre.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <span class="text-xs font-bold ${yaAgregado ? 'text-slate-500' : 'text-slate-900'} block leading-tight">${nombre}</span>
+                                <span class="text-[10px] text-slate-400 font-medium">${numOpciones} opciones predefinidas</span>
+                            </div>
+                        </div>
+                        <div>
+                            ${yaAgregado ? `
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-md">
+                                    Ya agregado
+                                </span>
+                            ` : `
+                                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg flex items-center gap-0.5 border border-emerald-200">
+                                    <span class="material-symbols-outlined text-[12px]">add</span>
+                                    <span>Seleccionar</span>
+                                </span>
+                            `}
+                        </div>
+                    `;
+                    return div;
+                }
+            });
+        }
         renderizarAtributosUI();
         regenerarMatrizCombinaciones();
     });
@@ -244,32 +266,117 @@
         if (sec) {
             sec.style.display = habilitado ? 'block' : 'none';
         }
+        if (!habilitado) {
+            const inputJson = document.getElementById('input-variantes-json');
+            if (inputJson) inputJson.value = '[]';
+        } else {
+            renderizarAtributosUI();
+            regenerarMatrizCombinaciones();
+        }
     }
 
-    function agregarAtributoDesdeSelector() {
-        const sel = document.getElementById('selector-atributos-principales');
-        const nombre = sel.value;
-        if (!nombre) {
-            alert('Por favor selecciona un atributo de la lista.');
-            return;
-        }
+    function abrirModalAtributosPrincipales() {
+        const inputNuevo = document.getElementById('input-nuevo-atributo-modal');
+        if (inputNuevo) inputNuevo.value = '';
+        if (window.ModalBuscador) window.ModalBuscador.abrir('modal-atributos-principales');
+    }
 
-        // Evitar duplicados
+    function cerrarModalAtributosPrincipales() {
+        if (window.ModalBuscador) window.ModalBuscador.cerrar('modal-atributos-principales');
+    }
+
+    function seleccionarAtributoDesdeModal(nombreAtributo) {
+        const nombre = nombreAtributo.trim();
+        if (!nombre) return;
+
         const existe = atributosActivos.some(a => a.nombre.toLowerCase() === nombre.toLowerCase());
         if (existe) {
             alert(`El atributo "${nombre}" ya está agregado.`);
             return;
         }
 
-        // Se agrega con 0 opciones seleccionadas por defecto para que el usuario elija exactamente las que quiere
         atributosActivos.push({
             nombre: nombre,
             seleccionadas: []
         });
 
-        sel.value = '';
+        cerrarModalAtributosPrincipales();
         renderizarAtributosUI();
         regenerarMatrizCombinaciones();
+    }
+
+    function agregarAtributoPersonalizadoModal() {
+        const input = document.getElementById('input-nuevo-atributo-modal');
+        if (!input) return;
+        const val = input.value.trim();
+        if (!val) return;
+
+        seleccionarAtributoDesdeModal(val);
+        input.value = '';
+    }
+
+    function renderizarListaAtributosModal(filtro = '') {
+        const contenedor = document.getElementById('lista-atributos-modal');
+        if (!contenedor) return;
+
+        contenedor.innerHTML = '';
+
+        const listaNombres = Object.keys(CATALOGO_ATRIBUTOS);
+
+        let filtrados = listaNombres;
+        if (filtro) {
+            filtrados = listaNombres.filter(n => n.toLowerCase().includes(filtro));
+        }
+
+        if (filtrados.length === 0) {
+            contenedor.innerHTML = `
+                <div class="py-6 text-center text-slate-400 text-xs">
+                    <p>No se encontró el atributo "${filtro}".</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Puedes crearlo usando el campo "+ Crear atributo personalizado".</p>
+                </div>
+            `;
+            return;
+        }
+
+        filtrados.forEach(nombre => {
+            const cat = CATALOGO_ATRIBUTOS[nombre] || { opciones: [] };
+            const yaAgregado = atributosActivos.some(a => a.nombre.toLowerCase() === nombre.toLowerCase());
+            const numOpciones = cat.opciones ? cat.opciones.length : 0;
+
+            const div = document.createElement('div');
+            div.onclick = () => {
+                if (!yaAgregado) seleccionarAtributoDesdeModal(nombre);
+            };
+            div.className = `flex items-center justify-between p-3 rounded-xl border transition-all select-none ${
+                yaAgregado 
+                ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed' 
+                : 'bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs cursor-pointer'
+            }`;
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg ${yaAgregado ? 'bg-slate-200 text-slate-500' : 'bg-slate-900 text-white'} flex items-center justify-center font-bold text-xs shadow-2xs">
+                        ${nombre.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold ${yaAgregado ? 'text-slate-500' : 'text-slate-900'} block leading-tight">${nombre}</span>
+                        <span class="text-[10px] text-slate-400 font-medium">${numOpciones} opciones predefinidas</span>
+                    </div>
+                </div>
+                <div>
+                    ${yaAgregado ? `
+                        <span class="text-[10px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-md">
+                            Ya agregado
+                        </span>
+                    ` : `
+                        <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg flex items-center gap-0.5 border border-emerald-200">
+                            <span class="material-symbols-outlined text-[12px]">add</span>
+                            <span>Seleccionar</span>
+                        </span>
+                    `}
+                </div>
+            `;
+            contenedor.appendChild(div);
+        });
     }
 
     function renderizarAtributosUI() {
@@ -283,7 +390,7 @@
                 <div class="p-6 text-center rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
                     <span class="material-symbols-outlined text-[24px] text-slate-300 mb-1">tune</span>
                     <p class="font-medium text-slate-600">No hay atributos agregados aún.</p>
-                    <p class="text-[11px] text-slate-400 mt-0.5">Selecciona un Atributo Principal en el menú superior para empezar a configurar las variantes.</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Haz clic en <strong>"+ Seleccionar Atributo Principal"</strong> en el menú superior para empezar.</p>
                 </div>
             `;
             return;
@@ -306,13 +413,13 @@
                         </span>
                         <span class="text-[11px] text-slate-400">(${attr.seleccionadas.length} opciones seleccionadas)</span>
                     </div>
-                    <button type="button" onclick="eliminarAtributo(${idx})" class="text-slate-400 hover:text-rose-600 p-1 transition-colors" title="Eliminar atributo">
+                    <button type="button" onclick="eliminarAtributo(${idx})" class="text-slate-400 hover:text-rose-600 p-1 transition-colors cursor-pointer" title="Eliminar atributo">
                         <span class="material-symbols-outlined text-[18px]">close</span>
                     </button>
                 </div>
             `;
 
-            // Chips / Pills de Opciones
+            // Chips / Pills de Opciones (Selección inline)
             let chipsHtml = `<div class="flex items-center gap-2 flex-wrap pt-1">`;
             
             todasOpciones.forEach(opc => {
@@ -327,7 +434,7 @@
                 chipsHtml += `
                     <button type="button" 
                             onclick="toggleOpcion(${idx}, '${opc.replace(/'/g, "\\'")}')" 
-                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer ${
                                 estaSeleccionada 
                                 ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
                                 : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
@@ -391,6 +498,12 @@
         regenerarMatrizCombinaciones();
     }
 
+    // Estado Global de Combinaciones (Ligero y escalable para 10,000+ variantes)
+    let combinacionesMatrizState = [];
+    let paginaActualMatriz = 1;
+    const itemsPorPaginaMatriz = 15;
+    let filtroMatrizTexto = '';
+
     function generarProductoCartesiano(arrays) {
         return arrays.reduce((acc, curr) => {
             const res = [];
@@ -411,6 +524,7 @@
         const atributosConOpciones = atributosActivos.filter(a => a.seleccionadas.length > 0);
 
         if (atributosConOpciones.length === 0) {
+            combinacionesMatrizState = [];
             tbody.innerHTML = `
                 <tr>
                     <td colspan="6" class="py-8 text-center text-slate-400 text-xs">
@@ -419,6 +533,8 @@
                 </tr>
             `;
             if (contador) contador.textContent = '0';
+            actualizarInfoPaginacionMatriz(0, 0, 0, 1);
+            sincronizarJsonVariantes();
             return;
         }
 
@@ -427,8 +543,8 @@
             valor: opc
         })));
 
-        const combinaciones = generarProductoCartesiano(opcionesAgrupadas);
-        if (contador) contador.textContent = combinaciones.length;
+        const productoCartesiano = generarProductoCartesiano(opcionesAgrupadas);
+        if (contador) contador.textContent = productoCartesiano.length;
 
         const inputSkuEl = document.querySelector('input[name="sku"]');
         const baseSku = (inputSkuEl && inputSkuEl.value) ? inputSkuEl.value.trim() : 'PROD';
@@ -436,37 +552,102 @@
         const inputPrecioEl = document.querySelector('input[name="precio"]');
         const basePrecio = (inputPrecioEl && inputPrecioEl.value) ? inputPrecioEl.value : '0.00';
 
-        tbody.innerHTML = '';
-        combinaciones.forEach((comb, idx) => {
+        combinacionesMatrizState = productoCartesiano.map((comb) => {
             const nombreCombinacion = comb.map(c => c.valor).join(' / ');
             const skuSugerido = `${baseSku}-${comb.map(c => c.valor.substring(0, 3).toUpperCase().replace(/[^A-Z0-9]/g, '')).join('-')}`;
             
-            // Buscar si esta combinación ya existe para preservar sus datos
             let existente = variantesExistentes.find(ve => {
                 if (Object.keys(ve.atributos).length !== comb.length) return false;
                 return comb.every(c => ve.atributos[c.atributo] === c.valor);
             });
 
-            const skuVal = existente ? existente.sku : skuSugerido;
-            const precioVal = existente ? parseFloat(existente.precio).toFixed(2) : basePrecio;
-            const stockVal = existente ? existente.stock : 10;
+            const attrsObj = {};
+            comb.forEach(c => { attrsObj[c.atributo] = c.valor; });
 
+            return {
+                nombre: nombreCombinacion,
+                sku: existente ? existente.sku : skuSugerido,
+                precio: existente ? parseFloat(existente.precio).toFixed(2) : basePrecio,
+                stock: existente ? existente.stock : 10,
+                atributos: attrsObj
+            };
+        });
+
+        paginaActualMatriz = 1;
+        renderizarPaginaMatriz();
+        sincronizarJsonVariantes();
+    }
+
+    function filtrarMatrizCombinaciones(texto) {
+        filtroMatrizTexto = texto.trim().toLowerCase();
+        paginaActualMatriz = 1;
+        renderizarPaginaMatriz();
+    }
+
+    function renderizarPaginaMatriz() {
+        const tbody = document.getElementById('tbody-matriz-variantes');
+        if (!tbody) return;
+
+        let itemsFiltrados = combinacionesMatrizState.map((item, indexOriginal) => ({ item, indexOriginal }));
+
+        if (filtroMatrizTexto) {
+            itemsFiltrados = itemsFiltrados.filter(({ item }) => 
+                item.nombre.toLowerCase().includes(filtroMatrizTexto) || 
+                item.sku.toLowerCase().includes(filtroMatrizTexto)
+            );
+        }
+
+        const totalItems = itemsFiltrados.length;
+        const totalPaginas = Math.ceil(totalItems / itemsPorPaginaMatriz) || 1;
+
+        if (paginaActualMatriz > totalPaginas) paginaActualMatriz = totalPaginas;
+        if (paginaActualMatriz < 1) paginaActualMatriz = 1;
+
+        const inicio = (paginaActualMatriz - 1) * itemsPorPaginaMatriz;
+        const fin = Math.min(inicio + itemsPorPaginaMatriz, totalItems);
+        const paginaItems = itemsFiltrados.slice(inicio, fin);
+
+        tbody.innerHTML = '';
+
+        if (paginaItems.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="py-6 text-center text-slate-400 text-xs">
+                        No se encontraron variantes que coincidan con "${filtroMatrizTexto}".
+                    </td>
+                </tr>
+            `;
+            actualizarInfoPaginacionMatriz(0, 0, totalItems, totalPaginas);
+            return;
+        }
+
+        paginaItems.forEach(({ item, indexOriginal }) => {
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-slate-50/70 transition-colors';
             tr.innerHTML = `
                 <td class="py-2.5 px-4">
                     <div class="flex items-center gap-2">
-                        <span class="font-bold text-slate-900">${nombreCombinacion}</span>
+                        <span class="font-bold text-slate-900">${item.nombre}</span>
                     </div>
                 </td>
                 <td class="py-2.5 px-4">
-                    <input type="text" name="variantes[${idx}][sku]" value="${skuVal}" class="text-xs font-mono py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500">
+                    <input type="text" 
+                           value="${item.sku}" 
+                           oninput="actualizarCampoMatriz(${indexOriginal}, 'sku', this.value)"
+                           class="text-xs font-mono py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500">
                 </td>
                 <td class="py-2.5 px-4 text-right">
-                    <input type="number" step="0.01" name="variantes[${idx}][precio]" value="${precioVal}" class="text-xs text-right py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500 font-bold text-slate-900">
+                    <input type="number" 
+                           step="0.01" 
+                           value="${item.precio}" 
+                           oninput="actualizarCampoMatriz(${indexOriginal}, 'precio', this.value)"
+                           class="text-xs text-right py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500 font-bold text-slate-900">
                 </td>
                 <td class="py-2.5 px-4 text-center">
-                    <input type="number" name="variantes[${idx}][stock]" value="${stockVal}" class="text-xs text-center py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+                    <input type="number" 
+                           value="${item.stock}" 
+                           oninput="actualizarCampoMatriz(${indexOriginal}, 'stock', this.value)"
+                           class="text-xs text-center py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
                 </td>
                 <td class="py-2.5 px-4 text-center">
                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -474,14 +655,82 @@
                     </span>
                 </td>
                 <td class="py-2.5 px-4 text-center">
-                    <button type="button" onclick="this.closest('tr').remove()" class="text-slate-400 hover:text-rose-600 transition-colors" title="Quitar combinación">
+                    <button type="button" onclick="eliminarVariantePorIndice(${indexOriginal})" class="text-slate-400 hover:text-rose-600 transition-colors cursor-pointer" title="Quitar combinación">
                         <span class="material-symbols-outlined text-[17px]">delete</span>
                     </button>
-                    <input type="hidden" name="variantes[${idx}][nombre]" value="${nombreCombinacion}">
-                    ${comb.map(c => `<input type="hidden" name="variantes[${idx}][atributos][${c.atributo}]" value="${c.valor}">`).join('')}
                 </td>
             `;
             tbody.appendChild(tr);
         });
+
+        actualizarInfoPaginacionMatriz(inicio + 1, fin, totalItems, totalPaginas);
     }
+
+    function actualizarCampoMatriz(indexGlobal, campo, valor) {
+        if (combinacionesMatrizState[indexGlobal]) {
+            combinacionesMatrizState[indexGlobal][campo] = valor;
+            sincronizarJsonVariantes();
+        }
+    }
+
+    function eliminarVariantePorIndice(indexGlobal) {
+        combinacionesMatrizState.splice(indexGlobal, 1);
+        renderizarPaginaMatriz();
+        sincronizarJsonVariantes();
+        const contador = document.getElementById('contador-combinaciones');
+        if (contador) contador.textContent = combinacionesMatrizState.length;
+    }
+
+    function cambiarPaginaMatriz(nuevaPagina) {
+        paginaActualMatriz = nuevaPagina;
+        renderizarPaginaMatriz();
+    }
+
+    function actualizarInfoPaginacionMatriz(desde = 0, hasta = 0, total = 0, paginasTotal = 1) {
+        const info = document.getElementById('info-paginacion-matriz');
+        const controles = document.getElementById('controles-paginacion-matriz');
+
+        if (info) {
+            info.textContent = total > 0 
+                ? `Mostrando ${desde} - ${hasta} de ${total} variantes` 
+                : 'Mostrando 0 variantes';
+        }
+
+        if (controles) {
+            controles.innerHTML = '';
+            if (paginasTotal > 1) {
+                controles.innerHTML = `
+                    <button type="button" 
+                            onclick="cambiarPaginaMatriz(${paginaActualMatriz - 1})" 
+                            ${paginaActualMatriz === 1 ? 'disabled' : ''} 
+                            class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                        Anterior
+                    </button>
+                    <span class="text-xs font-bold text-slate-700 px-2">Pág. ${paginaActualMatriz} de ${paginasTotal}</span>
+                    <button type="button" 
+                            onclick="cambiarPaginaMatriz(${paginaActualMatriz + 1})" 
+                            ${paginaActualMatriz === paginasTotal ? 'disabled' : ''} 
+                            class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                        Siguiente
+                    </button>
+                `;
+            }
+        }
+    }
+
+    function sincronizarJsonVariantes() {
+        const inputJson = document.getElementById('input-variantes-json');
+        if (inputJson) {
+            inputJson.value = JSON.stringify(combinacionesMatrizState);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('form-producto');
+        if (form) {
+            form.addEventListener('submit', function() {
+                sincronizarJsonVariantes();
+            });
+        }
+    });
 </script>

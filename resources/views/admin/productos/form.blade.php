@@ -16,21 +16,6 @@
 @section('content')
 <div class="space-y-5 w-full min-w-0 max-w-full">
 
-    {{-- ── Errores de Validación ── --}}
-    @if($errors->any())
-        <div class="px-4 py-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm shadow-xs">
-            <div class="flex items-center gap-2 font-bold mb-2">
-                <span class="material-symbols-outlined text-[20px]">error</span>
-                <span>Corrige los siguientes errores antes de guardar:</span>
-            </div>
-            <ul class="list-disc list-inside space-y-0.5 text-xs">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <!-- Formulario Principal -->
     @if($esEdicion ?? false)
         <form id="form-producto" method="POST"
@@ -598,157 +583,25 @@
 
 </div>
 
-<!-- MODAL DE SELECCIÓN DE MARCAS CON BUSCADOR -->
-<div id="modal-marcas" 
-     class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4" 
-     style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);"
-     onclick="if(event.target === this) cerrarModalMarcas();">
-    
-    <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-        
-        <!-- Modal Header -->
-        <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 shrink-0">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center shadow-xs">
-                    <span class="material-symbols-outlined text-[15px]">verified</span>
-                </div>
-                <div>
-                    <h3 class="text-xs font-bold text-slate-900">Seleccionar Marca</h3>
-                </div>
-            </div>
-            <button type="button" 
-                    onclick="cerrarModalMarcas()" 
-                    class="w-6 h-6 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center transition-colors cursor-pointer">
-                <span class="material-symbols-outlined text-[16px]">close</span>
-            </button>
-        </div>
+<!-- MODAL DE SELECCIÓN DE MARCAS REUTILIZABLE -->
+<x-modal-busqueda 
+    id="modal-marcas" 
+    titulo="Seleccionar Marca" 
+    subtitulo="Busca o elige el fabricante del producto" 
+    icono="verified" 
+    placeholder="Filtrar marca (ej. Lenovo, HP, ASUS, Apple, TP-Link, Adata)..."
+    :porPagina="15"
+/>
 
-        <!-- Buscador -->
-        <div class="p-3 border-b border-slate-100 bg-white shrink-0">
-            <div class="relative">
-                <span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[16px]">
-                    search
-                </span>
-                <input type="text" 
-                       id="buscador-marcas-modal" 
-                       placeholder="Filtrar marca (ej: Lenovo, HP, ASUS, Apple, TP-Link, Adata)..." 
-                       oninput="filtrarMarcasModal(this.value)" 
-                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-                <button type="button" 
-                        id="btn-limpiar-busqueda-marcas" 
-                        onclick="document.getElementById('buscador-marcas-modal').value = ''; filtrarMarcasModal('');" 
-                        class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer">
-                    <span class="material-symbols-outlined text-[14px]">cancel</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Grid de Marcas -->
-        <div class="p-3 overflow-y-auto max-h-[300px] flex-1 bg-slate-50/40">
-            <div id="grid-marcas-modal" class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-            </div>
-
-            <!-- Empty state -->
-            <div id="empty-state-marcas" class="hidden text-center py-6 px-3">
-                <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-1.5">
-                    <span class="material-symbols-outlined text-[20px]">search_off</span>
-                </div>
-                <div class="text-xs font-bold text-slate-800">No se encontró en el catálogo</div>
-                <p class="text-[10.5px] text-slate-500 mt-0.5 mb-2.5">Puedes asignarla directamente como marca personalizada.</p>
-                <button type="button" 
-                        id="btn-usar-marca-personalizada" 
-                        onclick="usarMarcaPersonalizada()" 
-                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-xs transition-all cursor-pointer">
-                    <span class="material-symbols-outlined text-[14px]">add_circle</span>
-                    <span>Usar «<span id="texto-marca-personalizada"></span>»</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Modal Footer -->
-        <div class="px-4 py-2.5 border-t border-slate-100 bg-white flex items-center justify-between shrink-0">
-            <div class="text-[10px] text-slate-400 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[13px]">touch_app</span>
-                <span>Clic en la marca para asignarla</span>
-            </div>
-            <button type="button" 
-                    onclick="cerrarModalMarcas()" 
-                    class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
-                Cerrar
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL SELECTOR DE CATEGORÍAS -->
-<div id="modal-categorias" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity select-none">
-    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-150">
-        
-        <!-- Modal Header -->
-        <div class="px-4 py-3 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between shrink-0">
-            <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center shadow-2xs">
-                    <span class="material-symbols-outlined text-[16px]">category</span>
-                </div>
-                <div>
-                    <h3 class="text-xs font-extrabold text-slate-900 leading-tight">Explorar Categorías</h3>
-                    <p class="text-[10px] text-slate-500 font-medium leading-tight">Busca y asigna la categoría del producto</p>
-                </div>
-            </div>
-            <button type="button" 
-                    onclick="cerrarModalCategorias()" 
-                    class="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer">
-                <span class="material-symbols-outlined text-[18px]">close</span>
-            </button>
-        </div>
-
-        <!-- Buscador -->
-        <div class="p-3 border-b border-slate-100 bg-white shrink-0">
-            <div class="relative flex items-center">
-                <span class="material-symbols-outlined absolute left-2.5 text-slate-400 text-[16px]">search</span>
-                <input type="text" 
-                       id="buscador-categorias-modal" 
-                       oninput="filtrarCategoriasModal(this.value)" 
-                       placeholder="Buscar por nombre o palabra clave..." 
-                       class="w-full pl-8 pr-7 py-1.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-lg text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-                <button type="button" 
-                        id="btn-limpiar-busqueda-categorias" 
-                        onclick="document.getElementById('buscador-categorias-modal').value = ''; filtrarCategoriasModal('');" 
-                        class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer">
-                    <span class="material-symbols-outlined text-[14px]">cancel</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Lista Categorías -->
-        <div class="p-3 overflow-y-auto max-h-[320px] flex-1 bg-slate-50/40">
-            <div id="grid-categorias-modal" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            </div>
-
-            <!-- Empty state -->
-            <div id="empty-state-categorias" class="hidden text-center py-6 px-3">
-                <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-slate-400 mb-1.5">
-                    <span class="material-symbols-outlined text-[20px]">search_off</span>
-                </div>
-                <div class="text-xs font-bold text-slate-800">No se encontraron categorías</div>
-                <p class="text-[10.5px] text-slate-500 mt-0.5">Intenta con otro término de búsqueda.</p>
-            </div>
-        </div>
-
-        <!-- Modal Footer -->
-        <div class="px-4 py-2.5 border-t border-slate-100 bg-white flex items-center justify-between shrink-0">
-            <div class="text-[10px] text-slate-400 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[13px]">info</span>
-                <span>Total: <strong id="contador-categorias-total" class="text-slate-700">0</strong> categorías</span>
-            </div>
-            <button type="button" 
-                    onclick="cerrarModalCategorias()" 
-                    class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
-                Cerrar
-            </button>
-        </div>
-    </div>
-</div>
+<!-- MODAL DE SELECCIÓN DE CATEGORÍAS REUTILIZABLE -->
+<x-modal-busqueda 
+    id="modal-categorias" 
+    titulo="Explorar Categorías" 
+    subtitulo="Busca y asigna la categoría del producto" 
+    icono="category" 
+    placeholder="Buscar por nombre o palabra clave..."
+    :porPagina="15"
+/>
 
 <script>
     /* Cambio de Pestañas de la Ficha de Producto */
@@ -869,87 +722,77 @@
         return `<span class="px-1.5 py-0.5 rounded bg-slate-900 text-white text-[9px] font-black uppercase tracking-wider">${name}</span>`;
     }
 
-    /* Modal Categorías Logic */
-    function abrirModalCategorias() {
-        const modal = document.getElementById('modal-categorias');
-        if (!modal) return;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+    /* Modal Categorías Logic (Integrado con ModalBuscador - Paginado 15 items) */
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.ModalBuscador) {
+            window.ModalBuscador.init('modal-categorias', {
+                items: categoriasData,
+                porPagina: 15,
+                emptyText: 'No se encontraron categorías para',
+                render: (cat) => {
+                    const idActual = (document.getElementById('input-categoria-valor')?.value || '').toString().trim();
+                    const isSelected = idActual && (cat.id.toString() === idActual);
 
-        const totalEl = document.getElementById('contador-categorias-total');
-        if (totalEl) totalEl.textContent = categoriasData.length;
+                    const card = document.createElement('div');
+                    card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${
+                        isSelected 
+                            ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
+                            : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
+                    }`;
+                    card.onclick = () => seleccionarCategoria(cat.id, cat.nombre);
 
-        const input = document.getElementById('buscador-categorias-modal');
-        if (input) {
-            input.value = '';
-            setTimeout(() => input.focus(), 80);
+                    card.innerHTML = `
+                        <div class="flex items-center gap-2 min-w-0">
+                            <div class="w-7 h-7 rounded-lg ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-900 group-hover:text-white'} flex items-center justify-center shrink-0 transition-colors">
+                                <span class="material-symbols-outlined text-[15px]">category</span>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-slate-900'} truncate">${cat.nombre}</div>
+                            </div>
+                        </div>
+                        ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
+                    `;
+                    return card;
+                }
+            });
+
+            window.ModalBuscador.init('modal-marcas', {
+                items: marcasData,
+                porPagina: 15,
+                emptyText: 'No se encontró la marca',
+                render: (brand) => {
+                    const valorActual = (document.getElementById('input-marca-valor')?.value || '').trim().toLowerCase();
+                    const isSelected = valorActual && (brand.nombre.toLowerCase() === valorActual || (brand.slug && brand.slug.toLowerCase() === valorActual));
+                    
+                    const card = document.createElement('div');
+                    card.className = `p-2 rounded-xl border transition-all cursor-pointer text-center flex items-center justify-between group ${
+                        isSelected 
+                            ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
+                            : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
+                    }`;
+                    card.onclick = () => seleccionarMarca(brand.nombre);
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center font-bold text-xs shrink-0 overflow-hidden">
+                                ${getLogoHtmlForBrand(brand)}
+                            </div>
+                            <span class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800'} truncate">${brand.nombre}</span>
+                        </div>
+                        ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>' : ''}
+                    `;
+                    return card;
+                }
+            });
         }
+    });
 
-        filtrarCategoriasModal('');
+    function abrirModalCategorias() {
+        if (window.ModalBuscador) window.ModalBuscador.abrir('modal-categorias');
     }
 
     function cerrarModalCategorias() {
-        const modal = document.getElementById('modal-categorias');
-        if (!modal) return;
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-
-    function filtrarCategoriasModal(query) {
-        const grid = document.getElementById('grid-categorias-modal');
-        const empty = document.getElementById('empty-state-categorias');
-        const btnClear = document.getElementById('btn-limpiar-busqueda-categorias');
-        const idActual = (document.getElementById('input-categoria-valor')?.value || '').toString().trim();
-
-        if (btnClear) {
-            btnClear.classList.toggle('hidden', !query);
-        }
-
-        const q = (query || '').trim().toLowerCase();
-        let lista = categoriasData;
-
-        if (q) {
-            lista = lista.filter(c => 
-                (c.nombre && c.nombre.toLowerCase().includes(q)) || 
-                (c.slug && c.slug.toLowerCase().includes(q))
-            );
-        }
-
-        grid.innerHTML = '';
-
-        if (lista.length === 0) {
-            grid.classList.add('hidden');
-            empty.classList.remove('hidden');
-            return;
-        }
-
-        grid.classList.remove('hidden');
-        empty.classList.add('hidden');
-
-        lista.forEach(cat => {
-            const isSelected = idActual && (cat.id.toString() === idActual);
-
-            const card = document.createElement('div');
-            card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${
-                isSelected 
-                    ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
-                    : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
-            }`;
-            card.onclick = () => seleccionarCategoria(cat.id, cat.nombre);
-
-            card.innerHTML = `
-                <div class="flex items-center gap-2 min-w-0">
-                    <div class="w-7 h-7 rounded-lg ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-900 group-hover:text-white'} flex items-center justify-center shrink-0 transition-colors">
-                        <span class="material-symbols-outlined text-[15px]">category</span>
-                    </div>
-                    <div class="min-w-0">
-                        <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-slate-900'} truncate">${cat.nombre}</div>
-                    </div>
-                </div>
-                ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
-            `;
-            grid.appendChild(card);
-        });
+        if (window.ModalBuscador) window.ModalBuscador.cerrar('modal-categorias');
     }
 
     function seleccionarCategoria(id, nombre) {
@@ -997,83 +840,11 @@
 
     /* Modal Marcas Logic */
     function abrirModalMarcas() {
-        const modal = document.getElementById('modal-marcas');
-        if (!modal) return;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-
-        const input = document.getElementById('buscador-marcas-modal');
-        if (input) {
-            input.value = '';
-            setTimeout(() => input.focus(), 80);
-        }
-        
-        filtrarMarcasModal('');
+        if (window.ModalBuscador) window.ModalBuscador.abrir('modal-marcas');
     }
 
     function cerrarModalMarcas() {
-        const modal = document.getElementById('modal-marcas');
-        if (!modal) return;
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-
-    function filtrarMarcasModal(query) {
-        const grid = document.getElementById('grid-marcas-modal');
-        const empty = document.getElementById('empty-state-marcas');
-        const btnClear = document.getElementById('btn-limpiar-busqueda-marcas');
-        const txtPersonalizada = document.getElementById('texto-marca-personalizada');
-        const valorActual = (document.getElementById('input-marca-valor')?.value || '').trim().toLowerCase();
-
-        if (btnClear) {
-            btnClear.classList.toggle('hidden', !query);
-        }
-
-        const q = (query || '').trim().toLowerCase();
-        let lista = marcasData;
-
-        if (q) {
-            lista = lista.filter(m => 
-                (m.nombre && m.nombre.toLowerCase().includes(q)) || 
-                (m.slug && m.slug.toLowerCase().includes(q))
-            );
-        }
-
-        grid.innerHTML = '';
-
-        if (lista.length === 0) {
-            grid.classList.add('hidden');
-            empty.classList.remove('hidden');
-            if (txtPersonalizada) {
-                txtPersonalizada.textContent = query.trim() || 'Nueva Marca';
-            }
-            return;
-        }
-
-        grid.classList.remove('hidden');
-        empty.classList.add('hidden');
-
-        lista.forEach(brand => {
-            const isSelected = valorActual && (brand.nombre.toLowerCase() === valorActual || brand.slug.toLowerCase() === valorActual);
-            
-            const card = document.createElement('div');
-            card.className = `p-2 rounded-xl border transition-all cursor-pointer text-center flex flex-col items-center justify-between group ${
-                isSelected 
-                    ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
-                    : 'bg-white border-slate-200/80 hover:border-slate-400 hover:shadow-xs'
-            }`;
-            card.onclick = () => seleccionarMarca(brand.nombre);
-
-            card.innerHTML = `
-                <div class="w-full h-9 rounded-lg bg-white border border-slate-100 flex items-center justify-center p-1 mb-1 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
-                    ${getLogoHtmlForBrand(brand)}
-                </div>
-                <div class="w-full">
-                    <div class="text-[11px] font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-slate-900'} truncate">${brand.nombre}</div>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
+        if (window.ModalBuscador) window.ModalBuscador.cerrar('modal-marcas');
     }
 
     function seleccionarMarca(nombreMarca) {

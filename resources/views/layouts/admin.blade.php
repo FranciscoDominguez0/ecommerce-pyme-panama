@@ -95,8 +95,8 @@
             <!-- Brand Logo Header -->
             <div class="px-5 py-4 border-b border-gray-700/60 flex items-center justify-between bg-black/20 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-[#059669] to-[#047857] flex items-center justify-center text-white font-black text-sm shadow-md group-hover:scale-105 transition-transform">
-                        P
+                    <div class="w-9 h-9 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-md border border-slate-700/40 group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                        <x-application-logo size="sm" />
                     </div>
                     <div>
                         <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">
@@ -167,6 +167,13 @@
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/inventario*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/inventario*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">warehouse</span>
                             <span class="truncate">Inventario</span>
+                        </a>
+
+                        <!-- Zonas de Envío -->
+                        <a href="{{ route('admin.zonas-envio.index') }}" 
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.zonas-envio*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.zonas-envio*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_shipping</span>
+                            <span class="truncate">Zonas de Envío</span>
                         </a>
                     </div>
                 </div>

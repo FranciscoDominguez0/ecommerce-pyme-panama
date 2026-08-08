@@ -101,17 +101,26 @@
                     @forelse($categorias as $categoria)
                         @php
                             $esHija = !is_null($categoria->padre_id);
+                            $nivel = $categoria->nivel;
                             $tieneProductos = $categoria->productos_count > 0;
                             $tieneHijas = $categoria->hijas->count() > 0;
                             $puedeEliminarse = !$tieneProductos && !$tieneHijas;
+
+                            // Sangría jerárquica progresiva limpia sin modificar la paleta oficial
+                            $paddingLeft = match($nivel) {
+                                0 => '',
+                                1 => 'pl-7',
+                                2 => 'pl-14',
+                                default => 'pl-20',
+                            };
                         @endphp
                         <tr class="hover:bg-slate-50/80 transition-colors group">
                             
-                            <!-- Nombre & Slug con Sangría Jerárquica -->
+                            <!-- Nombre & Slug con Sangría Jerárquica Progresiva -->
                             <td class="py-3.5 px-4 sm:px-6">
-                                <div class="flex items-center gap-3 {{ $esHija ? 'pl-8' : '' }}">
+                                <div class="flex items-center gap-3 {{ $paddingLeft }}">
                                     @if($esHija)
-                                        <span class="material-symbols-outlined text-slate-400 text-[18px]">subdirectory_arrow_right</span>
+                                        <span class="material-symbols-outlined text-slate-400 text-[18px] shrink-0">subdirectory_arrow_right</span>
                                     @else
                                         <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
                                             <span class="material-symbols-outlined text-[18px]">folder</span>
@@ -154,7 +163,7 @@
                                 @if($categoria->padre)
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                                         <span class="material-symbols-outlined text-[13px] text-slate-400">folder</span>
-                                        <span class="truncate max-w-[120px]">{{ $categoria->padre->nombre }}</span>
+                                        <span class="truncate max-w-[140px]">{{ $categoria->padre->nombre }}</span>
                                     </span>
                                 @else
                                     <span class="text-slate-400 font-medium text-[11px]">— Raíz —</span>

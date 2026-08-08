@@ -86,12 +86,15 @@ class CategoriaController extends Controller
         ]);
 
         $padres = Categoria::sinEliminar()
+            ->with('padre')
             ->orderBy('nombre', 'asc')
             ->get();
 
+        $padresFormatted = $this->formatearPadresJerarquicos($padres);
+
         $esEdicion = false;
 
-        return view('admin.categorias.form', compact('categoria', 'padres', 'esEdicion'));
+        return view('admin.categorias.form', compact('categoria', 'padres', 'padresFormatted', 'esEdicion'));
     }
 
     /**
@@ -181,13 +184,16 @@ class CategoriaController extends Controller
         $excluirIds = array_merge([$categoria->id], $descendientesIds);
 
         $padres = Categoria::sinEliminar()
+            ->with('padre')
             ->whereNotIn('id', $excluirIds)
             ->orderBy('nombre', 'asc')
             ->get();
 
+        $padresFormatted = $this->formatearPadresJerarquicos($padres);
+
         $esEdicion = true;
 
-        return view('admin.categorias.form', compact('categoria', 'padres', 'esEdicion'));
+        return view('admin.categorias.form', compact('categoria', 'padres', 'padresFormatted', 'esEdicion'));
     }
 
     /**
@@ -403,6 +409,77 @@ class CategoriaController extends Controller
         }
 
         return $ids;
+    }
+
+    /**
+     * Genera la lista formateada de categorías padre con su ruta jerárquica completa y nivel,
+     * ordenadas en estructura de árbol (Padres primero, luego sus hijas/subcategorías agrupadas alfabéticamente).
+     */
+    private function formatearPadresJerarquicos($padresCollection)
+    {
+        $mapaCategorias = Categoria::sinEliminar()->get()->keyBy('id');
+
+        // Agrupar categorías por su padre_id
+        $porPadre = $padresCollection->groupBy(function ($cat) {
+            return $cat->padre_id ?? 'root';
+        });
+
+        // Ordenar cada grupo alfabéticamente por nombre
+        $porPadre->transform(function ($grupo) {
+            return $grupo->sortBy(function ($item) {
+                return strtolower($item->nombre);
+            });
+        });
+
+        $ordenadoJerarquico = collect();
+
+        // Recorrido recursivo en profundidad (DFS)
+        $agregarConHijos = function ($padreId) use (&$agregarConHijos, $porPadre, &$ordenadoJerarquico) {
+            $key = $padreId ?? 'root';
+            if ($porPadre->has($key)) {
+                foreach ($porPadre->get($key) as $categoria) {
+                    $ordenadoJerarquico->push($categoria);
+                    $agregarConHijos($categoria->id);
+                }
+            }
+        };
+
+        // Comenzar por las categorías raíz
+        $agregarConHijos(null);
+
+        // Incluir categorías cuya categoría padre haya sido excluida (por ejemplo, al editar)
+        $incluidosIds = $ordenadoJerarquico->pluck('id')->all();
+        $huerfanas = $padresCollection->reject(function ($cat) use ($incluidosIds) {
+            return in_array($cat->id, $incluidosIds);
+        })->sortBy(function ($item) {
+            return strtolower($item->nombre);
+        });
+
+        $coleccionFinal = $ordenadoJerarquico->concat($huerfanas);
+
+        return $coleccionFinal->values()->map(function ($cat) use ($mapaCategorias) {
+            $ancestros = [];
+            $actualId = $cat->padre_id;
+
+            while ($actualId && isset($mapaCategorias[$actualId])) {
+                $padreObj = $mapaCategorias[$actualId];
+                array_unshift($ancestros, $padreObj->nombre);
+                $actualId = $padreObj->padre_id;
+            }
+
+            $rutaPadres = !empty($ancestros) ? implode(' > ', $ancestros) : null;
+            $nivel = count($ancestros);
+
+            return [
+                'id' => (int) $cat->id,
+                'nombre' => $cat->nombre,
+                'padre_nombre' => $cat->padre ? $cat->padre->nombre : null,
+                'ruta_jerarquica' => $rutaPadres ? "{$rutaPadres} > {$cat->nombre}" : $cat->nombre,
+                'ruta_padres' => $rutaPadres,
+                'nivel' => $nivel,
+                'activo' => (bool) $cat->activo,
+            ];
+        });
     }
 
     /**

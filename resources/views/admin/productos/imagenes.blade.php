@@ -80,6 +80,7 @@
 
                 <!-- Input oculto: si el usuario elimina esta card, el JS agrega imagenes_eliminar[id] al form -->
                 <input type="hidden" name="imagenes_existentes[]" value="{{ $img->id }}" class="input-imagen-existente">
+                <input type="hidden" name="orden_imagenes[]" value="{{ $img->id }}" class="input-orden-imagen">
 
                 <!-- Botones de Acción Rápida -->
                 <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-xl backdrop-blur-xs shadow-md">

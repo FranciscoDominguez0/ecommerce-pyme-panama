@@ -113,5 +113,8 @@
         <div class="relative z-10 w-full flex flex-col items-center justify-center py-6 px-4">
             {{ $slot }}
         </div>
+
+        <!-- Sistema Global de Alertas y Notificaciones Toast -->
+        <x-toast-alert />
     </body>
 </html>

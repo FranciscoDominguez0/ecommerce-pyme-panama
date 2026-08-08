@@ -90,4 +90,43 @@ class Categoria extends Model
     {
         return is_null($this->padre_id);
     }
+
+    /**
+     * Retorna el nivel de profundidad en el árbol jerárquico (0 = Raíz, 1 = Subcategoría, 2 = 3er Nivel, etc.).
+     */
+    public function getNivelAttribute(): int
+    {
+        $nivel = 0;
+        $actual = $this->padre;
+        while ($actual) {
+            $nivel++;
+            $actual = $actual->padre;
+        }
+        return $nivel;
+    }
+
+    /**
+     * Retorna la cadena de ancestros superiores (ej: "Tecnología > Laptops").
+     */
+    public function getRutaPadresAttribute(): ?string
+    {
+        $ancestros = [];
+        $actual = $this->padre;
+
+        while ($actual) {
+            array_unshift($ancestros, $actual->nombre);
+            $actual = $actual->padre;
+        }
+
+        return !empty($ancestros) ? implode(' > ', $ancestros) : null;
+    }
+
+    /**
+     * Retorna la ruta jerárquica completa incluyendo la propia categoría.
+     */
+    public function getRutaJerarquicaAttribute(): string
+    {
+        $padres = $this->ruta_padres;
+        return $padres ? "{$padres} > {$this->nombre}" : $this->nombre;
+    }
 }

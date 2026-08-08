@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductoController;
+use App\Http\Controllers\Admin\ZonaEnvioController;
 use App\Http\Controllers\Cliente\CatalogoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +61,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('admin.productos.update');
     Route::patch('/productos/{id}', [ProductoController::class, 'update']);
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('admin.productos.destroy');
+
+    // Módulo de Zonas de Envío (FASE 9)
+    Route::get('/configuracion/zonas-envio', [ZonaEnvioController::class, 'index'])->name('admin.zonas-envio.index');
+    Route::post('/configuracion/zonas-envio', [ZonaEnvioController::class, 'store'])->name('admin.zonas-envio.store');
+    Route::put('/configuracion/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'update'])->name('admin.zonas-envio.update');
+    Route::post('/configuracion/zonas-envio/{zonaEnvio}/toggle', [ZonaEnvioController::class, 'toggle'])->name('admin.zonas-envio.toggle');
+    Route::delete('/configuracion/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'destroy'])->name('admin.zonas-envio.destroy');
 });
 
 // 5. Gestión de Perfil de Usuario
