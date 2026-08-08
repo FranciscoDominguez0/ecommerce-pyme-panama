@@ -52,9 +52,17 @@ class LoginController extends Controller
         }
 
         // Iniciar sesión con soporte para "Recordarme"
+        $sesionPreviaId = $request->session()->getId();
         Auth::login($usuario, $request->boolean('remember'));
 
         $request->session()->regenerate();
+
+        // Fusionar carritos de la sesión de visitante y el usuario autenticado
+        try {
+            app(\App\Services\CarritoService::class)->fusionarCarritos($sesionPreviaId, $usuario->id);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Error al fusionar carrito en login: ' . $e->getMessage());
+        }
 
         // Redirección según rol usando Spatie
         if (

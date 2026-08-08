@@ -76,8 +76,16 @@ class RegisterController extends Controller
         }
 
         // Iniciar sesión automáticamente
+        $sesionPreviaId = $request->session()->getId();
         Auth::login($usuario);
         $request->session()->regenerate();
+
+        // Fusionar carritos de la sesión de visitante y el usuario registrado
+        try {
+            app(\App\Services\CarritoService::class)->fusionarCarritos($sesionPreviaId, $usuario->id);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Error al fusionar carrito en registro: ' . $e->getMessage());
+        }
 
         return redirect()->intended(route('dashboard'));
     }

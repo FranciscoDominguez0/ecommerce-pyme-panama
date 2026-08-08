@@ -132,6 +132,7 @@
         }
     </style>
 
+    @livewireStyles
     @stack('styles')
 </head>
 <body class="bg-[#F8F9FF] text-[#0b1c30] flex flex-col min-h-screen text-sm antialiased selection:bg-[#8af5be] selection:text-[#00714b]">
@@ -172,10 +173,14 @@
                 <!-- Navigation Links & User Menu -->
                 <div class="flex items-center gap-3">
                     
-                    <!-- Cart -->
-                    <a href="#" class="relative p-1.5 text-gray-600 hover:text-[#006148] transition-colors" title="Ver Carrito">
+                    <!-- Wishlist Link -->
+                    <a href="{{ route('cliente.lista-deseos') }}" class="p-1.5 text-gray-600 hover:text-red-500 transition-colors" title="Lista de Deseos">
+                        <span class="material-symbols-outlined text-[20px]">favorite</span>
+                    </a>
+
+                    <!-- Cart Link -->
+                    <a href="{{ route('cliente.carrito') }}" class="relative p-1.5 text-gray-600 hover:text-[#006148] transition-colors" title="Ver Carrito de Compras">
                         <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
-                        <span class="absolute top-0.5 right-0.5 w-3.5 h-3.5 bg-[#006148] text-white text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
                     </a>
 
                     <!-- User Authentication -->
@@ -317,6 +322,17 @@
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
     <x-toast-alert />
 
+    @livewireScripts
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('mostrar-toast', (event) => {
+                const data = Array.isArray(event) ? event[0] : (event.detail ? (Array.isArray(event.detail) ? event.detail[0] : event.detail) : event);
+                if (window.mostrarToast && data) {
+                    window.mostrarToast(data.tipo || 'info', data.mensaje || '');
+                }
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>

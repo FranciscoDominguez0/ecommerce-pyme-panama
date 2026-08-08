@@ -228,7 +228,7 @@
                                         $opcionesTexto = $v->opciones->map(fn($o) => $o->valor)->join(' / ');
                                     @endphp
                                     <button type="button" 
-                                            onclick="seleccionarVariante('{{ $v->precio }}', '{{ $v->stock }}', this)" 
+                                            onclick="seleccionarVariante('{{ $v->precio }}', '{{ $v->stock }}', this, {{ $v->id }})" 
                                             class="p-3 rounded-xl border border-slate-200 hover:border-emerald-500 text-left transition-all btn-variante {{ $loop->first ? 'border-emerald-500 bg-emerald-50/30' : 'bg-white' }}">
                                         <div class="text-xs font-bold text-slate-900">{{ $opcionesTexto ?: $v->sku }}</div>
                                         <div class="text-[11px] text-emerald-700 font-semibold mt-0.5">${{ number_format($v->precio, 2) }}</div>
@@ -270,10 +270,10 @@
                         <!-- 3. Botón 'Guardar para más tarde' -->
                         <div>
                             <button type="button" 
-                                    onclick="mostrarToast('Producto guardado para más tarde', 'success')" 
+                                    onclick="agregarDeseo({{ $producto->id }})" 
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-black hover:bg-slate-800 text-white text-xs font-bold rounded-md shadow-2xs transition-all active:scale-95 cursor-pointer">
-                                <span class="material-symbols-outlined text-[16px]">schedule</span>
-                                <span>Guardar para más tarde</span>
+                                <span class="material-symbols-outlined text-[16px]">favorite</span>
+                                <span>Guardar en Lista de Deseos</span>
                             </button>
                         </div>
                     </div>
@@ -300,15 +300,22 @@
                                 </div>
 
                                 <button type="button" 
-                                        onclick="mostrarToast('Producto agregado al carrito exitosamente', 'success')" 
+                                        onclick="agregarAlCarrito({{ $producto->id }})" 
                                         class="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
                                     <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
                                     <span>Agregar al Carrito</span>
                                 </button>
+
+                                <button type="button" 
+                                        onclick="agregarDeseo({{ $producto->id }})" 
+                                        class="p-3 border border-slate-200 text-slate-400 hover:text-red-500 hover:bg-red-50 hover:border-red-200 rounded-xl transition-all cursor-pointer" 
+                                        title="Guardar en Lista de Deseos">
+                                    <span class="material-symbols-outlined text-[20px]">favorite</span>
+                                </button>
                             </div>
 
                             <button type="button" 
-                                    onclick="mostrarToast('Redirigiendo a Pasarela de Pago Segura...', 'info')" 
+                                    onclick="comprarAhora({{ $producto->id }})" 
                                     class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
                                 <span class="material-symbols-outlined text-[18px]">bolt</span>
                                 <span>Comprar Ahora (Checkout Rápido)</span>
@@ -587,6 +594,8 @@
     }
 
     // Funciones del formulario de compra
+    let varianteSeleccionadaId = {{ $producto->variantes && $producto->variantes->isNotEmpty() ? $producto->variantes->first()->id : 'null' }};
+
     function cambiarCantidad(delta) {
         const input = document.getElementById('input-cantidad');
         if (!input) return;
@@ -595,7 +604,10 @@
         input.value = val;
     }
 
-    function seleccionarVariante(precio, stock, btn) {
+    function seleccionarVariante(precio, stock, btn, varianteId) {
+        if (varianteId) {
+            varianteSeleccionadaId = varianteId;
+        }
         const precioEl = document.getElementById('precio-dinamico');
         if (precioEl) {
             precioEl.textContent = `$${parseFloat(precio).toFixed(2)}`;
@@ -606,6 +618,87 @@
         });
         btn.classList.remove('bg-white');
         btn.classList.add('border-emerald-500', 'bg-emerald-50/30');
+    }
+
+    function agregarAlCarrito(productoId, redireccionar = false) {
+        const input = document.getElementById('input-cantidad');
+        const cantidad = input ? parseInt(input.value) || 1 : 1;
+
+        fetch("{{ route('cliente.carrito.agregar') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                producto_id: productoId,
+                variante_producto_id: varianteSeleccionadaId,
+                cantidad: cantidad
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.exito) {
+                if (redireccionar) {
+                    window.location.href = "{{ route('cliente.carrito') }}";
+                    return;
+                }
+                if (window.mostrarToast) {
+                    window.mostrarToast('success', data.mensaje);
+                }
+            } else {
+                if (window.mostrarToast) {
+                    window.mostrarToast('warning', data.mensaje || 'Stock insuficiente');
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (window.mostrarToast) {
+                window.mostrarToast('error', 'Error al agregar el producto al carrito.');
+            }
+        });
+    }
+
+    function comprarAhora(productoId) {
+        agregarAlCarrito(productoId, true);
+    }
+
+    function agregarDeseo(productoId) {
+        fetch(`/lista-deseos/agregar/${productoId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => {
+            if (res.status === 401) {
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data && data.exito) {
+                if (window.mostrarToast) {
+                    window.mostrarToast('success', data.mensaje);
+                }
+            } else if (data) {
+                if (window.mostrarToast) {
+                    window.mostrarToast('info', data.mensaje);
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (window.mostrarToast) {
+                window.mostrarToast('error', 'No se pudo guardar en la lista de deseos.');
+            }
+        });
     }
 
     // Enviar solicitud de aviso de stock por correo electrónico

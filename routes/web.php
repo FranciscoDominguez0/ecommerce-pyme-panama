@@ -7,7 +7,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\PromocionController;
 use App\Http\Controllers\Admin\ZonaEnvioController;
+use App\Http\Controllers\Cliente\CarritoController;
 use App\Http\Controllers\Cliente\CatalogoController;
+use App\Http\Controllers\Cliente\ListaDeseosController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,10 +44,19 @@ Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('clie
 Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
 Route::get('/terminos-y-condiciones', function () { return view('paginas.terminos'); })->name('terminos');
 
-// Carrito & Cupones Cliente
-Route::get('/carrito', [PromocionController::class, 'verCarrito'])->name('cliente.carrito');
-Route::post('/carrito/aplicar-cupon', [PromocionController::class, 'aplicarCuponCarrito'])->name('cliente.carrito.aplicar-cupon');
-Route::post('/carrito/remover-cupon', [PromocionController::class, 'removerCuponCarrito'])->name('cliente.carrito.remover-cupon');
+// Carrito de Compras
+Route::get('/carrito', [CarritoController::class, 'index'])->name('cliente.carrito');
+Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('cliente.carrito.agregar');
+Route::post('/carrito/actualizar/{id}', [CarritoController::class, 'actualizarCantidad'])->name('cliente.carrito.actualizar');
+Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('cliente.carrito.eliminar');
+Route::post('/carrito/aplicar-cupon', [CarritoController::class, 'aplicarCupon'])->name('cliente.carrito.aplicar-cupon');
+Route::post('/carrito/remover-cupon', [CarritoController::class, 'removerCupon'])->name('cliente.carrito.remover-cupon');
+
+// Lista de Deseos
+Route::get('/lista-deseos', [ListaDeseosController::class, 'index'])->name('cliente.lista-deseos');
+Route::post('/lista-deseos/agregar/{productoId}', [ListaDeseosController::class, 'agregar'])->name('cliente.lista-deseos.agregar');
+Route::post('/lista-deseos/mover-al-carrito/{productoId}', [ListaDeseosController::class, 'moverAlCarrito'])->name('cliente.lista-deseos.mover-al-carrito');
+Route::delete('/lista-deseos/eliminar/{productoId}', [ListaDeseosController::class, 'eliminar'])->name('cliente.lista-deseos.eliminar');
 
 // 2. Ruta /home para clientes autenticados (Redirección directa a dashboard)
 Route::get('/home', function () {
