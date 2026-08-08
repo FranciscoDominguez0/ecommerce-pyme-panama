@@ -5,6 +5,7 @@
     'icono' => 'search',
     'placeholder' => 'Buscar...',
     'porPagina' => 15,
+    'containerClass' => 'space-y-1.5',
 ])
 
 <!-- Componente Reutilizable: Modal de Búsqueda Paginado (15 items por página con navegación) -->
@@ -52,7 +53,7 @@
         </div>
 
         <!-- Contenedor Paginado de Resultados (15 items por página) -->
-        <div class="p-3 overflow-y-auto flex-1 space-y-1.5 max-h-[50vh]" id="{{ $id }}-lista-contenido" data-limit="{{ $porPagina }}">
+        <div class="p-3 overflow-y-auto flex-1 max-h-[50vh] {{ $containerClass }}" id="{{ $id }}-lista-contenido" data-limit="{{ $porPagina }}">
             {{ $slot ?? '' }}
         </div>
 
@@ -212,11 +213,69 @@
                 }
 
                 mostrados.forEach((item, idx) => {
+                    let el = null;
                     if (reg.render) {
-                        const el = reg.render(item, idx);
-                        contenedor.appendChild(el);
+                        el = reg.render(item, idx);
+                    } else {
+                        el = this.renderPorDefecto(id, item, idx);
                     }
+                    if (el) contenedor.appendChild(el);
                 });
+            },
+
+            renderPorDefecto(id, item, idx) {
+                const reg = this.registros[id];
+                const nombre = typeof item === 'string' ? item : (item.nombre || item.name || item.titulo || '');
+                const sub = item.subtitulo || item.ruta_padres || item.descripcion || '';
+                const card = document.createElement('div');
+                
+                const contenedor = document.getElementById(`${id}-lista-contenido`);
+                const esGrid = contenedor && contenedor.classList.contains('grid');
+
+                if (esGrid) {
+                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs`;
+                    let logoHtml = `<span class="font-bold text-xs text-slate-700">${nombre.substring(0, 2).toUpperCase()}</span>`;
+                    if (window.getLogoHtmlForBrand && (item.slug || item.url || item.nombre)) {
+                        logoHtml = window.getLogoHtmlForBrand(item);
+                    } else if (item.url) {
+                        logoHtml = `<img src="${item.url}" alt="${nombre}" class="h-6 object-contain">`;
+                    }
+                    card.innerHTML = `
+                        <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+                            ${logoHtml}
+                        </div>
+                        <span class="text-xs font-bold text-slate-800 group-hover:text-emerald-950 truncate max-w-full leading-tight">${nombre}</span>
+                    `;
+                } else {
+                    card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs`;
+                    
+                    if (item.nivel && item.nivel > 0) {
+                        card.style.marginLeft = `${Math.min(item.nivel * 16, 48)}px`;
+                    }
+
+                    let iconHtml = `<span class="material-symbols-outlined text-[16px]">${item.nivel > 0 ? 'subdirectory_arrow_right' : (item.icono || 'folder')}</span>`;
+                    if (window.getImageHtmlForCategory && item.imagen_ruta) {
+                        iconHtml = window.getImageHtmlForCategory(item);
+                    }
+
+                    card.innerHTML = `
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors shadow-2xs overflow-hidden p-0.5">
+                                ${iconHtml}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-bold text-slate-800 group-hover:text-emerald-950 truncate">${nombre}</div>
+                                ${sub ? `<div class="text-[10px] text-slate-400 font-medium truncate">${sub}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (reg && reg.onSelect) {
+                    card.onclick = () => reg.onSelect(item);
+                }
+
+                return card;
             }
         };
     }
