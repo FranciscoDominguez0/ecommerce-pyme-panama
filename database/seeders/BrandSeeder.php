@@ -61,12 +61,12 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Apple',
-                'file' => null,
+                'file' => 'apple.svg',
                 'is_suggested' => true,
                 'verified' => true,
             ],
 
-            // Las otras 10 marcas del catálogo
+            // Las otras marcas del catálogo
             [
                 'name' => 'Adata',
                 'file' => 'Adata.webp',
@@ -100,6 +100,12 @@ class BrandSeeder extends Seeder
             [
                 'name' => 'JBL',
                 'file' => 'Jbl.webp',
+                'is_suggested' => false,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Kingston',
+                'file' => 'kingston.webp',
                 'is_suggested' => false,
                 'verified' => true,
             ],

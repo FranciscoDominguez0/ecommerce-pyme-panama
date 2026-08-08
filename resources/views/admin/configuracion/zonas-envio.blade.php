@@ -133,7 +133,7 @@
 
                                         <!-- Botón Eliminar -->
                                         <button type="button" 
-                                                onclick="abrirModalEliminarZona({{ $zona->id }}, '{{ addslashes($zona->nombre) }}')" 
+                                                onclick="window.ModalEliminar.abrir('/admin/configuracion/zonas-envio/{{ $zona->id }}', '{{ addslashes($zona->nombre) }}')" 
                                                 class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 rounded-lg transition-colors cursor-pointer"
                                                 title="Eliminar zona">
                                             <span class="material-symbols-outlined text-[17px]">delete</span>
@@ -240,37 +240,6 @@
     </div>
 </div>
 
-<!-- ── MODAL: CONFIRMACIÓN DE ELIMINACIÓN ── -->
-<div id="modal-eliminar-zona" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-sm w-full p-6 space-y-4 text-center transform transition-all">
-        
-        <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto shadow-inner">
-            <span class="material-symbols-outlined text-[28px]">warning</span>
-        </div>
-
-        <div class="space-y-1">
-            <h3 class="text-base font-bold text-slate-900">¿Eliminar esta zona de envío?</h3>
-            <p class="text-xs text-slate-500 leading-relaxed">
-                Estás a punto de eliminar la zona <strong id="texto-nombre-zona-eliminar" class="text-slate-800"></strong>. Esta acción no se puede deshacer.
-            </p>
-        </div>
-
-        <form id="form-eliminar-zona" method="POST" action="" class="flex items-center justify-center gap-3 pt-2">
-            @csrf
-            @method('DELETE')
-            <button type="button" 
-                    onclick="cerrarModalEliminarZona()" 
-                    class="w-full py-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-                Cancelar
-            </button>
-            <button type="submit" 
-                    class="w-full py-2.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition-all shadow-sm">
-                Eliminar
-            </button>
-        </form>
-    </div>
-</div>
-
 <script>
     function abrirModalCrearZona() {
         const modal = document.getElementById('modal-zona-envio');
@@ -308,21 +277,6 @@
 
     function cerrarModalZona() {
         document.getElementById('modal-zona-envio').classList.add('hidden');
-    }
-
-    function abrirModalEliminarZona(id, nombre) {
-        const modal = document.getElementById('modal-eliminar-zona');
-        const form = document.getElementById('form-eliminar-zona');
-        const textoNombre = document.getElementById('texto-nombre-zona-eliminar');
-
-        form.action = `/admin/configuracion/zonas-envio/${id}`;
-        textoNombre.textContent = `"${nombre}"`;
-
-        modal.classList.remove('hidden');
-    }
-
-    function cerrarModalEliminarZona() {
-        document.getElementById('modal-eliminar-zona').classList.add('hidden');
     }
 </script>
 @endsection

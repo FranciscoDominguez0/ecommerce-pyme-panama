@@ -150,7 +150,13 @@
                                     </a>
 
                                     <button type="button" 
-                                            onclick="confirmarEliminarMarca({{ $brand->id }}, '{{ addslashes($brand->name) }}', {{ $brand->productos_count }})" 
+                                            onclick="window.ModalEliminar.abrir({
+                                                url: '{{ route('admin.brands.destroy', $brand) }}',
+                                                nombre: '{{ addslashes($brand->name) }}',
+                                                titulo: '¿Eliminar Marca?',
+                                                mensaje: 'Esta acción eliminará la marca del catálogo. Los productos asociados no se eliminarán, pero quedarán sin marca asignada.',
+                                                extra: '{{ $brand->productos_count > 0 ? '⚠️ Tiene ' . $brand->productos_count . ' producto(s) asociado(s) que quedarán sin marca asignada.' : '' }}'
+                                            })" 
                                             class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" 
                                             title="Eliminar Marca">
                                         <span class="material-symbols-outlined text-[18px]">delete</span>
@@ -190,32 +196,6 @@
 
 </div>
 
-<!-- Modal Confirmación de Eliminación -->
-<div id="modal-eliminar-marca" class="fixed inset-0 z-50 bg-[#070d18]/80 hidden backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all">
-        <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4">
-            <span class="material-symbols-outlined text-[28px]">delete_forever</span>
-        </div>
-        <h3 class="text-base font-bold text-slate-900 mb-1">¿Eliminar Marca?</h3>
-        <p id="modal-eliminar-texto" class="text-xs text-slate-500 mb-6 leading-relaxed">
-            Esta acción eliminará la marca del catálogo. Los productos asociados no se eliminarán, pero quedarán sin marca asignada.
-        </p>
-        
-        <form id="form-eliminar-marca" method="POST" action="">
-            @csrf
-            @method('DELETE')
-            <div class="flex items-center justify-end gap-3">
-                <button type="button" onclick="cerrarModalEliminar()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
-                    Cancelar
-                </button>
-                <button type="submit" class="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs transition-colors">
-                    Sí, eliminar marca
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
 @push('scripts')
 <script>
     function toggleSugerida(brandId, btn) {
@@ -247,26 +227,6 @@
             btn.classList.remove('opacity-50', 'pointer-events-none');
             console.error(err);
         });
-    }
-
-    function confirmarEliminarMarca(id, nombre, totalProductos) {
-        const modal = document.getElementById('modal-eliminar-marca');
-        const texto = document.getElementById('modal-eliminar-texto');
-        const form = document.getElementById('form-eliminar-marca');
-        
-        form.action = `/admin/brands/${id}`;
-        
-        let detalle = `¿Estás seguro de que deseas eliminar la marca <strong>«${nombre}»</strong>?`;
-        if (totalProductos > 0) {
-            detalle += `<br><span class="text-amber-600 font-semibold mt-1 block">⚠️ Tiene ${totalProductos} producto(s) asociado(s) que quedarán sin marca.</span>`;
-        }
-        texto.innerHTML = detalle;
-        
-        modal.classList.remove('hidden');
-    }
-
-    function cerrarModalEliminar() {
-        document.getElementById('modal-eliminar-marca').classList.add('hidden');
     }
 </script>
 @endpush

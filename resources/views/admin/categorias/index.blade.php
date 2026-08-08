@@ -205,8 +205,8 @@
                                     <!-- Botón Eliminar / Tooltip si bloqueado -->
                                     @if($puedeEliminarse)
                                         <button type="button" 
-                                                onclick="openDeleteModal({{ $categoria->id }}, '{{ addslashes($categoria->nombre) }}')" 
-                                                class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+                                                onclick="window.ModalEliminar.abrir('{{ route('admin.categorias.destroy', $categoria->id) }}', '{{ addslashes($categoria->nombre) }}')" 
+                                                class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" 
                                                 title="Eliminar categoría">
                                             <span class="material-symbols-outlined text-[17px]">delete</span>
                                         </button>
@@ -280,58 +280,4 @@
     </div>
 
 </div>
-
-<!-- Modal de Confirmación para Eliminar Categoría -->
-<div id="delete-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="card-elevated rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-        <div class="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto">
-            <span class="material-symbols-outlined text-[22px]">warning</span>
-        </div>
-        <div class="text-center space-y-1">
-            <h3 class="text-base font-extrabold text-slate-900">¿Eliminar esta categoría?</h3>
-            <p class="text-xs text-slate-500">
-                Estás a punto de eliminar la categoría <span id="delete-modal-cat-name" class="font-bold text-slate-800"></span>. Esta acción puede revertirse desde la base de datos si es necesario.
-            </p>
-        </div>
-
-        <form id="delete-modal-form" method="POST" action="" class="flex items-center justify-center gap-3 pt-2">
-            @csrf
-            @method('DELETE')
-            <button type="button" 
-                    onclick="closeDeleteModal()" 
-                    class="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-colors">
-                Cancelar
-            </button>
-            <button type="submit" 
-                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold transition-colors shadow-xs">
-                Sí, Eliminar
-            </button>
-        </form>
-    </div>
-</div>
-
-@push('scripts')
-<script>
-    function openDeleteModal(id, name) {
-        const modal = document.getElementById('delete-modal');
-        const form = document.getElementById('delete-modal-form');
-        const nameSpan = document.getElementById('delete-modal-cat-name');
-        
-        nameSpan.textContent = `"${name}"`;
-        form.action = `{{ url('/admin/categorias') }}/${id}`;
-        modal.classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('delete-modal').classList.add('hidden');
-    }
-
-    // Cerrar modal al presionar Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
-</script>
-@endpush
 @endsection

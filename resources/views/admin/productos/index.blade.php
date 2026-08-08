@@ -330,8 +330,8 @@
                                         <span class="material-symbols-outlined text-[17px]">edit</span>
                                     </a>
                                     <button type="button" 
-                                            onclick="confirmarEliminar('{{ $prod->id }}', '{{ addslashes($prod->nombre) }}')" 
-                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors" 
+                                            onclick="window.ModalEliminar.abrir('{{ route('admin.productos.destroy', $prod->id) }}', '{{ addslashes($prod->nombre) }}')" 
+                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer" 
                                             title="Eliminar producto">
                                         <span class="material-symbols-outlined text-[17px]">delete</span>
                                     </button>
@@ -376,58 +376,4 @@
     </div>
 
 </div>
-
-<!-- Modal Defensivo de Confirmación para Eliminar -->
-<div id="modal-eliminar-producto" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-4 animate-in fade-in zoom-in-95 duration-200">
-        <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 mx-auto">
-            <span class="material-symbols-outlined text-[26px]">delete_forever</span>
-        </div>
-        <div class="text-center space-y-1">
-            <h3 class="text-base font-bold text-slate-900">¿Eliminar este producto?</h3>
-            <p class="text-xs text-slate-500">
-                Estás a punto de eliminar <span id="nombre-producto-eliminar" class="font-bold text-slate-800"></span>. Esta acción no se puede deshacer.
-            </p>
-        </div>
-        <div class="flex items-center gap-3 pt-2">
-            <button type="button" 
-                    onclick="cerrarModalEliminar()" 
-                    class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all">
-                Cancelar
-            </button>
-            <button type="button" 
-                    onclick="ejecutarEliminar()" 
-                    class="flex-1 py-2.5 px-4 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-all">
-                Sí, Eliminar
-            </button>
-        </div>
-    </div>
-</div>
-
-<form id="form-eliminar-producto" method="POST" action="" class="hidden">
-    @csrf
-    @method('DELETE')
-</form>
-
-<script>
-    let productoIdParaEliminar = null;
-
-    function confirmarEliminar(id, nombre) {
-        productoIdParaEliminar = id;
-        document.getElementById('nombre-producto-eliminar').textContent = nombre;
-        document.getElementById('modal-eliminar-producto').classList.remove('hidden');
-    }
-
-    function cerrarModalEliminar() {
-        document.getElementById('modal-eliminar-producto').classList.add('hidden');
-    }
-
-    function ejecutarEliminar() {
-        if (!productoIdParaEliminar) return;
-        const form = document.getElementById('form-eliminar-producto');
-        const baseUrl = '{{ url("admin/productos") }}';
-        form.action = `${baseUrl}/${productoIdParaEliminar}`;
-        form.submit();
-    }
-</script>
 @endsection

@@ -30,3 +30,10 @@
 - **Prohibido Consultar la BD desde Vistas Blade**: Las vistas Blade (`resources/views/**/*.blade.php`) NO deben ejecutar consultas a la Base de Datos (`\App\Models\...`, `DB::table(...)`, helpers de BD) ni procesar transformaciones complejas de datos dentro de bloques `@php`.
 - **Responsabilidad del Controlador**: Toda consulta a la BD, mapeo, filtrado y formateo de colecciones (JSON para JS, datos de marcas, categorías, atributos, etc.) DEBE ser procesado en la clase Controller correspondiente antes de pasar los datos a la vista.
 - **Vistas Limpias**: Las vistas Blade deben permanecer exclusivamente enfocadas en la estructura HTML, estilos visuales y renderizado de componentes.
+
+## 8. Sistema Global de Confirmación Defensiva para Eliminación
+- **Componente Oficial**: `<x-modal-eliminar />` (definido en `resources/views/components/modal-eliminar.blade.php` e incluido automáticamente en `resources/views/layouts/admin.blade.php`).
+- **Helper Global en JS**: `window.ModalEliminar.abrir(url, nombre, extra)` o con objeto `window.ModalEliminar.abrir({ url, nombre, extra, titulo, mensaje })`.
+- **Regla**: NO usar diálogos nativos del navegador (`confirm(...)`) ni crear modales o formularios de eliminación ad-hoc repetidos en cada vista. Cualquier botón de acción "Eliminar" en tablas, listados o tarjetas de gestión administrativa debe invocar directamente `window.ModalEliminar.abrir(url, nombre, extra)`.
+
+

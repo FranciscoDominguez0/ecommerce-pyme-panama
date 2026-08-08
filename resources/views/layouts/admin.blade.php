@@ -15,12 +15,9 @@
     <!-- Tailwind CSS CDN con plugins -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     
-    <!-- Fuente Oficial de Laravel & Business SaaS: Plus Jakarta Sans, Figtree & Material Symbols -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- Fuente Oficial de Laravel & Business SaaS: Plus Jakarta Sans, Figtree & Material Symbols (Local) -->
+    <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
+    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
 
     <script>
         tailwind.config = {
@@ -397,6 +394,9 @@
 
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
     <x-toast-alert />
+
+    <!-- Sistema Global de Confirmación Defensiva para Eliminación -->
+    <x-modal-eliminar />
 
     @stack('scripts')
 </body>

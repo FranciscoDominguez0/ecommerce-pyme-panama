@@ -132,13 +132,14 @@
                         <tr class="hover:bg-slate-50/60 transition-colors group">
                             <!-- Código -->
                             <td class="py-3.5 px-4 font-bold text-slate-900">
-                                <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-lg text-xs font-mono font-bold tracking-wide">
-                                    <span>{{ $cupon->codigo }}</span>
+                                <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-100/90 border border-slate-200 rounded-lg text-xs font-mono font-bold tracking-wider transition-all duration-300 group/code">
+                                    <span class="select-all text-slate-900 font-extrabold">{{ $cupon->codigo }}</span>
                                     <button type="button" 
-                                            onclick="copiarCodigo('{{ $cupon->codigo }}')" 
-                                            class="text-slate-400 hover:text-emerald-600 transition-colors cursor-pointer"
-                                            title="Copiar código">
-                                        <span class="material-symbols-outlined text-[15px]">content_copy</span>
+                                            onclick="copiarCodigo(this, '{{ addslashes($cupon->codigo) }}')" 
+                                            class="relative inline-flex items-center justify-center w-5 h-5 text-slate-400 hover:text-emerald-600 hover:bg-white active:scale-90 rounded transition-all duration-200 cursor-pointer"
+                                            title="Copiar código"
+                                            aria-label="Copiar código {{ $cupon->codigo }}">
+                                        <span class="material-symbols-outlined text-[15px] transition-transform duration-200 pointer-events-none">content_copy</span>
                                     </button>
                                 </div>
                             </td>
@@ -261,18 +262,12 @@
                                     </form>
 
                                     <!-- Eliminar -->
-                                    <form action="{{ route('admin.promociones.cupones.eliminar', $cupon->id) }}" 
-                                          method="POST" 
-                                          onsubmit="return confirm('¿Estás seguro de eliminar este cupón?');" 
-                                          class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                                                title="Eliminar cupón">
-                                            <span class="material-symbols-outlined text-[18px]">delete</span>
-                                        </button>
-                                    </form>
+                                    <button type="button" 
+                                            onclick="window.ModalEliminar.abrir('{{ route('admin.promociones.cupones.eliminar', $cupon->id) }}', '{{ addslashes($cupon->codigo) }}')" 
+                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                            title="Eliminar cupón">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -307,14 +302,79 @@
 
 @push('scripts')
 <script>
-    function copiarCodigo(texto) {
-        navigator.clipboard.writeText(texto).then(() => {
-            if (window.showToast) {
-                window.showToast(`Código "${texto}" copiado al portapapeles.`, 'success');
-            } else {
-                alert(`Código "${texto}" copiado.`);
+    function copiarCodigo(btn, texto) {
+        if (!texto) return;
+
+        const ejecutarFeedback = () => {
+            // 1. Feedback visual interactivo en el botón y badge contenedor
+            if (btn) {
+                const icon = btn.querySelector('.material-symbols-outlined');
+                const badge = btn.closest('.inline-flex');
+                const originalTitle = btn.getAttribute('title') || 'Copiar código';
+
+                if (icon) {
+                    icon.textContent = 'check';
+                    icon.classList.add('text-emerald-600', 'scale-110');
+                }
+                btn.classList.add('text-emerald-600', 'bg-white', 'shadow-xs');
+                btn.setAttribute('title', '¡Copiado!');
+
+                if (badge) {
+                    badge.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-900', 'ring-2', 'ring-emerald-500/10');
+                    badge.classList.remove('bg-slate-100/90', 'border-slate-200');
+                }
+
+                // Restaurar estado visual original tras 2 segundos
+                setTimeout(() => {
+                    if (icon) {
+                        icon.textContent = 'content_copy';
+                        icon.classList.remove('text-emerald-600', 'scale-110');
+                    }
+                    btn.classList.remove('text-emerald-600', 'bg-white', 'shadow-xs');
+                    btn.setAttribute('title', originalTitle);
+
+                    if (badge) {
+                        badge.classList.remove('bg-emerald-50', 'border-emerald-300', 'text-emerald-900', 'ring-2', 'ring-emerald-500/10');
+                        badge.classList.add('bg-slate-100/90', 'border-slate-200');
+                    }
+                }, 2000);
             }
-        });
+
+            // 2. Notificación Toast Flotante Oficial de PayMe Panamá
+            if (typeof window.mostrarToast === 'function') {
+                window.mostrarToast(`Código "${texto}" copiado exitosamente al portapapeles.`, 'success', 3000);
+            } else if (typeof window.showToast === 'function') {
+                window.showToast(`Código "${texto}" copiado exitosamente.`, 'success');
+            }
+        };
+
+        // Copiar al portapapeles (Clipboard API moderna o fallback retrocompatible)
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(texto)
+                .then(ejecutarFeedback)
+                .catch(() => fallbackCopiar(texto, ejecutarFeedback));
+        } else {
+            fallbackCopiar(texto, ejecutarFeedback);
+        }
+    }
+
+    function fallbackCopiar(texto, callback) {
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = texto;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            textArea.setAttribute("readonly", "");
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            document.execCommand('copy');
+            textArea.remove();
+            if (callback) callback();
+        } catch (err) {
+            console.error('No se pudo copiar el código:', err);
+        }
     }
 </script>
 @endpush

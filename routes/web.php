@@ -25,7 +25,16 @@ Route::get('/', function () {
         ->where('destacado', true)
         ->take(8)
         ->get();
-    return view('welcome', compact('destacados'));
+
+    $marcasDistribuidores = \App\Models\Brand::where('verified', true)
+        ->where(function ($q) {
+            $q->whereNotNull('image_path')->orWhereNotNull('image');
+        })
+        ->orderBy('is_suggested', 'desc')
+        ->orderBy('name', 'asc')
+        ->get();
+
+    return view('welcome', compact('destacados', 'marcasDistribuidores'));
 })->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');

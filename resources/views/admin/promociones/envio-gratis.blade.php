@@ -115,16 +115,16 @@
                                         </button>
                                     </form>
 
-                                    <form action="{{ route('admin.promociones.envio-gratis.eliminar', $promo->id) }}" 
-                                          method="POST" 
-                                          onsubmit="return confirm('¿Eliminar esta regla de envío gratis?');" 
-                                          class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors">
-                                            <span class="material-symbols-outlined text-[18px]">delete</span>
-                                        </button>
-                                    </form>
+                                    <button type="button" 
+                                            onclick="window.ModalEliminar.abrir({
+                                                url: '{{ route('admin.promociones.envio-gratis.eliminar', $promo->id) }}',
+                                                nombre: 'Envío gratis: {{ addslashes($promo->zonaEnvio ? $promo->zonaEnvio->nombre : 'Todas las zonas') }} (Min. ${{ number_format($promo->monto_minimo, 2) }})',
+                                                titulo: '¿Eliminar Regla de Envío Gratis?'
+                                            })" 
+                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                            title="Eliminar regla">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>

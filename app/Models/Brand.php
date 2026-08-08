@@ -71,32 +71,29 @@ class Brand extends Model
     }
 
     /**
-     * Accessor para obtener la URL final del logo (sea base64 o archivo estático).
+     * Accessor para obtener la URL final del logo (sea ruta en base de datos o base64).
      */
     public function getLogoUrlAttribute(): ?string
     {
-        // 1. Si tiene imagen en blob (base64)
-        $base64 = $this->image_base64;
-        if (!empty($base64)) {
-            return $base64;
-        }
-
-        // 2. Si tiene ruta estática registrada
+        // 1. Si tiene ruta registrada en base de datos
         if (!empty($this->image_path)) {
+            if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
+                return $this->image_path;
+            }
             return asset($this->image_path);
         }
 
-        // 3. Búsqueda por archivo en public/images/Marcas
-        $imageFromHelper = \App\Helpers\BrandHelper::getBrandImagePath($this->name);
-        if ($imageFromHelper) {
-            return asset($imageFromHelper);
+        // 2. Si tiene imagen en blob (base64)
+        $base64 = $this->image_base64;
+        if (!empty($base64)) {
+            return $base64;
         }
 
         return null;
     }
 
     /**
-     * Retorna el HTML del logotipo (imagen o badge).
+     * Retorna el HTML del logotipo oficial (imagen o badge de texto).
      */
     public function getLogoHtmlAttribute(): string
     {
@@ -105,7 +102,7 @@ class Brand extends Model
             return '<img src="' . $url . '" alt="' . htmlspecialchars($this->name) . '" class="h-6 max-h-7 max-w-[85px] object-contain select-none">';
         }
 
-        return \App\Helpers\BrandHelper::getLogoHtml($this->name);
+        return '<span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black tracking-wider uppercase">' . htmlspecialchars($this->name ?: 'Oficial') . '</span>';
     }
 
     /**

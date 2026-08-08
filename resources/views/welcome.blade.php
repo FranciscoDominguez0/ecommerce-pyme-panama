@@ -238,28 +238,19 @@
 
                     <div class="brands-viewport" id="brandsViewport">
                         <div class="brands-track-manual" id="brandsTrack">
-                            @foreach ([
-                                    'Adata.webp',
-                                    'Amd.webp',
-                                    'Apc.webp',
-                                    'Asus.webp',
-                                    'cannon.webp',
-                                    'Dell.webp',
-                                    'hp.webp',
-                                    'intel.webp',
-                                    'jbl.webp',
-                                    'Lenovo.webp',
-                                    'Logitech.webp',
-                                    'Msi.webp',
-                                    'Razer.webp',
-                                    'Samsung.webp',
-                                    'Sony.webp',
-                                    'tp-link.webp',
-                                    'Xiaomi.webp'
-                                ] as $brand)
-                                <div class="brand-logo-card-m">
-                                    <img src="{{ asset('images/Marcas/' . $brand) }}" alt="Marca tecnológica" loading="lazy"
-                                        class="brand-logo-img-m" />
+                            @foreach ($marcasDistribuidores ?? [] as $marca)
+                                @php
+                                    /** @var \App\Models\Brand $marca */
+                                    $nombre = is_object($marca) ? ($marca->name ?? '') : data_get($marca, 'name', data_get($marca, 'nombre', ''));
+                                    $logo = is_object($marca) ? ($marca->logo_url ?? null) : data_get($marca, 'logo_url', data_get($marca, 'url'));
+                                @endphp
+                                <div class="brand-logo-card-m" title="{{ $nombre }}">
+                                    @if(!empty($logo))
+                                        <img src="{{ $logo }}" alt="{{ $nombre }}" loading="lazy"
+                                            class="brand-logo-img-m" />
+                                    @else
+                                        <span class="text-xs font-black uppercase text-slate-700 tracking-wider">{{ $nombre }}</span>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
