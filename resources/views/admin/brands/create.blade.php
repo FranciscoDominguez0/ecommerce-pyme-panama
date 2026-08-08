@@ -3,10 +3,6 @@
 @section('title', 'Nueva Marca')
 
 @section('breadcrumbs')
-    <span class="hidden sm:inline-flex items-center gap-1.5 text-slate-500">
-        <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-        <span>Catálogo</span>
-    </span>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <a href="{{ route('admin.brands.index') }}" class="text-slate-500 hover:text-slate-800 transition-colors">Marcas</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>

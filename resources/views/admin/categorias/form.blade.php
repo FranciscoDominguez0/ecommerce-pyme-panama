@@ -3,10 +3,6 @@
 @section('title', $esEdicion ? 'Editar Categoría' : 'Nueva Categoría')
 
 @section('breadcrumbs')
-    <span class="hidden md:inline-flex items-center gap-1.5 text-slate-500">
-        <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-        <span>Catálogo</span>
-    </span>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <a href="{{ route('admin.categorias.index') }}" class="text-slate-500 hover:text-slate-900 transition-colors truncate max-w-[85px] sm:max-w-none">Categorías</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>

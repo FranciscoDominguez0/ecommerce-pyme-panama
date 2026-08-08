@@ -95,7 +95,6 @@ class ProductoController extends Controller
      */
     public function create(): View
     {
-        $esEdicion = false;
         $producto = new Producto([
             'activo' => true,
             'destacado' => false,
@@ -105,93 +104,11 @@ class ProductoController extends Controller
             'stock_minimo' => 3,
             'precio' => 0.00,
         ]);
-        $imagenes = collect();
 
-        $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
-        $marcas = Brand::orderBy('is_suggested', 'desc')->orderBy('name', 'asc')->get();
-        $tiposVariante = TipoVariante::with('opciones')->get();
+        $datos = $this->obtenerDatosFormulario($producto, false);
+        $datos['imagenes'] = collect();
 
-        return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'marcas', 'tiposVariante', 'imagenes'));
-    }
-
-    /**
-     * Almacena un nuevo producto en la base de datos.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:productos,slug',
-            'sku' => 'required|string|max:100|unique:productos,sku',
-            'categoria_id' => 'required|exists:categorias,id',
-            'precio' => 'required|numeric|min:0',
-        ], [
-            'nombre.required' => 'El nombre del producto es obligatorio.',
-            'slug.required' => 'El slug del producto es obligatorio.',
-            'slug.unique' => 'Ya existe un producto con ese slug. Regenera uno diferente.',
-            'sku.required' => 'El SKU es obligatorio.',
-            'sku.unique' => 'Ya existe un producto con ese SKU.',
-            'categoria_id.required' => 'Debes seleccionar una categoría.',
-            'precio.required' => 'El precio es obligatorio.',
-        ]);
-
-        // Resolver marca y brand_id
-        $brandId = null;
-        $nombreMarca = null;
-
-        if ($request->filled('brand_id') && is_numeric($request->brand_id)) {
-            $brand = Brand::find($request->brand_id);
-            if ($brand) {
-                $brandId = $brand->id;
-                $nombreMarca = $brand->name;
-            }
-        } elseif ($request->filled('marca')) {
-            $nombreMarca = trim($request->marca);
-            $brand = Brand::where('name', 'ILIKE', $nombreMarca)
-                ->orWhere('slug', 'ILIKE', Str::slug($nombreMarca))
-                ->first();
-            if ($brand) {
-                $brandId = $brand->id;
-                $nombreMarca = $brand->name;
-            }
-        }
-
-        DB::transaction(function () use ($request, $brandId, $nombreMarca) {
-            $producto = Producto::create([
-                'categoria_id' => $request->categoria_id,
-                'brand_id' => $brandId,
-                'nombre' => $request->nombre,
-                'slug' => Str::slug($request->slug),
-                'descripcion' => $request->descripcion ?? '',
-                'descripcion_corta' => $request->descripcion_corta ?? '',
-                'sku' => strtoupper($request->sku),
-                'marca' => $nombreMarca,
-                'modelo' => $request->modelo ? trim($request->modelo) : null,
-                'precio' => $request->precio,
-                'precio_oferta' => $request->precio_oferta ?: null,
-                'oferta_activa' => $request->boolean('oferta_activa'),
-                'oferta_inicio_en' => $request->oferta_inicio_en ?: null,
-                'oferta_fin_en' => $request->oferta_fin_en ?: null,
-                'stock' => (int) ($request->stock ?? 0),
-                'stock_minimo' => (int) ($request->stock_minimo ?? 3),
-                'destacado' => $request->boolean('destacado'),
-                'activo' => $request->boolean('activo'),
-                'aplica_itbms' => $request->boolean('aplica_itbms'),
-            ]);
-
-            // Imágenes por URL ingresadas vía el campo de texto
-            $this->guardarImagenesUrl($request, $producto);
-
-            // Imágenes subidas por archivo
-            $this->guardarImagenesArchivos($request, $producto);
-
-            // Guardar variantes si aplica
-            $this->guardarVariantes($request, $producto);
-        });
-
-        return redirect()
-            ->route('admin.productos.index')
-            ->with('success', 'Producto creado exitosamente y publicado en la tienda.');
+        return view('admin.productos.form', $datos);
     }
 
     /**
@@ -199,17 +116,106 @@ class ProductoController extends Controller
      */
     public function edit(int $id): View
     {
-        $esEdicion = true;
         $producto = Producto::with(['imagenes', 'variantes.opciones.tipo', 'categoria', 'brand'])
             ->sinEliminar()
             ->findOrFail($id);
 
-        $imagenes = $producto->imagenes;
+        $datos = $this->obtenerDatosFormulario($producto, true);
+        $datos['imagenes'] = $producto->imagenes;
+        $datos['id'] = $id;
+
+        return view('admin.productos.form', $datos);
+    }
+
+    /**
+     * Centraliza las consultas a la BD y el formateo de datos para el formulario (MVC estricto).
+     */
+    private function obtenerDatosFormulario(Producto $producto, bool $esEdicion): array
+    {
         $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
         $marcas = Brand::orderBy('is_suggested', 'desc')->orderBy('name', 'asc')->get();
         $tiposVariante = TipoVariante::with('opciones')->get();
 
-        return view('admin.productos.form', compact('esEdicion', 'producto', 'categorias', 'marcas', 'tiposVariante', 'id', 'imagenes'));
+        $marcasData = $marcas->map(function ($m) {
+            return [
+                'id' => $m->id,
+                'nombre' => $m->name,
+                'slug' => $m->slug,
+                'url' => $m->logo_url,
+                'is_suggested' => (bool) $m->is_suggested,
+                'verified' => (bool) $m->verified,
+            ];
+        })->values()->toArray();
+
+        $categoriasData = $categorias->map(function ($c) {
+            return [
+                'id' => (string) $c->id,
+                'nombre' => $c->nombre,
+                'slug' => $c->slug ?? '',
+                'imagen_ruta' => $c->imagen_ruta ?? '',
+            ];
+        })->values()->toArray();
+
+        $catalogoAtributos = [];
+        foreach ($tiposVariante as $tipo) {
+            $opcs = [];
+            $hexs = [];
+            foreach ($tipo->opciones as $opc) {
+                $opcs[] = $opc->valor;
+                if (!empty($opc->valor_hex)) {
+                    $hexs[$opc->valor] = $opc->valor_hex;
+                }
+            }
+            $catalogoAtributos[$tipo->nombre] = [
+                'opciones' => $opcs,
+                'hex' => $hexs,
+            ];
+        }
+
+        $atributosIniciales = [];
+        $variantesExistentesData = [];
+
+        if ($esEdicion && $producto->variantes && $producto->variantes->count() > 0) {
+            $map = [];
+            foreach ($producto->variantes as $variante) {
+                $attrs = [];
+                foreach ($variante->opciones as $opcion) {
+                    $tipoNombre = $opcion->tipo->nombre;
+                    $attrs[$tipoNombre] = $opcion->valor;
+
+                    if (!isset($map[$tipoNombre])) {
+                        $map[$tipoNombre] = [];
+                    }
+                    if (!in_array($opcion->valor, $map[$tipoNombre])) {
+                        $map[$tipoNombre][] = $opcion->valor;
+                    }
+                }
+                $variantesExistentesData[] = [
+                    'sku' => $variante->sku,
+                    'precio' => $variante->precio,
+                    'stock' => $variante->stock,
+                    'atributos' => $attrs,
+                ];
+            }
+            foreach ($map as $nombre => $seleccionadas) {
+                $atributosIniciales[] = [
+                    'nombre' => $nombre,
+                    'seleccionadas' => $seleccionadas,
+                ];
+            }
+        }
+
+        return compact(
+            'esEdicion',
+            'producto',
+            'categorias',
+            'marcas',
+            'marcasData',
+            'categoriasData',
+            'catalogoAtributos',
+            'atributosIniciales',
+            'variantesExistentesData'
+        );
     }
 
     /**

@@ -146,68 +146,10 @@
 
 <!-- Datos y Lógica JavaScript del Constructor de Variantes -->
 <script>
-    @php
-        $tiposDb = isset($tiposVariante) && $tiposVariante->count() > 0 
-            ? $tiposVariante 
-            : \App\Models\TipoVariante::with('opciones')->get();
-
-        $catalogoDb = [];
-        foreach ($tiposDb as $tipo) {
-            $opcs = [];
-            $hexs = [];
-            foreach ($tipo->opciones as $opc) {
-                $opcs[] = $opc->valor;
-                if (!empty($opc->valor_hex)) {
-                    $hexs[$opc->valor] = $opc->valor_hex;
-                }
-            }
-            $catalogoDb[$tipo->nombre] = [
-                'opciones' => $opcs,
-                'hex' => $hexs
-            ];
-        }
-    @endphp
-
-    // Catálogo Oficial de Atributos cargado dinámicamente desde la Base de Datos
-    const CATALOGO_ATRIBUTOS = {!! json_encode($catalogoDb) !!};
-
-    @php
-        $atributosIniciales = [];
-        $variantesExistentesData = [];
-        if (isset($esEdicion) && $esEdicion && $producto->variantes->count() > 0) {
-            $map = [];
-            foreach ($producto->variantes as $variante) {
-                $attrs = [];
-                foreach ($variante->opciones as $opcion) {
-                    $tipoNombre = $opcion->tipo->nombre;
-                    $attrs[$tipoNombre] = $opcion->valor;
-                    
-                    if (!isset($map[$tipoNombre])) {
-                        $map[$tipoNombre] = [];
-                    }
-                    if (!in_array($opcion->valor, $map[$tipoNombre])) {
-                        $map[$tipoNombre][] = $opcion->valor;
-                    }
-                }
-                $variantesExistentesData[] = [
-                    'sku' => $variante->sku,
-                    'precio' => $variante->precio,
-                    'stock' => $variante->stock,
-                    'atributos' => $attrs
-                ];
-            }
-            foreach ($map as $nombre => $seleccionadas) {
-                $atributosIniciales[] = [
-                    'nombre' => $nombre,
-                    'seleccionadas' => $seleccionadas
-                ];
-            }
-        }
-    @endphp
-
-    // Estado inicial de la UI de variantes
-    let atributosActivos = {!! json_encode($atributosIniciales) !!};
-    let variantesExistentes = {!! json_encode($variantesExistentesData) !!};
+    // Estado del catálogo y variantes procesado desde el Controlador (MVC)
+    const CATALOGO_ATRIBUTOS = {!! json_encode($catalogoAtributos ?? []) !!};
+    let atributosActivos = {!! json_encode($atributosIniciales ?? []) !!};
+    let variantesExistentes = {!! json_encode($variantesExistentesData ?? []) !!};
 
     document.addEventListener('DOMContentLoaded', function() {
         if (window.ModalBuscador) {

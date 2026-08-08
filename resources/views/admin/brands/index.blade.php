@@ -3,10 +3,6 @@
 @section('title', 'Gestión de Marcas')
 
 @section('breadcrumbs')
-    <span class="hidden sm:inline-flex items-center gap-1.5 text-slate-500">
-        <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-        <span>Catálogo</span>
-    </span>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <span class="font-bold text-slate-900 truncate">Marcas</span>
 @endsection

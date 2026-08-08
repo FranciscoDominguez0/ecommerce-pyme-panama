@@ -25,3 +25,8 @@
 - **Límite de Renderizado (15 Items)**: Todo modal de selección masiva o selector de catálogo (Marcas, Categorías, Atributos Principales, Zonas) DEBE limitar el renderizado inicial del DOM a un máximo de 15 elementos (`porPagina: 15`). Esto garantiza búsquedas instantáneas y previene lentitud al manejar miles de registros.
 - **Componente Oficial de Selección**: Utilizar el componente reutilizable `<x-modal-busqueda id="..." titulo="..." subtitulo="..." icono="..." placeholder="..." />` integrado con el helper global `window.ModalBuscador` para no duplicar lógica visual ni JavaScript entre formularios.
 - **Serialización en JSON**: Para enviar estructuras de datos masivas (como matrices de 10,000 variantes), serializar el estado en un payload JSON (`variantes_json`) para evitar sobrepasar la restricción `max_input_vars` de PHP.
+
+## 7. Arquitectura MVC y Separación de Responsabilidades
+- **Prohibido Consultar la BD desde Vistas Blade**: Las vistas Blade (`resources/views/**/*.blade.php`) NO deben ejecutar consultas a la Base de Datos (`\App\Models\...`, `DB::table(...)`, helpers de BD) ni procesar transformaciones complejas de datos dentro de bloques `@php`.
+- **Responsabilidad del Controlador**: Toda consulta a la BD, mapeo, filtrado y formateo de colecciones (JSON para JS, datos de marcas, categorías, atributos, etc.) DEBE ser procesado en la clase Controller correspondiente antes de pasar los datos a la vista.
+- **Vistas Limpias**: Las vistas Blade deben permanecer exclusivamente enfocadas en la estructura HTML, estilos visuales y renderizado de componentes.
