@@ -188,10 +188,11 @@
                             </a>
 
                             <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                                @if($prod->tieneOfertaValida())
+                                @if($prod->tienePromocionOPrecioOferta())
                                     <span
-                                        class="text-xl font-extrabold text-gray-900">${{ number_format($prod->precio_oferta, 2) }}</span>
+                                        class="text-xl font-extrabold text-emerald-700">${{ number_format($prod->precioFinalPromocional(), 2) }}</span>
                                     <span class="text-sm text-gray-400 line-through">${{ number_format($prod->precio, 2) }}</span>
+                                    <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">-{{ number_format($prod->porcentajeDescuentoPromocional(), 0) }}%</span>
                                 @else
                                     <span class="text-xl font-extrabold text-gray-900">${{ number_format($prod->precio, 2) }}</span>
                                 @endif

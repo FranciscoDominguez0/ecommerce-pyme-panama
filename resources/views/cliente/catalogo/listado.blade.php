@@ -191,9 +191,12 @@
 
                                 <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
                                     <div>
-                                        @if($prod->tieneOfertaValida())
-                                            <div class="text-base font-extrabold text-emerald-700">${{ number_format($prod->precio_oferta, 2) }}</div>
-                                            <div class="text-[10px] text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</div>
+                                        @if($prod->tienePromocionOPrecioOferta())
+                                            <div class="text-base font-extrabold text-emerald-700">${{ number_format($prod->precioFinalPromocional(), 2) }}</div>
+                                            <div class="flex items-center gap-1.5 text-[10px]">
+                                                <span class="text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</span>
+                                                <span class="font-bold text-rose-600 font-mono">-{{ number_format($prod->porcentajeDescuentoPromocional(), 0) }}%</span>
+                                            </div>
                                         @else
                                             <div class="text-base font-extrabold text-slate-900">${{ number_format($prod->precio, 2) }}</div>
                                             <div class="text-[10px] text-slate-400">USD + ITBMS</div>

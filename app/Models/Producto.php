@@ -158,6 +158,78 @@ class Producto extends Model
     }
 
     /**
+     * Relación con promociones de Producto del Mes.
+     */
+    public function promocionesProductoDelMes(): HasMany
+    {
+        return $this->hasMany(ProductoDelMes::class, 'producto_id');
+    }
+
+    /**
+     * Retorna la promoción de Producto del Mes activa y vigente si existe.
+     */
+    public function promocionDelMesActiva(): ?ProductoDelMes
+    {
+        /** @var ProductoDelMes|null $promocion */
+        $promocion = ProductoDelMes::where('producto_id', $this->id)
+            ->where('activo', true)
+            ->first();
+
+        if ($promocion && $promocion->esVigente()) {
+            return $promocion;
+        }
+
+        return null;
+    }
+
+    /**
+     * Comprueba si el producto tiene oferta regular o Promoción del Mes activa.
+     */
+    public function tienePromocionOPrecioOferta(): bool
+    {
+        if ($this->promocionDelMesActiva()) {
+            return true;
+        }
+
+        return $this->tieneOfertaValida();
+    }
+
+    /**
+     * Retorna el precio promocional final aplicable.
+     */
+    public function precioFinalPromocional(): float
+    {
+        $promoMes = $this->promocionDelMesActiva();
+        if ($promoMes) {
+            return $promoMes->precioPromocional();
+        }
+
+        if ($this->tieneOfertaValida()) {
+            return (float) $this->precio_oferta;
+        }
+
+        return (float) $this->precio;
+    }
+
+    /**
+     * Retorna el porcentaje de descuento especial (Producto del Mes u Oferta).
+     */
+    public function porcentajeDescuentoPromocional(): float
+    {
+        $promoMes = $this->promocionDelMesActiva();
+        if ($promoMes) {
+            return (float) $promoMes->descuento_especial;
+        }
+
+        if ($this->tieneOfertaValida() && $this->precio > 0) {
+            $desc = $this->precio - $this->precio_oferta;
+            return round(($desc / $this->precio) * 100);
+        }
+
+        return 0;
+    }
+
+    /**
      * Retorna el HTML del logotipo oficial de la marca.
      */
     public function getMarcaLogoHtmlAttribute(): string

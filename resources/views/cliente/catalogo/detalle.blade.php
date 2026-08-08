@@ -175,14 +175,33 @@
                         {{ $producto->nombre }}
                     </h1>
 
-                    <!-- Bloque de Precios -->
-                    <div class="flex items-baseline gap-3 pt-1">
-                        @if($producto->tieneOfertaValida())
-                            <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700" id="precio-dinamico">${{ number_format($producto->precio_oferta, 2) }}</span>
-                            <span class="text-lg text-slate-400 line-through">${{ number_format($producto->precio, 2) }}</span>
-                        @else
-                            <span class="text-3xl sm:text-4xl font-extrabold text-slate-900" id="precio-dinamico">${{ number_format($producto->precio, 2) }}</span>
+                    <!-- Bloque de Precios y Promociones Especiales -->
+                    <div class="space-y-1">
+                        @php
+                            $promoMes = $producto->promocionDelMesActiva();
+                            $tienePromocion = $producto->tienePromocionOPrecioOferta();
+                            $precioFinal = $producto->precioFinalPromocional();
+                            $porcentajeDesc = $producto->porcentajeDescuentoPromocional();
+                        @endphp
+
+                        @if($promoMes)
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-lg text-xs font-bold shadow-2xs mb-1">
+                                <span class="material-symbols-outlined text-[16px] text-amber-600">star</span>
+                                <span>Producto del Mes (-{{ number_format($porcentajeDesc, 0) }}% OFF)</span>
+                            </div>
                         @endif
+
+                        <div class="flex items-baseline gap-3 pt-1">
+                            @if($tienePromocion)
+                                <span class="text-3xl sm:text-4xl font-extrabold text-emerald-700" id="precio-dinamico">${{ number_format($precioFinal, 2) }}</span>
+                                <span class="text-lg text-slate-400 line-through">${{ number_format($producto->precio, 2) }}</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-100 text-rose-700 border border-rose-200">
+                                    -{{ number_format($porcentajeDesc, 0) }}% OFF
+                                </span>
+                            @else
+                                <span class="text-3xl sm:text-4xl font-extrabold text-slate-900" id="precio-dinamico">${{ number_format($producto->precio, 2) }}</span>
+                            @endif
+                        </div>
                     </div>
                     <p class="text-xs text-slate-400">
                         Precios en Balboas / Dólares (USD). {{ $producto->aplica_itbms ? 'Aplica ITBMS 7% en el checkout.' : 'Exento de ITBMS.' }}
