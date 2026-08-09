@@ -32,6 +32,11 @@ class Direccion extends Model
         'eliminado_en' => 'datetime',
     ];
 
+    public function scopeSinEliminar($query)
+    {
+        return $query->whereNull('eliminado_en');
+    }
+
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');

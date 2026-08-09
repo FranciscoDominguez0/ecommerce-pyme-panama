@@ -56,10 +56,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/checkout/pago', [CheckoutController::class, 'guardarPago'])->name('cliente.checkout.guardar-pago');
     Route::get('/checkout/confirmacion', [CheckoutController::class, 'confirmacion'])->name('cliente.checkout.confirmacion');
     Route::post('/checkout/confirmacion', [CheckoutController::class, 'procesar'])->name('cliente.checkout.procesar');
-
-    // Mis Pedidos
-    Route::get('/mis-pedidos', [ClientePedidoController::class, 'index'])->name('cliente.pedidos.index');
-    Route::get('/mis-pedidos/{id}', [ClientePedidoController::class, 'detalle'])->name('cliente.pedidos.detalle');
 });
 
 // Lista de Deseos
@@ -73,7 +69,30 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->middleware(['auth'])->name('home');
 
-// 3. Panel de Cliente autenticado
+// 3. Perfil del Cliente: Datos, Direcciones, Métodos de Pago
+Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Cliente\PerfilController::class, 'edit'])->name('datos');
+    Route::put('/perfil', [\App\Http\Controllers\Cliente\PerfilController::class, 'update'])->name('datos.update');
+
+    Route::get('/direcciones', [\App\Http\Controllers\Cliente\DireccionController::class, 'index'])->name('direcciones');
+    Route::post('/direcciones', [\App\Http\Controllers\Cliente\DireccionController::class, 'store'])->name('direcciones.store');
+    Route::put('/direcciones/{id}', [\App\Http\Controllers\Cliente\DireccionController::class, 'update'])->name('direcciones.update');
+    Route::delete('/direcciones/{id}', [\App\Http\Controllers\Cliente\DireccionController::class, 'destroy'])->name('direcciones.destroy');
+    Route::put('/direcciones/{id}/predeterminada', [\App\Http\Controllers\Cliente\DireccionController::class, 'setDefault'])->name('direcciones.predeterminada');
+
+    Route::get('/metodos-pago', function () {
+        return view('cliente.perfil.pago');
+    })->name('pago');
+
+    Route::get('/mis-pedidos', [ClientePedidoController::class, 'index'])->name('pedidos.index');
+    Route::get('/mis-pedidos/{id}', [ClientePedidoController::class, 'detalle'])->name('pedidos.detalle');
+});
+
+// API interna: Ubicaciones de Panamá (distritos y corregimientos)
+Route::get('/api/ubicaciones/distritos', [\App\Http\Controllers\Cliente\DireccionController::class, 'apiDistritos'])->name('api.ubicaciones.distritos');
+Route::get('/api/ubicaciones/corregimientos', [\App\Http\Controllers\Cliente\DireccionController::class, 'apiCorregimientos'])->name('api.ubicaciones.corregimientos');
+
+// 4. Panel de Cliente autenticado
 Route::get('/dashboard', function () {
     $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
         ->sinEliminar()

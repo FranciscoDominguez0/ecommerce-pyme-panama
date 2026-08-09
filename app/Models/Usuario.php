@@ -45,6 +45,11 @@ class Usuario extends Authenticatable
         return (string) $this->password_hash;
     }
 
+    public function direcciones()
+    {
+        return $this->hasMany(Direccion::class, 'usuario_id');
+    }
+
     /**
      * Obtiene el nombre completo del usuario.
      */

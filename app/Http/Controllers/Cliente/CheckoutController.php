@@ -204,7 +204,7 @@ class CheckoutController extends Controller
             // Limpiar sesión
             session()->forget(['checkout_direccion_id', 'checkout_zona_envio_id', 'checkout_metodo_pago', 'checkout_comprobante_ruta']);
 
-            return redirect()->route('cliente.pedidos.detalle', $pedido->id)->with('toast_success', '¡Pedido procesado con éxito!');
+            return redirect()->route('cliente.perfil.pedidos.detalle', $pedido->id)->with('toast_success', '¡Pedido procesado con éxito!');
         } catch (Exception $e) {
             return redirect()->route('cliente.checkout.confirmacion')->with('error', 'Error al procesar el pedido: ' . $e->getMessage());
         }

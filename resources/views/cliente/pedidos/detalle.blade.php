@@ -3,6 +3,11 @@
 @section('title', 'Detalle del Pedido')
 
 @section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col md:flex-row gap-8">
+        <x-cliente.perfil.sidebar active="pedidos" />
+
+        <div class="flex-1 min-w-0">
 @php
     $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
 
@@ -48,11 +53,10 @@
     $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['icon' => 'payment', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
 @endphp
 
-<main class="max-w-[1200px] mx-auto px-4 md:px-16 py-8 w-full">
     <!-- Encabezado -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-            <a href="{{ route('cliente.pedidos.index') }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-label-caps text-xs font-bold tracking-wider uppercase mb-2">
+            <a href="{{ route('cliente.perfil.pedidos.index') }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-label-caps text-xs font-bold tracking-wider uppercase mb-2">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Volver a mis pedidos
             </a>
@@ -259,5 +263,7 @@
             @endif
         </div>
     </div>
-</main>
+        </div>
+    </div>
+</div>
 @endsection

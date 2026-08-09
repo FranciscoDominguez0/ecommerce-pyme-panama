@@ -32,7 +32,7 @@
     <!-- Tarjetas de acceso rápido (Pedidos, Favoritos, Perfil) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         
-        <a href="{{ route('cliente.pedidos.index') }}" class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4 relative overflow-hidden">
+        <a href="{{ route('cliente.perfil.pedidos.index') }}" class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4 relative overflow-hidden">
             <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 z-10">
                 <span class="material-symbols-outlined text-xl">local_shipping</span>
             </div>
@@ -56,7 +56,7 @@
             <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-rose-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         </a>
 
-        <a href="#" class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4 relative overflow-hidden">
+        <a href="{{ route('cliente.perfil.datos') }}" class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4 relative overflow-hidden">
             <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 z-10">
                 <span class="material-symbols-outlined text-xl">manage_accounts</span>
             </div>
@@ -64,7 +64,6 @@
                 <p class="text-sm font-bold text-slate-800 group-hover:text-blue-700 transition-colors">Mi Perfil</p>
                 <p class="text-[11px] text-slate-500 mt-0.5">Datos y seguridad</p>
             </div>
-            <!-- Animación visual (círculo que aparece al pasar el ratón) -->
             <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-blue-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
         </a>
 
