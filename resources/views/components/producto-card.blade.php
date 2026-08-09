@@ -18,10 +18,15 @@
 
     <!-- Imagen y Badges de Oferta -->
     <div class="relative h-48 bg-white p-4 flex items-center justify-center">
-        @if($prod->tieneOfertaValida())
-            <div class="absolute top-4 left-4 z-10">
-                <span class="px-2 py-1 rounded bg-rose-500 text-white text-[10px] font-bold">
-                    -{{ round((($prod->precio - $prod->precio_oferta) / $prod->precio) * 100) }}%
+        @if($prod->tienePromocionOPrecioOferta())
+            <div class="absolute top-4 left-4 z-10 flex flex-col gap-1 items-start">
+                @if($prod->promocionDelMesActiva())
+                    <span class="px-2 py-1 rounded bg-amber-500 text-white text-[9px] font-bold uppercase shadow-sm">
+                        Oferta del Mes
+                    </span>
+                @endif
+                <span class="px-2 py-1 rounded bg-rose-500 text-white text-[10px] font-bold shadow-sm">
+                    -{{ number_format($prod->porcentajeDescuentoPromocional(), 0) }}%
                 </span>
             </div>
         @endif
