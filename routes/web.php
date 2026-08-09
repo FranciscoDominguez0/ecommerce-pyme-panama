@@ -64,9 +64,7 @@ Route::get('/home', function () {
 })->middleware(['auth'])->name('home');
 
 // 3. Panel de Cliente autenticado
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [CatalogoController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->group(function () {

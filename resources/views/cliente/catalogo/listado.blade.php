@@ -16,23 +16,40 @@
             <span class="text-slate-900 font-bold">Catálogo de Productos</span>
         </nav>
 
-        <!-- Banner de Cabecera del Catálogo -->
-        <div class="rounded-3xl bg-gradient-to-r from-slate-900 via-primary to-slate-900 text-white p-6 sm:p-10 relative overflow-hidden shadow-lg">
-            <div class="relative z-10 max-w-2xl space-y-3">
-                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    <span class="material-symbols-outlined text-[14px]">local_shipping</span>
-                    <span>Envíos a todo Panamá</span>
-                </span>
-                <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
-                    Catálogo Oficial de Productos
-                </h1>
-                <p class="text-xs sm:text-sm text-slate-300">
-                    Explora nuestra selección de tecnología, periféricos y accesorios con garantía oficial, facturación fiscal y pago directo en Panamá.
-                </p>
+        <!-- Barra Superior Secundaria y Subcategorías -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-2 mb-4">
+            <!-- Menú Horizontal (Mockup basado en imagen) -->
+            <div class="flex flex-wrap items-center gap-4 px-4 py-2 border-b border-slate-100 mb-3">
+                <div class="bg-blue-700 text-white rounded-lg px-4 py-2 flex items-center gap-2 text-sm font-bold cursor-pointer">
+                    <span class="material-symbols-outlined text-[18px]">accessibility_new</span>
+                    Productos
+                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                </div>
+                <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold">
+                    <a href="{{ route('inicio') }}" class="text-slate-900 hover:text-blue-700 transition-colors">Inicio</a>
+                    <a href="#" class="text-slate-900 hover:text-blue-700 transition-colors flex items-center gap-1">Categorías <span class="material-symbols-outlined text-[16px]">expand_more</span></a>
+                    <a href="{{ route('cliente.catalogo') }}" class="text-slate-600 hover:text-blue-700 transition-colors">Todos los productos</a>
+                    <a href="#" class="text-slate-600 hover:text-blue-700 transition-colors flex items-center gap-1">Lo mas vendido <span class="material-symbols-outlined text-[16px]">expand_more</span></a>
+                    <a href="#" class="text-slate-600 hover:text-blue-700 transition-colors">+</a>
+                </nav>
             </div>
-            
-            <!-- Decoración de Fondo -->
-            <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-radial from-emerald-500/10 to-transparent pointer-events-none"></div>
+
+            <div class="px-4 pb-2">
+                <h2 class="text-base font-bold text-slate-900 mb-3">Categorías</h2>
+                <div class="flex flex-wrap gap-2">
+                    @foreach($categorias as $cat)
+                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" 
+                           class="flex items-center gap-2 px-4 py-2 rounded-lg border {{ $categoriaSlug === $cat->slug ? 'border-emerald-500 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:shadow-xs' }} transition-all text-xs font-semibold">
+                            @if($cat->imagen_ruta)
+                                <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="{{ $cat->nombre }}" class="w-5 h-5 object-contain">
+                            @else
+                                <span class="material-symbols-outlined text-[18px] text-emerald-500">category</span>
+                            @endif
+                            <span>{{ $cat->nombre }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
         </div>
 
         <!-- Grid Principal: Sidebar de Filtros + Grid de Productos -->
@@ -70,26 +87,57 @@
 
                     <!-- 2. Categorías -->
                     <div class="space-y-2 border-t border-slate-100 pt-4">
-                        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                        <h4 class="text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between">
                             Categorías
+                            <span class="material-symbols-outlined text-[16px]">expand_more</span>
                         </h4>
                         <div class="space-y-1 text-xs">
                             <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" 
-                               class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold bg-emerald-50 text-emerald-800' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
-                                <span>Todas las categorías</span>
-                                <span class="text-[10px] {{ $categoriaSlug === 'all' ? 'bg-emerald-200/60 font-bold' : 'text-slate-400' }} px-1.5 py-0.5 rounded-full">
-                                    {{ $categorias->sum('productos_count') }}
+                               class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
+                                <span class="flex items-center gap-2">
+                                    <input type="radio" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                    Todas los productos
                                 </span>
                             </a>
                             @foreach($categorias as $cat)
                                 <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => $cat->slug])) }}" 
-                                   class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold bg-emerald-50 text-emerald-800' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
-                                    <span>{{ $cat->nombre }}</span>
-                                    <span class="text-[10px] {{ $categoriaSlug === $cat->slug ? 'bg-emerald-200/60 font-bold' : 'text-slate-400' }} px-1.5 py-0.5 rounded-full">
-                                        {{ $cat->productos_count }}
+                                   class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
+                                    <span class="flex items-center gap-2">
+                                        <input type="radio" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                        {{ $cat->nombre }} <span class="text-slate-400 font-normal">({{ $cat->productos_count }})</span>
                                     </span>
                                 </a>
                             @endforeach
+                        </div>
+                    </div>
+
+                    <!-- 3. Marcas (Basado en imagen) -->
+                    <div x-data="{ open: false, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4">
+                        <h4 @click="open = !open" class="text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
+                            Marcas
+                            <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                        </h4>
+                        
+                        <div x-show="open" x-collapse>
+                            <div class="relative mb-4">
+                                <input type="text" x-model="searchBrand" placeholder="Search Brands" class="w-full border-0 border-b border-slate-200 text-sm py-2 pl-1 pr-8 focus:ring-0 focus:border-slate-400 placeholder-slate-300">
+                                <span class="material-symbols-outlined absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 text-[20px]">search</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
+                                @foreach($marcas as $marca)
+                                    <label x-show="searchBrand === '' || '{{ strtolower($marca->name) }}'.includes(searchBrand.toLowerCase())" class="relative group cursor-pointer">
+                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}">
+                                        <div class="h-12 border border-slate-200 rounded p-1.5 flex items-center justify-center peer-checked:border-emerald-600 peer-checked:shadow-sm transition-all bg-white hover:border-slate-300">
+                                            @if($marca->logo_url)
+                                                <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" class="max-h-full max-w-full object-contain transition-all">
+                                            @else
+                                                <span class="text-[9px] font-bold text-slate-400 text-center uppercase truncate w-full">{{ $marca->name }}</span>
+                                            @endif
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
 
@@ -143,21 +191,25 @@
                         @php
                             $img = $prod->imagenPrincipal();
                         @endphp
-                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md hover:border-emerald-200 transition-all flex flex-col group">
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group relative">
                             
-                            <!-- Imagen y Badges -->
-                            <div class="relative h-48 bg-slate-50 p-4 flex items-center justify-center overflow-hidden">
+                            <!-- Indicador de Stock (Punto Verde) -->
+                            @if($prod->stock > 0)
+                                <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-xs">
+                                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                </div>
+                            @else
+                                <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-xs">
+                                    <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                                </div>
+                            @endif
+
+                            <!-- Imagen y Badges de Oferta -->
+                            <div class="relative h-48 bg-white p-4 flex items-center justify-center">
                                 @if($prod->tieneOfertaValida())
-                                    <div class="absolute top-3 left-3 z-10">
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500 text-white shadow-xs">
-                                            -{{ round((($prod->precio - $prod->precio_oferta) / $prod->precio) * 100) }}% OFF
-                                        </span>
-                                    </div>
-                                @elseif($prod->destacado)
-                                    <div class="absolute top-3 left-3 z-10">
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500 text-white shadow-xs flex items-center gap-1">
-                                            <span class="material-symbols-outlined text-[12px]">star</span>
-                                            <span>Destacado</span>
+                                    <div class="absolute top-4 left-4 z-10">
+                                        <span class="px-2 py-1 rounded bg-rose-500 text-white text-[10px] font-bold">
+                                            -{{ round((($prod->precio - $prod->precio_oferta) / $prod->precio) * 100) }}%
                                         </span>
                                     </div>
                                 @endif
@@ -173,40 +225,53 @@
                                 @endif
                             </div>
 
+                            <!-- 4 Botones de Acción (Flotantes o justo debajo de la imagen) -->
+                            <div class="flex items-center justify-center gap-3 -mt-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <!-- Botón Carrito -->
+                                <button type="button" 
+                                        class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-emerald-600 transition-colors tooltip-trigger"
+                                        title="Añadir al carrito">
+                                    <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                                </button>
+                                <!-- Botón Deseos -->
+                                <button type="button" 
+                                        class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
+                                        title="Añadir a deseos">
+                                    <span class="material-symbols-outlined text-[18px]">favorite</span>
+                                </button>
+                                <!-- Botón Comparar -->
+                                <button type="button" 
+                                        class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
+                                        title="Comparar">
+                                    <span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+                                </button>
+                                <!-- Botón Ver Detalle -->
+                                <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" 
+                                   class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
+                                   title="Vista rápida">
+                                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                </a>
+                            </div>
+
                             <!-- Contenido de la Tarjeta -->
-                            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
-                                <div class="space-y-1">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                        {{ $prod->categoria?->nombre ?? 'Catálogo' }}
-                                    </span>
-                                    <h3 class="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2">
-                                        <a href="{{ route('cliente.producto.detalle', $prod->slug) }}">
-                                            {{ $prod->nombre }}
-                                        </a>
-                                    </h3>
-                                    <p class="text-xs text-slate-500 line-clamp-2">
-                                        {{ $prod->descripcion_corta ?? $prod->descripcion }}
-                                    </p>
-                                </div>
-
-                                <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-                                    <div>
-                                        @if($prod->tienePromocionOPrecioOferta())
-                                            <div class="text-base font-extrabold text-emerald-700">${{ number_format($prod->precioFinalPromocional(), 2) }}</div>
-                                            <div class="flex items-center gap-1.5 text-[10px]">
-                                                <span class="text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</span>
-                                                <span class="font-bold text-rose-600 font-mono">-{{ number_format($prod->porcentajeDescuentoPromocional(), 0) }}%</span>
-                                            </div>
-                                        @else
-                                            <div class="text-base font-extrabold text-slate-900">${{ number_format($prod->precio, 2) }}</div>
-                                            <div class="text-[10px] text-slate-400">USD + ITBMS</div>
-                                        @endif
-                                    </div>
-
-                                    <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" 
-                                       class="inline-flex items-center justify-center p-2 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-700 transition-colors">
-                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                            <div class="p-5 flex-1 flex flex-col justify-end space-y-2 text-center mt-2">
+                                <h3 class="text-[13px] font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">
+                                    <a href="{{ route('cliente.producto.detalle', $prod->slug) }}">
+                                        {{ $prod->nombre }}
                                     </a>
+                                </h3>
+                                
+                                <span class="text-[11px] font-medium text-slate-400 block">
+                                    SKU: {{ $prod->sku }}
+                                </span>
+
+                                <div class="pt-2">
+                                    @if($prod->tienePromocionOPrecioOferta())
+                                        <div class="text-lg font-extrabold text-emerald-700">${{ number_format($prod->precioFinalPromocional(), 2) }}</div>
+                                        <div class="text-[11px] text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</div>
+                                    @else
+                                        <div class="text-lg font-extrabold text-emerald-700">${{ number_format($prod->precio, 2) }}</div>
+                                    @endif
                                 </div>
                             </div>
 

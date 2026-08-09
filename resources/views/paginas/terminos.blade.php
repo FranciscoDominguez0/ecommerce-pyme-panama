@@ -103,7 +103,7 @@
                     <p class="text-xs text-slate-300 leading-relaxed">
                         Nuestro equipo de soporte al cliente está disponible para orientarte en tus derechos y compras.
                     </p>
-                    <a href="https://wa.me/50760000000?text=Hola%2C%20tengo%20una%20consulta%20sobre%20los%20Terminos%20y%20Condiciones" 
+                    <a href="https://wa.me/50768118272?text=Hola%2C%20tengo%20una%20consulta%20sobre%20los%20Terminos%20y%20Condiciones" 
                        target="_blank" 
                        class="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm">
                         <span class="material-symbols-outlined text-[16px]">chat</span>

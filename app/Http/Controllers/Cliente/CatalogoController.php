@@ -21,13 +21,15 @@ class CatalogoController extends Controller
         $precioMax = (float) $request->input('max_precio', 2000);
         $orden = $request->input('orden', 'relevancia');
 
-        // Categorías con conteo de productos activos
         $categorias = Categoria::sinEliminar()
             ->withCount(['productos' => function ($q) {
                 $q->sinEliminar()->activos();
             }])
             ->orderBy('nombre')
             ->get();
+
+        // Cargar marcas para el sidebar
+        $marcas = \App\Models\Brand::where('verified', true)->orderBy('name')->get();
 
         // Consulta de productos con eager loading
         $query = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
@@ -81,7 +83,8 @@ class CatalogoController extends Controller
             'precioMin',
             'precioMax',
             'orden',
-            'categorias'
+            'categorias',
+            'marcas'
         ));
     }
 
