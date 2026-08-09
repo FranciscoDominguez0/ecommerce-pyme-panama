@@ -20,16 +20,12 @@ class BrandController extends Controller
     public function index(Request $request): View
     {
         $busqueda = trim($request->input('buscar', ''));
-        $filtroSugerida = $request->input('sugerida', 'all');
         $filtroVerificada = $request->input('verificada', 'all');
 
-        // Métricas de cabecera
         $totalMarcas = Brand::count();
-        $totalSugeridas = Brand::where('is_suggested', true)->count();
         $totalVerificadas = Brand::where('verified', true)->count();
         $totalProductosConMarca = Producto::whereNotNull('brand_id')->orWhereNotNull('marca')->count();
 
-        // Query principal
         $query = Brand::withCount(['productos' => function ($q) {
             $q->whereNull('eliminado_en');
         }]);
@@ -38,31 +34,22 @@ class BrandController extends Controller
             $query->search($busqueda);
         }
 
-        if ($filtroSugerida === 'yes') {
-            $query->where('is_suggested', true);
-        } elseif ($filtroSugerida === 'no') {
-            $query->where('is_suggested', false);
-        }
-
         if ($filtroVerificada === 'yes') {
             $query->where('verified', true);
         } elseif ($filtroVerificada === 'no') {
             $query->where('verified', false);
         }
 
-        $marcas = $query->orderBy('is_suggested', 'desc')
-                        ->orderBy('name', 'asc')
+        $marcas = $query->orderBy('name', 'asc')
                         ->paginate(15)
                         ->withQueryString();
 
         return view('admin.brands.index', compact(
             'marcas',
             'totalMarcas',
-            'totalSugeridas',
             'totalVerificadas',
             'totalProductosConMarca',
             'busqueda',
-            'filtroSugerida',
             'filtroVerificada'
         ));
     }
@@ -85,7 +72,6 @@ class BrandController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'slug' => ['nullable', 'string', 'max:100', 'unique:brands,slug'],
             'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:4096'],
-            'is_suggested' => ['nullable', 'boolean'],
             'verified' => ['nullable', 'boolean'],
         ], [
             'name.required' => 'El nombre de la marca es obligatorio.',
@@ -136,7 +122,6 @@ class BrandController extends Controller
             'image' => $imageResource,
             'image_mime' => $imageMime,
             'image_path' => $imagePath,
-            'is_suggested' => $request->boolean('is_suggested'),
             'verified' => $request->boolean('verified', true),
         ]);
 
@@ -173,7 +158,6 @@ class BrandController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'slug' => ['nullable', 'string', 'max:100', 'unique:brands,slug,' . $brand->id],
             'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp,svg', 'max:4096'],
-            'is_suggested' => ['nullable', 'boolean'],
             'verified' => ['nullable', 'boolean'],
         ], [
             'name.required' => 'El nombre de la marca es obligatorio.',
@@ -188,7 +172,6 @@ class BrandController extends Controller
         $updateData = [
             'name' => $name,
             'slug' => $slug,
-            'is_suggested' => $request->boolean('is_suggested'),
             'verified' => $request->boolean('verified'),
         ];
 
@@ -252,18 +235,5 @@ class BrandController extends Controller
             ->with('success', "Marca «{$nombre}» eliminada del sistema." . ($totalProductos > 0 ? " Se desvincularon {$totalProductos} producto(s)." : ''));
     }
 
-    /**
-     * Alterna rápidamente el estado de marca sugerida vía AJAX.
-     */
-    public function toggleSuggested(Brand $brand): JsonResponse
-    {
-        $brand->is_suggested = !$brand->is_suggested;
-        $brand->save();
 
-        return response()->json([
-            'success' => true,
-            'is_suggested' => $brand->is_suggested,
-            'message' => $brand->is_suggested ? "Marca «{$brand->name}» marcada como sugerida." : "Marca «{$brand->name}» retirada de sugeridas.",
-        ]);
-    }
 }

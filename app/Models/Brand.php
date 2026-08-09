@@ -20,12 +20,10 @@ class Brand extends Model
         'image_mime',
         'image_path',
         'verified',
-        'is_suggested',
     ];
 
     protected $casts = [
         'verified' => 'boolean',
-        'is_suggested' => 'boolean',
     ];
 
     /**

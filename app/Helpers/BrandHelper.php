@@ -13,8 +13,7 @@ class BrandHelper
     public static function getAvailableBrands(): array
     {
         try {
-            return Brand::orderBy('is_suggested', 'desc')
-                ->orderBy('name', 'asc')
+            return Brand::orderBy('name', 'asc')
                 ->get()
                 ->map(function (Brand $brand) {
                     return [
@@ -23,7 +22,6 @@ class BrandHelper
                         'slug' => $brand->slug,
                         'path' => $brand->image_path,
                         'url' => $brand->logo_url,
-                        'is_suggested' => (bool) $brand->is_suggested,
                         'verified' => (bool) $brand->verified,
                     ];
                 })

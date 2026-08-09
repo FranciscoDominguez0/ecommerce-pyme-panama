@@ -99,7 +99,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::post('/pedidos/{id}/rechazar-pago', [AdminPedidoController::class, 'rechazarPago'])->name('admin.pedidos.rechazar-pago');
 
     // Módulo de Marcas (Brands)
-    Route::post('/brands/{brand}/toggle-suggested', [BrandController::class, 'toggleSuggested'])->name('admin.brands.toggle-suggested');
     Route::resource('brands', BrandController::class)->names('admin.brands');
 
     // Módulo de Productos y Variantes

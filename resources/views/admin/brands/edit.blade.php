@@ -20,7 +20,7 @@
             </a>
             <div>
                 <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Editar Marca: {{ $brand->name }}</h2>
-                <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Actualiza los datos, logotipo o estado de sugerida del fabricante.</p>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Actualiza los datos, logotipo o estado de verificación del fabricante.</p>
             </div>
         </div>
     </div>

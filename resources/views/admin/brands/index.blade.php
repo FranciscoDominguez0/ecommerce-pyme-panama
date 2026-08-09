@@ -14,7 +14,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Gestión de Marcas</h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Administra los fabricantes oficiales, logotipos vectoriales/imágenes y marcas sugeridas del catálogo.</p>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Administra los fabricantes oficiales y logotipos vectoriales/imágenes del catálogo.</p>
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.brands.create') }}" 
@@ -41,7 +41,7 @@
                            placeholder="Buscar marca por nombre o slug..." 
                            class="bg-transparent border-none focus:ring-0 w-full text-xs text-slate-800 placeholder:text-slate-400 p-0 ml-2 outline-none"/>
                     @if(!empty($busqueda))
-                        <a href="{{ route('admin.brands.index', ['sugerida' => $filtroSugerida, 'verificada' => $filtroVerificada]) }}" class="text-slate-400 hover:text-slate-600">
+                        <a href="{{ route('admin.brands.index', ['verificada' => $filtroVerificada]) }}" class="text-slate-400 hover:text-slate-600">
                             <span class="material-symbols-outlined text-[16px]">close</span>
                         </a>
                     @endif
@@ -197,38 +197,6 @@
 </div>
 
 @push('scripts')
-<script>
-    function toggleSugerida(brandId, btn) {
-        btn.classList.add('opacity-50', 'pointer-events-none');
-        
-        fetch(`/admin/brands/${brandId}/toggle-suggested`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            btn.classList.remove('opacity-50', 'pointer-events-none');
-            if (data.success) {
-                if (data.is_suggested) {
-                    btn.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100';
-                    btn.innerHTML = `<span class="material-symbols-outlined text-[13px] text-amber-500" style="font-variation-settings: 'FILL' 1;">star</span><span>Sí</span>`;
-                } else {
-                    btn.className = 'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer bg-slate-100 text-slate-400 border border-slate-200 hover:bg-slate-200 hover:text-slate-700';
-                    btn.innerHTML = `<span class="material-symbols-outlined text-[13px]">star</span><span>No</span>`;
-                }
-                if (window.toastExito) window.toastExito(data.message);
-            }
-        })
-        .catch(err => {
-            btn.classList.remove('opacity-50', 'pointer-events-none');
-            console.error(err);
-        });
-    }
-</script>
-@endpush
+
 
 @endsection

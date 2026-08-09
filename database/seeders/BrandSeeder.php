@@ -16,121 +16,99 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         $marcasIniciales = [
-            // Las 8 Sugeridas principales
             [
                 'name' => 'Lenovo',
                 'file' => 'Lenovo.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'HP',
                 'file' => 'hp.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'Dell',
                 'file' => 'Dell.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'ASUS',
                 'file' => 'Asus.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'Samsung',
                 'file' => 'Samsung.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'TP-Link',
                 'file' => 'tp-link.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'Logitech',
                 'file' => 'Logitech.webp',
-                'is_suggested' => true,
                 'verified' => true,
             ],
             [
                 'name' => 'Apple',
                 'file' => 'apple.svg',
-                'is_suggested' => true,
                 'verified' => true,
             ],
-
-            // Las otras marcas del catálogo
             [
                 'name' => 'Adata',
                 'file' => 'Adata.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'AMD',
                 'file' => 'Amd.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'APC',
                 'file' => 'Apc.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'Canon',
                 'file' => 'cannon.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'Intel',
                 'file' => 'intel.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'JBL',
                 'file' => 'Jbl.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'Kingston',
                 'file' => 'kingston.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'MSI',
                 'file' => 'Msi.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'Razer',
                 'file' => 'Razer.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'Sony',
                 'file' => 'Sony.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
             [
                 'name' => 'Xiaomi',
                 'file' => 'Xiaomi.webp',
-                'is_suggested' => false,
                 'verified' => true,
             ],
         ];
@@ -164,7 +142,6 @@ class BrandSeeder extends Seeder
                     'image' => $imageResource,
                     'image_mime' => $imageMime,
                     'image_path' => $imagePath,
-                    'is_suggested' => $marcaData['is_suggested'],
                     'verified' => $marcaData['verified'],
                 ]
             );

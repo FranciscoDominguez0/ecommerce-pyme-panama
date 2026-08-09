@@ -133,7 +133,7 @@ class ProductoController extends Controller
     private function obtenerDatosFormulario(Producto $producto, bool $esEdicion): array
     {
         $categorias = Categoria::sinEliminar()->orderBy('nombre')->get();
-        $marcas = Brand::orderBy('is_suggested', 'desc')->orderBy('name', 'asc')->get();
+        $marcas = Brand::orderBy('name', 'asc')->get();
         $tiposVariante = TipoVariante::with('opciones')->get();
 
         $marcasData = $marcas->map(function ($m) {
@@ -142,7 +142,6 @@ class ProductoController extends Controller
                 'nombre' => $m->name,
                 'slug' => $m->slug,
                 'url' => $m->logo_url,
-                'is_suggested' => (bool) $m->is_suggested,
                 'verified' => (bool) $m->verified,
             ];
         })->values()->toArray();
