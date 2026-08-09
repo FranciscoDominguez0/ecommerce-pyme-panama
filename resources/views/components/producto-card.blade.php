@@ -1,4 +1,4 @@
-<!-- Componente reutilizable de vista de los preoductos por si se me olvida -->
+<!-- Tarjeta individual de producto -->
 @props(['prod'])
 
 @php
@@ -7,7 +7,7 @@
 <div
     class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group relative">
 
-    <!-- Indicador de Stock (Punto Verde) -->
+    <!-- Indicador de stock (verde si hay, rojo si está agotado) -->
     @if($prod->stock > 0)
         <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-xs">
             <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    <!-- Imagen y Badges de Oferta -->
+    <!-- Zona de la imagen y etiqueta de descuento -->
     <div class="relative h-48 bg-white p-4 flex items-center justify-center">
         @if($prod->tienePromocionOPrecioOferta())
             <div class="absolute top-4 left-4 z-10">
@@ -45,7 +45,7 @@
         @endif
     </div>
 
-    <!-- 4 Botones de Acción (Flotantes o justo debajo de la imagen) -->
+    <!-- Botones ocultos que aparecen al pasar el ratón (Carrito, Deseos, Compartir, Ver) -->
     <div
         class="flex items-center justify-center gap-3 -mt-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <!-- Botón Carrito -->
@@ -74,7 +74,7 @@
         </a>
     </div>
 
-    <!-- Contenido de la Tarjeta -->
+    <!-- Información del producto (Nombre, SKU y precio) -->
     <div class="p-5 flex-1 flex flex-col justify-end space-y-2 text-center mt-2">
         <h3
             class="text-[13px] font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">

@@ -36,4 +36,12 @@
 - **Helper Global en JS**: `window.ModalEliminar.abrir(url, nombre, extra)` o con objeto `window.ModalEliminar.abrir({ url, nombre, extra, titulo, mensaje })`.
 - **Regla**: NO usar diálogos nativos del navegador (`confirm(...)`) ni crear modales o formularios de eliminación ad-hoc repetidos en cada vista. Cualquier botón de acción "Eliminar" en tablas, listados o tarjetas de gestión administrativa debe invocar directamente `window.ModalEliminar.abrir(url, nombre, extra)`.
 
+## 9. Componente Centralizado para Tarjetas de Producto
+- **Componente Oficial**: `<x-producto-card :prod="$producto" />` (definido en `resources/views/components/producto-card.blade.php`).
+- **Regla**: Cualquier vista que necesite mostrar una tarjeta de producto individual (catálogo, dashboard, inicio, relacionados, etc.) DEBE utilizar este componente. NO recrear manualmente la estructura HTML de las tarjetas de producto en otras vistas.
+
+## 10. Lenguaje y Estilo de Comentarios
+- **Regla**: Los comentarios en el código (especialmente en vistas de cliente) deben estar escritos en un lenguaje sencillo y "humano", como un técnico explicando de forma simple.
+- **Evitar**: No usar lenguaje excesivamente técnico ni llenar el código con comentarios innecesarios o redundantes. Mantenerlos limpios y descriptivos de la sección visual que representan.
+
 
