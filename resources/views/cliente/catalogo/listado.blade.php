@@ -20,24 +20,100 @@
         <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-2 mb-4">
             <!-- Menú Horizontal (Mockup basado en imagen) -->
             <div class="flex flex-wrap items-center gap-4 px-4 py-2 border-b border-slate-100 mb-3">
-                <div class="bg-blue-700 text-white rounded-lg px-4 py-2 flex items-center gap-2 text-sm font-bold cursor-pointer">
-                    <span class="material-symbols-outlined text-[18px]">accessibility_new</span>
-                    Productos
-                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                
+                <!-- Botón Productos Dropdown (Mega Menú) -->
+                <div x-data="{ open: false, activeCategory: null }" class="relative z-30" @click.away="open = false; activeCategory = null">
+                    <!-- Botón Verde Original -->
+                    <button @click="open = !open" class="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-4 py-2 flex items-center gap-2 text-sm font-bold cursor-pointer transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        </svg>
+                        Productos
+                        <span class="material-symbols-outlined text-[18px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                    </button>
+                    
+                    <!-- Mega Menú Desplegable -->
+                    <div x-show="open" x-transition.opacity class="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex" style="display: none; min-width: 600px; min-height: 300px;">
+                        
+                        <!-- Columna Izquierda: Categorías Padre -->
+                        <div class="w-1/2 border-r border-slate-100 py-2 bg-white">
+                            @foreach($categorias as $cat)
+                                <div @mouseenter="activeCategory = {{ $cat->id }}" 
+                                     class="px-5 py-3 flex items-center justify-between cursor-pointer transition-colors"
+                                     :class="activeCategory === {{ $cat->id }} ? 'bg-slate-50 text-emerald-700 font-bold border-l-4 border-emerald-600' : 'text-slate-700 font-semibold hover:bg-slate-50'">
+                                    <div class="flex items-center gap-3">
+                                        @if($cat->imagen_ruta)
+                                            <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="" class="w-5 h-5 object-contain">
+                                        @else
+                                            <span class="material-symbols-outlined text-[18px] text-emerald-500">category</span>
+                                        @endif
+                                        <span>{{ $cat->nombre }}</span>
+                                    </div>
+                                    @if($cat->hijas->count() > 0)
+                                        <span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Columna Derecha: Subcategorías (Dinámicas) -->
+                        <div class="w-1/2 py-2 bg-slate-50">
+                            @foreach($categorias as $cat)
+                                <div x-show="activeCategory === {{ $cat->id }}" class="px-5 py-3" style="display: none;">
+                                    <h3 class="text-sm font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">{{ $cat->nombre }}</h3>
+                                    @if($cat->hijas->count() > 0)
+                                        <div class="space-y-2">
+                                            @foreach($cat->hijas as $hija)
+                                                <a href="{{ route('cliente.catalogo', ['categoria' => $hija->slug]) }}" class="block text-sm text-slate-600 hover:text-emerald-700 hover:font-semibold transition-colors">
+                                                    {{ $hija->nombre }}
+                                                </a>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <p class="text-xs text-slate-400">No hay subcategorías.</p>
+                                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" class="inline-block mt-3 text-xs font-bold text-emerald-700 hover:underline">Ver todos en {{ $cat->nombre }}</a>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
+
                 <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold">
-                    <a href="{{ route('inicio') }}" class="text-slate-900 hover:text-blue-700 transition-colors">Inicio</a>
-                    <a href="#" class="text-slate-900 hover:text-blue-700 transition-colors flex items-center gap-1">Categorías <span class="material-symbols-outlined text-[16px]">expand_more</span></a>
-                    <a href="{{ route('cliente.catalogo') }}" class="text-slate-600 hover:text-blue-700 transition-colors">Todos los productos</a>
-                    <a href="#" class="text-slate-600 hover:text-blue-700 transition-colors flex items-center gap-1">Lo mas vendido <span class="material-symbols-outlined text-[16px]">expand_more</span></a>
-                    <a href="#" class="text-slate-600 hover:text-blue-700 transition-colors">+</a>
+                    <a href="{{ route('inicio') }}" class="text-slate-900 hover:text-emerald-700 transition-colors">Inicio</a>
+                    
+                    <!-- Categorías Dropdown -->
+                    <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
+                        <button @click="open = !open" class="text-slate-900 hover:text-emerald-700 transition-colors flex items-center gap-1">
+                            Categorías <span class="material-symbols-outlined text-[16px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                        </button>
+                        <div x-show="open" x-transition.opacity class="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2" style="display: none;">
+                            @foreach($categorias as $cat)
+                                <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-semibold">
+                                    {{ $cat->nombre }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <a href="{{ route('cliente.catalogo') }}" class="text-slate-600 hover:text-emerald-700 transition-colors">Todos los productos</a>
+                    
+                    <!-- Lo mas vendido Dropdown -->
+                    <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
+                        <button @click="open = !open" class="text-slate-600 hover:text-emerald-700 transition-colors flex items-center gap-1">
+                            Lo más vendido <span class="material-symbols-outlined text-[16px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
+                        </button>
+                        <div x-show="open" x-transition.opacity class="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2" style="display: none;">
+                            <a href="{{ route('cliente.catalogo', ['orden' => 'relevancia']) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-semibold">Top Ventas Global</a>
+                        </div>
+                    </div>
                 </nav>
             </div>
 
             <div class="px-4 pb-2">
                 <h2 class="text-base font-bold text-slate-900 mb-3">Categorías</h2>
                 <div class="flex flex-wrap gap-2">
-                    @foreach($categorias as $cat)
+                    @foreach($categoriasPills as $cat)
                         <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" 
                            class="flex items-center gap-2 px-4 py-2 rounded-lg border {{ $categoriaSlug === $cat->slug ? 'border-emerald-500 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:shadow-xs' }} transition-all text-xs font-semibold">
                             @if($cat->imagen_ruta)

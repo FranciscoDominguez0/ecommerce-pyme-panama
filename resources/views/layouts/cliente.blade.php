@@ -174,12 +174,13 @@
 
                 <!-- Search Bar -->
                 <div class="hidden md:flex flex-1 max-w-md mx-4">
-                    <div class="w-full relative">
-                        <input type="text" placeholder="Buscar productos, categorías..."
+                    <form action="{{ route('cliente.catalogo') }}" method="GET" class="w-full relative">
+                        <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar productos, categorías..."
                             class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 focus:bg-white focus:ring-1 focus:ring-[#006148] focus:border-[#006148] transition-all" />
-                        <span
-                            class="material-symbols-outlined absolute left-2.5 top-2 text-gray-400 text-[16px]">search</span>
-                    </div>
+                        <button type="submit" class="absolute left-2.5 top-2 text-gray-400 hover:text-[#006148] transition-colors">
+                            <span class="material-symbols-outlined text-[16px]">search</span>
+                        </button>
+                    </form>
                 </div>
 
                 <!-- Navigation Links & User Menu -->

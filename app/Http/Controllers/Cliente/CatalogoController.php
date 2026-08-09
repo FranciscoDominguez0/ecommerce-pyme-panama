@@ -22,11 +22,42 @@ class CatalogoController extends Controller
         $orden = $request->input('orden', 'relevancia');
 
         $categorias = Categoria::sinEliminar()
+            ->whereNull('padre_id')
+            ->with(['hijas' => function($q) {
+                $q->sinEliminar()->orderBy('nombre');
+            }])
             ->withCount(['productos' => function ($q) {
                 $q->sinEliminar()->activos();
             }])
             ->orderBy('nombre')
             ->get();
+
+        $categoriasPills = $categorias;
+        if ($categoriaSlug !== 'all') {
+            $categoriaActual = Categoria::where('slug', $categoriaSlug)->first();
+            if ($categoriaActual) {
+                $subcategorias = Categoria::sinEliminar()
+                    ->where('padre_id', $categoriaActual->id)
+                    ->withCount(['productos' => function ($q) {
+                        $q->sinEliminar()->activos();
+                    }])
+                    ->orderBy('nombre')
+                    ->get();
+                
+                if ($subcategorias->isNotEmpty()) {
+                    $categoriasPills = $subcategorias;
+                } elseif ($categoriaActual->padre_id) {
+                    // Si es hija y no tiene más hijas, mostrar sus "hermanas"
+                    $categoriasPills = Categoria::sinEliminar()
+                        ->where('padre_id', $categoriaActual->padre_id)
+                        ->withCount(['productos' => function ($q) {
+                            $q->sinEliminar()->activos();
+                        }])
+                        ->orderBy('nombre')
+                        ->get();
+                }
+            }
+        }
 
         // Cargar marcas para el sidebar
         $marcas = \App\Models\Brand::where('verified', true)->orderBy('name')->get();
@@ -89,6 +120,7 @@ class CatalogoController extends Controller
             'precioMax',
             'orden',
             'categorias',
+            'categoriasPills',
             'marcas'
         ));
     }
