@@ -4,12 +4,15 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\CuponController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\PromocionController;
 use App\Http\Controllers\Admin\ZonaEnvioController;
 use App\Http\Controllers\Cliente\CarritoController;
 use App\Http\Controllers\Cliente\CatalogoController;
+use App\Http\Controllers\Cliente\CheckoutController;
 use App\Http\Controllers\Cliente\ListaDeseosController;
+use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +46,20 @@ Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])-
 Route::post('/carrito/aplicar-cupon', [CarritoController::class, 'aplicarCupon'])->name('cliente.carrito.aplicar-cupon');
 Route::post('/carrito/remover-cupon', [CarritoController::class, 'removerCupon'])->name('cliente.carrito.remover-cupon');
 
+// Checkout
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout/direccion', [CheckoutController::class, 'direccion'])->name('cliente.checkout.direccion');
+    Route::post('/checkout/direccion', [CheckoutController::class, 'guardarDireccion'])->name('cliente.checkout.guardar-direccion');
+    Route::get('/checkout/pago', [CheckoutController::class, 'pago'])->name('cliente.checkout.pago');
+    Route::post('/checkout/pago', [CheckoutController::class, 'guardarPago'])->name('cliente.checkout.guardar-pago');
+    Route::get('/checkout/confirmacion', [CheckoutController::class, 'confirmacion'])->name('cliente.checkout.confirmacion');
+    Route::post('/checkout/confirmacion', [CheckoutController::class, 'procesar'])->name('cliente.checkout.procesar');
+
+    // Mis Pedidos
+    Route::get('/mis-pedidos', [ClientePedidoController::class, 'index'])->name('cliente.pedidos.index');
+    Route::get('/mis-pedidos/{id}', [ClientePedidoController::class, 'detalle'])->name('cliente.pedidos.detalle');
+});
+
 // Lista de Deseos
 Route::get('/lista-deseos', [ListaDeseosController::class, 'index'])->name('cliente.lista-deseos');
 Route::post('/lista-deseos/agregar/{productoId}', [ListaDeseosController::class, 'agregar'])->name('cliente.lista-deseos.agregar');
@@ -71,6 +88,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     // Módulo de Categorías
     Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');
     Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
+
+    // Módulo de Pedidos
+    Route::get('/pedidos', [AdminPedidoController::class, 'index'])->name('admin.pedidos.index');
+    Route::get('/pedidos/{id}', [AdminPedidoController::class, 'detalle'])->name('admin.pedidos.detalle');
+    Route::post('/pedidos/{id}/estado', [AdminPedidoController::class, 'cambiarEstado'])->name('admin.pedidos.estado');
+    Route::post('/pedidos/{id}/aprobar-pago', [AdminPedidoController::class, 'aprobarPago'])->name('admin.pedidos.aprobar-pago');
+    Route::post('/pedidos/{id}/rechazar-pago', [AdminPedidoController::class, 'rechazarPago'])->name('admin.pedidos.rechazar-pago');
 
     // Módulo de Marcas (Brands)
     Route::post('/brands/{brand}/toggle-suggested', [BrandController::class, 'toggleSuggested'])->name('admin.brands.toggle-suggested');

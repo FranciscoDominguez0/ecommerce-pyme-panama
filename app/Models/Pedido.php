@@ -66,4 +66,19 @@ class Pedido extends Model
     {
         return $this->hasOne(Factura::class, 'pedido_id');
     }
+
+    public function direccion(): BelongsTo
+    {
+        return $this->belongsTo(Direccion::class, 'direccion_id');
+    }
+
+    public function zonaEnvio(): BelongsTo
+    {
+        return $this->belongsTo(ZonaEnvio::class, 'zona_envio_id');
+    }
+
+    public function cupon(): BelongsTo
+    {
+        return $this->belongsTo(Cupon::class, 'cupon_id');
+    }
 }

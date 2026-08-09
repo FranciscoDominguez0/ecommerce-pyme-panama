@@ -290,11 +290,11 @@
 
 
                     <!-- Botón de Continuar al Pago (Checkout) -->
-                    <button type="button" 
+                    <a href="{{ route('cliente.checkout.direccion') }}" 
                             class="w-full bg-[#006148] hover:bg-[#004f3b] active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider cursor-pointer">
                         <span>Continuar al Pago</span>
                         <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-                    </button>
+                    </a>
 
                     <!-- Métodos de pago aceptados -->
                     <div class="pt-2 flex items-center justify-center gap-3 opacity-70">
