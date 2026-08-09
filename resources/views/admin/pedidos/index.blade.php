@@ -2,7 +2,7 @@
 @section('title', 'Gestión de Pedidos')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6 font-sans">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Gestión de Pedidos</h1>

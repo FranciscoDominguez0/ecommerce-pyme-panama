@@ -78,7 +78,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
+<body class="font-sans bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
 
     <!-- Mobile Sidebar Drawer (Overlay) -->
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
@@ -341,7 +341,7 @@
         </header>
 
         <!-- Main Body / Canvas -->
-        <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto">
+        <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto font-sans">
             @yield('content')
         </main>
 

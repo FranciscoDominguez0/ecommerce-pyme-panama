@@ -51,16 +51,24 @@ class CheckoutController extends Controller
 
     public function guardarDireccion(Request $request)
     {
-        $request->validate([
+        $rules = [
             'direccion_id' => 'nullable|exists:direcciones,id',
             'zona_envio_id' => 'required|exists:zonas_envio,id',
-            'alias' => 'required_without:direccion_id|string|max:100',
-            'nombre_receptor' => 'required_without:direccion_id|string|max:255',
-            'provincia' => 'required_without:direccion_id|string|max:100',
-            'distrito' => 'required_without:direccion_id|string|max:100',
-            'corregimiento' => 'required_without:direccion_id|string|max:100',
-            'direccion_exacta' => 'required_without:direccion_id|string',
-        ]);
+        ];
+
+        if (blank($request->direccion_id)) {
+            $rules += [
+                'alias' => 'required|string|max:100',
+                'nombre_receptor' => 'required|string|max:255',
+                'provincia' => 'required|string|max:100',
+                'distrito' => 'required|string|max:100',
+                'corregimiento' => 'required|string|max:100',
+                'direccion_exacta' => 'required|string',
+                'referencia' => 'nullable|string|max:255',
+            ];
+        }
+
+        $request->validate($rules);
 
         $usuarioId = Auth::id();
         $direccionId = $request->direccion_id;

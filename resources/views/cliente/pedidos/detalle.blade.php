@@ -1,187 +1,259 @@
-<x-app-layout>
-    <div class="bg-slate-50 min-h-screen py-12">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="mb-8">
-                <a href="{{ route('cliente.pedidos.index') }}" class="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700">
-                    <span class="material-symbols-outlined mr-1 text-[18px]">arrow_back</span>
-                    Volver a mis pedidos
-                </a>
-            </div>
+@extends('layouts.cliente')
 
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-900 font-sans">Pedido #{{ $pedido->numero_pedido }}</h1>
-                    <p class="text-sm text-slate-500 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y H:i') }}</p>
-                </div>
-                <div>
-                    @php
-                        $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
-                        $estadoClasses = [
-                            'pendiente' => 'bg-slate-100 text-slate-700',
-                            'pago_confirmado' => 'bg-blue-100 text-blue-700',
-                            'pago_rechazado' => 'bg-red-100 text-red-700',
-                            'en_preparacion' => 'bg-amber-100 text-amber-700',
-                            'listo_para_envio' => 'bg-teal-100 text-teal-700',
-                            'enviado' => 'bg-indigo-100 text-indigo-700',
-                            'entregado' => 'bg-emerald-100 text-emerald-700',
-                            'cancelado' => 'bg-red-100 text-red-700',
-                            'devolucion_solicitada' => 'bg-orange-100 text-orange-700',
-                        ];
-                        $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 text-slate-700';
-                        $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
-                    @endphp
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $claseEstado }}">
-                        {{ $labelEstado }}
+@section('title', 'Detalle del Pedido')
+
+@section('content')
+@php
+    $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
+
+    $configEstado = match($ultimoEstado) {
+        'entregado' => [
+            'badge_bg' => 'bg-secondary/10',
+            'badge_text' => 'text-secondary',
+            'icon' => 'check_circle',
+            'label' => 'Entregado',
+        ],
+        'enviado' => [
+            'badge_bg' => 'bg-secondary/10',
+            'badge_text' => 'text-secondary',
+            'icon' => 'local_shipping',
+            'label' => 'En tránsito',
+        ],
+        'pendiente', 'pago_confirmado', 'en_preparacion', 'listo_para_envio' => [
+            'badge_bg' => 'bg-tertiary-container/20',
+            'badge_text' => 'text-tertiary',
+            'icon' => 'schedule',
+            'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
+        ],
+        'cancelado', 'pago_rechazado', 'devolucion_solicitada' => [
+            'badge_bg' => 'bg-primary/10',
+            'badge_text' => 'text-primary',
+            'icon' => 'flag',
+            'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
+        ],
+        default => [
+            'badge_bg' => 'bg-surface-container-high',
+            'badge_text' => 'text-on-surface',
+            'icon' => 'info',
+            'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
+        ],
+    };
+
+    $metodosPago = [
+        'stripe' => ['badge' => 'TARJ', 'label' => 'Tarjeta de crédito / débito'],
+        'yappy' => ['badge' => 'YAPPY', 'label' => 'Yappy'],
+        'transferencia' => ['badge' => 'TRANS', 'label' => 'Transferencia bancaria'],
+        'contra_entrega' => ['badge' => 'COD', 'label' => 'Pago contra entrega'],
+    ];
+    $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['badge' => 'PAGO', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
+@endphp
+
+<main class="max-w-[1200px] mx-auto px-4 md:px-16 py-8 w-full">
+    <!-- Encabezado -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <a href="{{ route('cliente.pedidos.index') }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-label-caps text-xs font-bold tracking-wider uppercase mb-2">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                Volver a mis pedidos
+            </a>
+            <h1 class="font-headline-md text-2xl md:text-4xl font-bold text-primary">Pedido #{{ $pedido->numero_pedido }}</h1>
+            <p class="text-on-surface-variant font-body-md text-base mt-1">
+                Realizado el {{ $pedido->creado_en->translatedFormat('d M, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}
+            </p>
+        </div>
+        <div class="px-4 py-2 rounded-full {{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
+            <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
+            {{ $configEstado['label'] }}
+        </div>
+    </div>
+
+    <!-- Grid principal -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Columna izquierda -->
+        <div class="col-span-1 md:col-span-8 flex flex-col gap-6">
+
+            <!-- Estado y línea de tiempo -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
+                <div class="flex justify-between items-center mb-6 pb-4 border-b border-outline-variant/50">
+                    <h2 class="font-headline-md text-xl font-semibold text-primary">Estado del envío</h2>
+                    <span class="{{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} px-3 py-1 rounded-full font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
+                        <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
+                        {{ $configEstado['label'] }}
                     </span>
                 </div>
-            </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <!-- Columna Principal -->
-                <div class="lg:col-span-2 space-y-6">
-                    
-                    <!-- Línea de Tiempo de Estados -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-6 font-sans">Historial del Pedido</h2>
-                        <div class="flow-root">
-                            <ul role="list" class="-mb-8">
-                                @foreach($pedido->estados as $index => $historial)
-                                    <li>
-                                        <div class="relative pb-8">
-                                            @if(!$loop->last)
-                                                <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-slate-200" aria-hidden="true"></span>
-                                            @endif
-                                            <div class="relative flex space-x-3">
-                                                <div>
-                                                    <span class="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center ring-8 ring-white">
-                                                        <span class="material-symbols-outlined text-emerald-600 text-sm">
-                                                            {{ $historial->estado === 'entregado' ? 'done_all' : 'check' }}
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                                <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                                                    <div>
-                                                        <p class="text-sm text-slate-900 font-medium">{{ ucfirst(str_replace('_', ' ', $historial->estado)) }}</p>
-                                                        @if($historial->comentario)
-                                                            <p class="mt-1 text-sm text-slate-500">{{ $historial->comentario }}</p>
-                                                        @endif
-                                                    </div>
-                                                    <div class="whitespace-nowrap text-right text-sm text-slate-500">
-                                                        <time datetime="{{ $historial->creado_en }}">{{ $historial->creado_en->format('d/m/Y H:i') }}</time>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                @if($pedido->zonaEnvio || $pedido->numero_pedido)
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 bg-surface-container-low p-4 rounded-lg">
+                    @if($pedido->zonaEnvio)
+                    <div>
+                        <p class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-1">Zona de envío</p>
+                        <p class="font-body-md text-base font-semibold text-on-surface">{{ $pedido->zonaEnvio->nombre }}</p>
                     </div>
-
-                    <!-- Items -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4 font-sans">Artículos ({{ $pedido->items->count() }})</h2>
-                        <div class="space-y-4">
-                            @foreach($pedido->items as $item)
-                                <div class="flex items-center gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0">
-                                    <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded border border-slate-200">
-                                        @if($item->producto)
-                                            <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="h-full w-full object-cover">
-                                        @else
-                                            <div class="h-full w-full bg-slate-100 flex items-center justify-center">
-                                                <span class="material-symbols-outlined text-slate-400 text-sm">image</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="flex-1">
-                                        <h3 class="text-sm font-medium text-slate-900">{{ $item->producto ? $item->producto->nombre : 'Producto no disponible' }}</h3>
-                                        @if($item->variante)
-                                            <p class="text-xs text-slate-500 mt-0.5">
-                                                @foreach($item->variante->opciones as $opcion)
-                                                    {{ $opcion->tipo->nombre }}: {{ $opcion->valor }}@if(!$loop->last), @endif
-                                                @endforeach
-                                            </p>
-                                        @endif
-                                        <p class="text-xs text-slate-500 mt-1">Cant: {{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }}</p>
-                                    </div>
-                                    <div class="text-sm font-medium text-slate-900">
-                                        ${{ number_format($item->subtotal, 2) }}
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                    @endif
+                    <div>
+                        <p class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-1">Número de pedido</p>
+                        <p class="font-numeric-data text-lg font-semibold text-on-surface">{{ $pedido->numero_pedido }}</p>
+                    </div>
+                    <div>
+                        <p class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-1">Costo de envío</p>
+                        <p class="font-numeric-data text-lg font-semibold text-secondary">${{ number_format($pedido->costo_envio, 2) }}</p>
                     </div>
                 </div>
+                @endif
 
-                <!-- Columna Lateral -->
+                @if($estadosOrdenados->isNotEmpty())
+                <div class="relative pl-6 border-l-2 border-surface-variant space-y-6">
+                    @foreach($estadosOrdenados as $historial)
+                        @php
+                            $esActual = $loop->last;
+                            $dotClass = $esActual
+                                ? 'bg-tertiary-container animate-pulse'
+                                : 'bg-secondary';
+                            $textClass = $esActual ? 'text-tertiary' : 'text-on-surface';
+                        @endphp
+                        <div class="relative {{ $esActual ? '' : '' }}">
+                            <div class="absolute -left-[31px] w-4 h-4 rounded-full {{ $dotClass }} border-4 border-surface-container-lowest"></div>
+                            <div class="flex flex-col">
+                                <p class="font-body-md text-base font-semibold {{ $textClass }}">
+                                    {{ ucfirst(str_replace('_', ' ', $historial->estado)) }}
+                                </p>
+                                <p class="text-sm text-on-surface-variant mt-1">
+                                    {{ $historial->creado_en->translatedFormat('d M, Y') }} · {{ $historial->creado_en->format('h:i A') }}
+                                    @if($historial->comentario)
+                                        · {{ $historial->comentario }}
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                @else
+                <p class="text-on-surface-variant text-sm">Aún no hay actualizaciones registradas para este pedido.</p>
+                @endif
+            </div>
+
+            <!-- Artículos del pedido -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                <h2 class="font-headline-md text-xl font-semibold text-primary mb-6">Artículos del pedido</h2>
                 <div class="space-y-6">
-                    
-                    <!-- Resumen de Costos -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4 font-sans">Resumen</h2>
-                        <dl class="space-y-3 text-sm text-slate-600">
-                            <div class="flex justify-between">
-                                <dt>Subtotal</dt>
-                                <dd class="font-medium text-slate-900">${{ number_format($pedido->subtotal, 2) }}</dd>
-                            </div>
-                            @if($pedido->descuento > 0)
-                            <div class="flex justify-between text-emerald-600">
-                                <dt>Descuento</dt>
-                                <dd class="font-medium">-${{ number_format($pedido->descuento, 2) }}</dd>
-                            </div>
+                    @foreach($pedido->items as $item)
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
+                        <div class="w-24 h-24 flex-shrink-0 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container-low">
+                            @if($item->producto)
+                                <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-outline-variant">image</span>
+                                </div>
                             @endif
-                            <div class="flex justify-between">
-                                <dt>Costo de Envío</dt>
-                                <dd class="font-medium text-slate-900">${{ number_format($pedido->costo_envio, 2) }}</dd>
-                            </div>
-                            <div class="flex justify-between">
-                                <dt>Impuestos (7%)</dt>
-                                <dd class="font-medium text-slate-900">${{ number_format($pedido->itbms_monto, 2) }}</dd>
-                            </div>
-                            <div class="flex items-center justify-between border-t border-slate-200 pt-3">
-                                <dt class="text-base font-bold text-slate-900">Total</dt>
-                                <dd class="text-lg font-bold text-slate-900">${{ number_format($pedido->total, 2) }}</dd>
-                            </div>
-                        </dl>
-                        <div class="mt-4 pt-4 border-t border-slate-200">
-                            <p class="text-sm text-slate-500">
-                                <span class="font-medium text-slate-900">Método de pago:</span> 
-                                {{ ucfirst(str_replace('_', ' ', $pedido->metodo_pago)) }}
-                            </p>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-body-md text-base font-semibold text-on-surface">
+                                {{ $item->producto?->nombre ?? 'Producto no disponible' }}
+                            </h3>
+                            @if($item->variante && $item->variante->opciones->isNotEmpty())
+                                <p class="text-on-surface-variant text-sm mt-1">
+                                    @foreach($item->variante->opciones as $opcion)
+                                        {{ $opcion->tipo->nombre }}: {{ $opcion->valor }}@if(!$loop->last), @endif
+                                    @endforeach
+                                </p>
+                            @endif
+                        </div>
+                        <div class="text-right">
+                            <p class="font-numeric-data text-lg font-semibold text-on-surface">${{ number_format($item->precio_unitario, 2) }}</p>
+                            <p class="text-on-surface-variant text-sm mt-1">Cant: {{ $item->cantidad }}</p>
+                        </div>
+                        <div class="sm:w-24 text-right">
+                            <p class="font-numeric-data text-lg font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
                         </div>
                     </div>
-
-                    <!-- Dirección de Envío -->
-                    @if($pedido->direccion)
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h2 class="text-lg font-semibold text-slate-800 mb-4 font-sans">Dirección de Envío</h2>
-                        <address class="text-sm text-slate-600 not-italic space-y-1">
-                            <p class="font-medium text-slate-900">{{ $pedido->direccion->nombre_receptor }}</p>
-                            <p>{{ $pedido->direccion->direccion_exacta }}</p>
-                            <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
-                            <p>{{ $pedido->direccion->provincia }}</p>
-                            @if($pedido->direccion->referencia)
-                                <p class="mt-2 text-slate-500 italic">Ref: {{ $pedido->direccion->referencia }}</p>
-                            @endif
-                            @if($pedido->zonaEnvio)
-                                <p class="mt-2 text-xs font-semibold text-emerald-600 bg-emerald-50 inline-block px-2 py-1 rounded">Zona: {{ $pedido->zonaEnvio->nombre }}</p>
-                            @endif
-                        </address>
-                    </div>
-                    @endif
-
-                    <!-- Notas -->
-                    @if($pedido->notas_cliente)
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h2 class="text-sm font-semibold text-slate-800 mb-2 font-sans">Notas Adicionales</h2>
-                        <p class="text-sm text-slate-600 italic">"{{ $pedido->notas_cliente }}"</p>
-                    </div>
-                    @endif
-
+                    @endforeach
                 </div>
             </div>
         </div>
+
+        <!-- Columna derecha -->
+        <div class="col-span-1 md:col-span-4 flex flex-col gap-6">
+
+            <!-- Resumen -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
+                <h2 class="font-headline-md text-xl font-semibold text-primary mb-6">Resumen del pedido</h2>
+                <div class="space-y-3 mb-6">
+                    <div class="flex justify-between text-on-surface-variant font-body-md text-base">
+                        <span>Subtotal ({{ $totalArticulos }} {{ $totalArticulos === 1 ? 'artículo' : 'artículos' }})</span>
+                        <span class="font-numeric-data font-semibold">${{ number_format($pedido->subtotal, 2) }}</span>
+                    </div>
+                    @if($pedido->descuento > 0)
+                    <div class="flex justify-between text-secondary font-body-md text-base">
+                        <span>Descuento</span>
+                        <span class="font-numeric-data font-semibold">-${{ number_format($pedido->descuento, 2) }}</span>
+                    </div>
+                    @endif
+                    <div class="flex justify-between text-on-surface-variant font-body-md text-base">
+                        <span>Envío</span>
+                        <span class="font-numeric-data font-semibold">${{ number_format($pedido->costo_envio, 2) }}</span>
+                    </div>
+                    <div class="flex justify-between text-on-surface-variant font-body-md text-base">
+                        <span>ITBMS (7%)</span>
+                        <span class="font-numeric-data font-semibold">${{ number_format($pedido->itbms_monto, 2) }}</span>
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-outline-variant/50 flex justify-between items-center mb-6">
+                    <span class="font-body-lg text-lg font-semibold text-on-surface">Total</span>
+                    <span class="font-numeric-data text-2xl font-bold text-primary">${{ number_format($pedido->total, 2) }}</span>
+                </div>
+                <a href="{{ route('cliente.catalogo') }}" class="block w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-xs font-bold tracking-wider uppercase text-center shadow-sm hover:bg-on-secondary-container transition-colors">
+                    Seguir comprando
+                </a>
+            </div>
+
+            <!-- Método de pago -->
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                <h3 class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">payment</span>
+                    Método de pago
+                </h3>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-8 bg-surface-variant rounded flex items-center justify-center text-primary font-bold text-[10px] border border-outline-variant/30">
+                        {{ $pagoInfo['badge'] }}
+                    </div>
+                    <div>
+                        <p class="font-body-md text-base font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
+                        @if($pedido->metodo_pago === 'transferencia' && $pedido->comprobante_pago_ruta)
+                            <p class="text-sm text-on-surface-variant">Comprobante adjunto</p>
+                        @else
+                            <p class="text-sm text-on-surface-variant">Pago registrado al confirmar el pedido</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dirección de envío -->
+            @if($pedido->direccion)
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                <h3 class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">location_on</span>
+                    Dirección de envío
+                </h3>
+                <div class="font-body-md text-base text-on-surface space-y-1">
+                    <p class="font-semibold">{{ $pedido->direccion->nombre_receptor }}</p>
+                    <p>{{ $pedido->direccion->direccion_exacta }}</p>
+                    <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
+                    <p>{{ $pedido->direccion->provincia }}</p>
+                    @if($pedido->direccion->referencia)
+                        <p class="text-on-surface-variant mt-2 text-sm">Ref: {{ $pedido->direccion->referencia }}</p>
+                    @endif
+                </div>
+            </div>
+            @endif
+
+            @if($pedido->notas_cliente)
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                <h3 class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-3">Notas adicionales</h3>
+                <p class="font-body-md text-base text-on-surface-variant italic">"{{ $pedido->notas_cliente }}"</p>
+            </div>
+            @endif
+        </div>
     </div>
-</x-app-layout>
+</main>
+@endsection

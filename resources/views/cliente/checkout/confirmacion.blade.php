@@ -136,7 +136,7 @@
 
         <!-- Resumen de Costos (Right Column) -->
         <div class="lg:col-span-4">
-            <form action="{{ route('cliente.checkout.procesar') }}" method="POST">
+            <form id="form-confirmar-pedido" action="{{ route('cliente.checkout.procesar') }}" method="POST">
                 @csrf
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-[0_4px_20px_rgba(0,35,73,0.05)] sticky top-24">
                     <h2 class="font-headline-md text-xl font-semibold text-primary mb-6 pb-2 border-b border-outline-variant flex items-center justify-between">
@@ -205,7 +205,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form[action="{{ route(\'cliente.checkout.procesar\') }}"]');
+        const form = document.getElementById('form-confirmar-pedido');
         if (form) {
             form.addEventListener('submit', function(e) {
                 const btn = document.getElementById('btn-confirmar-pedido');

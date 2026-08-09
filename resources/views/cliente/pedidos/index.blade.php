@@ -118,9 +118,33 @@
         </div>
         
         <!-- Pagination -->
-        <div class="mt-8">
-            {{ $pedidos->links() }}
+        @if($pedidos->hasPages())
+        <div class="mt-8 flex justify-center items-center gap-2">
+            @if($pedidos->onFirstPage())
+                <span class="p-2 border border-outline-variant rounded-lg text-on-surface-variant opacity-50 cursor-not-allowed">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </span>
+            @else
+                <a href="{{ $pedidos->previousPageUrl() }}" class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-dim transition-colors">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </a>
+            @endif
+
+            <span class="font-label-caps text-xs font-bold tracking-wider text-on-surface px-4 uppercase">
+                Página {{ $pedidos->currentPage() }} de {{ $pedidos->lastPage() }}
+            </span>
+
+            @if($pedidos->hasMorePages())
+                <a href="{{ $pedidos->nextPageUrl() }}" class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-dim transition-colors">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </a>
+            @else
+                <span class="p-2 border border-outline-variant rounded-lg text-on-surface-variant opacity-50 cursor-not-allowed">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </span>
+            @endif
         </div>
+        @endif
     @else
         <!-- No orders state -->
         <div class="text-center py-16 bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow">

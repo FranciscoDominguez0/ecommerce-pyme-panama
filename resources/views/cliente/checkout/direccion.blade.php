@@ -157,23 +157,35 @@
     document.addEventListener('DOMContentLoaded', function() {
         const radios = document.querySelectorAll('input[name="direccion_id"]');
         const formNueva = document.getElementById('form_nueva_direccion');
-        
-        if (formNueva) {
-            const inputsNueva = formNueva.querySelectorAll('input[type="text"], textarea');
 
-            radios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if(this.value === '') {
-                        formNueva.classList.remove('hidden');
-                        inputsNueva.forEach(input => input.required = true);
-                        if(document.getElementById('referencia')) document.getElementById('referencia').required = false;
-                    } else {
-                        formNueva.classList.add('hidden');
-                        inputsNueva.forEach(input => input.required = false);
-                    }
+        if (!formNueva) return;
+
+        const inputsNueva = formNueva.querySelectorAll('input[type="text"], textarea');
+
+        function alternarFormularioNueva(esNueva) {
+            if (esNueva) {
+                formNueva.classList.remove('hidden');
+                inputsNueva.forEach(input => {
+                    input.disabled = false;
+                    input.required = input.id !== 'referencia';
                 });
-            });
+            } else {
+                formNueva.classList.add('hidden');
+                inputsNueva.forEach(input => {
+                    input.required = false;
+                    input.disabled = true;
+                });
+            }
         }
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                alternarFormularioNueva(this.value === '');
+            });
+        });
+
+        const seleccionado = document.querySelector('input[name="direccion_id"]:checked');
+        alternarFormularioNueva(!seleccionado || seleccionado.value === '');
     });
 </script>
 @endpush
