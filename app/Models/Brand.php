@@ -105,13 +105,7 @@ class Brand extends Model
         return '<span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black tracking-wider uppercase">' . htmlspecialchars($this->name ?: 'Oficial') . '</span>';
     }
 
-    /**
-     * Scopes
-     */
-    public function scopeSuggested($query)
-    {
-        return $query->where('is_suggested', true);
-    }
+
 
     public function scopeVerified($query)
     {
@@ -120,10 +114,11 @@ class Brand extends Model
 
     public function scopeSearch($query, ?string $term)
     {
-        if (empty($term)) return $query;
+        if (empty($term))
+            return $query;
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'ILIKE', "%{$term}%")
-              ->orWhere('slug', 'ILIKE', "%{$term}%");
+                ->orWhere('slug', 'ILIKE', "%{$term}%");
         });
     }
 }

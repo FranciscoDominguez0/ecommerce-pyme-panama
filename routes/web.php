@@ -29,7 +29,7 @@ Route::get('/', function () {
         ->take(8)
         ->get();
 
-    $marcasDistribuidores = \App\Models\Brand::verified()->suggested()->get();
+    $marcasDistribuidores = \App\Models\Brand::verified()->get();
 
     return view('welcome', compact('destacados', 'marcasDistribuidores'));
 })->name('inicio');
@@ -37,7 +37,8 @@ Route::get('/', function () {
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
 Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
 Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
-Route::get('/terminos-y-condiciones', function () { return view('paginas.terminos'); })->name('terminos');
+Route::get('/terminos-y-condiciones', function () {
+    return view('paginas.terminos'); })->name('terminos');
 
 // Carrito de Compras
 Route::get('/carrito', [CarritoController::class, 'index'])->name('cliente.carrito');
@@ -148,4 +149,4 @@ Route::middleware('auth')->group(function () {
 });
 
 // Rutas de Autenticación (Login, Registro, Recuperación de Contraseña)
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

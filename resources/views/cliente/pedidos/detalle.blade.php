@@ -40,12 +40,12 @@
     };
 
     $metodosPago = [
-        'stripe' => ['badge' => 'TARJ', 'label' => 'Tarjeta de crédito / débito'],
-        'yappy' => ['badge' => 'YAPPY', 'label' => 'Yappy'],
-        'transferencia' => ['badge' => 'TRANS', 'label' => 'Transferencia bancaria'],
-        'contra_entrega' => ['badge' => 'COD', 'label' => 'Pago contra entrega'],
+        'stripe' => ['icon' => 'credit_card', 'label' => 'Tarjeta de crédito / débito'],
+        'yappy' => ['icon' => 'yappy', 'label' => 'Yappy'],
+        'transferencia' => ['icon' => 'account_balance', 'label' => 'Transferencia bancaria'],
+        'contra_entrega' => ['icon' => 'local_shipping', 'label' => 'Pago contra entrega'],
     ];
-    $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['badge' => 'PAGO', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
+    $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['icon' => 'payment', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
 @endphp
 
 <main class="max-w-[1200px] mx-auto px-4 md:px-16 py-8 w-full">
@@ -214,9 +214,13 @@
                     Método de pago
                 </h3>
                 <div class="flex items-center gap-3">
-                    <div class="w-12 h-8 bg-surface-variant rounded flex items-center justify-center text-primary font-bold text-[10px] border border-outline-variant/30">
-                        {{ $pagoInfo['badge'] }}
+                    @if($pedido->metodo_pago === 'yappy')
+                    <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">
+                        <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">
                     </div>
+                    @else
+                    <span class="material-symbols-outlined text-2xl text-on-surface-variant">{{ $pagoInfo['icon'] }}</span>
+                    @endif
                     <div>
                         <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
                         @if($pedido->metodo_pago === 'transferencia' && $pedido->comprobante_pago_ruta)

@@ -8,7 +8,7 @@
         
         <!-- Breadcrumbs -->
         <nav class="flex items-center gap-1.5 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
-            <a href="{{ route('inicio') }}" class="hover:text-emerald-700 transition-colors flex items-center gap-1">
+            <a href="{{ route('dashboard') }}" class="hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">home</span>
                 <span>Inicio</span>
             </a>
@@ -80,7 +80,6 @@
                 </div>
 
                 <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold">
-                    <a href="{{ route('inicio') }}" class="text-slate-900 hover:text-emerald-700 transition-colors">Inicio</a>
                     
                     <!-- Categorías Dropdown -->
                     <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
