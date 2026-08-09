@@ -32,8 +32,8 @@
     </div>
 
     <div class="mb-8 max-w-4xl mx-auto">
-        <h1 class="font-headline-md text-2xl font-bold text-primary mb-2 md:text-4xl md:mb-2">Método de Pago</h1>
-        <p class="text-on-surface-variant font-body-md text-base">Seleccione la opción con la que desea procesar su pedido.</p>
+        <h1 class="text-lg sm:text-xl font-bold text-primary mb-2">Método de Pago</h1>
+        <p class="text-on-surface-variant text-sm">Seleccione la opción con la que desea procesar su pedido.</p>
     </div>
 
     <form action="{{ route('cliente.checkout.guardar-pago') }}" method="POST" enctype="multipart/form-data" class="max-w-4xl mx-auto space-y-8">
@@ -49,8 +49,8 @@
                         <div class="flex items-center gap-4">
                             <span class="material-symbols-outlined text-on-surface-variant text-3xl">credit_card</span>
                             <div>
-                                <span class="block font-headline-md text-lg font-semibold text-primary">Tarjeta de Crédito / Débito</span>
-                                <span class="block font-body-md text-sm text-on-surface-variant">Pago seguro procesado por Stripe</span>
+                                <span class="block text-base font-semibold text-primary">Tarjeta de Crédito / Débito</span>
+                                <span class="block text-xs text-on-surface-variant">Pago seguro procesado por Stripe</span>
                             </div>
                         </div>
                         <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
@@ -70,8 +70,8 @@
                                 <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">
                             </div>
                             <div>
-                                <span class="block font-headline-md text-lg font-semibold text-primary">Yappy</span>
-                                <span class="block font-body-md text-sm text-on-surface-variant">Paga rápido con tu directorio de Banco General</span>
+                                <span class="block text-base font-semibold text-primary">Yappy</span>
+                                <span class="block text-xs text-on-surface-variant">Paga rápido con tu directorio de Banco General</span>
                             </div>
                         </div>
                         <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
@@ -89,8 +89,8 @@
                         <div class="flex items-center gap-4">
                             <span class="material-symbols-outlined text-on-surface-variant text-3xl">account_balance</span>
                             <div>
-                                <span class="block font-headline-md text-lg font-semibold text-primary">Transferencia Bancaria (ACH)</span>
-                                <span class="block font-body-md text-sm text-on-surface-variant">Envía el comprobante para procesar tu pedido</span>
+                                <span class="block text-base font-semibold text-primary">Transferencia Bancaria (ACH)</span>
+                                <span class="block text-xs text-on-surface-variant">Envía el comprobante para procesar tu pedido</span>
                             </div>
                         </div>
                         <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
@@ -101,15 +101,15 @@
                     <!-- Sub-formulario Transferencia -->
                     <div id="form_transferencia" class="hidden mt-6 pt-6 border-t border-outline-variant w-full">
                         <div class="bg-surface-container-low p-4 rounded-lg mb-6 border border-outline-variant">
-                            <p class="font-semibold text-primary font-body-md mb-2">Datos Bancarios:</p>
-                            <div class="space-y-1 text-sm text-on-surface-variant font-body-md">
+                            <p class="text-sm font-semibold text-primary mb-2">Datos Bancarios:</p>
+                            <div class="space-y-1 text-xs text-on-surface-variant">
                                 <p>Banco: Banco General</p>
                                 <p>Cuenta Corriente: 03-XX-XXXX-X</p>
                                 <p>A nombre de: PayMe Panamá S.A.</p>
                             </div>
                         </div>
                         
-                        <label class="block text-sm font-semibold text-on-surface-variant mb-2">Sube tu comprobante de pago</label>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-2">Sube tu comprobante de pago</label>
                         <input type="file" name="comprobante_pago" id="comprobante_pago" accept="image/*,.pdf" class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-surface-container file:text-primary hover:file:bg-surface-container-high transition-colors cursor-pointer">
                         @error('comprobante_pago')
                             <p class="mt-2 text-sm text-error flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">error</span> {{ $message }}</p>
@@ -126,8 +126,8 @@
                         <div class="flex items-center gap-4">
                             <span class="material-symbols-outlined text-on-surface-variant text-3xl">local_shipping</span>
                             <div>
-                                <span class="block font-headline-md text-lg font-semibold text-primary">Pago Contra Entrega</span>
-                                <span class="block font-body-md text-sm text-on-surface-variant">Paga en efectivo o tarjeta al recibir tu pedido</span>
+                                <span class="block text-base font-semibold text-primary">Pago Contra Entrega</span>
+                                <span class="block text-xs text-on-surface-variant">Paga en efectivo o tarjeta al recibir tu pedido</span>
                             </div>
                         </div>
                         <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">

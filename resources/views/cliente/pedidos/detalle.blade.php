@@ -56,8 +56,8 @@
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Volver a mis pedidos
             </a>
-            <h1 class="font-headline-md text-2xl md:text-4xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
-            <p class="text-on-surface-variant font-body-md text-base mt-1">
+            <h1 class="text-lg sm:text-xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
+            <p class="text-on-surface-variant text-sm mt-1">
                 Realizado el {{ $pedido->creado_en->translatedFormat('d M, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}
             </p>
         </div>
@@ -75,7 +75,7 @@
             <!-- Estado y línea de tiempo -->
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
                 <div class="flex justify-between items-center mb-6 pb-4 border-b border-outline-variant/50">
-                    <h2 class="font-headline-md text-xl font-semibold text-primary">Estado del envío</h2>
+                    <h2 class="text-sm font-bold text-primary">Estado del envío</h2>
                     <span class="{{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} px-3 py-1 rounded-full font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
                         <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
                         {{ $configEstado['label'] }}
@@ -86,17 +86,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 bg-surface-container-low p-4 rounded-lg">
                     @if($pedido->zonaEnvio)
                     <div>
-                        <p class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-1">Zona de envío</p>
-                        <p class="font-body-md text-base font-semibold text-on-surface">{{ $pedido->zonaEnvio->nombre }}</p>
+                        <p class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-1">Zona de envío</p>
+                        <p class="text-sm font-semibold text-on-surface">{{ $pedido->zonaEnvio->nombre }}</p>
                     </div>
                     @endif
                     <div>
-                        <p class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-1">Número de pedido</p>
-                        <p class="font-numeric-data text-lg font-semibold text-on-surface">{{ $pedido->numero_pedido }}</p>
+                        <p class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-1">Número de pedido</p>
+                        <p class="text-sm font-semibold text-on-surface">{{ $pedido->numero_pedido }}</p>
                     </div>
                     <div>
-                        <p class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-1">Costo de envío</p>
-                        <p class="font-numeric-data text-lg font-semibold text-secondary">${{ number_format($pedido->costo_envio, 2) }}</p>
+                        <p class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-1">Costo de envío</p>
+                        <p class="text-sm font-semibold text-secondary">${{ number_format($pedido->costo_envio, 2) }}</p>
                     </div>
                 </div>
                 @endif
@@ -114,7 +114,7 @@
                         <div class="relative {{ $esActual ? '' : '' }}">
                             <div class="absolute -left-[31px] w-4 h-4 rounded-full {{ $dotClass }} border-4 border-surface-container-lowest"></div>
                             <div class="flex flex-col">
-                                <p class="font-body-md text-base font-semibold {{ $textClass }}">
+                                <p class="text-sm font-semibold {{ $textClass }}">
                                     {{ ucfirst(str_replace('_', ' ', $historial->estado)) }}
                                 </p>
                                 <p class="text-sm text-on-surface-variant mt-1">
@@ -134,7 +134,7 @@
 
             <!-- Artículos del pedido -->
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h2 class="font-headline-md text-xl font-semibold text-primary mb-6">Artículos del pedido</h2>
+                <h2 class="text-sm font-bold text-primary">Artículos del pedido</h2>
                 <div class="space-y-6">
                     @foreach($pedido->items as $item)
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
@@ -148,7 +148,7 @@
                             @endif
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-body-md text-base font-semibold text-on-surface">
+                            <h3 class="text-sm font-semibold text-on-surface">
                                 {{ $item->producto?->nombre ?? 'Producto no disponible' }}
                             </h3>
                             @if($item->variante && $item->variante->opciones->isNotEmpty())
@@ -160,11 +160,11 @@
                             @endif
                         </div>
                         <div class="text-right">
-                            <p class="font-numeric-data text-lg font-semibold text-on-surface">${{ number_format($item->precio_unitario, 2) }}</p>
-                            <p class="text-on-surface-variant text-sm mt-1">Cant: {{ $item->cantidad }}</p>
+                            <p class="text-sm font-semibold text-on-surface">${{ number_format($item->precio_unitario, 2) }}</p>
+                            <p class="text-on-surface-variant text-xs mt-1">Cant: {{ $item->cantidad }}</p>
                         </div>
                         <div class="sm:w-24 text-right">
-                            <p class="font-numeric-data text-lg font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
+                            <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
                         </div>
                     </div>
                     @endforeach
@@ -177,30 +177,30 @@
 
             <!-- Resumen -->
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                <h2 class="font-headline-md text-xl font-semibold text-primary mb-6">Resumen del pedido</h2>
-                <div class="space-y-3 mb-6">
-                    <div class="flex justify-between text-on-surface-variant font-body-md text-base">
+                <h2 class="text-sm font-bold text-primary mb-6">Resumen del pedido</h2>
+                <div class="space-y-2 mb-6">
+                    <div class="flex justify-between text-on-surface-variant text-sm">
                         <span>Subtotal ({{ $totalArticulos }} {{ $totalArticulos === 1 ? 'artículo' : 'artículos' }})</span>
                         <span class="font-numeric-data font-semibold">${{ number_format($pedido->subtotal, 2) }}</span>
                     </div>
                     @if($pedido->descuento > 0)
-                    <div class="flex justify-between text-secondary font-body-md text-base">
+                    <div class="flex justify-between text-secondary text-sm">
                         <span>Descuento</span>
                         <span class="font-numeric-data font-semibold">-${{ number_format($pedido->descuento, 2) }}</span>
                     </div>
                     @endif
-                    <div class="flex justify-between text-on-surface-variant font-body-md text-base">
+                    <div class="flex justify-between text-on-surface-variant text-sm">
                         <span>Envío</span>
                         <span class="font-numeric-data font-semibold">${{ number_format($pedido->costo_envio, 2) }}</span>
                     </div>
-                    <div class="flex justify-between text-on-surface-variant font-body-md text-base">
+                    <div class="flex justify-between text-on-surface-variant text-sm">
                         <span>ITBMS (7%)</span>
                         <span class="font-numeric-data font-semibold">${{ number_format($pedido->itbms_monto, 2) }}</span>
                     </div>
                 </div>
                 <div class="pt-4 border-t border-outline-variant/50 flex justify-between items-center mb-6">
-                    <span class="font-body-lg text-lg font-semibold text-on-surface">Total</span>
-                    <span class="font-numeric-data text-2xl font-bold text-primary">${{ number_format($pedido->total, 2) }}</span>
+                    <span class="text-sm font-bold text-on-surface">Total</span>
+                    <span class="text-base font-bold text-primary">${{ number_format($pedido->total, 2) }}</span>
                 </div>
                 <a href="{{ route('cliente.catalogo') }}" class="block w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-xs font-bold tracking-wider uppercase text-center shadow-sm hover:bg-on-secondary-container transition-colors">
                     Seguir comprando
@@ -209,7 +209,7 @@
 
             <!-- Método de pago -->
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
+                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">payment</span>
                     Método de pago
                 </h3>
@@ -218,7 +218,7 @@
                         {{ $pagoInfo['badge'] }}
                     </div>
                     <div>
-                        <p class="font-body-md text-base font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
+                        <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
                         @if($pedido->metodo_pago === 'transferencia' && $pedido->comprobante_pago_ruta)
                             <p class="text-sm text-on-surface-variant">Comprobante adjunto</p>
                         @else
@@ -231,11 +231,11 @@
             <!-- Dirección de envío -->
             @if($pedido->direccion)
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
+                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">location_on</span>
                     Dirección de envío
                 </h3>
-                <div class="font-body-md text-base text-on-surface space-y-1">
+                <div class="text-sm text-on-surface space-y-1">
                     <p class="font-semibold">{{ $pedido->direccion->nombre_receptor }}</p>
                     <p>{{ $pedido->direccion->direccion_exacta }}</p>
                     <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
@@ -249,8 +249,8 @@
 
             @if($pedido->notas_cliente)
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-xs font-bold tracking-wider text-on-surface-variant uppercase mb-3">Notas adicionales</h3>
-                <p class="font-body-md text-base text-on-surface-variant italic">"{{ $pedido->notas_cliente }}"</p>
+                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-3">Notas adicionales</h3>
+                <p class="text-sm text-on-surface-variant italic">"{{ $pedido->notas_cliente }}"</p>
             </div>
             @endif
         </div>

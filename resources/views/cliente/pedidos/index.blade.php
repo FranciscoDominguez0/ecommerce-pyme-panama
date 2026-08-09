@@ -26,8 +26,8 @@
     <!-- Page Header -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-            <h1 class="font-headline-md text-3xl font-bold text-primary mb-2 md:text-4xl">Mis Pedidos</h1>
-            <p class="font-body-md text-on-surface-variant text-base">Revisa y rastrea tus compras recientes.</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-primary mb-2">Mis Pedidos</h1>
+            <p class="text-sm text-on-surface-variant">Revisa y rastrea tus compras recientes.</p>
         </div>
         <!-- Quick Filters -->
         <div class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 hide-scrollbar">
@@ -82,7 +82,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="font-label-caps text-xs text-on-surface-variant uppercase tracking-wider font-bold">Pedido #</span>
-                            <div class="font-numeric-data text-lg font-bold text-primary mt-1">{{ $pedido->numero_pedido }}</div>
+                            <div class="text-sm font-bold text-primary mt-1">{{ $pedido->numero_pedido }}</div>
                         </div>
                         
                         <!-- Status Chip -->
@@ -95,18 +95,18 @@
                     <div class="flex flex-col gap-2 py-4 border-y border-outline-variant/50">
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-on-surface-variant">Fecha</span>
-                            <span class="font-numeric-data font-semibold text-primary">{{ $pedido->creado_en->format('d/m/Y') }}</span>
+                            <span class="text-xs font-semibold text-primary">{{ $pedido->creado_en->format('d/m/Y') }}</span>
                         </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-on-surface-variant">Artículos</span>
-                            <span class="font-semibold text-primary">{{ $pedido->items->sum('cantidad') }} {{ $pedido->items->sum('cantidad') == 1 ? 'artículo' : 'artículos' }}</span>
+                            <span class="text-xs font-semibold text-primary">{{ $pedido->items->sum('cantidad') }} {{ $pedido->items->sum('cantidad') == 1 ? 'artículo' : 'artículos' }}</span>
                         </div>
                     </div>
                     
                     <div class="flex justify-between items-end mt-auto">
                         <div>
                             <span class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-on-surface-variant">Total</span>
-                            <div class="font-headline-md text-xl text-primary font-bold mt-1">${{ number_format($pedido->total, 2) }}</div>
+                            <div class="text-base font-bold text-primary mt-1">${{ number_format($pedido->total, 2) }}</div>
                         </div>
                         <a href="{{ route('cliente.pedidos.detalle', $pedido->id) }}" class="border border-primary text-primary bg-transparent hover:bg-primary/5 rounded-lg px-4 py-2 font-label-caps text-[11px] font-bold tracking-wider uppercase transition-colors flex items-center gap-2">
                             Ver Detalle
@@ -149,9 +149,9 @@
         <!-- No orders state -->
         <div class="text-center py-16 bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow">
             <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">shopping_bag</span>
-            <h3 class="text-xl font-bold text-primary font-headline-md mb-2">Aún no tienes pedidos</h3>
-            <p class="text-on-surface-variant font-body-md text-sm mb-6">Explora nuestro catálogo y encuentra los mejores productos.</p>
-            <a href="{{ route('cliente.catalogo') }}" class="inline-flex justify-center items-center gap-2 rounded-lg border border-transparent bg-secondary px-6 py-3 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm hover:bg-secondary-container hover:text-on-secondary-container transition-colors font-label-caps">
+            <h3 class="text-base font-bold text-primary mb-2">Aún no tienes pedidos</h3>
+            <p class="text-on-surface-variant text-sm mb-6">Explora nuestro catálogo y encuentra los mejores productos.</p>
+            <a href="{{ route('cliente.catalogo') }}" class="inline-flex justify-center items-center gap-2 rounded-lg border border-transparent bg-secondary px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm hover:bg-secondary-container hover:text-on-secondary-container transition-colors font-label-caps">
                 <span class="material-symbols-outlined text-[18px]">storefront</span>
                 Ir a la tienda
             </a>
