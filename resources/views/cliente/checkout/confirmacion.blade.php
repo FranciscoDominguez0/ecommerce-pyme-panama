@@ -163,6 +163,19 @@
                         </div>
                         @endif
 
+                        @if($totales['descuento_envio'] > 0)
+                        <div class="flex justify-between items-center text-secondary bg-secondary/10 px-3 py-2 rounded-lg border border-secondary/20">
+                            <dt class="flex items-center gap-1.5 font-semibold">
+                                <span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                                Envío gratis
+                                @if($carrito->cupon)
+                                    <span class="font-label-caps uppercase tracking-wider ml-1">({{ $carrito->cupon->codigo }})</span>
+                                @endif
+                            </dt>
+                            <dd class="font-bold">-${{ number_format($totales['descuento_envio'], 2) }}</dd>
+                        </div>
+                        @endif
+
                         <div class="flex justify-between items-center">
                             <dt>Envío</dt>
                             <dd class="font-semibold text-on-background">${{ number_format($totales['costo_envio'], 2) }}</dd>

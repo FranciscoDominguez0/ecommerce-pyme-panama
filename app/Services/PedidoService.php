@@ -20,17 +20,15 @@ class PedidoService
     {
         $subtotal = $carrito->subtotal;
         $descuento = 0.00;
+        $descuentoEnvio = 0.00;
 
-        // Si ya hay descuento aplicado en el carrito (desde CuponService) o pasamos un cupon
         if ($cupon) {
-            // Re-evaluar descuento si es porcentaje o fijo, aunque $carrito->descuento_aplicado suele tenerlo.
-            // Para asegurar la misma lógica, usaremos el valor ya guardado si es consistente,
-            // pero si no, calculamos simple aquí.
             if ($cupon->tipo === 'porcentaje') {
                 $descuento = $subtotal * ($cupon->valor / 100);
-            } else {
+            } elseif ($cupon->tipo === 'monto_fijo') {
                 $descuento = $cupon->valor;
             }
+            // envio_gratis no genera descuento sobre productos
             if ($descuento > $subtotal) {
                 $descuento = $subtotal;
             }
@@ -39,15 +37,21 @@ class PedidoService
         }
 
         $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
+
+        if ($cupon && $cupon->tipo === 'envio_gratis') {
+            $descuentoEnvio = $costoEnvio;
+            $costoEnvio = 0.00;
+        }
         
         $montoBaseItbms = max(0, $subtotal - $descuento);
-        $itbmsMonto = $montoBaseItbms * 0.07; // Asumimos 7% de ITBMS en Panamá.
+        $itbmsMonto = $montoBaseItbms * 0.07;
 
         $total = $montoBaseItbms + $costoEnvio + $itbmsMonto;
 
         return [
             'subtotal' => round($subtotal, 2),
             'descuento' => round($descuento, 2),
+            'descuento_envio' => round($descuentoEnvio, 2),
             'costo_envio' => round($costoEnvio, 2),
             'itbms_monto' => round($itbmsMonto, 2),
             'total' => round($total, 2),
