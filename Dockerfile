@@ -1,7 +1,7 @@
 #############################
 # Stage 1: Composer dependencies
 #############################
-FROM php:8.3-cli-alpine AS vendor
+FROM php:8.4-cli-alpine AS vendor
 
 RUN apk add --no-cache \
         git \
@@ -61,7 +61,7 @@ RUN npm run build
 #############################
 # Stage 3: Runtime (php-fpm + nginx)
 #############################
-FROM php:8.3-fpm-alpine AS runtime
+FROM php:8.4-fpm-alpine AS runtime
 
 WORKDIR /var/www/html
 
