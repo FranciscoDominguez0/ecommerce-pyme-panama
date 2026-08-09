@@ -69,7 +69,7 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 })->middleware(['auth'])->name('home');
 
-// 3. Perfil del Cliente: Datos, Direcciones, Métodos de Pago
+// 3. Perfil del Cliente: Datos, Direcciones, Pedidos
 Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Cliente\PerfilController::class, 'edit'])->name('datos');
     Route::put('/perfil', [\App\Http\Controllers\Cliente\PerfilController::class, 'update'])->name('datos.update');
@@ -84,10 +84,6 @@ Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(f
     Route::put('/direcciones/{id}', [\App\Http\Controllers\Cliente\DireccionController::class, 'update'])->name('direcciones.update');
     Route::delete('/direcciones/{id}', [\App\Http\Controllers\Cliente\DireccionController::class, 'destroy'])->name('direcciones.destroy');
     Route::put('/direcciones/{id}/predeterminada', [\App\Http\Controllers\Cliente\DireccionController::class, 'setDefault'])->name('direcciones.predeterminada');
-
-    Route::get('/metodos-pago', function () {
-        return view('cliente.perfil.pago');
-    })->name('pago');
 
     Route::get('/mis-pedidos', [ClientePedidoController::class, 'index'])->name('pedidos.index');
     Route::get('/mis-pedidos/{id}', [ClientePedidoController::class, 'detalle'])->name('pedidos.detalle');

@@ -3,60 +3,51 @@
 @section('title', 'Detalle del Pedido')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex flex-col md:flex-row gap-8">
-        <x-cliente.perfil.sidebar active="pedidos" />
+<x-cliente.perfil.layout active="pedidos">
+    @php
+        $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
 
-        <div class="flex-1 min-w-0">
-            <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors mb-4">
-                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-                Volver al Dashboard
-            </a>
-@php
-    $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
+        $configEstado = match($ultimoEstado) {
+            'entregado' => [
+                'badge_bg' => 'bg-secondary/10',
+                'badge_text' => 'text-secondary',
+                'icon' => 'check_circle',
+                'label' => 'Entregado',
+            ],
+            'enviado' => [
+                'badge_bg' => 'bg-secondary/10',
+                'badge_text' => 'text-secondary',
+                'icon' => 'local_shipping',
+                'label' => 'En tránsito',
+            ],
+            'pendiente', 'pago_confirmado', 'en_preparacion', 'listo_para_envio' => [
+                'badge_bg' => 'bg-tertiary-container/20',
+                'badge_text' => 'text-tertiary',
+                'icon' => 'schedule',
+                'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
+            ],
+            'cancelado', 'pago_rechazado', 'devolucion_solicitada' => [
+                'badge_bg' => 'bg-primary/10',
+                'badge_text' => 'text-primary',
+                'icon' => 'flag',
+                'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
+            ],
+            default => [
+                'badge_bg' => 'bg-surface-container-high',
+                'badge_text' => 'text-on-surface',
+                'icon' => 'info',
+                'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
+            ],
+        };
 
-    $configEstado = match($ultimoEstado) {
-        'entregado' => [
-            'badge_bg' => 'bg-secondary/10',
-            'badge_text' => 'text-secondary',
-            'icon' => 'check_circle',
-            'label' => 'Entregado',
-        ],
-        'enviado' => [
-            'badge_bg' => 'bg-secondary/10',
-            'badge_text' => 'text-secondary',
-            'icon' => 'local_shipping',
-            'label' => 'En tránsito',
-        ],
-        'pendiente', 'pago_confirmado', 'en_preparacion', 'listo_para_envio' => [
-            'badge_bg' => 'bg-tertiary-container/20',
-            'badge_text' => 'text-tertiary',
-            'icon' => 'schedule',
-            'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
-        ],
-        'cancelado', 'pago_rechazado', 'devolucion_solicitada' => [
-            'badge_bg' => 'bg-primary/10',
-            'badge_text' => 'text-primary',
-            'icon' => 'flag',
-            'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
-        ],
-        default => [
-            'badge_bg' => 'bg-surface-container-high',
-            'badge_text' => 'text-on-surface',
-            'icon' => 'info',
-            'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
-        ],
-    };
-
-    $metodosPago = [
-        'stripe' => ['icon' => 'credit_card', 'label' => 'Tarjeta de crédito / débito'],
-        'yappy' => ['icon' => 'yappy', 'label' => 'Yappy'],
-        'transferencia' => ['icon' => 'account_balance', 'label' => 'Transferencia bancaria'],
-        'contra_entrega' => ['icon' => 'local_shipping', 'label' => 'Pago contra entrega'],
-    ];
-    $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['icon' => 'payment', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
-@endphp
+        $metodosPago = [
+            'stripe' => ['icon' => 'credit_card', 'label' => 'Tarjeta de crédito / débito'],
+            'yappy' => ['icon' => 'yappy', 'label' => 'Yappy'],
+            'transferencia' => ['icon' => 'account_balance', 'label' => 'Transferencia bancaria'],
+            'contra_entrega' => ['icon' => 'local_shipping', 'label' => 'Pago contra entrega'],
+        ];
+        $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['icon' => 'payment', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
+    @endphp
 
     <!-- Encabezado -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -268,7 +259,5 @@
             @endif
         </div>
     </div>
-        </div>
-    </div>
-</div>
+</x-cliente.perfil.layout>
 @endsection
