@@ -1,7 +1,36 @@
 #############################
 # Stage 1: Composer dependencies
 #############################
-FROM composer:2 AS vendor
+FROM php:8.3-cli-alpine AS vendor
+
+RUN apk add --no-cache \
+        git \
+        unzip \
+        postgresql-client \
+        libzip \
+        icu-libs \
+        libpng \
+        libjpeg-turbo \
+        freetype \
+    && apk add --no-cache --virtual .build-deps \
+        $PHPIZE_DEPS \
+        postgresql-dev \
+        libzip-dev \
+        icu-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype-dev \
+        libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" \
+        gd \
+        pdo_pgsql \
+        pgsql \
+        zip \
+        intl \
+    && apk del .build-deps
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 

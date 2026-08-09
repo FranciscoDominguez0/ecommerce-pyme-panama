@@ -45,6 +45,9 @@ services:
       - appnet
 
   queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: ecommerce-pyme-panama:latest
     container_name: ecommerce-queue
     restart: unless-stopped
