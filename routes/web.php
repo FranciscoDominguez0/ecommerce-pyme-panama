@@ -21,22 +21,13 @@ use Illuminate\Support\Facades\Route;
 
 // 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida, Carrito)
 Route::get('/', function () {
-    $destacados = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes'])
+    $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
         ->sinEliminar()
-        ->where('activo', true)
-        ->where('destacado', true)
+        ->activos()
         ->take(8)
         ->get();
 
-    $marcasDistribuidores = \App\Models\Brand::where('verified', true)
-        ->where(function ($q) {
-            $q->whereNotNull('image_path')->orWhereNotNull('image');
-        })
-        ->orderBy('is_suggested', 'desc')
-        ->orderBy('name', 'asc')
-        ->get();
-
-    return view('welcome', compact('destacados', 'marcasDistribuidores'));
+    return view('dashboard', compact('productos'));
 })->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
@@ -64,7 +55,14 @@ Route::get('/home', function () {
 })->middleware(['auth'])->name('home');
 
 // 3. Panel de Cliente autenticado
-Route::get('/dashboard', [CatalogoController::class, 'index'])->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', function () {
+    $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
+        ->sinEliminar()
+        ->activos()
+        ->take(8)
+        ->get();
+    return view('dashboard', compact('productos'));
+})->middleware(['auth'])->name('dashboard');
 
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->group(function () {

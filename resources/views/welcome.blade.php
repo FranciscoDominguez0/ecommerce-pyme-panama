@@ -150,63 +150,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
                 @forelse($destacados as $prod)
-                    <div
-                        class="bg-white border border-gray-200 rounded-2xl overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-                        <a href="{{ route('cliente.producto.detalle', $prod->slug) }}"
-                            class="relative bg-gray-50 flex items-center justify-center h-52 p-5 block">
-                            @if($prod->tieneOfertaValida())
-                                <span
-                                    class="absolute top-3 left-3 bg-rose-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg z-10">
-                                    -{{ round((($prod->precio - $prod->precio_oferta) / $prod->precio) * 100) }}%
-                                </span>
-                            @endif
-
-                            @php $imgPrincipal = $prod->imagenPrincipal(); @endphp
-                            @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
-                                <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}"
-                                    alt="{{ $prod->nombre }}"
-                                    class="max-h-full max-w-full w-auto h-auto object-contain group-hover:scale-105 transition-transform duration-500" />
-                            @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
-                                <div
-                                    class="w-24 h-24 flex items-center justify-center text-gray-400 group-hover:scale-105 transition-transform duration-500">
-                                    {!! $imgPrincipal->ruta !!}</div>
-                            @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
-                                <span
-                                    class="material-symbols-outlined text-[64px] text-gray-400 group-hover:scale-105 transition-transform duration-500">{{ $imgPrincipal->ruta }}</span>
-                            @else
-                                <span class="material-symbols-outlined text-[64px] text-gray-300">image</span>
-                            @endif
-                        </a>
-
-                        <div class="p-4 flex flex-col flex-grow">
-                            <p class="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">
-                                {{ $prod->categoria->nombre ?? 'Catálogo' }}</p>
-                            <a href="{{ route('cliente.producto.detalle', $prod->slug) }}">
-                                <h3
-                                    class="text-sm font-bold text-gray-900 leading-snug mb-2 line-clamp-2 hover:text-emerald-700 transition-colors">
-                                    {{ $prod->nombre }}</h3>
-                            </a>
-
-                            <div class="flex items-baseline gap-2 mb-4 mt-auto">
-                                @if($prod->tienePromocionOPrecioOferta())
-                                    <span
-                                        class="text-xl font-extrabold text-emerald-700">${{ number_format($prod->precioFinalPromocional(), 2) }}</span>
-                                    <span class="text-sm text-gray-400 line-through">${{ number_format($prod->precio, 2) }}</span>
-                                    <span class="text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">-{{ number_format($prod->porcentajeDescuentoPromocional(), 0) }}%</span>
-                                @else
-                                    <span class="text-xl font-extrabold text-gray-900">${{ number_format($prod->precio, 2) }}</span>
-                                @endif
-                            </div>
-
-                            <button onclick="window.location.href='{{ route('cliente.producto.detalle', $prod->slug) }}'"
-                                class="w-full py-2.5 rounded-xl text-sm font-bold text-white flex items-center justify-center gap-2 transition-all hover:brightness-110 active:scale-95"
-                                style="background:#22c55e;">
-                                <span class="material-symbols-outlined text-[18px]"
-                                    style="font-variation-settings:'FILL' 1;">visibility</span>
-                                Ver detalles
-                            </button>
-                        </div>
-                    </div>
+                    <x-producto-card :prod="$prod" />
                 @empty
                     <div
                         class="col-span-full py-16 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-2xl">

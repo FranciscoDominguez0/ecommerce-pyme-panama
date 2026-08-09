@@ -8,75 +8,72 @@
     <!-- Welcome Header -->
     <div class="bg-[#002349] text-white rounded-xl p-5 sm:p-6 shadow-sm mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
+            @auth
             <div class="flex items-center gap-1.5 text-[#8af5be] text-[11px] font-semibold uppercase tracking-wider mb-0.5">
                 <span class="material-symbols-outlined text-[14px]">verified_user</span>
-                <span>Cliente Verificado</span>
+                <span>Cuenta Segura</span>
             </div>
+            @endauth
             <h1 class="text-xl sm:text-2xl font-bold tracking-tight">
-                ¡Hola, {{ Auth::user()->nombre ?? 'Cliente' }}!
+                ¡Hola, {{ Auth::check() ? Auth::user()->nombre : 'Bienvenido' }}!
             </h1>
             <p class="text-xs text-gray-300 mt-0.5">
-                Bienvenido a tu panel de compras en PayMe Panamá.
+                {{ Auth::check() ? 'Bienvenido a tu panel de control. Aquí puedes gestionar tus compras y preferencias.' : 'Encuentra los mejores productos y ofertas en nuestra tienda.' }}
             </p>
         </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ url('/') }}" class="px-3.5 py-2 bg-[#006148] hover:bg-[#004f3b] text-white text-xs font-semibold rounded-lg transition-colors shadow-xs">
-                Explorar Catálogo
-            </a>
-        </div>
     </div>
 
-    <!-- Client Quick Stats & Sections -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <!-- Enlaces Rápidos (Quick Links) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         
-        <div class="bg-white p-4.5 rounded-xl border border-gray-200/80 shadow-soft flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-lg bg-emerald-50 text-[#006148] flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-xl">shopping_bag</span>
+        <a href="#" class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all group flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-2xl">local_shipping</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Mis Pedidos</p>
-                <p class="text-lg font-bold text-[#002349]">0 Activos</p>
+                <p class="text-sm font-bold text-[#002349] group-hover:text-emerald-700 transition-colors">Mis Pedidos</p>
+                <p class="text-xs text-gray-500 mt-0.5">Rastrea y revisa tus compras</p>
             </div>
-        </div>
+        </a>
 
-        <div class="bg-white p-4.5 rounded-xl border border-gray-200/80 shadow-soft flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-xl">location_on</span>
+        <a href="{{ route('cliente.lista-deseos') }}" class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-200 transition-all group flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center shrink-0 group-hover:bg-rose-500 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-2xl">favorite</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Dirección de Entrega</p>
-                <p class="text-xs font-semibold text-[#002349]">Panamá, Rep. de Panamá</p>
+                <p class="text-sm font-bold text-[#002349] group-hover:text-rose-600 transition-colors">Lista de Deseos</p>
+                <p class="text-xs text-gray-500 mt-0.5">Tus productos favoritos</p>
             </div>
-        </div>
+        </a>
 
-        <div class="bg-white p-4.5 rounded-xl border border-gray-200/80 shadow-soft flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-xl">lock</span>
+        <a href="#" class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all group flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-2xl">manage_accounts</span>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Seguridad</p>
-                <p class="text-xs font-semibold text-[#002349]">Cifrado SSL 256 bits</p>
+                <p class="text-sm font-bold text-[#002349] group-hover:text-blue-700 transition-colors">Mi Perfil</p>
+                <p class="text-xs text-gray-500 mt-0.5">Datos, direcciones y seguridad</p>
             </div>
-        </div>
+        </a>
 
     </div>
 
-    <!-- Orders Section -->
-    <div class="bg-white rounded-xl border border-gray-200/80 shadow-soft p-5 sm:p-6">
+    <!-- Productos Recomendados Section -->
+    <div class="mb-6">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-sm font-bold text-[#002349]">Historial de Pedidos Recientes</h2>
+            <h2 class="text-lg font-bold text-[#002349]">Productos Recomendados para ti</h2>
+            <a href="{{ route('cliente.catalogo') }}" class="text-sm font-semibold text-emerald-700 hover:underline">Ver todo el catálogo</a>
         </div>
         
-        <div class="text-center py-10">
-            <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">inventory_2</span>
-            <p class="text-sm font-bold text-[#002349]">No tienes pedidos realizados todavía</p>
-            <p class="text-xs text-gray-400 max-w-md mx-auto mt-0.5 mb-5">
-                Encuentra los mejores productos y aprovecha nuestros métodos de pago locales en Panamá como Yappy, Tarjeta de Crédito o ACH.
-            </p>
-            <a href="{{ url('/') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#006148] hover:bg-[#004f3b] text-white text-xs font-semibold rounded-lg transition-colors shadow-xs">
-                <span class="material-symbols-outlined text-[16px]">storefront</span>
-                <span>Ir a la Tienda</span>
-            </a>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            @forelse($productos as $prod)
+                <x-producto-card :prod="$prod" />
+            @empty
+                <div class="col-span-full text-center py-10 bg-white rounded-xl border border-gray-200/80 shadow-soft">
+                    <span class="material-symbols-outlined text-4xl text-gray-300 block mb-2">inventory_2</span>
+                    <p class="text-sm font-bold text-[#002349]">No hay productos disponibles en este momento</p>
+                </div>
+            @endforelse
         </div>
     </div>
 
