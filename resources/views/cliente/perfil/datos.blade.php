@@ -23,104 +23,150 @@
                 @csrf
                 @method('PUT')
 
-                {{-- Profile Summary Card --}}
-                <div class="bg-white border border-outline-variant rounded-xl p-6 md:p-8 shadow-sm">
-                    <div class="flex flex-col sm:flex-row items-start gap-6">
-                        <div class="relative shrink-0 group cursor-pointer" id="photo-wrapper">
-                            <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant bg-surface-container-low flex items-center justify-center">
-                                @if($usuario->foto_perfil_url)
-                                    <img id="avatar-preview-img" src="{{ $usuario->foto_perfil_url }}" alt="{{ $usuario->nombre_completo }}" class="w-full h-full object-cover">
-                                @else
-                                    <span id="avatar-preview-initials" class="text-3xl font-bold text-on-surface-variant">{{ $usuario->iniciales }}</span>
-                                    <img id="avatar-preview-img" src="" alt="" class="w-full h-full object-cover hidden">
-                                @endif
-                                <div class="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity">photo_camera</span>
-                                </div>
-                            </div>
-                            <button type="button" id="btn-eliminar-foto"
-                                class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-error text-on-error items-center justify-center shadow-sm hover:bg-red-700 transition-colors {{ $usuario->foto_perfil_url ? 'flex' : 'hidden' }}"
-                                title="Eliminar foto">
-                                <span class="material-symbols-outlined text-[14px]">close</span>
-                            </button>
-                        </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-                        <div class="flex-1 space-y-2 pt-1">
-                            <h2 class="text-lg font-bold text-primary">{{ $usuario->nombre_completo }}</h2>
-                            <div class="flex items-center gap-1.5 text-sm text-on-surface-variant">
-                                <span class="material-symbols-outlined text-[16px]">mail</span>
-                                <span>{{ $usuario->email }}</span>
+                    {{-- Left Card: Profile Photo + Name + Contact --}}
+                    <div class="lg:col-span-4">
+                        <div class="bg-white border border-outline-variant rounded-xl p-6 shadow-sm text-center">
+                            <div class="relative inline-flex group cursor-pointer" id="photo-wrapper">
+                                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant bg-surface-container-low flex items-center justify-center mx-auto">
+                                    @if($usuario->foto_perfil_url)
+                                        <img id="avatar-preview-img" src="{{ $usuario->foto_perfil_url }}" alt="{{ $usuario->nombre_completo }}" class="w-full h-full object-cover">
+                                    @else
+                                        <span id="avatar-preview-initials" class="text-3xl font-bold text-on-surface-variant">{{ $usuario->iniciales }}</span>
+                                        <img id="avatar-preview-img" src="" alt="" class="w-full h-full object-cover hidden">
+                                    @endif
+                                    <div class="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity">photo_camera</span>
+                                    </div>
+                                </div>
+                                <button type="button" id="btn-eliminar-foto"
+                                    class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-error text-on-error items-center justify-center shadow-sm hover:bg-red-700 transition-colors {{ $usuario->foto_perfil_url ? 'flex' : 'hidden' }}"
+                                    title="Eliminar foto">
+                                    <span class="material-symbols-outlined text-[14px]">close</span>
+                                </button>
                             </div>
-                            @if($usuario->email_verified_at)
-                            <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary/10 text-secondary text-[11px] font-bold tracking-wider uppercase">
-                                <span class="material-symbols-outlined text-[14px]">verified</span>
-                                Cuenta Verificada
+
+                            <h2 class="text-lg font-bold text-primary mt-4">{{ $usuario->nombre_completo }}</h2>
+                            <div class="mt-3 space-y-1.5">
+                                <a href="mailto:{{ $usuario->email }}"
+                                    class="flex items-center justify-center gap-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[14px]">mail</span>
+                                    <span class="truncate">{{ $usuario->email }}</span>
+                                </a>
+                                <a href="tel:+507{{ $usuario->telefono }}"
+                                    class="flex items-center justify-center gap-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[14px]">call</span>
+                                    <span>{{ $usuario->telefono ? '+507 ' . $usuario->telefono : 'No especificado' }}</span>
+                                </a>
                             </div>
-                            @endif
+
+                            <input type="file" name="foto_perfil" id="foto_perfil" accept="image/png,image/jpeg,image/webp" class="hidden">
+                            <input type="hidden" name="eliminar_foto" id="eliminar_foto" value="0">
+                            <span id="file-name" class="block text-xs text-outline mt-3 hidden"></span>
+                            @error('foto_perfil')
+                                <p class="mt-2 text-xs text-error flex items-center justify-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
-                    <input type="file" name="foto_perfil" id="foto_perfil" accept="image/png,image/jpeg,image/webp" class="hidden">
-                    <input type="hidden" name="eliminar_foto" id="eliminar_foto" value="0">
-                    <span id="file-name" class="block text-xs text-outline mt-3 hidden"></span>
-                    @error('foto_perfil')
-                        <p class="mt-2 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
-                    @enderror
-                </div>
-
-                {{-- Personal Information Form --}}
-                <div class="bg-white border border-outline-variant rounded-xl p-6 md:p-8 shadow-sm">
-                    <h2 class="text-base font-bold text-primary mb-1">Información Personal</h2>
-                    <p class="text-xs text-on-surface-variant mb-6">Actualiza los datos básicos de tu perfil.</p>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div>
-                            <label for="nombre" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Nombre</label>
-                            <input type="text" name="nombre" id="nombre" value="{{ old('nombre', $usuario->nombre) }}"
-                                class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 px-3 @error('nombre') border-error @enderror"
-                                required>
-                            @error('nombre')
-                                <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="apellido" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Apellido</label>
-                            <input type="text" name="apellido" id="apellido" value="{{ old('apellido', $usuario->apellido) }}"
-                                class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 px-3 @error('apellido') border-error @enderror"
-                                required>
-                            @error('apellido')
-                                <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <label for="email" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Correo Electrónico</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-2.5 text-on-surface-variant">
-                                    <span class="material-symbols-outlined text-[16px]">mail</span>
-                                </span>
-                                <input type="email" name="email" id="email" value="{{ old('email', $usuario->email) }}"
-                                    class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 pl-9 pr-3 @error('email') border-error @enderror"
-                                    required>
+                    {{-- Right Card: General Information --}}
+                    <div class="lg:col-span-8">
+                        <div class="bg-white border border-outline-variant rounded-xl p-6 md:p-8 shadow-sm">
+                            <div class="flex items-center justify-between mb-5 pb-4 border-b border-outline-variant/50">
+                                <h2 class="text-base font-bold text-primary">Información General</h2>
+                                <button type="button" id="btn-toggle-edit"
+                                    class="p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors"
+                                    title="Editar información">
+                                    <span class="material-symbols-outlined text-lg" id="toggle-icon">edit</span>
+                                </button>
                             </div>
-                            <p class="text-[10px] text-outline mt-1">Principal</p>
-                            @error('email')
-                                <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
-                            @enderror
-                        </div>
 
-                        <div>
-                            <label for="telefono" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Teléfono</label>
-                            <div class="flex rounded-lg border border-outline-variant shadow-sm focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary overflow-hidden bg-white @error('telefono') border-error @enderror">
-                                <span class="inline-flex items-center px-3 bg-surface-container-low text-on-surface-variant text-sm font-medium border-r border-outline-variant">+507</span>
-                                <input type="text" name="telefono" id="telefono" value="{{ old('telefono', $usuario->telefono) }}"
-                                    class="block w-full border-0 focus:ring-0 sm:text-sm bg-white py-2.5 px-3"
-                                    placeholder="6000-0000">
+                            {{-- Display Mode --}}
+                            <div id="display-mode">
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between py-2">
+                                        <span class="text-xs text-on-surface-variant">Fecha de Nacimiento</span>
+                                        <span class="text-sm font-semibold text-primary">{{ $usuario->fecha_nacimiento ? $usuario->fecha_nacimiento->format('d/m/Y') : '—' }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2">
+                                        <span class="text-xs text-on-surface-variant">Dirección</span>
+                                        <span class="text-sm font-semibold text-primary text-right max-w-[60%] truncate">
+                                            @if($direccionPredeterminada)
+                                                {{ $direccionPredeterminada->direccion_exacta }}
+                                            @else
+                                                Sin dirección
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2">
+                                        <span class="text-xs text-on-surface-variant">Correo Electrónico</span>
+                                        <span class="text-sm font-semibold text-primary text-right max-w-[60%] truncate">{{ $usuario->email }}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between py-2">
+                                        <span class="text-xs text-on-surface-variant">Teléfono</span>
+                                        <span class="text-sm font-semibold text-primary">{{ $usuario->telefono ? '+507 ' . $usuario->telefono : '—' }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            @error('telefono')
-                                <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
-                            @enderror
+
+                            {{-- Edit Mode --}}
+                            <div id="edit-mode" class="hidden">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div>
+                                        <label for="nombre" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Nombre</label>
+                                        <input type="text" name="nombre" id="nombre" value="{{ old('nombre', $usuario->nombre) }}"
+                                            class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 px-3 @error('nombre') border-error @enderror"
+                                            required>
+                                        @error('nombre')
+                                            <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="apellido" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Apellido</label>
+                                        <input type="text" name="apellido" id="apellido" value="{{ old('apellido', $usuario->apellido) }}"
+                                            class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 px-3 @error('apellido') border-error @enderror"
+                                            required>
+                                        @error('apellido')
+                                            <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="email" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Correo Electrónico</label>
+                                        <input type="email" name="email" id="email" value="{{ old('email', $usuario->email) }}"
+                                            class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 px-3 @error('email') border-error @enderror"
+                                            required>
+                                        @error('email')
+                                            <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="telefono" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Teléfono</label>
+                                        <div class="flex rounded-lg border border-outline-variant shadow-sm focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary overflow-hidden bg-white @error('telefono') border-error @enderror">
+                                            <span class="inline-flex items-center px-3 bg-surface-container-low text-on-surface-variant text-sm font-medium border-r border-outline-variant">+507</span>
+                                            <input type="text" name="telefono" id="telefono" value="{{ old('telefono', $usuario->telefono) }}"
+                                                class="block w-full border-0 focus:ring-0 sm:text-sm bg-white py-2.5 px-3"
+                                                placeholder="6000-0000">
+                                        </div>
+                                        @error('telefono')
+                                            <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="fecha_nacimiento" class="block text-xs font-semibold text-on-surface-variant mb-1.5">Fecha de Nacimiento</label>
+                                        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento"
+                                            value="{{ old('fecha_nacimiento', $usuario->fecha_nacimiento ? $usuario->fecha_nacimiento->format('Y-m-d') : '') }}"
+                                            class="block w-full rounded-lg border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm bg-white py-2.5 px-3 @error('fecha_nacimiento') border-error @enderror">
+                                        @error('fecha_nacimiento')
+                                            <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,6 +190,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Photo upload
         const inputFoto = document.getElementById('foto_perfil');
         const fileName = document.getElementById('file-name');
         const previewImg = document.getElementById('avatar-preview-img');
@@ -188,6 +235,26 @@
             if (previewInitials) previewInitials.classList.remove('hidden');
             btnEliminar.classList.add('hidden');
             btnEliminar.style.display = 'none';
+        });
+
+        // Display / Edit mode toggle
+        const btnToggle = document.getElementById('btn-toggle-edit');
+        const displayMode = document.getElementById('display-mode');
+        const editMode = document.getElementById('edit-mode');
+        const toggleIcon = document.getElementById('toggle-icon');
+        let isEditing = false;
+
+        btnToggle.addEventListener('click', function () {
+            isEditing = !isEditing;
+            if (isEditing) {
+                displayMode.classList.add('hidden');
+                editMode.classList.remove('hidden');
+                toggleIcon.textContent = 'visibility';
+            } else {
+                displayMode.classList.remove('hidden');
+                editMode.classList.add('hidden');
+                toggleIcon.textContent = 'edit';
+            }
         });
     });
 </script>

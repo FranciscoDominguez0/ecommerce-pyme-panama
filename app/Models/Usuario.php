@@ -23,6 +23,11 @@ class Usuario extends Authenticatable
         'password_hash',
         'telefono',
         'foto_perfil_ruta',
+        'fecha_nacimiento',
+    ];
+
+    protected $casts = [
+        'fecha_nacimiento' => 'date',
     ];
 
     protected $hidden = [

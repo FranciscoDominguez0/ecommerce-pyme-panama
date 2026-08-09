@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
+use App\Models\Direccion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,12 @@ class PerfilController extends Controller
     {
         $usuario = Auth::user();
 
-        return view('cliente.perfil.datos', compact('usuario'));
+        $direccionPredeterminada = Direccion::where('usuario_id', $usuario->id)
+            ->where('es_predeterminada', true)
+            ->whereNull('eliminado_en')
+            ->first();
+
+        return view('cliente.perfil.datos', compact('usuario', 'direccionPredeterminada'));
     }
 
     public function update(Request $request): RedirectResponse
@@ -28,6 +34,7 @@ class PerfilController extends Controller
             'apellido' => 'required|string|max:100',
             'email' => 'required|email|max:255|unique:usuarios,email,' . $usuario->id,
             'telefono' => 'nullable|string|max:20',
+            'fecha_nacimiento' => 'nullable|date|before:today',
             'foto_perfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'eliminar_foto' => 'boolean',
         ]);
