@@ -288,13 +288,6 @@
                         </div>
                     </div>
 
-                    <!-- Banner de Confianza y Seguridad -->
-                    <div class="bg-[#e5eeff]/60 border border-[#d3e4fe] rounded-xl p-3 flex items-center gap-2.5 text-xs text-[#002349]">
-                        <span class="material-symbols-outlined text-[#006148] text-[20px] shrink-0">lock</span>
-                        <p class="font-medium text-[11px] leading-tight">
-                            Pago Seguro con Encriptación SSL & Factura Fiscal Panameña garantizada.
-                        </p>
-                    </div>
 
                     <!-- Botón de Continuar al Pago (Checkout) -->
                     <button type="button" 
