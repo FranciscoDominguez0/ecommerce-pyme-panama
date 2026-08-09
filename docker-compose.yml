@@ -2,8 +2,10 @@
 # traffic, it cannot serve PHP. So the Laravel app runs inside Docker with its
 # own nginx + php-fpm and listens on port 80 (published as 127.0.0.1:8080).
 #
+# Everything is driven by the regular .env file (DB_*, APP_*, MAIL_*).
+#
 # Deploy on the VPS (inside this project directory):
-#   cp .env.docker.example .env.docker   # set APP_URL + change DB password
+#   cp .env.example .env     # then set DB_*, APP_URL, MAIL_PASSWORD, APP_KEY
 #   docker compose up -d --build
 #
 # Then in NPM create a Proxy Host:
@@ -23,7 +25,7 @@ services:
     container_name: ecommerce-app
     restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env
     environment:
       - DB_HOST=db
     ports:
@@ -47,7 +49,7 @@ services:
     container_name: ecommerce-queue
     restart: unless-stopped
     env_file:
-      - .env.docker
+      - .env
     environment:
       - DB_HOST=db
     command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
@@ -66,9 +68,10 @@ services:
     container_name: ecommerce-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ecommerce_pyme_panama
-      POSTGRES_USER: ecommerce
-      POSTGRES_PASSWORD: ecommerce_password
+      # Credentials come from your .env file (DB_*)
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       # Only reachable through an SSH tunnel, never exposed publicly.
       - "127.0.0.1:5432:5432"
