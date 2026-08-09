@@ -283,7 +283,7 @@
                                         {{ $pedido->usuario ? $pedido->usuario->nombre_completo : 'Cliente' }}
                                     </div>
                                     <div class="text-[11px] text-slate-400 font-mono">
-                                        #{{ $pedido->numero_pedido ?? 'PED-' . str_pad($pedido->id, 5, '0', STR_PAD_LEFT) }}
+                                        {{ $pedido->numero_pedido ?? '#PED-' . str_pad($pedido->id, 5, '0', STR_PAD_LEFT) }}
                                     </div>
                                 </td>
                                 <td class="py-2.5">

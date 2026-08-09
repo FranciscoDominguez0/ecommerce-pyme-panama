@@ -9,7 +9,6 @@ use App\Models\ItemPedido;
 use App\Models\Pedido;
 use App\Models\ZonaEnvio;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Exception;
 
 class PedidoService
@@ -81,14 +80,12 @@ class PedidoService
             $totales = $this->calcularTotales($carrito, $zonaEnvio, $cupon);
 
             // 3. Crear registro de Pedido
-            $numeroPedido = 'PM-' . strtoupper(Str::random(8)) . '-' . time();
-
             $pedido = Pedido::create([
                 'usuario_id' => $carrito->usuario_id,
                 'direccion_id' => $direccionId,
                 'cupon_id' => $carrito->cupon_id,
                 'zona_envio_id' => $zonaEnvio ? $zonaEnvio->id : null,
-                'numero_pedido' => $numeroPedido,
+                'numero_pedido' => '',
                 'metodo_pago' => $metodoPago,
                 'subtotal' => $totales['subtotal'],
                 'descuento' => $totales['descuento'],
@@ -97,6 +94,10 @@ class PedidoService
                 'total' => $totales['total'],
                 'notas_cliente' => $notasCliente,
                 'comprobante_pago_ruta' => $comprobantePagoRuta,
+            ]);
+
+            $pedido->update([
+                'numero_pedido' => '#PM-' . (260000 + $pedido->id),
             ]);
 
             // 4. Copiar items y deducir stock

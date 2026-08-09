@@ -56,7 +56,7 @@
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Volver a mis pedidos
             </a>
-            <h1 class="font-headline-md text-2xl md:text-4xl font-bold text-primary">Pedido #{{ $pedido->numero_pedido }}</h1>
+            <h1 class="font-headline-md text-2xl md:text-4xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
             <p class="text-on-surface-variant font-body-md text-base mt-1">
                 Realizado el {{ $pedido->creado_en->translatedFormat('d M, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}
             </p>

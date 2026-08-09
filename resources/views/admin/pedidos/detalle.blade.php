@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Detalle de Pedido #' . $pedido->numero_pedido)
+@section('title', 'Detalle de Pedido ' . $pedido->numero_pedido)
 
 @section('content')
 <div class="space-y-6 font-sans [&_input]:font-sans [&_select]:font-sans [&_textarea]:font-sans [&_button]:font-sans [&_table]:font-sans">
@@ -14,7 +14,7 @@
     <div class="card-elevated rounded-xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
-                Pedido #{{ $pedido->numero_pedido }}
+                Pedido {{ $pedido->numero_pedido }}
                 @php
                     $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
                     $estadoClasses = [
