@@ -22,6 +22,7 @@ class Usuario extends Authenticatable
         'email',
         'password_hash',
         'telefono',
+        'foto_perfil_ruta',
     ];
 
     protected $hidden = [
@@ -43,6 +44,16 @@ class Usuario extends Authenticatable
     public function getAuthPassword(): string
     {
         return (string) $this->password_hash;
+    }
+
+    public function getFotoPerfilUrlAttribute(): ?string
+    {
+        return $this->foto_perfil_ruta ? asset($this->foto_perfil_ruta) : null;
+    }
+
+    public function getInicialesAttribute(): string
+    {
+        return strtoupper(substr($this->nombre ?: '', 0, 1) . substr($this->apellido ?: '', 0, 1));
     }
 
     public function direcciones()

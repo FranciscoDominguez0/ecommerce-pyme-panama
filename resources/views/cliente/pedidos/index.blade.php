@@ -27,6 +27,11 @@
         <x-cliente.perfil.sidebar active="pedidos" />
 
         <div class="flex-1 min-w-0">
+            <a href="{{ route('dashboard') }}"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors mb-4">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                Volver al Dashboard
+            </a>
             <!-- Page Header -->
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
                 <div>

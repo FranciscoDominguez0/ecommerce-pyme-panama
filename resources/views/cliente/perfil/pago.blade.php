@@ -8,6 +8,11 @@
         <x-cliente.perfil.sidebar active="pago" />
 
         <div class="flex-1 min-w-0">
+            <a href="{{ route('dashboard') }}"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors mb-4">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                Volver al Dashboard
+            </a>
             <div class="mb-6">
                 <h1 class="text-xl sm:text-2xl font-bold text-primary">Métodos de Pago</h1>
                 <p class="text-sm text-on-surface-variant mt-1">Administra los métodos de pago disponibles para tus compras.</p>

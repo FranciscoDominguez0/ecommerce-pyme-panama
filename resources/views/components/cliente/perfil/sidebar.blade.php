@@ -1,11 +1,15 @@
 @props(['active' => ''])
 
-<aside class="w-full md:w-64 shrink-0">
+<aside class="w-full md:w-64 shrink-0 md:sticky md:top-24 md:self-start">
     <div class="bg-white border border-outline-variant rounded-xl overflow-hidden shadow-sm">
         <div class="p-5 border-b border-outline-variant/50">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                    <span class="material-symbols-outlined text-xl">person</span>
+                <div class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 overflow-hidden">
+                    @if(Auth::user()->foto_perfil_url)
+                        <img src="{{ Auth::user()->foto_perfil_url }}" alt="{{ Auth::user()->nombre_completo }}" class="w-full h-full object-cover">
+                    @else
+                        <span class="material-symbols-outlined text-xl">person</span>
+                    @endif
                 </div>
                 <div class="min-w-0">
                     <p class="text-sm font-bold text-primary truncate">{{ Auth::user()->nombre_completo }}</p>
@@ -15,12 +19,6 @@
         </div>
 
         <nav class="p-2">
-            <a href="{{ route('dashboard') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $active === 'dashboard' ? 'bg-primary/10 text-primary' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
-                <span class="material-symbols-outlined text-lg">dashboard</span>
-                <span>Dashboard</span>
-            </a>
-
             <a href="{{ route('cliente.perfil.pedidos.index') }}"
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $active === 'pedidos' ? 'bg-primary/10 text-primary' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
                 <span class="material-symbols-outlined text-lg">package_2</span>
@@ -39,20 +37,18 @@
                 <span>Métodos de Pago</span>
             </a>
 
+            <a href="{{ route('cliente.perfil.password') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $active === 'password' ? 'bg-primary/10 text-primary' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
+                <span class="material-symbols-outlined text-lg">lock</span>
+                <span>Cambiar Contraseña</span>
+            </a>
+
             <a href="{{ route('cliente.perfil.datos') }}"
                 class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ $active === 'configuracion' ? 'bg-primary/10 text-primary' : 'text-on-surface-variant hover:bg-surface-container-low hover:text-primary' }}">
                 <span class="material-symbols-outlined text-lg">settings</span>
                 <span>Configuración</span>
             </a>
         </nav>
-
-        <div class="p-2 border-t border-outline-variant/50">
-            <a href="{{ route('cliente.lista-deseos') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
-                <span class="material-symbols-outlined text-lg">favorite</span>
-                <span>Lista de Deseos</span>
-            </a>
-        </div>
     </div>
 
     <div class="mt-4">

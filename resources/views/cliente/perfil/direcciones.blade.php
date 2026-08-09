@@ -19,6 +19,11 @@
         <x-cliente.perfil.sidebar active="direcciones" />
 
         <div class="flex-1 min-w-0">
+            <a href="{{ route('dashboard') }}"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors mb-4">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                Volver al Dashboard
+            </a>
             <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
                 <div>
                     <h1 class="text-xl sm:text-2xl font-bold text-primary">Mis Direcciones</h1>
