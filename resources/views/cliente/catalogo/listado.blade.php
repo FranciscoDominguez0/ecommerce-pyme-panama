@@ -112,7 +112,7 @@
                     </div>
 
                     <!-- 3. Marcas (Basado en imagen) -->
-                    <div x-data="{ open: false, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4">
+                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4">
                         <h4 @click="open = !open" class="text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
                             Marcas
                             <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
@@ -127,7 +127,7 @@
                             <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
                                 @foreach($marcas as $marca)
                                     <label x-show="searchBrand === '' || '{{ strtolower($marca->name) }}'.includes(searchBrand.toLowerCase())" class="relative group cursor-pointer">
-                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}">
+                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}" {{ in_array($marca->id, request('marca', [])) ? 'checked' : '' }}>
                                         <div class="h-12 border border-slate-200 rounded p-1.5 flex items-center justify-center peer-checked:border-emerald-600 peer-checked:shadow-sm transition-all bg-white hover:border-slate-300">
                                             @if($marca->logo_url)
                                                 <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" class="max-h-full max-w-full object-contain transition-all">
@@ -229,21 +229,24 @@
                             <div class="flex items-center justify-center gap-3 -mt-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <!-- Botón Carrito -->
                                 <button type="button" 
+                                        onclick="agregarAlCarritoListado({{ $prod->id }})"
                                         class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-emerald-600 transition-colors tooltip-trigger"
                                         title="Añadir al carrito">
                                     <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
                                 </button>
                                 <!-- Botón Deseos -->
                                 <button type="button" 
+                                        onclick="agregarDeseoListado({{ $prod->id }})"
                                         class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
                                         title="Añadir a deseos">
                                     <span class="material-symbols-outlined text-[18px]">favorite</span>
                                 </button>
-                                <!-- Botón Comparar -->
+                                <!-- Botón Compartir -->
                                 <button type="button" 
+                                        onclick="copiarLink('{{ route('cliente.producto.detalle', $prod->slug) }}')"
                                         class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
-                                        title="Comparar">
-                                    <span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+                                        title="Copiar enlace">
+                                    <span class="material-symbols-outlined text-[18px]">share</span>
                                 </button>
                                 <!-- Botón Ver Detalle -->
                                 <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" 
@@ -303,3 +306,108 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    function agregarAlCarritoListado(productoId) {
+        fetch("{{ route('cliente.carrito.agregar') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                producto_id: productoId,
+                variante_producto_id: null,
+                cantidad: 1
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.exito) {
+                if (typeof window.abrirCarritoDrawer === 'function') {
+                    window.abrirCarritoDrawer();
+                }
+                if (window.mostrarToast) {
+                    window.mostrarToast('success', data.mensaje);
+                }
+            } else {
+                if (window.mostrarToast) {
+                    window.mostrarToast('warning', data.mensaje || 'Stock insuficiente');
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (window.mostrarToast) {
+                window.mostrarToast('error', 'Error al agregar el producto al carrito.');
+            }
+        });
+    }
+
+    function agregarDeseoListado(productoId) {
+        fetch(`/lista-deseos/agregar/${productoId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => {
+            if (res.status === 401) {
+                window.location.href = "{{ route('login') }}";
+                return;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (data && data.exito) {
+                if (window.Livewire) {
+                    Livewire.dispatch('deseos-actualizado');
+                }
+                if (window.mostrarToast) {
+                    window.mostrarToast('success', data.mensaje);
+                }
+            } else if (data) {
+                if (window.mostrarToast) {
+                    window.mostrarToast('info', data.mensaje);
+                }
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (window.mostrarToast) {
+                window.mostrarToast('error', 'No se pudo guardar en la lista de deseos.');
+            }
+        });
+    }
+
+    function copiarLink(url) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(() => {
+                if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
+            });
+        } else {
+            // Fallback for non-https / older browsers
+            let textArea = document.createElement("textarea");
+            textArea.value = url;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+            }
+            textArea.remove();
+        }
+    }
+</script>
+@endpush

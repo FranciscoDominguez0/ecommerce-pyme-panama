@@ -51,6 +51,11 @@ class CatalogoController extends Controller
             });
         }
 
+        $marcasFiltradas = $request->input('marca', []);
+        if (is_array($marcasFiltradas) && count($marcasFiltradas) > 0) {
+            $query->whereIn('brand_id', $marcasFiltradas);
+        }
+
         if ($precioMin > 0) {
             $query->where('precio', '>=', $precioMin);
         }

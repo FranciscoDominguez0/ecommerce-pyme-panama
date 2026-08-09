@@ -64,6 +64,8 @@ class LoginController extends Controller
             \Illuminate\Support\Facades\Log::warning('Error al fusionar carrito en login: ' . $e->getMessage());
         }
 
+        $intendedUrl = $request->session()->pull('url.intended');
+
         // Redirección según rol usando Spatie
         if (
             $usuario->hasRole('admin') ||
@@ -71,10 +73,15 @@ class LoginController extends Controller
             $usuario->hasRole('super_admin') ||
             $usuario->hasRole('Administrador')
         ) {
-            return redirect()->intended('/admin/dashboard');
+            return redirect()->to($intendedUrl ?? '/admin/dashboard');
         }
 
-        return redirect()->intended(route('dashboard'));
+        // Si es normal, NUNCA debería ir a una ruta de admin, forzamos dashboard si estaba yendo allá por error
+        if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
+            $intendedUrl = null;
+        }
+
+        return redirect()->to($intendedUrl ?? route('dashboard'));
     }
 
     /**
