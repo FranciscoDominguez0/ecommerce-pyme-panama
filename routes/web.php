@@ -24,13 +24,14 @@ use Illuminate\Support\Facades\Route;
 
 // 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida, Carrito)
 Route::get('/', function () {
-    $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
-        ->sinEliminar()
-        ->activos()
+    $destacados = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
+        ->destacados()
         ->take(8)
         ->get();
 
-    return view('dashboard', compact('productos'));
+    $marcasDistribuidores = \App\Models\Brand::verified()->suggested()->get();
+
+    return view('welcome', compact('destacados', 'marcasDistribuidores'));
 })->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');

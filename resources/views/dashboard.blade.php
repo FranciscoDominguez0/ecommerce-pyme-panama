@@ -32,7 +32,7 @@
     <!-- Tarjetas de acceso rápido (Pedidos, Favoritos, Perfil) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         
-        <a href="#" class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4 relative overflow-hidden">
+        <a href="{{ route('cliente.pedidos.index') }}" class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group flex items-center gap-4 relative overflow-hidden">
             <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 z-10">
                 <span class="material-symbols-outlined text-xl">local_shipping</span>
             </div>

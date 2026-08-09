@@ -186,7 +186,7 @@
                         <textarea name="notas_cliente" id="notas_cliente" rows="2" class="block w-full rounded-md border-outline-variant shadow-sm focus:border-secondary focus:ring-secondary font-body-md text-sm bg-surface-container-lowest" placeholder="Ej: Entregar en la puerta blanca..."></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-secondary text-on-secondary font-label-caps text-xs font-semibold uppercase tracking-wide py-4 px-4 rounded-lg hover:bg-secondary-container transition-colors shadow-[0_4px_20px_rgba(0,35,73,0.12)] flex justify-center items-center gap-2">
+                    <button type="submit" id="btn-confirmar-pedido" class="w-full bg-secondary text-on-secondary font-label-caps text-xs font-semibold uppercase tracking-wide py-4 px-4 rounded-lg hover:bg-secondary-container transition-colors shadow-[0_4px_20px_rgba(0,35,73,0.12)] flex justify-center items-center gap-2">
                         <span class="material-symbols-outlined text-[18px]">check_circle</span>
                         Confirmar Pedido
                     </button>
@@ -201,3 +201,26 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form[action="{{ route(\'cliente.checkout.procesar\') }}"]');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const btn = document.getElementById('btn-confirmar-pedido');
+                if (btn) {
+                    if (btn.disabled) {
+                        e.preventDefault();
+                        return;
+                    }
+                    btn.disabled = true;
+                    // Cambiar el contenido del botón para mostrar estado de carga
+                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span> Procesando...';
+                    btn.classList.add('opacity-75', 'cursor-not-allowed');
+                }
+            });
+        }
+    });
+</script>
+@endpush

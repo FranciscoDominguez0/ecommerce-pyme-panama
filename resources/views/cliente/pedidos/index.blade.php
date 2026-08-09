@@ -1,64 +1,137 @@
-<x-app-layout>
-    <div class="bg-slate-50 min-h-screen py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-slate-900 mb-8 font-sans">Mis Pedidos</h1>
+@extends('layouts.cliente')
 
-            @if($pedidos->count() > 0)
-                <div class="space-y-6">
-                    @foreach($pedidos as $pedido)
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-shadow hover:shadow-md">
-                            
-                            <div class="flex-1 space-y-2">
-                                <div class="flex items-center gap-3">
-                                    <h2 class="text-lg font-bold text-slate-900 font-sans">Pedido #{{ $pedido->numero_pedido }}</h2>
-                                    @php
-                                        $estadoClasses = [
-                                            'pendiente' => 'bg-slate-100 text-slate-700',
-                                            'pago_confirmado' => 'bg-blue-100 text-blue-700',
-                                            'en_preparacion' => 'bg-amber-100 text-amber-700',
-                                            'enviado' => 'bg-indigo-100 text-indigo-700',
-                                            'entregado' => 'bg-emerald-100 text-emerald-700',
-                                            'cancelado' => 'bg-red-100 text-red-700',
-                                        ];
-                                        $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
-                                        $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 text-slate-700';
-                                        $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
-                                    @endphp
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $claseEstado }}">
-                                        {{ $labelEstado }}
-                                    </span>
-                                </div>
-                                <p class="text-sm text-slate-500">Realizado el {{ $pedido->creado_en->format('d/m/Y \a \l\a\s H:i') }}</p>
-                                <p class="text-sm font-medium text-slate-700">Total: ${{ number_format($pedido->total, 2) }}</p>
-                            </div>
-                            
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <a href="{{ route('cliente.pedidos.detalle', $pedido->id) }}" class="inline-flex justify-center items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 transition-colors">
-                                    Ver Detalle
-                                </a>
-                                @if($ultimoEstado === 'entregado')
-                                    <button class="inline-flex justify-center items-center rounded-lg border border-transparent bg-slate-800 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-slate-900 transition-colors">
-                                        Comprar de Nuevo
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                
-                <div class="mt-8">
-                    {{ $pedidos->links() }}
-                </div>
-            @else
-                <div class="text-center py-16 bg-white rounded-xl border border-slate-200 shadow-sm">
-                    <span class="material-symbols-outlined text-6xl text-slate-300 mb-4">shopping_bag</span>
-                    <h3 class="text-xl font-medium text-slate-900 font-sans mb-2">Aún no tienes pedidos</h3>
-                    <p class="text-slate-500 mb-6">Explora nuestro catálogo y encuentra los mejores productos.</p>
-                    <a href="{{ route('cliente.catalogo') }}" class="inline-flex justify-center rounded-lg border border-transparent bg-emerald-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-emerald-700 transition-colors">
-                        Ir a la tienda
-                    </a>
-                </div>
-            @endif
+@section('title', 'Mis Pedidos')
+
+@push('styles')
+<style>
+    /* Utilities */
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .ambient-shadow {
+        box-shadow: 0px 4px 20px rgba(0, 35, 73, 0.05);
+    }
+    .ambient-shadow-hover:hover {
+        box-shadow: 0px 12px 32px rgba(0, 35, 73, 0.12);
+    }
+</style>
+@endpush
+
+@section('content')
+<main class="flex-grow pt-8 pb-12 px-4 md:px-16 w-full max-w-[1200px] mx-auto">
+    <!-- Page Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+            <h1 class="font-headline-md text-3xl font-bold text-primary mb-2 md:text-4xl">Mis Pedidos</h1>
+            <p class="font-body-md text-on-surface-variant text-base">Revisa y rastrea tus compras recientes.</p>
+        </div>
+        <!-- Quick Filters -->
+        <div class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 hide-scrollbar">
+            <a href="{{ route('cliente.pedidos.index') }}" class="whitespace-nowrap px-4 py-2 rounded-full {{ !request('estado') ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Todos</a>
+            <a href="{{ route('cliente.pedidos.index', ['estado' => 'pendiente']) }}" class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'pendiente' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Pendientes</a>
+            <a href="{{ route('cliente.pedidos.index', ['estado' => 'entregado']) }}" class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'entregado' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Completados</a>
         </div>
     </div>
-</x-app-layout>
+    
+    @if($pedidos->count() > 0)
+        <!-- Orders Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($pedidos as $pedido)
+                @php
+                    $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
+                    
+                    // Configuramos los colores y el ícono según el estado
+                    $configEstado = match($ultimoEstado) {
+                        'entregado' => [
+                            'bar' => 'bg-secondary/80',
+                            'chip_bg' => 'bg-secondary/10',
+                            'chip_text' => 'text-secondary',
+                            'icon' => 'check_circle',
+                        ],
+                        'pendiente', 'pago_confirmado', 'en_preparacion' => [
+                            'bar' => 'bg-tertiary-container',
+                            'chip_bg' => 'bg-tertiary-container/20',
+                            'chip_text' => 'text-tertiary',
+                            'icon' => 'schedule',
+                        ],
+                        'cancelado', 'devolucion_solicitada', 'pago_rechazado' => [
+                            'bar' => 'bg-primary',
+                            'chip_bg' => 'bg-primary/10',
+                            'chip_text' => 'text-primary',
+                            'icon' => 'flag',
+                        ],
+                        default => [
+                            'bar' => 'bg-blue-500',
+                            'chip_bg' => 'bg-blue-100',
+                            'chip_text' => 'text-blue-700',
+                            'icon' => 'local_shipping',
+                        ]
+                    };
+                    $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
+                @endphp
+                
+                <!-- Order Card -->
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4 ambient-shadow ambient-shadow-hover transition-all duration-300 relative overflow-hidden group">
+                    <!-- Status Bar Top -->
+                    <div class="absolute top-0 left-0 w-full h-1 {{ $configEstado['bar'] }}"></div>
+                    
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-label-caps text-xs text-on-surface-variant uppercase tracking-wider font-bold">Pedido #</span>
+                            <div class="font-numeric-data text-lg font-bold text-primary mt-1">{{ $pedido->numero_pedido }}</div>
+                        </div>
+                        
+                        <!-- Status Chip -->
+                        <div class="px-3 py-1 rounded-full {{ $configEstado['chip_bg'] }} {{ $configEstado['chip_text'] }} font-label-caps text-[11px] font-bold tracking-wider flex items-center gap-1 uppercase">
+                            <span class="material-symbols-outlined text-[14px]" data-icon="{{ $configEstado['icon'] }}">{{ $configEstado['icon'] }}</span>
+                            {{ $labelEstado }}
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col gap-2 py-4 border-y border-outline-variant/50">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-on-surface-variant">Fecha</span>
+                            <span class="font-numeric-data font-semibold text-primary">{{ $pedido->creado_en->format('d/m/Y') }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-on-surface-variant">Artículos</span>
+                            <span class="font-semibold text-primary">{{ $pedido->items->sum('cantidad') }} {{ $pedido->items->sum('cantidad') == 1 ? 'artículo' : 'artículos' }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-end mt-auto">
+                        <div>
+                            <span class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-on-surface-variant">Total</span>
+                            <div class="font-headline-md text-xl text-primary font-bold mt-1">${{ number_format($pedido->total, 2) }}</div>
+                        </div>
+                        <a href="{{ route('cliente.pedidos.detalle', $pedido->id) }}" class="border border-primary text-primary bg-transparent hover:bg-primary/5 rounded-lg px-4 py-2 font-label-caps text-[11px] font-bold tracking-wider uppercase transition-colors flex items-center gap-2">
+                            Ver Detalle
+                            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        
+        <!-- Pagination -->
+        <div class="mt-8">
+            {{ $pedidos->links() }}
+        </div>
+    @else
+        <!-- No orders state -->
+        <div class="text-center py-16 bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow">
+            <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">shopping_bag</span>
+            <h3 class="text-xl font-bold text-primary font-headline-md mb-2">Aún no tienes pedidos</h3>
+            <p class="text-on-surface-variant font-body-md text-sm mb-6">Explora nuestro catálogo y encuentra los mejores productos.</p>
+            <a href="{{ route('cliente.catalogo') }}" class="inline-flex justify-center items-center gap-2 rounded-lg border border-transparent bg-secondary px-6 py-3 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm hover:bg-secondary-container hover:text-on-secondary-container transition-colors font-label-caps">
+                <span class="material-symbols-outlined text-[18px]">storefront</span>
+                Ir a la tienda
+            </a>
+        </div>
+    @endif
+</main>
+@endsection
