@@ -321,7 +321,7 @@ class CarritoService
     /**
      * Calcula el total desglosado con ITBMS (7%), envío y descuentos aplicados.
      */
-    public function calcularTotal(Carrito $carrito, ?float $costoEnvio = 0.0): array
+    public function calcularTotal(Carrito $carrito, ?float $costoEnvio = 0.0, ?int $zonaEnvioId = null): array
     {
         $items = $carrito->relationLoaded('items')
             ? $carrito->items
@@ -344,8 +344,8 @@ class CarritoService
         $descuento = round((float) $carrito->descuento_aplicado, 2);
         $envio = round((float) ($costoEnvio ?? 0.0), 2);
 
-        // Si el cupón es de envío gratis, anular costo de envío
-        if ($carrito->cupon && $carrito->cupon->tipo === 'envio_gratis') {
+        // Si la promoción de envío gratis aplica para esta zona, anular costo de envío
+        if ($zonaEnvioId && $this->cuponService->evaluarEnvioGratis($zonaEnvioId, $subtotal)) {
             $envio = 0.0;
         }
 

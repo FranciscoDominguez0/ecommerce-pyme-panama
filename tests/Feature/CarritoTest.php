@@ -35,7 +35,7 @@ class CarritoTest extends TestCase
         $this->assertEquals(1, $carrito->items->count());
         $this->assertEquals(2, $carrito->cantidad_total);
 
-        $totales = $service->calcularTotal($carrito, 5.00);
+        $totales = $service->calcularTotal($carrito, 5.00, null);
         $this->assertGreaterThan(0, $totales['total']);
         $this->assertEquals(5.00, $totales['envio']);
 

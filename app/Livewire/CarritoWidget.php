@@ -204,7 +204,7 @@ class CarritoWidget extends Component
             'variante.opciones',
         ])->get();
 
-        $resumen = $carritoService->calcularTotal($carrito, $this->costoEnvio);
+        $resumen = $carritoService->calcularTotal($carrito, $this->costoEnvio, null);
 
         // Obtener productos de la lista de deseos
         $productosDeseos = collect();

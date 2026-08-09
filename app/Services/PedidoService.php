@@ -13,6 +13,12 @@ use Exception;
 
 class PedidoService
 {
+    protected CuponService $cuponService;
+
+    public function __construct(CuponService $cuponService)
+    {
+        $this->cuponService = $cuponService;
+    }
     /**
      * Calcula los totales del pedido antes de procesarlo.
      */
@@ -38,7 +44,7 @@ class PedidoService
 
         $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
 
-        if ($cupon && $cupon->tipo === 'envio_gratis') {
+        if ($zonaEnvio && $this->cuponService->evaluarEnvioGratis($zonaEnvio->id, $subtotal)) {
             $descuentoEnvio = $costoEnvio;
             $costoEnvio = 0.00;
         }
