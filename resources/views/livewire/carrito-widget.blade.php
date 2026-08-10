@@ -50,7 +50,7 @@
 
                                     <h3 class="text-base font-bold text-gray-900 leading-snug hover:text-[#006148] transition-colors">
                                         @if($producto)
-                                            <a href="{{ route('cliente.producto.detalle', $producto->slug) }}">
+                                            <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" wire:navigate>
                                                 {{ $producto->nombre }}
                                             </a>
                                         @else
@@ -151,7 +151,7 @@
 
                 <!-- Enlace a continuar comprando -->
                 <div class="pt-2 flex items-center justify-between">
-                    <a href="{{ route('cliente.catalogo') }}" 
+                    <a href="{{ route('cliente.catalogo') }}" wire:navigate
                        class="inline-flex items-center gap-1.5 text-xs font-bold text-[#006148] hover:text-[#004f3b] transition-colors">
                         <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                         <span>Continuar comprando en el catálogo</span>
@@ -290,7 +290,7 @@
 
 
                     <!-- Botón de Continuar al Pago (Checkout) -->
-                    <a href="{{ route('cliente.checkout.direccion') }}" 
+                    <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate
                             class="w-full bg-[#006148] hover:bg-[#004f3b] active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2 text-sm uppercase tracking-wider cursor-pointer">
                         <span>Continuar al Pago</span>
                         <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
@@ -325,7 +325,7 @@
                 Aún no has agregado productos a tu carrito. Explora nuestro catálogo de tecnología y encuentra las mejores herramientas para tu PyME.
             </p>
 
-            <a href="{{ route('cliente.catalogo') }}" 
+            <a href="{{ route('cliente.catalogo') }}" wire:navigate
                class="bg-[#006148] hover:bg-[#004f3b] text-white font-bold text-xs uppercase tracking-wider px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">storefront</span>
                 <span>Ir al catálogo</span>
@@ -344,7 +344,7 @@
                     <span>Lista de Deseos</span>
                 </h2>
 
-                <a href="{{ route('cliente.lista-deseos') }}" class="text-xs font-bold text-[#006148] hover:underline">
+                <a href="{{ route('cliente.lista-deseos') }}" wire:navigate class="text-xs font-bold text-[#006148] hover:underline">
                     Ver todos
                 </a>
             </div>
@@ -376,7 +376,7 @@
 
                         <!-- Info -->
                         <h3 class="text-sm font-bold text-gray-900 line-clamp-2 min-h-[40px] leading-snug">
-                            <a href="{{ route('cliente.producto.detalle', $deseo->slug) }}" class="hover:text-[#006148] transition-colors">
+                            <a href="{{ route('cliente.producto.detalle', $deseo->slug) }}" wire:navigate class="hover:text-[#006148] transition-colors">
                                 {{ $deseo->nombre }}
                             </a>
                         </h3>

@@ -8,15 +8,15 @@
         
         <!-- Breadcrumbs Navegables -->
         <nav class="flex items-center gap-1.5 text-xs text-slate-500 font-medium overflow-x-auto whitespace-nowrap scrollbar-none" aria-label="Breadcrumb">
-            <a href="{{ route('inicio') }}" class="hover:text-emerald-700 transition-colors flex items-center gap-1">
+            <a href="{{ route('inicio') }}" wire:navigate class="hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">home</span>
                 <span>Inicio</span>
             </a>
             <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
-            <a href="{{ route('cliente.catalogo') }}" class="hover:text-emerald-700 transition-colors">Catálogo</a>
+            <a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-emerald-700 transition-colors">Catálogo</a>
             @if($producto->categoria)
                 <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
-                <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria->slug]) }}" class="text-slate-600 hover:text-emerald-700">
+                <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria->slug]) }}" wire:navigate class="text-slate-600 hover:text-emerald-700">
                     {{ $producto->categoria->nombre }}
                 </a>
             @endif
@@ -349,7 +349,7 @@
 
                     <!-- Categoría -->
                     <div>
-                        Categoría: <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria?->slug ?? 'all']) }}" class="text-blue-600 hover:underline font-normal">{{ $producto->categoria ? $producto->categoria->nombre : 'Portátiles' }}</a>
+                        Categoría: <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria?->slug ?? 'all']) }}" wire:navigate class="text-blue-600 hover:underline font-normal">{{ $producto->categoria ? $producto->categoria->nombre : 'Portátiles' }}</a>
                     </div>
 
                     <!-- Modelo -->
@@ -406,7 +406,7 @@
                             </div>
                             <div class="space-y-1">
                                 <h3 class="text-xs font-bold text-slate-900 line-clamp-1">
-                                    <a href="{{ route('cliente.producto.detalle', $rel->slug) }}" class="hover:text-emerald-700">
+                                    <a href="{{ route('cliente.producto.detalle', $rel->slug) }}" wire:navigate class="hover:text-emerald-700">
                                         {{ $rel->nombre }}
                                     </a>
                                 </h3>

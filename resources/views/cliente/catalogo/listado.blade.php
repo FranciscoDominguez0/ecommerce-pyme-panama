@@ -8,7 +8,7 @@
         
         <!-- Breadcrumbs -->
         <nav class="flex items-center gap-1.5 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
-            <a href="{{ route('dashboard') }}" class="hover:text-emerald-700 transition-colors flex items-center gap-1">
+            <a href="{{ route('dashboard') }}" wire:navigate class="hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">home</span>
                 <span>Inicio</span>
             </a>
@@ -64,14 +64,14 @@
                                     @if($cat->hijas->count() > 0)
                                         <div class="space-y-2">
                                             @foreach($cat->hijas as $hija)
-                                                <a href="{{ route('cliente.catalogo', ['categoria' => $hija->slug]) }}" class="block text-sm text-slate-600 hover:text-emerald-700 hover:font-semibold transition-colors">
+                                                <a href="{{ route('cliente.catalogo', ['categoria' => $hija->slug]) }}" wire:navigate class="block text-sm text-slate-600 hover:text-emerald-700 hover:font-semibold transition-colors">
                                                     {{ $hija->nombre }}
                                                 </a>
                                             @endforeach
                                         </div>
                                     @else
                                         <p class="text-xs text-slate-400">No hay subcategorías.</p>
-                                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" class="inline-block mt-3 text-xs font-bold text-emerald-700 hover:underline">Ver todos en {{ $cat->nombre }}</a>
+                                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate class="inline-block mt-3 text-xs font-bold text-emerald-700 hover:underline">Ver todos en {{ $cat->nombre }}</a>
                                     @endif
                                 </div>
                             @endforeach
@@ -88,14 +88,14 @@
                         </button>
                         <div x-show="open" x-transition.opacity class="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2" style="display: none;">
                             @foreach($categorias as $cat)
-                                <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-semibold">
+                                <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-semibold">
                                     {{ $cat->nombre }}
                                 </a>
                             @endforeach
                         </div>
                     </div>
 
-                    <a href="{{ route('cliente.catalogo') }}" class="text-slate-600 hover:text-emerald-700 transition-colors">Todos los productos</a>
+                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-slate-600 hover:text-emerald-700 transition-colors">Todos los productos</a>
                     
                     <!-- Lo mas vendido Dropdown -->
                     <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
@@ -103,7 +103,7 @@
                             Lo más vendido <span class="material-symbols-outlined text-[16px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
                         </button>
                         <div x-show="open" x-transition.opacity class="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2" style="display: none;">
-                            <a href="{{ route('cliente.catalogo', ['orden' => 'relevancia']) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-semibold">Top Ventas Global</a>
+                            <a href="{{ route('cliente.catalogo', ['orden' => 'relevancia']) }}" wire:navigate class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 font-semibold">Top Ventas Global</a>
                         </div>
                     </div>
                 </nav>
@@ -113,7 +113,7 @@
                 <h2 class="text-base font-bold text-slate-900 mb-3">Categorías</h2>
                 <div class="flex flex-wrap gap-2">
                     @foreach($categoriasPills as $cat)
-                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" 
+                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate
                            class="flex items-center gap-2 px-4 py-2 rounded-lg border {{ $categoriaSlug === $cat->slug ? 'border-emerald-500 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:shadow-xs' }} transition-all text-xs font-semibold">
                             @if($cat->imagen_ruta)
                                 <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="{{ $cat->nombre }}" class="w-5 h-5 object-contain">
@@ -139,7 +139,7 @@
                         <span class="material-symbols-outlined text-[18px] text-emerald-600">tune</span>
                         <span>Filtrar Resultados</span>
                     </h3>
-                    <a href="{{ route('cliente.catalogo') }}" class="text-[11px] font-semibold text-emerald-700 hover:underline">
+                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-[11px] font-semibold text-emerald-700 hover:underline">
                         Limpiar todo
                     </a>
                 </div>
@@ -167,7 +167,7 @@
                             <span class="material-symbols-outlined text-[16px]">expand_more</span>
                         </h4>
                         <div class="space-y-1 text-xs">
-                            <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" 
+                            <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" wire:navigate
                                class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                 <span class="flex items-center gap-2">
                                     <input type="radio" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
@@ -175,7 +175,7 @@
                                 </span>
                             </a>
                             @foreach($categorias as $cat)
-                                <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => $cat->slug])) }}" 
+                                <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => $cat->slug])) }}" wire:navigate
                                    class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                     <span class="flex items-center gap-2">
                                         <input type="radio" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
@@ -269,7 +269,7 @@
                             <span class="material-symbols-outlined text-[48px] text-slate-300 mx-auto">search_off</span>
                             <h3 class="text-sm font-bold text-slate-700 mt-2">No encontramos productos con estos filtros</h3>
                             <p class="text-xs text-slate-400 mt-1">Intenta con otros términos de búsqueda o categorías.</p>
-                            <a href="{{ route('cliente.catalogo') }}" class="inline-block mt-4 text-xs font-semibold text-emerald-700 hover:underline">
+                            <a href="{{ route('cliente.catalogo') }}" wire:navigate class="inline-block mt-4 text-xs font-semibold text-emerald-700 hover:underline">
                                 Ver todo el catálogo
                             </a>
                         </div>

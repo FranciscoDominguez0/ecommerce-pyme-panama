@@ -45,14 +45,14 @@
                         </a>
 
                         @guest
-                            <a href="{{ route('register') }}"
+                            <a href="{{ route('register') }}" wire:navigate
                                 class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white border transition-all hover:bg-white/10 active:scale-95"
                                 style="border-color:rgba(255,255,255,0.3);">
                                 <span class="material-symbols-outlined text-[18px]">person_add</span>
                                 <span>Crear Cuenta</span>
                             </a>
                         @else
-                            <a href="{{ route('dashboard') }}"
+                            <a href="{{ route('dashboard') }}" wire:navigate
                                 class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white border transition-all hover:bg-white/10 active:scale-95"
                                 style="border-color:rgba(255,255,255,0.3);">
                                 <span class="material-symbols-outlined text-[18px]">account_circle</span>

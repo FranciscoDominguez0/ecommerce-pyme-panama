@@ -52,7 +52,7 @@
     <!-- Encabezado -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-            <a href="{{ route('cliente.perfil.pedidos.index') }}" class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-label-caps text-xs font-bold tracking-wider uppercase mb-2">
+            <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-label-caps text-xs font-bold tracking-wider uppercase mb-2">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Volver a mis pedidos
             </a>
@@ -202,7 +202,7 @@
                     <span class="text-sm font-bold text-on-surface">Total</span>
                     <span class="text-base font-bold text-primary">${{ number_format($pedido->total, 2) }}</span>
                 </div>
-                <a href="{{ route('cliente.catalogo') }}" class="block w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-xs font-bold tracking-wider uppercase text-center shadow-sm hover:bg-on-secondary-container transition-colors">
+                <a href="{{ route('cliente.catalogo') }}" wire:navigate class="block w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-xs font-bold tracking-wider uppercase text-center shadow-sm hover:bg-on-secondary-container transition-colors">
                     Seguir comprando
                 </a>
             </div>

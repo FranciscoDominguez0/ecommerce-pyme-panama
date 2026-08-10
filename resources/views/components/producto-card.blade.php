@@ -67,7 +67,7 @@
             <span class="material-symbols-outlined text-[18px]">share</span>
         </button>
         <!-- Botón Ver Detalle -->
-        <a href="{{ route('cliente.producto.detalle', $prod->slug) }}"
+        <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" wire:navigate
             class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
             title="Vista rápida">
             <span class="material-symbols-outlined text-[18px]">visibility</span>
@@ -78,7 +78,7 @@
     <div class="p-5 flex-1 flex flex-col justify-end space-y-2 text-center mt-2">
         <h3
             class="text-[13px] font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">
-            <a href="{{ route('cliente.producto.detalle', $prod->slug) }}">
+            <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" wire:navigate>
                 {{ $prod->nombre }}
             </a>
         </h3>

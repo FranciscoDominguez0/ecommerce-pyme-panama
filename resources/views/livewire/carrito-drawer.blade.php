@@ -68,7 +68,8 @@
                         <!-- Detalles del Producto -->
                         <div class="flex-1 min-w-0 flex flex-col justify-between">
                             <div>
-                                <a href="{{ route('cliente.producto.detalle', $item['slug']) }}" 
+                                <a href="{{ route('cliente.producto.detalle', $item['slug']) }}" wire:navigate
+                                   @click="abierto = false; $wire.cerrar();"
                                    class="text-xs font-bold text-gray-900 hover:text-[#006148] transition-colors line-clamp-2 leading-snug">
                                     {{ $item['nombre'] }}
                                 </a>
@@ -128,6 +129,7 @@
                             Explora nuestro catálogo para encontrar los mejores productos tecnológicos.
                         </p>
                         <a href="{{ route('cliente.catalogo') }}" 
+                           wire:navigate
                            @click="abierto = false; $wire.cerrar();"
                            class="bg-[#002349] hover:bg-[#001730] text-white text-xs font-bold px-5 py-2.5 rounded-full transition-all">
                             Ir al Catálogo
@@ -155,13 +157,13 @@
                     <!-- Botones de Acción (FINALIZAR COMPRA & VER CARRITO) -->
                     <div class="grid grid-cols-2 gap-3 pt-1">
                         <!-- Botón Finalizar Compra (Negro) -->
-                        <a href="{{ route('cliente.carrito') }}" 
+                        <a href="{{ route('cliente.carrito') }}" wire:navigate
                            class="w-full bg-black hover:bg-gray-800 text-white font-bold text-xs uppercase tracking-wider py-3.5 px-3 rounded-lg text-center transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                             <span>Finalizar Compra</span>
                         </a>
 
                         <!-- Botón Ver Carrito (Azul PayMe) -->
-                        <a href="{{ route('cliente.carrito') }}" 
+                        <a href="{{ route('cliente.carrito') }}" wire:navigate
                            class="w-full bg-[#002349] hover:bg-[#001730] text-white font-bold text-xs uppercase tracking-wider py-3.5 px-3 rounded-lg text-center transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
                             <span>Ver Carrito</span>
                         </a>

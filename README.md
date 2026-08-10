@@ -56,3 +56,27 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+## Despliegue a producción
+
+Pasos recomendados para cada liberación. Ejecutar **únicamente en producción/staging** — nunca en el entorno de desarrollo:
+
+```bash
+# 1) Dependencias
+composer install --no-dev --optimize-autoloader
+npm ci && npm run build   # genera assets con hash en public/build (con Cache-Control immutable en Apache)
+
+# 2) Cachear configuraciones y rutas — acelera notablemente la respuesta del framework
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Notas importantes:
+
+- **`config:cache`** cifra los valores de `.env` dentro del cache. Si cambias `.env` en producción, vuelve a ejecutar `php artisan config:clear && php artisan config:cache`.
+- **`route:cache`** requiere que todas las rutas sean serializables (sin closures en `routes/*.php`). Se invalida con `php artisan route:clear`.
+- **Assets**: nunca sirvas `public/build` sin cache de navegador. El `.htaccess` incluido aplica `Cache-Control: immutable` (1 año) a `/build/assets/*.js|css`, 1 semana a fuentes y 1 día a archivos bajo `/storage` y `/uploads`. Si el host usa el servidor web integrado de PHP (`php artisan serve`), el archivo `server.php` de la raíz replica esas cabeceras.
+- **Caché de carrito**: `CarritoService` está registrado como singleton y memoriza el carrito por petición; esto reduce consultas duplicadas en la barra, el drawer y el widget. La caché se invalida automáticamente en cualquier mutación del carrito.

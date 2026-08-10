@@ -12,38 +12,12 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo-192.png') }}">
 
-    <!-- Tailwind CSS CDN con plugins -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <!-- Vite Build Pipeline: Tailwind CSS compilado en producción -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- Fuente Oficial de Laravel & Business SaaS: Plus Jakarta Sans, Figtree & Material Symbols (Local) -->
     <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
     <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
-
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            sidebar: "#1F2937",
-                            surface: "#F8FAFC",
-                            card: "#FFFFFF",
-                            border: "#E5E7EB",
-                            title: "#111827",
-                            muted: "#6B7280",
-                            emerald: "#059669",
-                            emeraldLight: "#ECFDF5",
-                            gold: "#D97706",
-                        }
-                    },
-                    fontFamily: {
-                        sans: ["'Plus Jakarta Sans'", "Figtree", "sans-serif"],
-                    }
-                }
-            }
-        }
-    </script>
 
     <style>
         html, body {

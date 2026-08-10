@@ -16,57 +16,10 @@
         <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
         <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-        <!-- Tailwind CSS & Vite -->
+        <!-- Tailwind CSS compilado vía Vite -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <script>
-            tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                        colors: {
-                            "primary": "#000d22",
-                            "primary-container": "#002349",
-                            "on-primary": "#ffffff",
-                            "on-primary-container": "#718bb7",
-                            "secondary": "#006c47",
-                            "secondary-container": "#8af5be",
-                            "on-secondary": "#ffffff",
-                            "on-secondary-container": "#00714b",
-                            "tertiary": "#735c00",
-                            "tertiary-container": "#cca830",
-                            "background": "#f8f9ff",
-                            "on-background": "#0b1c30",
-                            "surface": "#ffffff",
-                            "surface-container-lowest": "#ffffff",
-                            "surface-container-low": "#f8f9ff",
-                            "surface-container": "#e5eeff",
-                            "surface-container-highest": "#d3e4fe",
-                            "on-surface": "#0b1c30",
-                            "on-surface-variant": "#4b5563",
-                            "outline": "#9ca3af",
-                            "outline-variant": "#e5e7eb",
-                            "error": "#dc2626",
-                            "error-container": "#fee2e2",
-                            "on-error": "#ffffff",
-                            "on-error-container": "#991b1b"
-                        },
-                        fontFamily: {
-                            "sans": ["Figtree", "ui-sans-serif", "system-ui", "sans-serif"]
-                        },
-                        borderRadius: {
-                            "DEFAULT": "0.375rem",
-                            "md": "0.375rem",
-                            "lg": "0.5rem",
-                            "xl": "0.75rem",
-                            "2xl": "1rem"
-                        }
-                    }
-                }
-            }
-        </script>
 
         <style>
             body {

@@ -13,77 +13,13 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo-192.png') }}">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <!-- Vite Build Pipeline: Tailwind CSS compilado en producción -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Tipografía Oficial de Laravel: Figtree & Material Symbols (Local) -->
     <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
     <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2"
         crossorigin>
-
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#002349",
-                        "primary-container": "#002349",
-                        "primary-fixed": "#d5e3ff",
-                        "primary-fixed-dim": "#adc8f6",
-                        "on-primary": "#ffffff",
-                        "on-primary-container": "#718bb7",
-                        "secondary": "#006148",
-                        "secondary-container": "#8af5be",
-                        "secondary-fixed": "#8df7c1",
-                        "secondary-fixed-dim": "#71dba6",
-                        "on-secondary": "#ffffff",
-                        "on-secondary-container": "#00714b",
-                        "tertiary": "#735c00",
-                        "tertiary-container": "#cca830",
-                        "tertiary-fixed": "#ffe088",
-                        "tertiary-fixed-dim": "#e9c349",
-                        "background": "#f8f9ff",
-                        "on-background": "#0b1c30",
-                        "surface": "#f8f9ff",
-                        "surface-bright": "#f8f9ff",
-                        "surface-dim": "#cbdbf5",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-low": "#eff4ff",
-                        "surface-container": "#e5eeff",
-                        "surface-container-high": "#dce9ff",
-                        "surface-container-highest": "#d3e4fe",
-                        "on-surface": "#0b1c30",
-                        "on-surface-variant": "#43474e",
-                        "outline": "#74777f",
-                        "outline-variant": "#c4c6cf",
-                        "error": "#ba1a1a",
-                        "error-container": "#ffdad6",
-                        "on-error": "#ffffff",
-                        "on-error-container": "#93000a"
-                    },
-                    fontFamily: {
-                        sans: ["Figtree", "sans-serif"],
-                        "headline-md": ["Figtree", "sans-serif"],
-                        "display-lg": ["Figtree", "sans-serif"],
-                        "body-lg": ["Figtree", "sans-serif"],
-                        "body-md": ["Figtree", "sans-serif"],
-                        "label-caps": ["Figtree", "sans-serif"],
-                        "numeric-data": ["Figtree", "sans-serif"]
-                    },
-                    spacing: {
-                        "gutter": "24px",
-                        "container-max": "1200px",
-                        "margin-desktop": "64px",
-                        "margin-mobile": "20px",
-                        "stack-sm": "4px",
-                        "stack-md": "16px",
-                        "stack-lg": "32px"
-                    }
-                }
-            }
-        }
-    </script>
 
     <style>
         html {
@@ -166,7 +102,7 @@
             <div class="flex items-center justify-between h-15 py-2.5 gap-4">
 
                 <!-- Brand Logo -->
-                <a href="{{ url('/') }}" class="flex items-center gap-2.5 shrink-0">
+                <a href="{{ url('/') }}" wire:navigate class="flex items-center gap-2.5 shrink-0">
                     <x-application-logo size="default" />
                     <div>
                         <span class="text-base font-bold text-[#002349] tracking-tight block leading-none">PayMe <span
@@ -196,7 +132,7 @@
                     <!-- User Authentication -->
                     @auth
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('dashboard') }}"
+                            <a href="{{ route('dashboard') }}" wire:navigate
                                 class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-[#002349] transition-colors">
                                 <span class="material-symbols-outlined text-[15px]">account_circle</span>
                                 <span>{{ Auth::user()->nombre ?? 'Mi Cuenta' }}</span>
@@ -220,11 +156,11 @@
                         </div>
                     @else
                         <div class="flex items-center gap-1.5">
-                            <a href="{{ route('login') }}"
+                            <a href="{{ route('login') }}" wire:navigate
                                 class="text-xs font-semibold text-[#002349] hover:text-[#006148] px-2.5 py-1.5 transition-colors">
                                 Iniciar Sesión
                             </a>
-                            <a href="{{ route('register') }}"
+                            <a href="{{ route('register') }}" wire:navigate
                                 class="text-xs font-semibold text-white bg-[#006148] hover:bg-[#004f3b] px-3 py-1.5 rounded-lg shadow-xs transition-colors">
                                 Registrarme
                             </a>
@@ -270,7 +206,7 @@
                     <h4 class="text-[11px] font-bold text-white uppercase tracking-wider mb-3 text-[#8af5be]">Tienda
                     </h4>
                     <ul class="space-y-1.5 text-xs text-gray-300">
-                        <li><a href="{{ url('/') }}" class="hover:text-white transition-colors">Inicio</a></li>
+                        <li><a href="{{ url('/') }}" wire:navigate class="hover:text-white transition-colors">Inicio</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Catálogo de Productos</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Ofertas Especiales</a></li>
                     </ul>
@@ -283,8 +219,8 @@
                     <ul class="space-y-1.5 text-xs text-gray-300">
                         <li><a href="#" class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
                         <li><a href="#" class="hover:text-white transition-colors">Políticas de Envío</a></li>
-                        <li><a href="{{ route('terminos') }}" class="hover:text-white transition-colors">Términos y
-                                Condiciones</a></li>
+<li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Términos y
+                                    Condiciones</a></li>
                     </ul>
                 </div>
 

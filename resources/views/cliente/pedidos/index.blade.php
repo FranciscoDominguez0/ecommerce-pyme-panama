@@ -29,9 +29,9 @@
             <p class="text-xs text-on-surface-variant mt-0.5">Consulta el estado y detalle de tus pedidos anteriores.</p>
         </div>
         <div class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 hide-scrollbar shrink-0">
-            <a href="{{ route('cliente.perfil.pedidos.index') }}" class="whitespace-nowrap px-4 py-2 rounded-full {{ !request('estado') ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Todos</a>
-            <a href="{{ route('cliente.perfil.pedidos.index', ['estado' => 'pendiente']) }}" class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'pendiente' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Pendientes</a>
-            <a href="{{ route('cliente.perfil.pedidos.index', ['estado' => 'entregado']) }}" class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'entregado' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Completados</a>
+            <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate class="whitespace-nowrap px-4 py-2 rounded-full {{ !request('estado') ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Todos</a>
+            <a href="{{ route('cliente.perfil.pedidos.index', ['estado' => 'pendiente']) }}" wire:navigate class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'pendiente' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Pendientes</a>
+            <a href="{{ route('cliente.perfil.pedidos.index', ['estado' => 'entregado']) }}" wire:navigate class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'entregado' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Completados</a>
         </div>
     </div>
 
@@ -101,7 +101,7 @@
                             <span class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-on-surface-variant">Total</span>
                             <div class="text-base font-bold text-primary mt-1">${{ number_format($pedido->total, 2) }}</div>
                         </div>
-                        <a href="{{ route('cliente.perfil.pedidos.detalle', $pedido->id) }}" class="border border-primary text-primary bg-transparent hover:bg-primary/5 rounded-lg px-4 py-2 font-label-caps text-[11px] font-bold tracking-wider uppercase transition-colors flex items-center gap-2">
+                        <a href="{{ route('cliente.perfil.pedidos.detalle', $pedido->id) }}" wire:navigate class="border border-primary text-primary bg-transparent hover:bg-primary/5 rounded-lg px-4 py-2 font-label-caps text-[11px] font-bold tracking-wider uppercase transition-colors flex items-center gap-2">
                             Ver Detalle
                             <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
                         </a>
@@ -117,7 +117,7 @@
                     <span class="material-symbols-outlined">chevron_left</span>
                 </span>
             @else
-                <a href="{{ $pedidos->previousPageUrl() }}" class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-dim transition-colors">
+                <a href="{{ $pedidos->previousPageUrl() }}" wire:navigate class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-dim transition-colors">
                     <span class="material-symbols-outlined">chevron_left</span>
                 </a>
             @endif
@@ -127,7 +127,7 @@
             </span>
 
             @if($pedidos->hasMorePages())
-                <a href="{{ $pedidos->nextPageUrl() }}" class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-dim transition-colors">
+                <a href="{{ $pedidos->nextPageUrl() }}" wire:navigate class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-dim transition-colors">
                     <span class="material-symbols-outlined">chevron_right</span>
                 </a>
             @else
@@ -142,7 +142,7 @@
             <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">shopping_bag</span>
             <h3 class="text-base font-bold text-primary mb-2">Aún no tienes pedidos</h3>
             <p class="text-on-surface-variant text-sm mb-6">Explora nuestro catálogo y encuentra los mejores productos.</p>
-            <a href="{{ route('cliente.catalogo') }}" class="inline-flex justify-center items-center gap-2 rounded-lg border border-transparent bg-secondary px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm hover:bg-secondary-container hover:text-on-secondary-container transition-colors font-label-caps">
+            <a href="{{ route('cliente.catalogo') }}" wire:navigate class="inline-flex justify-center items-center gap-2 rounded-lg border border-transparent bg-secondary px-6 py-2.5 text-sm font-bold uppercase tracking-wider text-on-secondary shadow-sm hover:bg-secondary-container hover:text-on-secondary-container transition-colors font-label-caps">
                 <span class="material-symbols-outlined text-[18px]">storefront</span>
                 Ir a la tienda
             </a>

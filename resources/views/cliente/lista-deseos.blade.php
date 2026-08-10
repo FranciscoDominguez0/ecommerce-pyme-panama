@@ -7,9 +7,9 @@
     
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-xs font-semibold text-gray-500 mb-6" aria-label="Breadcrumb">
-        <a href="{{ url('/') }}" class="hover:text-[#002349] transition-colors">Inicio</a>
+        <a href="{{ url('/') }}" wire:navigate class="hover:text-[#002349] transition-colors">Inicio</a>
         <span class="text-gray-300">/</span>
-        <a href="{{ route('cliente.catalogo') }}" class="hover:text-[#002349] transition-colors">Catálogo</a>
+        <a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-[#002349] transition-colors">Catálogo</a>
         <span class="text-gray-300">/</span>
         <span class="text-[#002349]">Lista de Deseos</span>
     </nav>
@@ -27,7 +27,7 @@
         </div>
 
         @if($productos->isNotEmpty())
-            <a href="{{ route('cliente.catalogo') }}" 
+            <a href="{{ route('cliente.catalogo') }}" wire:navigate
                class="inline-flex items-center gap-1.5 text-xs font-bold text-[#006148] hover:text-[#004f3b] transition-colors">
                 <span class="material-symbols-outlined text-[16px]">storefront</span>
                 <span>Explorar más productos</span>
@@ -50,7 +50,7 @@
                 Guarda los productos tecnológicos que te interesen para revisarlos o comprarlos después cuando estés listo.
             </p>
 
-            <a href="{{ route('cliente.catalogo') }}" 
+            <a href="{{ route('cliente.catalogo') }}" wire:navigate
                class="bg-[#006148] hover:bg-[#004f3b] text-white font-bold text-xs uppercase tracking-wider px-8 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all flex items-center gap-2">
                 <span class="material-symbols-outlined text-[18px]">storefront</span>
                 <span>Ir al catálogo</span>
@@ -98,7 +98,7 @@
                     @endif
 
                     <h3 class="text-sm font-bold text-gray-900 line-clamp-2 min-h-[40px] leading-snug hover:text-[#006148] transition-colors">
-                        <a href="{{ route('cliente.producto.detalle', $producto->slug) }}">
+                        <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" wire:navigate>
                             {{ $producto->nombre }}
                         </a>
                     </h3>

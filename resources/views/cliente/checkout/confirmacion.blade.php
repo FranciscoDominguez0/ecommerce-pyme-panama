@@ -9,7 +9,7 @@
         <div class="flex items-center w-full relative">
             <!-- Step 1: Address (Completed) -->
             <div class="flex flex-col items-center relative z-10 w-1/3">
-                <a href="{{ route('cliente.checkout.direccion') }}" class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
+                <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">check</span>
                 </a>
                 <span class="font-label-caps text-xs font-semibold uppercase tracking-wide text-secondary text-center">Dirección</span>
@@ -18,7 +18,7 @@
             <div class="absolute top-4 left-[16.6%] right-[50%] h-[2px] bg-secondary -z-10"></div>
             <!-- Step 2: Payment (Completed) -->
             <div class="flex flex-col items-center relative z-10 w-1/3">
-                <a href="{{ route('cliente.checkout.pago') }}" class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
+                <a href="{{ route('cliente.checkout.pago') }}" wire:navigate class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">check</span>
                 </a>
                 <span class="font-label-caps text-xs font-semibold uppercase tracking-wide text-secondary text-center">Pago</span>
@@ -83,7 +83,7 @@
                             <span class="material-symbols-outlined text-primary text-xl">location_on</span>
                             <h2 class="text-sm font-bold text-primary">Envío a</h2>
                         </div>
-                        <a href="{{ route('cliente.checkout.direccion') }}" class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
+                        <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
                     </div>
                     <address class="text-xs text-on-surface-variant not-italic flex-1">
                         <p class="font-semibold text-on-background mb-1">{{ $direccion->nombre_receptor }}</p>
@@ -103,7 +103,7 @@
                             <span class="material-symbols-outlined text-primary text-xl">payments</span>
                             <h2 class="text-sm font-bold text-primary">Pago</h2>
                         </div>
-                        <a href="{{ route('cliente.checkout.pago') }}" class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
+                        <a href="{{ route('cliente.checkout.pago') }}" wire:navigate class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
                     </div>
                     <div class="text-xs text-on-surface-variant flex items-center gap-3">
                         @if($metodoPago === 'stripe')

@@ -13,6 +13,12 @@ class CarritoService
 {
     protected CuponService $cuponService;
 
+    /**
+     * Carritos resueltos en la petición actual, indexados por "u:{id}" o "s:{sesion}".
+     * Evita repetir la consulta en cada componente (navbar badges, drawer, widget).
+     */
+    protected array $carritosPorPeticion = [];
+
     public function __construct(CuponService $cuponService)
     {
         $this->cuponService = $cuponService;
@@ -22,6 +28,41 @@ class CarritoService
      * Obtiene o crea un carrito persistente para el usuario o sesión actual.
      */
     public function obtenerOCrearCarrito(?int $usuarioId = null, ?string $sesionId = null): Carrito
+    {
+        $clave = $this->claveCarrito($usuarioId, $sesionId);
+
+        if ($clave !== null && array_key_exists($clave, $this->carritosPorPeticion)) {
+            return $this->carritosPorPeticion[$clave];
+        }
+
+        return $this->resolverCarrito($usuarioId, $sesionId, $clave);
+    }
+
+    protected function claveCarrito(?int $usuarioId, ?string $sesionId): ?string
+    {
+        if ($usuarioId) {
+            return 'u:' . $usuarioId;
+        }
+
+        if ($sesionId) {
+            return 's:' . $sesionId;
+        }
+
+        return null;
+    }
+
+    protected function resolverCarrito(?int $usuarioId = null, ?string $sesionId = null, ?string $clave = null): Carrito
+    {
+        $carrito = $this->consultarOCrearCarrito($usuarioId, $sesionId);
+
+        if ($clave !== null && $carrito->exists) {
+            $this->carritosPorPeticion[$clave] = $carrito;
+        }
+
+        return $carrito;
+    }
+
+    protected function consultarOCrearCarrito(?int $usuarioId = null, ?string $sesionId = null): Carrito
     {
         if ($usuarioId) {
             $carrito = Carrito::with([
@@ -66,10 +107,22 @@ class CarritoService
     }
 
     /**
+     * Invalida la caché de carritos de la petición actual.
+     * Debe llamarse antes de cualquier mutación para evitar lecturas obsoletas
+     * (p. ej. listeners de "carrito-actualizado" ejecutados en la misma petición).
+     */
+    protected function olvidarCarritos(): void
+    {
+        $this->carritosPorPeticion = [];
+    }
+
+    /**
      * Fusiona el carrito de una sesión de visitante con el del usuario autenticado.
      */
     public function fusionarCarritos(string $sesionId, int $usuarioId): Carrito
     {
+        $this->olvidarCarritos();
+
         return DB::transaction(function () use ($sesionId, $usuarioId) {
             $carritoSesion = Carrito::with(['items', 'cupon'])->where('sesion_id', $sesionId)->first();
             $carritoUsuario = $this->obtenerOCrearCarrito($usuarioId);
@@ -125,6 +178,8 @@ class CarritoService
             // Recalcular cupón y refrescar
             $this->recalcularDescuentoCupon($carritoUsuario, $usuarioId);
 
+            $this->olvidarCarritos();
+
             return $carritoUsuario->fresh(['items.producto.imagenes', 'items.variante.opciones', 'cupon']);
         });
     }
@@ -142,6 +197,8 @@ class CarritoService
         if ($cantidad <= 0) {
             $cantidad = 1;
         }
+
+        $this->olvidarCarritos();
 
         $producto = Producto::where('id', $productoId)
             ->whereNull('eliminado_en')
@@ -227,6 +284,8 @@ class CarritoService
         // Recalcular cupón si existe
         $this->recalcularDescuentoCupon($carrito, $usuarioId);
 
+        $this->olvidarCarritos();
+
         return [
             'exito' => true,
             'mensaje' => 'Producto añadido al carrito correctamente.',
@@ -240,6 +299,8 @@ class CarritoService
      */
     public function actualizarCantidad(int $itemCarritoId, int $cantidad, ?int $usuarioId = null): array
     {
+        $this->olvidarCarritos();
+
         if ($cantidad <= 0) {
             $this->eliminarItem($itemCarritoId, $usuarioId);
             return [
@@ -286,6 +347,8 @@ class CarritoService
      */
     public function eliminarItem(int $itemCarritoId, ?int $usuarioId = null): bool
     {
+        $this->olvidarCarritos();
+
         $item = ItemCarrito::with('carrito')->find($itemCarritoId);
 
         if (!$item) {
@@ -366,6 +429,8 @@ class CarritoService
      */
     public function aplicarCupon(Carrito $carrito, string $codigo, ?int $usuarioId = null): array
     {
+        $this->olvidarCarritos();
+
         $subtotal = $this->calcularSubtotal($carrito);
 
         if ($subtotal <= 0) {
@@ -415,6 +480,8 @@ class CarritoService
      */
     public function removerCupon(Carrito $carrito): bool
     {
+        $this->olvidarCarritos();
+
         $carrito->update([
             'cupon_id' => null,
             'descuento_aplicado' => 0.00,
@@ -428,6 +495,8 @@ class CarritoService
      */
     public function recalcularDescuentoCupon(Carrito $carrito, ?int $usuarioId = null): void
     {
+        $this->olvidarCarritos();
+
         if (!$carrito->cupon_id) {
             return;
         }

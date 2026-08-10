@@ -8,7 +8,7 @@
         
         <!-- Breadcrumbs -->
         <nav class="flex items-center gap-2 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
-            <a href="{{ route('inicio') }}" class="hover:text-emerald-700 transition-colors flex items-center gap-1">
+            <a href="{{ route('inicio') }}" wire:navigate class="hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">home</span>
                 <span>Inicio</span>
             </a>

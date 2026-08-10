@@ -77,7 +77,7 @@
 
             {{-- Botones de acción --}}
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-outline-variant">
-                <a href="{{ route('cliente.carrito') }}" class="text-on-surface-variant hover:text-primary font-label-caps text-xs font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
+                <a href="{{ route('cliente.carrito') }}" wire:navigate class="text-on-surface-variant hover:text-primary font-label-caps text-xs font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
                     <span class="material-symbols-outlined text-sm">arrow_back</span>
                     Volver al Carrito
                 </a>

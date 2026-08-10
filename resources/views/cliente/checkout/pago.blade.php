@@ -9,7 +9,7 @@
         <div class="flex items-center w-full relative">
             <!-- Step 1: Address (Completed) -->
             <div class="flex flex-col items-center relative z-10 w-1/3">
-                <a href="{{ route('cliente.checkout.direccion') }}" class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
+                <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">check</span>
                 </a>
                 <span class="font-label-caps text-xs font-semibold uppercase tracking-wide text-secondary text-center">Dirección</span>
@@ -141,7 +141,7 @@
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-outline-variant">
-            <a href="{{ route('cliente.checkout.direccion') }}" class="text-on-surface-variant hover:text-primary font-label-caps text-xs font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
+            <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="text-on-surface-variant hover:text-primary font-label-caps text-xs font-semibold uppercase tracking-wide transition-colors flex items-center gap-2 w-full sm:w-auto justify-center">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Volver a Dirección
             </a>

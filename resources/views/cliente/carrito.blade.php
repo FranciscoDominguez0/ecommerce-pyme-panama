@@ -7,9 +7,9 @@
     
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-xs font-semibold text-gray-500 mb-6" aria-label="Breadcrumb">
-        <a href="{{ url('/') }}" class="hover:text-[#002349] transition-colors">Inicio</a>
+        <a href="{{ url('/') }}" wire:navigate class="hover:text-[#002349] transition-colors">Inicio</a>
         <span class="text-gray-300">/</span>
-        <a href="{{ route('cliente.catalogo') }}" class="hover:text-[#002349] transition-colors">Catálogo</a>
+        <a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-[#002349] transition-colors">Catálogo</a>
         <span class="text-gray-300">/</span>
         <span class="text-[#002349]">Carrito</span>
     </nav>
