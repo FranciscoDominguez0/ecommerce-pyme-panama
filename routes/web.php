@@ -51,7 +51,6 @@ Route::post('/carrito/remover-cupon', [CarritoController::class, 'removerCupon']
 // Checkout
 Route::middleware('auth')->group(function () {
     Route::get('/checkout/direccion', [CheckoutController::class, 'direccion'])->name('cliente.checkout.direccion');
-    Route::post('/checkout/direccion', [CheckoutController::class, 'guardarDireccion'])->name('cliente.checkout.guardar-direccion');
     Route::get('/checkout/pago', [CheckoutController::class, 'pago'])->name('cliente.checkout.pago');
     Route::post('/checkout/pago', [CheckoutController::class, 'guardarPago'])->name('cliente.checkout.guardar-pago');
     Route::get('/checkout/confirmacion', [CheckoutController::class, 'confirmacion'])->name('cliente.checkout.confirmacion');
@@ -81,18 +80,10 @@ Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(f
     })->name('password');
 
     Route::get('/direcciones', [\App\Http\Controllers\Cliente\DireccionController::class, 'index'])->name('direcciones');
-    Route::post('/direcciones', [\App\Http\Controllers\Cliente\DireccionController::class, 'store'])->name('direcciones.store');
-    Route::put('/direcciones/{id}', [\App\Http\Controllers\Cliente\DireccionController::class, 'update'])->name('direcciones.update');
-    Route::delete('/direcciones/{id}', [\App\Http\Controllers\Cliente\DireccionController::class, 'destroy'])->name('direcciones.destroy');
-    Route::put('/direcciones/{id}/predeterminada', [\App\Http\Controllers\Cliente\DireccionController::class, 'setDefault'])->name('direcciones.predeterminada');
 
     Route::get('/mis-pedidos', [ClientePedidoController::class, 'index'])->name('pedidos.index');
     Route::get('/mis-pedidos/{id}', [ClientePedidoController::class, 'detalle'])->name('pedidos.detalle');
 });
-
-// API interna: Ubicaciones de Panamá (distritos y corregimientos)
-Route::get('/api/ubicaciones/distritos', [\App\Http\Controllers\Cliente\DireccionController::class, 'apiDistritos'])->name('api.ubicaciones.distritos');
-Route::get('/api/ubicaciones/corregimientos', [\App\Http\Controllers\Cliente\DireccionController::class, 'apiCorregimientos'])->name('api.ubicaciones.corregimientos');
 
 // 4. Panel de Cliente autenticado
 Route::get('/dashboard', function () {

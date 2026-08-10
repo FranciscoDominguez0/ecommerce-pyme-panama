@@ -65,6 +65,8 @@
 <script>
     window.ModalEliminar = window.ModalEliminar || {
         _urls: {},
+        _livewireEvents: {},
+        _livewireData: {},
 
         abrir: function(opcionesOUrl, nombreOpcional, extraOpcional) {
             let opts = {};
@@ -83,6 +85,8 @@
             if (!modal) return;
 
             this._urls[id] = opts.url;
+            this._livewireEvents[id] = opts.livewireEvent || null;
+            this._livewireData[id] = opts.livewireData || null;
 
             // Form action
             const form = document.getElementById(id + '-form');
@@ -143,6 +147,20 @@
 
         confirmar: function(id) {
             id = id || 'modal-eliminar-global';
+
+            const livewireEvent = this._livewireEvents && this._livewireEvents[id];
+            if (livewireEvent) {
+                const datos = (this._livewireData && this._livewireData[id]) || {};
+                if (window.Livewire) {
+                    window.Livewire.dispatch(livewireEvent, datos);
+                }
+                this.cerrar(id);
+                this._urls[id] = null;
+                this._livewireEvents[id] = null;
+                this._livewireData[id] = null;
+                return;
+            }
+
             const form = document.getElementById(id + '-form');
             const url = this._urls[id];
 

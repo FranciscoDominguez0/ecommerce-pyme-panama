@@ -27,6 +27,8 @@ class CheckoutController extends Controller
 
     /**
      * Paso 1: Dirección de Envío
+     * La selección/creación de la dirección y la continuación del flujo
+     * las maneja el componente reutilizable App\Livewire\GestionDirecciones.
      */
     public function direccion(Request $request)
     {
@@ -40,60 +42,9 @@ class CheckoutController extends Controller
             return redirect()->route('cliente.carrito')->with('warning', 'Tu carrito está vacío.');
         }
 
-        $direcciones = Direccion::where('usuario_id', $usuario->id)
-            ->whereNull('eliminado_en')
-            ->get();
-            
         $zonasEnvio = ZonaEnvio::activo()->get();
 
-        return view('cliente.checkout.direccion', compact('direcciones', 'zonasEnvio'));
-    }
-
-    public function guardarDireccion(Request $request)
-    {
-        $rules = [
-            'direccion_id' => 'nullable|exists:direcciones,id',
-            'zona_envio_id' => 'required|exists:zonas_envio,id',
-        ];
-
-        if (blank($request->direccion_id)) {
-            $rules += [
-                'alias' => 'required|string|max:100',
-                'nombre_receptor' => 'required|string|max:255',
-                'provincia' => 'required|string|max:100',
-                'distrito' => 'required|string|max:100',
-                'corregimiento' => 'required|string|max:100',
-                'direccion_exacta' => 'required|string',
-                'referencia' => 'nullable|string|max:255',
-            ];
-        }
-
-        $request->validate($rules);
-
-        $usuarioId = Auth::id();
-        $direccionId = $request->direccion_id;
-
-        if (!$direccionId) {
-            $direccion = Direccion::create([
-                'usuario_id' => $usuarioId,
-                'alias' => $request->alias,
-                'nombre_receptor' => $request->nombre_receptor,
-                'provincia' => $request->provincia,
-                'distrito' => $request->distrito,
-                'corregimiento' => $request->corregimiento,
-                'direccion_exacta' => $request->direccion_exacta,
-                'referencia' => $request->referencia,
-                'es_predeterminada' => $request->has('es_predeterminada'),
-            ]);
-            $direccionId = $direccion->id;
-        }
-
-        session([
-            'checkout_direccion_id' => $direccionId,
-            'checkout_zona_envio_id' => $request->zona_envio_id,
-        ]);
-
-        return redirect()->route('cliente.checkout.pago');
+        return view('cliente.checkout.direccion', compact('zonasEnvio'));
     }
 
     /**
