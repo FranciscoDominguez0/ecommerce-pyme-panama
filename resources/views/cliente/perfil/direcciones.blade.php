@@ -200,162 +200,182 @@
 
 @push('scripts')
 <script>
-    window.geoData = @json(\App\Helpers\GeolocalizacionPanama::data());
+    (function () {
+        var geoData = @json(\App\Helpers\GeolocalizacionPanama::data());
 
-    let modoEdicion = false;
-    let editandoId = null;
+        function iniciar() {
+            var formContainer = document.getElementById('form-container');
+            if (!formContainer || formContainer.getAttribute('data-bound') === '1') return;
+            formContainer.setAttribute('data-bound', '1');
 
-    const formContainer = document.getElementById('form-container');
-    const formTitulo = document.getElementById('form-titulo');
-    const formSubtitulo = document.getElementById('form-subtitulo');
-    const formDireccion = document.getElementById('form-direccion');
-    const formMethod = document.getElementById('form-method');
-    const provinciaSelect = document.getElementById('provincia');
-    const distritoSelect = document.getElementById('distrito');
-    const corregimientoSelect = document.getElementById('corregimiento');
-    const btnGuardarTexto = document.getElementById('btn-guardar-texto');
-    const listaDirecciones = document.getElementById('lista-direcciones');
-    const estadoVacio = document.getElementById('estado-vacio');
+            window.geoData = geoData;
 
-    function mostrarFormulario() {
-        formContainer.classList.remove('hidden');
-        formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+            var modoEdicion = false;
+            var editandoId = null;
 
-    function ocultarFormulario() {
-        formContainer.classList.add('hidden');
-        resetFormulario();
-    }
+            var formTitulo = document.getElementById('form-titulo');
+            var formSubtitulo = document.getElementById('form-subtitulo');
+            var formDireccion = document.getElementById('form-direccion');
+            var formMethod = document.getElementById('form-method');
+            var provinciaSelect = document.getElementById('provincia');
+            var distritoSelect = document.getElementById('distrito');
+            var corregimientoSelect = document.getElementById('corregimiento');
+            var btnGuardarTexto = document.getElementById('btn-guardar-texto');
+            var listaDirecciones = document.getElementById('lista-direcciones');
+            var estadoVacio = document.getElementById('estado-vacio');
 
-    function resetFormulario() {
-        modoEdicion = false;
-        editandoId = null;
-        formDireccion.action = '{{ route('cliente.perfil.direcciones.store') }}';
-        formMethod.value = 'POST';
-        formTitulo.textContent = 'Agregar Dirección';
-        formSubtitulo.textContent = 'Completa los datos de tu dirección de envío.';
-        btnGuardarTexto.textContent = 'Guardar dirección';
-        formDireccion.reset();
-        provinciaSelect.value = '';
-        distritoSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-        distritoSelect.disabled = true;
-        corregimientoSelect.innerHTML = '<option value="">Selecciona un corregimiento</option>';
-        corregimientoSelect.disabled = true;
-    }
+            function mostrarFormulario() {
+                formContainer.classList.remove('hidden');
+                formContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
 
-    function llenarDistritos(provincia, distritoSeleccionado) {
-        distritoSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
-        corregimientoSelect.innerHTML = '<option value="">Selecciona un corregimiento</option>';
-        corregimientoSelect.disabled = true;
+            function ocultarFormulario() {
+                formContainer.classList.add('hidden');
+                resetFormulario();
+            }
 
-        if (!provincia || !window.geoData[provincia]) {
-            distritoSelect.disabled = true;
-            return;
+            function resetFormulario() {
+                modoEdicion = false;
+                editandoId = null;
+                formDireccion.action = '{{ route('cliente.perfil.direcciones.store') }}';
+                formMethod.value = 'POST';
+                formTitulo.textContent = 'Agregar Dirección';
+                formSubtitulo.textContent = 'Completa los datos de tu dirección de envío.';
+                btnGuardarTexto.textContent = 'Guardar dirección';
+                formDireccion.reset();
+                provinciaSelect.value = '';
+                distritoSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+                distritoSelect.disabled = true;
+                corregimientoSelect.innerHTML = '<option value="">Selecciona un corregimiento</option>';
+                corregimientoSelect.disabled = true;
+            }
+
+            function llenarDistritos(provincia, distritoSeleccionado) {
+                distritoSelect.innerHTML = '<option value="">Selecciona un distrito</option>';
+                corregimientoSelect.innerHTML = '<option value="">Selecciona un corregimiento</option>';
+                corregimientoSelect.disabled = true;
+
+                if (!provincia || !window.geoData[provincia]) {
+                    distritoSelect.disabled = true;
+                    return;
+                }
+
+                distritoSelect.disabled = false;
+                var distritos = Object.keys(window.geoData[provincia].distritos);
+                distritos.forEach(function(d) {
+                    var opt = document.createElement('option');
+                    opt.value = d;
+                    opt.textContent = d;
+                    if (d === distritoSeleccionado) opt.selected = true;
+                    distritoSelect.appendChild(opt);
+                });
+
+                if (distritoSeleccionado) {
+                    llenarCorregimientos(provincia, distritoSeleccionado, null);
+                }
+            }
+
+            function llenarCorregimientos(provincia, distrito, corregimientoSeleccionado) {
+                corregimientoSelect.innerHTML = '<option value="">Selecciona un corregimiento</option>';
+
+                if (!provincia || !distrito || !window.geoData[provincia] || !window.geoData[provincia].distritos[distrito]) {
+                    corregimientoSelect.disabled = true;
+                    return;
+                }
+
+                corregimientoSelect.disabled = false;
+                var corregimientos = window.geoData[provincia].distritos[distrito];
+                corregimientos.forEach(function(c) {
+                    var opt = document.createElement('option');
+                    opt.value = c;
+                    opt.textContent = c;
+                    if (c === corregimientoSeleccionado) opt.selected = true;
+                    corregimientoSelect.appendChild(opt);
+                });
+            }
+
+            provinciaSelect.addEventListener('change', function() {
+                llenarDistritos(this.value, null);
+            });
+
+            distritoSelect.addEventListener('change', function() {
+                llenarCorregimientos(provinciaSelect.value, this.value, null);
+            });
+
+            document.getElementById('btn-agregar').addEventListener('click', function() {
+                resetFormulario();
+                mostrarFormulario();
+            });
+
+            document.getElementById('btn-cancelar').addEventListener('click', ocultarFormulario);
+
+            document.getElementById('btn-volver').addEventListener('click', ocultarFormulario);
+
+            var btnAgregarVacio = document.getElementById('btn-agregar-vacio');
+            if (btnAgregarVacio) {
+                btnAgregarVacio.addEventListener('click', function() {
+                    resetFormulario();
+                    mostrarFormulario();
+                });
+            }
+
+            window.editarDireccion = function(id) {
+                var card = document.querySelector('[onclick="editarDireccion(' + id + ')"]').closest('.card-direccion');
+                var datos = card.querySelector('.space-y-1');
+                var alias = card.querySelector('.text-base.font-semibold').textContent.trim();
+                var receptor = datos.querySelector('.font-semibold').textContent.trim();
+                var direccionExacta = datos.querySelector('p:nth-child(2)').textContent.trim();
+                var corregDistrito = datos.querySelector('p:nth-child(3)').textContent.trim();
+                var provincia = datos.querySelector('p:nth-child(4)').textContent.trim();
+                var refElem = datos.querySelector('p.text-outline');
+                var referencia = refElem ? refElem.textContent.replace(/^Ref:\s*/, '').trim() : '';
+                var esPredeterminada = card.querySelector('.text-secondary.text-\\[10px\\]') !== null;
+
+                var partes = corregDistrito.split(', ');
+                var corregimiento = partes[0] || '';
+                var distrito = partes[1] || '';
+
+                modoEdicion = true;
+                editandoId = id;
+                formDireccion.action = '{{ url('mi-cuenta/direcciones') }}/' + id;
+                formMethod.value = 'PUT';
+                formTitulo.textContent = 'Editar Dirección';
+                formSubtitulo.textContent = 'Actualiza los datos de tu dirección de envío guardada.';
+                btnGuardarTexto.textContent = 'Guardar cambios';
+
+                document.getElementById('alias').value = alias;
+                document.getElementById('nombre_receptor').value = receptor;
+                document.getElementById('direccion_exacta').value = direccionExacta;
+                document.getElementById('referencia').value = referencia;
+                document.getElementById('es_predeterminada').checked = esPredeterminada;
+
+                provinciaSelect.value = provincia;
+                llenarDistritos(provincia, distrito);
+                llenarCorregimientos(provincia, distrito, corregimiento);
+
+                mostrarFormulario();
+            };
+
+            window.confirmarEliminar = function(id, alias, direccion) {
+                window.ModalEliminar.abrir({
+                    url: '{{ url('mi-cuenta/direcciones') }}/' + id,
+                    nombre: alias + ' - ' + direccion.substring(0, 40) + (direccion.length > 40 ? '...' : ''),
+                    id: 'modal-eliminar-direccion'
+                });
+            };
         }
 
-        distritoSelect.disabled = false;
-        const distritos = Object.keys(window.geoData[provincia].distritos);
-        distritos.forEach(function(d) {
-            const opt = document.createElement('option');
-            opt.value = d;
-            opt.textContent = d;
-            if (d === distritoSeleccionado) opt.selected = true;
-            distritoSelect.appendChild(opt);
-        });
-
-        if (distritoSeleccionado) {
-            llenarCorregimientos(provincia, distritoSeleccionado, null);
-        }
-    }
-
-    function llenarCorregimientos(provincia, distrito, corregimientoSeleccionado) {
-        corregimientoSelect.innerHTML = '<option value="">Selecciona un corregimiento</option>';
-
-        if (!provincia || !distrito || !window.geoData[provincia] || !window.geoData[provincia].distritos[distrito]) {
-            corregimientoSelect.disabled = true;
-            return;
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', iniciar);
+        } else {
+            iniciar();
         }
 
-        corregimientoSelect.disabled = false;
-        const corregimientos = window.geoData[provincia].distritos[distrito];
-        corregimientos.forEach(function(c) {
-            const opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = c;
-            if (c === corregimientoSeleccionado) opt.selected = true;
-            corregimientoSelect.appendChild(opt);
-        });
-    }
-
-    provinciaSelect.addEventListener('change', function() {
-        llenarDistritos(this.value, null);
-    });
-
-    distritoSelect.addEventListener('change', function() {
-        llenarCorregimientos(provinciaSelect.value, this.value, null);
-    });
-
-    document.getElementById('btn-agregar').addEventListener('click', function() {
-        resetFormulario();
-        mostrarFormulario();
-    });
-
-    document.getElementById('btn-cancelar').addEventListener('click', ocultarFormulario);
-
-    document.getElementById('btn-volver').addEventListener('click', ocultarFormulario);
-
-    const btnAgregarVacio = document.getElementById('btn-agregar-vacio');
-    if (btnAgregarVacio) {
-        btnAgregarVacio.addEventListener('click', function() {
-            resetFormulario();
-            mostrarFormulario();
-        });
-    }
-
-    window.editarDireccion = function(id) {
-        const card = document.querySelector('[onclick="editarDireccion(' + id + ')"]').closest('.card-direccion');
-        const datos = card.querySelector('.space-y-1');
-        const alias = card.querySelector('.text-base.font-semibold').textContent.trim();
-        const receptor = datos.querySelector('.font-semibold').textContent.trim();
-        const direccionExacta = datos.querySelector('p:nth-child(2)').textContent.trim();
-        const corregDistrito = datos.querySelector('p:nth-child(3)').textContent.trim();
-        const provincia = datos.querySelector('p:nth-child(4)').textContent.trim();
-        const refElem = datos.querySelector('p.text-outline');
-        const referencia = refElem ? refElem.textContent.replace(/^Ref:\s*/, '').trim() : '';
-        const esPredeterminada = card.querySelector('.text-secondary.text-\\[10px\\]') !== null;
-
-        const partes = corregDistrito.split(', ');
-        const corregimiento = partes[0] || '';
-        const distrito = partes[1] || '';
-
-        modoEdicion = true;
-        editandoId = id;
-        formDireccion.action = '{{ url('mi-cuenta/direcciones') }}/' + id;
-        formMethod.value = 'PUT';
-        formTitulo.textContent = 'Editar Dirección';
-        formSubtitulo.textContent = 'Actualiza los datos de tu dirección de envío guardada.';
-        btnGuardarTexto.textContent = 'Guardar cambios';
-
-        document.getElementById('alias').value = alias;
-        document.getElementById('nombre_receptor').value = receptor;
-        document.getElementById('direccion_exacta').value = direccionExacta;
-        document.getElementById('referencia').value = referencia;
-        document.getElementById('es_predeterminada').checked = esPredeterminada;
-
-        provinciaSelect.value = provincia;
-        llenarDistritos(provincia, distrito);
-        llenarCorregimientos(provincia, distrito, corregimiento);
-
-        mostrarFormulario();
-    };
-
-    window.confirmarEliminar = function(id, alias, direccion) {
-        window.ModalEliminar.abrir({
-            url: '{{ url('mi-cuenta/direcciones') }}/' + id,
-            nombre: alias + ' - ' + direccion.substring(0, 40) + (direccion.length > 40 ? '...' : ''),
-            id: 'modal-eliminar-direccion'
-        });
-    };
+        if (!window.__direccionesInitRegistrado) {
+            window.__direccionesInitRegistrado = true;
+            document.addEventListener('livewire:navigated', iniciar);
+        }
+    })();
 </script>
 @endpush
 @endsection
