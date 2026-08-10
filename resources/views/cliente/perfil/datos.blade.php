@@ -3,7 +3,7 @@
 @section('title', 'Configuración de Perfil')
 
 @section('content')
-<x-cliente.perfil.layout active="configuracion" :editableAvatar="true">
+<x-cliente.perfil.layout active="configuracion">
     <div class="flex items-center justify-between mb-4">
         <div>
             <h3 class="text-base font-bold text-primary">Información personal</h3>
@@ -125,101 +125,49 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const inputFoto = document.getElementById('foto_perfil');
-        const fileName = document.getElementById('file-name');
-        const previewImg = document.getElementById('avatar-preview-img');
-        const previewInitials = document.getElementById('avatar-preview-initials');
-        const btnEliminar = document.getElementById('btn-eliminar-foto');
-        const eliminarFotoInput = document.getElementById('eliminar_foto');
-        const photoWrapper = document.getElementById('photo-wrapper');
-        const cameraBadge = document.getElementById('camera-badge');
-
-        function triggerFilePicker() {
-            inputFoto.click();
-        }
-
-        photoWrapper.addEventListener('click', function (e) {
-            if (e.target.closest('#btn-eliminar-foto')) return;
-            triggerFilePicker();
-        });
-
-        cameraBadge.addEventListener('click', function (e) {
-            e.stopPropagation();
-            triggerFilePicker();
-        });
-
-        inputFoto.addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                fileName.textContent = file.name;
-                fileName.classList.remove('hidden');
-                btnEliminar.classList.remove('hidden');
-                btnEliminar.style.display = 'flex';
-                eliminarFotoInput.value = '0';
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    previewImg.src = e.target.result;
-                    previewImg.classList.remove('hidden');
-                    if (previewInitials) previewInitials.classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        btnEliminar.addEventListener('click', function (e) {
-            e.stopPropagation();
-            e.preventDefault();
-            inputFoto.value = '';
-            fileName.textContent = '';
-            fileName.classList.add('hidden');
-            eliminarFotoInput.value = '1';
-            previewImg.src = '';
-            previewImg.classList.add('hidden');
-            if (previewInitials) previewInitials.classList.remove('hidden');
-            btnEliminar.classList.add('hidden');
-            btnEliminar.style.display = 'none';
-        });
-
-        // Edit mode toggle
+    (function () {
         const btnToggle = document.getElementById('btn-toggle-edit');
-        const displayMode = document.getElementById('display-mode');
-        const editMode = document.getElementById('edit-mode');
-        const toggleIcon = document.getElementById('toggle-icon');
-        const toggleText = document.getElementById('toggle-text');
-        const actionButtons = document.getElementById('action-buttons');
-        const btnCancelarEdit = document.getElementById('btn-cancelar-edit');
-        let isEditing = false;
+        if (btnToggle && !btnToggle.dataset.inited) {
+            btnToggle.dataset.inited = '1';
 
-        btnToggle.addEventListener('click', function () {
-            isEditing = !isEditing;
-            if (isEditing) {
-                displayMode.classList.add('hidden');
-                editMode.classList.remove('hidden');
-                actionButtons.classList.remove('hidden');
-                actionButtons.classList.add('flex');
-                toggleIcon.textContent = 'visibility';
-                toggleText.textContent = 'Vista previa';
-            } else {
+            const displayMode = document.getElementById('display-mode');
+            const editMode = document.getElementById('edit-mode');
+            const toggleIcon = document.getElementById('toggle-icon');
+            const toggleText = document.getElementById('toggle-text');
+            const actionButtons = document.getElementById('action-buttons');
+            const btnCancelarEdit = document.getElementById('btn-cancelar-edit');
+            let isEditing = false;
+
+            btnToggle.addEventListener('click', function () {
+                isEditing = !isEditing;
+                if (isEditing) {
+                    displayMode.classList.add('hidden');
+                    editMode.classList.remove('hidden');
+                    actionButtons.classList.remove('hidden');
+                    actionButtons.classList.add('flex');
+                    toggleIcon.textContent = 'visibility';
+                    toggleText.textContent = 'Vista previa';
+                } else {
+                    displayMode.classList.remove('hidden');
+                    editMode.classList.add('hidden');
+                    actionButtons.classList.add('hidden');
+                    actionButtons.classList.remove('flex');
+                    toggleIcon.textContent = 'edit';
+                    toggleText.textContent = 'Editar información';
+                }
+            });
+
+            btnCancelarEdit.addEventListener('click', function () {
+                isEditing = false;
                 displayMode.classList.remove('hidden');
                 editMode.classList.add('hidden');
                 actionButtons.classList.add('hidden');
                 actionButtons.classList.remove('flex');
                 toggleIcon.textContent = 'edit';
                 toggleText.textContent = 'Editar información';
-            }
-        });
-
-        btnCancelarEdit.addEventListener('click', function () {
-            isEditing = false;
-            displayMode.classList.remove('hidden');
-            editMode.classList.add('hidden');
-            actionButtons.classList.add('hidden');
-            actionButtons.classList.remove('flex');
-            toggleIcon.textContent = 'edit';
-            toggleText.textContent = 'Editar información';
-        });
-    });
+            });
+        }
+    })();
 </script>
 @endpush
 @endsection

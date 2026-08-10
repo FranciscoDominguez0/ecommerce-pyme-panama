@@ -73,6 +73,7 @@ Route::get('/home', function () {
 Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Cliente\PerfilController::class, 'edit'])->name('datos');
     Route::put('/perfil', [\App\Http\Controllers\Cliente\PerfilController::class, 'update'])->name('datos.update');
+    Route::post('/perfil/foto', [\App\Http\Controllers\Cliente\PerfilController::class, 'updateFoto'])->name('foto.update');
     Route::put('/password', [\App\Http\Controllers\Cliente\PerfilController::class, 'updatePassword'])->name('password.update');
 
     Route::get('/password', function () {

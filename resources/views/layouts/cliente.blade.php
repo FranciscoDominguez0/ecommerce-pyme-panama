@@ -136,6 +136,11 @@
             transform: scale(1.08);
             box-shadow: 0 8px 24px rgba(37, 211, 102, 0.6);
         }
+
+        .sidebar-nav-active {
+            background-color: rgba(0, 35, 73, 0.10) !important;
+            color: #002349 !important;
+        }
     </style>
 
     @livewireStyles

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Models\Direccion;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +65,50 @@ class PerfilController extends Controller
         $usuario->save();
 
         return redirect()->route('cliente.perfil.datos')->with('toast_success', 'Perfil actualizado correctamente.');
+    }
+
+    public function updateFoto(Request $request): JsonResponse
+    {
+        $request->validate([
+            'foto_perfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'eliminar_foto' => 'nullable|boolean',
+        ]);
+
+        $usuario = Auth::user();
+
+        if ($request->boolean('eliminar_foto') && !$request->hasFile('foto_perfil')) {
+            if ($usuario->foto_perfil_ruta && file_exists(public_path($usuario->foto_perfil_ruta))) {
+                unlink(public_path($usuario->foto_perfil_ruta));
+            }
+            $usuario->foto_perfil_ruta = null;
+            $usuario->save();
+
+            return response()->json([
+                'ok' => true,
+                'mensaje' => 'Foto de perfil eliminada.',
+                'foto_perfil_url' => null,
+            ]);
+        }
+
+        if ($request->hasFile('foto_perfil')) {
+            if ($usuario->foto_perfil_ruta && file_exists(public_path($usuario->foto_perfil_ruta))) {
+                unlink(public_path($usuario->foto_perfil_ruta));
+            }
+            $archivo = $request->file('foto_perfil');
+            $nombreArchivo = time() . '_' . preg_replace('/[^A-Za-z0-9._-]/', '', $archivo->getClientOriginalName());
+            $ruta = 'uploads/avatars/' . $usuario->id;
+            $archivo->move(public_path($ruta), $nombreArchivo);
+            $usuario->foto_perfil_ruta = $ruta . '/' . $nombreArchivo;
+            $usuario->save();
+
+            return response()->json([
+                'ok' => true,
+                'mensaje' => 'Foto de perfil actualizada.',
+                'foto_perfil_url' => $usuario->foto_perfil_url,
+            ]);
+        }
+
+        return response()->json(['ok' => false, 'mensaje' => 'No se recibió ninguna imagen.'], 422);
     }
 
     public function updatePassword(Request $request): RedirectResponse
