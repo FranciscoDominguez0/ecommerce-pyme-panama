@@ -101,16 +101,21 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Aviso si faltan secrets
-        if: secrets.VPS_HOST == '' || secrets.VPS_SSH_KEY == ''
+        if: env.VPS_HOST == '' || env.VPS_SSH_KEY == ''
         run: echo "::warning::Secrets VPS no configurados (VPS_HOST/VPS_USER/VPS_SSH_KEY). Deploy omitido."
 
       - name: Deploy via SSH
-        if: secrets.VPS_HOST != '' && secrets.VPS_SSH_KEY != ''
+        if: env.VPS_HOST != '' && env.VPS_SSH_KEY != ''
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.VPS_HOST }}
