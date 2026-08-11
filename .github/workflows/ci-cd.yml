@@ -68,6 +68,9 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
+      - name: Create .env for tests (phpdotenv requiere el archivo)
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
       - name: Generate APP_KEY
         run: echo "APP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')" >> "$GITHUB_ENV"
 
