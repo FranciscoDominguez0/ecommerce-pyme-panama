@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ItemCarrito extends Model
 {
+    use HasFactory;
     protected $table = 'items_carrito';
 
     const CREATED_AT = 'creado_en';

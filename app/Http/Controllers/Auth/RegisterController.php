@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\Usuario;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
-use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -66,13 +66,18 @@ class RegisterController extends Controller
         try {
             $usuario->assignRole('cliente');
         } catch (\Throwable $e) {
-            // Fallback directo en tabla usuario_roles si fuera necesario
-            \Illuminate\Support\Facades\DB::table('usuario_roles')->insertOrIgnore([
-                'usuario_id' => $usuario->id,
-                'rol_id' => 5, // ID rol cliente
-                'model_type' => Usuario::class,
-                'asignado_en' => now(),
-            ]);
+            // Fallback directo en tabla usuario_roles. El rol se busca SIEMPRE por su
+            // NAME (nunca por un id hardcodeado: los ids no son estables entre
+            // entornos/resiembras). Ver RolesSeeder como fuente de verdad.
+            $rolCliente = Role::where('name', 'cliente')->where('guard_name', 'web')->first();
+            if ($rolCliente) {
+                \Illuminate\Support\Facades\DB::table('usuario_roles')->insertOrIgnore([
+                    'usuario_id' => $usuario->id,
+                    'rol_id' => $rolCliente->id,
+                    'model_type' => Usuario::class,
+                    'asignado_en' => now(),
+                ]);
+            }
         }
 
         // Iniciar sesión automáticamente

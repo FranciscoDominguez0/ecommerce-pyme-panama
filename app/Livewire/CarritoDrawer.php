@@ -93,7 +93,7 @@ class CarritoDrawer extends Component
         $item = ItemCarrito::find($itemId);
         if (!$item) return;
 
-        $res = $this->carritoService->actualizarCantidad($itemId, $item->cantidad + 1);
+        $res = $this->carritoService->actualizarCantidad($itemId, $item->cantidad + 1, Auth::id(), Session::getId());
         if ($res['exito']) {
             $this->cargarCarrito();
             $this->dispatch('carrito-actualizado');
@@ -107,7 +107,7 @@ class CarritoDrawer extends Component
         $item = ItemCarrito::find($itemId);
         if (!$item) return;
 
-        $res = $this->carritoService->actualizarCantidad($itemId, $item->cantidad - 1);
+        $res = $this->carritoService->actualizarCantidad($itemId, $item->cantidad - 1, Auth::id(), Session::getId());
         if ($res['exito']) {
             $this->cargarCarrito();
             $this->dispatch('carrito-actualizado');
@@ -118,7 +118,7 @@ class CarritoDrawer extends Component
 
     public function eliminar(int $itemId)
     {
-        $this->carritoService->eliminarItem($itemId);
+        $this->carritoService->eliminarItem($itemId, Auth::id(), Session::getId());
         $this->cargarCarrito();
         $this->dispatch('carrito-actualizado');
         $this->dispatch('mostrar-toast', ['tipo' => 'info', 'mensaje' => 'Producto removido del carrito']);

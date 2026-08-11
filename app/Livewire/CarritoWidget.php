@@ -43,7 +43,7 @@ class CarritoWidget extends Component
         }
 
         unset($this->stockAdvertencias[$itemId]);
-        $carritoService->actualizarCantidad($itemId, $nuevaCantidad, $usuarioId);
+        $carritoService->actualizarCantidad($itemId, $nuevaCantidad, $usuarioId, $sesionId);
         $this->dispatch('carrito-actualizado');
     }
 
@@ -64,9 +64,9 @@ class CarritoWidget extends Component
         unset($this->stockAdvertencias[$itemId]);
 
         if ($item->cantidad > 1) {
-            $carritoService->actualizarCantidad($itemId, $item->cantidad - 1, $usuarioId);
+            $carritoService->actualizarCantidad($itemId, $item->cantidad - 1, $usuarioId, $sesionId);
         } else {
-            $carritoService->eliminarItem($itemId, $usuarioId);
+            $carritoService->eliminarItem($itemId, $usuarioId, $sesionId);
         }
 
         $this->dispatch('carrito-actualizado');
@@ -78,8 +78,9 @@ class CarritoWidget extends Component
     public function eliminar(int $itemId, CarritoService $carritoService): void
     {
         $usuarioId = Auth::id();
+        $sesionId = session()->getId();
         unset($this->stockAdvertencias[$itemId]);
-        $carritoService->eliminarItem($itemId, $usuarioId);
+        $carritoService->eliminarItem($itemId, $usuarioId, $sesionId);
 
         $this->dispatch('mostrar-toast', [
             'tipo' => 'info',

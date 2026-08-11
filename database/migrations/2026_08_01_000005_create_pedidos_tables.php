@@ -9,6 +9,13 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // NOTA DE ARQUITECTURA (obsoleto): esta función y su trigger (trg_numero_pedido)
+        // generaban el número de pedido con formato "P-YYYY-000001". El código PHP de
+        // PedidoService lo sobrescribía SIEMPRE con "#PM-XXXXXX", por lo que el trabajo
+        // del trigger se descartaba en cada inserción. Ambos se ELIMINARON en la
+        // migración 2026_08_11_000000_drop_trigger_numero_pedido: desde entonces el
+        // número lo genera ÚNICAMENTE PedidoService::generarNumeroPedido() (correlativo
+        // atómico en "configuracion"). Este bloque se conserva únicamente como historia.
         $fnNumero = DB::select("SELECT 1 FROM pg_proc WHERE proname = 'generar_numero_pedido'");
         if (empty($fnNumero)) {
             DB::unprepared(<<<'SQL'
@@ -101,7 +108,11 @@ SQL);
             DB::statement('DROP TRIGGER IF EXISTS trg_numero_pedido ON public.pedidos');
             DB::statement('DROP TRIGGER IF EXISTS trg_estado_inicial_pedido ON public.pedidos');
             DB::statement('CREATE TRIGGER trg_upd_pedidos BEFORE UPDATE ON public.pedidos FOR EACH ROW EXECUTE FUNCTION public.actualizar_timestamp()');
+            // OBSOLETO: trg_numero_pedido se eliminó en 2026_08_11_000000_drop_trigger_numero_pedido.
+            // numero_pedido lo genera ÚNICAMENTE PedidoService::generarNumeroPedido() (PHP).
             DB::statement('CREATE TRIGGER trg_numero_pedido BEFORE INSERT ON public.pedidos FOR EACH ROW WHEN (((new.numero_pedido IS NULL) OR ((new.numero_pedido)::text = \'\'::text))) EXECUTE FUNCTION public.generar_numero_pedido()');
+            // OBSOLETO: trg_estado_inicial_pedido se eliminó en 2026_08_11_000001_drop_trigger_estado_inicial_pedido.
+            // El estado inicial "pendiente" lo inserta ÚNICAMENTE PedidoService::cambiarEstado (PHP).
             DB::statement('CREATE TRIGGER trg_estado_inicial_pedido AFTER INSERT ON public.pedidos FOR EACH ROW EXECUTE FUNCTION public.registrar_estado_inicial_pedido()');
         }
 

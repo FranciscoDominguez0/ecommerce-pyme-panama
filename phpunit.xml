@@ -30,5 +30,19 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <!--
+            BLOQUEO EXPLÍCITO DE LA BD DE TESTS.
+            Estas variables fuerzan la conexión a la BD dedicada `ecommerce_test`
+            (mismo destino que `.env.testing`) para que el suite de tests JAMÁS pueda
+            apuntar a la BD de desarrollo `ecommerce_pyme_panama`, incluso si
+            `.env.testing` no se carga o alguien ejecuta phpunit directamente.
+            Nunca cambies estos valores a la BD de desarrollo.
+        -->
+        <env name="DB_CONNECTION" value="pgsql"/>
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="5432"/>
+        <env name="DB_DATABASE" value="ecommerce_test"/>
+        <env name="DB_USERNAME" value="postgres"/>
+        <env name="DB_PASSWORD" value="12345678"/>
     </php>
 </phpunit>

@@ -296,26 +296,28 @@ class CarritoService
 
     /**
      * Actualiza la cantidad de un item validando el stock disponible.
+     * SEGURIDAD: solo el propietario del carrito (usuario autenticado o sesión
+     * de invitado) puede modificar el item; cualquier otro recibe un error.
      */
-    public function actualizarCantidad(int $itemCarritoId, int $cantidad, ?int $usuarioId = null): array
+    public function actualizarCantidad(int $itemCarritoId, int $cantidad, ?int $usuarioId = null, ?string $sesionId = null): array
     {
         $this->olvidarCarritos();
 
+        $item = ItemCarrito::with(['producto', 'variante', 'carrito'])->find($itemCarritoId);
+
+        if (!$item || !$this->validarPropietarioDelItem($item, $usuarioId, $sesionId)) {
+            return [
+                'exito' => false,
+                'mensaje' => 'El artículo no fue encontrado en el carrito.',
+            ];
+        }
+
         if ($cantidad <= 0) {
-            $this->eliminarItem($itemCarritoId, $usuarioId);
+            $this->eliminarItem($itemCarritoId, $usuarioId, $sesionId);
             return [
                 'exito' => true,
                 'eliminado' => true,
                 'mensaje' => 'El producto fue retirado del carrito.',
-            ];
-        }
-
-        $item = ItemCarrito::with(['producto', 'variante', 'carrito'])->find($itemCarritoId);
-
-        if (!$item) {
-            return [
-                'exito' => false,
-                'mensaje' => 'El artículo no fue encontrado en el carrito.',
             ];
         }
 
@@ -344,14 +346,15 @@ class CarritoService
 
     /**
      * Elimina un item del carrito.
+     * SEGURIDAD: solo el propietario del carrito puede eliminar el item.
      */
-    public function eliminarItem(int $itemCarritoId, ?int $usuarioId = null): bool
+    public function eliminarItem(int $itemCarritoId, ?int $usuarioId = null, ?string $sesionId = null): bool
     {
         $this->olvidarCarritos();
 
         $item = ItemCarrito::with('carrito')->find($itemCarritoId);
 
-        if (!$item) {
+        if (!$item || !$this->validarPropietarioDelItem($item, $usuarioId, $sesionId)) {
             return false;
         }
 
@@ -370,6 +373,30 @@ class CarritoService
     }
 
     /**
+     * Verifica que el item pertenezca al carrito del usuario autenticado (usuario_id)
+     * o al carrito de la sesión actual de invitado (sesion_id). Evita el acceso
+     * indebido por ID (IDOR) en las rutas HTTP y en cualquier llamada al servicio.
+     */
+    protected function validarPropietarioDelItem(ItemCarrito $item, ?int $usuarioId, ?string $sesionId): bool
+    {
+        $carrito = $item->carrito;
+
+        if (!$carrito) {
+            return false;
+        }
+
+        if ($carrito->usuario_id !== null && $usuarioId !== null && (int) $carrito->usuario_id === (int) $usuarioId) {
+            return true;
+        }
+
+        if ($carrito->sesion_id !== null && $sesionId !== null && $carrito->sesion_id === $sesionId) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Calcula el subtotal bruto del carrito.
      */
     public function calcularSubtotal(Carrito $carrito): float
@@ -382,9 +409,16 @@ class CarritoService
     }
 
     /**
-     * Calcula el total desglosado con ITBMS (7%), envío y descuentos aplicados.
+     * Calcula el subtotal y la base imponible de ITBMS respetando el flag
+     * "aplica_itbms" de cada producto.
+     *
+     * Es la ÚNICA fuente de cálculo compartida entre el carrito (CarritoService)
+     * y el pedido (PedidoService) para que el ITBMS mostrado/calculado sea SIEMPRE
+     * consistente entre ambos flujos.
+     *
+     * @return array{subtotal: float, base_imponible_itbms: float, itbms: float, cantidad_items: int}
      */
-    public function calcularTotal(Carrito $carrito, ?float $costoEnvio = 0.0, ?int $zonaEnvioId = null): array
+    public function calcularSubtotalEItbms(Carrito $carrito): array
     {
         $items = $carrito->relationLoaded('items')
             ? $carrito->items
@@ -402,8 +436,23 @@ class CarritoService
             }
         }
 
-        $subtotal = round($subtotal, 2);
-        $itbms = round($baseImponibleItbms * 0.07, 2);
+        return [
+            'subtotal' => round($subtotal, 2),
+            'base_imponible_itbms' => round($baseImponibleItbms, 2),
+            'itbms' => round($baseImponibleItbms * 0.07, 2),
+            'cantidad_items' => (int) $items->sum('cantidad'),
+        ];
+    }
+
+    /**
+     * Calcula el total desglosado con ITBMS (7%), envío y descuentos aplicados.
+     */
+    public function calcularTotal(Carrito $carrito, ?float $costoEnvio = 0.0, ?int $zonaEnvioId = null): array
+    {
+        $desglose = $this->calcularSubtotalEItbms($carrito);
+
+        $subtotal = $desglose['subtotal'];
+        $itbms = $desglose['itbms'];
         $descuento = round((float) $carrito->descuento_aplicado, 2);
         $envio = round((float) ($costoEnvio ?? 0.0), 2);
 
@@ -420,7 +469,7 @@ class CarritoService
             'itbms' => $itbms,
             'envio' => $envio,
             'total' => $total,
-            'cantidad_items' => (int) $items->sum('cantidad'),
+            'cantidad_items' => $desglose['cantidad_items'],
         ];
     }
 

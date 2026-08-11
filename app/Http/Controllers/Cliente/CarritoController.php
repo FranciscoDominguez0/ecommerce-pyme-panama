@@ -97,7 +97,8 @@ class CarritoController extends Controller
         ]);
 
         $usuarioId = Auth::id();
-        $resultado = $this->carritoService->actualizarCantidad($id, (int) $request->cantidad, $usuarioId);
+        $sesionId = $request->session()->getId();
+        $resultado = $this->carritoService->actualizarCantidad($id, (int) $request->cantidad, $usuarioId, $sesionId);
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json($resultado, $resultado['exito'] ? 200 : 422);
@@ -116,7 +117,8 @@ class CarritoController extends Controller
     public function eliminar(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $usuarioId = Auth::id();
-        $eliminado = $this->carritoService->eliminarItem($id, $usuarioId);
+        $sesionId = $request->session()->getId();
+        $eliminado = $this->carritoService->eliminarItem($id, $usuarioId, $sesionId);
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([

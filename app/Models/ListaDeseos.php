@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ListaDeseos extends Model
 {
+    use HasFactory;
     protected $table = 'lista_deseos';
 
     public $incrementing = false;

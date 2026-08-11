@@ -8,7 +8,6 @@ use App\Models\Producto;
 use App\Models\ProductoDelMes;
 use App\Models\PromocionEnvioGratis;
 use App\Models\ZonaEnvio;
-use App\Services\CuponService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -20,13 +19,6 @@ use Illuminate\View\View;
 
 class PromocionController extends Controller
 {
-    protected CuponService $cuponService;
-
-    public function __construct(CuponService $cuponService)
-    {
-        $this->cuponService = $cuponService;
-    }
-
     // ─────────────────────────────────────────────────────────
     // 1. GESTIÓN DE PROMOCIONES DE ENVÍO GRATIS
     // ─────────────────────────────────────────────────────────
@@ -260,81 +252,6 @@ class PromocionController extends Controller
         return redirect()
             ->route('admin.promociones.producto-del-mes')
             ->with('success', 'Promoción de Producto del Mes eliminada.');
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // 3. CARRITO DE CLIENTE & ENDPOINTS AJAX DE CUPÓN
-    // ─────────────────────────────────────────────────────────
-
-    public function verCarrito(): View
-    {
-        $usuarioId = Auth::id();
-
-        // En una implementación real se consulta el modelo Carrito o Sesión
-        $cuponAplicado = session('cupon_aplicado');
-
-        return view('cliente.carrito', compact('cuponAplicado'));
-    }
-
-    public function aplicarCuponCarrito(Request $request): JsonResponse|RedirectResponse
-    {
-        $request->validate([
-            'codigo' => 'required|string',
-            'subtotal' => 'nullable|numeric|min:0',
-        ]);
-
-        $codigo = trim($request->input('codigo'));
-        $subtotal = (float) $request->input('subtotal', 150.00); // Subtotal de demostración
-        $usuarioId = Auth::id();
-
-        $resultado = $this->cuponService->validarCupon($codigo, $subtotal, $usuarioId);
-
-        if (!$resultado['valido']) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $resultado['mensaje'],
-                ], 422);
-            }
-            return back()->with('error', $resultado['mensaje']);
-        }
-
-        $cupon = $resultado['cupon'];
-        $datosCupon = [
-            'id' => $cupon->id,
-            'codigo' => $cupon->codigo,
-            'tipo' => $cupon->tipo,
-            'valor' => $cupon->valor,
-            'descuento' => $resultado['descuento'],
-        ];
-
-        session(['cupon_aplicado' => $datosCupon]);
-
-        if ($request->wantsJson()) {
-            return response()->json([
-                'success' => true,
-                'message' => $resultado['mensaje'],
-                'cupon' => $datosCupon,
-                'nuevo_descuento' => $resultado['descuento'],
-                'nuevo_total' => max(0.0, round($subtotal - $resultado['descuento'], 2)),
-            ]);
-        }
-
-        return back()->with('success', $resultado['mensaje']);
-    }
-
-    public function removerCuponCarrito(Request $request): JsonResponse|RedirectResponse
-    {
-        session()->forget('cupon_aplicado');
-
-        if ($request->wantsJson()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'El cupón ha sido removido de tu carrito.',
-            ]);
-        }
-
-        return back()->with('info', 'Cupón removido.');
     }
 
     private function registrarAuditoria(string $accion, string $descripcion, ?array $anterior = null, ?array $nuevo = null): void
