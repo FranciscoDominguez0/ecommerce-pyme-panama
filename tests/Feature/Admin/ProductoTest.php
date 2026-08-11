@@ -176,11 +176,8 @@ class ProductoTest extends BaseAdminTest
     //  CREACIÓN — POST /admin/productos (store)
     // =====================================================================
 
-    public function test_la_ruta_de_creacion_post_actualmente_devuelve_error_por_metodo_faltante(): void
+    public function test_un_administrador_puede_crear_un_producto(): void
     {
-        // Reporte de incompletitud: la ruta POST /admin/productos está registrada
-        // apuntando a ProductoController@store, pero ese método NO existe todavía.
-        // Por lo tanto, esta prueba documenta el estado actual (500) hasta que se implemente.
         $admin = $this->crearAdmin();
         $categoria = Categoria::factory()->create();
 
@@ -188,7 +185,14 @@ class ProductoTest extends BaseAdminTest
             ->post('/admin/productos', $this->datosProductoValidos([
                 'categoria_id' => $categoria->id,
             ]))
-            ->assertStatus(500);
+            ->assertRedirect(route('admin.productos.index'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('productos', [
+            'nombre' => 'Teclado Mecánico RGB',
+            'categoria_id' => $categoria->id,
+            'activo' => true,
+        ]);
     }
 
     // =====================================================================
