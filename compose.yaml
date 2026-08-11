@@ -1,0 +1,49 @@
+services:
+
+  db:
+    image: postgres:16-alpine
+    container_name: ecommerce_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${DB_DATABASE}
+      POSTGRES_USER:     ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"   # solo localhost del VPS
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecommerce_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - app_storage:/var/www/html/storage/app
+      - app_logs:/var/www/html/storage/logs
+    ports:
+      - "127.0.0.1:9000:9000"   # VPS Nginx hace fastcgi_pass a este puerto
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  db_data:
+  app_storage:
+  app_logs:

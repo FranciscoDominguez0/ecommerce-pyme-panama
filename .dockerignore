@@ -1,22 +1,58 @@
+# ── Repositorio ───────────────────────────────────────────────────────────────
 .git
 .gitignore
-.agents
+.gitattributes
+
+# ── IDEs y editores ───────────────────────────────────────────────────────────
 .idea
 .vscode
+.editorconfig
 .codex
+opencode.jsonc
+
+# ── Agentes y CI ──────────────────────────────────────────────────────────────
+.agents
+.secrets
+
+# ── Dependencias (se instalan en el build) ────────────────────────────────────
 node_modules
 vendor
+
+# ── Assets compilados (se recompilan en el build) ────────────────────────────
 public/build
+
+# ── Storage (montado como volumen en producción) ──────────────────────────────
 storage/logs/*
 storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
+
+# ── Entorno — NUNCA meter .env en la imagen ───────────────────────────────────
 .env
 .env.*
 !.env.example
+
+# ── Archivos de despliegue Docker (no son parte del código de la app) ─────────
+compose.yaml
+docker-compose.yaml
+docker-compose.yml
+.dockerignore
+
+# ── Tests (no van en producción) ──────────────────────────────────────────────
+tests
+phpunit.xml
+.phpunit.result.cache
+.env.testing
+
+# ── Logs y temporales ─────────────────────────────────────────────────────────
 *.log
 .DS_Store
+Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.phpunit.result.cache
+
+# ── Documentación (no es código ejecutable) ───────────────────────────────────
+README.md
+README_AUTH_LOGIN.md
+AGENTS.md
