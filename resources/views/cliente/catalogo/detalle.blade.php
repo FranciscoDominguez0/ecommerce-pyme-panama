@@ -438,7 +438,8 @@
 </div>
 
 <script>
-    // Colección de imágenes inyectada desde Blade
+    (function () {
+    // Colección de imágenes inyectada desde Blade (scope local: evita colisiones al re-ejecutarse con wire:navigate)
     const galeriaImagenes = @json($imagenesJson);
     let indiceActual = {{ $indiceInicial }};
     const totalImagenes = galeriaImagenes.length;
@@ -564,15 +565,20 @@
     }
 
     // Control por teclado (flechas izquierda / derecha y escape)
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') {
-            navegarImagen(-1);
-        } else if (e.key === 'ArrowRight') {
-            navegarImagen(1);
-        } else if (e.key === 'Escape') {
-            cerrarLightbox();
-        }
-    });
+    // Se registra UNA sola vez en document (persiste entre navegaciones SPA) y
+    // despacha a las funciones expuestas en window, que se re-enlazan por página.
+    if (!window.__galeriaKeydownInicializado) {
+        window.__galeriaKeydownInicializado = true;
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                window.navegarImagen(-1);
+            } else if (e.key === 'ArrowRight') {
+                window.navegarImagen(1);
+            } else if (e.key === 'Escape') {
+                window.cerrarLightbox();
+            }
+        });
+    }
 
     // Control táctil para móviles (Swipe)
     let touchStartX = 0;
@@ -763,9 +769,25 @@
         });
     }
 
-    // Renderizar imagen inicial al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-        renderizarVisor(indiceActual, false);
-    });
+    // Renderizar imagen inicial (ejecución inmediata: ya estamos al final del body,
+    // funciona tanto en carga inicial como al llegar vía wire:navigate)
+    renderizarVisor(indiceActual, false);
+
+    // Exponer las funciones usadas por los atributos inline (onclick/onmousemove/...)
+    // al scope global, re-enlazándolas en cada carga para que apunten a la
+    // galería del producto actual tras una navegación SPA.
+    window.abrirLightbox = abrirLightbox;
+    window.navegarImagen = navegarImagen;
+    window.irAImagen = irAImagen;
+    window.manejarZoomLupa = manejarZoomLupa;
+    window.resetearZoomLupa = resetearZoomLupa;
+    window.seleccionarVariante = seleccionarVariante;
+    window.agregarDeseo = agregarDeseo;
+    window.cambiarCantidad = cambiarCantidad;
+    window.agregarAlCarrito = agregarAlCarrito;
+    window.comprarAhora = comprarAhora;
+    window.cerrarLightbox = cerrarLightbox;
+    window.enviarNotificacionStock = enviarNotificacionStock;
+    })();
 </script>
 @endsection

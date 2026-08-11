@@ -67,7 +67,7 @@ class LoginTest extends TestCase
     //  DISEÑO — La vista GET /login debe renderizarse con todos los elementos
     // =====================================================================
 
-    public function test_login_view_renders_store_name_at_top(): void
+    public function test_la_vista_de_login_muestra_el_nombre_de_la_tienda_arriba(): void
     {
         $this->get('/login')
             ->assertOk()
@@ -75,11 +75,11 @@ class LoginTest extends TestCase
             ->assertSee('Iniciar sesión');
     }
 
-    public function test_login_view_has_email_field_with_icon(): void
+    public function test_la_vista_de_login_tiene_campo_de_correo_con_icono(): void
     {
-        $response = $this->get('/login');
+        $respuesta = $this->get('/login');
 
-        $response->assertOk()
+        $respuesta->assertOk()
             ->assertSee('id="email"', false)
             ->assertSee('type="email"', false)
             ->assertSee('name="email"', false)
@@ -87,11 +87,11 @@ class LoginTest extends TestCase
             ->assertSee('>mail</span>', false);
     }
 
-    public function test_login_view_has_password_field_with_icon_and_hidden_by_default(): void
+    public function test_la_vista_de_login_tiene_campo_de_contrasena_con_icono_y_oculto_por_defecto(): void
     {
-        $response = $this->get('/login');
+        $respuesta = $this->get('/login');
 
-        $response->assertOk()
+        $respuesta->assertOk()
             ->assertSee('id="password"', false)
             ->assertSee('name="password"', false)
             ->assertSee('type="password"', false)
@@ -99,7 +99,7 @@ class LoginTest extends TestCase
             ->assertSee('>lock</span>', false);
     }
 
-    public function test_login_view_has_remember_me_checkbox(): void
+    public function test_la_vista_de_login_tiene_checkbox_de_recordarme(): void
     {
         $this->get('/login')
             ->assertOk()
@@ -108,7 +108,7 @@ class LoginTest extends TestCase
             ->assertSee('Recordarme en este dispositivo');
     }
 
-    public function test_login_view_has_forgot_password_link(): void
+    public function test_la_vista_de_login_tiene_enlace_de_recuperacion_de_contrasena(): void
     {
         $this->get('/login')
             ->assertOk()
@@ -116,14 +116,14 @@ class LoginTest extends TestCase
             ->assertSee('href="' . route('password.request') . '"', false);
     }
 
-    public function test_login_view_has_submit_button(): void
+    public function test_la_vista_de_login_tiene_boton_de_envio(): void
     {
         $this->get('/login')
             ->assertOk()
             ->assertSee('Entrar a mi cuenta');
     }
 
-    public function test_login_view_has_register_link(): void
+    public function test_la_vista_de_login_tiene_enlace_de_registro(): void
     {
         $this->get('/login')
             ->assertOk()
@@ -132,14 +132,14 @@ class LoginTest extends TestCase
             ->assertSee('href="' . route('register') . '"', false);
     }
 
-    public function test_login_form_includes_csrf_token(): void
+    public function test_el_formulario_de_login_incluye_token_csrf(): void
     {
         $this->get('/login')
             ->assertOk()
             ->assertSee('name="_token"', false);
     }
 
-    public function test_login_view_displays_validation_errors_inline(): void
+    public function test_la_vista_de_login_muestra_los_errores_de_validacion(): void
     {
         $this->from('/login')->post('/login', [
             'email' => '',
@@ -152,15 +152,15 @@ class LoginTest extends TestCase
             ->assertSee('La contraseña es requerida.');
     }
 
-    public function test_login_uses_guest_layout(): void
+    public function test_login_usa_el_layout_de_invitado(): void
     {
         // El layout de invitado debe existir (App\View\Components\GuestLayout → layouts/guest.blade.php)
         $this->assertTrue(class_exists(GuestLayout::class), 'El componente GuestLayout no existe.');
 
-        $response = $this->get('/login');
+        $respuesta = $this->get('/login');
 
         // Marcas distintivas del layout de invitado: clase .glass-card y el fondo de pantalla.
-        $response->assertOk()
+        $respuesta->assertOk()
             ->assertSee('glass-card', false)
             ->assertSee('min-h-screen flex flex-col items-center justify-center', false);
     }
@@ -169,22 +169,22 @@ class LoginTest extends TestCase
     //  LÓGICA — POST /login (credenciales, validación, recordarme, rutas)
     // =====================================================================
 
-    public function test_valid_login_admin_redirects_to_admin_dashboard(): void
+    public function test_un_login_valido_de_admin_redirige_al_panel_admin(): void
     {
         $usuario = $this->crearUsuario([], 'admin');
 
         $this->assertTrue($usuario->hasRole('admin'));
 
-        $response = $this->post('/login', [
+        $respuesta = $this->post('/login', [
             'email' => $usuario->email,
             'password' => 'secret123',
         ]);
 
-        $response->assertRedirect('/admin/dashboard');
+        $respuesta->assertRedirect('/admin/dashboard');
         $this->assertAuthenticatedAs($usuario);
     }
 
-    public function test_valid_login_cliente_is_authenticated(): void
+    public function test_un_login_valido_de_cliente_queda_autenticado(): void
     {
         $usuario = $this->crearUsuario([], 'cliente');
 
@@ -201,40 +201,40 @@ class LoginTest extends TestCase
         $this->assertAuthenticatedAs($usuario);
     }
 
-    public function test_login_with_wrong_password_shows_generic_error_and_not_authenticated(): void
+    public function test_el_login_con_contrasena_incorrecta_muestra_error_generico_y_no_autentica(): void
     {
         $usuario = $this->crearUsuario([], 'cliente');
 
-        $response = $this->from('/login')->post('/login', [
+        $respuesta = $this->from('/login')->post('/login', [
             'email' => $usuario->email,
             'password' => 'contraseña-incorrecta',
         ]);
 
-        $response->assertRedirect('/login');
-        $response->assertSessionHasErrors([
+        $respuesta->assertRedirect('/login');
+        $respuesta->assertSessionHasErrors([
             'email' => 'Las credenciales proporcionadas no son válidas.',
         ]);
         // No debe existir error específico en el campo de contraseña.
-        $response->assertSessionDoesntHaveErrors(['password']);
+        $respuesta->assertSessionDoesntHaveErrors(['password']);
         $this->assertGuest();
     }
 
-    public function test_login_with_non_existent_email_shows_same_generic_error(): void
+    public function test_el_login_con_correo_inexistente_muestra_el_mismo_error_generico(): void
     {
-        $response = $this->from('/login')->post('/login', [
+        $respuesta = $this->from('/login')->post('/login', [
             'email' => 'nadie-registrado@example.com',
             'password' => 'cualquier-cosa',
         ]);
 
-        $response->assertRedirect('/login');
-        $response->assertSessionHasErrors([
+        $respuesta->assertRedirect('/login');
+        $respuesta->assertSessionHasErrors([
             'email' => 'Las credenciales proporcionadas no son válidas.',
         ]);
-        $response->assertSessionDoesntHaveErrors(['password']);
+        $respuesta->assertSessionDoesntHaveErrors(['password']);
         $this->assertGuest();
     }
 
-    public function test_error_message_does_not_reveal_which_field_was_incorrect(): void
+    public function test_el_mensaje_de_error_no_revela_que_campo_era_incorrecto(): void
     {
         $usuario = $this->crearUsuario([], 'cliente');
 
@@ -250,11 +250,11 @@ class LoginTest extends TestCase
             'email' => $usuario->email,
             'password' => 'contraseña-incorrecta',
         ]);
-        $mensajePasswordIncorrecta = $this->mensajeErrorDeLogin();
+        $mensajeContrasenaIncorrecta = $this->mensajeErrorDeLogin();
 
         $this->assertNotNull($mensajeCorreoInexistente);
-        $this->assertSame($mensajeCorreoInexistente, $mensajePasswordIncorrecta);
-        $this->assertSame('Las credenciales proporcionadas no son válidas.', $mensajePasswordIncorrecta);
+        $this->assertSame($mensajeCorreoInexistente, $mensajeContrasenaIncorrecta);
+        $this->assertSame('Las credenciales proporcionadas no son válidas.', $mensajeContrasenaIncorrecta);
     }
 
     /**
@@ -263,104 +263,104 @@ class LoginTest extends TestCase
      */
     protected function mensajeErrorDeLogin(): ?string
     {
-        $session = app('session.store');
-        if (! $session->isStarted()) {
-            $session->start();
+        $sesion = app('session.store');
+        if (! $sesion->isStarted()) {
+            $sesion->start();
         }
 
-        return $session->get('errors')?->first('email');
+        return $sesion->get('errors')?->first('email');
     }
 
-    public function test_login_requires_email(): void
+    public function test_el_login_requiere_correo(): void
     {
-        $response = $this->from('/login')->post('/login', [
+        $respuesta = $this->from('/login')->post('/login', [
             'email' => '',
             'password' => 'secret123',
         ]);
 
-        $response->assertSessionHasErrors([
+        $respuesta->assertSessionHasErrors([
             'email' => 'El correo electrónico es requerido.',
         ]);
         $this->assertGuest();
     }
 
-    public function test_login_requires_password(): void
+    public function test_el_login_requiere_contrasena(): void
     {
-        $response = $this->from('/login')->post('/login', [
+        $respuesta = $this->from('/login')->post('/login', [
             'email' => 'juan@example.com',
             'password' => '',
         ]);
 
-        $response->assertSessionHasErrors([
+        $respuesta->assertSessionHasErrors([
             'password' => 'La contraseña es requerida.',
         ]);
         $this->assertGuest();
     }
 
-    public function test_login_rejects_malformed_email(): void
+    public function test_el_login_rechaza_un_correo_mal_formado(): void
     {
-        $response = $this->from('/login')->post('/login', [
+        $respuesta = $this->from('/login')->post('/login', [
             'email' => 'no-es-un-correo',
             'password' => 'secret123',
         ]);
 
-        $response->assertSessionHasErrors([
+        $respuesta->assertSessionHasErrors([
             'email' => 'Por favor, ingrese un correo electrónico válido.',
         ]);
         $this->assertGuest();
     }
 
-    public function test_login_with_remember_sets_remember_token_and_cookie(): void
+    public function test_el_login_con_recordarme_guarda_token_y_cookie(): void
     {
         $usuario = $this->crearUsuario([], 'cliente');
 
-        $response = $this->post('/login', [
+        $respuesta = $this->post('/login', [
             'email' => $usuario->email,
             'password' => 'secret123',
             'remember' => '1',
         ]);
 
-        $response->assertRedirect(route('dashboard'));
+        $respuesta->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($usuario);
 
         // Se debe persistir un token de "recordarme" en la columna remember_token.
         $this->assertNotNull($usuario->fresh()->remember_token);
 
         // Se debe emitir la cookie remember_web_*.
-        $cookies = $response->headers->getCookies();
+        $cookies = $respuesta->headers->getCookies();
         $cookieRecordar = collect($cookies)->first(
             fn ($cookie) => str_starts_with($cookie->getName(), 'remember_web_')
         );
         $this->assertNotNull($cookieRecordar, 'Se esperaba la cookie remember_web_* en la respuesta.');
     }
 
-    public function test_login_without_remember_does_not_set_remember_token(): void
+    public function test_el_login_sin_recordarme_no_guarda_token_de_recordarme(): void
     {
         $usuario = $this->crearUsuario([], 'cliente');
 
-        $response = $this->post('/login', [
+        $respuesta = $this->post('/login', [
             'email' => $usuario->email,
             'password' => 'secret123',
         ]);
 
-        $response->assertRedirect(route('dashboard'));
+        $respuesta->assertRedirect(route('dashboard'));
         $this->assertAuthenticatedAs($usuario);
 
         $this->assertNull($usuario->fresh()->remember_token);
 
-        $cookies = $response->headers->getCookies();
+        $cookies = $respuesta->headers->getCookies();
         $cookieRecordar = collect($cookies)->first(
             fn ($cookie) => str_starts_with($cookie->getName(), 'remember_web_')
         );
         $this->assertNull($cookieRecordar, 'No debería emitirse la cookie remember_web_* sin marcar recordarme.');
     }
 
-    public function test_login_get_route_returns_200_for_guests(): void
+    public function test_la_ruta_get_de_login_responde_200_para_invitados(): void
     {
         $this->get(route('login'))->assertOk();
     }
 
-    public function test_login_get_route_redirects_already_authenticated_users(): void
+    public function test_la_ruta_get_de_login_redirige_a_usuarios_ya_autenticados(): void
     {
         $usuario = $this->crearUsuario([], 'cliente');
 
@@ -369,7 +369,7 @@ class LoginTest extends TestCase
             ->assertRedirect(route('dashboard'));
     }
 
-    public function test_login_routes_are_wired_to_login_controller(): void
+    public function test_las_rutas_de_login_apuntan_al_controlador_de_login(): void
     {
         // GET /login → showLoginForm (named route 'login')
         $rutaGet = Route::getRoutes()->getByName('login');
@@ -383,5 +383,28 @@ class LoginTest extends TestCase
         );
         $this->assertNotNull($rutaPost, 'Falta la ruta POST /login.');
         $this->assertStringContainsString('LoginController@login', $rutaPost->getActionName());
+    }
+
+    // =====================================================================
+    //  CIERRE DE SESIÓN — POST /logout
+    // =====================================================================
+
+    public function test_un_usuario_autenticado_puede_cerrar_sesion(): void
+    {
+        $usuario = $this->crearUsuario([], 'cliente');
+
+        $respuesta = $this->actingAs($usuario)->post('/logout');
+
+        $respuesta->assertRedirect('/login');
+        $this->assertGuest();
+    }
+
+    public function test_la_ruta_logout_requiere_estar_autenticado(): void
+    {
+        // Sin sesión activa, el cierre de sesión redirige al login (guest middleware).
+        $respuesta = $this->post('/logout');
+
+        $respuesta->assertRedirect('/login');
+        $this->assertGuest();
     }
 }
