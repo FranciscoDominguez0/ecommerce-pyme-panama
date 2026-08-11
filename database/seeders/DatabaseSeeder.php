@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,   // primero los roles (otros seeders pueden depender de ellos)
             BrandSeeder::class,
+            AtributosVarianteSeeder::class,   // atributos y opciones para el constructor de variantes
         ]);
     }
 }

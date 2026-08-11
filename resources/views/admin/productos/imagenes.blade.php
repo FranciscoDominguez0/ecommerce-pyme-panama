@@ -61,7 +61,7 @@
     <input type="hidden" name="imagen_principal_id" id="input-imagen-principal-id" value="{{ optional($imagenes->where('es_principal', true)->first())->id ?? '' }}">
 
     <!-- Grid de Miniaturas de Imágenes (Full-Width Responsive) -->
-    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 pt-2">
+    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3.5 pt-2">
         
         @forelse($imagenes ?? [] as $idx => $img)
             @php /** @var \App\Models\ImagenProducto $img */ @endphp

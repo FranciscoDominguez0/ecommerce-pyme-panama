@@ -25,101 +25,61 @@
                     @csrf
             @endif
 
-                <!-- Header con Acciones Principales -->
-                <div
-                    class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-200/80 pb-3">
-                    <div>
-                        <div class="flex items-center gap-2.5">
-                            <div
-                                class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 shadow-xs shrink-0">
-                                <span
-                                    class="material-symbols-outlined text-[22px]">{{ ($esEdicion ?? false) ? 'edit_note' : 'add_box' }}</span>
-                            </div>
-                            <div>
-                                <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
-                                    {{ ($esEdicion ?? false) ? 'Editar Registro de Artículo' : 'Nuevo Registro de Artículo' }}
-                                </h1>
-                                <p class="text-xs text-slate-500 mt-0.5">
-                                    Ficha técnica del producto, precios, inventario y variantes.
-                                </p>
-                            </div>
-                        </div>
+                <!-- Encabezado de Página (no fijo) -->
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 shadow-xs shrink-0">
+                        <span
+                            class="material-symbols-outlined text-[22px]">{{ ($esEdicion ?? false) ? 'edit_note' : 'add_box' }}</span>
                     </div>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                            {{ ($esEdicion ?? false) ? 'Editar Artículo' : 'Nuevo Artículo' }}
+                        </h1>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            Ficha técnica, precios, inventario, imágenes y variantes.
+                        </p>
+                    </div>
+                </div>
 
-                    <div class="flex items-center gap-2 flex-wrap">
+                <!-- Barra de Acciones Fija (siempre visible) -->
+                <div
+                    class="sticky top-16 z-30 -mx-3.5 sm:-mx-8 px-3.5 sm:px-8 py-2.5 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="material-symbols-outlined text-slate-400 text-[18px] shrink-0">inventory_2</span>
+                        <span class="text-xs font-bold text-slate-700 truncate">
+                            {{ ($esEdicion ?? false) ? 'Editando: ' . ($producto->nombre ?? '') : 'Nuevo artículo' }}
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
                         <a href="{{ route('admin.productos.index') }}"
-                            class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-xs">
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-xs">
                             <span class="material-symbols-outlined text-[17px] text-slate-400">arrow_back</span>
-                            <span>Volver</span>
+                            <span class="hidden sm:inline">Cancelar</span>
                         </a>
 
                         @if(($esEdicion ?? false) && !empty($producto->slug))
                             <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" target="_blank"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all shadow-xs">
+                                class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 transition-all shadow-xs">
                                 <span class="material-symbols-outlined text-[17px]">visibility</span>
-                                <span>Ver en Tienda</span>
+                                <span class="hidden sm:inline">Ver en Tienda</span>
                             </a>
                         @endif
 
                         <button type="submit"
-                            class="inline-flex items-center gap-1.5 px-4 py-1.5 sm:px-5 sm:py-2 bg-slate-900 hover:bg-slate-800 rounded-xl text-xs font-bold text-white shadow-sm transition-all transform active:scale-95">
+                            class="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 bg-slate-900 hover:bg-slate-800 rounded-xl text-xs font-bold text-white shadow-sm transition-all transform active:scale-95">
                             <span class="material-symbols-outlined text-[17px]">check_circle</span>
                             <span>{{ ($esEdicion ?? false) ? 'Guardar Cambios' : 'Publicar Artículo' }}</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Barra Superior de Pestañas (Registro de Artículo style) -->
-                <div class="bg-white border border-slate-200/90 rounded-2xl p-1.5 shadow-xs overflow-x-auto no-scrollbar">
-                    <div class="flex items-center gap-1 min-w-max">
-                        <button type="button" id="btn-tab-datos-generales" onclick="cambiarTabProducto('datos-generales')"
-                            class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-slate-900 text-white shadow-xs">
-                            <span class="material-symbols-outlined text-[16px]">info</span>
-                            <span>DATOS GENERALES</span>
-                        </button>
+                <!-- ── CONTENIDO ÚNICO: TODAS LAS SECCIONES VISIBLES ── -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
-                        <button type="button" id="btn-tab-precios-inventario"
-                            onclick="cambiarTabProducto('precios-inventario')"
-                            class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
-                            <span class="material-symbols-outlined text-[16px]">payments</span>
-                            <span>PRECIOS E INVENTARIO</span>
-                        </button>
-
-                        <button type="button" id="btn-tab-descripcion" onclick="cambiarTabProducto('descripcion')"
-                            class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
-                            <span class="material-symbols-outlined text-[16px]">description</span>
-                            <span>DESCRIPCIÓN DETALLADA</span>
-                        </button>
-
-                        <button type="button" id="btn-tab-imagenes" onclick="cambiarTabProducto('imagenes')"
-                            class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
-                            <span class="material-symbols-outlined text-[16px]">photo_library</span>
-                            <span>IMÁGENES</span>
-                        </button>
-
-                        <button type="button" id="btn-tab-variantes" onclick="cambiarTabProducto('variantes')"
-                            class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-600 hover:bg-slate-100">
-                            <span class="material-symbols-outlined text-[16px]">style</span>
-                            <span>VARIANTES</span>
-                        </button>
-
-                        <button type="button" id="btn-tab-ver-todo" onclick="cambiarTabProducto('ver-todo')"
-                            class="btn-tab-producto inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-500 hover:bg-slate-100 border-l border-slate-200 ml-auto">
-                            <span class="material-symbols-outlined text-[16px]">view_agenda</span>
-                            <span>VER TODO</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ── CONTENIDO DE PESTAÑAS ── -->
-
-                <!-- Pestaña 1: DATOS GENERALES -->
-                <div id="tab-panel-datos-generales" class="tab-contenido-producto space-y-5">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-
-                        <!-- Columna Izquierda: Datos de Ficha de Artículo (8 cols) -->
-                        <div class="lg:col-span-8 space-y-5">
-                            <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
+                    <!-- Columna Principal: Ficha de Artículo (8 cols) -->
+                    <div class="lg:col-span-9 xl:col-span-9 2xl:col-span-10 space-y-5 order-2 lg:order-1 min-w-0">
+                        <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
                                 <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                                     <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
                                     <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Información del
@@ -306,99 +266,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- Columna Derecha: Estado & Visibilidad (4 cols) -->
-                        <div class="lg:col-span-4 space-y-5">
-                            <div class="card-elevated p-5 rounded-2xl space-y-4">
-                                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                                    <span class="material-symbols-outlined text-emerald-600 text-[20px]">toggle_on</span>
-                                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Estado &
-                                        Visibilidad</h3>
+                            <!-- Sub-bloque: Precios & Rentabilidad -->
+                            <div class="pt-4 border-t border-slate-100">
+                                <div class="flex items-center gap-1.5 mb-3">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[17px]">payments</span>
+                                    <h3 class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Precios &
+                                        Rentabilidad</h3>
                                 </div>
-
-                                <div class="space-y-4">
-                                    <div>
-                                        <label for="activo"
-                                            class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
-                                            Estado del Producto
-                                        </label>
-                                        <select id="activo" name="activo"
-                                            class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold">
-                                            <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>
-                                                Activo (Visible en tienda)</option>
-                                            <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>
-                                                Inactivo (Borrador oculto)</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="space-y-2.5">
-                                        <!-- Switch Destacado -->
-                                        <div
-                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                            <div class="space-y-0.5">
-                                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                                                    <span
-                                                        class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
-                                                    <span>Destacado</span>
-                                                </p>
-                                                <p class="text-[9px] text-slate-500">Sección destacados</p>
-                                            </div>
-                                            <label class="relative inline-flex items-center cursor-pointer">
-                                                <input type="checkbox" name="destacado" value="1" class="sr-only peer"
-                                                    @checked(old('destacado', $producto->destacado ?? false))>
-                                                <div
-                                                    class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500">
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <!-- Switch ITBMS 7% -->
-                                        <div
-                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                                            <div class="space-y-0.5">
-                                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
-                                                    <span
-                                                        class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
-                                                    <span>ITBMS (7%)</span>
-                                                </p>
-                                                <p class="text-[9px] text-slate-500">Impuesto Panamá</p>
-                                            </div>
-                                            <label class="relative inline-flex items-center cursor-pointer">
-                                                <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer"
-                                                    @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
-                                                <div
-                                                    class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600">
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Pestaña 2: PRECIOS E INVENTARIO -->
-                <div id="tab-panel-precios-inventario" class="tab-contenido-producto space-y-5 hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-
-                        <!-- Precios & Rentabilidad (7 Cols) -->
-                        <div class="lg:col-span-7 space-y-5">
-                            <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-                                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                                    <div class="flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">payments</span>
-                                        <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Precios &
-                                            Rentabilidad</h2>
-                                    </div>
-                                    <span
-                                        class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">USD
-                                        ($)</span>
-                                </div>
-
                                 <div class="space-y-4">
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <!-- Precio Base -->
@@ -468,17 +343,14 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Inventario & Stock (5 Cols) -->
-                        <div class="lg:col-span-5 space-y-5">
-                            <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-                                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                                    <span class="material-symbols-outlined text-emerald-600 text-[20px]">warehouse</span>
-                                    <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Inventario & Stock
-                                    </h2>
+                            <!-- Sub-bloque: Inventario & Stock -->
+                            <div class="pt-4 border-t border-slate-100">
+                                <div class="flex items-center gap-1.5 mb-3">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[17px]">warehouse</span>
+                                    <h3 class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Inventario &
+                                        Stock</h3>
                                 </div>
-
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label for="stock"
@@ -507,11 +379,7 @@
                             </div>
                         </div>
 
-                    </div>
-                </div>
-
-                <!-- Pestaña 3: DESCRIPCIÓN DETALLADA -->
-                <div id="tab-panel-descripcion" class="tab-contenido-producto space-y-5 hidden">
+                        <!-- ── SECCIÓN: DESCRIPCIÓN DETALLADA ── -->
                     <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
                         <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
                             <span class="material-symbols-outlined text-emerald-600 text-[20px]">description</span>
@@ -563,19 +431,87 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Pestaña 4: IMÁGENES -->
-                <div id="tab-panel-imagenes" class="tab-contenido-producto space-y-5 hidden">
+                <!-- ── SECCIÓN: IMÁGENES ── -->
                     @include('admin.productos.imagenes', ['imagenes' => $producto->imagenes ?? collect()])
-                </div>
 
-                <!-- Pestaña 5: VARIANTES -->
-                <div id="tab-panel-variantes" class="tab-contenido-producto space-y-5 hidden">
+                <!-- ── SECCIÓN: VARIANTES ── -->
                     @include('admin.productos.variantes', [
                         'variantes' => $producto->variantes ?? collect(),
                         'tiposVariante' => $tiposVariante ?? collect()
                     ])
+                    </div>
+
+                <!-- ── COLUMNA LATERAL: ESTADO & VISIBILIDAD (STICKY) ── -->
+                    <div class="lg:col-span-3 xl:col-span-3 2xl:col-span-2 space-y-5 order-1 lg:order-2">
+                        <div class="lg:sticky lg:top-36">
+                            <div class="card-elevated p-5 rounded-2xl space-y-4">
+                                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[20px]">toggle_on</span>
+                                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Estado &
+                                        Visibilidad</h3>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="activo"
+                                            class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                            Estado del Producto
+                                        </label>
+                                        <select id="activo" name="activo"
+                                            class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold">
+                                            <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>
+                                                Activo (Visible en tienda)</option>
+                                            <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>
+                                                Inactivo (Borrador oculto)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="space-y-2.5">
+                                        <!-- Switch Destacado -->
+                                        <div
+                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                            <div class="space-y-0.5">
+                                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                                    <span
+                                                        class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
+                                                    <span>Destacado</span>
+                                                </p>
+                                                <p class="text-[9px] text-slate-500">Sección destacados</p>
+                                            </div>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" name="destacado" value="1" class="sr-only peer"
+                                                    @checked(old('destacado', $producto->destacado ?? false))>
+                                                <div
+                                                    class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500">
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                        <!-- Switch ITBMS 7% -->
+                                        <div
+                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                            <div class="space-y-0.5">
+                                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                                    <span
+                                                        class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
+                                                    <span>ITBMS (7%)</span>
+                                                </p>
+                                                <p class="text-[9px] text-slate-500">Impuesto Panamá</p>
+                                            </div>
+                                            <label class="relative inline-flex items-center cursor-pointer">
+                                                <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer"
+                                                    @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
+                                                <div
+                                                    class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600">
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </form>
@@ -592,65 +528,6 @@
         placeholder="Buscar por nombre o palabra clave..." :porPagina="15" />
 
     <script>
-        /* Cambio de Pestañas de la Ficha de Producto con Persistencia al Recargar */
-        function cambiarTabProducto(tabId) {
-            const paneles = document.querySelectorAll('.tab-contenido-producto');
-            const botones = document.querySelectorAll('.btn-tab-producto');
-
-            if (tabId === 'ver-todo') {
-                paneles.forEach(p => p.classList.remove('hidden'));
-            } else {
-                paneles.forEach(p => p.classList.add('hidden'));
-                const target = document.getElementById('tab-panel-' + tabId);
-                if (target) target.classList.remove('hidden');
-            }
-
-            botones.forEach(btn => {
-                btn.classList.remove('bg-slate-900', 'text-white', 'shadow-xs');
-                btn.classList.add('bg-white', 'text-slate-600', 'hover:bg-slate-100');
-            });
-
-            const activeBtn = document.getElementById('btn-tab-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.remove('bg-white', 'text-slate-600', 'hover:bg-slate-100');
-                activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-xs');
-            }
-
-            // Persistir tab activo en localStorage y URL Hash
-            if (tabId && tabId !== 'ver-todo') {
-                localStorage.setItem('producto_tab_activo', tabId);
-                if (history.replaceState) {
-                    history.replaceState(null, null, '#' + tabId);
-                } else {
-                    location.hash = '#' + tabId;
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            let tabApertura = 'generales';
-
-            // 1. Prioridad: Hash en la URL (#variantes, #imagenes, etc.)
-            const hash = (window.location.hash || '').replace('#', '').trim();
-            if (hash) {
-                const btnTarget = document.getElementById('btn-tab-' + hash);
-                if (btnTarget) {
-                    tabApertura = hash;
-                }
-            } else {
-                // 2. Segunda opción: localStorage
-                const tabGuardado = localStorage.getItem('producto_tab_activo');
-                if (tabGuardado) {
-                    const btnTarget = document.getElementById('btn-tab-' + tabGuardado);
-                    if (btnTarget) {
-                        tabApertura = tabGuardado;
-                    }
-                }
-            }
-
-            cambiarTabProducto(tabApertura);
-        });
-
         function regenerarSlugDesdeNombre() {
             const nombreInput = document.getElementById('nombre');
             const slugInput = document.getElementById('slug');
@@ -957,11 +834,6 @@
             if (categoriaInicial) {
                 actualizarUICategoria(categoriaInicial, '');
             }
-
-            @if($errors->any())
-                // En caso de errores de validación, mostrar todas las pestañas para ubicarlos rápido
-                cambiarTabProducto('ver-todo');
-            @endif
             });
     </script>
 @endsection

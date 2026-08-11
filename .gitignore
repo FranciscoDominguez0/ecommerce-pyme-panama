@@ -6,6 +6,7 @@
 .env.testing
 .phpactor.json
 .secrets
+/.github/workflows/vps-secrets.env
 opencode.jsonc
 .phpunit.result.cache
 /.codex

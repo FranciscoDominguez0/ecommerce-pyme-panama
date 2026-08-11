@@ -219,16 +219,6 @@
 
         <!-- Sidebar Footer / Actions -->
         <div class="p-3 border-t border-gray-700/60 bg-black/20 space-y-1.5">
-            
-            <!-- Quick Link: Ver Tienda Pública -->
-            <a href="{{ url('/') }}" target="_blank" 
-               class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-white/[0.03] hover:bg-white/[0.08] hover:text-white border border-gray-700/60 hover:border-gray-600 transition-all group">
-                <span class="flex items-center gap-2.5">
-                    <span class="material-symbols-outlined text-[17px] text-[#059669] group-hover:scale-110 transition-transform">storefront</span>
-                    <span>Ver Tienda Online</span>
-                </span>
-                <span class="material-symbols-outlined text-[15px] text-slate-400 group-hover:text-white">open_in_new</span>
-            </a>
 
             <!-- Logout Button -->
             <form method="POST" action="{{ route('logout') }}" class="w-full">
