@@ -207,7 +207,7 @@ class LoginTest extends TestCase
 
         $respuesta = $this->from('/login')->post('/login', [
             'email' => $usuario->email,
-            'password' => 'contraseña-incorrecta',
+            'password' => 'contrasena-incorrecta',
         ]);
 
         $respuesta->assertRedirect('/login');
@@ -264,7 +264,7 @@ class LoginTest extends TestCase
     protected function mensajeErrorDeLogin(): ?string
     {
         $sesion = app('session.store');
-        if (! $sesion->isStarted()) {
+        if (!$sesion->isStarted()) {
             $sesion->start();
         }
 
@@ -329,7 +329,7 @@ class LoginTest extends TestCase
         // Se debe emitir la cookie remember_web_*.
         $cookies = $respuesta->headers->getCookies();
         $cookieRecordar = collect($cookies)->first(
-            fn ($cookie) => str_starts_with($cookie->getName(), 'remember_web_')
+            fn($cookie) => str_starts_with($cookie->getName(), 'remember_web_')
         );
         $this->assertNotNull($cookieRecordar, 'Se esperaba la cookie remember_web_* en la respuesta.');
     }
@@ -350,7 +350,7 @@ class LoginTest extends TestCase
 
         $cookies = $respuesta->headers->getCookies();
         $cookieRecordar = collect($cookies)->first(
-            fn ($cookie) => str_starts_with($cookie->getName(), 'remember_web_')
+            fn($cookie) => str_starts_with($cookie->getName(), 'remember_web_')
         );
         $this->assertNull($cookieRecordar, 'No debería emitirse la cookie remember_web_* sin marcar recordarme.');
     }
@@ -379,7 +379,7 @@ class LoginTest extends TestCase
 
         // POST /login → login
         $rutaPost = collect(Route::getRoutes()->getRoutes())->first(
-            fn ($ruta) => in_array('POST', $ruta->methods()) && $ruta->uri() === 'login'
+            fn($ruta) => in_array('POST', $ruta->methods()) && $ruta->uri() === 'login'
         );
         $this->assertNotNull($rutaPost, 'Falta la ruta POST /login.');
         $this->assertStringContainsString('LoginController@login', $rutaPost->getActionName());
