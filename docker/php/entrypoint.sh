@@ -2,9 +2,7 @@
 set -e
 
 # Crear .env desde .env.example si no existe
-# (el contenedor recibe las vars por env_file, pero artisan necesita el archivo físico)
 if [ ! -f .env ]; then
-    echo ">> Creando .env desde .env.example"
     cp .env.example .env
 fi
 
@@ -12,13 +10,18 @@ fi
 chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
 chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
 
-# Generar APP_KEY si falta o está vacío
-if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:" ]; then
-    echo ">> Generando APP_KEY..."
-    php artisan key:generate --force
-else
-    # Escribir la key del entorno en el .env para que artisan la vea
+# Escribir APP_KEY en el .env del contenedor
+if [ -n "$APP_KEY" ] && [ "$APP_KEY" != "base64:" ]; then
+    # Usar la key que viene del .env del VPS
     sed -i "s|^APP_KEY=.*|APP_KEY=${APP_KEY}|" .env
+else
+    # No hay key: generar una nueva
+    echo ">> APP_KEY no definida, generando..."
+    php artisan key:generate --force
+    # Leer la key recién generada y exportarla al entorno actual
+    APP_KEY=$(grep '^APP_KEY=' .env | cut -d'=' -f2-)
+    export APP_KEY
+    echo ">> Copia esta key en el .env del VPS: APP_KEY=${APP_KEY}"
 fi
 
 # Enlace simbólico de storage
@@ -30,7 +33,7 @@ if [ "$RUN_MIGRATIONS" != "false" ]; then
     php artisan migrate --force
 fi
 
-# Optimizar en producción
+# Optimizar en producción (config:cache usa la key ya exportada)
 if [ "$APP_ENV" = "production" ]; then
     php artisan optimize 2>/dev/null || true
 fi
