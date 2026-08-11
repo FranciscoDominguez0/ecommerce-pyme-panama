@@ -18,7 +18,10 @@ php artisan storage:link --force 2>/dev/null || true
 if [ "$RUN_MIGRATIONS" != "false" ]; then
     echo ">> Ejecutando migraciones..."
     php artisan migrate --force
+    echo ">> Ejecutando seeders (roles y datos base)..."
+    php artisan db:seed --force
 fi
+
 
 # Cachear solo rutas y vistas (NO config:cache — Docker inyecta las env vars directamente)
 php artisan route:cache  2>/dev/null || true
