@@ -104,7 +104,7 @@
                 <!-- Brand Logo -->
                 <a href="{{ url('/') }}" wire:navigate class="flex items-center gap-2.5 shrink-0">
                     <x-application-logo size="default" />
-                    <div>
+                    <div class="hidden md:block">
                         <span class="text-base font-bold text-[#002349] tracking-tight block leading-none">PayMe <span
                                 class="text-[#006148]">Panamá</span></span>
                         <span

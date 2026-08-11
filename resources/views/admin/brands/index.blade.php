@@ -86,7 +86,7 @@
             <table class="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                     <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
-                        <th class="py-3.5 px-4 sm:px-6">Marca & Fabricante</th>
+                        <th class="py-3.5 px-4 sm:px-6 max-w-[280px]">Marca & Fabricante</th>
                         <th class="py-3.5 px-3 text-center w-32">Logotipo</th>
                         <th class="py-3.5 px-4 text-center w-40">Slug</th>
                         <th class="py-3.5 px-4 text-center w-32">Productos</th>
@@ -99,9 +99,9 @@
                         <tr class="hover:bg-slate-50/80 transition-colors group">
                             
                             <!-- Nombre & Detalle -->
-                            <td class="py-3.5 px-4 sm:px-6 font-semibold text-slate-900">
-                                <div class="flex items-center gap-2.5">
-                                    <span class="font-bold text-slate-900 text-sm">{{ $brand->name }}</span>
+                            <td class="py-3.5 px-4 sm:px-6 font-semibold text-slate-900 max-w-[280px]">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <span class="font-bold text-slate-900 text-sm truncate min-w-0" title="{{ $brand->name }}">{{ $brand->name }}</span>
                                 </div>
                             </td>
 
@@ -195,8 +195,5 @@
     </div>
 
 </div>
-
-@push('scripts')
-
 
 @endsection
