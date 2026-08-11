@@ -112,6 +112,94 @@ class ProductoController extends Controller
     }
 
     /**
+     * Almacena un nuevo producto en la base de datos.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:productos,slug',
+            'sku' => 'required|string|max:100|unique:productos,sku',
+            'categoria_id' => 'required|exists:categorias,id',
+            'precio' => 'required|numeric|min:0',
+        ], [
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'slug.unique' => 'Ya existe otro producto con ese slug.',
+            'sku.unique' => 'Ya existe otro producto con ese SKU.',
+            'categoria_id.required' => 'Debes seleccionar una categoría.',
+            'precio.required' => 'El precio es obligatorio.',
+        ]);
+
+        // Resolver marca y brand_id
+        $brandId = null;
+        $nombreMarca = null;
+
+        if ($request->filled('brand_id') && is_numeric($request->brand_id)) {
+            $brand = Brand::find($request->brand_id);
+            if ($brand) {
+                $brandId = $brand->id;
+                $nombreMarca = $brand->name;
+            }
+        } elseif ($request->filled('marca')) {
+            $nombreMarca = trim($request->marca);
+            $brand = Brand::where('name', 'ILIKE', $nombreMarca)
+                ->orWhere('slug', 'ILIKE', Str::slug($nombreMarca))
+                ->first();
+            if ($brand) {
+                $brandId = $brand->id;
+                $nombreMarca = $brand->name;
+            }
+        }
+
+        $producto = DB::transaction(function () use ($request, $brandId, $nombreMarca) {
+            $producto = Producto::create([
+                'categoria_id' => $request->categoria_id,
+                'brand_id' => $brandId,
+                'nombre' => $request->nombre,
+                'slug' => Str::slug($request->slug),
+                'descripcion' => $request->descripcion ?? '',
+                'descripcion_corta' => $request->descripcion_corta ?? '',
+                'sku' => strtoupper($request->sku),
+                'marca' => $nombreMarca,
+                'modelo' => $request->modelo ? trim($request->modelo) : null,
+                'precio' => $request->precio,
+                'precio_oferta' => $request->precio_oferta ?: null,
+                'oferta_activa' => $request->boolean('oferta_activa'),
+                'oferta_inicio_en' => $request->oferta_inicio_en ?: null,
+                'oferta_fin_en' => $request->oferta_fin_en ?: null,
+                'stock' => (int) ($request->stock ?? 0),
+                'stock_minimo' => (int) ($request->stock_minimo ?? 3),
+                'destacado' => $request->boolean('destacado'),
+                'activo' => $request->boolean('activo'),
+                'aplica_itbms' => $request->boolean('aplica_itbms'),
+            ]);
+
+            // Imágenes por URL
+            $this->guardarImagenesUrl($request, $producto);
+
+            // Imágenes por archivo
+            $this->guardarImagenesArchivos($request, $producto);
+
+            // Asegurar al menos una imagen principal si existen imágenes
+            if ($producto->imagenes()->exists() && !$producto->imagenes()->where('es_principal', true)->exists()) {
+                $primera = ImagenProducto::where('producto_id', $producto->id)->orderBy('orden')->first();
+                if ($primera) {
+                    $primera->update(['es_principal' => true]);
+                }
+            }
+
+            // Guardar variantes si aplica
+            $this->guardarVariantes($request, $producto);
+
+            return $producto;
+        });
+
+        return redirect()
+            ->route('admin.productos.index')
+            ->with('success', 'Producto creado exitosamente y publicado en la tienda.');
+    }
+
+    /**
      * Muestra el formulario para editar un producto existente.
      */
     public function edit(int $id): View

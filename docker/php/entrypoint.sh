@@ -11,6 +11,11 @@ fi
 chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
 chmod -R ug+rwX storage bootstrap/cache 2>/dev/null || true
 
+# Directorios de subida de imágenes (marcas, categorías, promociones, avatares, productos)
+mkdir -p public/images/Marcas public/uploads/categorias public/uploads/promociones public/uploads/avatars public/uploads/productos
+chown -R www-data:www-data public/images public/uploads 2>/dev/null || true
+chmod -R ug+rwX public/images public/uploads 2>/dev/null || true
+
 # Enlace simbólico de storage
 php artisan storage:link --force 2>/dev/null || true
 
