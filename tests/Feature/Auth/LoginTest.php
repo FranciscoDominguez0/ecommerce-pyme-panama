@@ -207,7 +207,7 @@ class LoginTest extends TestCase
 
         $respuesta = $this->from('/login')->post('/login', [
             'email' => $usuario->email,
-            'password' => 'contrasena-incorrecta',
+            'password' => 'secret123',
         ]);
 
         $respuesta->assertRedirect('/login');

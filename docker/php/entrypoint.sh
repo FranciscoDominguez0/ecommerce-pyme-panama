@@ -24,4 +24,5 @@ if [ "$APP_ENV" = "production" ]; then
     php artisan optimize 2>/dev/null || true
 fi
 
-exec php-fpm
+# Iniciar Nginx + PHP-FPM via Supervisor
+exec /usr/bin/supervisord -c /etc/supervisord.conf

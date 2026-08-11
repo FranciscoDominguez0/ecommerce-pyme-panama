@@ -34,14 +34,16 @@ services:
     volumes:
       - app_storage:/var/www/html/storage/app
       - app_logs:/var/www/html/storage/logs
-    ports:
-      - "127.0.0.1:9000:9000"   # VPS Nginx hace fastcgi_pass a este puerto
     networks:
       - backend
+      - npm_network   # red de NPM para que hable directo al contenedor
 
 networks:
   backend:
     driver: bridge
+  npm_network:
+    external: true
+    name: nginx-proxy-manager_default
 
 volumes:
   db_data:
