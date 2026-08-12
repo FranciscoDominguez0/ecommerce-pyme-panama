@@ -143,9 +143,10 @@
                             <!-- Acciones -->
                             <td class="py-3.5 px-4 sm:px-6 text-right">
                                 <div class="flex items-center justify-end gap-1">
-                                    <a href="{{ route('admin.brands.edit', $brand) }}" 
-                                       class="p-1.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors" 
-                                       title="Editar Marca">
+                                    <!-- Botón Editar -->
+                                    <a href="{{ route('admin.brands.edit', $brand) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
+                                       class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors" 
+                                       title="Editar marca">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </a>
 

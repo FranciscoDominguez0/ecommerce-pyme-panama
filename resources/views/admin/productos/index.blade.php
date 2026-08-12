@@ -228,8 +228,8 @@
                             <td class="py-3 px-4">
                                 <div class="space-y-1">
                                     <div class="flex items-center gap-1.5">
-                                        <a href="{{ route('admin.productos.edit', $prod->id) }}" class="font-bold text-slate-900 text-sm hover:text-emerald-700 transition-colors">
-                                            {{ $prod->nombre }}
+                                        <a href="{{ route('admin.productos.edit', $prod->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="font-bold text-slate-900 text-sm hover:text-emerald-700 transition-colors">
+                                            {{ Str::limit($prod->nombre, 60) }}
                                         </a>
                                         @if($prod->destacado)
                                             <span class="material-symbols-outlined text-[15px] text-amber-500" title="Producto Destacado">star</span>
@@ -324,8 +324,9 @@
                                        title="Ver en la tienda pública">
                                         <span class="material-symbols-outlined text-[17px]">visibility</span>
                                     </a>
-                                    <a href="{{ route('admin.productos.edit', $prod->id) }}" 
-                                       class="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" 
+                                    <!-- Botón Editar -->
+                                    <a href="{{ route('admin.productos.edit', $prod->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
+                                       class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors" 
                                        title="Editar producto">
                                         <span class="material-symbols-outlined text-[17px]">edit</span>
                                     </a>

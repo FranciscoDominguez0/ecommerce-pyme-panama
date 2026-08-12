@@ -207,8 +207,8 @@ class BrandController extends Controller
         // Sincronizar el nombre en los productos asociados
         Producto::where('brand_id', $brand->id)->update(['marca' => $name]);
 
-        return redirect()->route('admin.brands.index')
-            ->with('success', "Marca «{$brand->name}» actualizada correctamente.");
+        return redirect()->route('admin.brands.index', request()->query())
+            ->with('success', 'Marca actualizada exitosamente.');
     }
 
     /**

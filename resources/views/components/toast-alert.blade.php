@@ -44,19 +44,27 @@
             
             $config = match($tipo) {
                 'error' => [
-                    'textIcon' => 'text-rose-500',
+                    'bg' => 'bg-rose-50',
+                    'border' => 'border-rose-100',
+                    'text' => 'text-rose-800',
                     'icon' => 'error'
                 ],
                 'warning' => [
-                    'textIcon' => 'text-amber-500',
+                    'bg' => 'bg-amber-50',
+                    'border' => 'border-amber-100',
+                    'text' => 'text-amber-800',
                     'icon' => 'warning'
                 ],
                 'info' => [
-                    'textIcon' => 'text-blue-400',
+                    'bg' => 'bg-blue-50',
+                    'border' => 'border-blue-100',
+                    'text' => 'text-blue-800',
                     'icon' => 'info'
                 ],
                 default => [
-                    'textIcon' => 'text-emerald-500',
+                    'bg' => 'bg-emerald-50',
+                    'border' => 'border-emerald-100',
+                    'text' => 'text-emerald-800',
                     'icon' => 'check_circle'
                 ]
             };
@@ -65,17 +73,17 @@
         <div id="toast-session-{{ $idx }}" 
              data-toast
              data-duration="4000"
-             class="pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-900 shadow-xl text-white relative overflow-hidden transition-all duration-300 transform translate-y-0 opacity-100 ring-1 ring-white/10">
+             class="pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full {{ $config['bg'] }} {{ $config['border'] }} border shadow-md {{ $config['text'] }} relative overflow-hidden transition-all duration-300 transform translate-y-0 opacity-100">
             
-            <span class="material-symbols-outlined {{ $config['textIcon'] }} text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
+            <span class="material-symbols-outlined text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
             
-            <div class="flex-1 text-xs font-medium leading-tight tracking-wide pr-2">
+            <div class="flex-1 text-xs font-semibold leading-tight tracking-wide pr-2">
                 {{ $mensaje }}
             </div>
             
             <button type="button" 
                     onclick="cerrarToast(this.closest('[data-toast]'))" 
-                    class="text-slate-400 hover:text-white transition-colors p-0.5 shrink-0" 
+                    class="opacity-60 hover:opacity-100 transition-opacity p-0.5 shrink-0" 
                     aria-label="Cerrar notificación">
                 <span class="material-symbols-outlined text-[16px]">close</span>
             </button>
@@ -160,23 +168,33 @@
 
             const configs = {
                 success: {
-                    textIcon: 'text-emerald-500',
+                    bg: 'bg-emerald-50',
+                    border: 'border-emerald-100',
+                    text: 'text-emerald-800',
                     icon: 'check_circle'
                 },
                 error: {
-                    textIcon: 'text-rose-500',
+                    bg: 'bg-rose-50',
+                    border: 'border-rose-100',
+                    text: 'text-rose-800',
                     icon: 'error'
                 },
                 fallo: {
-                    textIcon: 'text-rose-500',
+                    bg: 'bg-rose-50',
+                    border: 'border-rose-100',
+                    text: 'text-rose-800',
                     icon: 'error'
                 },
                 warning: {
-                    textIcon: 'text-amber-500',
+                    bg: 'bg-amber-50',
+                    border: 'border-amber-100',
+                    text: 'text-amber-800',
                     icon: 'warning'
                 },
                 info: {
-                    textIcon: 'text-blue-400',
+                    bg: 'bg-blue-50',
+                    border: 'border-blue-100',
+                    text: 'text-blue-800',
                     icon: 'info'
                 }
             };
@@ -184,16 +202,16 @@
             const cfg = configs[tipo] || configs.success;
             const toast = document.createElement('div');
             toast.dataset.toast = 'true';
-            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-900 shadow-xl text-white relative overflow-hidden transition-all duration-300 transform translate-y-[-10px] opacity-0 ring-1 ring-white/10`;
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full ${cfg.bg} ${cfg.border} border shadow-md ${cfg.text} relative overflow-hidden transition-all duration-300 transform translate-y-[-10px] opacity-0`;
 
             toast.innerHTML = `
-                <span class="material-symbols-outlined ${cfg.textIcon} text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">${cfg.icon}</span>
-                <div class="flex-1 text-xs font-medium leading-tight tracking-wide pr-2">
+                <span class="material-symbols-outlined text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">${cfg.icon}</span>
+                <div class="flex-1 text-xs font-semibold leading-tight tracking-wide pr-2">
                     ${mensaje}
                 </div>
                 <button type="button" 
                         onclick="cerrarToast(this.closest('[data-toast]'))" 
-                        class="text-slate-400 hover:text-white transition-colors p-0.5 shrink-0" 
+                        class="opacity-60 hover:opacity-100 transition-opacity p-0.5 shrink-0" 
                         aria-label="Cerrar notificación">
                     <span class="material-symbols-outlined text-[16px]">close</span>
                 </button>

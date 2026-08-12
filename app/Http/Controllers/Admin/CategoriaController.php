@@ -304,7 +304,7 @@ class CategoriaController extends Controller
         );
 
         return redirect()
-            ->route('admin.categorias.index')
+            ->route('admin.categorias.index', request()->query())
             ->with('success', "La categoría '{$categoria->nombre}' fue actualizada exitosamente.");
     }
 

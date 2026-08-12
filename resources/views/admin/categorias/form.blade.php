@@ -15,7 +15,7 @@
     <!-- Encabezado de Página -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.categorias.index') }}" 
+            <a href="{{ route('admin.categorias.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
                class="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors" 
                title="Volver al listado">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.categorias.index') }}" 
+            <a href="{{ route('admin.categorias.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
                class="px-4 py-2 border border-slate-200 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-colors shadow-xs">
                 Cancelar
             </a>
@@ -46,7 +46,7 @@
     <!-- Formulario Principal -->
     <form id="categoria-form" 
           method="POST" 
-          action="{{ $esEdicion ? route('admin.categorias.update', $categoria->id) : route('admin.categorias.store') }}" 
+          action="{{ $esEdicion ? route('admin.categorias.update', $categoria->id) . (request()->getQueryString() ? '?' . request()->getQueryString() : '') : route('admin.categorias.store') }}" 
           enctype="multipart/form-data" 
           class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         @csrf

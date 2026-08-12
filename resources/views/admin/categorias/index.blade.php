@@ -196,7 +196,7 @@
                                 <div class="flex items-center justify-end gap-1">
                                     
                                     <!-- Botón Editar -->
-                                    <a href="{{ route('admin.categorias.edit', $categoria->id) }}" 
+                                    <a href="{{ route('admin.categorias.edit', $categoria->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
                                        class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors" 
                                        title="Editar categoría">
                                         <span class="material-symbols-outlined text-[17px]">edit</span>

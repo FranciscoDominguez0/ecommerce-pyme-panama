@@ -4,8 +4,8 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <a href="{{ route('admin.productos.index') }}"
-        class="text-slate-500 hover:text-slate-900 transition-colors">Productos</a>
+    <a href="{{ route('admin.productos.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
+       class="text-slate-500 hover:text-slate-900 transition-colors truncate max-w-[85px] sm:max-w-none">Productos</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <span class="font-bold text-slate-900 truncate">{{ ($esEdicion ?? false) ? 'Editar' : 'Nuevo' }}</span>
 @endsection
@@ -14,16 +14,12 @@
     <div class="space-y-5 w-full min-w-0 max-w-full">
 
         <!-- Formulario Principal -->
-        @if($esEdicion ?? false)
-            <form id="form-producto" method="POST" action="{{ route('admin.productos.update', $id ?? $producto->id) }}"
+        <form id="form-producto" method="POST" action="{{ ($esEdicion ?? false) ? route('admin.productos.update', $producto->id) . (request()->getQueryString() ? '?' . request()->getQueryString() : '') : route('admin.productos.store') }}"
                 enctype="multipart/form-data" class="space-y-5">
                 @csrf
-                @method('PUT')
-        @else
-                <form id="form-producto" method="POST" action="{{ route('admin.productos.store') }}"
-                    enctype="multipart/form-data" class="space-y-5">
-                    @csrf
-            @endif
+                @if($esEdicion ?? false)
+                    @method('PUT')
+                @endif
 
                 <!-- Encabezado de Página (no fijo) -->
                 <div class="flex items-center gap-2.5">
@@ -52,7 +48,7 @@
                         </span>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <a href="{{ route('admin.productos.index') }}"
+                        <a href="{{ route('admin.productos.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
                             class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-xs">
                             <span class="material-symbols-outlined text-[17px] text-slate-400">arrow_back</span>
                             <span class="hidden sm:inline">Cancelar</span>

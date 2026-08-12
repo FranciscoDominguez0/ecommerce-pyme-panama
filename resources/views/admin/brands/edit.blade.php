@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <a href="{{ route('admin.brands.index') }}" class="text-slate-500 hover:text-slate-800 transition-colors">Marcas</a>
+    <a href="{{ route('admin.brands.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="text-slate-500 hover:text-slate-800 transition-colors">Marcas</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <span class="font-bold text-slate-900 truncate">Editar Marca</span>
 @endsection
@@ -15,7 +15,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between pb-4 border-b border-slate-200/80">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.brands.index') }}" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
+            <a href="{{ route('admin.brands.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             </a>
             <div>
@@ -26,7 +26,7 @@
     </div>
 
     <!-- Formulario Principal -->
-    <form method="POST" action="{{ route('admin.brands.update', $brand) }}" enctype="multipart/form-data" class="space-y-6">
+    <form method="POST" action="{{ route('admin.brands.update', $brand) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 

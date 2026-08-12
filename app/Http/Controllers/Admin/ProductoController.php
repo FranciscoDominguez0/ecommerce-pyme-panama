@@ -413,7 +413,7 @@ class ProductoController extends Controller
         });
 
         return redirect()
-            ->route('admin.productos.edit', $id)
+            ->route('admin.productos.edit', ['id' => $id] + request()->query())
             ->with('success', 'Producto actualizado correctamente.');
     }
 
