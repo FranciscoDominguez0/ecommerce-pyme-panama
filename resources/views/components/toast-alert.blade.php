@@ -1,5 +1,5 @@
 {{-- Componente Reutilizable: Alertas Toast Flotantes (Éxito, Error/Fallo, Advertencia, Información) --}}
-<div id="toast-container" class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-3 sm:px-0" aria-live="polite" aria-atomic="true">
+<div id="toast-container" class="fixed top-5 right-5 sm:right-6 z-[9999] flex flex-col gap-2.5 pointer-events-none w-full max-w-[280px] sm:max-w-xs" aria-live="polite" aria-atomic="true">
     @php
         $toasts = [];
         if (session('success')) {
@@ -44,36 +44,20 @@
             
             $config = match($tipo) {
                 'error' => [
-                    'border' => 'border-rose-100',
-                    'bgIcon' => 'bg-rose-100 text-rose-600',
-                    'icon' => 'error',
-                    'bar' => 'bg-rose-500',
-                    'barBg' => 'bg-rose-500/20',
-                    'title' => 'Error'
+                    'textIcon' => 'text-rose-500',
+                    'icon' => 'error'
                 ],
                 'warning' => [
-                    'border' => 'border-amber-100',
-                    'bgIcon' => 'bg-amber-100 text-amber-600',
-                    'icon' => 'warning',
-                    'bar' => 'bg-amber-500',
-                    'barBg' => 'bg-amber-500/20',
-                    'title' => 'Atención'
+                    'textIcon' => 'text-amber-500',
+                    'icon' => 'warning'
                 ],
                 'info' => [
-                    'border' => 'border-blue-100',
-                    'bgIcon' => 'bg-blue-100 text-blue-600',
-                    'icon' => 'info',
-                    'bar' => 'bg-blue-500',
-                    'barBg' => 'bg-blue-500/20',
-                    'title' => 'Información'
+                    'textIcon' => 'text-blue-400',
+                    'icon' => 'info'
                 ],
                 default => [
-                    'border' => 'border-emerald-100',
-                    'bgIcon' => 'bg-emerald-100 text-emerald-600',
-                    'icon' => 'check_circle',
-                    'bar' => 'bg-emerald-500',
-                    'barBg' => 'bg-emerald-500/20',
-                    'title' => 'Éxito'
+                    'textIcon' => 'text-emerald-500',
+                    'icon' => 'check_circle'
                 ]
             };
         @endphp
@@ -81,22 +65,20 @@
         <div id="toast-session-{{ $idx }}" 
              data-toast
              data-duration="4000"
-             class="pointer-events-auto flex items-center gap-3.5 px-4 py-4 rounded-2xl bg-white/95 backdrop-blur-md border {{ $config['border'] }} shadow-2xl text-slate-700 text-sm font-bold relative overflow-hidden transition-all duration-300 transform translate-y-0 opacity-100">
-            <div class="w-10 h-10 rounded-full {{ $config['bgIcon'] }} flex items-center justify-center shrink-0 shadow-xs">
-                <span class="material-symbols-outlined text-[24px]">{{ $config['icon'] }}</span>
-            </div>
-            <div class="flex-1 text-xs sm:text-sm font-semibold text-slate-800 leading-snug break-words">
+             class="pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-900 shadow-xl text-white relative overflow-hidden transition-all duration-300 transform translate-y-0 opacity-100 ring-1 ring-white/10">
+            
+            <span class="material-symbols-outlined {{ $config['textIcon'] }} text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
+            
+            <div class="flex-1 text-xs font-medium leading-tight tracking-wide pr-2">
                 {{ $mensaje }}
             </div>
+            
             <button type="button" 
                     onclick="cerrarToast(this.closest('[data-toast]'))" 
-                    class="text-slate-400 hover:text-slate-700 transition-colors p-1.5 rounded-lg hover:bg-slate-100 shrink-0" 
+                    class="text-slate-400 hover:text-white transition-colors p-0.5 shrink-0" 
                     aria-label="Cerrar notificación">
-                <span class="material-symbols-outlined text-[18px]">close</span>
+                <span class="material-symbols-outlined text-[16px]">close</span>
             </button>
-            <div class="absolute bottom-0 left-0 h-1 {{ $config['barBg'] }} w-full">
-                <div class="toast-progress-bar h-full {{ $config['bar'] }} w-full transition-all ease-linear"></div>
-            </div>
         </div>
     @endforeach
 </div>
@@ -178,63 +160,43 @@
 
             const configs = {
                 success: {
-                    border: 'border-emerald-100',
-                    bgIcon: 'bg-emerald-100 text-emerald-600',
-                    icon: 'check_circle',
-                    bar: 'bg-emerald-500',
-                    barBg: 'bg-emerald-500/20'
+                    textIcon: 'text-emerald-500',
+                    icon: 'check_circle'
                 },
                 error: {
-                    border: 'border-rose-100',
-                    bgIcon: 'bg-rose-100 text-rose-600',
-                    icon: 'error',
-                    bar: 'bg-rose-500',
-                    barBg: 'bg-rose-500/20'
+                    textIcon: 'text-rose-500',
+                    icon: 'error'
                 },
                 fallo: {
-                    border: 'border-rose-100',
-                    bgIcon: 'bg-rose-100 text-rose-600',
-                    icon: 'error',
-                    bar: 'bg-rose-500',
-                    barBg: 'bg-rose-500/20'
+                    textIcon: 'text-rose-500',
+                    icon: 'error'
                 },
                 warning: {
-                    border: 'border-amber-100',
-                    bgIcon: 'bg-amber-100 text-amber-600',
-                    icon: 'warning',
-                    bar: 'bg-amber-500',
-                    barBg: 'bg-amber-500/20'
+                    textIcon: 'text-amber-500',
+                    icon: 'warning'
                 },
                 info: {
-                    border: 'border-blue-100',
-                    bgIcon: 'bg-blue-100 text-blue-600',
-                    icon: 'info',
-                    bar: 'bg-blue-500',
-                    barBg: 'bg-blue-500/20'
+                    textIcon: 'text-blue-400',
+                    icon: 'info'
                 }
             };
 
             const cfg = configs[tipo] || configs.success;
             const toast = document.createElement('div');
             toast.dataset.toast = 'true';
-            toast.className = `pointer-events-auto flex items-center gap-3.5 px-4 py-4 rounded-2xl bg-white/95 backdrop-blur-md border ${cfg.border} shadow-2xl text-slate-700 text-sm font-bold relative overflow-hidden transition-all duration-300 transform translate-y-[-10px] opacity-0`;
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full bg-slate-900 shadow-xl text-white relative overflow-hidden transition-all duration-300 transform translate-y-[-10px] opacity-0 ring-1 ring-white/10`;
 
             toast.innerHTML = `
-                <div class="w-10 h-10 rounded-full ${cfg.bgIcon} flex items-center justify-center shrink-0 shadow-xs">
-                    <span class="material-symbols-outlined text-[24px]">${cfg.icon}</span>
-                </div>
-                <div class="flex-1 text-xs sm:text-sm font-semibold text-slate-800 leading-snug break-words">
+                <span class="material-symbols-outlined ${cfg.textIcon} text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">${cfg.icon}</span>
+                <div class="flex-1 text-xs font-medium leading-tight tracking-wide pr-2">
                     ${mensaje}
                 </div>
                 <button type="button" 
                         onclick="cerrarToast(this.closest('[data-toast]'))" 
-                        class="text-slate-400 hover:text-slate-700 transition-colors p-1.5 rounded-lg hover:bg-slate-100 shrink-0" 
+                        class="text-slate-400 hover:text-white transition-colors p-0.5 shrink-0" 
                         aria-label="Cerrar notificación">
-                    <span class="material-symbols-outlined text-[18px]">close</span>
+                    <span class="material-symbols-outlined text-[16px]">close</span>
                 </button>
-                <div class="absolute bottom-0 left-0 h-1 ${cfg.barBg} w-full">
-                    <div class="toast-progress-bar h-full ${cfg.bar} w-full transition-all ease-linear"></div>
-                </div>
             `;
 
             container.appendChild(toast);

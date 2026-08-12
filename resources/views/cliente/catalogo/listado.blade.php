@@ -183,8 +183,8 @@
                 </div>
 
                 <form method="GET" action="{{ route('cliente.catalogo') }}" class="space-y-5">
-                    <!-- 1. Búsqueda de Texto -->
-                    <div>
+                    <!-- 1. Búsqueda de Texto (Solo Móvil, en PC se usa el topbar) -->
+                    <div class="block lg:hidden">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                             Buscar
                         </label>
@@ -199,7 +199,7 @@
                     </div>
 
                     <!-- 2. Categorías -->
-                    <div class="space-y-2 border-t border-slate-100 pt-4 hidden lg:block" x-data="{ verMas: false }">
+                    <div class="space-y-2 border-t border-slate-100 pt-4" x-data="{ verMas: false }">
                         <h4 class="text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between">
                             Categorías
                             <span class="material-symbols-outlined text-[16px]">expand_more</span>
@@ -232,7 +232,7 @@
                     </div>
 
                     <!-- 3. Marcas -->
-                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4 hidden lg:block">
+                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4">
                         <h4 @click="open = !open" class="text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
                             Marcas
                             <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
@@ -262,7 +262,7 @@
                     </div>
 
                     <!-- 4. Rango de Precio -->
-                    <div class="space-y-2 border-t border-slate-100 pt-4 hidden lg:block">
+                    <div class="space-y-2 border-t border-slate-100 pt-4">
                         <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                             Precio (USD)
                         </h4>

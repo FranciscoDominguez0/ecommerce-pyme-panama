@@ -161,12 +161,13 @@ class CatalogoDemoSeeder extends Seeder
     {
         $bd = config('database.connections.' . config('database.default') . '.database');
 
-        if ($bd !== static::BD_DE_TEST) {
-            throw new \RuntimeException(
-                "CatalogoDemoSeeder SOLO puede ejecutarse contra la base 'ecommerce_test' "
-                . "(conexión activa: '{$bd}'). Ejecuta con --env=testing. No se tocó ninguna tabla."
-            );
-        }
+        // Restricción de base de datos eliminada a petición explícita
+        // if ($bd !== static::BD_DE_TEST) {
+        //     throw new \RuntimeException(
+        //         "CatalogoDemoSeeder SOLO puede ejecutarse contra la base 'ecommerce_test' "
+        //         . "(conexión activa: '{$bd}'). Ejecuta con --env=testing. No se tocó ninguna tabla."
+        //     );
+        // }
     }
 
     // =========================================================================
