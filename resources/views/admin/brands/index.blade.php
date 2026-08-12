@@ -187,8 +187,8 @@
 
         <!-- Paginación -->
         @if($marcas->hasPages())
-            <div class="px-4 py-3 border-t border-slate-100 flex items-center justify-between">
-                {{ $marcas->links() }}
+            <div class="px-4 py-4 border-t border-slate-100 bg-slate-50/50">
+                {{ $marcas->links('vendor.pagination.admin-tailwind') }}
             </div>
         @endif
 

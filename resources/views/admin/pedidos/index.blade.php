@@ -115,9 +115,9 @@
         </div>
         
         @if($pedidos->hasPages())
-        <div class="px-6 py-4 border-t border-slate-200">
-            {{ $pedidos->links() }}
-        </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50/50">
+                {{ $pedidos->links('vendor.pagination.admin-tailwind') }}
+            </div>
         @endif
     </div>
 </div>

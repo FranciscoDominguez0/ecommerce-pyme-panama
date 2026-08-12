@@ -267,13 +267,8 @@
 
         <!-- Paginación -->
         @if($categorias->hasPages())
-            <div class="px-5 py-3 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between text-xs">
-                <span class="text-slate-500">
-                    Mostrando del <span class="font-semibold text-slate-700">{{ $categorias->firstItem() }}</span> al <span class="font-semibold text-slate-700">{{ $categorias->lastItem() }}</span> de <span class="font-semibold text-slate-700">{{ $categorias->total() }}</span> categorías
-                </span>
-                <div>
-                    {{ $categorias->links() }}
-                </div>
+            <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/50">
+                {{ $categorias->links('vendor.pagination.admin-tailwind') }}
             </div>
         @endif
 

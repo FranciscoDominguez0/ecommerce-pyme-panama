@@ -290,10 +290,10 @@
             </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- Paginación -->
         @if($cupones->hasPages())
-            <div class="p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                {{ $cupones->links() }}
+            <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+                {{ $cupones->links('vendor.pagination.admin-tailwind') }}
             </div>
         @endif
     </div>

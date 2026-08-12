@@ -16,71 +16,109 @@
             <span class="text-slate-900 font-bold">Catálogo de Productos</span>
         </nav>
 
-        <!-- Barra Superior Secundaria y Subcategorías -->
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-2 mb-4">
-            <!-- Menú Horizontal (Mockup basado en imagen) -->
+        <!-- Barra Superior Secundaria (Solo PC) -->
+        <div class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-xs p-2 mb-4">
+            <!-- Menú Horizontal -->
             <div class="flex flex-wrap items-center gap-4 px-4 py-2 border-b border-slate-100 mb-3">
-                
-                <!-- Botón Productos Dropdown (Mega Menú) -->
-                <div x-data="{ open: false, activeCategory: null }" class="relative z-30" @click.away="open = false; activeCategory = null">
-                    <!-- Botón Verde Original -->
-                    <button @click="open = !open" class="bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-4 py-2 flex items-center gap-2 text-sm font-bold cursor-pointer transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                        </svg>
-                        Productos
+
+                <!-- Botón Productos: 2 columnas (categorías | subcategorías) -->
+                <div x-data="{ open: false, activeCategory: null }" class="relative z-40" @click.away="open = false; activeCategory = null">
+                    <button @click="open = !open"
+                            class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-4 py-2 flex items-center justify-between sm:justify-start gap-2 text-sm font-bold cursor-pointer transition-colors">
+                        <span class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                            </svg>
+                            Productos
+                        </span>
                         <span class="material-symbols-outlined text-[18px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
                     </button>
-                    
-                    <!-- Mega Menú Desplegable -->
-                    <div x-show="open" x-transition.opacity class="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex" style="display: none; min-width: 600px; min-height: 300px;">
-                        
-                        <!-- Columna Izquierda: Categorías Padre -->
-                        <div class="w-1/2 border-r border-slate-100 py-2 bg-white">
+
+                    <!-- Panel de 2 columnas anclado directamente bajo el botón -->
+                    <div x-show="open"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-1"
+                         class="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-slate-200 flex overflow-hidden"
+                         style="display:none; min-width:560px; max-height:400px; z-index:50;">
+
+                        <!-- Columna izquierda: lista de categorías padre -->
+                        <div class="w-56 shrink-0 border-r border-slate-100 py-2 overflow-y-auto bg-white">
                             @foreach($categorias as $cat)
-                                <div @mouseenter="activeCategory = {{ $cat->id }}" 
-                                     class="px-5 py-3 flex items-center justify-between cursor-pointer transition-colors"
-                                     :class="activeCategory === {{ $cat->id }} ? 'bg-slate-50 text-emerald-700 font-bold border-l-4 border-emerald-600' : 'text-slate-700 font-semibold hover:bg-slate-50'">
-                                    <div class="flex items-center gap-3">
+                                <div @mouseenter="activeCategory = {{ $cat->id }}"
+                                     class="flex items-center justify-between px-4 py-2.5 cursor-pointer select-none transition-colors border-l-4"
+                                     :class="activeCategory === {{ $cat->id }}
+                                         ? 'bg-emerald-50 text-emerald-700 font-bold border-emerald-500'
+                                         : 'text-slate-700 font-semibold border-transparent hover:bg-slate-50 hover:border-emerald-200'">
+                                    <span class="flex items-center gap-3">
                                         @if($cat->imagen_ruta)
-                                            <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="" class="w-5 h-5 object-contain">
+                                            <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}"
+                                                 alt="" class="w-5 h-5 object-contain shrink-0">
                                         @else
-                                            <span class="material-symbols-outlined text-[18px] text-emerald-500">category</span>
+                                            <span class="material-symbols-outlined text-[18px] text-emerald-500 shrink-0">category</span>
                                         @endif
-                                        <span>{{ $cat->nombre }}</span>
-                                    </div>
+                                        <span class="text-sm">{{ $cat->nombre }}</span>
+                                    </span>
                                     @if($cat->hijas->count() > 0)
-                                        <span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
+                                        <span class="material-symbols-outlined text-[16px] text-slate-400 shrink-0">chevron_right</span>
                                     @endif
                                 </div>
                             @endforeach
                         </div>
 
-                        <!-- Columna Derecha: Subcategorías (Dinámicas) -->
-                        <div class="w-1/2 py-2 bg-slate-50">
+                        <!-- Columna derecha: subcategorías de la categoría en hover -->
+                        <div class="flex-1 overflow-y-auto bg-slate-50/60">
+
+                            <!-- Placeholder cuando ninguna categoría está activa -->
+                            <div x-show="activeCategory === null"
+                                 class="flex flex-col items-center justify-center h-full py-10 text-slate-400"
+                                 style="display:flex;">
+                                <span class="material-symbols-outlined text-[40px] mb-2">category</span>
+                                <p class="text-xs font-medium text-center">Pasa el cursor sobre<br>una categoría</p>
+                            </div>
+
+                            <!-- Panel de subcategorías por categoría -->
                             @foreach($categorias as $cat)
-                                <div x-show="activeCategory === {{ $cat->id }}" class="px-5 py-3" style="display: none;">
-                                    <h3 class="text-sm font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">{{ $cat->nombre }}</h3>
+                                <div x-show="activeCategory === {{ $cat->id }}"
+                                     class="px-5 py-4"
+                                     style="display:none;">
+                                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 pb-2 border-b border-slate-200">
+                                        {{ $cat->nombre }}
+                                    </h3>
                                     @if($cat->hijas->count() > 0)
-                                        <div class="space-y-2">
+                                        <div class="space-y-0.5">
+                                            <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate
+                                               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-emerald-700 hover:bg-emerald-50 transition-colors">
+                                                <span class="material-symbols-outlined text-[14px]">apps</span>
+                                                Ver todo en {{ $cat->nombre }}
+                                            </a>
                                             @foreach($cat->hijas as $hija)
-                                                <a href="{{ route('cliente.catalogo', ['categoria' => $hija->slug]) }}" wire:navigate class="block text-sm text-slate-600 hover:text-emerald-700 hover:font-semibold transition-colors">
+                                                <a href="{{ route('cliente.catalogo', ['categoria' => $hija->slug]) }}" wire:navigate
+                                                   class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
                                                     {{ $hija->nombre }}
                                                 </a>
                                             @endforeach
                                         </div>
                                     @else
-                                        <p class="text-xs text-slate-400">No hay subcategorías.</p>
-                                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate class="inline-block mt-3 text-xs font-bold text-emerald-700 hover:underline">Ver todos en {{ $cat->nombre }}</a>
+                                        <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate
+                                           class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold text-emerald-700 hover:bg-emerald-50 transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                                            Ver todos los productos
+                                        </a>
                                     @endif
                                 </div>
                             @endforeach
+
                         </div>
                     </div>
                 </div>
 
                 <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold">
-                    
+
                     <!-- Categorías Dropdown -->
                     <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
                         <button @click="open = !open" class="text-slate-900 hover:text-emerald-700 transition-colors flex items-center gap-1">
@@ -96,8 +134,8 @@
                     </div>
 
                     <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-slate-600 hover:text-emerald-700 transition-colors">Todos los productos</a>
-                    
-                    <!-- Lo mas vendido Dropdown -->
+
+                    <!-- Lo más vendido -->
                     <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
                         <button @click="open = !open" class="text-slate-600 hover:text-emerald-700 transition-colors flex items-center gap-1">
                             Lo más vendido <span class="material-symbols-outlined text-[16px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
@@ -129,10 +167,10 @@
 
         <!-- Grid Principal: Sidebar de Filtros + Grid de Productos -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             <!-- Sidebar de Filtros (3 columnas en LG) -->
             <aside class="lg:col-span-3 space-y-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-                
+
                 <!-- Encabezado de Filtros -->
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
@@ -152,16 +190,16 @@
                         </label>
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
-                            <input type="text" 
+                            <input type="text"
                                    name="buscar"
-                                   placeholder="Nombre, SKU..." 
-                                   value="{{ $buscar }}" 
+                                   placeholder="Nombre, SKU..."
+                                   value="{{ $buscar }}"
                                    class="pl-9 text-xs w-full rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2">
                         </div>
                     </div>
 
                     <!-- 2. Categorías -->
-                    <div class="space-y-2 border-t border-slate-100 pt-4">
+                    <div class="space-y-2 border-t border-slate-100 pt-4 hidden lg:block" x-data="{ verMas: false }">
                         <h4 class="text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between">
                             Categorías
                             <span class="material-symbols-outlined text-[16px]">expand_more</span>
@@ -171,11 +209,13 @@
                                class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                 <span class="flex items-center gap-2">
                                     <input type="radio" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
-                                    Todas los productos
+                                    Todos los productos
                                 </span>
                             </a>
-                            @foreach($categorias as $cat)
+                            @foreach($categorias as $index => $cat)
                                 <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => $cat->slug])) }}" wire:navigate
+                                   x-show="verMas || {{ $index }} < 5"
+                                   {!! $index >= 5 ? 'style="display:none;"' : '' !!}
                                    class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                     <span class="flex items-center gap-2">
                                         <input type="radio" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
@@ -183,16 +223,21 @@
                                     </span>
                                 </a>
                             @endforeach
+                            @if(count($categorias) > 5)
+                                <button type="button" @click="verMas = !verMas" class="text-emerald-700 hover:underline font-semibold mt-2 px-2.5 py-1 text-[11px] block text-left">
+                                    <span x-text="verMas ? '- Ver menos' : '+ Ver más'"></span>
+                                </button>
+                            @endif
                         </div>
                     </div>
 
-                    <!-- 3. Marcas (Basado en imagen) -->
-                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4">
+                    <!-- 3. Marcas -->
+                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4 hidden lg:block">
                         <h4 @click="open = !open" class="text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
                             Marcas
                             <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
                         </h4>
-                        
+
                         <div x-show="open" x-collapse>
                             <div class="relative mb-4">
                                 <input type="text" x-model="searchBrand" placeholder="Search Brands" class="w-full border-0 border-b border-slate-200 text-sm py-2 pl-1 pr-8 focus:ring-0 focus:border-slate-400 placeholder-slate-300">
@@ -216,8 +261,8 @@
                         </div>
                     </div>
 
-                    <!-- 3. Rango de Precio -->
-                    <div class="space-y-2 border-t border-slate-100 pt-4">
+                    <!-- 4. Rango de Precio -->
+                    <div class="space-y-2 border-t border-slate-100 pt-4 hidden lg:block">
                         <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                             Precio (USD)
                         </h4>
@@ -241,7 +286,7 @@
 
             <!-- Grid de Productos (9 columnas en LG) -->
             <main class="lg:col-span-9 space-y-6">
-                
+
                 <!-- Barra Superior del Listado: Total y Ordenamiento -->
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
                     <div class="text-xs text-slate-500">
@@ -261,7 +306,7 @@
 
                 <!-- Tarjetas de Productos en Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
+
                     @forelse($productos as $prod)
                         <x-producto-card :prod="$prod" />
                     @empty

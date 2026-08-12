@@ -360,16 +360,14 @@
             </table>
         </div>
 
-        <!-- Paginación Dinámica de Laravel -->
-        <div class="px-5 py-4 border-t border-slate-100 flex items-center justify-between flex-wrap gap-3">
-            <span class="text-xs text-slate-500">
-                Mostrando <strong>{{ $productos->firstItem() ?? 0 }}</strong> a <strong>{{ $productos->lastItem() ?? 0 }}</strong> de <strong>{{ $productos->total() }}</strong> productos en total
-            </span>
-
+        <!-- Paginación -->
+        <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/50">
             @if($productos->hasPages())
-                <div class="flex items-center gap-1">
-                    {{ $productos->links() }}
-                </div>
+                {{ $productos->links('vendor.pagination.admin-tailwind') }}
+            @else
+                <p class="text-xs text-center text-slate-500">
+                    Mostrando <strong>{{ $productos->total() }}</strong> producto(s)
+                </p>
             @endif
         </div>
 
