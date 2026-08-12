@@ -16,10 +16,10 @@
             <span class="text-slate-900 font-bold">Catálogo de Productos</span>
         </nav>
 
-        <!-- Barra Superior Secundaria (Solo PC) -->
-        <div class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-xs p-2 mb-4">
-            <!-- Menú Horizontal -->
-            <div class="flex flex-wrap items-center gap-4 px-4 py-2 border-b border-slate-100 mb-3">
+        <!-- Barra Superior Secundaria -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-2 mb-4">
+            <!-- Menú Horizontal (Solo PC) -->
+            <div class="hidden md:flex flex-wrap items-center gap-4 px-4 py-2 border-b border-slate-100 mb-3">
 
                 <!-- Botón Productos: 2 columnas (categorías | subcategorías) -->
                 <div x-data="{ open: false, activeCategory: null }" class="relative z-40" @click.away="open = false; activeCategory = null">
@@ -168,11 +168,11 @@
         <!-- Grid Principal: Sidebar de Filtros + Grid de Productos -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-            <!-- Sidebar de Filtros (3 columnas en LG) -->
+            <!-- Sidebar de Filtros -->
             <aside class="lg:col-span-3 space-y-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
 
                 <!-- Encabezado de Filtros -->
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="hidden sm:flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px] text-emerald-600">tune</span>
                         <span>Filtrar Resultados</span>
@@ -183,7 +183,7 @@
                 </div>
 
                 <form method="GET" action="{{ route('cliente.catalogo') }}" class="space-y-5">
-                    <!-- 1. Búsqueda de Texto (Solo Móvil, en PC se usa el topbar) -->
+                    <!-- 1. Búsqueda de Texto -->
                     <div class="block lg:hidden">
                         <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                             Buscar
@@ -199,12 +199,12 @@
                     </div>
 
                     <!-- 2. Categorías -->
-                    <div class="space-y-2 border-t border-slate-100 pt-4" x-data="{ verMas: false }">
-                        <h4 class="text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between">
+                    <div class="hidden sm:block space-y-2 border-t border-slate-100 pt-4" x-data="{ verMas: false, open: true }">
+                        <h4 @click="open = !open" class="text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between cursor-pointer">
                             Categorías
-                            <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                            <span class="material-symbols-outlined text-[18px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
                         </h4>
-                        <div class="space-y-1 text-xs">
+                        <div x-show="open" x-collapse class="space-y-1 text-xs">
                             <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" wire:navigate
                                class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                 <span class="flex items-center gap-2">
@@ -232,7 +232,7 @@
                     </div>
 
                     <!-- 3. Marcas -->
-                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="space-y-3 border-t border-slate-100 pt-4">
+                    <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="hidden sm:block space-y-3 border-t border-slate-100 pt-4">
                         <h4 @click="open = !open" class="text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
                             Marcas
                             <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
@@ -262,7 +262,7 @@
                     </div>
 
                     <!-- 4. Rango de Precio -->
-                    <div class="space-y-2 border-t border-slate-100 pt-4">
+                    <div class="hidden sm:block space-y-2 border-t border-slate-100 pt-4">
                         <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                             Precio (USD)
                         </h4>
@@ -278,13 +278,13 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors">
+                    <button type="submit" class="hidden sm:block w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors">
                         Aplicar Filtros
                     </button>
                 </form>
             </aside>
 
-            <!-- Grid de Productos (9 columnas en LG) -->
+            <!-- Grid de Productos -->
             <main class="lg:col-span-9 space-y-6">
 
                 <!-- Barra Superior del Listado: Total y Ordenamiento -->
