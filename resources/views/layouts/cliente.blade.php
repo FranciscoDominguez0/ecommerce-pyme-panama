@@ -109,7 +109,7 @@
                         <span class="material-symbols-outlined text-[26px]">menu</span>
                     </button>
                     
-                    <a href="{{ url('/') }}" wire:navigate class="hidden md:flex items-center gap-2.5">
+                    <div class="hidden md:flex items-center gap-2.5">
                         <x-application-logo size="default" />
                         <div class="hidden md:block">
                             <span class="text-base font-bold text-[#002349] tracking-tight block leading-none">PayMe <span
@@ -118,7 +118,7 @@
                                 class="text-[9px] text-gray-500 font-semibold uppercase tracking-wider block mt-0.5">Tecnología
                                 & Equipos IT</span>
                         </div>
-                    </a>
+                    </div>
                 </div>
 
                 <!-- Search Bar -->
@@ -140,10 +140,14 @@
                     <!-- User Authentication -->
                     @auth
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('dashboard') }}" wire:navigate
-                                class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-xs font-semibold text-[#002349] transition-colors">
-                                <span class="material-symbols-outlined text-[15px]">account_circle</span>
-                                <span>{{ Auth::user()->nombre ?? 'Mi Cuenta' }}</span>
+                            <a href="{{ route('cliente.perfil.datos') }}" wire:navigate
+                                class="flex items-center gap-2 py-0.5 {{ Auth::user()->foto_perfil_ruta ? 'pl-0.5' : 'pl-2.5' }} pr-3.5 rounded-full bg-gray-100 hover:bg-gray-200 text-sm font-bold text-[#002349] transition-colors">
+                                @if(Auth::user()->foto_perfil_ruta)
+                                    <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Perfil" class="w-9 h-9 rounded-full object-cover shadow-sm border border-white">
+                                @else
+                                    <span class="material-symbols-outlined text-[22px]">account_circle</span>
+                                @endif
+                                <span>{{ Auth::user() ? strtoupper(substr(Auth::user()->nombre, 0, 1) . (Auth::user()->apellido ? substr(Auth::user()->apellido, 0, 1) : '')) : 'MC' }}</span>
                             </a>
 
                             @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))

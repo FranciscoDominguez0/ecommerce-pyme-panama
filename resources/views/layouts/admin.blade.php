@@ -291,9 +291,13 @@
 
                 <!-- User Profile Badge -->
                 <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-                    <div class="w-8 h-8 rounded-full bg-[#09111e] text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-slate-100 shrink-0">
-                        {{ strtoupper(substr(Auth::user()->nombre ?? 'A', 0, 1)) }}
-                    </div>
+                    @if(Auth::user() && Auth::user()->foto_perfil_ruta)
+                        <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover shadow-xs ring-2 ring-slate-100 shrink-0">
+                    @else
+                        <div class="w-8 h-8 rounded-full bg-[#09111e] text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-slate-100 shrink-0">
+                            {{ strtoupper(substr(Auth::user()->nombre ?? 'A', 0, 1)) }}
+                        </div>
+                    @endif
                     <div class="hidden sm:flex flex-col text-left">
                         <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px] md:max-w-none">{{ Auth::user()->nombre_completo ?? Auth::user()->nombre ?? 'Administrador' }}</span>
                         <span class="text-[10px] font-semibold text-emerald-700 leading-tight">

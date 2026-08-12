@@ -70,6 +70,12 @@
 
 <body
     class="bg-background text-on-surface min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden selection:bg-secondary selection:text-on-secondary antialiased font-sans text-sm">
+    <!-- Botón Regresar a Inicio -->
+    <a href="{{ route('inicio') }}" wire:navigate class="absolute top-5 left-5 sm:top-8 sm:left-8 z-50 flex items-center gap-1.5 text-slate-500 hover:text-emerald-700 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm transition-all hover:scale-105 hover:bg-emerald-50 hover:border-emerald-200" title="Volver a la tienda">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span class="text-xs font-bold pr-1">Volver</span>
+    </a>
+
     <!-- Ambient Background Gradients -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div

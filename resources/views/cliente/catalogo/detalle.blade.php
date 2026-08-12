@@ -7,7 +7,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         <!-- Breadcrumbs Navegables -->
-        <nav class="flex items-center gap-1.5 text-xs text-slate-500 font-medium overflow-x-auto whitespace-nowrap scrollbar-none" aria-label="Breadcrumb">
+        <nav class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
             <a href="{{ route('inicio') }}" wire:navigate class="hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span class="material-symbols-outlined text-[16px]">home</span>
                 <span>Inicio</span>
@@ -21,7 +21,7 @@
                 </a>
             @endif
             <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
-            <span class="text-slate-900 font-bold truncate">{{ $producto->nombre }}</span>
+            <span class="text-slate-900 font-bold">{{ $producto->nombre }}</span>
         </nav>
 
         <!-- Bloque Principal de Producto (Galería Prioritaria + Compra) -->
@@ -536,10 +536,10 @@
     function abrirLightbox() {
         const modal = document.getElementById('modal-lightbox');
         if (!modal) return;
-        actualizarLightboxContenido();
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.body.style.overflow = 'hidden';
+        actualizarLightboxContenido();
     }
 
     function cerrarLightbox(e) {
