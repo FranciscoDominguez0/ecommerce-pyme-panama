@@ -32,7 +32,7 @@
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('info')];
         } elseif (session('toast_info')) {
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('toast_info')];
-        } elseif (session('status') && !in_array(session('status'), ['profile-updated', 'password-updated', 'verification-link-sent'])) {
+        } elseif (session('status') && !in_array(session('status'), ['profile-updated', 'password-updated', 'verification-link-sent']) && !str_contains(session('status'), 'restablecer tu contraseña')) {
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('status')];
         }
     @endphp

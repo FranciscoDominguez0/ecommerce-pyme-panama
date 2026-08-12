@@ -139,10 +139,11 @@ class PedidoServiceTest extends BaseAdminTest
 
     public function test_el_correlativo_de_numero_de_pedido_continua_desde_el_max_id_existente(): void
     {
-        // Al sembrar el correlativo se usa MAX(pedidos.id): con pedidos previos creados
-        // por id (estilo #PM-26000X), los nuevos números continúan sin solaparse.
+        // Al sembrar el correlativo se usa MAX(pedidos.id). Debido a que las secuencias
+        // de Postgres no se reinician entre tests transaccionales, usamos un número de
+        // pedido ficticio muy alto para evitar colisiones con el constraint unique.
         $usuario = $this->crearCliente();
-        $pedidoPrevio = Pedido::factory()->create(['usuario_id' => $usuario->id, 'numero_pedido' => '#PM-260010']);
+        $pedidoPrevio = Pedido::factory()->create(['usuario_id' => $usuario->id, 'numero_pedido' => '#PM-999999']);
         $direccion = Direccion::factory()->create(['usuario_id' => $usuario->id]);
         $producto = Producto::factory()->create(['precio' => 10.00, 'stock' => 100]);
         $carrito = $this->crearCarritoConItem($usuario, $producto, 1, 10.00);

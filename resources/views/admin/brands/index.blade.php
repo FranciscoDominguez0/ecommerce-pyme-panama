@@ -82,7 +82,7 @@
     <!-- Tabla Principal de Marcas -->
     <div class="card-elevated rounded-xl overflow-hidden flex flex-col w-full min-w-0 max-w-full">
         
-        <div class="overflow-x-auto w-full max-w-full touch-pan-x overscroll-x-contain">
+        <div class="overflow-x-auto w-full max-w-full">
             <table class="w-full text-left border-collapse min-w-[700px]">
                 <thead>
                     <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
