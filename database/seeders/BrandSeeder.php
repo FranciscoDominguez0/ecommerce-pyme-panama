@@ -111,6 +111,228 @@ class BrandSeeder extends Seeder
                 'file' => 'Xiaomi.webp',
                 'verified' => true,
             ],
+            // ── Marcas adicionales (agregadas al catálogo demo) ────────────
+            // Sin archivo de logo disponible aún en public/images/Marcas/ → file = null.
+            [
+                'name' => 'Acer',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'LG',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Corsair',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Gigabyte',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Nvidia',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Seagate',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Western Digital',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Epson',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Brother',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Anker',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Belkin',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Netgear',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Ubiquiti',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Nintendo',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'GoPro',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Hisense',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Huawei',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Motorola',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'OnePlus',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Realme',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Amazfit',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Garmin',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'HyperX',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'SteelSeries',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Marshall',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Edifier',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Philips',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Cooler Master',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Redragon',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Microsoft',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'SanDisk',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Toshiba',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'BenQ',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'ViewSonic',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Logitech G',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'NZXT',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Thermaltake',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'EVGA',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Crucial',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Google',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Bose',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Sennheiser',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'D-Link',
+                'file' => null,
+                'verified' => true,
+            ],
+            [
+                'name' => 'Zyxel',
+                'file' => null,
+                'verified' => true,
+            ],
         ];
 
         $marcasDir = public_path('images/Marcas');
@@ -156,6 +378,6 @@ class BrandSeeder extends Seeder
                 ->update(['brand_id' => $brand->id, 'marca' => $marcaData['name']]);
         }
 
-        $this->command->info('Seeder de Marcas ejecutado exitosamente con 18 marcas iniciales.');
+        $this->command->info('Seeder de Marcas ejecutado exitosamente con ' . count($marcasIniciales) . ' marcas.');
     }
 }

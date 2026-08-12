@@ -385,7 +385,7 @@
                         </div>
                         <div class="flex-1">
                             <p class="text-xs font-semibold text-slate-900 leading-tight">Admin Autenticado</p>
-                            <p class="text-[10px] text-slate-400 mt-0.5">{{ Auth::user()->email ?? 'dominguezf225@gmail.com' }}</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">{{ Auth::user()->email ?? 'admin@example.com' }}</p>
                         </div>
                     </div>
                 @endforelse

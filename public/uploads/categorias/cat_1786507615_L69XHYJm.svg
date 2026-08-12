@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
+  <!-- Cuerpo del adaptador -->
+  <rect x="16" y="14" width="32" height="40" rx="4" fill="none" stroke="#23C773" stroke-width="3.2"/>
+
+  <!-- Clavijas -->
+  <line x1="26" y1="14" x2="26" y2="6" stroke="#23C773" stroke-width="3.2" stroke-linecap="round"/>
+  <line x1="38" y1="14" x2="38" y2="6" stroke="#23C773" stroke-width="3.2" stroke-linecap="round"/>
+
+  <!-- Rayo -->
+  <path d="M35 22 L26 37 L32 37 L29 50 L42 33 L35 33 Z" fill="#23C773" stroke="none"/>
+</svg>
