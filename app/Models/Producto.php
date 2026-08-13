@@ -200,9 +200,13 @@ class Producto extends Model
     public function promocionDelMesActiva(): ?ProductoDelMes
     {
         /** @var ProductoDelMes|null $promocion */
-        $promocion = ProductoDelMes::where('producto_id', $this->id)
-            ->where('activo', true)
-            ->first();
+        if ($this->relationLoaded('promocionesProductoDelMes')) {
+            $promocion = $this->promocionesProductoDelMes->firstWhere('activo', true);
+        } else {
+            $promocion = ProductoDelMes::where('producto_id', $this->id)
+                ->where('activo', true)
+                ->first();
+        }
 
         if ($promocion && $promocion->esVigente()) {
             return $promocion;

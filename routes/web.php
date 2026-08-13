@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 // 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida, Carrito)
 Route::get('/', function () {
-    $destacados = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
+    $destacados = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo', 'promocionesProductoDelMes'])
         ->destacados()
         ->take(8)
         ->get();

@@ -63,7 +63,7 @@ class CatalogoController extends Controller
         $marcas = \App\Models\Brand::where('verified', true)->orderBy('name')->get();
 
         // Consulta de productos con eager loading
-        $query = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
+        $query = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo', 'promocionesProductoDelMes'])
             ->withCount('variantes')
             ->sinEliminar()
             ->activos();
@@ -130,13 +130,13 @@ class CatalogoController extends Controller
      */
     public function show(string $slug): View
     {
-        $producto = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
+        $producto = Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo', 'promocionesProductoDelMes'])
             ->sinEliminar()
             ->where('slug', $slug)
             ->firstOrFail();
 
         // Productos relacionados
-        $relacionados = Producto::with(['categoria', 'imagenes'])
+        $relacionados = Producto::with(['categoria', 'imagenes', 'promocionesProductoDelMes'])
             ->sinEliminar()
             ->activos()
             ->where('id', '!=', $producto->id)
@@ -145,7 +145,7 @@ class CatalogoController extends Controller
             ->get();
 
         if ($relacionados->isEmpty()) {
-            $relacionados = Producto::with(['categoria', 'imagenes'])
+            $relacionados = Producto::with(['categoria', 'imagenes', 'promocionesProductoDelMes'])
                 ->sinEliminar()
                 ->activos()
                 ->where('id', '!=', $producto->id)
