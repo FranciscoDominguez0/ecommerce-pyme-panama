@@ -114,6 +114,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::get('/pedidos', [AdminPedidoController::class, 'index'])->name('admin.pedidos.index');
     Route::get('/pedidos/{id}', [AdminPedidoController::class, 'detalle'])->name('admin.pedidos.detalle');
     Route::post('/pedidos/{id}/estado', [AdminPedidoController::class, 'cambiarEstado'])->name('admin.pedidos.estado');
+    Route::post('/pedidos/{id}/avanzar-estado', [AdminPedidoController::class, 'avanzarEstado'])->name('admin.pedidos.avanzar-estado');
     Route::post('/pedidos/{id}/aprobar-pago', [AdminPedidoController::class, 'aprobarPago'])->name('admin.pedidos.aprobar-pago');
     Route::post('/pedidos/{id}/rechazar-pago', [AdminPedidoController::class, 'rechazarPago'])->name('admin.pedidos.rechazar-pago');
     Route::put('/pedidos/{id}/envio', [EnvioPedidoController::class, 'update'])->name('admin.pedidos.envio.update');

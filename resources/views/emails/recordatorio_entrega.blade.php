@@ -5,7 +5,7 @@ Han pasado algunos días desde que enviamos tu pedido **{{ $pedido->numero_pedid
 
 Si ya recibiste tu paquete correctamente, por favor ayúdanos a confirmar la entrega haciendo clic en el siguiente botón:
 
-<x-mail::button :url="route('cliente.pedidos.detalle', $pedido->id)">
+<x-mail::button :url="route('cliente.perfil.pedidos.detalle', $pedido->id)">
 Confirmar Recepción
 </x-mail::button>
 

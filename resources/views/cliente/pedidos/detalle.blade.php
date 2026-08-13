@@ -62,10 +62,7 @@
             </p>
         </div>
         <div class="flex flex-col items-end gap-3">
-            <div class="px-4 py-2 rounded-full {{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
-                <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
-                {{ $configEstado['label'] }}
-            </div>
+
             
             @if(in_array($ultimoEstado, ['entregado', 'enviado']))
                 @php
@@ -162,7 +159,7 @@
                     <span class="material-symbols-outlined text-emerald-600 text-3xl mb-2">inventory_2</span>
                     <h3 class="text-lg font-bold text-emerald-900 mb-1">¿Ya recibiste tu pedido?</h3>
                     <p class="text-sm text-emerald-700 mb-4 max-w-md">Ayúdanos a confirmar que el paquete llegó correctamente a tus manos.</p>
-                    <form action="{{ route('cliente.pedidos.confirmar-recepcion', $pedido->id) }}" method="POST">
+                    <form action="{{ route('cliente.perfil.pedidos.confirmar-recepcion', $pedido->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-full font-bold shadow hover:bg-emerald-700 transition-colors">
                             <span class="material-symbols-outlined text-sm">thumb_up</span>

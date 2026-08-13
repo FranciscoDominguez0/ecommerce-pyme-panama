@@ -38,18 +38,51 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
-
             @if($ultimoEstado === 'pendiente' && in_array($pedido->metodo_pago, ['transferencia']))
                 <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST">
                     @csrf
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 active:bg-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                        Aprobar Pago
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 focus:outline-none transition">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5">check_circle</span> Aprobar Pago
                     </button>
                 </form>
-                <button type="button" onclick="document.getElementById('modal-rechazar').classList.remove('hidden')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    Rechazar
+                <button type="button" onclick="document.getElementById('modal-rechazar').classList.remove('hidden')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 focus:outline-none transition">
+                    <span class="material-symbols-outlined text-[16px] mr-1.5">cancel</span> Rechazar
                 </button>
             @endif
+
+            @if($ultimoEstado === 'pago_confirmado')
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST">
+                    @csrf <input type="hidden" name="accion" value="iniciar_preparacion">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-amber-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-600 transition">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5">inventory_2</span> Iniciar Preparación
+                    </button>
+                </form>
+            @endif
+
+            @if($ultimoEstado === 'en_preparacion')
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST">
+                    @csrf <input type="hidden" name="accion" value="marcar_listo">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5">box</span> Marcar Listo para Envío
+                    </button>
+                </form>
+            @endif
+
+            @if($ultimoEstado === 'listo_para_envio')
+                <a href="#form-envio" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition">
+                    <span class="material-symbols-outlined text-[16px] mr-1.5">local_shipping</span> Configurar Envío
+                </a>
+            @endif
+
+            @if($ultimoEstado === 'enviado')
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST">
+                    @csrf <input type="hidden" name="accion" value="marcar_transito">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5">local_shipping</span> Marcar en Tránsito
+                    </button>
+                </form>
+            @endif
+
         </div>
     </div>
 
@@ -262,7 +295,7 @@
             @endif
 
             <!-- Formulario de Envío -->
-            <div class="card-elevated rounded-xl shadow-sm">
+            <div id="form-envio" class="card-elevated rounded-xl shadow-sm">
                 <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl">
                     <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <span class="material-symbols-outlined text-slate-700">local_shipping</span>
