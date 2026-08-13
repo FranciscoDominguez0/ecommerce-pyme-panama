@@ -116,9 +116,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::post('/pedidos/{id}/estado', [AdminPedidoController::class, 'cambiarEstado'])->name('admin.pedidos.estado');
     Route::post('/pedidos/{id}/aprobar-pago', [AdminPedidoController::class, 'aprobarPago'])->name('admin.pedidos.aprobar-pago');
     Route::post('/pedidos/{id}/rechazar-pago', [AdminPedidoController::class, 'rechazarPago'])->name('admin.pedidos.rechazar-pago');
-    Route::get('/pedidos/{id}/envio', [EnvioPedidoController::class, 'edit'])->name('admin.pedidos.envio');
     Route::put('/pedidos/{id}/envio', [EnvioPedidoController::class, 'update'])->name('admin.pedidos.envio.update');
-    Route::post('/pedidos/{id}/envio/estado', [EnvioPedidoController::class, 'updateStatus'])->name('admin.pedidos.envio.estado');
 
     // Módulo de Marcas (Brands)
     Route::resource('brands', BrandController::class)->names('admin.brands');

@@ -18,12 +18,6 @@ class EnvioPedidoController extends Controller
         $this->pedidoService = $pedidoService;
     }
 
-    public function edit($pedidoId)
-    {
-        $pedido = Pedido::with(['usuario', 'items.producto', 'items.variante', 'direccion', 'envio'])->findOrFail($pedidoId);
-        
-        return view('admin.pedidos.envio', compact('pedido'));
-    }
 
     public function update(Request $request, $pedidoId)
     {
@@ -65,54 +59,5 @@ class EnvioPedidoController extends Controller
             ->with('toast_success', 'Información de envío actualizada correctamente.');
     }
 
-    public function updateStatus(Request $request, $pedidoId)
-    {
-        $request->validate([
-            'nuevo_estado' => 'required|string|in:enviado,en_transito,entregado,problema_entrega',
-            'comentario' => 'nullable|string|max:255',
-        ]);
 
-        $pedido = Pedido::with('envio')->findOrFail($pedidoId);
-
-        $nuevoEstado = $request->nuevo_estado;
-        
-        if ($request->comentario) {
-            $comentario = $request->comentario;
-        } else {
-            $empresa = $pedido->envio->empresa_mensajeria ?? 'nuestra logística';
-            $guia = $pedido->envio->numero_guia ? " (Referencia: {$pedido->envio->numero_guia})" : "";
-            
-            switch ($nuevoEstado) {
-                case 'enviado':
-                    $comentario = "El pedido ha sido despachado a través de {$empresa}{$guia}.";
-                    break;
-                case 'en_transito':
-                    $comentario = "El pedido se encuentra en ruta hacia su destino mediante {$empresa}.";
-                    break;
-                case 'entregado':
-                    $comentario = "El pedido ha sido entregado exitosamente al destinatario.";
-                    break;
-                case 'problema_entrega':
-                    $comentario = "Se ha reportado un inconveniente durante el proceso de entrega. Estamos revisando el caso.";
-                    break;
-                default:
-                    $comentario = 'Estado actualizado a ' . str_replace('_', ' ', $nuevoEstado);
-            }
-        }
-
-        $this->pedidoService->cambiarEstado(
-            $pedido,
-            $nuevoEstado,
-            Auth::id(),
-            $comentario
-        );
-
-        if ($nuevoEstado === 'entregado' && $pedido->envio) {
-            $pedido->envio->update([
-                'fecha_entrega_real' => now()
-            ]);
-        }
-
-        return back()->with('toast_success', 'Estado del envío actualizado a ' . strtoupper(str_replace('_', ' ', $nuevoEstado)));
-    }
 }

@@ -38,10 +38,7 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
-            <a href="{{ route('admin.pedidos.envio', $pedido->id) }}" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 transition ease-in-out duration-150">
-                <span class="material-symbols-outlined text-[16px] mr-1.5">local_shipping</span>
-                Gestión de Envío
-            </a>
+
             @if($ultimoEstado === 'pendiente' && in_array($pedido->metodo_pago, ['transferencia']))
                 <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST">
                     @csrf
@@ -72,6 +69,10 @@
                             <option value="pago_confirmado" {{ $ultimoEstado == 'pago_confirmado' ? 'selected' : '' }}>Pago Confirmado</option>
                             <option value="en_preparacion" {{ $ultimoEstado == 'en_preparacion' ? 'selected' : '' }}>En Preparación</option>
                             <option value="listo_para_envio" {{ $ultimoEstado == 'listo_para_envio' ? 'selected' : '' }}>Listo para Envío</option>
+                            <option value="enviado" {{ $ultimoEstado == 'enviado' ? 'selected' : '' }}>Enviado</option>
+                            <option value="en_transito" {{ $ultimoEstado == 'en_transito' ? 'selected' : '' }}>En Tránsito</option>
+                            <option value="entregado" {{ $ultimoEstado == 'entregado' ? 'selected' : '' }}>Entregado</option>
+                            <option value="problema_entrega" {{ $ultimoEstado == 'problema_entrega' ? 'selected' : '' }}>Problema de Entrega</option>
                             <option value="cancelado" {{ $ultimoEstado == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
                         </select>
                     </div>
@@ -85,10 +86,7 @@
                         </button>
                     </div>
                 </form>
-                <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[14px]">info</span>
-                    Para marcar el pedido como enviado o entregado, utiliza el botón "Gestión de Envío" en la cabecera.
-                </p>
+
             </div>
 
             <!-- Items del Pedido -->
@@ -262,6 +260,90 @@
                 <p class="text-sm text-yellow-700 italic">"{{ $pedido->notas_cliente }}"</p>
             </div>
             @endif
+
+            <!-- Formulario de Envío -->
+            <div class="card-elevated rounded-xl shadow-sm">
+                <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-slate-700">local_shipping</span>
+                        Gestión de Envío
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Configure los detalles logísticos para despachar el pedido.</p>
+                </div>
+                
+                @php
+                    $empresaDB = $pedido->envio->empresa_mensajeria ?? '';
+                    $metodoEnvioDefault = old('metodo_envio', '');
+                    $empresaMensajeriaDefault = old('empresa_mensajeria', '');
+                    
+                    if (!$metodoEnvioDefault && $empresaDB) {
+                        $partes = explode(' - ', $empresaDB, 2);
+                        $metodoEnvioDefault = $partes[0];
+                        $empresaMensajeriaDefault = $partes[1] ?? '';
+                    }
+                    if (!$metodoEnvioDefault) {
+                        $metodoEnvioDefault = 'Company Delivery';
+                    }
+                @endphp
+                <form action="{{ route('admin.pedidos.envio.update', $pedido->id) }}" method="POST" class="p-6 flex flex-col gap-5" x-data="{ metodoEnvio: '{{ $metodoEnvioDefault }}' }">
+                    @csrf
+                    @method('PUT')
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="metodo_envio">Método de Envío <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <select class="w-full bg-white border {{ $errors->has('metodo_envio') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 pr-10 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 appearance-none transition-all" 
+                                    id="metodo_envio" name="metodo_envio" x-model="metodoEnvio" required>
+                                <option value="Company Delivery">Entrega Propia (Driver)</option>
+                                <option value="Courier Service">Mensajería Local (Courier)</option>
+                                <option value="External Delivery">Servicio Externo (Fletes, etc.)</option>
+                                <option value="Store Pickup">Retiro en Tienda</option>
+                            </select>
+                            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
+                        </div>
+                        @error('metodo_envio')
+                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div x-show="metodoEnvio !== 'Store Pickup' && metodoEnvio !== 'Company Delivery'">
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="empresa_mensajeria">Empresa de Mensajería / Courier</label>
+                        <input class="w-full bg-white border {{ $errors->has('empresa_mensajeria') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
+                               id="empresa_mensajeria" name="empresa_mensajeria" type="text" placeholder="Ej: Fletes Chavale, UnoExpress..."
+                               value="{{ $empresaMensajeriaDefault }}">
+                        @error('empresa_mensajeria')
+                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div x-show="metodoEnvio !== 'Store Pickup'">
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="numero_guia">Número de Guía / Referencia</label>
+                        <input class="w-full bg-white border {{ $errors->has('numero_guia') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all font-mono" 
+                               id="numero_guia" name="numero_guia" placeholder="Opcional" type="text"
+                               value="{{ old('numero_guia', $pedido->envio->numero_guia ?? '') }}">
+                        @error('numero_guia')
+                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="fecha_estimada_entrega">Fecha Estimada de Entrega</label>
+                        <div class="relative flex items-center">
+                            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px]">calendar_today</span>
+                            <input class="w-full pl-9 bg-white border {{ $errors->has('fecha_estimada_entrega') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
+                                   id="fecha_estimada_entrega" name="fecha_estimada_entrega" type="date"
+                                   value="{{ old('fecha_estimada_entrega', $pedido->envio?->fecha_estimada_entrega?->format('Y-m-d') ?? '') }}">
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
+                        <button type="submit" class="w-full bg-slate-900 text-white py-2.5 px-4 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">save</span>
+                            Guardar Info. de Envío
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

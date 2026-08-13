@@ -54,9 +54,42 @@ class PedidoController extends Controller
             'comentario' => 'nullable|string',
         ]);
 
-        $pedido = Pedido::findOrFail($id);
+        $pedido = Pedido::with('envio')->findOrFail($id);
         
-        $this->pedidoService->cambiarEstado($pedido, $request->estado, Auth::id(), $request->comentario);
+        $nuevoEstado = $request->estado;
+        
+        if ($request->comentario) {
+            $comentario = $request->comentario;
+        } else {
+            // Auto-generar comentarios para estados de envío si no se provee uno
+            $empresa = $pedido->envio->empresa_mensajeria ?? 'nuestra logística';
+            $guia = ($pedido->envio && $pedido->envio->numero_guia) ? " (Referencia: {$pedido->envio->numero_guia})" : "";
+            
+            switch ($nuevoEstado) {
+                case 'enviado':
+                    $comentario = "El pedido ha sido despachado a través de {$empresa}{$guia}.";
+                    break;
+                case 'en_transito':
+                    $comentario = "El pedido se encuentra en ruta hacia su destino mediante {$empresa}.";
+                    break;
+                case 'entregado':
+                    $comentario = "El pedido ha sido entregado exitosamente al destinatario.";
+                    break;
+                case 'problema_entrega':
+                    $comentario = "Se ha reportado un inconveniente durante el proceso de entrega. Estamos revisando el caso.";
+                    break;
+                default:
+                    $comentario = 'Estado actualizado a ' . str_replace('_', ' ', $nuevoEstado);
+            }
+        }
+
+        $this->pedidoService->cambiarEstado($pedido, $nuevoEstado, Auth::id(), $comentario);
+
+        if ($nuevoEstado === 'entregado' && $pedido->envio) {
+            $pedido->envio->update([
+                'fecha_entrega_real' => now()
+            ]);
+        }
 
         return back()->with('toast_success', 'Estado del pedido actualizado correctamente.');
     }
