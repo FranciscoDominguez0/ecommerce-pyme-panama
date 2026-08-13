@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\InventarioController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\CuponController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -112,6 +113,26 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
 
     // Módulo de Marcas (Brands)
     Route::resource('brands', BrandController::class)->names('admin.brands');
+
+    // Módulo de Inventario
+    Route::prefix('inventario')->name('admin.inventario.')->group(function () {
+        // Historial de movimientos (index)
+        Route::get('/', [InventarioController::class, 'index'])->name('index');
+        // Stock actual
+        Route::get('/stock', [InventarioController::class, 'stock'])->name('stock');
+        // Registrar entrada
+        Route::get('/entrada', [InventarioController::class, 'entradaForm'])->name('entrada.form');
+        Route::post('/entrada', [InventarioController::class, 'entrada'])->name('entrada');
+        // Registrar salida
+        Route::get('/salida', [InventarioController::class, 'salidaForm'])->name('salida.form');
+        Route::post('/salida', [InventarioController::class, 'salida'])->name('salida');
+        // Ajuste manual
+        Route::get('/ajuste', [InventarioController::class, 'ajusteForm'])->name('ajuste.form');
+        Route::post('/ajuste', [InventarioController::class, 'ajuste'])->name('ajuste');
+        // AJAX helpers
+        Route::get('/variantes/{productoId}', [InventarioController::class, 'variantesPorProducto'])->name('variantes');
+        Route::get('/stock-actual/{productoId}/{varianteId?}', [InventarioController::class, 'stockProducto'])->name('stock-actual');
+    });
 
     // Módulo de Productos y Variantes
     Route::get('/productos', [ProductoController::class, 'index'])->name('admin.productos.index');

@@ -254,7 +254,10 @@
                     }
 
                     let iconHtml = `<span class="material-symbols-outlined text-[16px]">${item.nivel > 0 ? 'subdirectory_arrow_right' : (item.icono || 'folder')}</span>`;
-                    if (window.getImageHtmlForCategory && item.imagen_ruta) {
+                    
+                    if (item.imagen_ruta && !window.getImageHtmlForCategory) {
+                        iconHtml = `<img src="${item.imagen_ruta}" alt="${nombre}" class="w-full h-full object-cover">`;
+                    } else if (window.getImageHtmlForCategory && item.imagen_ruta) {
                         iconHtml = window.getImageHtmlForCategory(item);
                     }
 
