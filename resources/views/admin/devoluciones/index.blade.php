@@ -5,16 +5,36 @@
 <div x-data="{ 
         modalAbierto: false, 
         devolucionActiva: null,
+        errorComentario: '',
         
         abrirModal(devolucion) {
             this.devolucionActiva = devolucion;
+            this.errorComentario = '';
             this.modalAbierto = true;
             document.body.style.overflow = 'hidden';
         },
         cerrarModal() {
             this.modalAbierto = false;
+            this.errorComentario = '';
             setTimeout(() => { this.devolucionActiva = null; }, 300);
             document.body.style.overflow = '';
+        },
+        validarRechazo(e) {
+            const comment = document.getElementById('admin-comment-input').value.trim();
+            if (!comment) {
+                e.preventDefault();
+                this.errorComentario = 'Debe ingresar un comentario explicando el motivo del rechazo.';
+                return false;
+            }
+            this.errorComentario = '';
+            e.target.querySelector('input[name=comentario_admin]').value = comment;
+            return true;
+        },
+        validarAprobacion(e) {
+            const comment = document.getElementById('admin-comment-input').value.trim();
+            this.errorComentario = '';
+            e.target.querySelector('input[name=comentario_admin]').value = comment;
+            return true;
         }
     }" class="space-y-6 font-sans">
     
@@ -234,7 +254,8 @@
                             <template x-if="devolucionActiva.estado === 'pendiente'">
                                 <div>
                                     <label class="block text-xs text-slate-500 mb-2">Comentario del administrador (Obligatorio para rechazar)</label>
-                                    <textarea id="admin-comment-input" class="w-full p-3 bg-white border border-slate-300 rounded-lg focus:ring-1 focus:ring-slate-900 focus:border-slate-900 text-sm text-slate-900 resize-none" placeholder="Ingrese detalles de la resolución..." rows="3"></textarea>
+                                    <textarea id="admin-comment-input" :class="errorComentario ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-300 focus:ring-slate-900 focus:border-slate-900'" class="w-full p-3 bg-white border rounded-lg focus:ring-1 text-sm text-slate-900 resize-none transition-colors" placeholder="Ingrese detalles de la resolución..." rows="3"></textarea>
+                                    <p x-show="errorComentario" x-text="errorComentario" class="text-red-500 text-xs font-bold mt-1.5"></p>
                                 </div>
                             </template>
 
@@ -249,7 +270,7 @@
                     <!-- Footer Actions -->
                     <template x-if="devolucionActiva.estado === 'pendiente'">
                         <div class="p-4 border-t border-slate-100 bg-slate-50 flex gap-3">
-                            <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/rechazar'" method="POST" class="flex-1" onsubmit="this.querySelector('input[name=comentario_admin]').value = document.getElementById('admin-comment-input').value">
+                            <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/rechazar'" method="POST" class="flex-1" @submit="validarRechazo">
                                 @csrf
                                 <input type="hidden" name="comentario_admin" value="">
                                 <button type="submit" class="w-full py-2.5 px-4 bg-red-100 hover:bg-red-200 text-red-800 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors text-center border border-red-200">
@@ -257,7 +278,7 @@
                                 </button>
                             </form>
                             
-                            <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/aprobar'" method="POST" class="flex-1" onsubmit="this.querySelector('input[name=comentario_admin]').value = document.getElementById('admin-comment-input').value">
+                            <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/aprobar'" method="POST" class="flex-1" @submit="validarAprobacion">
                                 @csrf
                                 <input type="hidden" name="comentario_admin" value="">
                                 <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors text-center shadow-sm">

@@ -66,14 +66,17 @@ class LoginController extends Controller
 
         $intendedUrl = $request->session()->pull('url.intended');
 
-        // Redirección según rol usando Spatie
-        if (
-            $usuario->hasRole('admin') ||
-            $usuario->hasRole('Admin') ||
-            $usuario->hasRole('super_admin') ||
-            $usuario->hasRole('Administrador')
-        ) {
-            return redirect()->to($intendedUrl ?? '/admin/dashboard');
+        // Forzar carga de roles para evitar problemas de caché (Spatie) justo al iniciar sesión
+        $usuario->load('roles');
+        
+        $esAdmin = $usuario->roles->whereIn('name', ['admin', 'Admin', 'super_admin', 'Administrador'])->isNotEmpty();
+
+        if ($esAdmin) {
+            // Un admin siempre debe ir al panel, a menos que el intendedUrl sea de admin
+            if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
+                return redirect()->to($intendedUrl);
+            }
+            return redirect()->to('/admin/dashboard');
         }
 
         // Si es normal, NUNCA debería ir a una ruta de admin, forzamos dashboard si estaba yendo allá por error
