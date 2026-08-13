@@ -31,7 +31,8 @@
         @if($img && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'data:image') || str_starts_with($img->ruta, 'storage/')))
             <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}"
                 alt="{{ $prod->nombre }}"
-                class="h-full object-contain group-hover:scale-105 transition-transform duration-300">
+                class="h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                loading="lazy" decoding="async">
         @elseif($img && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
             <div
                 class="h-full flex items-center justify-center svg-container group-hover:scale-105 transition-transform duration-300">

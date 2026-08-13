@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # eCommerce PyME Panama
 
@@ -22,7 +22,6 @@ Especializada en tecnologia, equipos informaticos, perifericos y servicios IT.
 |---|---|
 | [Stack tecnologico](#stack-tecnologico) | Tecnologias y versiones utilizadas |
 | [Requisitos del sistema](#requisitos-del-sistema) | Software necesario antes de instalar |
-| [Instalacion rapida](#instalacion-rapida) | Resumen en un vistazo |
 | [Instalacion paso a paso](#instalacion-paso-a-paso) | Guia detallada de instalacion |
 | [Verificacion de la instalacion](#verificacion-de-la-instalacion) | URLs para confirmar que todo funciona |
 | [Seeders y datos de catalogo](#seeders-y-datos-de-catalogo) | Carga de datos iniciales |
@@ -62,45 +61,6 @@ Asegurate de tener instalado todo lo siguiente antes de comenzar.
 | **npm** | 10.x | Incluida con Node | Gestor de paquetes JS |
 | **PostgreSQL** | 14 | 16 | Motor de base de datos |
 | **Git** | 2.x | Ultima estable | Control de versiones |
-
----
-
-## Instalacion rapida
-
-Para quienes ya tienen el entorno configurado, estos son todos los pasos en orden:
-
-```bash
-# 1. Clonar el repositorio
-git clone <url-del-repositorio> ecommerce-pyme-panama && cd ecommerce-pyme-panama
-
-# 2. Dependencias PHP y JS
-composer install
-npm install
-
-# 3. Entorno y clave
-cp .env.example .env
-php artisan key:generate
-
-# 4. Base de datos
-createdb ecommerce_pyme_panama
-php artisan migrate
-
-# 5. Storage y assets
-php artisan storage:link
-npm run build
-
-# 6. Datos base
-php artisan db:seed
-php artisan db:seed --class=RolesPermisosSeeder
-php artisan db:seed --class=CategoriaSeeder
-php artisan db:seed --class=ZonaEnvioSeeder
-
-# 7. Iniciar el servidor
-php artisan serve
-```
-
-> **Acceso al panel admin:** `http://localhost:8000/admin/dashboard`
-> **Credenciales:** `admin@example.com` / `Admin1234!`
 
 ---
 

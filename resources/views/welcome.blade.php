@@ -83,18 +83,18 @@
 
                     <!-- Slide 1 -->
                     <img src="{{ asset('images/ARMA TU PC A MEDIDA (6).gif') }}" alt="Arma tu PC a Medida"
-                        class="hero-slide absolute inset-0 w-full h-full object-cover block transition-opacity duration-700"
-                        style="max-height:480px; object-position:center; opacity:1;" />
+                        class="hero-slide absolute inset-0 w-full h-full object-cover block"
+                        style="max-height:480px; object-position:center; opacity:1; visibility:visible; transition: opacity 0.7s ease, visibility 0s 0s;" fetchpriority="high" decoding="async" />
 
                     <!-- Slide 2 -->
                     <img src="{{ asset('images/PORTATILES.gif') }}" alt="Portátiles en Panamá"
-                        class="hero-slide absolute inset-0 w-full h-full object-cover block transition-opacity duration-700"
-                        style="max-height:480px; object-position:center; opacity:0;" />
+                        class="hero-slide absolute inset-0 w-full h-full object-cover block"
+                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" loading="lazy" decoding="async" />
 
                     <!-- Slide 3 -->
                     <img src="{{ asset('images/PERIFERICOS BAJA.gif') }}" alt="Periféricos en Panamá"
-                        class="hero-slide absolute inset-0 w-full h-full object-cover block transition-opacity duration-700"
-                        style="max-height:480px; object-position:center; opacity:0;" />
+                        class="hero-slide absolute inset-0 w-full h-full object-cover block"
+                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" loading="lazy" decoding="async" />
 
                     <!-- Dot indicators -->
                     <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="heroDots">
@@ -115,16 +115,22 @@
                         let cur = 0;
 
                         function goTo(n) {
+                            slides[cur].style.transition = 'opacity 0.7s ease, visibility 0s 0.7s';
                             slides[cur].style.opacity = '0';
+                            slides[cur].style.visibility = 'hidden';
                             dots[cur].style.background = 'rgba(255,255,255,0.35)';
+                            
                             cur = (n + slides.length) % slides.length;
+                            
+                            slides[cur].style.transition = 'opacity 0.7s ease, visibility 0s 0s';
+                            slides[cur].style.visibility = 'visible';
                             slides[cur].style.opacity = '1';
                             dots[cur].style.background = '#22c55e';
                         }
 
-                        dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); goTo(i); timer = setInterval(() => goTo(cur + 1), 4000); }));
+                        dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); goTo(i); timer = setInterval(() => goTo(cur + 1), 6000); }));
 
-                        let timer = setInterval(() => goTo(cur + 1), 4000);
+                        let timer = setInterval(() => goTo(cur + 1), 6000);
                     })();
                 </script>
 
@@ -510,7 +516,8 @@
                     ] as $banner)
                     <div class="w-full shrink-0" style="min-width:100%;">
                         <img src="{{ asset('images/Banners/' . $banner) }}" alt="Banner promocional PayMe Panamá"
-                            class="w-full object-cover block" style="max-height:340px; object-position:center;" />
+                            class="w-full object-cover block" style="max-height:340px; object-position:center;" 
+                            loading="lazy" decoding="async" />
                     </div>
                 @endforeach
             </div>
