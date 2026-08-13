@@ -61,9 +61,28 @@
                 Realizado el {{ $pedido->creado_en->translatedFormat('d M, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}
             </p>
         </div>
-        <div class="px-4 py-2 rounded-full {{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
-            <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
-            {{ $configEstado['label'] }}
+        <div class="flex flex-col items-end gap-3">
+            <div class="px-4 py-2 rounded-full {{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
+                <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
+                {{ $configEstado['label'] }}
+            </div>
+            
+            @if(in_array($ultimoEstado, ['entregado', 'enviado']))
+                @php
+                    $tieneDevolucion = \App\Models\Devolucion::where('pedido_id', $pedido->id)->exists();
+                @endphp
+                @if(!$tieneDevolucion)
+                    <a href="{{ route('cliente.perfil.pedidos.devolucion.create', $pedido->id) }}" wire:navigate class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary-container transition-colors shadow-sm">
+                        <span class="material-symbols-outlined text-[16px]">assignment_return</span>
+                        Solicitar Devolución
+                    </a>
+                @else
+                    <span class="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface-variant text-xs font-bold uppercase tracking-wider rounded-lg border border-outline-variant/30">
+                        <span class="material-symbols-outlined text-[16px]">info</span>
+                        Devolución Solicitada
+                    </span>
+                @endif
+            @endif
         </div>
     </div>
 
@@ -106,12 +125,19 @@
                     @foreach($estadosOrdenados as $historial)
                         @php
                             $esActual = $loop->last;
-                            $dotClass = $esActual
-                                ? 'bg-tertiary-container animate-pulse'
-                                : 'bg-secondary';
-                            $textClass = $esActual ? 'text-tertiary' : 'text-on-surface';
+                            $esProblema = $historial->estado === 'problema_entrega';
+                            
+                            if ($esProblema) {
+                                $dotClass = $esActual ? 'bg-red-500 animate-pulse' : 'bg-red-500';
+                                $textClass = 'text-red-600';
+                            } else {
+                                $dotClass = $esActual
+                                    ? 'bg-tertiary-container animate-pulse'
+                                    : 'bg-secondary';
+                                $textClass = $esActual ? 'text-tertiary' : 'text-on-surface';
+                            }
                         @endphp
-                        <div class="relative {{ $esActual ? '' : '' }}">
+                        <div class="relative">
                             <div class="absolute -left-[31px] w-4 h-4 rounded-full {{ $dotClass }} border-4 border-surface-container-lowest"></div>
                             <div class="flex flex-col">
                                 <p class="text-sm font-semibold {{ $textClass }}">
@@ -120,7 +146,7 @@
                                 <p class="text-sm text-on-surface-variant mt-1">
                                     {{ $historial->creado_en->translatedFormat('d M, Y') }} · {{ $historial->creado_en->format('h:i A') }}
                                     @if($historial->comentario)
-                                        · {{ $historial->comentario }}
+                                        <br><span class="text-xs opacity-90 mt-1 block">{{ $historial->comentario }}</span>
                                     @endif
                                 </p>
                             </div>
@@ -129,6 +155,21 @@
                 </div>
                 @else
                 <p class="text-on-surface-variant text-sm">Aún no hay actualizaciones registradas para este pedido.</p>
+                @endif
+
+                @if(in_array($ultimoEstado, ['enviado', 'en_transito']))
+                <div class="mt-8 p-6 bg-emerald-50 rounded-xl border border-emerald-200 flex flex-col items-center text-center">
+                    <span class="material-symbols-outlined text-emerald-600 text-3xl mb-2">inventory_2</span>
+                    <h3 class="text-lg font-bold text-emerald-900 mb-1">¿Ya recibiste tu pedido?</h3>
+                    <p class="text-sm text-emerald-700 mb-4 max-w-md">Ayúdanos a confirmar que el paquete llegó correctamente a tus manos.</p>
+                    <form action="{{ route('cliente.pedidos.confirmar-recepcion', $pedido->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-full font-bold shadow hover:bg-emerald-700 transition-colors">
+                            <span class="material-symbols-outlined text-sm">thumb_up</span>
+                            Sí, ya recibí mi pedido
+                        </button>
+                    </form>
+                </div>
                 @endif
             </div>
 

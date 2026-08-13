@@ -83,4 +83,9 @@ class Pedido extends Model
     {
         return $this->belongsTo(Cupon::class, 'cupon_id');
     }
+
+    public function envio(): HasOne
+    {
+        return $this->hasOne(EnvioPedido::class, 'pedido_id');
+    }
 }

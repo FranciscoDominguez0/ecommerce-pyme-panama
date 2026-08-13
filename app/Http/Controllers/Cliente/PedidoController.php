@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
+use App\Services\PedidoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
 {
+    protected $pedidoService;
+
+    public function __construct(PedidoService $pedidoService)
+    {
+        $this->pedidoService = $pedidoService;
+    }
     public function index(Request $request)
     {
         $query = Pedido::where('usuario_id', Auth::id())
@@ -38,5 +45,27 @@ class PedidoController extends Controller
         $totalArticulos = $pedido->items->sum('cantidad');
 
         return view('cliente.pedidos.detalle', compact('pedido', 'estadosOrdenados', 'totalArticulos'));
+    }
+
+    public function confirmarRecepcion($id)
+    {
+        $pedido = Pedido::with('ultimoEstado')
+            ->where('usuario_id', Auth::id())
+            ->findOrFail($id);
+
+        $ultimoEstado = $pedido->ultimoEstado?->estado;
+
+        if (in_array($ultimoEstado, ['enviado', 'en_transito'])) {
+            $this->pedidoService->cambiarEstado(
+                $pedido, 
+                'entregado', 
+                Auth::id(),
+                'Entrega confirmada por el cliente desde su panel.'
+            );
+            
+            return back()->with('toast_success', '¡Gracias por confirmar la recepción! Disfruta tu compra.');
+        }
+
+        return back()->with('toast_error', 'Este pedido no se encuentra en ruta.');
     }
 }

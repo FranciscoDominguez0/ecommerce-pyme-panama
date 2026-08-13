@@ -37,7 +37,11 @@
             <p class="text-sm text-slate-500 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y H:i') }} por <span class="font-medium text-slate-700">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span></p>
         </div>
         
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
+            <a href="{{ route('admin.pedidos.envio', $pedido->id) }}" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-bold text-xs text-white uppercase tracking-widest hover:bg-slate-900 focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 transition ease-in-out duration-150">
+                <span class="material-symbols-outlined text-[16px] mr-1.5">local_shipping</span>
+                Gestión de Envío
+            </a>
             @if($ultimoEstado === 'pendiente' && in_array($pedido->metodo_pago, ['transferencia']))
                 <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST">
                     @csrf
@@ -68,8 +72,6 @@
                             <option value="pago_confirmado" {{ $ultimoEstado == 'pago_confirmado' ? 'selected' : '' }}>Pago Confirmado</option>
                             <option value="en_preparacion" {{ $ultimoEstado == 'en_preparacion' ? 'selected' : '' }}>En Preparación</option>
                             <option value="listo_para_envio" {{ $ultimoEstado == 'listo_para_envio' ? 'selected' : '' }}>Listo para Envío</option>
-                            <option value="enviado" {{ $ultimoEstado == 'enviado' ? 'selected' : '' }}>Enviado</option>
-                            <option value="entregado" {{ $ultimoEstado == 'entregado' ? 'selected' : '' }}>Entregado</option>
                             <option value="cancelado" {{ $ultimoEstado == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
                         </select>
                     </div>
@@ -83,6 +85,10 @@
                         </button>
                     </div>
                 </form>
+                <p class="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">info</span>
+                    Para marcar el pedido como enviado o entregado, utiliza el botón "Gestión de Envío" en la cabecera.
+                </p>
             </div>
 
             <!-- Items del Pedido -->

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\EnvioPedidoController;
+use App\Http\Controllers\Admin\DevolucionController;
 use App\Http\Controllers\Admin\InventarioController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\CuponController;
@@ -84,6 +86,10 @@ Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(f
 
     Route::get('/mis-pedidos', [ClientePedidoController::class, 'index'])->name('pedidos.index');
     Route::get('/mis-pedidos/{id}', [ClientePedidoController::class, 'detalle'])->name('pedidos.detalle');
+    Route::get('/mis-pedidos/{id}/devolucion', [\App\Http\Controllers\Cliente\DevolucionController::class, 'create'])->name('pedidos.devolucion.create');
+    Route::post('/mis-pedidos/{id}/devolucion', [\App\Http\Controllers\Cliente\DevolucionController::class, 'store'])->name('pedidos.devolucion.store');
+    
+    Route::post('/mis-pedidos/{id}/confirmar-recepcion', [ClientePedidoController::class, 'confirmarRecepcion'])->name('pedidos.confirmar-recepcion');
 });
 
 // 4. Panel de Cliente autenticado
@@ -110,6 +116,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::post('/pedidos/{id}/estado', [AdminPedidoController::class, 'cambiarEstado'])->name('admin.pedidos.estado');
     Route::post('/pedidos/{id}/aprobar-pago', [AdminPedidoController::class, 'aprobarPago'])->name('admin.pedidos.aprobar-pago');
     Route::post('/pedidos/{id}/rechazar-pago', [AdminPedidoController::class, 'rechazarPago'])->name('admin.pedidos.rechazar-pago');
+    Route::get('/pedidos/{id}/envio', [EnvioPedidoController::class, 'edit'])->name('admin.pedidos.envio');
+    Route::put('/pedidos/{id}/envio', [EnvioPedidoController::class, 'update'])->name('admin.pedidos.envio.update');
+    Route::post('/pedidos/{id}/envio/estado', [EnvioPedidoController::class, 'updateStatus'])->name('admin.pedidos.envio.estado');
 
     // Módulo de Marcas (Brands)
     Route::resource('brands', BrandController::class)->names('admin.brands');
@@ -142,6 +151,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('admin.productos.update');
     Route::patch('/productos/{id}', [ProductoController::class, 'update']);
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('admin.productos.destroy');
+
+    // Módulo de Devoluciones
+    Route::get('/devoluciones', [DevolucionController::class, 'index'])->name('admin.devoluciones.index');
+    Route::post('/devoluciones/{id}/aprobar', [DevolucionController::class, 'aprobar'])->name('admin.devoluciones.aprobar');
+    Route::post('/devoluciones/{id}/rechazar', [DevolucionController::class, 'rechazar'])->name('admin.devoluciones.rechazar');
 
     // Módulo de Zonas de Envío (FASE 9)
     Route::get('/configuracion/zonas-envio', [ZonaEnvioController::class, 'index'])->name('admin.zonas-envio.index');
