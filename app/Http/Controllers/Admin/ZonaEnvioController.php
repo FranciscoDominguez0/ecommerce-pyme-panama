@@ -35,7 +35,7 @@ class ZonaEnvioController extends Controller
             ZonaEnvio::create($validated);
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', 'Zona de envío creada correctamente.');
+                ->with('success', 'Zona de envío creada exitosamente.');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()
                 ->with('error', 'Error al guardar: El monto ingresado excede la precisión de la base de datos (máx. 99,999,999.99).')
@@ -64,7 +64,7 @@ class ZonaEnvioController extends Controller
             $zonaEnvio->update($validated);
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', 'Zona de envío actualizada correctamente.');
+                ->with('success', 'Zona de envío actualizada exitosamente.');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()
                 ->with('error', 'Error al actualizar: El monto ingresado excede la precisión de la base de datos (máx. 99,999,999.99).')
@@ -89,7 +89,7 @@ class ZonaEnvioController extends Controller
             $estadoTexto = $zonaEnvio->activo ? 'activada' : 'desactivada';
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', "La zona de envío {$zonaEnvio->nombre} ha sido {$estadoTexto}.");
+                ->with('success', 'Estado de zona de envío actualizado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Ocurrió un error al cambiar el estado de la zona de envío.');
@@ -106,7 +106,7 @@ class ZonaEnvioController extends Controller
             $zonaEnvio->delete();
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', "Zona de envío '{$nombre}' eliminada correctamente.");
+                ->with('success', 'Zona de envío eliminada exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'No se pudo eliminar la zona de envío.');

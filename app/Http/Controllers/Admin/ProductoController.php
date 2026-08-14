@@ -196,7 +196,7 @@ class ProductoController extends Controller
 
         return redirect()
             ->route('admin.productos.index')
-            ->with('success', 'Producto creado exitosamente y publicado en la tienda.');
+            ->with('success', 'Producto creado exitosamente.');
     }
 
     /**

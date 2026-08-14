@@ -1,5 +1,5 @@
 {{-- Componente Reutilizable: Alertas Toast Flotantes (Éxito, Error/Fallo, Advertencia, Información) --}}
-<div id="toast-container" class="fixed top-5 right-5 sm:right-6 z-[9999] flex flex-col gap-2.5 pointer-events-none w-full max-w-[280px] sm:max-w-xs" aria-live="polite" aria-atomic="true">
+<div id="toast-container" class="fixed top-8 z-[9999] flex flex-col items-center gap-3 pointer-events-none w-full px-4 sm:max-w-md" style="left: 50%; transform: translateX(calc(-50% + var(--sidebar-offset, 0px) / 2));" aria-live="polite" aria-atomic="true">
     @php
         $toasts = [];
         if (session('success')) {
@@ -44,27 +44,27 @@
             
             $config = match($tipo) {
                 'error' => [
-                    'bg' => 'bg-rose-50',
-                    'border' => 'border-rose-100',
-                    'text' => 'text-rose-800',
+                    'border' => 'border-rose-200/60',
+                    'icon_color' => 'text-rose-600',
+                    'icon_bg' => 'bg-rose-100',
                     'icon' => 'error'
                 ],
                 'warning' => [
-                    'bg' => 'bg-amber-50',
-                    'border' => 'border-amber-100',
-                    'text' => 'text-amber-800',
+                    'border' => 'border-amber-200/60',
+                    'icon_color' => 'text-amber-600',
+                    'icon_bg' => 'bg-amber-100',
                     'icon' => 'warning'
                 ],
                 'info' => [
-                    'bg' => 'bg-blue-50',
-                    'border' => 'border-blue-100',
-                    'text' => 'text-blue-800',
+                    'border' => 'border-blue-200/60',
+                    'icon_color' => 'text-blue-600',
+                    'icon_bg' => 'bg-blue-100',
                     'icon' => 'info'
                 ],
                 default => [
-                    'bg' => 'bg-emerald-50',
-                    'border' => 'border-emerald-100',
-                    'text' => 'text-emerald-800',
+                    'border' => 'border-emerald-200/60',
+                    'icon_color' => 'text-emerald-600',
+                    'icon_bg' => 'bg-emerald-100',
                     'icon' => 'check_circle'
                 ]
             };
@@ -73,19 +73,21 @@
         <div id="toast-session-{{ $idx }}" 
              data-toast
              data-duration="4000"
-             class="pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full {{ $config['bg'] }} {{ $config['border'] }} border shadow-md {{ $config['text'] }} relative overflow-hidden transition-all duration-300 transform translate-y-0 opacity-100">
+             class="pointer-events-auto flex items-center gap-3.5 pl-2 pr-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md {{ $config['border'] }} border shadow-2xl shadow-slate-300/40 text-slate-800 relative overflow-hidden transition-all duration-300 w-full max-w-sm">
             
-            <span class="material-symbols-outlined text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
+            <div class="{{ $config['icon_bg'] }} w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[22px] {{ $config['icon_color'] }}" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
+            </div>
             
-            <div class="flex-1 text-xs font-semibold leading-tight tracking-wide pr-2">
+            <div class="flex-1 text-[13px] font-bold leading-tight tracking-wide">
                 {{ $mensaje }}
             </div>
             
             <button type="button" 
                     onclick="cerrarToast(this.closest('[data-toast]'))" 
-                    class="opacity-60 hover:opacity-100 transition-opacity p-0.5 shrink-0" 
+                    class="opacity-40 hover:opacity-100 transition-opacity p-1.5 shrink-0 rounded-lg hover:bg-slate-100 text-slate-500" 
                     aria-label="Cerrar notificación">
-                <span class="material-symbols-outlined text-[16px]">close</span>
+                <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
         </div>
     @endforeach
@@ -93,43 +95,31 @@
 
 <script>
     (function() {
-        // Inicializar toasts provenientes del render inicial de Blade
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#toast-container [data-toast]').forEach(toast => {
-                iniciarTemporizadorToast(toast);
+        // Inicializar toasts sin depender de Alpine y animar entrada
+        const inicializarToasts = () => {
+            document.querySelectorAll('#toast-container [data-toast]:not([data-inited])').forEach(toast => {
+                toast.dataset.inited = 'true';
+                window.iniciarTemporizadorToast(toast, parseInt(toast.dataset.duration || 4000));
             });
-        });
+        };
 
-        // Función para iniciar la barra de progreso y auto-cierre
         window.iniciarTemporizadorToast = function(toast, duracion = 4000) {
             if (!toast) return;
-            const barra = toast.querySelector('.toast-progress-bar');
-            
-            if (barra) {
-                barra.style.transitionDuration = `${duracion}ms`;
-                // Forzar reflow antes de animar a 0%
-                requestAnimationFrame(() => {
-                    barra.style.width = '0%';
-                });
-            }
-
             const timeoutId = setTimeout(() => {
-                cerrarToast(toast);
+                window.cerrarToast(toast);
             }, duracion);
 
             toast.dataset.timeoutId = timeoutId;
         };
 
-        // Función para cerrar y animar la salida del Toast
         window.cerrarToast = function(toast) {
             if (!toast) return;
             if (toast.dataset.timeoutId) {
                 clearTimeout(Number(toast.dataset.timeoutId));
             }
             
-            // Animación de salida suave (fade-out + slide-up)
             toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-16px) scale(0.96)';
+            toast.style.transform = 'translateY(-20px) scale(0.95)';
             toast.style.marginBottom = `-${toast.offsetHeight}px`;
             
             setTimeout(() => {
@@ -137,13 +127,21 @@
             }, 300);
         };
 
-        // API JavaScript Global reutilizable e inteligente: window.mostrarToast(mensaje, tipo, duracion) o window.mostrarToast(tipo, mensaje, duracion)
+        // Ejecutar inmediatamente
+        inicializarToasts();
+        
+        // Ejecutar también en DOMContentLoaded o navegación Livewire
+        document.addEventListener('DOMContentLoaded', inicializarToasts);
+        document.addEventListener('livewire:navigated', inicializarToasts);
+
+        // API JavaScript Global reutilizable e inteligente
         window.mostrarToast = function(arg1, arg2 = 'success', duracion = 4000) {
             let container = document.getElementById('toast-container');
             if (!container) {
                 container = document.createElement('div');
                 container.id = 'toast-container';
-                container.className = 'fixed top-5 right-5 z-[9999] flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-3 sm:px-0';
+                container.className = 'fixed top-8 z-[9999] flex flex-col items-center gap-3 pointer-events-none w-full px-4 sm:max-w-md';
+                container.style.cssText = 'left: 50%; transform: translateX(calc(-50% + var(--sidebar-offset, 0px) / 2));';
                 document.body.appendChild(container);
             }
 
@@ -163,38 +161,31 @@
                 tipo = (arg2 && tiposValidos.includes(String(arg2).toLowerCase())) ? String(arg2).toLowerCase() : 'success';
             }
 
-            // Normalizar alias
             if (tipo === 'fallo') tipo = 'error';
 
             const configs = {
                 success: {
-                    bg: 'bg-emerald-50',
-                    border: 'border-emerald-100',
-                    text: 'text-emerald-800',
+                    border: 'border-emerald-200/60',
+                    icon_color: 'text-emerald-600',
+                    icon_bg: 'bg-emerald-100',
                     icon: 'check_circle'
                 },
                 error: {
-                    bg: 'bg-rose-50',
-                    border: 'border-rose-100',
-                    text: 'text-rose-800',
-                    icon: 'error'
-                },
-                fallo: {
-                    bg: 'bg-rose-50',
-                    border: 'border-rose-100',
-                    text: 'text-rose-800',
+                    border: 'border-rose-200/60',
+                    icon_color: 'text-rose-600',
+                    icon_bg: 'bg-rose-100',
                     icon: 'error'
                 },
                 warning: {
-                    bg: 'bg-amber-50',
-                    border: 'border-amber-100',
-                    text: 'text-amber-800',
+                    border: 'border-amber-200/60',
+                    icon_color: 'text-amber-600',
+                    icon_bg: 'bg-amber-100',
                     icon: 'warning'
                 },
                 info: {
-                    bg: 'bg-blue-50',
-                    border: 'border-blue-100',
-                    text: 'text-blue-800',
+                    border: 'border-blue-200/60',
+                    icon_color: 'text-blue-600',
+                    icon_bg: 'bg-blue-100',
                     icon: 'info'
                 }
             };
@@ -202,29 +193,25 @@
             const cfg = configs[tipo] || configs.success;
             const toast = document.createElement('div');
             toast.dataset.toast = 'true';
-            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-full ${cfg.bg} ${cfg.border} border shadow-md ${cfg.text} relative overflow-hidden transition-all duration-300 transform translate-y-[-10px] opacity-0`;
+            toast.className = `pointer-events-auto flex items-center gap-3.5 pl-2 pr-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md ${cfg.border} border shadow-2xl shadow-slate-300/40 text-slate-800 relative overflow-hidden transition-all duration-300 w-full max-w-sm`;
 
             toast.innerHTML = `
-                <span class="material-symbols-outlined text-[20px] shrink-0" style="font-variation-settings: 'FILL' 1;">${cfg.icon}</span>
-                <div class="flex-1 text-xs font-semibold leading-tight tracking-wide pr-2">
+                <div class="${cfg.icon_bg} w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[22px] ${cfg.icon_color}" style="font-variation-settings: 'FILL' 1;">${cfg.icon}</span>
+                </div>
+                <div class="flex-1 text-[13px] font-bold leading-tight tracking-wide">
                     ${mensaje}
                 </div>
                 <button type="button" 
                         onclick="cerrarToast(this.closest('[data-toast]'))" 
-                        class="opacity-60 hover:opacity-100 transition-opacity p-0.5 shrink-0" 
+                        class="opacity-40 hover:opacity-100 transition-opacity p-1.5 shrink-0 rounded-lg hover:bg-slate-100 text-slate-500" 
                         aria-label="Cerrar notificación">
-                    <span class="material-symbols-outlined text-[16px]">close</span>
+                    <span class="material-symbols-outlined text-[18px]">close</span>
                 </button>
             `;
 
             container.appendChild(toast);
-
-            // Animar entrada
-            requestAnimationFrame(() => {
-                toast.style.transform = 'translateY(0)';
-                toast.style.opacity = '1';
-                iniciarTemporizadorToast(toast, duracion);
-            });
+            window.iniciarTemporizadorToast(toast, duracion);
         };
     })();
 </script>

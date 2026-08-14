@@ -68,6 +68,6 @@ class FacturaController extends Controller
 
         $this->facturaService->reenviarFactura($factura, $request->email_destino, $request->mensaje);
 
-        return back()->with('success', 'Factura reenviada exitosamente a ' . $request->email_destino);
+        return back()->with('success', 'Factura reenviada exitosamente.');
     }
 }

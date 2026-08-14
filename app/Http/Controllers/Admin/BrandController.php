@@ -138,7 +138,7 @@ class BrandController extends Controller
             ->update(['brand_id' => $brand->id, 'marca' => $name]);
 
         return redirect()->route('admin.brands.index')
-            ->with('success', "Marca «{$brand->name}» registrada exitosamente en el catálogo.");
+            ->with('success', "Marca registrada exitosamente.");
     }
 
     /**
@@ -227,12 +227,12 @@ class BrandController extends Controller
         if (request()->wantsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => "La marca «{$nombre}» ha sido eliminada correctamente.",
+                'message' => "Marca eliminada exitosamente.",
             ]);
         }
 
         return redirect()->route('admin.brands.index')
-            ->with('success', "Marca «{$nombre}» eliminada del sistema." . ($totalProductos > 0 ? " Se desvincularon {$totalProductos} producto(s)." : ''));
+            ->with('success', "Marca eliminada exitosamente.");
     }
 
 

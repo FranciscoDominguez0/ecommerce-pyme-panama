@@ -163,7 +163,7 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', "La categoría '{$categoria->nombre}' ha sido creada correctamente.");
+            ->with('success', "Categoría creada exitosamente.");
     }
 
     /**
@@ -305,7 +305,7 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index', request()->query())
-            ->with('success', "La categoría '{$categoria->nombre}' fue actualizada exitosamente.");
+            ->with('success', "Categoría actualizada exitosamente.");
     }
 
     /**
@@ -355,7 +355,7 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', "La categoría '{$categoria->nombre}' ha sido eliminada correctamente.");
+            ->with('success', "Categoría eliminada exitosamente.");
     }
 
     /**
@@ -392,7 +392,7 @@ class CategoriaController extends Controller
 
         return redirect()
             ->route('admin.categorias.index')
-            ->with('success', "Estado de '{$categoria->nombre}' actualizado.");
+            ->with('success', "Estado actualizado exitosamente.");
     }
 
     /**

@@ -158,9 +158,8 @@ class CuponController extends Controller
 
         $this->registrarAuditoria('crear_cupon', "Cupón '{$cupon->codigo}' creado.", null, $cupon->toArray());
 
-        return redirect()
-            ->route('admin.promociones.cupones')
-            ->with('success', "El cupón '{$cupon->codigo}' ha sido creado exitosamente.");
+        return redirect()->route('admin.promociones.cupones')
+            ->with('success', "Cupón creado exitosamente.");
     }
 
     /**
@@ -258,9 +257,8 @@ class CuponController extends Controller
 
         $this->registrarAuditoria('actualizar_cupon', "Cupón '{$cupon->codigo}' actualizado.", $valorAnterior, $cupon->toArray());
 
-        return redirect()
-            ->route('admin.promociones.cupones')
-            ->with('success', "El cupón '{$cupon->codigo}' fue actualizado correctamente.");
+        return redirect()->route('admin.promociones.cupones')
+            ->with('success', "Cupón actualizado exitosamente.");
     }
 
     /**
@@ -296,7 +294,7 @@ class CuponController extends Controller
             ]);
         }
 
-        return back()->with('success', "Estado del cupón '{$cupon->codigo}' actualizado.");
+        return back()->with('success', "Estado del cupón actualizado exitosamente.");
     }
 
     /**
@@ -317,9 +315,8 @@ class CuponController extends Controller
 
         $this->registrarAuditoria('eliminar_cupon', "Cupón '{$codigo}' eliminado.", $cupon->toArray(), null);
 
-        return redirect()
-            ->route('admin.promociones.cupones')
-            ->with('success', "El cupón '{$codigo}' ha sido eliminado.");
+        return redirect()->route('admin.promociones.cupones')
+            ->with('success', "Cupón eliminado exitosamente.");
     }
 
     private function registrarAuditoria(string $accion, string $descripcion, ?array $anterior = null, ?array $nuevo = null): void
