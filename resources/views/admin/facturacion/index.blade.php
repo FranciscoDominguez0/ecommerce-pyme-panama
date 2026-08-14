@@ -32,7 +32,17 @@
                 </select>
             </div>
 
-            @if(request()->anyFilled(['estado', 'numero', 'cliente']))
+            <div class="w-full sm:w-48">
+                <label for="emitida_desde" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Emitida desde</label>
+                <input type="date" name="emitida_desde" id="emitida_desde" value="{{ request('emitida_desde') }}" class="block w-full rounded-md border-slate-300 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+            </div>
+
+            <div class="w-full sm:w-48">
+                <label for="emitida_hasta" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Emitida hasta</label>
+                <input type="date" name="emitida_hasta" id="emitida_hasta" value="{{ request('emitida_hasta') }}" class="block w-full rounded-md border-slate-300 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+            </div>
+
+            @if(request()->anyFilled(['estado', 'numero', 'cliente', 'emitida_desde', 'emitida_hasta']))
             <div class="flex items-end mb-1">
                 <a href="{{ route('admin.facturas.index') }}" class="inline-flex items-center text-sm text-slate-500 hover:text-slate-700">
                     <span class="material-symbols-outlined text-[18px] mr-1">close</span> Limpiar

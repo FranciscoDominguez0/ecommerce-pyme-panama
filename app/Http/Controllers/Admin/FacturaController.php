@@ -29,6 +29,14 @@ class FacturaController extends Controller
             $query->where('estado', $request->estado);
         }
 
+        if ($request->filled('emitida_desde')) {
+            $query->whereDate('emitida_en', '>=', $request->emitida_desde);
+        }
+
+        if ($request->filled('emitida_hasta')) {
+            $query->whereDate('emitida_en', '<=', $request->emitida_hasta);
+        }
+
         if ($request->filled('cliente')) {
             $query->whereHas('usuario', function($q) use ($request) {
                 $q->where('nombre', 'like', '%' . $request->cliente . '%')

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ReenvioFactura extends Model
 {
+    use HasFactory;
+
     protected $table = 'reenvios_factura';
 
     public $timestamps = false; // Solo usa enviado_en, u otros.

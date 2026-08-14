@@ -609,8 +609,17 @@
         const maxVal = parseInt(input.max) || 1;
         
         if (delta > 0 && val >= maxVal) {
-            if (typeof window.mostrarToast === 'function') {
-                window.mostrarToast('warning', `Stock máximo alcanzado. Solo hay ${maxVal} unidades disponibles.`);
+            const msj = `Stock máximo alcanzado. Solo hay ${maxVal} unidades disponibles.`;
+            try {
+                if (typeof window.mostrarToast === 'function') {
+                    window.mostrarToast(msj, 'warning');
+                } else if (window.Livewire) {
+                    window.Livewire.dispatch('mostrar-toast', [{ tipo: 'warning', mensaje: msj }]);
+                } else {
+                    alert(msj);
+                }
+            } catch (e) {
+                console.error(e);
             }
         }
         

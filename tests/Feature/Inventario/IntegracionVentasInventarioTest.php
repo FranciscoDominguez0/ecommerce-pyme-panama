@@ -131,7 +131,7 @@ class IntegracionVentasInventarioTest extends BaseAdminTest
             ])
             ->post('/checkout/confirmacion', ['notas_cliente' => ''])
             ->assertRedirect()
-            ->assertSessionHas('toast_success');
+            ->assertSessionHas('pedido_creado_animacion');
 
         $this->assertSame(3, $producto->fresh()->stock);
 

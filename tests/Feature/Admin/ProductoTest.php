@@ -382,11 +382,8 @@ class ProductoTest extends BaseAdminTest
         $this->assertSame(0, $producto->fresh()->variantes()->count());
     }
 
-    public function test_el_stock_del_producto_no_se_deriva_automaticamente_de_sus_variantes(): void
+    public function test_el_stock_del_producto_se_deriva_automaticamente_de_sus_variantes(): void
     {
-        // REPORTE: la especificación pide que el stock del producto sea la SUMA
-        // del stock de sus variantes. La implementación ACTUAL NO lo hace: el stock
-        // se guarda tal cual llega del formulario y las variantes se guardan aparte.
         $admin = $this->crearAdmin();
         $categoria = Categoria::factory()->create();
         $producto = Producto::factory()->create(['categoria_id' => $categoria->id, 'stock' => 0]);
@@ -403,9 +400,9 @@ class ProductoTest extends BaseAdminTest
                 ]),
             ]));
 
-        // Las variantes sí se guardan (3), pero el stock del producto NO se recalcula.
+        // Las variantes se guardan y el stock del producto se recalcula automáticamente.
         $this->assertSame(3, $producto->fresh()->variantes()->count());
-        $this->assertSame(0, $producto->fresh()->stock);
+        $this->assertSame(10, $producto->fresh()->stock);
         $this->assertSame(10, $producto->fresh()->variantes()->sum('stock'));
     }
 

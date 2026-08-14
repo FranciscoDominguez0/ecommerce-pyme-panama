@@ -132,7 +132,7 @@ class CheckoutTest extends BaseAdminTest
             ])
             ->post('/checkout/confirmacion', ['notas_cliente' => 'Entregar en portería'])
             ->assertRedirect()
-            ->assertSessionHas('toast_success');
+            ->assertSessionHas('pedido_creado_animacion');
 
         $pedido = Pedido::where('usuario_id', $usuario->id)->first();
         $this->assertNotNull($pedido);
