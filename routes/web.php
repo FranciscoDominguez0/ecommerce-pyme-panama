@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\PromocionController;
 use App\Http\Controllers\Admin\ZonaEnvioController;
+use App\Http\Controllers\Admin\FacturaController as AdminFacturaController;
+use App\Http\Controllers\Cliente\FacturaController as ClienteFacturaController;
 use App\Http\Controllers\Cliente\CarritoController;
 use App\Http\Controllers\Cliente\CatalogoController;
 use App\Http\Controllers\Cliente\CheckoutController;
@@ -92,6 +94,11 @@ Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(f
     Route::post('/mis-pedidos/{id}/confirmar-recepcion', [ClientePedidoController::class, 'confirmarRecepcion'])->name('pedidos.confirmar-recepcion');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/mis-facturas', [ClienteFacturaController::class, 'index'])->name('cliente.facturas.index');
+    Route::get('/mis-facturas/{factura}/pdf', [ClienteFacturaController::class, 'descargarPdf'])->name('cliente.facturas.pdf');
+});
+
 // 4. Panel de Cliente autenticado
 Route::get('/dashboard', function () {
     $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
@@ -121,6 +128,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
 
     // Módulo de Marcas (Brands)
     Route::resource('brands', BrandController::class)->names('admin.brands');
+
+    // Módulo de Facturas
+    Route::get('/facturas', [AdminFacturaController::class, 'index'])->name('admin.facturas.index');
+    Route::get('/facturas/{factura}', [AdminFacturaController::class, 'show'])->name('admin.facturas.show');
+    Route::get('/facturas/{factura}/pdf', [AdminFacturaController::class, 'descargarPdf'])->name('admin.facturas.pdf');
+    Route::post('/facturas/{factura}/reenviar', [AdminFacturaController::class, 'reenviar'])->name('admin.facturas.reenviar');
 
     // Módulo de Inventario
     Route::prefix('inventario')->name('admin.inventario.')->group(function () {

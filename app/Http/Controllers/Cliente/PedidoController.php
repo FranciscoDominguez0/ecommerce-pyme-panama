@@ -37,7 +37,7 @@ class PedidoController extends Controller
 
     public function detalle($id)
     {
-        $pedido = Pedido::with(['items.producto.imagenes', 'items.variante.opciones.tipo', 'estados', 'ultimoEstado', 'direccion', 'zonaEnvio'])
+        $pedido = Pedido::with(['items.producto.imagenes', 'items.variante.opciones.tipo', 'estados', 'ultimoEstado', 'direccion', 'zonaEnvio', 'factura'])
             ->where('usuario_id', Auth::id())
             ->findOrFail($id);
 

@@ -12,6 +12,16 @@ class Factura extends Model
     const CREATED_AT = 'creado_en';
     const UPDATED_AT = 'actualizado_en';
 
+    protected $casts = [
+        'subtotal' => 'decimal:2',
+        'descuento' => 'decimal:2',
+        'costo_envio' => 'decimal:2',
+        'itbms_tasa' => 'decimal:2',
+        'itbms_monto' => 'decimal:2',
+        'total' => 'decimal:2',
+        'emitida_en' => 'datetime',
+    ];
+
     protected $fillable = [
         'pedido_id',
         'usuario_id',
@@ -37,5 +47,10 @@ class Factura extends Model
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
+    public function reenvios()
+    {
+        return $this->hasMany(ReenvioFactura::class, 'factura_id');
     }
 }

@@ -168,12 +168,24 @@ class PedidoService
      */
     public function cambiarEstado(Pedido $pedido, string $nuevoEstado, ?int $usuarioId = null, ?string $comentario = null): EstadoPedido
     {
-        return EstadoPedido::create([
+        $estado = EstadoPedido::create([
             'pedido_id' => $pedido->id,
             'usuario_id' => $usuarioId,
             'estado' => $nuevoEstado,
             'comentario' => $comentario,
         ]);
+
+        // Regla de negocio: Generar factura cuando el pago es confirmado
+        if ($nuevoEstado === 'pago_confirmado') {
+            app(FacturaService::class)->generarFactura($pedido);
+        }
+
+        // Regla de negocio: Anular factura cuando el pedido se cancela
+        if ($nuevoEstado === 'cancelado') {
+            app(FacturaService::class)->anularFactura($pedido);
+        }
+
+        return $estado;
     }
 
     /**

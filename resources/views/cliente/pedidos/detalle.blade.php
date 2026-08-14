@@ -63,8 +63,13 @@
             </p>
         </div>
         <div class="flex flex-col items-end gap-3">
+            @if($pedido->factura)
+                <a href="{{ route('cliente.facturas.pdf', $pedido->factura->id) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-surface text-primary border border-primary text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/5 transition-colors shadow-sm">
+                    <span class="material-symbols-outlined text-[16px]">receipt_long</span>
+                    Descargar Recibo
+                </a>
+            @endif
 
-            
             @if(in_array($ultimoEstado, ['entregado', 'enviado']))
                 @php
                     $tieneDevolucion = \App\Models\Devolucion::where('pedido_id', $pedido->id)->exists();
