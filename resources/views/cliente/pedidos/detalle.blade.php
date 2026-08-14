@@ -5,6 +5,28 @@
 @section('content')
 <div class="h-[calc(100vh-160px)] overflow-y-auto bg-surface/50 py-6 md:py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    @if(session('pedido_creado_animacion'))
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-md" x-transition.opacity.duration.500ms>
+        <div class="bg-surface rounded-3xl p-10 flex flex-col items-center justify-center max-w-sm w-full mx-4 shadow-2xl" x-show="show" x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 scale-50 translate-y-10" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+            <!-- SVG Checkmark Animado -->
+            <div class="relative w-28 h-28 mb-6 text-secondary">
+                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-lg" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="50" cy="50" r="45" stroke-dasharray="300" stroke-dashoffset="300" style="animation: animCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;"></circle>
+                    <path d="M 30 50 L 45 65 L 70 35" stroke-dasharray="100" stroke-dashoffset="100" style="animation: animCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards; animation-delay: 0.4s;"></path>
+                </svg>
+            </div>
+            <style>
+                @keyframes animCircle { to { stroke-dashoffset: 0; } }
+                @keyframes animCheck { to { stroke-dashoffset: 0; } }
+            </style>
+            
+            <h2 class="text-2xl font-bold text-on-surface mb-2 text-center" x-show="show" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">¡Pedido Confirmado!</h2>
+            <p class="text-on-surface-variant text-center" x-show="show" x-transition:enter="transition ease-out duration-500 delay-400" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">Tu orden ha sido procesada exitosamente.</p>
+        </div>
+    </div>
+    @endif
+
     @php
         $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
 

@@ -337,6 +337,20 @@
             backdrop.classList.toggle('hidden');
         }
 
+        // Mantener la posición del scroll del sidebar entre recargas de página
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebarNav = document.querySelector('#admin-sidebar nav');
+            if (sidebarNav) {
+                const savedScroll = sessionStorage.getItem('adminSidebarScroll');
+                if (savedScroll !== null) {
+                    sidebarNav.scrollTop = parseInt(savedScroll, 10);
+                }
+                window.addEventListener('beforeunload', () => {
+                    sessionStorage.setItem('adminSidebarScroll', sidebarNav.scrollTop);
+                });
+            }
+        });
+
         // Reloj en vivo de Panamá (GMT-5, formato 12 horas en español)
         function updatePanamaClock() {
             const clockEl = document.getElementById('topbar-live-clock');

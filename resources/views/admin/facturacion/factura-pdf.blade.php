@@ -224,12 +224,35 @@
             <tr>
                 <td class="text-center">{{ $item->cantidad }}</td>
                 <td>
-                    <strong>{{ $item->producto->nombre }}</strong>
-                    <div style="font-size: 11px; color: #777; margin-top: 3px;">
-                        SKU: {{ $item->variante ? $item->variante->sku : $item->producto->sku }}
-                    </div>
+                    <table style="width: 100%; border: none; padding: 0; margin: 0; background: transparent;">
+                        <tr>
+                            <td style="width: 45px; padding: 0; padding-right: 10px; border: none;">
+                                @php
+                                    $img = $item->producto ? $item->producto->imagenPrincipal() : null;
+                                    $imgPath = public_path('images/placeholder-product.png');
+                                    if ($img && !empty($img->ruta)) {
+                                        if (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, 'data:')) {
+                                            $imgPath = $img->ruta; // Asumimos que DomPDF puede cargarla o fallará silenciosamente
+                                        } else {
+                                            $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $img->ruta);
+                                            if (file_exists(storage_path('app/public/' . $cleanRoute))) {
+                                                $imgPath = storage_path('app/public/' . $cleanRoute);
+                                            }
+                                        }
+                                    }
+                                @endphp
+                                <img src="{{ $imgPath }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" alt="">
+                            </td>
+                            <td style="padding: 0; border: none; vertical-align: middle;">
+                                <strong>{{ $item->producto->nombre ?? 'Producto Eliminado' }}</strong>
+                                <div style="font-size: 11px; color: #777; margin-top: 3px;">
+                                    SKU: {{ $item->variante ? $item->variante->sku : ($item->producto ? $item->producto->sku : 'N/A') }}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
-                <td class="text-right">${{ number_format($item->precio_unitario, 2) }}</td>
+                <td class="text-right text-muted">${{ number_format($item->precio_unitario, 2) }}</td>
                 <td class="text-right">${{ number_format($item->subtotal, 2) }}</td>
             </tr>
             @endforeach
