@@ -232,12 +232,16 @@
                                     $imgPath = public_path('images/placeholder-product.png');
                                     if ($img && !empty($img->ruta)) {
                                         if (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, 'data:')) {
-                                            $imgPath = $img->ruta; // Asumimos que DomPDF puede cargarla o fallará silenciosamente
+                                            $imgPath = $img->ruta;
                                         } else {
                                             $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $img->ruta);
                                             if (file_exists(storage_path('app/public/' . $cleanRoute))) {
                                                 $imgPath = storage_path('app/public/' . $cleanRoute);
                                             }
+                                        }
+                                        // DomPDF (CPDF) falla al renderizar WebP si PHP no tiene soporte GD para WebP
+                                        if (str_ends_with(strtolower($imgPath), '.webp') && !function_exists('imagecreatefromwebp')) {
+                                            $imgPath = public_path('images/placeholder-product.png');
                                         }
                                     }
                                 @endphp
