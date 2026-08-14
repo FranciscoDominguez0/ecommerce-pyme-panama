@@ -3,7 +3,8 @@
 @section('title', 'Detalle del Pedido')
 
 @section('content')
-<x-cliente.perfil.layout active="pedidos">
+<div class="h-[calc(100vh-160px)] overflow-y-auto bg-surface/50 py-6 md:py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     @php
         $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
 
@@ -297,5 +298,6 @@
             @endif
         </div>
     </div>
-</x-cliente.perfil.layout>
+    </div>
+</div>
 @endsection

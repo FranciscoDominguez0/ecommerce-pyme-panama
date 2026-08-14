@@ -7,11 +7,11 @@
 @endphp
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <div class="bg-white border border-outline-variant rounded-2xl shadow-sm overflow-clip">
-        <div class="md:flex">
+    <div class="bg-white border border-outline-variant rounded-2xl shadow-sm overflow-clip h-[calc(100vh-140px)] flex flex-col">
+        <div class="md:flex flex-1 overflow-hidden">
 
             {{-- LEFT: Profile + Navigation (persisted across routes) --}}
-            <aside x-persist="mi-cuenta-sidebar" x-data class="md:w-[32%] md:min-w-[260px] md:max-w-[320px] shrink-0 md:self-start md:sticky md:top-24 border-b md:border-b-0 md:border-r border-outline-variant/30 p-6 md:p-7">
+            <aside x-persist="mi-cuenta-sidebar" x-data class="md:w-[32%] md:min-w-[260px] md:max-w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-outline-variant/30 p-6 md:p-7 overflow-y-auto h-full">
                 <a href="{{ route('dashboard') }}" wire:navigate
                     class="inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
                     <span class="material-symbols-outlined text-[16px]">arrow_back</span>
@@ -42,13 +42,9 @@
                     </div>
 
                     <h2 class="text-sm font-bold text-primary">{{ $usuario->nombre_completo }}</h2>
-                    <span class="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 rounded-full bg-secondary/10 text-secondary text-[10px] font-bold uppercase tracking-wider">
-                        <span class="material-symbols-outlined text-[12px]">check_circle</span>
-                        Cuenta activa
-                    </span>
                 </div>
 
-                <nav class="mt-6 pt-5 border-t border-outline-variant/30 space-y-1">
+                <nav class="mt-4 pt-4 border-t border-outline-variant/30 space-y-1">
                     <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate wire:current.exact="sidebar-nav-active"
                         class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">package_2</span>
@@ -311,7 +307,7 @@
             </aside>
 
             {{-- RIGHT: Dynamic Content --}}
-            <div class="flex-1 min-w-0 p-6 md:p-8">
+            <div class="flex-1 min-w-0 p-6 md:p-8 overflow-y-auto h-full relative">
                 {{ $slot }}
             </div>
         </div>
