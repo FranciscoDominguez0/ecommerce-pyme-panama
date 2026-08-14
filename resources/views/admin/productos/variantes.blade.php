@@ -203,6 +203,23 @@
         regenerarMatrizCombinaciones();
     });
 
+    function recalcularStockGlobal() {
+        const checkbox = document.getElementById('toggle-habilitar-variantes');
+        const stockInput = document.getElementById('stock');
+        
+        if (stockInput && checkbox) {
+            if (checkbox.checked) {
+                stockInput.readOnly = true;
+                const totalStock = combinacionesMatrizState.reduce((sum, item) => sum + (parseInt(item.stock) || 0), 0);
+                stockInput.value = totalStock;
+                stockInput.classList.add('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
+            } else {
+                stockInput.readOnly = false;
+                stockInput.classList.remove('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
+            }
+        }
+    }
+
     function toggleVariantesSection(habilitado) {
         const sec = document.getElementById('seccion-editor-variantes');
         if (sec) {
@@ -211,6 +228,7 @@
         if (!habilitado) {
             const inputJson = document.getElementById('input-variantes-json');
             if (inputJson) inputJson.value = '[]';
+            recalcularStockGlobal();
         } else {
             renderizarAtributosUI();
             regenerarMatrizCombinaciones();
@@ -665,6 +683,7 @@
         if (inputJson) {
             inputJson.value = JSON.stringify(combinacionesMatrizState);
         }
+        recalcularStockGlobal();
     }
 
     document.addEventListener('DOMContentLoaded', function() {

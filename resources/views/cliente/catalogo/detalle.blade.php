@@ -281,9 +281,9 @@
                     <!-- Bloque con Stock Disponible -->
                     <div class="space-y-3.5 pt-1">
                         
-                        <div class="text-xs text-emerald-700 font-bold flex items-center gap-1.5">
+                        <div class="text-xs text-emerald-700 font-bold flex items-center gap-1.5" id="stock-container">
                             <span class="material-symbols-outlined text-[16px]">inventory_2</span>
-                            <span>Disponible ({{ $producto->stock }} en inventario)</span>
+                            <span id="stock-dinamico">Disponible ({{ $producto->variantes && $producto->variantes->isNotEmpty() ? $producto->variantes->first()->stock : $producto->stock }} en inventario)</span>
                         </div>
 
                         <!-- Selector de Cantidad y Botones de Compra Activos -->
@@ -293,7 +293,7 @@
                                     <button type="button" onclick="cambiarCantidad(-1)" class="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-700 font-bold transition-colors">
                                         -
                                     </button>
-                                    <input type="number" id="input-cantidad" value="1" min="1" max="{{ max(1, $producto->stock) }}" class="w-12 text-center bg-transparent border-none text-xs font-bold text-slate-900 focus:outline-none">
+                                    <input type="number" id="input-cantidad" value="1" min="1" max="{{ max(1, $producto->variantes && $producto->variantes->isNotEmpty() ? $producto->variantes->first()->stock : $producto->stock) }}" class="w-12 text-center bg-transparent border-none text-xs font-bold text-slate-900 focus:outline-none">
                                     <button type="button" onclick="cambiarCantidad(1)" class="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-700 font-bold transition-colors">
                                         +
                                     </button>
@@ -606,7 +606,15 @@
         const input = document.getElementById('input-cantidad');
         if (!input) return;
         let val = parseInt(input.value) || 1;
-        val = Math.max(1, val + delta);
+        const maxVal = parseInt(input.max) || 1;
+        
+        if (delta > 0 && val >= maxVal) {
+            if (typeof window.mostrarToast === 'function') {
+                window.mostrarToast('warning', `Stock máximo alcanzado. Solo hay ${maxVal} unidades disponibles.`);
+            }
+        }
+        
+        val = Math.max(1, Math.min(val + delta, maxVal));
         input.value = val;
     }
 
@@ -618,6 +626,43 @@
         if (precioEl) {
             precioEl.textContent = `$${parseFloat(precio).toFixed(2)}`;
         }
+        
+        const stockEl = document.getElementById('stock-dinamico');
+        const stockContainer = document.getElementById('stock-container');
+        const parsedStock = parseInt(stock) || 0;
+        
+        if (stockEl && stockContainer) {
+            if (parsedStock > 0) {
+                stockEl.textContent = `Disponible (${parsedStock} en inventario)`;
+                stockContainer.classList.remove('text-rose-600');
+                stockContainer.classList.add('text-emerald-700');
+            } else {
+                stockEl.textContent = `Agotado`;
+                stockContainer.classList.remove('text-emerald-700');
+                stockContainer.classList.add('text-rose-600');
+            }
+        }
+        
+        const inputCantidad = document.getElementById('input-cantidad');
+        if (inputCantidad) {
+            const maxStock = Math.max(1, parsedStock);
+            inputCantidad.max = maxStock;
+            if (parseInt(inputCantidad.value) > maxStock) {
+                inputCantidad.value = maxStock;
+            }
+        }
+        
+        const btnAgregar = document.querySelector('button[onclick^="agregarAlCarrito"]');
+        const btnComprar = document.querySelector('button[onclick^="comprarAhora"]');
+        
+        if (parsedStock <= 0) {
+            if (btnAgregar) { btnAgregar.disabled = true; btnAgregar.classList.add('opacity-50', 'cursor-not-allowed'); }
+            if (btnComprar) { btnComprar.disabled = true; btnComprar.classList.add('opacity-50', 'cursor-not-allowed'); }
+        } else {
+            if (btnAgregar) { btnAgregar.disabled = false; btnAgregar.classList.remove('opacity-50', 'cursor-not-allowed'); }
+            if (btnComprar) { btnComprar.disabled = false; btnComprar.classList.remove('opacity-50', 'cursor-not-allowed'); }
+        }
+
         document.querySelectorAll('.btn-variante').forEach(b => {
             b.classList.remove('border-emerald-500', 'bg-emerald-50/30');
             b.classList.add('bg-white');

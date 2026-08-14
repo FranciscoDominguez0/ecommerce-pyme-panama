@@ -79,22 +79,22 @@
 
                 <!-- Right: GIF hero slider -->
                 <div class="w-full lg:w-[52%] shrink-0 self-stretch min-h-[320px] lg:min-h-full relative overflow-hidden"
-                    id="heroSlider" style="contain: paint;">
+                    id="heroSlider">
 
                     <!-- Slide 1 -->
                     <img src="{{ asset('images/ARMA TU PC A MEDIDA (6).gif') }}" alt="Arma tu PC a Medida"
                         class="hero-slide absolute inset-0 w-full h-full object-cover block"
-                        style="max-height:480px; object-position:center; opacity:1; visibility:visible; transition: opacity 0.7s ease, visibility 0s 0s; will-change: opacity, transform; transform: translateZ(0);" fetchpriority="high" decoding="async" />
+                        style="max-height:480px; object-position:center; opacity:1; visibility:visible; transition: opacity 0.7s ease, visibility 0s 0s;" fetchpriority="high" decoding="async" />
 
                     <!-- Slide 2 -->
-                    <img data-src="{{ asset('images/PORTATILES.gif') }}" alt="Portátiles en Panamá"
+                    <img src="{{ asset('images/PORTATILES.gif') }}" alt="Portátiles en Panamá"
                         class="hero-slide absolute inset-0 w-full h-full object-cover block"
-                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s; will-change: opacity, transform; transform: translateZ(0);" decoding="async" />
+                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" loading="lazy" decoding="async" />
 
                     <!-- Slide 3 -->
-                    <img data-src="{{ asset('images/PERIFERICOS BAJA.gif') }}" alt="Periféricos en Panamá"
+                    <img src="{{ asset('images/PERIFERICOS BAJA.gif') }}" alt="Periféricos en Panamá"
                         class="hero-slide absolute inset-0 w-full h-full object-cover block"
-                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s; will-change: opacity, transform; transform: translateZ(0);" decoding="async" />
+                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" loading="lazy" decoding="async" />
 
                     <!-- Dot indicators -->
                     <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="heroDots">
@@ -131,18 +131,6 @@
                         dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(timer); goTo(i); timer = setInterval(() => goTo(cur + 1), 6000); }));
 
                         let timer = setInterval(() => goTo(cur + 1), 6000);
-
-                        // Carga agresivamente diferida: Solo inyectar los GIFs pesados después de pintar la página
-                        window.addEventListener('load', () => {
-                            setTimeout(() => {
-                                slides.forEach(img => {
-                                    if (img.hasAttribute('data-src')) {
-                                        img.src = img.getAttribute('data-src');
-                                        img.removeAttribute('data-src');
-                                    }
-                                });
-                            }, 800); // 800ms de respiro para que el primer GIF se estabilice
-                        });
                     })();
                 </script>
 

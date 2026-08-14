@@ -167,7 +167,7 @@ class ProductoController extends Controller
                 'oferta_activa' => $request->boolean('oferta_activa'),
                 'oferta_inicio_en' => $request->oferta_inicio_en ?: null,
                 'oferta_fin_en' => $request->oferta_fin_en ?: null,
-                'stock' => (int) ($request->stock ?? 0),
+                'stock' => $this->calcularStockTotal($request),
                 'stock_minimo' => (int) ($request->stock_minimo ?? 3),
                 'destacado' => $request->boolean('destacado'),
                 'activo' => $request->boolean('activo'),
@@ -363,7 +363,7 @@ class ProductoController extends Controller
                 'oferta_activa' => $request->boolean('oferta_activa'),
                 'oferta_inicio_en' => $request->oferta_inicio_en ?: null,
                 'oferta_fin_en' => $request->oferta_fin_en ?: null,
-                'stock' => (int) ($request->stock ?? 0),
+                'stock' => $this->calcularStockTotal($request),
                 'stock_minimo' => (int) ($request->stock_minimo ?? 3),
                 'destacado' => $request->boolean('destacado'),
                 'activo' => $request->boolean('activo'),
@@ -559,5 +559,31 @@ class ProductoController extends Controller
                 $variante->opciones()->attach($opcionesIds);
             }
         }
+    }
+
+    /**
+     * Calcula el stock total sumando el de las variantes si aplica.
+     */
+    private function calcularStockTotal(Request $request): int
+    {
+        if (!$request->boolean('tiene_variantes')) {
+            return (int) ($request->stock ?? 0);
+        }
+
+        $stockTotal = 0;
+        $variantesData = $request->input('variantes', []);
+
+        if ($request->filled('variantes_json')) {
+            $decoded = json_decode($request->input('variantes_json'), true);
+            if (is_array($decoded) && count($decoded) > 0) {
+                $variantesData = $decoded;
+            }
+        }
+
+        foreach ($variantesData as $data) {
+            $stockTotal += (int) ($data['stock'] ?? 0);
+        }
+
+        return $stockTotal;
     }
 }
