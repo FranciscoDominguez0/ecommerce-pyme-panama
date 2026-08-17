@@ -25,15 +25,16 @@ abstract class BaseAdminTest extends TestCase
 
         // Evita que Spatie use el cache de permisos/roles entre pruebas.
         app(PermissionRegistrar::class)->forgetCachedPermissions();
+        
+        // Sembrar roles y permisos para que las pruebas de middleware no fallen (403).
+        $this->seed(\Database\Seeders\RolesSeeder::class);
     }
 
     /**
-     * Crea un administrador de prueba con el rol 'admin'.
+     * Crea un administrador de prueba con el rol 'Admin'.
      */
     protected function crearAdmin(array $atributos = []): Usuario
     {
-        $this->crearRol('admin');
-
         $admin = Usuario::create(array_merge([
             'nombre' => 'Admin',
             'apellido' => 'Sistema',
@@ -42,9 +43,27 @@ abstract class BaseAdminTest extends TestCase
             'telefono' => '60000000',
         ], $atributos));
 
-        $admin->assignRole('admin');
+        $admin->assignRole('Admin');
 
         return $admin;
+    }
+
+    /**
+     * Crea un super administrador de prueba con el rol 'super_admin' y permisos básicos.
+     */
+    protected function crearSuperAdmin(array $atributos = []): Usuario
+    {
+        $superAdmin = Usuario::create(array_merge([
+            'nombre' => 'Super',
+            'apellido' => 'Admin',
+            'email' => 'superadmin.' . uniqid() . '@example.com',
+            'password_hash' => Hash::make('secret123'),
+            'telefono' => '60000000',
+        ], $atributos));
+
+        $superAdmin->assignRole('super_admin');
+
+        return $superAdmin;
     }
 
     /**
@@ -52,8 +71,6 @@ abstract class BaseAdminTest extends TestCase
      */
     protected function crearCliente(array $atributos = []): Usuario
     {
-        $this->crearRol('cliente');
-
         $cliente = Usuario::create(array_merge([
             'nombre' => 'Cliente',
             'apellido' => 'Prueba',
@@ -69,6 +86,8 @@ abstract class BaseAdminTest extends TestCase
 
     /**
      * Crea el rol indicado en la base de pruebas (como se siembra en producción).
+     * Nota: Ahora se usa primariamente RolesSeeder en setUp(), pero este método
+     * se conserva para tests que necesitan crear roles adicionales.
      */
     protected function crearRol(string $rol): void
     {

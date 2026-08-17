@@ -54,7 +54,7 @@ Route::post('/carrito/aplicar-cupon', [CarritoController::class, 'aplicarCupon']
 Route::post('/carrito/remover-cupon', [CarritoController::class, 'removerCupon'])->name('cliente.carrito.remover-cupon');
 
 // Checkout
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->group(function () {
     Route::get('/checkout/direccion', [CheckoutController::class, 'direccion'])->name('cliente.checkout.direccion');
     Route::get('/checkout/pago', [CheckoutController::class, 'pago'])->name('cliente.checkout.pago');
     Route::post('/checkout/pago', [CheckoutController::class, 'guardarPago'])->name('cliente.checkout.guardar-pago');
@@ -74,7 +74,7 @@ Route::get('/home', function () {
 })->middleware(['auth'])->name('home');
 
 // 3. Perfil del Cliente: Datos, Direcciones, Pedidos
-Route::middleware('auth')->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
+Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Cliente\PerfilController::class, 'edit'])->name('datos');
     Route::put('/perfil', [\App\Http\Controllers\Cliente\PerfilController::class, 'update'])->name('datos.update');
     Route::post('/perfil/foto', [\App\Http\Controllers\Cliente\PerfilController::class, 'updateFoto'])->name('foto.update');
@@ -110,7 +110,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
-Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App\Http\Middleware\CheckAdminPermissions::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
     // Módulo de Categorías
@@ -197,6 +197,25 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin'])->gr
     Route::post('/promociones/producto-del-mes', [PromocionController::class, 'productoDelMesStore'])->name('admin.promociones.producto-del-mes.guardar');
     Route::post('/promociones/producto-del-mes/{id}/toggle', [PromocionController::class, 'productoDelMesToggle'])->name('admin.promociones.producto-del-mes.toggle');
     Route::delete('/promociones/producto-del-mes/{id}', [PromocionController::class, 'productoDelMesDestroy'])->name('admin.promociones.producto-del-mes.eliminar');
+
+    // Módulo de Usuarios, Roles y Permisos (FASE 18)
+    Route::prefix('usuarios')->name('admin.usuarios.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\RolController::class, 'index'])->name('index');
+        
+        // Usuarios por rol
+        Route::get('/roles/{rol}', [\App\Http\Controllers\Admin\UsuarioController::class, 'index'])->name('por-rol');
+        Route::get('/roles/{rol}/crear', [\App\Http\Controllers\Admin\UsuarioController::class, 'create'])->name('create');
+        Route::post('/roles/{rol}', [\App\Http\Controllers\Admin\UsuarioController::class, 'store'])->name('store');
+        
+        // Editar usuario
+        Route::get('/{usuario}/editar', [\App\Http\Controllers\Admin\UsuarioController::class, 'edit'])->name('edit');
+        Route::put('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'update'])->name('update');
+        
+        // Roles (Crear y Permisos)
+        Route::post('/roles', [\App\Http\Controllers\Admin\RolController::class, 'store'])->name('roles.store');
+        Route::get('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'permisos'])->name('roles-permisos');
+        Route::put('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'updatePermisos'])->name('update-permisos');
+    });
 });
 
 // 5. Gestión de Perfil de Usuario

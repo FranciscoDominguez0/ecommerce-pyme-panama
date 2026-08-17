@@ -153,7 +153,14 @@
     <table class="header">
         <tr>
             <td style="width: 50%;">
-                <img src="{{ public_path('images/logo.png') }}" class="logo" alt="PyME Panamá">
+                @php
+                    $logoPath = public_path('images/logo.png');
+                    $logoSrc = $logoPath;
+                    if (file_exists($logoPath)) {
+                        $logoSrc = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+                    }
+                @endphp
+                <img src="{{ $logoSrc }}" class="logo" alt="PyME Panamá">
                 <div class="company-info">
                     <strong>PyME Panamá</strong><br>
                     PH Obarrio 60, Piso 8, Oficina 802<br>
@@ -229,19 +236,24 @@
                             <td style="width: 45px; padding: 0; padding-right: 10px; border: none;">
                                 @php
                                     $img = $item->producto ? $item->producto->imagenPrincipal() : null;
-                                    $imgPath = public_path('images/placeholder-product.png');
+                                    
+                                    // Placeholder by default (Base64)
+                                    $placeholderPath = public_path('images/placeholder-product.png');
+                                    $imgPath = $placeholderPath;
+                                    if (file_exists($placeholderPath)) {
+                                        $imgPath = 'data:image/png;base64,' . base64_encode(file_get_contents($placeholderPath));
+                                    }
+
                                     if ($img && !empty($img->ruta)) {
                                         if (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, 'data:')) {
                                             $imgPath = $img->ruta;
                                         } else {
                                             $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $img->ruta);
-                                            if (file_exists(storage_path('app/public/' . $cleanRoute))) {
-                                                $imgPath = storage_path('app/public/' . $cleanRoute);
+                                            $localPath = storage_path('app/public/' . $cleanRoute);
+                                            if (file_exists($localPath)) {
+                                                $ext = pathinfo($localPath, PATHINFO_EXTENSION);
+                                                $imgPath = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($localPath));
                                             }
-                                        }
-                                        // DomPDF (CPDF) falla al renderizar WebP si PHP no tiene soporte GD para WebP
-                                        if (str_ends_with(strtolower($imgPath), '.webp') && !function_exists('imagecreatefromwebp')) {
-                                            $imgPath = public_path('images/placeholder-product.png');
                                         }
                                     }
                                 @endphp

@@ -23,18 +23,29 @@ class ActualizarContrasenaTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Sembrar roles para que las pruebas de middleware de perfil de cliente funcionen
+        $this->seed(\Database\Seeders\RolesSeeder::class);
+    }
+
     /**
      * Crea un usuario de prueba con una contraseña conocida.
      */
     protected function crearUsuario(array $atributos = []): Usuario
     {
-        return Usuario::create(array_merge([
+        $usuario = Usuario::create(array_merge([
             'nombre' => 'Juan',
             'apellido' => 'Pérez',
             'email' => 'juan.' . uniqid() . '@example.com',
             'password_hash' => Hash::make('secret123'),
             'telefono' => '60000000',
         ], $atributos));
+
+        $usuario->assignRole('cliente');
+
+        return $usuario;
     }
 
     // =====================================================================

@@ -184,12 +184,14 @@
                         Clientes & Finanzas
                     </div>
                     <div class="space-y-0.5">
-                        <!-- Clientes / Usuarios -->
-                        <a href="{{ url('/admin/usuarios') }}" 
+                        @can('admin.usuarios.gestionar')
+                        <!-- Usuarios y Roles -->
+                        <a href="{{ route('admin.usuarios.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/usuarios*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">group</span>
-                            <span class="truncate">Clientes / Usuarios</span>
+                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">admin_panel_settings</span>
+                            <span class="truncate">Usuarios y Roles</span>
                         </a>
+                        @endcan
 
                         <!-- Facturación Fiscal -->
                         <a href="{{ url('/admin/facturas') }}" 

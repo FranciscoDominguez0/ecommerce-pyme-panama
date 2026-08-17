@@ -35,6 +35,9 @@ class RolesSeeder extends Seeder
             // Promociones y cupones
             'admin.cupones.ver',      'admin.cupones.gestionar',
             'admin.promociones.ver',  'admin.promociones.gestionar',
+
+            // Usuarios y Roles
+            'admin.usuarios.gestionar',
         ];
 
         // ── Permisos del cliente (storefront) ────────────────────────────────
