@@ -45,25 +45,26 @@ class FacturaService
                 'emitida_en' => now(),
             ]);
 
-            // La factura debe guardarse y confirmarse en la DB rápidamente.
-            // Para no bloquear la respuesta HTTP, diferimos la generación pesada del PDF y envío de email.
-            defer(function () use ($factura, $numeroFactura) {
-                // Cargar relaciones necesarias para el PDF
-                $factura->load(['pedido.items.producto.imagenes', 'usuario']);
+            // Cargar relaciones necesarias para el PDF
+            $factura->load(['pedido.items.producto.imagenes', 'usuario']);
 
-                // Generar PDF
-                $pdf = Pdf::loadView('admin.facturacion.factura-pdf', [
-                    'factura' => $factura,
-                ]);
+            // Generar PDF
+            $pdf = Pdf::loadView('admin.facturacion.factura-pdf', [
+                'factura' => $factura,
+            ]);
 
-                $pdfRuta = 'facturas/' . $numeroFactura . '.pdf';
-                Storage::disk('public')->put($pdfRuta, $pdf->output());
+            $pdfRuta = 'facturas/' . $numeroFactura . '.pdf';
+            Storage::disk('public')->put($pdfRuta, $pdf->output());
 
-                $factura->update(['pdf_ruta' => $pdfRuta]);
+            $factura->update(['pdf_ruta' => $pdfRuta]);
 
-                // Enviar correo automático
+            // Enviar correo automático
+            try {
                 Mail::to($factura->usuario->email)->send(new FacturaMail($factura));
-            });
+            } catch (Exception $e) {
+                // Registrar el error de correo, pero no revertir la transacción de la factura
+                \Illuminate\Support\Facades\Log::error('Error al enviar factura por correo: ' . $e->getMessage());
+            }
 
             return $factura;
         });
