@@ -113,13 +113,14 @@
                                     <span class="material-symbols-outlined text-[18px]">visibility</span>
                                 </a>
                                 @if($factura->estado === 'emitida')
-                                <form action="{{ route('admin.facturas.reenviar', $factura) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.facturas.reenviar', $factura) }}" method="POST" class="inline" x-data="{ sending: false }" @submit="sending = true">
                                     @csrf
                                     <input type="hidden" name="email_destino" value="{{ $factura->usuario->email }}">
-                                    <button type="submit" class="text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/20 p-2 rounded-md transition-colors inline-flex items-center relative" title="Reenviar">
-                                        <span class="material-symbols-outlined text-[18px]">mail</span>
+                                    <button type="submit" class="text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/20 p-2 rounded-md transition-colors inline-flex items-center relative w-[34px] h-[34px] justify-center" title="Reenviar" :class="{ 'opacity-75 cursor-wait': sending }" :disabled="sending">
+                                        <span x-show="!sending" class="material-symbols-outlined text-[18px]">mail</span>
+                                        <span x-show="sending" style="display: none;" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
                                         @if($factura->reenvios()->count() > 0)
-                                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                                        <span x-show="!sending" class="absolute -top-1 -right-1 flex h-3 w-3">
                                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                                             <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
                                         </span>

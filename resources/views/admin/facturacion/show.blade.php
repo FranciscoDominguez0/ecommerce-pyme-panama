@@ -39,11 +39,13 @@
             </a>
             
             @if($factura->estado === 'emitida')
-                <form action="{{ route('admin.facturas.reenviar', $factura) }}" method="POST">
+                <form action="{{ route('admin.facturas.reenviar', $factura) }}" method="POST" x-data="{ sending: false }" @submit="sending = true">
                     @csrf
                     <input type="hidden" name="email_destino" value="{{ $factura->usuario->email }}">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary border border-transparent rounded-md font-semibold text-xs text-on-primary uppercase tracking-widest hover:bg-primary-container transition">
-                        <span class="material-symbols-outlined text-[16px] mr-1.5">mail</span> Reenviar
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary border border-transparent rounded-md font-semibold text-xs text-on-primary uppercase tracking-widest hover:bg-primary-container transition w-[130px] justify-center" :class="{ 'opacity-75 cursor-wait': sending }" :disabled="sending">
+                        <span x-show="!sending" class="material-symbols-outlined text-[16px] mr-1.5">mail</span>
+                        <span x-show="sending" style="display: none;" class="material-symbols-outlined text-[16px] mr-1.5 animate-spin">sync</span>
+                        <span x-text="sending ? 'Enviando...' : 'Reenviar'">Reenviar</span>
                     </button>
                 </form>
             @endif
