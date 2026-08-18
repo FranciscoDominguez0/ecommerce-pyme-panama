@@ -245,14 +245,24 @@
                                     }
 
                                     if ($img && !empty($img->ruta)) {
-                                        if (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, 'data:')) {
-                                            $imgPath = $img->ruta;
+                                        $isWebp = strtolower(pathinfo($img->ruta, PATHINFO_EXTENSION)) === 'webp';
+                                        
+                                        if ($isWebp && !function_exists('imagecreatefromwebp')) {
+                                            // Fallback to placeholder if server lacks WebP support for DomPDF
+                                            $imgPath = $placeholderPath;
+                                            if (file_exists($placeholderPath)) {
+                                                $imgPath = 'data:image/png;base64,' . base64_encode(file_get_contents($placeholderPath));
+                                            }
                                         } else {
-                                            $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $img->ruta);
-                                            $localPath = storage_path('app/public/' . $cleanRoute);
-                                            if (file_exists($localPath)) {
-                                                $ext = pathinfo($localPath, PATHINFO_EXTENSION);
-                                                $imgPath = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($localPath));
+                                            if (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, 'data:')) {
+                                                $imgPath = $img->ruta;
+                                            } else {
+                                                $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $img->ruta);
+                                                $localPath = storage_path('app/public/' . $cleanRoute);
+                                                if (file_exists($localPath)) {
+                                                    $ext = pathinfo($localPath, PATHINFO_EXTENSION);
+                                                    $imgPath = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($localPath));
+                                                }
                                             }
                                         }
                                     }

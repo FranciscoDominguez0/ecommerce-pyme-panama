@@ -9,11 +9,11 @@
 #############################
 FROM php:8.4-cli-alpine AS vendor
 
-RUN apk add --no-cache git unzip libzip icu-libs libpng libjpeg-turbo freetype \
+RUN apk add --no-cache git unzip libzip icu-libs libpng libjpeg-turbo freetype libwebp \
     && apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS postgresql-dev libzip-dev icu-dev \
-        libpng-dev libjpeg-turbo-dev freetype-dev libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+        libpng-dev libjpeg-turbo-dev freetype-dev libwebp-dev libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j"$(nproc)" gd pdo_pgsql pgsql zip intl \
     && apk del .build-deps
 
@@ -41,11 +41,11 @@ FROM php:8.4-fpm-alpine AS runtime
 
 WORKDIR /var/www/html
 
-RUN apk add --no-cache nginx supervisor postgresql-client libzip icu-libs libpng libjpeg-turbo freetype \
+RUN apk add --no-cache nginx supervisor postgresql-client libzip icu-libs libpng libjpeg-turbo freetype libwebp \
     && apk add --no-cache --virtual .build-deps \
         $PHPIZE_DEPS postgresql-dev libzip-dev icu-dev \
-        libpng-dev libjpeg-turbo-dev freetype-dev libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+        libpng-dev libjpeg-turbo-dev freetype-dev libwebp-dev libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j"$(nproc)" \
         bcmath exif gd intl opcache pcntl pdo_pgsql pgsql zip \
     && apk del .build-deps \
