@@ -102,8 +102,12 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.facturas.pdf', $factura) }}" class="text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/20 p-2 rounded-md transition-colors inline-flex items-center" title="Descargar PDF">
-                                    <span class="material-symbols-outlined text-[18px]">download</span>
+                                <a href="{{ route('admin.facturas.pdf', $factura) }}" 
+                                   x-data="{ downloading: false }" 
+                                   @click="downloading = true; setTimeout(() => downloading = false, 4000)"
+                                   class="text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/20 p-2 rounded-md transition-colors inline-flex items-center w-[34px] h-[34px] justify-center" title="Descargar PDF">
+                                    <span x-show="!downloading" class="material-symbols-outlined text-[18px]">download</span>
+                                    <span x-show="downloading" style="display: none;" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
                                 </a>
                                 <a href="{{ route('admin.facturas.show', $factura) }}" class="text-primary hover:text-primary/80 bg-primary/10 hover:bg-primary/20 p-2 rounded-md transition-colors inline-flex items-center" title="Ver Detalle">
                                     <span class="material-symbols-outlined text-[18px]">visibility</span>

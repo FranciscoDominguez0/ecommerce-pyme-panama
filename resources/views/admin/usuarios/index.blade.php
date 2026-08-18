@@ -4,9 +4,11 @@
 
 @section('content')
 <!-- Page Header -->
-<div class="mb-12">
-    <h2 class="font-display-lg text-[32px] md:text-[48px] font-bold text-on-surface mb-2">Usuarios, Roles y Permisos</h2>
-    <p class="font-body-lg text-lg text-on-surface-variant">Administra los niveles de acceso, usuarios y permisos del sistema</p>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div>
+        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Usuarios, Roles y Permisos</h1>
+        <p class="text-sm text-slate-500 mt-1">Administra los niveles de acceso, usuarios y permisos del sistema.</p>
+    </div>
 </div>
 
 <!-- Section Title -->

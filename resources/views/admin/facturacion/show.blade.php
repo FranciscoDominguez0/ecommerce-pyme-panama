@@ -29,8 +29,13 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
-            <a href="{{ route('admin.facturas.pdf', $factura) }}" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition">
-                <span class="material-symbols-outlined text-[16px] mr-1.5">download</span> Descargar PDF
+            <a href="{{ route('admin.facturas.pdf', $factura) }}" 
+               x-data="{ downloading: false }" 
+               @click="downloading = true; setTimeout(() => downloading = false, 4000)"
+               class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition w-[165px] justify-center">
+                <span x-show="!downloading" class="material-symbols-outlined text-[16px] mr-1.5">download</span>
+                <span x-show="downloading" style="display: none;" class="material-symbols-outlined text-[16px] mr-1.5 animate-spin">sync</span>
+                <span x-text="downloading ? 'Descargando...' : 'Descargar PDF'">Descargar PDF</span>
             </a>
             
             @if($factura->estado === 'emitida')

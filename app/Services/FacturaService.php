@@ -58,13 +58,16 @@ class FacturaService
 
             $factura->update(['pdf_ruta' => $pdfRuta]);
 
-            // Enviar correo automático
-            try {
-                Mail::to($factura->usuario->email)->send(new FacturaMail($factura));
-            } catch (Exception $e) {
-                // Registrar el error de correo, pero no revertir la transacción de la factura
-                \Illuminate\Support\Facades\Log::error('Error al enviar factura por correo: ' . $e->getMessage());
-            }
+            // Enviar correo automático en segundo plano usando defer() de Laravel 11+
+            // Esto asegura que la transacción de BD se haya cerrado y el usuario reciba
+            // respuesta inmediata, evitando que el tiempo de conexión SMTP bloquee el sistema.
+            defer(function () use ($factura) {
+                try {
+                    Mail::to($factura->usuario->email)->send(new FacturaMail($factura));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error('Error al enviar factura por correo (defer): ' . $e->getMessage());
+                }
+            });
 
             return $factura;
         });
