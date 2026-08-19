@@ -216,6 +216,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::get('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'permisos'])->name('roles-permisos');
         Route::put('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'updatePermisos'])->name('update-permisos');
     });
+
+    // Módulo de Auditoría del Sistema
+    Route::get('/auditoria', [\App\Http\Controllers\Admin\AuditoriaController::class, 'index'])->name('admin.auditoria.index');
+    Route::get('/auditoria/{id}', [\App\Http\Controllers\Admin\AuditoriaController::class, 'show'])->name('admin.auditoria.show');
 });
 
 // 5. Gestión de Perfil de Usuario

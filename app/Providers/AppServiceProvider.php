@@ -26,5 +26,15 @@ class AppServiceProvider extends ServiceProvider
         } elseif ($this->app->environment('local')) {
             @ini_set('max_execution_time', '120');
         }
+
+        \App\Models\Usuario::observe(\App\Observers\UsuarioObserver::class);
+        \App\Models\Producto::observe(\App\Observers\ProductoObserver::class);
+        \App\Models\Pedido::observe(\App\Observers\PedidoObserver::class);
+        \App\Models\MovimientoInventario::observe(\App\Observers\MovimientoInventarioObserver::class);
+        \App\Models\VarianteProducto::observe(\App\Observers\VarianteProductoObserver::class);
+        \App\Models\Role::observe(\App\Observers\RoleObserver::class);
+        \App\Models\Permission::observe(\App\Observers\PermissionObserver::class);
+        \App\Models\Brand::observe(\App\Observers\BrandObserver::class);
+        \App\Models\Categoria::observe(\App\Observers\CategoriaObserver::class);
     }
 }
