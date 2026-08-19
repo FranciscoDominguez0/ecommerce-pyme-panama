@@ -217,6 +217,22 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::put('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'updatePermisos'])->name('update-permisos');
     });
 
+    // Módulo de Configuración General
+    Route::prefix('configuracion')->name('admin.configuracion.')->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('admin.configuracion.general');
+        })->name('index');
+        
+        Route::get('/general', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'general'])->name('general');
+        Route::put('/general', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'guardarGeneral'])->name('general.guardar');
+        
+        Route::get('/pagos', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'pagos'])->name('pagos');
+        Route::put('/pagos', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'guardarPagos'])->name('pagos.guardar');
+        
+        Route::get('/impuestos', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'impuestos'])->name('impuestos');
+        Route::put('/impuestos', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'guardarImpuestos'])->name('impuestos.guardar');
+    });
+
     // Módulo de Auditoría del Sistema
     Route::get('/auditoria', [\App\Http\Controllers\Admin\AuditoriaController::class, 'index'])->name('admin.auditoria.index');
     Route::get('/auditoria/{id}', [\App\Http\Controllers\Admin\AuditoriaController::class, 'show'])->name('admin.auditoria.show');

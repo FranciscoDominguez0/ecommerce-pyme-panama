@@ -154,19 +154,26 @@
         <tr>
             <td style="width: 50%;">
                 @php
-                    $logoPath = public_path('images/logo.png');
+                    $rutaLogoConf = \App\Models\Configuracion::obtener('empresa.logo_ruta');
+                    $logoPath = $rutaLogoConf ? storage_path('app/public/' . $rutaLogoConf) : public_path('images/logo.png');
                     $logoSrc = $logoPath;
                     if (file_exists($logoPath)) {
-                        $logoSrc = 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath));
+                        $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
+                        $logoSrc = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($logoPath));
                     }
+
+                    $nombreEmpresa = \App\Models\Configuracion::obtener('empresa.nombre', 'PyME Panamá');
+                    $rucEmpresa = \App\Models\Configuracion::obtener('empresa.ruc', 'No registrado');
+                    $direccionEmpresa = \App\Models\Configuracion::obtener('empresa.direccion', 'Panamá');
+                    $emailEmpresa = \App\Models\Configuracion::obtener('empresa.correo_contacto', 'info@pymepanama.com');
+                    $telefonoEmpresa = \App\Models\Configuracion::obtener('empresa.telefono', '+507 830-4500');
                 @endphp
-                <img src="{{ $logoSrc }}" class="logo" alt="PyME Panamá">
+                <img src="{{ $logoSrc }}" class="logo" alt="{{ $nombreEmpresa }}">
                 <div class="company-info">
-                    <strong>PyME Panamá</strong><br>
-                    PH Obarrio 60, Piso 8, Oficina 802<br>
-                    Bella Vista, Ciudad de Panamá<br>
-                    RUC: 155698745-2-2023 DV 45<br>
-                    info@pymepanama.com | +507 830-4500
+                    <strong>{{ $nombreEmpresa }}</strong><br>
+                    {!! nl2br(e($direccionEmpresa)) !!}<br>
+                    RUC: {{ $rucEmpresa }}<br>
+                    {{ $emailEmpresa }} @if($telefonoEmpresa) | {{ $telefonoEmpresa }} @endif
                 </div>
             </td>
             <td style="width: 50%;" class="invoice-title-container">
@@ -320,7 +327,7 @@
 
     <div class="footer">
         Este documento es una representación impresa de un Comprobante Fiscal Digital.<br>
-        Gracias por su preferencia. | <strong>PyME Panamá</strong>
+        Gracias por su preferencia. | <strong>{{ \App\Models\Configuracion::obtener('empresa.nombre', 'PyME Panamá') }}</strong>
     </div>
 
 </body>

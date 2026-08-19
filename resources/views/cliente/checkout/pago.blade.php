@@ -42,8 +42,9 @@
         <div class="space-y-4">
             
             <!-- Tarjeta de Crédito (Stripe) -->
+            @if (\App\Models\Configuracion::obtenerBool('pagos.stripe.activo', true))
             <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="stripe" class="peer sr-only" checked />
+                <input type="radio" name="metodo_pago" value="stripe" class="peer sr-only" required />
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-4">
@@ -59,10 +60,12 @@
                     </div>
                 </div>
             </label>
+            @endif
 
             <!-- Yappy -->
+            @if (\App\Models\Configuracion::obtenerBool('pagos.yappy.activo', true))
             <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="yappy" class="peer sr-only" />
+                <input type="radio" name="metodo_pago" value="yappy" class="peer sr-only" required />
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-4">
@@ -80,10 +83,12 @@
                     </div>
                 </div>
             </label>
+            @endif
 
             <!-- Transferencia ACH -->
+            @if (\App\Models\Configuracion::obtenerBool('pagos.transferencia.activo', true))
             <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="transferencia" class="peer sr-only" id="radio_transferencia" />
+                <input type="radio" name="metodo_pago" value="transferencia" class="peer sr-only" id="radio_transferencia" required />
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-4">
@@ -117,10 +122,12 @@
                     </div>
                 </div>
             </label>
+            @endif
 
             <!-- Contra Entrega -->
+            @if (\App\Models\Configuracion::obtenerBool('pagos.contra_entrega.activo', true))
             <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="contra_entrega" class="peer sr-only" />
+                <input type="radio" name="metodo_pago" value="contra_entrega" class="peer sr-only" required />
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-4">
@@ -136,6 +143,7 @@
                     </div>
                 </div>
             </label>
+            @endif
 
         </div>
 

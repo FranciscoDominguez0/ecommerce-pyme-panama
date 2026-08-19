@@ -6,7 +6,7 @@
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
     <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #002349;">Factura Generada - PayMe Panamá</h2>
+        <h2 style="color: #002349;">Factura Generada - {{ \App\Models\Configuracion::obtener('empresa.nombre', 'PayMe Panamá') }}</h2>
         
         <p>Hola {{ $factura->usuario->nombre ?? 'Cliente' }},</p>
         
@@ -24,7 +24,7 @@
             <strong>Método de pago:</strong> {{ ucfirst($factura->metodo_pago) }}
         </p>
 
-        <p>Gracias por confiar en PayMe Panamá.</p>
+        <p>Gracias por confiar en {{ \App\Models\Configuracion::obtener('empresa.nombre', 'PayMe Panamá') }}.</p>
         
         <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
         <p style="font-size: 12px; color: #777;">
