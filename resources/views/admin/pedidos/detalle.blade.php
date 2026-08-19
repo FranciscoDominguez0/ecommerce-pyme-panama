@@ -39,10 +39,11 @@
         
         <div class="flex flex-wrap gap-2">
             @if($ultimoEstado === 'pendiente' && in_array($pedido->metodo_pago, ['transferencia']))
-                <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST">
+                <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
                     @csrf
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 focus:outline-none transition">
-                        <span class="material-symbols-outlined text-[16px] mr-1.5">check_circle</span> Aprobar Pago
+                    <button type="submit" :disabled="sub" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 focus:outline-none transition disabled:opacity-75 disabled:cursor-wait">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5" :class="sub ? 'animate-spin' : ''" x-text="sub ? 'progress_activity' : 'check_circle'">check_circle</span>
+                        <span x-text="sub ? 'Procesando...' : 'Aprobar Pago'">Aprobar Pago</span>
                     </button>
                 </form>
                 <button type="button" onclick="document.getElementById('modal-rechazar').classList.remove('hidden')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 focus:outline-none transition">
@@ -51,19 +52,21 @@
             @endif
 
             @if($ultimoEstado === 'pago_confirmado')
-                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST">
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
                     @csrf <input type="hidden" name="accion" value="iniciar_preparacion">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-amber-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-600 transition">
-                        <span class="material-symbols-outlined text-[16px] mr-1.5">inventory_2</span> Iniciar Preparación
+                    <button type="submit" :disabled="sub" class="inline-flex items-center px-4 py-2 bg-amber-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-600 transition disabled:opacity-75 disabled:cursor-wait">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5" :class="sub ? 'animate-spin' : ''" x-text="sub ? 'progress_activity' : 'inventory_2'">inventory_2</span>
+                        <span x-text="sub ? 'Procesando...' : 'Iniciar Preparación'">Iniciar Preparación</span>
                     </button>
                 </form>
             @endif
 
             @if($ultimoEstado === 'en_preparacion')
-                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST">
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
                     @csrf <input type="hidden" name="accion" value="marcar_listo">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition">
-                        <span class="material-symbols-outlined text-[16px] mr-1.5">box</span> Marcar Listo para Envío
+                    <button type="submit" :disabled="sub" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition disabled:opacity-75 disabled:cursor-wait">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5" :class="sub ? 'animate-spin' : ''" x-text="sub ? 'progress_activity' : 'box'">box</span>
+                        <span x-text="sub ? 'Procesando...' : 'Marcar Listo para Envío'">Marcar Listo para Envío</span>
                     </button>
                 </form>
             @endif
@@ -75,10 +78,11 @@
             @endif
 
             @if($ultimoEstado === 'enviado')
-                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST">
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
                     @csrf <input type="hidden" name="accion" value="marcar_transito">
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition">
-                        <span class="material-symbols-outlined text-[16px] mr-1.5">local_shipping</span> Marcar en Tránsito
+                    <button type="submit" :disabled="sub" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition disabled:opacity-75 disabled:cursor-wait">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5" :class="sub ? 'animate-spin' : ''" x-text="sub ? 'progress_activity' : 'local_shipping'">local_shipping</span>
+                        <span x-text="sub ? 'Procesando...' : 'Marcar en Tránsito'">Marcar en Tránsito</span>
                     </button>
                 </form>
             @endif
@@ -93,7 +97,7 @@
             <!-- Actualizar Estado -->
             <div class="card-elevated rounded-xl p-6">
                 <h2 class="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-2">Actualizar Estado</h2>
-                <form action="{{ route('admin.pedidos.estado', $pedido->id) }}" method="POST" class="flex flex-col sm:flex-row gap-4 items-end">
+                <form action="{{ route('admin.pedidos.estado', $pedido->id) }}" method="POST" class="flex flex-col sm:flex-row gap-4 items-end" x-data="{ sub: false }" @submit="sub = true">
                     @csrf
                     <div class="w-full sm:w-1/3">
                         <label for="estado" class="block text-sm font-medium text-slate-700 mb-1">Nuevo Estado</label>
@@ -114,8 +118,9 @@
                         <input type="text" name="comentario" id="comentario" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" placeholder="Ej: Paquete entregado a mensajería">
                     </div>
                     <div class="w-full sm:w-auto">
-                        <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-colors h-10">
-                            Actualizar
+                        <button type="submit" :disabled="sub" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-colors h-10 disabled:opacity-75 disabled:cursor-wait">
+                            <span class="material-symbols-outlined mr-1.5 animate-spin text-[18px]" x-show="sub" style="display: none;">progress_activity</span>
+                            <span x-text="sub ? 'Actualizando...' : 'Actualizar'">Actualizar</span>
                         </button>
                     </div>
                 </form>
@@ -402,9 +407,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm font-sans">
-                            Rechazar Pago
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse" x-data="{ sub: false }" @submit="sub = true">
+                        <button type="submit" :disabled="sub" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm font-sans disabled:opacity-75 disabled:cursor-wait">
+                            <span class="material-symbols-outlined mr-1.5 animate-spin text-[18px]" x-show="sub" style="display: none;">progress_activity</span>
+                            <span x-text="sub ? 'Rechazando...' : 'Rechazar Pago'">Rechazar Pago</span>
                         </button>
                         <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm font-sans">
                             Cancelar

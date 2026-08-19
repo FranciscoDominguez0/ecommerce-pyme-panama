@@ -3,7 +3,7 @@
 @section('title', 'Detalle del Pedido')
 
 @section('content')
-<div class="h-[calc(100vh-160px)] overflow-y-auto bg-surface/50 py-6 md:py-8">
+<div class="min-h-[calc(100vh-160px)] bg-surface/50 py-6 md:py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
     @if(session('pedido_creado_animacion'))
@@ -203,8 +203,8 @@
                 <h2 class="text-sm font-bold text-primary">Artículos del pedido</h2>
                 <div class="space-y-6">
                     @foreach($pedido->items as $item)
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
-                        <div class="w-24 h-24 flex-shrink-0 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container-low">
+                    <div class="flex flex-col sm:flex-row items-start gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container-low">
                             @if($item->producto)
                                 <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="w-full h-full object-cover">
                             @else
@@ -213,24 +213,33 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-sm font-semibold text-on-surface">
-                                {{ $item->producto?->nombre ?? 'Producto no disponible' }}
-                            </h3>
-                            @if($item->variante && $item->variante->opciones->isNotEmpty())
-                                <p class="text-on-surface-variant text-sm mt-1">
-                                    @foreach($item->variante->opciones as $opcion)
-                                        {{ $opcion->tipo->nombre }}: {{ $opcion->valor }}@if(!$loop->last), @endif
-                                    @endforeach
-                                </p>
-                            @endif
-                        </div>
-                        <div class="text-right">
-                            <p class="text-sm font-semibold text-on-surface">${{ number_format($item->precio_unitario, 2) }}</p>
-                            <p class="text-on-surface-variant text-xs mt-1">Cant: {{ $item->cantidad }}</p>
-                        </div>
-                        <div class="sm:w-24 text-right">
-                            <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
+                        
+                        <div class="flex-1 min-w-0 w-full flex flex-col sm:flex-row justify-between gap-4">
+                            <!-- Info Producto -->
+                            <div class="flex-1">
+                                <h3 class="text-sm font-semibold text-on-surface line-clamp-2">
+                                    {{ $item->producto?->nombre ?? 'Producto no disponible' }}
+                                </h3>
+                                @if($item->variante && $item->variante->opciones->isNotEmpty())
+                                    <p class="text-on-surface-variant text-sm mt-1">
+                                        @foreach($item->variante->opciones as $opcion)
+                                            <span class="inline-block mr-2">{{ $opcion->tipo->nombre }}: <span class="font-medium text-on-surface">{{ $opcion->valor }}</span></span>
+                                        @endforeach
+                                    </p>
+                                @endif
+                                
+                                <!-- Precio y Cantidad Mobile -->
+                                <div class="mt-2 sm:hidden flex items-center justify-between">
+                                    <p class="text-on-surface-variant text-sm">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }}</p>
+                                    <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Precio y Cantidad Desktop -->
+                            <div class="hidden sm:flex flex-col items-end gap-1 min-w-[120px]">
+                                <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
+                                <p class="text-on-surface-variant text-xs">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }} c/u</p>
+                            </div>
                         </div>
                     </div>
                     @endforeach

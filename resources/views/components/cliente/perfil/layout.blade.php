@@ -6,19 +6,40 @@
     $usuario = Auth::user();
 @endphp
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <div class="bg-white border border-outline-variant rounded-2xl shadow-sm overflow-clip h-[calc(100vh-140px)] flex flex-col">
-        <div class="md:flex flex-1 overflow-hidden">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+    <div class="bg-white border border-outline-variant rounded-2xl shadow-sm overflow-clip md:h-[calc(100vh-140px)] flex flex-col md:flex-row" x-data="{ mobileMenuOpen: false }">
 
-            {{-- LEFT: Profile + Navigation (persisted across routes) --}}
-            <aside x-persist="mi-cuenta-sidebar" x-data class="md:w-[32%] md:min-w-[260px] md:max-w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-outline-variant/30 p-6 md:p-7 overflow-y-auto h-full">
+        {{-- LEFT: Profile + Navigation (persisted across routes) --}}
+        <aside x-persist="mi-cuenta-sidebar" class="w-full md:w-[32%] md:min-w-[260px] md:max-w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-outline-variant/30 md:p-7 overflow-y-auto md:h-full bg-surface-container-lowest md:bg-transparent">
+            
+            {{-- Mobile Toggle --}}
+            <div class="md:hidden flex items-center justify-between p-4 cursor-pointer hover:bg-surface-container-low transition-colors" @click="mobileMenuOpen = !mobileMenuOpen">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-low flex items-center justify-center">
+                        @if($usuario->foto_perfil_url)
+                            <img src="{{ $usuario->foto_perfil_url }}" alt="{{ $usuario->nombre_completo }}" class="w-full h-full object-cover">
+                        @else
+                            <span class="text-sm font-bold text-on-surface-variant">{{ $usuario->iniciales }}</span>
+                        @endif
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-primary leading-tight">{{ $usuario->nombre_completo }}</h2>
+                        <p class="text-[11px] text-outline font-medium mt-0.5">Opciones de mi cuenta</p>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-outline transition-transform duration-300" :class="mobileMenuOpen ? 'rotate-180' : ''">expand_more</span>
+            </div>
+
+            {{-- Collapsible Content --}}
+            <div class="p-6 pt-2 md:p-0 md:block" x-show="mobileMenuOpen" x-transition.opacity style="display: none;" class="md:!block">
+                
                 <a href="{{ route('dashboard') }}" wire:navigate
-                    class="inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
+                    class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
                     <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                     Volver al Dashboard
                 </a>
 
-                <div class="flex flex-col items-center text-center mt-5">
+                <div class="hidden md:flex flex-col items-center text-center mt-5">
                     <div class="relative inline-flex group cursor-pointer mb-4" id="photo-wrapper" data-has-foto="{{ $usuario->foto_perfil_url ? '1' : '0' }}">
                         <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-outline-variant bg-surface-container-low flex items-center justify-center">
                             @if($usuario->foto_perfil_url)
@@ -44,7 +65,7 @@
                     <h2 class="text-sm font-bold text-primary">{{ $usuario->nombre_completo }}</h2>
                 </div>
 
-                <nav class="mt-4 pt-4 border-t border-outline-variant/30 space-y-1">
+                <nav class="md:mt-4 md:pt-4 md:border-t border-outline-variant/30 space-y-1">
                     <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate wire:current.exact="sidebar-nav-active"
                         class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">package_2</span>
@@ -304,12 +325,12 @@
                         }
                     })();
                 </script>
-            </aside>
-
-            {{-- RIGHT: Dynamic Content --}}
-            <div class="flex-1 min-w-0 p-6 md:p-8 overflow-y-auto h-full relative">
-                {{ $slot }}
             </div>
+        </aside>
+
+        {{-- RIGHT: Dynamic Content --}}
+        <div class="flex-1 min-w-0 p-4 md:p-8 overflow-y-auto md:h-full relative">
+            {{ $slot }}
         </div>
     </div>
 </div>
