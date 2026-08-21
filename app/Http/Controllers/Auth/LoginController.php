@@ -8,6 +8,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TwoFactorCodeMail;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -51,7 +54,32 @@ class LoginController extends Controller
             ])->onlyInput('email');
         }
 
-        // Iniciar sesión con soporte para "Recordarme"
+        // Si el usuario tiene 2FA habilitado, interceptamos el login
+        if ($usuario->two_fa_habilitado) {
+            // Generar código numérico de 4 dígitos
+            $code = str_pad((string)random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+            
+            // Guardar en caché por 10 minutos
+            Cache::put('2fa_code_' . $usuario->id, $code, now()->addMinutes(10));
+            
+            // Guardar datos en la sesión temporalmente
+            session([
+                '2fa:user:id' => $usuario->id,
+                '2fa:remember' => $request->boolean('remember')
+            ]);
+            
+            // Enviar correo
+            try {
+                Mail::to($usuario->email)->send(new TwoFactorCodeMail($code, $usuario->nombre));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Error al enviar correo de 2FA: ' . $e->getMessage());
+            }
+            
+            // Redirigir a la pantalla de verificación
+            return redirect()->route('2fa.challenge');
+        }
+
+        // Iniciar sesión con soporte para "Recordarme" (Flujo normal sin 2FA)
         $sesionPreviaId = $request->session()->getId();
         Auth::login($usuario, $request->boolean('remember'));
 

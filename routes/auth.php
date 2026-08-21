@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,14 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])
         ->name('login');
     Route::post('login', [LoginController::class, 'login']);
+
+    // 2FA Challenge
+    Route::get('2fa-challenge', [TwoFactorController::class, 'showChallenge'])
+        ->name('2fa.challenge');
+    Route::post('2fa-challenge', [TwoFactorController::class, 'verify'])
+        ->name('2fa.verify');
+    Route::post('2fa-challenge/resend', [TwoFactorController::class, 'resend'])
+        ->name('2fa.resend');
 
     // Recuperación de Contraseña
     Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])

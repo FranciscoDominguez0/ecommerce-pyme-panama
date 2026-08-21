@@ -42,7 +42,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-3.5" id="login-form">
+            <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-3.5" id="login-form" x-data="{ isSubmitting: false }" @submit="isSubmitting = true">
                 @csrf
 
                 <!-- Email Field -->
@@ -113,10 +113,21 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button class="w-full mt-1.5 bg-primary-container hover:bg-primary-container/90 active:scale-[0.99] text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow-sm hover:shadow transition-all flex justify-center items-center gap-1.5 group"
-                        type="submit">
-                    <span>Entrar a mi cuenta</span>
-                    <span class="material-symbols-outlined text-base group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                <button class="w-full mt-1.5 bg-primary-container hover:bg-primary-container/90 active:scale-[0.99] disabled:opacity-75 disabled:cursor-wait text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow-sm hover:shadow transition-all flex justify-center items-center gap-1.5 group"
+                        type="submit"
+                        :disabled="isSubmitting">
+                    
+                    <!-- Estado Normal -->
+                    <span x-show="!isSubmitting" class="flex items-center gap-1.5">
+                        <span>Entrar a mi cuenta</span>
+                        <span class="material-symbols-outlined text-base group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                    </span>
+
+                    <!-- Estado Cargando -->
+                    <span x-show="isSubmitting" class="flex items-center gap-1.5" style="display: none;">
+                        <span class="material-symbols-outlined text-base animate-spin">progress_activity</span>
+                        <span>Verificando...</span>
+                    </span>
                 </button>
             </form>
 
