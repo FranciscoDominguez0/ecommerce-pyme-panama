@@ -59,8 +59,8 @@ class ActualizarContrasenaTest extends TestCase
         $this->actingAs($usuario)
             ->get('/mi-cuenta/password')
             ->assertOk()
-            ->assertSee('Cambiar Contraseña')
-            ->assertSee('Actualiza la contraseña de tu cuenta.');
+            ->assertSee('Seguridad de la Cuenta')
+            ->assertSee('Administra tu contraseña y la autenticación de dos factores.');
     }
 
     public function test_la_vista_de_cambio_de_contrasena_tiene_los_tres_campos(): void
