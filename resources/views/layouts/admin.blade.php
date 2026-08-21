@@ -306,20 +306,67 @@
 
                 <div class="h-4 w-px bg-slate-200 shrink-0"></div>
 
-                <!-- User Profile Badge -->
-                <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-                    @if(Auth::user() && Auth::user()->foto_perfil_ruta)
-                        <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover shadow-xs ring-2 ring-slate-100 shrink-0">
-                    @else
-                        <div class="w-8 h-8 rounded-full bg-[#09111e] text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-slate-100 shrink-0">
-                            {{ strtoupper(substr(Auth::user()->nombre ?? 'A', 0, 1)) }}
+                <!-- User Profile Badge + Dropdown -->
+                <div class="relative shrink-0" x-data="{ open: false }" @click.outside="open = false">
+
+                    {{-- Trigger: Avatar + Nombre --}}
+                    <button @click="open = !open"
+                            class="flex items-center gap-2 sm:gap-2.5 rounded-xl px-2 py-1.5 hover:bg-slate-100 transition-colors cursor-pointer select-none"
+                            :aria-expanded="open">
+
+                        @if(Auth::user() && Auth::user()->foto_perfil_ruta)
+                            <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}"
+                                 alt="Foto de perfil"
+                                 class="w-8 h-8 rounded-full object-cover shadow-xs ring-2 ring-slate-100 shrink-0">
+                        @else
+                            <div class="w-8 h-8 rounded-full bg-[#09111e] text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-slate-100 shrink-0">
+                                {{ strtoupper(substr(Auth::user()->nombre ?? 'A', 0, 1)) }}
+                            </div>
+                        @endif
+
+                        <div class="hidden sm:flex flex-col text-left">
+                            <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px] md:max-w-none">
+                                {{ Auth::user()->nombre_completo ?? Auth::user()->nombre ?? 'Administrador' }}
+                            </span>
+                            <span class="text-[10px] font-semibold text-emerald-700 leading-tight">
+                                {{ (Auth::user() && Auth::user()->hasRole('super_admin')) ? 'Super Administrador' : 'Administrador' }}
+                            </span>
                         </div>
-                    @endif
-                    <div class="hidden sm:flex flex-col text-left">
-                        <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px] md:max-w-none">{{ Auth::user()->nombre_completo ?? Auth::user()->nombre ?? 'Administrador' }}</span>
-                        <span class="text-[10px] font-semibold text-emerald-700 leading-tight">
-                            {{ (Auth::user() && Auth::user()->hasRole('super_admin')) ? 'Super Administrador' : 'Administrador' }}
-                        </span>
+
+                        <span class="material-symbols-outlined text-[16px] text-slate-400 hidden sm:inline transition-transform duration-200"
+                              :class="open ? 'rotate-180' : ''">expand_more</span>
+                    </button>
+
+                    {{-- Dropdown Panel --}}
+                    <div x-show="open"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                         style="display:none;"
+                         class="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-50 origin-top-right">
+
+                        {{-- Perfil --}}
+                        <a href="{{ route('admin.perfil') }}"
+                           class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-700 transition-colors">
+                            <span class="material-symbols-outlined text-[18px] text-slate-400">manage_accounts</span>
+                            Perfil
+                        </a>
+
+                        <div class="my-1 h-px bg-slate-100 mx-3"></div>
+
+                        {{-- Cerrar sesión --}}
+                        <form method="POST" action="{{ route('logout') }}" id="admin-logout-form">
+                            @csrf
+                            <button type="submit"
+                                    class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors">
+                                <span class="material-symbols-outlined text-[18px] text-rose-400">logout</span>
+                                Cerrar sesión
+                            </button>
+                        </form>
+
                     </div>
                 </div>
             </div>

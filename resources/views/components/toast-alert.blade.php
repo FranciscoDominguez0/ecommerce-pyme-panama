@@ -14,13 +14,7 @@
             $toasts[] = ['tipo' => 'error', 'mensaje' => session('toast_error')];
         }
 
-        if (isset($errors) && $errors->any()) {
-            foreach ($errors->all() as $err) {
-                if (session('error') !== $err) {
-                    $toasts[] = ['tipo' => 'error', 'mensaje' => $err];
-                }
-            }
-        }
+
 
         if (session('warning')) {
             $toasts[] = ['tipo' => 'warning', 'mensaje' => session('warning')];

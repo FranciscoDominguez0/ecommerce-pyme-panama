@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PedidoController as AdminPedidoController;
 use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\PromocionController;
 use App\Http\Controllers\Admin\ZonaEnvioController;
+use App\Http\Controllers\Admin\PerfilController;
 use App\Http\Controllers\Admin\FacturaController as AdminFacturaController;
 use App\Http\Controllers\Cliente\FacturaController as ClienteFacturaController;
 use App\Http\Controllers\Cliente\CarritoController;
@@ -112,6 +113,15 @@ Route::get('/dashboard', function () {
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App\Http\Middleware\CheckAdminPermissions::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Módulo de Perfil Administrativo
+    Route::prefix('perfil')->name('admin.perfil')->group(function () {
+        Route::get('/', [PerfilController::class, 'index']);
+        Route::put('/datos', [PerfilController::class, 'actualizarDatos'])->name('.datos.update');
+        Route::post('/foto', [PerfilController::class, 'actualizarFoto'])->name('.foto.update');
+        Route::put('/password', [PerfilController::class, 'actualizarPassword'])->name('.password.update');
+        Route::put('/2fa', [PerfilController::class, 'actualizarDosFactores'])->name('.2fa.update');
+    });
 
     // Módulo de Categorías
     Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');

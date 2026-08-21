@@ -24,6 +24,7 @@ class Usuario extends Authenticatable
         'telefono',
         'foto_perfil_ruta',
         'fecha_nacimiento',
+        'two_fa_habilitado',
     ];
 
     protected $casts = [
