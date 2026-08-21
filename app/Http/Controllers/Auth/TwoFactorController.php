@@ -150,4 +150,18 @@ class TwoFactorController extends Controller
 
         return back()->with('toast_success', 'Se ha enviado un nuevo código a tu correo.');
     }
+
+    /**
+     * Cancela el inicio de sesión y limpia la sesión temporal de 2FA.
+     */
+    public function cancel(Request $request)
+    {
+        $userId = session('2fa:user:id');
+        if ($userId) {
+            Cache::forget('2fa_code_' . $userId);
+            session()->forget('2fa:user:id');
+        }
+
+        return redirect()->route('login');
+    }
 }

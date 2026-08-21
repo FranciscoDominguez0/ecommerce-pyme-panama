@@ -80,6 +80,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->
     Route::put('/perfil', [\App\Http\Controllers\Cliente\PerfilController::class, 'update'])->name('datos.update');
     Route::post('/perfil/foto', [\App\Http\Controllers\Cliente\PerfilController::class, 'updateFoto'])->name('foto.update');
     Route::put('/password', [\App\Http\Controllers\Cliente\PerfilController::class, 'updatePassword'])->name('password.update');
+    Route::put('/2fa', [\App\Http\Controllers\Cliente\PerfilController::class, 'actualizarDosFactores'])->name('2fa.update');
 
     Route::get('/password', function () {
         return view('cliente.perfil.password');

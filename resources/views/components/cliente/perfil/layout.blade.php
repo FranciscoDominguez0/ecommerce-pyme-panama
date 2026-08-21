@@ -31,7 +31,7 @@
             </div>
 
             {{-- Collapsible Content --}}
-            <div class="p-6 pt-2 md:p-0 md:block" x-show="mobileMenuOpen" x-transition.opacity style="display: none;" class="md:!block">
+            <div class="p-6 pt-2 md:p-0 md:!block" x-show="mobileMenuOpen" x-transition.opacity style="display: none;">
                 
                 <a href="{{ route('dashboard') }}" wire:navigate
                     class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
@@ -88,8 +88,8 @@
                         class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">lock</span>
                         <div class="text-left min-w-0">
-                            <p class="text-sm font-medium">Cambiar Contraseña</p>
-                            <p class="text-[11px] text-outline leading-tight">Seguridad de la cuenta</p>
+                            <p class="text-sm font-medium">Seguridad</p>
+                            <p class="text-[11px] text-outline leading-tight">Contraseña y 2FA</p>
                         </div>
                     </a>
 

@@ -6,8 +6,8 @@
 <x-cliente.perfil.layout active="password">
     <div class="flex items-center justify-between mb-4">
         <div>
-            <h3 class="text-base font-bold text-primary">Cambiar Contraseña</h3>
-            <p class="text-xs text-on-surface-variant mt-0.5">Actualiza la contraseña de tu cuenta.</p>
+            <h3 class="text-base font-bold text-primary">Seguridad de la Cuenta</h3>
+            <p class="text-xs text-on-surface-variant mt-0.5">Administra tu contraseña y la autenticación de dos factores.</p>
         </div>
     </div>
 
@@ -50,9 +50,39 @@
             <button type="submit"
                 class="px-6 py-2.5 rounded-lg bg-primary text-on-primary text-xs font-bold uppercase tracking-wider hover:bg-primary-container transition-colors shadow-sm flex items-center gap-2">
                 <span class="material-symbols-outlined text-[16px]">lock</span>
-                Guardar cambios
+                Actualizar Contraseña
             </button>
         </div>
     </form>
+
+    <!-- Sección de Autenticación de 2 Factores (2FA) -->
+    <div class="mt-10 border-t border-outline-variant/20 pt-8 mb-4">
+        <h3 class="text-base font-bold text-primary flex items-center gap-2 mb-1.5">
+            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            Autenticación de 2 Factores (2FA)
+        </h3>
+        <p class="text-sm text-on-surface-variant mb-6 max-w-2xl">Protege tu cuenta requiriendo un código adicional de seguridad cada vez que inicies sesión.</p>
+
+        <form action="{{ route('cliente.perfil.2fa.update') }}" method="POST" class="bg-surface-container-lowest border border-outline-variant/40 rounded-xl p-5 shadow-sm inline-block">
+            @csrf
+            @method('PUT')
+            <div class="flex items-center gap-5">
+                <div>
+                    <p class="text-sm font-semibold text-primary mb-1">Estado actual: 
+                        @if(auth()->user()->two_fa_habilitado)
+                            <span class="text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded text-xs font-bold border border-emerald-200">Activado</span>
+                        @else
+                            <span class="text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded text-xs font-bold border border-slate-200">Desactivado</span>
+                        @endif
+                    </p>
+                    <p class="text-xs text-on-surface-variant">Si lo activas, te enviaremos un correo con un código PIN de 4 dígitos al iniciar sesión.</p>
+                </div>
+                <input type="hidden" name="two_fa_habilitado" value="{{ auth()->user()->two_fa_habilitado ? '0' : '1' }}">
+                <button type="submit" class="px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider shadow-sm transition-colors border {{ auth()->user()->two_fa_habilitado ? 'bg-white border-error text-error hover:bg-error/5' : 'bg-primary text-on-primary border-primary hover:bg-primary-container' }}">
+                    {{ auth()->user()->two_fa_habilitado ? 'Desactivar 2FA' : 'Activar 2FA' }}
+                </button>
+            </div>
+        </form>
+    </div>
 </x-cliente.perfil.layout>
 @endsection

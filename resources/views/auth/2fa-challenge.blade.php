@@ -49,22 +49,22 @@
                         
                         <!-- Input 1 -->
                         <input type="text" x-ref="input0" inputmode="numeric" maxlength="1" required
-                               class="w-12 h-16 sm:w-16 sm:h-20 text-center text-3xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
+                               class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
                                @input="handleInput(0, $event)" @keydown.backspace="handleBackspace(0, $event)" @paste="handlePaste($event)">
                                
                         <!-- Input 2 -->
                         <input type="text" x-ref="input1" inputmode="numeric" maxlength="1" required
-                               class="w-12 h-16 sm:w-16 sm:h-20 text-center text-3xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
+                               class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
                                @input="handleInput(1, $event)" @keydown.backspace="handleBackspace(1, $event)" @paste="handlePaste($event)">
                                
                         <!-- Input 3 -->
                         <input type="text" x-ref="input2" inputmode="numeric" maxlength="1" required
-                               class="w-12 h-16 sm:w-16 sm:h-20 text-center text-3xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
+                               class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
                                @input="handleInput(2, $event)" @keydown.backspace="handleBackspace(2, $event)" @paste="handlePaste($event)">
                                
                         <!-- Input 4 -->
                         <input type="text" x-ref="input3" inputmode="numeric" maxlength="1" required
-                               class="w-12 h-16 sm:w-16 sm:h-20 text-center text-3xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
+                               class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
                                @input="handleInput(3, $event)" @keydown.backspace="handleBackspace(3, $event)" @paste="handlePaste($event)">
                     </div>
                     @error('code')
@@ -105,10 +105,13 @@
             </div>
             
             <div class="mt-4 text-center">
-                <a href="{{ route('login') }}" class="text-xs text-gray-500 hover:text-gray-700 transition-colors flex items-center justify-center gap-1">
-                    <span class="material-symbols-outlined text-[14px]">arrow_back</span>
-                    Volver al inicio de sesión
-                </a>
+                <form method="POST" action="{{ route('2fa.cancel') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="text-xs text-gray-500 hover:text-gray-700 transition-colors flex items-center justify-center gap-1 w-full focus:outline-none">
+                        <span class="material-symbols-outlined text-[14px]">arrow_back</span>
+                        Volver al inicio de sesión
+                    </button>
+                </form>
             </div>
         </div>
 

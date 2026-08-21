@@ -132,4 +132,25 @@ class PerfilController extends Controller
 
         return redirect()->route('cliente.perfil.datos')->with('toast_success', 'Contraseña actualizada correctamente.');
     }
+
+    /**
+     * Habilita o deshabilita la Autenticación de Dos Factores (2FA).
+     */
+    public function actualizarDosFactores(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'two_fa_habilitado' => 'boolean'
+        ]);
+
+        $usuario = Auth::user();
+        $habilitar = $request->boolean('two_fa_habilitado');
+        
+        $usuario->update([
+            'two_fa_habilitado' => $habilitar
+        ]);
+
+        $accion = $habilitar ? 'activado' : 'desactivado';
+
+        return back()->with('toast_success', "Autenticación de dos factores {$accion} correctamente.");
+    }
 }

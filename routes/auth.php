@@ -30,6 +30,8 @@ Route::middleware('guest')->group(function () {
         ->name('2fa.verify');
     Route::post('2fa-challenge/resend', [TwoFactorController::class, 'resend'])
         ->name('2fa.resend');
+    Route::post('2fa-challenge/cancel', [TwoFactorController::class, 'cancel'])
+        ->name('2fa.cancel');
 
     // Recuperación de Contraseña
     Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
