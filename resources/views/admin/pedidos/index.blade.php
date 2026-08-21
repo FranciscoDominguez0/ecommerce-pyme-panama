@@ -28,8 +28,22 @@
                     <option value="devolucion_solicitada" {{ request('estado') === 'devolucion_solicitada' ? 'selected' : '' }}>Devolución Solicitada</option>
                 </select>
             </div>
-            @if(request('estado') && request('estado') !== 'todos')
+            <div class="w-full sm:w-64">
+                <label for="q" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Buscar</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
+                    </span>
+                    <input type="text" name="q" id="q" value="{{ request('q') }}" placeholder="N° Pedido o Cliente" class="block w-full rounded-md border-slate-300 py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                </div>
+            </div>
             <div class="flex items-end">
+                <button type="submit" class="bg-slate-900 text-white rounded-md px-4 py-2 text-sm font-medium hover:bg-slate-800 transition-colors h-[38px]">
+                    Buscar
+                </button>
+            </div>
+            @if((request('estado') && request('estado') !== 'todos') || request('q'))
+            <div class="flex items-end mb-1">
                 <a href="{{ route('admin.pedidos.index') }}" class="inline-flex items-center text-sm text-slate-500 hover:text-slate-700">
                     <span class="material-symbols-outlined text-[18px] mr-1">close</span> Limpiar
                 </a>

@@ -257,6 +257,19 @@
 
             confirm.addEventListener('input', checkPasswordsMatch);
             pwd.addEventListener('input', checkPasswordsMatch);
+
+            // Loading state on form submit
+            const form = document.getElementById('register-form');
+            const btn = document.getElementById('submit-register-btn');
+            
+            form.addEventListener('submit', function() {
+                // Only show loading if form is valid (HTML5 validation passed)
+                if (form.checkValidity()) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-80', 'cursor-not-allowed');
+                    btn.innerHTML = '<span class="inline-block animate-spin material-symbols-outlined text-[18px]">progress_activity</span> <span>Creando cuenta e iniciando sesión...</span>';
+                }
+            });
         });
     </script>
 </x-guest-layout>

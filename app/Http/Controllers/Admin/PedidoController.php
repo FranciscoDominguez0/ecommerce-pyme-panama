@@ -33,7 +33,18 @@ class PedidoController extends Controller
             });
         }
 
-        $pedidos = $query->orderByDesc('creado_en')->paginate(15);
+        if ($request->filled('q')) {
+            $busqueda = $request->q;
+            $query->where(function ($q) use ($busqueda) {
+                $q->where('numero_pedido', 'ilike', "%{$busqueda}%")
+                  ->orWhereHas('usuario', function ($uq) use ($busqueda) {
+                      $uq->where('nombre', 'ilike', "%{$busqueda}%")
+                         ->orWhere('apellido', 'ilike', "%{$busqueda}%");
+                  });
+            });
+        }
+
+        $pedidos = $query->orderByDesc('creado_en')->paginate(15)->withQueryString();
 
         return view('admin.pedidos.index', compact('pedidos'));
     }
