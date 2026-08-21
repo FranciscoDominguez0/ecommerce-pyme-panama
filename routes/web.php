@@ -228,6 +228,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         // Editar usuario
         Route::get('/{usuario}/editar', [\App\Http\Controllers\Admin\UsuarioController::class, 'edit'])->name('edit');
         Route::put('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'update'])->name('update');
+        Route::delete('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'destroy'])->name('destroy');
         
         // Roles (Crear y Permisos)
         Route::post('/roles', [\App\Http\Controllers\Admin\RolController::class, 'store'])->name('roles.store');

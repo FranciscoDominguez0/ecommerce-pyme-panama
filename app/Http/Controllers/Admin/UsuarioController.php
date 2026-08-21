@@ -129,4 +129,27 @@ class UsuarioController extends Controller
         return redirect()->route('admin.usuarios.por-rol', $rolAsignar->id)
                          ->with('toast_success', 'Usuario actualizado correctamente.');
     }
+
+    /**
+     * Elimina un usuario.
+     */
+    public function destroy(Usuario $usuario)
+    {
+        // Protección: No permitir que el usuario logueado se elimine a sí mismo
+        if ($usuario->id === auth()->id()) {
+            return back()->with('toast_error', 'No puedes eliminar tu propia cuenta.');
+        }
+
+        // Protección: No dejar eliminar a un Superadmin a menos que sea Superadmin
+        if ($usuario->hasRole('super_admin') && !auth()->user()->hasRole('super_admin')) {
+            return back()->with('toast_error', 'No tienes permiso para eliminar un Super Administrador.');
+        }
+
+        try {
+            $usuario->delete();
+            return back()->with('toast_success', 'Usuario eliminado correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('toast_error', 'No se pudo eliminar el usuario porque tiene registros asociados.');
+        }
+    }
 }

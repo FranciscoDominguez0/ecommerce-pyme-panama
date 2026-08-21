@@ -122,6 +122,14 @@
                                     <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-slate-900 hover:bg-slate-100 p-1.5 rounded transition-colors" title="Editar">
                                         <span class="material-symbols-outlined text-[20px]">edit</span>
                                     </a>
+                                    @if($user->id !== auth()->id())
+                                    <button type="button" 
+                                            onclick="window.ModalEliminar.abrir('{{ route('admin.usuarios.destroy', $user->id) }}', 'al usuario {{ addslashes($user->nombre_completo) }}')"
+                                            class="text-rose-400 hover:text-rose-600 hover:bg-rose-50 p-1.5 rounded transition-colors" 
+                                            title="Eliminar">
+                                        <span class="material-symbols-outlined text-[20px]">delete</span>
+                                    </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
