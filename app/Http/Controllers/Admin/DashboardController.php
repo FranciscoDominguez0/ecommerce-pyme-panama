@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Factura;
 use App\Models\LogAuditoria;
 use App\Models\Pedido;
 use App\Models\Producto;
@@ -20,7 +21,7 @@ class DashboardController extends Controller
     public function index(Request $request): View
     {
         // 1. Totales Principales y Métricas Financieras
-        $ventasTotales = (float) (Pedido::sum('total') ?: 0);
+        $ventasTotales = (float) (Factura::where('estado', 'emitida')->sum('total') ?: 0);
         $totalPedidos = Pedido::count();
         $ticketPromedio = $totalPedidos > 0 ? ($ventasTotales / $totalPedidos) : 0;
 
@@ -58,7 +59,7 @@ class DashboardController extends Controller
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
             $mesesLabels[] = $mes->locale('es')->isoFormat('MMM');
-            $ventasMes = Pedido::whereBetween('creado_en', [
+            $ventasMes = Factura::where('estado', 'emitida')->whereBetween('emitida_en', [
                 $mes->copy()->startOfMonth(),
                 $mes->copy()->endOfMonth(),
             ])->sum('total') ?: 0;

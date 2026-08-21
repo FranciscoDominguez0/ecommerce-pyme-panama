@@ -115,6 +115,13 @@ Route::get('/dashboard', function () {
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App\Http\Middleware\CheckAdminPermissions::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+    // Módulo de Reportes y Estadísticas
+    Route::prefix('reportes')->name('admin.reportes.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('index');
+        Route::get('/exportar-excel', [\App\Http\Controllers\Admin\ReporteController::class, 'exportarExcel'])->name('exportar-excel');
+        Route::get('/exportar-pdf', [\App\Http\Controllers\Admin\ReporteController::class, 'exportarPdf'])->name('exportar-pdf');
+    });
+
     // Módulo de Perfil Administrativo
     Route::prefix('perfil')->name('admin.perfil')->group(function () {
         Route::get('/', [PerfilController::class, 'index']);
