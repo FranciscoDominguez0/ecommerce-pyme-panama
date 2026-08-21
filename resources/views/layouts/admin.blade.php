@@ -56,6 +56,34 @@
                 --sidebar-offset: 256px;
             }
         }
+
+    </style>
+
+
+    <!-- Prevención de Parpadeo (FOUC) para el Sidebar -->
+    <script>
+        if (localStorage.getItem('sidebarExpanded') === 'false') {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
+    </script>
+    <style>
+        :root {
+            --sidebar-width: 256px;
+        }
+        html.sidebar-collapsed {
+            --sidebar-width: 64px;
+        }
+        @media (min-width: 768px) {
+            #admin-sidebar { width: var(--sidebar-width) !important; }
+            #main-content { margin-left: var(--sidebar-width) !important; }
+        }
+        /* Collapsible Sidebar Styles */
+        html.sidebar-collapsed #admin-sidebar .sidebar-text { display: none; }
+        html.sidebar-collapsed #admin-sidebar .sidebar-group-title { display: none; }
+        html.sidebar-collapsed #admin-sidebar .brand-text { display: none; }
+        html.sidebar-collapsed #admin-sidebar a { justify-content: center; padding-left: 0; padding-right: 0; }
+        html.sidebar-collapsed #admin-sidebar .sidebar-header { justify-content: center; padding-left: 0; padding-right: 0; }
+        html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
     </style>
 
     @stack('styles')
@@ -66,18 +94,18 @@
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
 
     <!-- Sidebar Admin (Fondo #1F2937, Bordes #E5E7EB/20) -->
-    <aside id="admin-sidebar" class="fixed left-0 top-0 h-full w-64 bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out border-r border-gray-700/60 shadow-2xl flex flex-col justify-between select-none">
+    <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out border-r border-gray-700/60 shadow-2xl flex flex-col justify-between select-none">
         
         <!-- Header & Navigation -->
         <div class="flex flex-col flex-1 min-h-0">
             
             <!-- Brand Logo Header -->
-            <div class="px-5 py-4 border-b border-gray-700/60 flex items-center justify-between bg-black/20 shrink-0">
+            <div class="sidebar-header px-5 py-4 border-b border-gray-700/60 flex items-center justify-between bg-black/20 shrink-0 transition-all duration-300">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                    <div class="w-9 h-9 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-md border border-slate-700/40 group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                    <div class="brand-logo-container w-9 h-9 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-md border border-slate-700/40 group-hover:scale-105 transition-all shrink-0 overflow-hidden">
                         <x-application-logo size="sm" />
                     </div>
-                    <div>
+                    <div class="brand-text transition-all duration-300">
                         <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">
                             PayMe <span class="text-[#059669] font-bold">Panamá</span>
                         </h1>
@@ -94,7 +122,7 @@
                 
                 <!-- Grupo 1: General -->
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                    <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         General
                     </div>
                     <div class="space-y-0.5">
@@ -102,28 +130,28 @@
                         <a href="{{ route('admin.dashboard') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
-                            <span class="truncate">Dashboard</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Dashboard</span>
                         </a>
 
                         <!-- Pedidos & Ventas -->
                         <a href="{{ url('/admin/pedidos') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
-                            <span class="truncate">Pedidos & Ventas</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Pedidos & Ventas</span>
                         </a>
 
                         <!-- Devoluciones -->
                         <a href="{{ route('admin.devoluciones.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.devoluciones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">assignment_return</span>
-                            <span class="truncate">Devoluciones</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Devoluciones</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Grupo 2: Catálogo & Stock -->
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                    <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         Catálogo & Stock
                     </div>
                     <div class="space-y-0.5">
@@ -131,56 +159,56 @@
                         <a href="{{ route('admin.productos.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.productos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.productos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">sell</span>
-                            <span class="truncate">Productos</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Productos</span>
                         </a>
 
                         <!-- Categorías -->
                         <a href="{{ route('admin.categorias.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.categorias*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.categorias*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">category</span>
-                            <span class="truncate">Categorías</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Categorías</span>
                         </a>
 
                         <!-- Marcas -->
                         <a href="{{ route('admin.brands.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.brands*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.brands*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">verified</span>
-                            <span class="truncate">Marcas & Logos</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Marcas & Logos</span>
                         </a>
 
                         <!-- Inventario -->
                         <a href="{{ url('/admin/inventario') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/inventario*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/inventario*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">warehouse</span>
-                            <span class="truncate">Inventario</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Inventario</span>
                         </a>
 
                         <!-- Zonas de Envío -->
                         <a href="{{ route('admin.zonas-envio.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.zonas-envio*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.zonas-envio*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_shipping</span>
-                            <span class="truncate">Zonas de Envío</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Zonas de Envío</span>
                         </a>
 
                         <!-- Cupones de Descuento -->
                         <a href="{{ route('admin.promociones.cupones') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.cupones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.promociones.cupones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_offer</span>
-                            <span class="truncate">Cupones de Descuento</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Cupones de Descuento</span>
                         </a>
 
                         <!-- Promociones Especiales -->
                         <a href="{{ route('admin.promociones.envio-gratis') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">campaign</span>
-                            <span class="truncate">Promociones Especiales</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Promociones Especiales</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Grupo 3: Clientes & Facturación -->
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                    <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         Clientes & Finanzas
                     </div>
                     <div class="space-y-0.5">
@@ -189,7 +217,7 @@
                         <a href="{{ route('admin.usuarios.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/usuarios*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">admin_panel_settings</span>
-                            <span class="truncate">Usuarios y Roles</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Usuarios y Roles</span>
                         </a>
                         @endcan
 
@@ -197,21 +225,21 @@
                         <a href="{{ url('/admin/facturas') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/facturas*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/facturas*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">receipt_long</span>
-                            <span class="truncate">Facturación Fiscal</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Facturación Fiscal</span>
                         </a>
 
                         <!-- Reportes -->
                         <a href="{{ url('/admin/reportes') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/reportes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/reportes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">bar_chart</span>
-                            <span class="truncate">Reportes</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Reportes</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Grupo 4: Sistema & Auditoría -->
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3">
+                    <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         Sistema & Seguridad
                     </div>
                     <div class="space-y-0.5">
@@ -219,14 +247,14 @@
                         <a href="{{ url('/admin/auditoria') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/auditoria*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/auditoria*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">security</span>
-                            <span class="truncate">Auditoría</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Auditoría</span>
                         </a>
 
                         <!-- Configuración -->
                         <a href="{{ url('/admin/configuracion') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->is('admin/configuracion*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/configuracion*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">settings</span>
-                            <span class="truncate">Configuración</span>
+                            <span class="sidebar-text truncate transition-all duration-300">Configuración</span>
                         </a>
                     </div>
                 </div>
@@ -243,7 +271,7 @@
                 <button type="submit" 
                         class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-300/90 hover:text-rose-200 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all group">
                     <span class="material-symbols-outlined text-[17px] text-rose-400 group-hover:-translate-x-0.5 transition-transform">logout</span>
-                    <span>Cerrar Sesión</span>
+                    <span class="sidebar-text transition-all duration-300">Cerrar Sesión</span>
                 </button>
             </form>
 
@@ -251,7 +279,7 @@
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 md:ml-64 flex flex-col min-h-screen min-w-0 w-full max-w-full">
+    <div id="main-content" class="md:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full transition-all duration-300 ease-in-out">
         
         <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
         <header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
@@ -261,6 +289,11 @@
                 <!-- Hamburger Button (Mobile) -->
                 <button onclick="toggleSidebar()" class="md:hidden p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Abrir menú">
                     <span class="material-symbols-outlined text-[22px]">menu</span>
+                </button>
+                
+                <!-- Desktop Sidebar Toggle -->
+                <button onclick="toggleDesktopSidebar()" class="hidden md:block p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Alternar menú lateral">
+                    <span class="material-symbols-outlined text-[22px]" id="desktop-sidebar-icon">menu</span>
                 </button>
 
                 <!-- Breadcrumbs de Navegación (Ultra-Responsive para celular) -->
@@ -393,6 +426,26 @@
             sidebar.classList.toggle('-translate-x-full');
             backdrop.classList.toggle('hidden');
         }
+
+        function toggleDesktopSidebar() {
+            const html = document.documentElement;
+            html.classList.toggle('sidebar-collapsed');
+            const isCollapsed = html.classList.contains('sidebar-collapsed');
+            localStorage.setItem('sidebarExpanded', !isCollapsed);
+            document.getElementById('desktop-sidebar-icon').textContent = isCollapsed ? 'menu' : 'menu_open';
+        }
+
+        // Initialize desktop icon
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.documentElement.classList.contains('sidebar-collapsed')) {
+                const icon = document.getElementById('desktop-sidebar-icon');
+                if (icon) icon.textContent = 'menu';
+            } else {
+                const icon = document.getElementById('desktop-sidebar-icon');
+                if (icon) icon.textContent = 'menu_open';
+            }
+        });
+
 
         // Mantener la posición del scroll del sidebar entre recargas de página
         document.addEventListener("DOMContentLoaded", function() {
