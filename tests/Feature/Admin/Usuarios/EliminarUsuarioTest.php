@@ -21,7 +21,7 @@ class EliminarUsuarioTest extends BaseAdminTest
             ->delete(route('admin.usuarios.destroy', $cliente->id));
 
         $response->assertRedirect();
-        $response->assertSessionHas('toast_success', 'Usuario eliminado correctamente.');
+        $response->assertSessionHas('toast_success', 'Usuario y todos sus registros eliminados permanentemente.');
         $this->assertDatabaseMissing('usuarios', ['id' => $cliente->id]);
     }
 
@@ -59,7 +59,7 @@ class EliminarUsuarioTest extends BaseAdminTest
             ->delete(route('admin.usuarios.destroy', $superAdmin2->id));
 
         $response->assertRedirect();
-        $response->assertSessionHas('toast_success', 'Usuario eliminado correctamente.');
+        $response->assertSessionHas('toast_success', 'Usuario y todos sus registros eliminados permanentemente.');
         $this->assertDatabaseMissing('usuarios', ['id' => $superAdmin2->id]);
     }
 }

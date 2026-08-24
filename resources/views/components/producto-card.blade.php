@@ -121,8 +121,8 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.exito) {
-                        if (typeof window.abrirCarritoDrawer === 'function') {
-                            window.abrirCarritoDrawer();
+                        if (window.Livewire) {
+                            Livewire.dispatch('carrito-actualizado');
                         }
                         if (window.mostrarToast) {
                             window.mostrarToast('success', data.mensaje);

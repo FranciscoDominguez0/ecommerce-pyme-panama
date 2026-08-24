@@ -245,8 +245,21 @@
     </div>
 
     <!-- Main Content -->
-    <main class="flex-1">
-        @yield('content')
+    <main class="flex-1 relative">
+        @php
+            $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login');
+        @endphp
+        
+        <!-- Esqueleto de Carga (Solo post-login) -->
+        @if($isFromLogin)
+            <div id="global-cliente-skeleton" class="absolute inset-0 z-[60] bg-[#F8F9FF] transition-opacity duration-300">
+                <x-cliente-skeleton :fullScreen="false" />
+            </div>
+        @endif
+
+        <div id="actual-page-content" class="w-full transition-opacity duration-300 {{ $isFromLogin ? 'opacity-0' : 'opacity-100' }}">
+            @yield('content')
+        </div>
     </main>
 
     <!-- Floating WhatsApp Button -->
@@ -374,6 +387,22 @@
                     window.mostrarToast(data.tipo || 'info', data.mensaje || '');
                 }
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const skeleton = document.getElementById('global-cliente-skeleton');
+            const actualContent = document.getElementById('actual-page-content');
+            
+            if (skeleton && actualContent) {
+                setTimeout(() => {
+                    skeleton.style.opacity = '0';
+                    actualContent.classList.remove('opacity-0');
+                    actualContent.classList.add('opacity-100');
+                    setTimeout(() => {
+                        skeleton.classList.add('hidden');
+                    }, 300);
+                }, 800);
+            }
         });
     </script>
     @stack('scripts')

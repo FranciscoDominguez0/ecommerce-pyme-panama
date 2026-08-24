@@ -589,20 +589,10 @@ class CarritoService
      */
     protected function obtenerPrecioUnitario(Producto $producto, ?VarianteProducto $variante = null): float
     {
-        if ($variante && $variante->precio !== null && (float) $variante->precio > 0) {
-            return (float) $variante->precio;
+        if ($variante) {
+            return $variante->precioFinalPromocional();
         }
 
-        if ($producto->oferta_activa && $producto->precio_oferta !== null) {
-            $ahora = now();
-            $inicioValido = !$producto->oferta_inicio_en || $ahora->gte($producto->oferta_inicio_en);
-            $finValido = !$producto->oferta_fin_en || $ahora->lte($producto->oferta_fin_en);
-
-            if ($inicioValido && $finValido) {
-                return (float) $producto->precio_oferta;
-            }
-        }
-
-        return (float) $producto->precio;
+        return $producto->precioFinalPromocional();
     }
 }

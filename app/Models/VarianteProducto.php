@@ -54,4 +54,19 @@ class VarianteProducto extends Model
             'opcion_variante_id'
         );
     }
+
+    /**
+     * Retorna el precio promocional de la variante aplicando el porcentaje de descuento del producto.
+     */
+    public function precioFinalPromocional(): float
+    {
+        $precioBase = $this->precio > 0 ? (float) $this->precio : (float) $this->producto->precio;
+        $descuentoPct = $this->producto->porcentajeDescuentoPromocional();
+
+        if ($descuentoPct > 0) {
+            return max(0.0, round($precioBase - (($precioBase * $descuentoPct) / 100), 2));
+        }
+
+        return $precioBase;
+    }
 }

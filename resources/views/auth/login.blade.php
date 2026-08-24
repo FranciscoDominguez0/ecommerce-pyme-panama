@@ -42,7 +42,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-3.5" id="login-form" x-data="{ isSubmitting: false }" @submit="isSubmitting = true">
+            <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-3.5" id="login-form" x-data="{ isSubmitting: false }" @submit.prevent="isSubmitting = true; submitLogin($event, () => isSubmitting = false)">
                 @csrf
 
                 <!-- Email Field -->
@@ -152,8 +152,15 @@
         <x-secure-badge />
     </main>
 
-    <!-- Skeleton Transition Overlay -->
-    <x-admin-skeleton :fullScreen="true" />
+    <!-- Skeletons Transition Overlays (ocultos por defecto) -->
+    <div id="skeleton-container" class="hidden">
+        <div id="admin-skeleton-wrapper" class="hidden">
+            <x-admin-skeleton :fullScreen="true" />
+        </div>
+        <div id="cliente-skeleton-wrapper" class="hidden">
+            <x-cliente-skeleton :fullScreen="true" />
+        </div>
+    </div>
 
     <script>
         function togglePassword() {
@@ -169,35 +176,74 @@
             }
         }
 
-        // Interceptor de transición de Login a Skeleton
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginForm = document.getElementById('login-form');
-            if (loginForm) {
-                loginForm.addEventListener('submit', (e) => {
-                    setTimeout(() => {
-                        // Ocultar login y mostrar esqueleto de la aplicación
-                        const mainContent = document.querySelector('main.fade-in-up');
-                        const skeleton = document.getElementById('global-admin-skeleton');
-                        const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
-                        
-                        if (mainContent && skeleton) {
-                            mainContent.classList.add('hidden');
-                            if (bgGradients) bgGradients.classList.add('hidden');
-                            skeleton.classList.remove('hidden');
-                        }
-                    }, 200);
+        async function submitLogin(e, resetLoading) {
+            const form = e.target;
+            const errorAlert = document.getElementById('error-alert');
+            
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
                 });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Ocultar login form
+                    const mainContent = document.querySelector('main.fade-in-up');
+                    const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
+                    const skeletonContainer = document.getElementById('skeleton-container');
+                    
+                    if (mainContent) mainContent.classList.add('hidden');
+                    if (bgGradients) bgGradients.classList.add('hidden');
+                    if (skeletonContainer) skeletonContainer.classList.remove('hidden');
+
+                    if (data.isAdmin) {
+                        document.getElementById('admin-skeleton-wrapper').classList.remove('hidden');
+                    } else {
+                        document.getElementById('cliente-skeleton-wrapper').classList.remove('hidden');
+                    }
+                    
+                    // Retardo visual corto antes de navegar
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 100);
+
+                } else if (response.status === 422) {
+                    const data = await response.json();
+                    resetLoading();
+                    
+                    if (errorAlert) {
+                        errorAlert.classList.remove('hidden');
+                        errorAlert.querySelector('p.opacity-95').textContent = data.message || 'Las credenciales proporcionadas no son válidas.';
+                    } else {
+                        window.location.reload();
+                    }
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (error) {
+                resetLoading();
+                window.location.reload();
             }
-        });
-        
+        }
+
         // BFCache fix
         window.addEventListener('pageshow', (event) => {
             const mainContent = document.querySelector('main.fade-in-up');
-            const skeleton = document.getElementById('global-admin-skeleton');
+            const skeletonContainer = document.getElementById('skeleton-container');
             const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
             
-            if (mainContent && skeleton) {
-                skeleton.classList.add('hidden');
+            if (mainContent && skeletonContainer) {
+                skeletonContainer.classList.add('hidden');
+                document.getElementById('admin-skeleton-wrapper').classList.add('hidden');
+                document.getElementById('cliente-skeleton-wrapper').classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 if (bgGradients) bgGradients.classList.remove('hidden');
             }

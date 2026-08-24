@@ -69,8 +69,15 @@ Route::post('/lista-deseos/agregar/{productoId}', [ListaDeseosController::class,
 Route::post('/lista-deseos/mover-al-carrito/{productoId}', [ListaDeseosController::class, 'moverAlCarrito'])->name('cliente.lista-deseos.mover-al-carrito');
 Route::delete('/lista-deseos/eliminar/{productoId}', [ListaDeseosController::class, 'eliminar'])->name('cliente.lista-deseos.eliminar');
 
-// 2. Ruta /home para clientes autenticados (Redirección directa a dashboard)
+// 2. Ruta /home para clientes autenticados (Redirección dinámica)
 Route::get('/home', function () {
+    $user = auth()->user();
+    if ($user) {
+        $isCustomer = $user->hasRole('cliente') || $user->roles->isEmpty();
+        if (!$isCustomer) {
+            return redirect()->route('admin.dashboard');
+        }
+    }
     return redirect()->route('dashboard');
 })->middleware(['auth'])->name('home');
 

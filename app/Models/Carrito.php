@@ -51,7 +51,7 @@ class Carrito extends Model
      */
     public function items(): HasMany
     {
-        return $this->hasMany(ItemCarrito::class, 'carrito_id');
+        return $this->hasMany(ItemCarrito::class, 'carrito_id')->orderBy('id', 'asc');
     }
 
     /**

@@ -133,6 +133,17 @@
 </head>
 <body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
     
+    @php
+        $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login');
+    @endphp
+
+    <!-- Esqueleto Global de Carga (Cubre toda la pantalla) -->
+    @if($isFromLogin)
+        <div id="global-admin-skeleton-wrapper" class="fixed inset-0 z-[9999] bg-[#F8FAFC] transition-opacity duration-300">
+            <x-admin-skeleton :fullScreen="true" />
+        </div>
+    @endif
+
     <!-- Barra de progreso superior -->
     <div id="top-progress-bar"></div>
 
@@ -436,18 +447,11 @@
         <!-- Main Body / Canvas -->
         <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto relative">
             @php
-                $isFromLogin = str_contains(request()->headers->get('referer', ''), '/login');
+                $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login');
             @endphp
             
-            <!-- Esqueleto de Carga (Solo post-login) -->
-            @if($isFromLogin)
-                <div id="global-admin-skeleton" class="w-full h-full transition-opacity duration-300">
-                    <x-admin-skeleton />
-                </div>
-            @endif
-            
             <!-- Contenido Real -->
-            <div id="actual-page-content" class="w-full h-full transition-all duration-300 {{ $isFromLogin ? 'hidden' : 'animate-fade-in-up' }}">
+            <div id="actual-page-content" class="w-full h-full transition-all duration-300 {{ $isFromLogin ? 'opacity-0' : 'animate-fade-in-up' }}">
                 @yield('content')
             </div>
         </main>
@@ -571,19 +575,21 @@
             });
 
             // Lógica para quitar el skeleton de Login si está presente
-            const skeleton = document.getElementById('global-admin-skeleton');
+            const skeleton = document.getElementById('global-admin-skeleton-wrapper');
             const actualContent = document.getElementById('actual-page-content');
             
             if (skeleton && !skeleton.classList.contains('hidden')) {
                 // Simular un tiempo de carga post-login para mostrar el efecto premium
                 setTimeout(() => {
+                    if (actualContent) {
+                        actualContent.classList.remove('opacity-0');
+                        actualContent.classList.add('opacity-100');
+                    }
                     skeleton.style.opacity = '0';
                     setTimeout(() => {
                         skeleton.classList.add('hidden');
                         if (actualContent) {
-                            actualContent.classList.remove('hidden');
                             actualContent.classList.add('animate-fade-in-up');
-                            // Limpiar containing block luego del fade-in del login
                             setTimeout(() => actualContent.classList.remove('animate-fade-in-up'), 400);
                         }
                     }, 300); // 300ms debe coincidir con transition-opacity

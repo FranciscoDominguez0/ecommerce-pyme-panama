@@ -226,12 +226,19 @@
                                 @foreach($producto->variantes as $v)
                                     @php
                                         $opcionesTexto = $v->opciones->map(fn($o) => $o->valor)->join(' / ');
+                                        $vPrecioBase = $v->precio > 0 ? $v->precio : $producto->precio;
+                                        $vPrecioFinal = $v->precioFinalPromocional();
                                     @endphp
                                     <button type="button" 
-                                            onclick="seleccionarVariante('{{ $v->precio }}', '{{ $v->stock }}', this, {{ $v->id }})" 
+                                            onclick="seleccionarVariante('{{ $vPrecioFinal }}', '{{ $v->stock }}', this, {{ $v->id }})" 
                                             class="p-3 rounded-xl border border-slate-200 hover:border-emerald-500 text-left transition-all btn-variante {{ $loop->first ? 'border-emerald-500 bg-emerald-50/30' : 'bg-white' }}">
                                         <div class="text-xs font-bold text-slate-900">{{ $opcionesTexto ?: $v->sku }}</div>
-                                        <div class="text-[11px] text-emerald-700 font-semibold mt-0.5">${{ number_format($v->precio, 2) }}</div>
+                                        <div class="text-[11px] font-semibold mt-0.5">
+                                            @if($vPrecioBase > $vPrecioFinal)
+                                                <span class="text-slate-400 line-through mr-1">${{ number_format($vPrecioBase, 2) }}</span>
+                                            @endif
+                                            <span class="text-emerald-700">${{ number_format($vPrecioFinal, 2) }}</span>
+                                        </div>
                                     </button>
                                 @endforeach
                             </div>
@@ -705,8 +712,8 @@
                     window.location.href = "{{ route('cliente.carrito') }}";
                     return;
                 }
-                if (typeof window.abrirCarritoDrawer === 'function') {
-                    window.abrirCarritoDrawer();
+                if (window.Livewire) {
+                    Livewire.dispatch('carrito-actualizado');
                 }
                 if (window.mostrarToast) {
                     window.mostrarToast('success', data.mensaje);

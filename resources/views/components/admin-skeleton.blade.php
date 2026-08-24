@@ -34,7 +34,7 @@
 </style>
 
 @if($fullScreen)
-<div id="global-admin-skeleton" class="hidden fixed inset-0 z-[100] bg-[#F8FAFC] flex transition-opacity duration-300">
+<div class="fixed inset-0 z-[100] bg-[#F8FAFC] flex transition-opacity duration-300 w-full h-full">
     <!-- Fake Sidebar -->
     <div class="hidden md:flex w-64 bg-[#1F2937] h-full shrink-0 flex-col border-r border-gray-700/60 shadow-2xl relative overflow-hidden">
         <div class="h-16 border-b border-gray-700/60 w-full flex items-center px-5">
@@ -62,13 +62,13 @@
             </div>
         </div>
         <!-- Main Content Skeleton -->
-        <div class="flex-1 px-4 sm:px-8 py-6 w-full max-w-[1500px] mx-auto flex flex-col gap-6 w-full">
+        <div class="flex-1 px-4 sm:px-8 py-6 w-full max-w-[1500px] mx-auto flex flex-col gap-6">
             @include('components.partials.skeleton-content')
         </div>
     </div>
 </div>
 @else
-<div id="global-admin-skeleton" class="hidden w-full h-full flex flex-col gap-6 transition-opacity duration-300 pt-2">
+<div class="w-full h-full flex flex-col gap-6 transition-opacity duration-300 pt-2">
     @include('components.partials.skeleton-content')
 </div>
 @endif
