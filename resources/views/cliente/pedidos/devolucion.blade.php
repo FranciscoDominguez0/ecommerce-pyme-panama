@@ -2,7 +2,7 @@
 @section('title', 'Solicitar Devolución')
 
 @section('content')
-<x-cliente.perfil.layout active="pedidos">
+<div class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
     <!-- Encabezado -->
     <div class="mb-6">
         <a href="{{ route('cliente.perfil.pedidos.detalle', $pedido->id) }}" class="inline-flex items-center gap-2 text-on-surface hover:text-primary transition-colors mb-4">
@@ -149,7 +149,7 @@
             </div>
         </div>
     </div>
-</x-cliente.perfil.layout>
+</div>
 
 <script>
     function previewImage(input) {

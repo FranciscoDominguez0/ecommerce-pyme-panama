@@ -6,8 +6,11 @@ use App\Models\Devolucion;
 use App\Models\MovimientoInventario;
 use App\Models\Producto;
 use App\Models\VarianteProducto;
-use Exception;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\StockMinimoNotification;
+use Exception;
 
 class InventarioService
 {
@@ -167,7 +170,7 @@ class InventarioService
 
             $stockDespues = $stockAntes - $cantidad;
 
-            return MovimientoInventario::create([
+            $movimiento = MovimientoInventario::create([
                 'producto_id'          => $producto->id,
                 'variante_producto_id' => $variante?->id,
                 'usuario_id'           => $usuarioId,
@@ -179,6 +182,15 @@ class InventarioService
                 'motivo'               => $motivo,
                 'notas'                => $notas,
             ]);
+
+            // Notificar stock mínimo si aplica
+            $stockMinimo = $producto->stock_minimo ?? 0;
+            if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
+                $admins = Usuario::role('super_admin')->get();
+                Notification::send($admins, new StockMinimoNotification($producto, $variante));
+            }
+
+            return $movimiento;
         });
     }
 
@@ -213,7 +225,7 @@ class InventarioService
 
             $diferencia = $nuevoStock - $stockAntes;
 
-            return MovimientoInventario::create([
+            $movimiento = MovimientoInventario::create([
                 'producto_id'          => $producto->id,
                 'variante_producto_id' => $variante?->id,
                 'usuario_id'           => $usuarioId,
@@ -225,6 +237,15 @@ class InventarioService
                 'motivo'               => $motivo,
                 'notas'                => $notas,
             ]);
+
+            // Notificar stock mínimo si aplica (solo si disminuyó y cruzó el umbral)
+            $stockMinimo = $producto->stock_minimo ?? 0;
+            if ($stockAntes > $stockMinimo && $nuevoStock <= $stockMinimo) {
+                $admins = Usuario::role('super_admin')->get();
+                Notification::send($admins, new StockMinimoNotification($producto, $variante));
+            }
+
+            return $movimiento;
         });
     }
 

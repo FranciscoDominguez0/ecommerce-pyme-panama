@@ -7,6 +7,9 @@ use App\Models\Devolucion;
 use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NuevaDevolucionNotification;
 
 class DevolucionController extends Controller
 {
@@ -51,7 +54,7 @@ class DevolucionController extends Controller
             $fotoRuta = $request->file('foto_evidencia')->store('devoluciones', 'public');
         }
 
-        Devolucion::create([
+        $devolucion = Devolucion::create([
             'pedido_id' => $pedido->id,
             'usuario_id' => Auth::id(),
             'motivo' => $request->motivo,
@@ -59,6 +62,10 @@ class DevolucionController extends Controller
             'foto_evidencia_ruta' => $fotoRuta,
             'estado' => 'pendiente',
         ]);
+
+        // Enviar notificación a los administradores
+        $admins = Usuario::role('super_admin')->get();
+        Notification::send($admins, new NuevaDevolucionNotification($devolucion));
 
         return redirect()->route('cliente.perfil.pedidos.detalle', $pedido->id)
             ->with('toast_success', 'Solicitud de devolución enviada correctamente.');

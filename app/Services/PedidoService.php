@@ -8,7 +8,13 @@ use App\Models\EstadoPedido;
 use App\Models\ItemPedido;
 use App\Models\Pedido;
 use App\Models\ZonaEnvio;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NuevoPedidoNotification;
+use App\Notifications\StockMinimoNotification;
+use App\Mail\PedidoEntregadoMail;
+use Illuminate\Support\Facades\Mail;
 use Exception;
 
 class PedidoService
@@ -147,6 +153,14 @@ class PedidoService
                     'notas' => null,
                     'creado_en' => now(),
                 ]);
+
+                // Notificar stock mínimo si aplica
+                $stockDespues = $stockAntes - $item->cantidad;
+                $stockMinimo = $item->producto->stock_minimo ?? 0;
+                if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
+                    $admins = Usuario::role('super_admin')->get();
+                    Notification::send($admins, new StockMinimoNotification($item->producto, $item->variante));
+                }
             }
 
             // 5. Crear estado inicial
@@ -158,6 +172,10 @@ class PedidoService
                 'cupon_id' => null,
                 'descuento_aplicado' => 0.00,
             ]);
+
+            // 7. Enviar notificaciones a los administradores
+            $admins = Usuario::role('super_admin')->get();
+            Notification::send($admins, new NuevoPedidoNotification($pedido));
 
             return $pedido;
         });
@@ -183,6 +201,11 @@ class PedidoService
         // Regla de negocio: Anular factura cuando el pedido se cancela
         if ($nuevoEstado === 'cancelado') {
             app(FacturaService::class)->anularFactura($pedido);
+        }
+
+        // Regla de negocio: Enviar email cuando el pedido es entregado
+        if ($nuevoEstado === 'entregado') {
+            Mail::to($pedido->usuario->email)->send(new PedidoEntregadoMail($pedido));
         }
 
         return $estado;

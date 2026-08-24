@@ -370,11 +370,8 @@
                     <span class="absolute right-2.5 text-[10px] font-mono font-bold text-slate-400 bg-white px-1.5 py-0.5 rounded border border-slate-200 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
                 </form>
 
-                <!-- Notifications -->
-                <button class="relative p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0" title="Notificaciones">
-                    <span class="material-symbols-outlined text-[18px]">notifications</span>
-                    <span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                </button>
+                <!-- Notifications Livewire Component -->
+                <livewire:admin.notificaciones-bell />
 
                 <div class="h-4 w-px bg-slate-200 shrink-0"></div>
 

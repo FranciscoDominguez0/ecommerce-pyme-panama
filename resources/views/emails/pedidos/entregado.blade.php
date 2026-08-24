@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Restablecer Contraseña - PayMe Panamá</title>
+    <title>Pedido Entregado</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; color: #1e293b; }
         .wrapper { width: 100%; table-layout: fixed; background-color: #f1f5f9; padding-bottom: 60px; }
@@ -13,7 +13,6 @@
         h1 { margin: 0 0 20px 0; font-size: 24px; color: #0f172a; font-weight: 700; }
         p { margin: 0 0 20px 0; font-size: 16px; line-height: 1.6; color: #475569; }
         .button { background-color: #00875a; color: #ffffff !important; text-decoration: none; padding: 14px 30px; border-radius: 6px; display: inline-block; font-weight: bold; font-size: 16px; margin-top: 10px; box-shadow: 0 2px 4px rgba(0, 135, 90, 0.3); }
-        .notice { font-size: 13px; color: #64748b; margin-top: 25px; }
         .footer { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; }
     </style>
 </head>
@@ -31,10 +30,9 @@
             </tr>
             <tr>
                 <td class="content">
-                    <h1>Recuperar Contraseña</h1>
-                    <p>Hola <strong>{{ $usuario->nombre ?? 'usuario' }}</strong>, solicitaste restablecer tu contraseña.</p>
-                    <a href="{{ $resetUrl }}" class="button">Cambiar Contraseña</a>
-                    <p class="notice">Este enlace expira en 60 minutos. Si no fuiste tú, puedes ignorar este correo.</p>
+                    <h1>¡Tu pedido ha sido entregado!</h1>
+                    <p>Hola <strong>{{ $pedido->usuario->nombre }}</strong>, nos alegra informarte que el pedido <strong>#{{ $pedido->numero_pedido }}</strong> ya está en tus manos.</p>
+                    <a href="{{ route('cliente.perfil.pedidos.detalle', $pedido->id) }}" class="button">Ver detalles del pedido</a>
                 </td>
             </tr>
             <tr>
