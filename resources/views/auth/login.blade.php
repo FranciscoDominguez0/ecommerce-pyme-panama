@@ -152,6 +152,9 @@
         <x-secure-badge />
     </main>
 
+    <!-- Skeleton Transition Overlay -->
+    <x-admin-skeleton :fullScreen="true" />
+
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
@@ -165,5 +168,39 @@
                 visibilityIcon.textContent = 'visibility_off';
             }
         }
+
+        // Interceptor de transición de Login a Skeleton
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    setTimeout(() => {
+                        // Ocultar login y mostrar esqueleto de la aplicación
+                        const mainContent = document.querySelector('main.fade-in-up');
+                        const skeleton = document.getElementById('global-admin-skeleton');
+                        const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
+                        
+                        if (mainContent && skeleton) {
+                            mainContent.classList.add('hidden');
+                            if (bgGradients) bgGradients.classList.add('hidden');
+                            skeleton.classList.remove('hidden');
+                        }
+                    }, 200);
+                });
+            }
+        });
+        
+        // BFCache fix
+        window.addEventListener('pageshow', (event) => {
+            const mainContent = document.querySelector('main.fade-in-up');
+            const skeleton = document.getElementById('global-admin-skeleton');
+            const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
+            
+            if (mainContent && skeleton) {
+                skeleton.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                if (bgGradients) bgGradients.classList.remove('hidden');
+            }
+        });
     </script>
 </x-guest-layout>

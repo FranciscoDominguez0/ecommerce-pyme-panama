@@ -287,37 +287,9 @@
             </div>
 
             {{-- Pagination --}}
-            @if($movimientos->hasPages())
-                <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/40 flex items-center justify-between">
-                    <span class="text-xs text-slate-500">
-                        Mostrando {{ $movimientos->firstItem() }}–{{ $movimientos->lastItem() }} de {{ $movimientos->total() }} movimientos
-                    </span>
-                    <div class="flex items-center gap-1">
-                        @if($movimientos->onFirstPage())
-                            <span class="p-1.5 rounded-lg text-slate-300 cursor-default">
-                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
-                            </span>
-                        @else
-                            <a href="{{ $movimientos->previousPageUrl() }}" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-200 transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">chevron_left</span>
-                            </a>
-                        @endif
-                        @foreach($movimientos->getUrlRange(1, $movimientos->lastPage()) as $page => $url)
-                            <a href="{{ $url }}"
-                               class="w-7 h-7 rounded-lg text-[11px] font-bold flex items-center justify-center transition-colors {{ $page === $movimientos->currentPage() ? 'bg-slate-900 text-white' : 'text-slate-500 hover:bg-slate-100' }}">
-                                {{ $page }}
-                            </a>
-                        @endforeach
-                        @if($movimientos->hasMorePages())
-                            <a href="{{ $movimientos->nextPageUrl() }}" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-200 transition-colors">
-                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
-                            </a>
-                        @else
-                            <span class="p-1.5 rounded-lg text-slate-300 cursor-default">
-                                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
-                            </span>
-                        @endif
-                    </div>
+            @if($movimientos->total() > 0)
+                <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40">
+                    {{ $movimientos->links('vendor.pagination.admin-tailwind') }}
                 </div>
             @endif
         </div>
@@ -498,28 +470,21 @@
             </div>
 
             {{-- Pagination --}}
-            @if($productos->hasPages() || $variantes->hasPages())
-                <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/40 text-xs text-slate-500">
-                    <div class="flex items-center justify-between gap-4 flex-wrap">
-                        <span>
-                            Productos: {{ $productos->total() }} ·
-                            Variantes: {{ $variantes->total() }}
-                        </span>
-                        <div class="flex flex-wrap gap-2">
-                            @if($productos->hasPages())
-                                <div class="flex items-center gap-1">
-                                    <span class="text-slate-400">Pág. prod.:</span>
-                                    {{ $productos->links() }}
-                                </div>
-                            @endif
-                            @if($variantes->hasPages())
-                                <div class="flex items-center gap-1">
-                                    <span class="text-slate-400">Pág. var.:</span>
-                                    {{ $variantes->links() }}
-                                </div>
-                            @endif
+            @if($productos->total() > 0 || $variantes->total() > 0)
+                <div class="flex flex-col border-t border-slate-100 bg-slate-50/40 divide-y divide-slate-100">
+                    @if($productos->total() > 0)
+                        <div class="px-6 py-4">
+                            <div class="text-xs text-slate-500 font-bold mb-2">Paginación de Productos (Sin Variantes)</div>
+                            {{ $productos->links('vendor.pagination.admin-tailwind') }}
                         </div>
-                    </div>
+                    @endif
+                    
+                    @if($variantes->total() > 0)
+                        <div class="px-6 py-4">
+                            <div class="text-xs text-slate-500 font-bold mb-2">Paginación de Variantes</div>
+                            {{ $variantes->links('vendor.pagination.admin-tailwind') }}
+                        </div>
+                    @endif
                 </div>
             @endif
         </div>

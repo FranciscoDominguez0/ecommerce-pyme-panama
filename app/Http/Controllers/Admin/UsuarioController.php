@@ -146,10 +146,36 @@ class UsuarioController extends Controller
         }
 
         try {
-            $usuario->delete();
-            return back()->with('toast_success', 'Usuario eliminado correctamente.');
+            \DB::transaction(function() use ($usuario) {
+                $userId = $usuario->id;
+
+                // Eliminar facturas y sus reenvíos para evitar constraints
+                $facturasIds = \DB::table('facturas')->where('usuario_id', $userId)->pluck('id');
+                if ($facturasIds->isNotEmpty()) {
+                    \DB::table('reenvios_factura')->whereIn('factura_id', $facturasIds)->delete();
+                    \DB::table('facturas')->where('usuario_id', $userId)->delete();
+                }
+
+                // Eliminar devoluciones
+                \DB::table('devoluciones')->where('usuario_id', $userId)->delete();
+
+                // Eliminar usos de cupones
+                if (\Illuminate\Support\Facades\Schema::hasTable('usos_cupon')) {
+                    \DB::table('usos_cupon')->where('usuario_id', $userId)->delete();
+                }
+
+                // Eliminar pedidos (cascade borrará items_pedido y envios_pedido)
+                \DB::table('pedidos')->where('usuario_id', $userId)->delete();
+
+                // Borrar usuario (direcciones, carritos, lista_deseos se borran por cascade en BD)
+                $usuario->delete();
+            });
+
+            // Si venimos de la vista de editar, no podemos volver atrás con back() porque dará 404
+            return redirect()->route('admin.usuarios.index')->with('toast_success', 'Usuario y todos sus registros eliminados permanentemente.');
         } catch (\Exception $e) {
-            return back()->with('toast_error', 'No se pudo eliminar el usuario porque tiene registros asociados.');
+            \Illuminate\Support\Facades\Log::error('Error eliminando usuario en cascada: ' . $e->getMessage());
+            return back()->with('toast_error', 'No se pudo eliminar el usuario porque tiene registros dependientes en otras tablas del sistema que no se pueden borrar automáticamente.');
         }
     }
 }

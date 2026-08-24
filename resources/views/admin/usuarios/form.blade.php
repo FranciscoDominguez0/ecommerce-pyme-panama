@@ -28,11 +28,18 @@
             <p class="text-sm text-slate-500 font-medium ml-9">{{ $description }}</p>
         </div>
         <div class="flex items-center gap-4">
+            @if($isEdit && $usuario->id !== auth()->id() && !($usuario->hasRole('super_admin') && !auth()->user()->hasRole('super_admin')))
+                <button type="button" 
+                        onclick="window.ModalEliminar.abrir({ url: '{{ route('admin.usuarios.destroy', $usuario->id) }}', nombre: '{{ addslashes($usuario->nombre) }}', titulo: 'Eliminar Usuario (Cascada)', mensaje: 'Se eliminará permanentemente este usuario junto con TODOS sus pedidos, carritos, devoluciones y facturas. Esta acción NO se puede deshacer.' })"
+                        class="px-6 py-2 rounded-lg border border-red-200 text-red-600 font-semibold text-xs uppercase tracking-wide hover:bg-red-50 hover:text-red-700 transition-colors flex items-center">
+                    <span class="material-symbols-outlined mr-2 text-[18px]">delete</span>
+                    Eliminar
+                </button>
+            @endif
             <a href="{{ $backRoute }}" class="px-6 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 transition-colors">
                 Cancelar
             </a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all flex items-center">
-
                 <span class="material-symbols-outlined mr-2 text-[18px]">save</span>
                 Guardar Usuario
             </button>

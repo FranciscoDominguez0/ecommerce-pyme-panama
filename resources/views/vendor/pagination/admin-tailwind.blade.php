@@ -1,4 +1,4 @@
-@if ($paginator->hasPages())
+@if ($paginator->total() > 0)
     <nav role="navigation" aria-label="Paginación" class="flex flex-col items-center gap-2 w-full py-1">
 
         {{-- Controles de página --}}

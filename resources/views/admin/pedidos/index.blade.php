@@ -128,7 +128,7 @@
             </table>
         </div>
         
-        @if($pedidos->hasPages())
+        @if($pedidos->total() > 0)
             <div class="px-6 py-4 border-t border-slate-200 bg-slate-50/50">
                 {{ $pedidos->links('vendor.pagination.admin-tailwind') }}
             </div>

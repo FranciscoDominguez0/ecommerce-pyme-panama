@@ -56,6 +56,42 @@
                 --sidebar-offset: 256px;
             }
         }
+        
+        /* Barra de progreso de navegación superior (Estilo Premium) */
+        #top-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: #10B981; /* emerald-500 */
+            z-index: 99999;
+            width: 0%;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 0 10px #10B981, 0 0 4px #10B981;
+        }
+        
+        .navigating #top-progress-bar {
+            opacity: 1;
+            width: 75%;
+            transition: width 15s cubic-bezier(0.1, 0.05, 0, 1);
+        }
+
+        /* Animaciones Suaves de Página */
+        @keyframes subtleFadeIn {
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: none; }
+        }
+        .animate-fade-in-up {
+            animation: subtleFadeIn 0.35s ease-out;
+        }
+        
+        /* Animación de salida ultra-sutil (Sin blurs ni blancos) */
+        .page-transitioning {
+            opacity: 0.65 !important;
+            pointer-events: none;
+            transition: opacity 0.2s ease-out !important;
+        }
 
     </style>
 
@@ -96,6 +132,9 @@
     @stack('styles')
 </head>
 <body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
+    
+    <!-- Barra de progreso superior -->
+    <div id="top-progress-bar"></div>
 
     <!-- Mobile Sidebar Drawer (Overlay) -->
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
@@ -304,25 +343,7 @@
                 </button>
 
                 <!-- Breadcrumbs de Navegación (Ultra-Responsive para celular) -->
-                <nav class="flex items-center gap-1 sm:gap-1.5 text-xs text-slate-500 font-medium min-w-0 flex-nowrap overflow-hidden" aria-label="Breadcrumb">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-1 text-slate-500 hover:text-slate-900 transition-colors shrink-0" title="Panel Principal">
-                        <span class="material-symbols-outlined text-[17px] text-slate-400">home</span>
-                        <span class="hidden sm:inline">Panel</span>
-                    </a>
-                    
-                    @hasSection('breadcrumbs')
-                        @yield('breadcrumbs')
-                    @else
-                        @if(request()->segment(2))
-                            <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-                            <span class="capitalize text-slate-600 truncate max-w-[90px] sm:max-w-none">{{ str_replace('-', ' ', request()->segment(2)) }}</span>
-                        @endif
-                        @if(request()->segment(3) && !is_numeric(request()->segment(3)))
-                            <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-                            <span class="capitalize font-bold text-slate-900 truncate max-w-[90px] sm:max-w-none">{{ str_replace('-', ' ', request()->segment(3)) }}</span>
-                        @endif
-                    @endif
-                </nav>
+                <x-admin-breadcrumb />
             </div>
 
             <!-- Right: Live Clock, Notifications & User Profile (Siempre visible en el extremo derecho) -->
@@ -413,8 +434,22 @@
         </header>
 
         <!-- Main Body / Canvas -->
-        <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto">
-            @yield('content')
+        <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto relative">
+            @php
+                $isFromLogin = str_contains(request()->headers->get('referer', ''), '/login');
+            @endphp
+            
+            <!-- Esqueleto de Carga (Solo post-login) -->
+            @if($isFromLogin)
+                <div id="global-admin-skeleton" class="w-full h-full transition-opacity duration-300">
+                    <x-admin-skeleton />
+                </div>
+            @endif
+            
+            <!-- Contenido Real -->
+            <div id="actual-page-content" class="w-full h-full transition-all duration-300 {{ $isFromLogin ? 'hidden' : 'animate-fade-in-up' }}">
+                @yield('content')
+            </div>
         </main>
 
         <!-- Admin Footer -->
@@ -496,6 +531,71 @@
 
         setInterval(updatePanamaClock, 1000);
         updatePanamaClock();
+
+        // --------------------------------------------------------
+        // Interceptor Global de Navegación (Transición Suave)
+        // --------------------------------------------------------
+        
+        function cleanupTransition() {
+            document.body.classList.remove('navigating');
+            const actualContent = document.getElementById('actual-page-content');
+            if (actualContent) {
+                actualContent.classList.remove('page-transitioning');
+                // Remover la clase de animación 100% para destruir cualquier Containing Block de CSS
+                setTimeout(() => {
+                    actualContent.classList.remove('animate-fade-in-up');
+                }, 400);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cleanupTransition();
+
+            const sidebarLinks = document.querySelectorAll('#admin-sidebar nav a, a.nav-transition');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Ignorar anclas, js, links en blanco o la misma página
+                    if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+                    if (this.getAttribute('target') === '_blank') return;
+                    if (href === window.location.href || href === window.location.pathname) return;
+
+                    document.body.classList.add('navigating');
+                    const actualContent = document.getElementById('actual-page-content');
+                    if (actualContent) {
+                        actualContent.classList.add('page-transitioning');
+                    }
+                });
+            });
+
+            // Lógica para quitar el skeleton de Login si está presente
+            const skeleton = document.getElementById('global-admin-skeleton');
+            const actualContent = document.getElementById('actual-page-content');
+            
+            if (skeleton && !skeleton.classList.contains('hidden')) {
+                // Simular un tiempo de carga post-login para mostrar el efecto premium
+                setTimeout(() => {
+                    skeleton.style.opacity = '0';
+                    setTimeout(() => {
+                        skeleton.classList.add('hidden');
+                        if (actualContent) {
+                            actualContent.classList.remove('hidden');
+                            actualContent.classList.add('animate-fade-in-up');
+                            // Limpiar containing block luego del fade-in del login
+                            setTimeout(() => actualContent.classList.remove('animate-fade-in-up'), 400);
+                        }
+                    }, 300); // 300ms debe coincidir con transition-opacity
+                }, 800);
+            }
+        });
+
+        // BFCache (Back/Forward Cache) Fix
+        window.addEventListener('pageshow', cleanupTransition);
+        
+        // Livewire Navigation Fix (Borra estados de navegación tras SPA swap)
+        document.addEventListener('livewire:navigated', cleanupTransition);
     </script>
 
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
