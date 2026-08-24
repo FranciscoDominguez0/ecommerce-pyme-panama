@@ -35,7 +35,19 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('2fa.verify') }}" class="flex flex-col gap-5" id="2fa-form" x-data="{ isVerifying: false }" @submit="isVerifying = true">
+            <!-- Error Alert -->
+            <div id="error-alert" class="hidden mb-4 bg-red-50 text-red-700 p-3 rounded-lg flex items-start gap-2 border border-red-200 text-xs">
+                <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
+                <div class="flex-1">
+                    <p class="font-semibold mb-0.5">Error de verificación</p>
+                    <p class="opacity-95 message-text">El código ingresado es incorrecto.</p>
+                </div>
+                <button class="text-red-400 hover:text-red-600 focus:outline-none" onclick="document.getElementById('error-alert').classList.add('hidden')" type="button">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+
+            <form method="POST" action="{{ route('2fa.verify') }}" class="flex flex-col gap-5" id="2fa-form" x-data="{ isVerifying: false }" @submit.prevent="isVerifying = true; submitVerify($event, () => isVerifying = false)">
                 @csrf
 
                 <!-- Code Input -->
@@ -67,6 +79,7 @@
                                class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-primary focus:ring-primary/20 @enderror"
                                @input="handleInput(3, $event)" @keydown.backspace="handleBackspace(3, $event)" @paste="handlePaste($event)">
                     </div>
+                    <p id="code-error-msg" class="text-xs text-red-600 font-medium mt-1 hidden"></p>
                     @error('code')
                         <p class="text-xs text-red-600 font-medium mt-1">{{ $message }}</p>
                     @enderror
@@ -120,6 +133,51 @@
     </main>
 
     <script>
+        async function submitVerify(e, resetLoading) {
+            const form = e.target;
+            const errorAlert = document.getElementById('error-alert');
+            const codeErrorMsg = document.getElementById('code-error-msg');
+            
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    window.location.href = data.redirect;
+
+                } else if (response.status === 422) {
+                    const data = await response.json();
+                    resetLoading();
+                    
+                    if (errorAlert) {
+                        errorAlert.classList.remove('hidden');
+                        let errorMsg = 'El código ingresado es incorrecto.';
+                        if (data.errors && data.errors.code && data.errors.code.length > 0) {
+                            errorMsg = data.errors.code[0];
+                        } else if (data.message) {
+                            errorMsg = data.message;
+                        }
+                        errorAlert.querySelector('.message-text').textContent = errorMsg;
+                    }
+                } else {
+                    throw new Error('Server error');
+                }
+            } catch (error) {
+                resetLoading();
+                window.location.reload();
+            }
+        }
+
         document.addEventListener('alpine:init', () => {
             Alpine.data('otpComponent', () => ({
                 digits: ['', '', '', ''],

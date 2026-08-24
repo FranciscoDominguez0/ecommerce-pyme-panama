@@ -34,7 +34,7 @@ class LoginController extends Controller
     /**
      * Procesa el inicio de sesión del usuario.
      */
-    public function login(Request $request): RedirectResponse
+    public function login(Request $request)
     {
         $request->validate([
             'email' => ['required', 'string', 'email'],
@@ -49,8 +49,12 @@ class LoginController extends Controller
 
         // Validar credenciales contra la columna password_hash
         if (!$usuario || !Hash::check($request->password, $usuario->password_hash)) {
+            $msg = 'Las credenciales proporcionadas no son válidas.';
+            if ($request->wantsJson()) {
+                return response()->json(['errors' => ['email' => [$msg]]], 422);
+            }
             return back()->withErrors([
-                'email' => 'Las credenciales proporcionadas no son válidas.',
+                'email' => $msg,
             ])->onlyInput('email');
         }
 
@@ -76,6 +80,13 @@ class LoginController extends Controller
             }
             
             // Redirigir a la pantalla de verificación
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'redirect' => route('2fa.challenge'),
+                    'isAdmin' => false,
+                    'is2fa' => true
+                ]);
+            }
             return redirect()->route('2fa.challenge');
         }
 
@@ -101,10 +112,12 @@ class LoginController extends Controller
 
         if ($esAdmin) {
             // Un admin siempre debe ir al panel, a menos que el intendedUrl sea de admin
-            if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
-                return redirect()->to($intendedUrl);
+            $url = ($intendedUrl && str_contains($intendedUrl, '/admin')) ? $intendedUrl : '/admin/dashboard';
+            
+            if ($request->wantsJson()) {
+                return response()->json(['redirect' => url($url), 'isAdmin' => true]);
             }
-            return redirect()->to('/admin/dashboard');
+            return redirect()->to($url);
         }
 
         // Si es normal, NUNCA debería ir a una ruta de admin, forzamos dashboard si estaba yendo allá por error
@@ -112,13 +125,18 @@ class LoginController extends Controller
             $intendedUrl = null;
         }
 
-        return redirect()->to($intendedUrl ?? route('dashboard'));
+        $url = $intendedUrl ?? route('dashboard');
+        
+        if ($request->wantsJson()) {
+            return response()->json(['redirect' => url($url), 'isAdmin' => false]);
+        }
+        return redirect()->to($url);
     }
 
     /**
      * Alias para procesar la petición de login.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         return $this->login($request);
     }
@@ -126,7 +144,7 @@ class LoginController extends Controller
     /**
      * Cierra la sesión activa del usuario.
      */
-    public function logout(Request $request): RedirectResponse
+    public function logout(Request $request)
     {
         Auth::logout();
 
@@ -139,7 +157,7 @@ class LoginController extends Controller
     /**
      * Alias para logout.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
         return $this->logout($request);
     }

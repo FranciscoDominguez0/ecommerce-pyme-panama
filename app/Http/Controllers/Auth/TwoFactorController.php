@@ -59,8 +59,12 @@ class TwoFactorController extends Controller
         if (!$cachedCode || $cachedCode !== $request->code) {
             RateLimiter::hit($key);
             
+            $msg = 'El código ingresado es incorrecto o ha expirado.';
+            if ($request->wantsJson()) {
+                return response()->json(['errors' => ['code' => [$msg]]], 422);
+            }
             throw ValidationException::withMessages([
-                'code' => 'El código ingresado es incorrecto o ha expirado.',
+                'code' => $msg,
             ]);
         }
 
@@ -98,16 +102,25 @@ class TwoFactorController extends Controller
 
         if ($esAdmin) {
             if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
-                return redirect()->to($intendedUrl);
+                $url = $intendedUrl;
+            } else {
+                $url = '/admin/dashboard';
             }
-            return redirect()->to('/admin/dashboard');
+            if ($request->wantsJson()) {
+                return response()->json(['redirect' => url($url), 'isAdmin' => true]);
+            }
+            return redirect()->to($url);
         }
 
         if ($intendedUrl && str_contains($intendedUrl, '/admin')) {
             $intendedUrl = null;
         }
 
-        return redirect()->to($intendedUrl ?? route('dashboard'));
+        $url = $intendedUrl ?? route('dashboard');
+        if ($request->wantsJson()) {
+            return response()->json(['redirect' => url($url), 'isAdmin' => false]);
+        }
+        return redirect()->to($url);
     }
 
     /**

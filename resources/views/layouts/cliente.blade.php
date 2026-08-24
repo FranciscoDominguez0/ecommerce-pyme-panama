@@ -247,7 +247,7 @@
     <!-- Main Content -->
     <main class="flex-1 relative">
         @php
-            $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login');
+            $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
         @endphp
         
         <!-- Esqueleto de Carga (Solo post-login) -->
@@ -389,11 +389,11 @@
             });
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
+        function handleLoginSkeleton() {
             const skeleton = document.getElementById('global-cliente-skeleton');
             const actualContent = document.getElementById('actual-page-content');
             
-            if (skeleton && actualContent) {
+            if (skeleton && actualContent && !skeleton.classList.contains('hidden')) {
                 setTimeout(() => {
                     skeleton.style.opacity = '0';
                     actualContent.classList.remove('opacity-0');
@@ -403,7 +403,10 @@
                     }, 300);
                 }, 800);
             }
-        });
+        }
+
+        document.addEventListener('DOMContentLoaded', handleLoginSkeleton);
+        document.addEventListener('livewire:navigated', handleLoginSkeleton);
     </script>
     @stack('scripts')
 </body>

@@ -27,20 +27,18 @@
             @endif
 
             <!-- Error Alert -->
-            @if ($errors->any())
-                <div class="mb-4 bg-red-50 text-red-700 p-3 rounded-lg flex items-start gap-2 border border-red-200 text-xs" id="error-alert">
-                    <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
-                    <div class="flex-1">
-                        <p class="font-semibold mb-0.5">Error de autenticación</p>
-                        <p class="opacity-95">
-                            {{ $errors->first('email') ?? $errors->first('password') ?? 'Las credenciales proporcionadas no son válidas.' }}
-                        </p>
-                    </div>
-                    <button class="text-red-400 hover:text-red-600" onclick="document.getElementById('error-alert').classList.add('hidden')" type="button">
-                        <span class="material-symbols-outlined text-sm">close</span>
-                    </button>
+            <div class="{{ $errors->any() ? '' : 'hidden' }} mb-4 bg-red-50 text-red-700 p-3 rounded-lg flex items-start gap-2 border border-red-200 text-xs" id="error-alert">
+                <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
+                <div class="flex-1">
+                    <p class="font-semibold mb-0.5">Error de autenticación</p>
+                    <p class="opacity-95 message-text">
+                        {{ $errors->first('email') ?? $errors->first('password') ?? 'Las credenciales proporcionadas no son válidas.' }}
+                    </p>
                 </div>
-            @endif
+                <button class="text-red-400 hover:text-red-600" onclick="document.getElementById('error-alert').classList.add('hidden')" type="button">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
 
             <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-3.5" id="login-form" x-data="{ isSubmitting: false }" @submit.prevent="isSubmitting = true; submitLogin($event, () => isSubmitting = false)">
                 @csrf
@@ -152,16 +150,6 @@
         <x-secure-badge />
     </main>
 
-    <!-- Skeletons Transition Overlays (ocultos por defecto) -->
-    <div id="skeleton-container" class="hidden">
-        <div id="admin-skeleton-wrapper" class="hidden">
-            <x-admin-skeleton :fullScreen="true" />
-        </div>
-        <div id="cliente-skeleton-wrapper" class="hidden">
-            <x-cliente-skeleton :fullScreen="true" />
-        </div>
-    </div>
-
     <script>
         function togglePassword() {
             const passwordInput = document.getElementById('password');
@@ -195,25 +183,12 @@
                 if (response.ok) {
                     const data = await response.json();
                     
-                    // Ocultar login form
-                    const mainContent = document.querySelector('main.fade-in-up');
-                    const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
-                    const skeletonContainer = document.getElementById('skeleton-container');
-                    
-                    if (mainContent) mainContent.classList.add('hidden');
-                    if (bgGradients) bgGradients.classList.add('hidden');
-                    if (skeletonContainer) skeletonContainer.classList.remove('hidden');
-
-                    if (data.isAdmin) {
-                        document.getElementById('admin-skeleton-wrapper').classList.remove('hidden');
-                    } else {
-                        document.getElementById('cliente-skeleton-wrapper').classList.remove('hidden');
+                    if (data.is2fa) {
+                        window.location.href = data.redirect;
+                        return;
                     }
                     
-                    // Retardo visual corto antes de navegar
-                    setTimeout(() => {
-                        window.location.href = data.redirect;
-                    }, 100);
+                    window.location.href = data.redirect;
 
                 } else if (response.status === 422) {
                     const data = await response.json();
@@ -234,19 +209,5 @@
             }
         }
 
-        // BFCache fix
-        window.addEventListener('pageshow', (event) => {
-            const mainContent = document.querySelector('main.fade-in-up');
-            const skeletonContainer = document.getElementById('skeleton-container');
-            const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
-            
-            if (mainContent && skeletonContainer) {
-                skeletonContainer.classList.add('hidden');
-                document.getElementById('admin-skeleton-wrapper').classList.add('hidden');
-                document.getElementById('cliente-skeleton-wrapper').classList.add('hidden');
-                mainContent.classList.remove('hidden');
-                if (bgGradients) bgGradients.classList.remove('hidden');
-            }
-        });
     </script>
 </x-guest-layout>

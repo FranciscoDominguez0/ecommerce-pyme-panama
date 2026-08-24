@@ -134,7 +134,7 @@
 <body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
     
     @php
-        $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login');
+        $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
     @endphp
 
     <!-- Esqueleto Global de Carga (Cubre toda la pantalla) -->
@@ -444,7 +444,7 @@
         <!-- Main Body / Canvas -->
         <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto relative">
             @php
-                $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login');
+                $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
             @endphp
             
             <!-- Contenido Real -->
@@ -549,6 +549,30 @@
             }
         }
 
+        function handleLoginSkeleton() {
+            const skeleton = document.getElementById('global-admin-skeleton-wrapper');
+            const actualContent = document.getElementById('actual-page-content');
+            
+            if (skeleton && !skeleton.classList.contains('hidden')) {
+                // Simular un tiempo de carga post-login para mostrar el efecto premium
+                setTimeout(() => {
+                    if (actualContent) {
+                        actualContent.classList.remove('opacity-0');
+                        actualContent.classList.add('opacity-100');
+                        actualContent.classList.add('animate-fade-in-up');
+                    }
+                    skeleton.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        skeleton.classList.add('hidden');
+                        if (actualContent) {
+                            setTimeout(() => actualContent.classList.remove('animate-fade-in-up'), 400);
+                        }
+                    }, 300); // 300ms debe coincidir con transition-opacity
+                }, 800);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             cleanupTransition();
 
@@ -571,35 +595,17 @@
                 });
             });
 
-            // Lógica para quitar el skeleton de Login si está presente
-            const skeleton = document.getElementById('global-admin-skeleton-wrapper');
-            const actualContent = document.getElementById('actual-page-content');
-            
-            if (skeleton && !skeleton.classList.contains('hidden')) {
-                // Simular un tiempo de carga post-login para mostrar el efecto premium
-                setTimeout(() => {
-                    if (actualContent) {
-                        actualContent.classList.remove('opacity-0');
-                        actualContent.classList.add('opacity-100');
-                        actualContent.classList.add('animate-fade-in-up');
-                    }
-                    skeleton.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        skeleton.classList.add('hidden');
-                        if (actualContent) {
-                            setTimeout(() => actualContent.classList.remove('animate-fade-in-up'), 400);
-                        }
-                    }, 300); // 300ms debe coincidir con transition-opacity
-                }, 800);
-            }
+            handleLoginSkeleton();
         });
 
         // BFCache (Back/Forward Cache) Fix
         window.addEventListener('pageshow', cleanupTransition);
         
         // Livewire Navigation Fix (Borra estados de navegación tras SPA swap)
-        document.addEventListener('livewire:navigated', cleanupTransition);
+        document.addEventListener('livewire:navigated', () => {
+            cleanupTransition();
+            handleLoginSkeleton();
+        });
     </script>
 
     <!-- Sistema Global de Alertas y Notificaciones Toast -->

@@ -71,7 +71,7 @@
 <body
     class="bg-background text-on-surface min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden selection:bg-secondary selection:text-on-secondary antialiased font-sans text-sm">
     <!-- Botón Regresar a Inicio -->
-    <a href="{{ route('inicio') }}" wire:navigate class="absolute top-5 left-5 sm:top-8 sm:left-8 z-50 flex items-center gap-1.5 text-slate-500 hover:text-emerald-700 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm transition-all hover:scale-105 hover:bg-emerald-50 hover:border-emerald-200" title="Volver a la tienda">
+    <a id="back-to-store-btn" href="{{ route('inicio') }}" wire:navigate class="absolute top-5 left-5 sm:top-8 sm:left-8 z-50 flex items-center gap-1.5 text-slate-500 hover:text-emerald-700 bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200 shadow-sm transition-all hover:scale-105 hover:bg-emerald-50 hover:border-emerald-200" title="Volver a la tienda">
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         <span class="text-xs font-bold pr-1">Volver</span>
     </a>
@@ -95,6 +95,35 @@
     @if (!request()->is('forgot-password'))
         <x-toast-alert />
     @endif
+
+    <!-- Skeletons Transition Overlays (compartido para login y 2fa) -->
+    <div id="skeleton-container" class="hidden">
+        <div id="admin-skeleton-wrapper" class="hidden">
+            <x-admin-skeleton :fullScreen="true" />
+        </div>
+        <div id="cliente-skeleton-wrapper" class="hidden">
+            <x-cliente-skeleton :fullScreen="true" />
+        </div>
+    </div>
+
+    <script>
+        // BFCache fix global para cuando el usuario presiona el botón "Atrás" del navegador
+        window.addEventListener('pageshow', (event) => {
+            const mainContent = document.querySelector('main.fade-in-up');
+            const skeletonContainer = document.getElementById('skeleton-container');
+            const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
+            const backBtn = document.getElementById('back-to-store-btn');
+            
+            if (mainContent && skeletonContainer) {
+                skeletonContainer.classList.add('hidden');
+                document.getElementById('admin-skeleton-wrapper').classList.add('hidden');
+                document.getElementById('cliente-skeleton-wrapper').classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                if (bgGradients) bgGradients.classList.remove('hidden');
+                if (backBtn) backBtn.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 
 </html>
