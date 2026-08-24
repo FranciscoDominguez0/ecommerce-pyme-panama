@@ -136,6 +136,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::post('/foto', [PerfilController::class, 'actualizarFoto'])->name('.foto.update');
         Route::put('/password', [PerfilController::class, 'actualizarPassword'])->name('.password.update');
         Route::put('/2fa', [PerfilController::class, 'actualizarDosFactores'])->name('.2fa.update');
+        Route::delete('/sesiones', [PerfilController::class, 'cerrarSesiones'])->name('.sesiones.destroy');
     });
 
     // Módulo de Categorías

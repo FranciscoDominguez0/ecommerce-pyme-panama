@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Laravel genere URLs https:// correctas aunque reciba HTTP interno
         $middleware->trustProxies(at: '*');
 
+        $middleware->web(append: [
+            \Illuminate\Session\Middleware\AuthenticateSession::class,
+        ]);
+
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

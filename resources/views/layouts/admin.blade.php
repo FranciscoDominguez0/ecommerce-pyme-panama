@@ -584,12 +584,13 @@
                     if (actualContent) {
                         actualContent.classList.remove('opacity-0');
                         actualContent.classList.add('opacity-100');
+                        actualContent.classList.add('animate-fade-in-up');
                     }
                     skeleton.style.opacity = '0';
+                    
                     setTimeout(() => {
                         skeleton.classList.add('hidden');
                         if (actualContent) {
-                            actualContent.classList.add('animate-fade-in-up');
                             setTimeout(() => actualContent.classList.remove('animate-fade-in-up'), 400);
                         }
                     }, 300); // 300ms debe coincidir con transition-opacity

@@ -25,7 +25,21 @@ class PerfilController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.perfil.index', compact('usuario', 'actividadReciente'));
+        $sesionesActivas = \Illuminate\Support\Facades\DB::table('sessions')
+            ->where('user_id', $usuario->id)
+            ->orderBy('last_activity', 'desc')
+            ->get()
+            ->map(function ($session) {
+                return (object) [
+                    'id' => $session->id,
+                    'ip_address' => $session->ip_address,
+                    'is_current_device' => $session->id === request()->session()->getId(),
+                    'last_active' => \Carbon\Carbon::createFromTimestamp($session->last_activity)->locale('es')->diffForHumans(),
+                    'agent' => $this->crearAgente($session->user_agent)
+                ];
+            });
+
+        return view('admin.perfil.index', compact('usuario', 'actividadReciente', 'sesionesActivas'));
     }
 
     /**
@@ -142,6 +156,71 @@ class PerfilController extends Controller
         );
 
         return redirect()->route('admin.perfil')->with('toast_success', "Autenticación de Dos Factores " . ($habilitar ? 'activada' : 'desactivada') . ".");
+    }
+
+    /**
+     * Cierra todas las sesiones en otros dispositivos.
+     */
+    public function cerrarSesiones(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'current_password'],
+        ]);
+
+        \Illuminate\Support\Facades\Auth::logoutOtherDevices($request->password);
+
+        $usuario = auth()->user();
+        $this->registrarAuditoria(
+            $usuario->id,
+            'Perfil',
+            'Sesiones cerradas',
+            'Se cerraron las sesiones activas en otros dispositivos',
+            null,
+            null
+        );
+
+        return back()->with('toast_success', 'Se han cerrado las sesiones en otros dispositivos.');
+    }
+
+    /**
+     * Parsea de manera sencilla el User Agent.
+     */
+    private function crearAgente($userAgent)
+    {
+        $browser = 'Desconocido';
+        $platform = 'Desconocido';
+        $icon = 'devices';
+
+        if (preg_match('/windows|win32/i', $userAgent)) {
+            $platform = 'Windows';
+            $icon = 'desktop_windows';
+        } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
+            $platform = 'macOS';
+            $icon = 'desktop_mac';
+        } elseif (preg_match('/linux/i', $userAgent)) {
+            $platform = 'Linux';
+            $icon = 'computer';
+        } elseif (preg_match('/iphone|ipad|ipod/i', $userAgent)) {
+            $platform = 'iOS';
+            $icon = 'phone_iphone';
+        } elseif (preg_match('/android/i', $userAgent)) {
+            $platform = 'Android';
+            $icon = 'phone_android';
+        }
+
+        if (preg_match('/edge/i', $userAgent)) {
+            $browser = 'Edge';
+        } elseif (preg_match('/chrome|crios/i', $userAgent)) {
+            $browser = 'Chrome';
+        } elseif (preg_match('/firefox|fxios/i', $userAgent)) {
+            $browser = 'Firefox';
+        } elseif (preg_match('/safari/i', $userAgent)) {
+            $browser = 'Safari';
+        } elseif (preg_match('/opera|opr/i', $userAgent)) {
+            $browser = 'Opera';
+        }
+
+        return (object) ['platform' => $platform, 'browser' => $browser, 'icon' => $icon];
     }
 
     /**

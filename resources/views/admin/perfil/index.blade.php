@@ -209,7 +209,7 @@
                 </div>
                 <div class="p-5">
                     <p class="text-xs text-slate-500 mb-4 leading-relaxed">
-                        Protege tu cuenta requiriendo un código adicional cada vez que inicies sesión desde un dispositivo no reconocido.
+                        Añade una capa de seguridad extra con un código de verificación.
                     </p>
                     
                     <form action="{{ route('admin.perfil.2fa.update') }}" method="POST">
@@ -227,6 +227,95 @@
                             </span>
                         </label>
                     </form>
+                </div>
+            </div>
+
+            <!-- Tarjeta: Sesiones Activas -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden" x-data="{ modalOpen: false }">
+                <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 text-sm">Sesiones Activas</h3>
+                </div>
+                <div class="p-5 space-y-4">
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Cierra la sesión en otros dispositivos por seguridad si notas actividad inusual.
+                    </p>
+                    
+                    @if(isset($sesionesActivas) && count($sesionesActivas) > 0)
+                        <div class="space-y-3">
+                            @foreach($sesionesActivas as $sesion)
+                                <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                                    <span class="material-symbols-outlined text-3xl {{ $sesion->is_current_device ? 'text-emerald-500' : 'text-slate-400' }}">
+                                        {{ $sesion->agent->icon }}
+                                    </span>
+                                    <div class="flex-1 min-w-0 text-left">
+                                        <div class="text-sm font-bold text-slate-800 truncate">
+                                            {{ $sesion->agent->platform }} - {{ $sesion->agent->browser }}
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 truncate flex gap-1 items-center">
+                                            <span>{{ $sesion->ip_address }}</span>
+                                            <span>&bull;</span>
+                                            @if($sesion->is_current_device)
+                                                <span class="text-emerald-600 font-semibold">Este dispositivo</span>
+                                            @else
+                                                <span>Última actividad {{ $sesion->last_active }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <div class="pt-2">
+                        <button type="button" @click="modalOpen = true" class="w-full px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors text-center">
+                            Cerrar Sesión en Otros Dispositivos
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal de Confirmación para Cerrar Sesiones -->
+                <div x-show="modalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm" style="display: none;">
+                    <div @click.outside="modalOpen = false" class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full mx-4 p-6"
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95">
+                        
+                        <div class="flex items-center gap-3 mb-4 text-slate-800">
+                            <span class="material-symbols-outlined text-3xl text-rose-500">warning</span>
+                            <h3 class="text-lg font-bold">Cerrar Sesión en Otros Dispositivos</h3>
+                        </div>
+                        
+                        <p class="text-sm text-slate-600 mb-5">
+                            Ingresa tu contraseña para confirmar que deseas cerrar la sesión en todos los demás dispositivos y navegadores.
+                        </p>
+                        
+                        <form action="{{ route('admin.perfil.sesiones.destroy') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            
+                            <div x-data="{ show: false }" class="mb-5">
+                                <div class="relative">
+                                    <input :type="show ? 'text' : 'password'" name="password" placeholder="Contraseña Actual" required class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 text-slate-800 transition-all outline-none">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                        <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
+                                    </button>
+                                </div>
+                                @error('password') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div class="flex justify-end gap-2">
+                                <button type="button" @click="modalOpen = false" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
+                                    Cancelar
+                                </button>
+                                <button type="submit" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors">
+                                    Cerrar Sesiones
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
