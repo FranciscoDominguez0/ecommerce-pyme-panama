@@ -83,7 +83,7 @@ class Cliente_FacturaControllerTest extends BaseAdminTest
             'usuario_id' => $cliente->id,
             'pdf_ruta' => 'facturas/cliente-ejemplo.pdf',
         ]);
-        Storage::disk('public')->put('facturas/cliente-ejemplo.pdf', '%PDF-1.4 TEST');
+        Storage::disk('local')->put('facturas/cliente-ejemplo.pdf', '%PDF-1.4 TEST');
 
         $this->actingAs($cliente)
             ->get(route('cliente.facturas.pdf', $factura))

@@ -26,9 +26,9 @@ class FacturaController extends Controller
             abort(403, 'No tienes permiso para ver esta factura.');
         }
 
-        if ($factura->pdf_ruta && Storage::disk('public')->exists($factura->pdf_ruta)) {
+        if ($factura->pdf_ruta && Storage::disk('local')->exists($factura->pdf_ruta)) {
             /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
-            $disk = Storage::disk('public');
+            $disk = Storage::disk('local');
             return $disk->download($factura->pdf_ruta, 'Factura_' . $factura->numero . '.pdf');
         }
 

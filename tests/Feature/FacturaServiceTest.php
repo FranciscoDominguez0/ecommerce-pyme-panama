@@ -164,15 +164,16 @@ class FacturaServiceTest extends BaseAdminTest
     {
         $this->prepararGeneracionDeFactura();
         Storage::fake('public');
+        Storage::fake('local');
 
         $pedido = Pedido::factory()->create();
         $factura = app(FacturaService::class)->generarFactura($pedido);
 
         $pdfRuta = 'facturas/' . $factura->numero . '.pdf';
 
-        $this->assertSame($pdfRuta, $factura->fresh()->pdf_ruta, 'pdf_ruta debe guardarse en storage/app/public/facturas/.');
-        Storage::disk('public')->assertExists($pdfRuta);
-        $this->assertSame('%PDF-1.4 TEST', Storage::disk('public')->get($pdfRuta));
+        $this->assertSame($pdfRuta, $factura->fresh()->pdf_ruta, 'pdf_ruta debe guardarse en storage/app/public/.');
+        Storage::disk('local')->assertExists($factura->pdf_ruta);
+        $this->assertSame('%PDF-1.4 TEST', Storage::disk('local')->get($factura->pdf_ruta));
 
         // El correo automático se envía al usuario dueño del pedido.
         Mail::assertSent(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo($pedido->usuario->email));

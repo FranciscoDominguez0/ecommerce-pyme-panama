@@ -1,78 +1,478 @@
 # AGENTS.md
 
-Guías para agentes de IA y desarrolladores que trabajan en **eCommerce PyME Panamá** (Laravel 12 + Livewire 4 + Vite + Tailwind + PostgreSQL).
+## Proyecto
 
-## Reglas de la base de datos y roles (prevenir pérdida de datos en DEV)
+**PayMe Panamá — eCommerce PyME**
+Stack: **Laravel 12 + Livewire 4 + Vite + Tailwind + PostgreSQL**.
 
-- **NUNCA hardcodees un `rol_id` o `permiso_id` numérico en el código.** Los ids se auto-generan y NO son estables entre entornos, resiembras o resets de BD (ej.: `cliente` fue id 5 en algún momento y es id 3 tras una resiembra). Siempre busca roles/permisos por su **`name`**: `Role::where('name', 'cliente')->where('guard_name', 'web')->first()`, o usa `assignRole('cliente')`/`hasRole('cliente')`. El único lugar que hardcodeaba el id 5 (fallback de `RegisterController`) fue corregido.
-- **`RolesSeeder` es la fuente de verdad** de roles (`Admin`, `super_admin`, `cliente`) y permisos. Ejecútalo en toda BD nueva/reseteada (dev o test) antes de depender de funciones basadas en roles: `php artisan db:seed --class=RolesSeeder` (y `RolesPermisosSeeder` para crear/asignar el admin genérico `admin@example.com` como `super_admin`).
-- **NUNCA ejecutes `migrate:fresh`, `migrate:refresh` o `db:wipe` sin confirmar antes el `DB_DATABASE` activo.** Los tests SIEMPRE corren contra `ecommerce_test` vía `.env.testing` (`php artisan test --env=testing`); `.env` apunta a `ecommerce_pyme_panama` (dev). Un `migrate:fresh` sin `--env=testing` ejecutado contra dev borró roles/permisos y todo el catálogo (productos, categorías, marcas, variantes, pedidos, etc.) — los 2 usuarios sobrevivientes no tenían seeder que los respaldara. Verifica con `php artisan about` o consultando `config('database.connections.pgsql.database')` antes de cualquier comando destructivo.
-- **Los tests están blindados contra la BD dev (doble candado):** `phpunit.xml` fija explícitamente las variables `DB_*` a `ecommerce_test` (no dependen de que `.env.testing` se cargue, ni siquiera al ejecutar `vendor/bin/phpunit` directo), y `tests/TestCase.php` valida en `setUp()` — ANTES de que RefreshDatabase corra `migrate:fresh` — que la BD activa sea exactamente `ecommerce_test`; si no, lanza una excepción y aborta la ejecución sin tocar nada. No cambies esos valores a la BD de desarrollo.
-- **Incidente de referencia (2026-08-11):** la BD dev quedó sin roles/permisos y sin catálogo. Se restauraron vía seeders: `RolesSeeder`, `RolesPermisosSeeder`, `BrandSeeder`, `AtributosVarianteSeeder`, `ZonaEnvioSeeder`. **Pendiente de recuperación manual**: `productos`/`variantes`/`imagenes` (requieren categorías), y datos transaccionales reales (`pedidos`, `direcciones`, `cupones`, `facturas`, usuarios extra) que no tienen seeder. Nota: `ProductosSeeder` fue eliminado y `CategoriaSeeder` creado — las marcas viven en `BrandSeeder`, las categorías en `CategoriaSeeder` y los datos demo en `CatalogoDemoSeeder`.
-- **`CatalogoDemoSeeder` (datos demo masivos) SOLO corre contra la BD de tests:** `php artisan db:seed --class=CatalogoDemoSeeder --env=testing`. Tiene un **guard interno** (aborta con `RuntimeException` antes de tocar nada si la conexión activa NO es `ecommerce_test`), así que jamás debe ejecutarse contra `ecommerce_pyme_panama`. Genera **solo catálogo** — NO crea roles ni usuarios (eso es `RolesSeeder` + `RolesPermisosSeeder`, que se ejecutan por separado) y **NO crea marcas ni categorías** (las crean `BrandSeeder` —fuente canónica con logos reales— y `CategoriaSeeder` —nombres en español, slug = `Str::slug(nombre)`—, que este seeder llama internamente y solo CARGA desde la BD para asignar `brand_id`/`categoria_id`). En un comando genera: 63 marcas (vía `BrandSeeder`), 43 categorías (vía `CategoriaSeeder`, raíz + subcategorías) y **1075 productos** (1051 bienes + 24 servicios informáticos) con ~832 variantes (22%, stock del producto = suma del stock de sus variantes). Los **servicios** llevan `stock = 999` (centinela, sin inventario), `brand_id = null` y `aplica_itbms = true` (el ITBMS grava servicios en Panamá). Es idempotente (firstOrCreate/updateOrCreate por slug/SKU) y determinista (semilla fija); no crea filas en `imagenes_producto` (el storefront renderiza placeholder sin imágenes). No usar como seeder de producción ni de recuperación de dev.
+Este archivo define las convenciones obligatorias para agentes de IA y desarrolladores. Antes de modificar código, respetar estas reglas y reutilizar los componentes, servicios y patrones existentes.
 
-## Performance Guidelines
+---
 
-### Resumen de problemas encontrados y corregidos
+# 1. UI, diseño e identidad visual
 
-Una auditoría de rendimiento en el storefront detectó y corrigió lo siguiente:
+### Tipografía
 
-| Problema | Corrección aplicada |
-|---|---|
-| CSS compilado en runtime vía **Tailwind Play CDN** (`cdn.tailwindcss.com`) en los layouts — descarga ~330 kB del navegador del usuario en cada carga | Reemplazado por el **pipeline de build de Vite** (`resources/css/app.css`, `resources/js/app.js`, `@vite()` en layouts cliente/admin/guest) |
-| Enlaces internos sin `wire:navigate` — cada clic disparaba un full page reload | Se añadió `wire:navigate` a los enlaces internos del storefront (navbar, catálogo, producto, carrito, checkout, perfil, dashboard, paginación) |
-| Assets servidos sin cabeceras `Cache-Control` — el navegador los re-descargaba en cada navegación | `public/.htaccess` (Apache/producción) y `server.php` (router de `php artisan serve` en dev) aplican cabeceras por tipo de asset |
-| Consultas de carrito duplicadas: `NavbarBadges` y `CarritoDrawer` (y `CarritoWidget`) llamaban cada uno a `obtenerOCrearCarrito()` por separado → 3 `SELECT` de carrito por página | `CarritoService` registrado como **singleton** con **memoización por petición** (`carritosPorPeticion`) e invalidación automática en cada mutación |
+* Fuente oficial: **Plus Jakarta Sans** (`font-sans`).
+* Está configurada globalmente en `resources/views/layouts/admin.blade.php`.
+* No importar fuentes adicionales desde vistas individuales.
+* Mantener `font-sans` y la jerarquía tipográfica definida por el layout.
 
-### Reglas obligatorias (NO reintroducir estas regresiones)
+### Colores
 
-1. **Nunca** añadas `cdn.tailwindcss.com` ni ningún otro CDN de compilación de CSS/JS en runtime. Todo el CSS/JS debe ir por el **pipeline de build de Vite** (`@vite(['resources/css/app.css', 'resources/js/app.js'])`). Después de modificar `tailwind.config.js` o los `@layer`/`@apply` en CSS, ejecuta `npm run build`.
+* Accent principal: `emerald-600` / `#059669`.
+* Fondo/superficie: `slate-50` / `#F8FAFC`.
+* Bordes: `slate-200` / `#E5E7EB`.
+* Sidebar: `#1F2937`.
+* Texto del sidebar: `slate-300`.
+* Indicadores activos: `emerald-400`.
 
-2. **Todo enlace interno** (`<a href="route(...)">`, `url(...)`, o ruta interna `/...`) dentro del storefront **debe llevar `wire:navigate`** para evitar full page reloads. Excepciones documentadas:
-   - Destinos del **panel admin** (admin no carga Livewire: navegación clásica a propósito).
-   - Enlaces con `target="_blank"` (abrir en pestaña nueva — `wire:navigate` es irrelevante).
-   - Anclas `href="#"` o `#seccion` dentro de la misma página.
-   - Páginas guest/auth (login, register, reset) son hojas de entrada: no requieren `wire:navigate`.
-   - Si un enlace llega al carrito/checkout desde el **drawer**, recuerda cerrar el drawer antes de navegar (`@click="abierto = false; $wire.cerrar();"`).
+### Navegación administrativa
 
-3. **Assets estáticos nuevos** (fuentes, imágenes, íconos) deben servirse con cabeceras `Cache-Control` apropiadas. Revisa **ambos** sitios al añadir un tipo de asset nuevo:
-   - `public/.htaccess` (Apache — producción): bloques `<IfModule mod_headers.c>` con `<FilesMatch>` / `<If>`.
-   - `server.php` (PHP built-in server — dev): `$contentTypes` + bloques `preg_match` de `$cacheControl`.
-   - Reglas vigentes: `/build/assets/*.js|css` → `max-age=31536000, immutable` (1 año); fuentes → `604800` (1 semana); `/storage/**` y `/uploads/**` → `86400` (1 día); imágenes/JS/CSS no-fingerprinted → `604800` (1 semana).
+El breadcrumb del TopBar debe seguir:
 
-4. **Evita fetch duplicado de datos** en múltiples componentes Livewire montados en la misma página (carrito, lista de deseos, notificaciones). En lugar de consultar por componente, **resuelve una vez y comparte** el mismo patrón de `CarritoService` (Fix 4):
-   - Registra el servicio como singleton en `AppServiceProvider::register()`.
-   - Memoiza dentro de la petición en el método de resolución (`obtenerOCrearCarrito` con `carritosPorPeticion`).
-   - **Invalida la caché en toda mutación** (llama al helper de olvido al inicio y fin de `agregarProducto`, `actualizarCantidad`, `eliminarItem`, `aplicarCupon`, `removerCupon`, `fusionarCarritos`, `recalcularDescuentoCupon`), para que los listeners de `carrito-actualizado` en la misma petición lean datos frescos.
-   - No añadas relaciones al `->load()` si el servicio ya las eager-loads (provoca una query duplicada — ver open items).
+`Panel > Módulo > Acción`
 
-5. **`php artisan config:cache` / `route:cache` son SOLO para producción/despliegue.** Nunca los ejecutes en dev local — cifran `.env` (los cambios de entorno dejan de aplicar hasta `config:clear`) y rompen rutas con closures. `view:cache` es aceptable en dev (se invalida sola por mtime).
+Ejemplos de acción: `Index`, `Nuevo`, `Editar`.
 
-### Hallazgos pendientes (open items — no corregidos aún, solo documentados)
+El TopNavBar permanece fijo:
 
-- **[wire:navigate × DOMContentLoaded]** Tras ampliar `wire:navigate`, estas páginas del storefront tienen scripts de init con `document.addEventListener('DOMContentLoaded', ...)` que **no se ejecutan** cuando la página se alcanza vía navegación SPA (el evento ya disparó en la carga inicial). Misma clase de bug previamente corregida en `mi-cuenta`:
-  - `resources/views/cliente/checkout/pago.blade.php:159` — toggle del formulario de transferencia (crítico: rompe el checkout).
-  - `resources/views/cliente/checkout/confirmacion.blade.php:220` — protección de doble submit del botón "Confirmar".
-  - `resources/views/components/toast-alert.blade.php:107` — auto-inicio de temporizador de toasts servidos por `->with('toast_*')` (solo afecta toasts renderizados en el primer HTML; los disparados por `Livewire.dispatch` son seguros).
-  - **Patrón correcto ya usado en el repo**: `resources/views/cliente/perfil/datos.blade.php` (IIFE + guard `dataset.inited`, sin dependencia de `DOMContentLoaded` para el init crítico). Aplica ese patrón a las páginas listadas.
-- **[FIXED] `catalogo/detalle.blade.php` (galería de producto)**: el script tenía `const`/`let` a nivel superior (`galeriaImagenes`, `indiceActual`, `totalImagenes`, `varianteSeleccionadaId`, `touchStartX`) e init con `DOMContentLoaded`. Al re-ejecutarse el script en una navegación SPA (Livewire clona y re-ejecuta los `<script>` del body en scope global), la re-declaración de `const galeriaImagenes` lanzaba `SyntaxError` y abortaba todo el script → imagen anterior/no inicializada. **Corregido** envolviendo todo en una **IIFE** (scope local → sin colisión de `const`/`let`), ejecutando el init de forma **inmediata** (no con `DOMContentLoaded`), exponiendo las funciones usadas por `onclick` inline en `window` (re-enlazadas en cada carga), y registrando el listener `keydown` de `document` **una sola vez** con dispatch a `window.*`. Verificado: navegación A→B→C→A con imagen correcta en cada paso, sin SyntaxError.
-- **[items_carrito duplicado]** `CarritoDrawer::cargarCarrito()` llama `->load(['items.producto.imagenes', 'items.producto.brand', 'items.variante.opciones'])` sobre el carrito memoizado. Como `brand` no está en el eager load de `obtenerOCrearCarrito()`, Laravel re-ejecuta `SELECT * FROM items_carrito` → 1 query duplicada por página. Solución sugerida: añadir `items.producto.brand` al eager load del servicio, o comprobar `relationLoaded()` antes de `load()`. Impacto: 1 query extra por página (menor).
-- **Servidor dev en el puerto 8000**: el `artisan serve` del usuario se arrancó **antes** de crear `server.php`, por lo que aún usa el router de vendor y **no** aplica las cabeceras de caché. Reiniciar `php artisan serve` (o tocar `.env`) para que use `server.php` y verificar con `curl -I`.
-- **[Stock Breeze layout]** `layouts/app.blade.php` + `layouts/navigation.blade.php` (componentes `AppLayout`, `GuestLayout`) son restos de Laravel Breeze usados solo por `profile/edit.blade.php` (sin ruta activa). Usan `@vite` (sin CDN) pero **no** tienen `wire:navigate`. No afecta al rendimiento actual (código muerto), pero conviene eliminarlos o migrarlos.
-- **[CANCELAR NO restaura stock — pendiente de confirmación de negocio]** Al cancelar un pedido (`cambiarEstado('cancelado')`) NO se repone el stock descontado al crearlo. Si la decisión de negocio es que sí debe reponerse (y también en `devolucion_aprobada`), implementar: incrementar stock por item + registrar `movimientos_inventario` tipo `entrada` con motivo `"Cancelación - Pedido #PM-XXXXXX"`. Hasta que se confirme, el comportamiento actual (no restaurar) queda documentado por el test `test_cancelar_un_pedido_no_restaura_el_stock`.
+```html
+sticky top-0 z-40 backdrop-blur-md
+```
 
-### Comportamientos confirmados como intencionales (no corregir)
+---
 
-- **contra_entrega** se confirma de inmediato como pedido en estado `pendiente` (el pago se cobra al entregar) — intencional.
-- **transferencia (ACH)** exige subir el comprobante antes de crear el pedido; sin él `PagoService::procesarTransferencia(null)` devuelve `false` y NO se crea el pedido (queda a confirmación manual del admin) — intencional.
-- **Stripe / Yappy** son **simulaciones puras** (`PagoService` siempre devuelve `true`; nunca se llama a APIs reales). **TODO**: integrar SDKs reales de pasarela de pago antes de producción. Los tests fuerzan el fallo con mock de `PagoService`.
-- **Aislamiento por usuario**: `Cliente\PedidoController::detalle` filtra por `usuario_id` (404 cross-user) — correcto.
-- **Cupón en carrito**: la integración real está en `CarritoWidget::aplicarCupon` y `CarritoController::aplicarCupon` (cubiertas por tests). Los métodos muertos `verCarrito`/`aplicarCuponCarrito`/`removerCuponCarrito` de `PromocionController` (sin rutas registradas) fueron **ELIMINADOS**.
+# 2. Componentes globales obligatorios
 
-### Notas de arquitectura resueltas
+### Toast / notificaciones
 
-- **[FIXED — numero_pedido] Fuente única de verdad en PHP.** Existían DOS mecanismos en conflicto: el trigger DB `trg_numero_pedido`/`generar_numero_pedido()` (formato `P-YYYY-000001`) y el código PHP de `PedidoService` que lo sobrescribía con `#PM-XXXXXX`. Se eliminó el trigger (migración `2026_08_11_000000_drop_trigger_numero_pedido.php`) y `numero_pedido` lo genera **únicamente** `PedidoService::generarNumeroPedido()`: correlativo atómico en `configuracion` (`clave = 'pedido_correlativo'`) con `lockForUpdate()` dentro de la transacción del pedido (mismo patrón seguro que `facturas.numero` → `generar_numero_factura`). Esto evita la colisión que ocurriría si dos pedidos insertaran `numero_pedido = ''` de forma concurrente (constraint `pedidos_numero_pedido_key`). Si un día se regenera la BD desde cero, los números siguen saliendo `#PM-260001`, `#PM-260002`, … porque el correlativo se siembra con `MAX(pedidos.id)`.
-- **[FIXED — IDOR en items del carrito (seguridad)]** `CarritoService::actualizarCantidad()` y `eliminarItem()` ahora validan la propiedad del item antes de actuar (`validarPropietarioDelItem`): el carrito del item debe pertenecer al `usuario_id` autenticado o al `sesion_id` de la sesión actual. Se añadió el parámetro `?string $sesionId` y se actualizaron TODOS los llamadores (rutas HTTP, `CarritoWidget`, `CarritoDrawer`). Antes, cualquier usuario podía modificar/eliminar items ajenos adivinando el id.
-- **[FIXED — movimientos_inventario (auditoría de stock)]** `PedidoService::crearDesdeCarrito` ahora registra un `movimientos_inventario` (tipo `salida`, `stock_antes`/`stock_despues`, `pedido_id`, motivo `"Venta - Pedido #PM-XXXXXX"`) por cada item, en la MISMA transacción que descuenta stock. Antes la tabla existía pero ningún código la escribía.
-- **[FIXED — ITBMS respeta aplica_itbms]** Se extrajo el cálculo compartido `CarritoService::calcularSubtotalEItbms()` (subtotal + base imponible ITBMS por producto con `aplica_itbms`). `PedidoService::calcularTotales` y `CarritoService::calcularTotal` lo usan → carrito y pedido siempre consistentes (antes PedidoService aplicaba 7% plano sobre todo el subtotal).
-- **[FIXED — estado inicial 'pendiente' duplicado]** El trigger DB `trg_estado_inicial_pedido`/`registrar_estado_inicial_pedido()` fue eliminado (migración `2026_08_11_000001_drop_trigger_estado_inicial_pedido.php`). El estado inicial y todas las transiciones las gestiona **únicamente** `PedidoService::cambiarEstado` → exactamente 1 fila `pendiente` al crear el pedido.
+Utilizar:
+
+```blade
+<x-toast-alert />
+```
+
+Está incluido en `layouts/admin.blade.php`.
+
+**No crear alertas inline** como:
+
+```blade
+@if(session('success'))
+@if(session('error'))
+```
+
+El sistema global ya procesa:
+
+* `success`
+* `toast_success`
+* `error`
+* `warning`
+* `info`
+
+Crear alertas adicionales puede provocar mensajes duplicados.
+
+### Confirmación de eliminación
+
+Utilizar:
+
+```blade
+<x-modal-eliminar />
+```
+
+y:
+
+```js
+window.ModalEliminar.abrir(url, nombre, extra)
+```
+
+o:
+
+```js
+window.ModalEliminar.abrir({
+    url,
+    nombre,
+    extra,
+    titulo,
+    mensaje
+})
+```
+
+**Nunca** utilizar:
+
+```js
+confirm(...)
+```
+
+ni crear modales de eliminación independientes para cada vista.
+
+### Tarjetas de producto
+
+Para mostrar un producto individual utilizar siempre:
+
+```blade
+<x-producto-card :prod="$producto" />
+```
+
+No duplicar manualmente el HTML de una tarjeta de producto en catálogo, dashboard, inicio, relacionados u otras vistas.
+
+### Modal de búsqueda
+
+Para selectores y búsquedas masivas utilizar:
+
+```blade
+<x-modal-busqueda
+    id="..."
+    titulo="..."
+    subtitulo="..."
+    icono="..."
+    placeholder="..."
+/>
+```
+
+y el helper global:
+
+```js
+window.ModalBuscador
+```
+
+No duplicar la lógica visual/JS del buscador en cada formulario.
+
+---
+
+# 3. Tablas y listados
+
+* No mostrar IDs técnicos como `#123` debajo del nombre salvo que se solicite explícitamente.
+* Los estados deben utilizar badges tipo pill:
+
+```html
+rounded-full
+```
+
+* Estado activo: punto `w-1.5 h-1.5 rounded-full bg-emerald-500`.
+* Estado inactivo: `bg-slate-400`.
+
+---
+
+# 4. Arquitectura y separación de responsabilidades
+
+### Blade
+
+Las vistas:
+
+```text
+resources/views/**/*.blade.php
+```
+
+deben encargarse principalmente de:
+
+* HTML.
+* Tailwind/CSS.
+* Componentes.
+* Renderizado.
+
+**No consultar la BD desde Blade.**
+
+Evitar:
+
+```php
+\App\Models\...
+DB::table(...)
+```
+
+y consultas dentro de `@php`.
+
+Tampoco colocar transformaciones complejas de datos en las vistas.
+
+### Controllers
+
+Los Controllers deben preparar los datos necesarios:
+
+* Consultas.
+* Filtrado.
+* Mapeo.
+* Formateo.
+* Datos JSON para JavaScript.
+* Marcas.
+* Categorías.
+* Atributos.
+* Etc.
+
+### Services
+
+La lógica de negocio y cálculos reutilizables deben centralizarse en:
+
+```text
+app/Services/
+```
+
+Ejemplo:
+
+```text
+app/Services/EnvioService.php
+```
+
+No duplicar reglas de negocio entre Controllers, Livewire y Blade.
+
+---
+
+# 5. Modales y grandes cantidades de datos
+
+Los selectores masivos de:
+
+* Marcas.
+* Categorías.
+* Atributos.
+* Zonas.
+* Catálogos.
+
+deben renderizar inicialmente **máximo 15 elementos**:
+
+```text
+porPagina: 15
+```
+
+No cargar miles de registros directamente en el DOM.
+
+Para estructuras grandes, como miles de variantes, utilizar payload JSON:
+
+```text
+variantes_json
+```
+
+en lugar de enviar miles de variables individuales y arriesgar `max_input_vars`.
+
+---
+
+# 6. Vite, Tailwind y assets
+
+**Nunca utilizar `cdn.tailwindcss.com` ni CDN para compilar CSS/JS en runtime.**
+
+Todo debe utilizar Vite:
+
+```blade
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+```
+
+Después de modificar `tailwind.config.js`, `@layer` o `@apply`:
+
+```bash
+npm run build
+```
+
+### Caché de assets
+
+Mantener sincronizados:
+
+* `public/.htaccess` → producción Apache.
+* `server.php` → servidor PHP de desarrollo.
+
+Política actual:
+
+| Asset                           | Cache-Control |                       |
+| ------------------------------- | ------------: | --------------------- |
+| `/build/assets/*.js             |          css` | `31536000, immutable` |
+| Fuentes                         |      `604800` |                       |
+| `/storage/**`, `/uploads/**`    |       `86400` |                       |
+| Imágenes/JS/CSS sin fingerprint |      `604800` |                       |
+
+Al agregar nuevos tipos de assets, revisar ambos archivos.
+
+---
+
+# 7. Livewire y navegación SPA
+
+Todo enlace interno del **storefront** debe utilizar:
+
+```blade
+wire:navigate
+```
+
+para evitar full page reload.
+
+Excepciones:
+
+* Panel admin.
+* `target="_blank"`.
+* Anclas `#` o `#seccion`.
+* Login, registro y reset.
+* Casos donde la navegación clásica sea intencional.
+
+Si un enlace del drawer del carrito lleva a carrito/checkout, cerrar primero el drawer.
+
+---
+
+# 8. JavaScript con `wire:navigate`
+
+Las páginas navegadas mediante `wire:navigate` **no deben depender de `DOMContentLoaded`** para ejecutar inicializaciones.
+
+Preferir:
+
+* IIFE.
+* Inicialización inmediata.
+* `dataset.inited`.
+* Scope local para `const`/`let`.
+* Funciones necesarias para `onclick` expuestas mediante `window`.
+* Listeners globales registrados una sola vez.
+
+Patrón de referencia:
+
+```text
+resources/views/cliente/perfil/datos.blade.php
+```
+
+### Pendientes conocidos
+
+Revisar:
+
+```text
+resources/views/cliente/checkout/pago.blade.php
+resources/views/cliente/checkout/confirmacion.blade.php
+resources/views/components/toast-alert.blade.php
+```
+
+porque contienen inicializaciones basadas en `DOMContentLoaded`.
+
+En `checkout/pago.blade.php`, el problema es crítico porque puede impedir el funcionamiento del formulario de transferencia.
+
+### Galería de producto
+
+`catalogo/detalle.blade.php` ya fue corregido.
+
+Mantener:
+
+* IIFE.
+* Sin `const`/`let` globales.
+* Init inmediata.
+* Funciones inline expuestas mediante `window`.
+* Listener `keydown` global único.
+
+---
+
+# 9. Rendimiento y consultas duplicadas
+
+Evitar que varios componentes Livewire consulten los mismos datos independientemente.
+
+### Carrito
+
+`CarritoService` debe ser un **singleton** y utilizar memoización por petición mediante:
+
+```text
+carritosPorPeticion
+```
+
+`obtenerOCrearCarrito()` debe reutilizar el carrito ya resuelto durante la petición.
+
+Las mutaciones deben invalidar la caché:
+
+* `agregarProducto`
+* `actualizarCantidad`
+* `eliminarItem`
+* `aplicarCupon`
+* `removerCupon`
+* `fusionarCarritos`
+* `recalcularDescuentoCupon`
+
+No realizar nuevamente `->load()` sobre relaciones que el servicio ya cargó.
+
+Antes de cargar una relación adicional, utilizar `relationLoaded()`.
+
+### Problema conocido
+
+`CarritoDrawer::cargarCarrito()` puede generar una consulta adicional si solicita:
+
+```php
+items.producto.brand
+```
+
+pero dicha relación no fue cargada por `CarritoService`.
+
+Preferir agregarla al eager loading del servicio o comprobar `relationLoaded()`.
+
+---
+
+# 10. Caché de Laravel
+
+`config:cache` y `route:cache` son **solo para producción/despliegue**.
+
+No ejecutarlos en desarrollo local.
+
+Motivos:
+
+* `config:cache` puede impedir que cambios en `.env` se apliquen hasta `config:clear`.
+* `route:cache` no funciona con rutas basadas en closures.
+
+`view:cache` puede utilizarse si es necesario.
+
+---
+
+# 11. Servidor de desarrollo
+
+Cuando se modifique `server.php`, reiniciar:
+
+```bash
+php artisan serve
+```
+
+para asegurar que el servidor utilice el router actualizado.
+
+Verificar las cabeceras con:
+
+```bash
+curl -I http://127.0.0.1:8000/...
+```
+
+---
+
+# 12. Breeze / código legado
+
+Estos archivos son restos de Laravel Breeze:
+
+```text
+layouts/app.blade.php
+layouts/navigation.blade.php
+```
+
+Actualmente son utilizados únicamente por `profile/edit.blade.php`, sin una ruta activa relevante.
+
+No afectan al rendimiento actual. Pueden eliminarse o migrarse durante una limpieza posterior.
+
+---
+
+# 13. Comentarios en el código
+
+Los comentarios deben ser:
+
+* Simples.
+* Humanos.
+* Descriptivos.
+* Útiles para entender la sección.
+
+Evitar comentarios excesivamente técnicos, largos o redundantes.
+
+Ejemplo correcto:
+
+```php
+// Cargamos las categorías para mostrarlas en el selector.
+```
+
+No llenar el código de comentarios que simplemente repitan lo que ya hace el código.
+
+---
+
+# Prioridades
+
+Al modificar el proyecto, respetar este orden:
+
+1. **No romper la arquitectura MVC.**
+2. **Reutilizar componentes y Services existentes.**
+3. **Mantener la identidad visual global.**
+4. **Evitar consultas y renders innecesarios.**
+5. **Mantener `wire:navigate` en el storefront.**
+6. **No romper JavaScript al navegar con Livewire.**
+7. **Mantener Vite como sistema de assets.**
+8. **Respetar los componentes globales de Toast, eliminación, búsqueda y productos.**
+9. **No introducir consultas a BD ni lógica compleja en Blade.**
+10. **No ejecutar configuraciones de producción durante desarrollo.**
+
+Antes de crear una nueva solución, buscar primero si ya existe un **componente, helper, Service, patrón JavaScript o sistema global equivalente** y reutilizarlo.

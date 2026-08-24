@@ -54,7 +54,7 @@ class FacturaService
             ]);
 
             $pdfRuta = 'facturas/' . $numeroFactura . '.pdf';
-            Storage::disk('public')->put($pdfRuta, $pdf->output());
+            Storage::disk('local')->put($pdfRuta, $pdf->output());
 
             $factura->update(['pdf_ruta' => $pdfRuta]);
 

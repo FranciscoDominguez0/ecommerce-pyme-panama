@@ -55,8 +55,8 @@ class FacturaMail extends Mailable
     {
         $attachments = [];
 
-        if ($this->factura->pdf_ruta && \Storage::disk('public')->exists($this->factura->pdf_ruta)) {
-            $attachments[] = Attachment::fromStorageDisk('public', $this->factura->pdf_ruta)
+        if ($this->factura->pdf_ruta && \Storage::disk('local')->exists($this->factura->pdf_ruta)) {
+            $attachments[] = Attachment::fromStorageDisk('local', $this->factura->pdf_ruta)
                 ->as('Factura_' . $this->factura->numero . '.pdf')
                 ->withMime('application/pdf');
         }

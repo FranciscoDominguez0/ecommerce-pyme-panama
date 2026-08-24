@@ -142,7 +142,7 @@ class FacturaControllerAdminTest extends BaseAdminTest
         $factura = Factura::factory()->create([
             'pdf_ruta' => 'facturas/ejemplo.pdf',
         ]);
-        Storage::disk('public')->put('facturas/ejemplo.pdf', '%PDF-1.4 TEST');
+        Storage::disk('local')->put('facturas/ejemplo.pdf', '%PDF-1.4 TEST');
 
         $this->actingAs($admin)
             ->get(route('admin.facturas.pdf', $factura))
