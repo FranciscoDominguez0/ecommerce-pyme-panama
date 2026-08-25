@@ -182,17 +182,10 @@
             }
         }
 
-        // Definir el componente de forma global para Alpine
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('otpComponent', otpComponentData);
-        });
-
-        // Fallback por si Alpine ya se inicializó (muy común en producción con Livewire/Vite)
-        if (window.Alpine) {
-            window.Alpine.data('otpComponent', otpComponentData);
-        }
-
-        function otpComponentData() {
+        // Para evitar CUALQUIER problema de inicialización o conflictos entre Livewire y Vite,
+        // definimos el componente directamente en el objeto global 'window'.
+        // Alpine v3 lo detectará automáticamente cuando evalúe x-data="otpComponent()".
+        window.otpComponent = function() {
             return {
                 digits: ['', '', '', ''],
                 get code() {
