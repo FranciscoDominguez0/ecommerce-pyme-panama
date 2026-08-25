@@ -182,11 +182,8 @@
             }
         }
 
-        // Para evitar CUALQUIER problema de inicialización o conflictos entre Livewire y Vite,
-        // definimos el componente directamente en el objeto global 'window'.
-        // Alpine v3 lo detectará automáticamente cuando evalúe x-data="otpComponent()".
-        window.otpComponent = function() {
-            return {
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('otpComponent', () => ({
                 digits: ['', '', '', ''],
                 get code() {
                     return this.digits.join('');
@@ -230,7 +227,7 @@
                         this.$refs.input0.focus();
                     }, 100);
                 }
-            };
-        }
+            }));
+        });
     </script>
 </x-guest-layout>
