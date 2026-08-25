@@ -66,7 +66,7 @@ class DevolucionController extends Controller
         // Enviar notificación a los administradores
         $admins = Usuario::role('super_admin')->get();
         Notification::send($admins, new NuevaDevolucionNotification($devolucion));
-        \App\Events\NuevaNotificacion::dispatch();
+
 
         return redirect()->route('cliente.perfil.pedidos.detalle', $pedido->id)
             ->with('toast_success', 'Solicitud de devolución enviada correctamente.');

@@ -14,11 +14,10 @@ class NotificacionesBell extends Component
 
     public function mount()
     {
-        $this->cargarNotificaciones();
+        $this->cargarNotificaciones(false);
     }
 
-    #[On('echo:admin,.NuevaNotificacion')]
-    public function cargarNotificaciones()
+    public function cargarNotificaciones($playAudio = true)
     {
         $user = Auth::user();
         if ($user) {
@@ -27,7 +26,7 @@ class NotificacionesBell extends Component
             $this->notificaciones = $user->unreadNotifications()->take(15)->get();
             $this->unreadCount = $user->unreadNotifications()->count();
             
-            if ($this->unreadCount > $conteoAnterior) {
+            if ($playAudio && $this->unreadCount > $conteoAnterior) {
                 $this->dispatch('nueva-notificacion-recibida');
             }
         }

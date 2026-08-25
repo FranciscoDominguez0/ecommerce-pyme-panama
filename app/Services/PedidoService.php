@@ -160,7 +160,7 @@ class PedidoService
                 if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
                     $admins = Usuario::role('super_admin')->get();
                     Notification::send($admins, new StockMinimoNotification($item->producto, $item->variante));
-                    \App\Events\NuevaNotificacion::dispatch();
+
                 }
             }
 
@@ -177,7 +177,6 @@ class PedidoService
             // 7. Enviar notificaciones a los administradores
             $admins = Usuario::role('super_admin')->get();
             Notification::send($admins, new NuevoPedidoNotification($pedido));
-            \App\Events\NuevaNotificacion::dispatch();
 
             return $pedido;
         });
