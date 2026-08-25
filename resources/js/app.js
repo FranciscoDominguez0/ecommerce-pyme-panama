@@ -1,4 +1,7 @@
 import Alpine from 'alpinejs';
+import ApexCharts from 'apexcharts';
+
+window.ApexCharts = ApexCharts;
 
 // Livewire bundles and auto-initializes its own Alpine instance on any page
 // that loads @livewireScripts (window.Livewire is set synchronously by the

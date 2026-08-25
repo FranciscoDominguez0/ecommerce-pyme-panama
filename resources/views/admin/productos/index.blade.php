@@ -17,12 +17,10 @@
             <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Administra el catálogo de artículos, control de stock multivariante, precios y visibilidad.</p>
         </div>
         <div class="flex items-center gap-3">
-            <button type="button" 
-                    onclick="alert('Exportando catálogo completo a CSV / Excel...')" 
-                    class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-xs">
-                <span class="material-symbols-outlined text-[18px] text-slate-500">file_download</span>
-                <span class="hidden sm:inline">Exportar</span>
-            </button>
+            <x-btn-exportar 
+                excel-url="{{ route('admin.productos.exportar-excel') }}" 
+                pdf-url="{{ route('admin.productos.exportar-pdf') }}" 
+            />
             <a href="{{ route('admin.productos.create') }}" 
                class="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
                 <span class="material-symbols-outlined text-[18px]">add</span>

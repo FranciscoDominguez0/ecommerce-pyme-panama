@@ -182,6 +182,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     });
 
     // Módulo de Productos y Variantes
+    Route::get('/productos/exportar-excel', [ProductoController::class, 'exportarExcel'])->name('admin.productos.exportar-excel');
+    Route::get('/productos/exportar-pdf', [ProductoController::class, 'exportarPdf'])->name('admin.productos.exportar-pdf');
     Route::get('/productos', [ProductoController::class, 'index'])->name('admin.productos.index');
     Route::get('/productos/crear', [ProductoController::class, 'create'])->name('admin.productos.create');
     Route::post('/productos', [ProductoController::class, 'store'])->name('admin.productos.store');

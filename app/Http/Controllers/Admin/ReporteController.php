@@ -72,7 +72,11 @@ class ReporteController extends Controller
         
         if ($diferenciaDias <= 31) {
             $ventasDB = (clone $queryFacturas)
-                ->select(DB::raw('DATE(emitida_en) as fecha'), DB::raw('SUM(total) as total_ventas'))
+                ->select(
+                    DB::raw('DATE(emitida_en) as fecha'),
+                    DB::raw('SUM(total) as total_ventas'),
+                    DB::raw('SUM(descuento) as total_descuentos')
+                )
                 ->groupBy(DB::raw('DATE(emitida_en)'))
                 ->orderBy('fecha')
                 ->get();
@@ -80,12 +84,17 @@ class ReporteController extends Controller
             $ventasPorPeriodo = $ventasDB->map(function ($item) {
                 return [
                     'etiqueta' => Carbon::parse($item->fecha)->format('d M Y'),
-                    'total' => $item->total_ventas
+                    'total' => (float) $item->total_ventas,
+                    'descuentos' => (float) $item->total_descuentos
                 ];
             })->toArray();
         } else {
             $ventasDB = (clone $queryFacturas)
-                ->select(DB::raw('TO_CHAR(emitida_en, \'YYYY-MM\') as mes'), DB::raw('SUM(total) as total_ventas'))
+                ->select(
+                    DB::raw('TO_CHAR(emitida_en, \'YYYY-MM\') as mes'), 
+                    DB::raw('SUM(total) as total_ventas'),
+                    DB::raw('SUM(descuento) as total_descuentos')
+                )
                 ->groupBy(DB::raw('TO_CHAR(emitida_en, \'YYYY-MM\')'))
                 ->orderBy('mes')
                 ->get();
@@ -93,7 +102,8 @@ class ReporteController extends Controller
             $ventasPorPeriodo = $ventasDB->map(function ($item) {
                 return [
                     'etiqueta' => Carbon::parse($item->mes . '-01')->format('M Y'),
-                    'total' => $item->total_ventas
+                    'total' => (float) $item->total_ventas,
+                    'descuentos' => (float) $item->total_descuentos
                 ];
             })->toArray();
         }
@@ -146,20 +156,9 @@ class ReporteController extends Controller
             ->take(20)
             ->get();
 
-        // --- 6. Ventas por Método de Pago (Gráfica de Pastel) ---
-        $ventasPorMetodoPago = (clone $queryFacturas)
-            ->select('metodo_pago', DB::raw('SUM(total) as total_ventas'))
-            ->groupBy('metodo_pago')
-            ->orderBy('total_ventas', 'desc')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'metodo' => ucfirst(str_replace('_', ' ', $item->metodo_pago)),
-                    'total' => $item->total_ventas
-                ];
-            })->toArray();
+        // --- 6. (Removido: Ventas por Método de Pago) ---
 
-        // --- 7. Ventas por Categoría (Gráfica de Barras) ---
+        // --- 7. Ventas por Categoría (Gráfica de Barras / Donut) ---
         $ventasPorCategoria = DB::table('items_pedido')
             ->join('pedidos', 'items_pedido.pedido_id', '=', 'pedidos.id')
             ->join('facturas', 'pedidos.id', '=', 'facturas.pedido_id')
@@ -172,6 +171,12 @@ class ReporteController extends Controller
             ->orderBy('total_ventas', 'desc')
             ->take(8)
             ->get()
+            ->map(function ($item) {
+                return [
+                    'categoria' => $item->categoria,
+                    'total_ventas' => (float) $item->total_ventas
+                ];
+            })
             ->toArray();
 
         return compact(
@@ -188,7 +193,6 @@ class ReporteController extends Controller
             'productosMasVendidos',
             'clientesFrecuentes',
             'stockCritico',
-            'ventasPorMetodoPago',
             'ventasPorCategoria'
         );
     }

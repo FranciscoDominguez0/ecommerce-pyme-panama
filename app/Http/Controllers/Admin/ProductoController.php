@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\InventarioExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductoController extends Controller
 {
@@ -88,6 +91,44 @@ class ProductoController extends Controller
             'filtroStock',
             'categorias'
         ));
+    }
+
+    /**
+     * Genera un reporte PDF de Valorización de Inventario.
+     */
+    public function exportarPdf(Request $request)
+    {
+        // Obtener todos los productos activos en el inventario con su categoría
+        $productos = Producto::with('categoria')
+            ->sinEliminar()
+            ->orderBy('nombre', 'asc')
+            ->get();
+
+        $totalProductos = $productos->count();
+        $totalStock = $productos->sum('stock');
+        $valorizacionTotal = 0;
+
+        foreach ($productos as $producto) {
+            $valorizacionTotal += ($producto->stock * $producto->precio);
+        }
+
+        $pdf = Pdf::loadView('admin.productos.pdf.inventario', compact(
+            'productos',
+            'totalProductos',
+            'totalStock',
+            'valorizacionTotal'
+        ));
+
+        // Descarga el PDF con el nombre del día
+        return $pdf->download("valorizacion_inventario_" . now()->format('Ymd') . ".pdf");
+    }
+
+    /**
+     * Genera un reporte Excel de Valorización de Inventario.
+     */
+    public function exportarExcel()
+    {
+        return Excel::download(new InventarioExport, "valorizacion_inventario_" . now()->format('Ymd') . ".xlsx");
     }
 
     /**
