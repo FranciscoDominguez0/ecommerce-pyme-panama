@@ -167,6 +167,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::get('/', [InventarioController::class, 'index'])->name('index');
         // Stock actual
         Route::get('/stock', [InventarioController::class, 'stock'])->name('stock');
+        Route::get('/stock/exportar-excel', [InventarioController::class, 'exportarStockExcel'])->name('stock.exportar-excel');
+        Route::get('/stock/exportar-pdf', [InventarioController::class, 'exportarStockPdf'])->name('stock.exportar-pdf');
         // Registrar entrada
         Route::get('/entrada', [InventarioController::class, 'entradaForm'])->name('entrada.form');
         Route::post('/entrada', [InventarioController::class, 'entrada'])->name('entrada');

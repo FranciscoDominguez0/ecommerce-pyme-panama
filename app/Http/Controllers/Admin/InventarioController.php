@@ -259,4 +259,100 @@ class InventarioController extends Controller
         $producto = Producto::findOrFail($productoId);
         return response()->json(['stock' => $producto->stock]);
     }
+
+    // 🔥 7. Exportación de Stock 🔥
+
+    protected function obtenerDatosStockFiltrado(Request $request)
+    {
+        // 1. Productos sin variantes
+        $qProductos = Producto::with(['categoria'])
+            ->sinEliminar()
+            ->whereDoesntHave('variantes')
+            ->orderBy('nombre');
+
+        if ($request->filled('q')) {
+            $buscar = $request->q;
+            $qProductos->where(function ($q) use ($buscar) {
+                $q->where('nombre', 'ilike', "%{$buscar}%")
+                  ->orWhere('sku', 'ilike', "%{$buscar}%");
+            });
+        }
+        if ($request->filled('categoria')) {
+            $qProductos->where('categoria_id', $request->categoria);
+        }
+        if ($request->boolean('stock_bajo')) {
+            $qProductos->whereRaw('stock <= stock_minimo');
+        }
+
+        // 2. Variantes
+        $qVariantes = VarianteProducto::with(['producto.categoria', 'opciones.tipo'])
+            ->where('variantes_producto.activo', true)
+            ->whereHas('producto', fn($q) => $q->sinEliminar())
+            ->join('productos', 'variantes_producto.producto_id', '=', 'productos.id')
+            ->select('variantes_producto.*')
+            ->orderBy('productos.nombre');
+
+        if ($request->filled('q')) {
+            $buscar = $request->q;
+            $qVariantes->where(function ($q) use ($buscar) {
+                $q->where('variantes_producto.sku', 'ilike', "%{$buscar}%")
+                  ->orWhereHas('producto', fn($p) => $p->where('nombre', 'ilike', "%{$buscar}%"));
+            });
+        }
+        if ($request->filled('categoria')) {
+            $qVariantes->whereHas('producto', fn($p) => $p->where('categoria_id', $request->categoria));
+        }
+        if ($request->boolean('stock_bajo')) {
+            // Nota: En la BD, stock_minimo está en la tabla productos. 
+            // Para ser precisos en la vista original se compara variantes_producto.stock con productos.stock_minimo
+            $qVariantes->whereRaw('variantes_producto.stock <= productos.stock_minimo');
+        }
+
+        $productos = $qProductos->get()->map(function ($p) {
+            $p->is_variante = false;
+            $p->nombre_completo = $p->nombre;
+            return $p;
+        });
+
+        $variantes = $qVariantes->get()->map(function ($v) {
+            $v->is_variante = true;
+            $label = $v->opciones->map(fn($o) => $o->valor)->join(' - ');
+            $v->nombre_completo = $v->producto->nombre . ' (' . $label . ')';
+            $v->categoria = $v->producto->categoria;
+            $v->stock_minimo = $v->producto->stock_minimo;
+            return $v;
+        });
+
+        return $productos->concat($variantes)->sortBy('nombre_completo')->values();
+    }
+
+    public function exportarStockExcel(Request $request, \App\Services\AuditoriaService $auditoria)
+    {
+        $items = $this->obtenerDatosStockFiltrado($request);
+        
+        $auditoria->registrar('Inventario', 'Exportación Excel', 'Exportación de reporte de stock actual filtrado');
+        
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\StockActualExport($items), 'stock_actual_' . date('Y-m-d') . '.xlsx');
+    }
+
+    public function exportarStockPdf(Request $request, \App\Services\AuditoriaService $auditoria)
+    {
+        $items = $this->obtenerDatosStockFiltrado($request);
+        
+        $auditoria->registrar('Inventario', 'Exportación PDF', 'Exportación de reporte de stock actual filtrado');
+        
+        $totalStock = $items->sum('stock');
+        $valorizacionTotal = $items->sum(function ($item) {
+            return $item->stock * $item->precio;
+        });
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.inventario.pdf.stock', [
+            'items' => $items,
+            'totalItems' => $items->count(),
+            'totalStock' => $totalStock,
+            'valorizacionTotal' => $valorizacionTotal
+        ]);
+        
+        return $pdf->download('stock_actual_' . date('Y-m-d') . '.pdf');
+    }
 }

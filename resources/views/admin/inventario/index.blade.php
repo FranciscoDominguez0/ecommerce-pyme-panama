@@ -326,6 +326,9 @@
                     @if(request()->hasAny(['q', 'categoria', 'stock_bajo']))
                         <a href="{{ route('admin.inventario.stock') }}" class="px-3 py-1.5 text-xs text-slate-500 hover:text-slate-700 font-medium">Limpiar</a>
                     @endif
+                    <div class="ml-auto">
+                        <x-btn-exportar excel-onclick="exportar('excel')" pdf-onclick="exportar('pdf')" />
+                    </div>
                 </form>
             </div>
 
@@ -495,6 +498,28 @@
 
 @push('scripts')
 <script>
-// Alpine.js is expected to be already available via the admin layout
+    function exportar(formato) {
+        // Encontramos el formulario de filtros del stock
+        const forms = document.getElementsByTagName('form');
+        let form = null;
+        for (let i = 0; i < forms.length; i++) {
+            if (forms[i].action.includes('admin/inventario/stock')) {
+                form = forms[i];
+                break;
+            }
+        }
+        
+        if (!form) return;
+
+        const actionOriginal = form.action;
+        
+        if (formato === 'excel') { form.action = "{{ route('admin.inventario.stock.exportar-excel') }}"; } 
+        else if (formato === 'pdf') { form.action = "{{ route('admin.inventario.stock.exportar-pdf') }}"; }
+        
+        form.target = "_blank";
+        form.submit();
+        
+        setTimeout(() => { form.action = actionOriginal; form.target = "_self"; }, 100);
+    }
 </script>
 @endpush
