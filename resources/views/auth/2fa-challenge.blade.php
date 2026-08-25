@@ -135,10 +135,13 @@
     <script>
         async function submitVerify(e, resetLoading) {
             const form = e.target;
-            const errorAlert = document.getElementById('error-alert');
-            const codeErrorMsg = document.getElementById('code-error-msg');
-            
             const formData = new FormData(form);
+            
+            // Calcular el código manualmente para evitar problemas de sincronización (Race Condition) 
+            // entre la escritura rápida del usuario y la actualización del DOM de Alpine.js
+            const inputs = Array.from(form.querySelectorAll('input[inputmode="numeric"]'));
+            const actualCode = inputs.map(input => input.value).join('');
+            formData.set('code', actualCode);
             
             try {
                 const response = await fetch(form.action, {
@@ -159,6 +162,7 @@
                     const data = await response.json();
                     resetLoading();
                     
+                    const errorAlert = document.getElementById('error-alert');
                     if (errorAlert) {
                         errorAlert.classList.remove('hidden');
                         let errorMsg = 'El código ingresado es incorrecto.';
