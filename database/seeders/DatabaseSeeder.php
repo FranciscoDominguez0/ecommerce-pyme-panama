@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             CategoriaSeeder::class,       // 4. Categorías principales y subcategorías
             AtributosVarianteSeeder::class, // 5. Atributos y opciones para variantes
             ZonaEnvioSeeder::class,       // 6. Zonas de envío (Panamá)
+            ProductosDemoSeeder::class,   // 7. Productos de demostración con nombres y descripciones completas
         ]);
     }
 }
