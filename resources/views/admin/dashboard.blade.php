@@ -307,18 +307,16 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
 </div>
 
 @endsection
 
 @push('scripts')
+<script src="{{ asset('js/apexcharts.min.js') }}"></script>
 <script>
 (function() {
     function renderDashboardCharts() {
-        // Vite carga app.js como módulo (diferido). Esperamos hasta que ApexCharts esté disponible en window.
-        if (typeof window.ApexCharts === 'undefined') {
+        if (typeof ApexCharts === 'undefined') {
             setTimeout(renderDashboardCharts, 50);
             return;
         }
@@ -373,28 +371,28 @@
         };
 
         // 1. Sparkline - Sales (Emerald)
-        new window.ApexCharts(document.querySelector("#spark1"), {
+        new ApexCharts(document.querySelector("#spark1"), {
             ...sparklineOptions,
             colors: ['#059669'], // emerald-600
             series: [{ name: 'Ventas', data: ventas7Dias }]
         }).render();
 
         // 2. Sparkline - Orders (Blue)
-        new window.ApexCharts(document.querySelector("#spark2"), {
+        new ApexCharts(document.querySelector("#spark2"), {
             ...sparklineOptions,
             colors: ['#2563eb'], // blue-600
             series: [{ name: 'Pedidos', data: pedidos7Dias }]
         }).render();
 
         // 3. Sparkline - Customers (Purple)
-        new window.ApexCharts(document.querySelector("#spark3"), {
+        new ApexCharts(document.querySelector("#spark3"), {
             ...sparklineOptions,
             colors: ['#9333ea'], // purple-600
             series: [{ name: 'Clientes', data: clientes7Dias }]
         }).render();
 
         // 4. Sparkline - AOV (Orange)
-        new window.ApexCharts(document.querySelector("#spark4"), {
+        new ApexCharts(document.querySelector("#spark4"), {
             ...sparklineOptions,
             colors: ['#ea580c'], // orange-600
             series: [{ name: 'Ticket Promedio', data: aov7Dias }]
@@ -451,7 +449,7 @@
             theme: { mode: 'light' }
         };
 
-        new window.ApexCharts(document.querySelector("#mainChart"), mainChartOptions).render();
+        new ApexCharts(document.querySelector("#mainChart"), mainChartOptions).render();
     }
 
     // Ejecutar inicialmente (esperará a que ApexCharts cargue)
