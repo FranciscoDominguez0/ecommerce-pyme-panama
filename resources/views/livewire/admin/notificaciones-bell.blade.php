@@ -1,19 +1,12 @@
 <div class="relative shrink-0" 
-     x-data="{ 
-        open: false,
-        init() {
-            this.$watch('$wire.unreadCount', (value, oldValue) => {
-                if (oldValue !== undefined && value > oldValue) {
-                    let audio = document.getElementById('notification-sound');
-                    if (audio) {
-                        audio.play().catch(e => console.warn('Audio bloqueado o error:', e));
-                    }
-                }
-            });
-        }
-     }" 
-     @click.outside="open = false" 
-     wire:poll.5s="cargarNotificaciones">
+     x-data="{ open: false }" 
+     @click.outside="open = false"
+     @nueva-notificacion-recibida.window="
+         let audio = document.getElementById('notification-sound');
+         if (audio) {
+             audio.play().catch(e => console.warn('Audio bloqueado por el navegador. Debes hacer clic en la página primero:', e));
+         }
+     ">
      
     <!-- Audio para notificaciones -->
     <audio id="notification-sound" src="{{ asset('sounds/Notificacion.mp3') }}" preload="auto" style="display: none;"></audio>

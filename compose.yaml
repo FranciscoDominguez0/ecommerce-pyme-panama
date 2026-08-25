@@ -34,6 +34,8 @@ services:
     volumes:
       - app_storage:/var/www/html/storage/app
       - app_logs:/var/www/html/storage/logs
+    ports:
+      - "8080:8080" # Puerto para Laravel Reverb
     networks:
       - backend
       - npm_network   # red de NPM para que hable directo al contenedor

@@ -188,6 +188,7 @@ class InventarioService
             if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
                 $admins = Usuario::role('super_admin')->get();
                 Notification::send($admins, new StockMinimoNotification($producto, $variante));
+                \App\Events\NuevaNotificacion::dispatch();
             }
 
             return $movimiento;
@@ -243,6 +244,7 @@ class InventarioService
             if ($stockAntes > $stockMinimo && $nuevoStock <= $stockMinimo) {
                 $admins = Usuario::role('super_admin')->get();
                 Notification::send($admins, new StockMinimoNotification($producto, $variante));
+                \App\Events\NuevaNotificacion::dispatch();
             }
 
             return $movimiento;
