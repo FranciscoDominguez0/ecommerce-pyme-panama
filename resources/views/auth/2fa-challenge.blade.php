@@ -182,8 +182,18 @@
             }
         }
 
+        // Definir el componente de forma global para Alpine
         document.addEventListener('alpine:init', () => {
-            Alpine.data('otpComponent', () => ({
+            Alpine.data('otpComponent', otpComponentData);
+        });
+
+        // Fallback por si Alpine ya se inicializó (muy común en producción con Livewire/Vite)
+        if (window.Alpine) {
+            window.Alpine.data('otpComponent', otpComponentData);
+        }
+
+        function otpComponentData() {
+            return {
                 digits: ['', '', '', ''],
                 get code() {
                     return this.digits.join('');
@@ -227,7 +237,7 @@
                         this.$refs.input0.focus();
                     }, 100);
                 }
-            }));
-        });
+            };
+        }
     </script>
 </x-guest-layout>
