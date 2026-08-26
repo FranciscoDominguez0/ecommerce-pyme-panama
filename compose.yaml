@@ -34,6 +34,8 @@ services:
     volumes:
       - app_storage:/var/www/html/storage/app
       - app_logs:/var/www/html/storage/logs
+      - app_uploads:/var/www/html/public/uploads
+      - app_marcas:/var/www/html/public/images/Marcas
     networks:
       - backend
       - npm_network   # red de NPM para que hable directo al contenedor
@@ -49,3 +51,5 @@ volumes:
   db_data:
   app_storage:
   app_logs:
+  app_uploads:
+  app_marcas:

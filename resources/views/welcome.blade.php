@@ -84,17 +84,20 @@
                     <!-- Slide 1 -->
                     <video src="{{ asset('images/Imagen1.webm') }}" aria-label="Arma tu PC a Medida"
                         class="hero-slide absolute inset-0 w-full h-full object-cover block"
-                        style="max-height:480px; object-position:center; opacity:1; visibility:visible; transition: opacity 0.7s ease, visibility 0s 0s;" autoplay loop muted playsinline fetchpriority="high"></video>
+                        style="max-height:480px; object-position:center; opacity:1; visibility:visible; transition: opacity 0.7s ease, visibility 0s 0s;" 
+                        {{ app()->environment('local') ? 'preload="none"' : 'autoplay loop muted playsinline fetchpriority="high"' }}></video>
 
                     <!-- Slide 2 -->
                     <video src="{{ asset('images/Imagen2.webm') }}" aria-label="Portátiles en Panamá"
                         class="hero-slide absolute inset-0 w-full h-full object-cover block"
-                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" autoplay loop muted playsinline></video>
+                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" 
+                        {{ app()->environment('local') ? 'preload="none"' : 'autoplay loop muted playsinline' }}></video>
 
                     <!-- Slide 3 -->
                     <video src="{{ asset('images/Imagen3.webm') }}" aria-label="Periféricos en Panamá"
                         class="hero-slide absolute inset-0 w-full h-full object-cover block"
-                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" autoplay loop muted playsinline></video>
+                        style="max-height:480px; object-position:center; opacity:0; visibility:hidden; transition: opacity 0.7s ease, visibility 0s 0.7s;" 
+                        {{ app()->environment('local') ? 'preload="none"' : 'autoplay loop muted playsinline' }}></video>
 
                     <!-- Dot indicators -->
                     <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="heroDots">

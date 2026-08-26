@@ -25,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
             @ini_set('max_execution_time', '0');
         } elseif ($this->app->environment('local')) {
             @ini_set('max_execution_time', '120');
+        } else {
+            // Forzar HTTPS en producción (VPS) para arreglar Mixed Content (iconos y CSS rotos)
+            \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
         \App\Models\Usuario::observe(\App\Observers\UsuarioObserver::class);
