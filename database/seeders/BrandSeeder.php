@@ -8,8 +8,12 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
 class BrandSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Run the database seeds.
      */
@@ -115,7 +119,7 @@ class BrandSeeder extends Seeder
             // Sin archivo de logo disponible aún en public/images/Marcas/ → file = null.
             [
                 'name' => 'Acer',
-                'file' => null,
+                'file' => 'Acer.webp',
                 'verified' => true,
             ],
             [
@@ -125,7 +129,7 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Corsair',
-                'file' => null,
+                'file' => 'Corsair.webp',
                 'verified' => true,
             ],
             [
@@ -155,17 +159,17 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Brother',
-                'file' => null,
+                'file' => 'Brother.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Anker',
-                'file' => null,
+                'file' => 'Anker.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Belkin',
-                'file' => null,
+                'file' => 'Belkin.webp',
                 'verified' => true,
             ],
             [
@@ -215,7 +219,7 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Amazfit',
-                'file' => null,
+                'file' => 'Amazfit.webp',
                 'verified' => true,
             ],
             [
@@ -250,7 +254,7 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Cooler Master',
-                'file' => null,
+                'file' => 'Cooler-Mater.webp',
                 'verified' => true,
             ],
             [
@@ -275,7 +279,7 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'BenQ',
-                'file' => null,
+                'file' => 'Benq.webp',
                 'verified' => true,
             ],
             [
@@ -315,7 +319,7 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Bose',
-                'file' => null,
+                'file' => 'Bose.webp',
                 'verified' => true,
             ],
             [
@@ -349,7 +353,7 @@ class BrandSeeder extends Seeder
                     $rawBytes = File::get($fullFilePath);
                     $imageMime = 'image/webp';
                     $imagePath = 'images/Marcas/' . $marcaData['file'];
-                    
+
                     // En PostgreSQL bytea se inserta con stream resource o hex
                     $imageResource = fopen('php://memory', 'r+');
                     fwrite($imageResource, $rawBytes);
