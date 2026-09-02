@@ -17,6 +17,7 @@
             <a href="{{ route('admin.configuracion.general') }}" class="text-emerald-600 font-bold border-b-2 border-emerald-600 pb-3 px-1 text-sm font-semibold">General</a>
             <a href="{{ route('admin.configuracion.pagos') }}" class="text-slate-500 hover:text-emerald-600 transition-colors pb-3 px-1 text-sm">Pagos</a>
             <a href="{{ route('admin.configuracion.impuestos') }}" class="text-slate-500 hover:text-emerald-600 transition-colors pb-3 px-1 text-sm">Impuestos</a>
+            <a href="{{ route('admin.configuracion.notificaciones') }}" class="text-slate-500 hover:text-emerald-600 transition-colors pb-3 px-1 text-sm">Notificaciones</a>
         </nav>
     </div>
 

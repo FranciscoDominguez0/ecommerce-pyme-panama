@@ -186,9 +186,25 @@ class InventarioService
             // Notificar stock mínimo si aplica
             $stockMinimo = $producto->stock_minimo ?? 0;
             if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
-                $admins = Usuario::role('super_admin')->get();
-                Notification::send($admins, new StockMinimoNotification($producto, $variante));
+                $roles = ['super_admin'];
+                $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
+                $roles = array_unique(array_merge($roles, $rolesConfigurados));
+                
+                $usuariosNotificar = Usuario::role($roles)->get();
+                Notification::send($usuariosNotificar, new StockMinimoNotification($producto, $variante));
 
+                // Correos adicionales sin cuenta
+                if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
+                    $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
+                    if (!empty(trim($adicionales))) {
+                        $correos = array_map('trim', explode(',', $adicionales));
+                        foreach ($correos as $correo) {
+                            if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                                Notification::route('mail', $correo)->notify(new StockMinimoNotification($producto, $variante));
+                            }
+                        }
+                    }
+                }
             }
 
             return $movimiento;
@@ -242,9 +258,25 @@ class InventarioService
             // Notificar stock mínimo si aplica (solo si disminuyó y cruzó el umbral)
             $stockMinimo = $producto->stock_minimo ?? 0;
             if ($stockAntes > $stockMinimo && $nuevoStock <= $stockMinimo) {
-                $admins = Usuario::role('super_admin')->get();
-                Notification::send($admins, new StockMinimoNotification($producto, $variante));
+                $roles = ['super_admin'];
+                $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
+                $roles = array_unique(array_merge($roles, $rolesConfigurados));
+                
+                $usuariosNotificar = Usuario::role($roles)->get();
+                Notification::send($usuariosNotificar, new StockMinimoNotification($producto, $variante));
 
+                // Correos adicionales sin cuenta
+                if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
+                    $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
+                    if (!empty(trim($adicionales))) {
+                        $correos = array_map('trim', explode(',', $adicionales));
+                        foreach ($correos as $correo) {
+                            if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                                Notification::route('mail', $correo)->notify(new StockMinimoNotification($producto, $variante));
+                            }
+                        }
+                    }
+                }
             }
 
             return $movimiento;

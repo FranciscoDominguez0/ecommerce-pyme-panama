@@ -158,9 +158,25 @@ class PedidoService
                 $stockDespues = $stockAntes - $item->cantidad;
                 $stockMinimo = $item->producto->stock_minimo ?? 0;
                 if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
-                    $admins = Usuario::role('super_admin')->get();
-                    Notification::send($admins, new StockMinimoNotification($item->producto, $item->variante));
+                    $roles = ['super_admin'];
+                    $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
+                    $roles = array_unique(array_merge($roles, $rolesConfigurados));
+                    
+                    $usuariosNotificar = Usuario::role($roles)->get();
+                    Notification::send($usuariosNotificar, new StockMinimoNotification($item->producto, $item->variante));
 
+                    // Correos adicionales sin cuenta
+                    if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
+                        $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
+                        if (!empty(trim($adicionales))) {
+                            $correos = array_map('trim', explode(',', $adicionales));
+                            foreach ($correos as $correo) {
+                                if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+                                    Notification::route('mail', $correo)->notify(new StockMinimoNotification($item->producto, $item->variante));
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

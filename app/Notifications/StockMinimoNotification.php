@@ -29,7 +29,46 @@ class StockMinimoNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        // Siempre guardar en la base de datos para los usuarios del sistema
+        $canales = $notifiable instanceof \Illuminate\Notifications\AnonymousNotifiable ? [] : ['database'];
+        
+        $activo = \App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false);
+        if ($activo) {
+            if ($notifiable instanceof \Illuminate\Notifications\AnonymousNotifiable) {
+                // Correos adicionales (on-demand)
+                $canales[] = 'mail';
+            } elseif (method_exists($notifiable, 'hasAnyRole')) {
+                // Usuarios del sistema: verificar si tienen el rol configurado para correos
+                $rolesSeleccionados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
+                if (!empty($rolesSeleccionados) && $notifiable->hasAnyRole($rolesSeleccionados)) {
+                    $canales[] = 'mail';
+                }
+            }
+        }
+        
+        return $canales;
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): \Illuminate\Notifications\Messages\MailMessage
+    {
+        $nombreProducto = $this->producto->nombre;
+        if ($this->variante) {
+            $nombreProducto .= ' (' . $this->variante->valor . ')';
+        }
+
+        $stockActual = $this->variante ? $this->variante->stock : $this->producto->stock;
+        $url = url('/admin/inventario/stock?buscar=' . urlencode($this->producto->sku ?? $this->producto->nombre));
+
+        return (new \Illuminate\Notifications\Messages\MailMessage)
+                    ->subject('Alerta: Stock Mínimo Alcanzado - ' . $nombreProducto)
+                    ->view('emails.stock_minimo', [
+                        'nombreProducto' => $nombreProducto,
+                        'stockActual' => $stockActual,
+                        'url' => $url
+                    ]);
     }
 
     /**

@@ -116,4 +116,35 @@ class ConfiguracionController extends Controller
 
         return redirect()->route('admin.configuracion.impuestos')->with('toast_success', 'Configuración de impuestos guardada exitosamente.');
     }
+
+    /**
+     * Muestra el formulario de configuración de notificaciones.
+     */
+    public function notificaciones()
+    {
+        $configuraciones = Configuracion::porGrupo('correos')->pluck('valor', 'clave')->toArray();
+        $roles = \App\Models\Role::all(); // Usar Spatie o el modelo de roles que exista
+
+        return view('admin.configuracion.notificaciones', compact('configuraciones', 'roles'));
+    }
+
+    /**
+     * Guarda la configuración de notificaciones.
+     */
+    public function guardarNotificaciones(Request $request)
+    {
+        $request->validate([
+            'stock_email_roles' => 'nullable|array',
+            'stock_email_adicionales' => 'nullable|string',
+        ]);
+
+        $activo = $request->has('stock_email_activo') ? 'true' : 'false';
+        $roles = $request->input('stock_email_roles', []);
+        
+        Configuracion::guardar('notificaciones.stock.email.activo', $activo, 'correos', 'Activa el envío de emails por stock mínimo');
+        Configuracion::guardar('notificaciones.stock.email.roles', json_encode($roles), 'correos', 'Roles que reciben emails por stock mínimo');
+        Configuracion::guardar('notificaciones.stock.email.adicionales', $request->input('stock_email_adicionales', ''), 'correos', 'Correos adicionales para stock mínimo (separados por coma)');
+
+        return redirect()->route('admin.configuracion.notificaciones')->with('toast_success', 'Configuración de notificaciones guardada exitosamente.');
+    }
 }

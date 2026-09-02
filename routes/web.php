@@ -262,6 +262,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         
         Route::get('/impuestos', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'impuestos'])->name('impuestos');
         Route::put('/impuestos', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'guardarImpuestos'])->name('impuestos.guardar');
+
+        Route::get('/notificaciones', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'notificaciones'])->name('notificaciones');
+        Route::put('/notificaciones', [\App\Http\Controllers\Admin\ConfiguracionController::class, 'guardarNotificaciones'])->name('notificaciones.guardar');
     });
 
     // Módulo de Auditoría del Sistema
