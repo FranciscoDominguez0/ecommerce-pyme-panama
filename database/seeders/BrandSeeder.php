@@ -115,8 +115,7 @@ class BrandSeeder extends Seeder
                 'file' => 'Xiaomi.webp',
                 'verified' => true,
             ],
-            // ── Marcas adicionales (agregadas al catálogo demo) ────────────
-            // Sin archivo de logo disponible aún en public/images/Marcas/ → file = null.
+
             [
                 'name' => 'Acer',
                 'file' => 'Acer.webp',
@@ -124,7 +123,7 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'LG',
-                'file' => null,
+                'file' => 'LG.webp',
                 'verified' => true,
             ],
             [
@@ -134,27 +133,27 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Gigabyte',
-                'file' => null,
+                'file' => 'Gigabyte.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Nvidia',
-                'file' => null,
+                'file' => 'nvidia.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Seagate',
-                'file' => null,
+                'file' => 'Seagate.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Western Digital',
-                'file' => null,
+                'file' => 'Western Digital.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Epson',
-                'file' => null,
+                'file' => 'Epson.webp',
                 'verified' => true,
             ],
             [
@@ -174,47 +173,47 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Netgear',
-                'file' => null,
+                'file' => 'netgear.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Ubiquiti',
-                'file' => null,
+                'file' => 'Ubiquiti.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Nintendo',
-                'file' => null,
+                'file' => 'Nintendo.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'GoPro',
-                'file' => null,
+                'file' => 'gopro.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Hisense',
-                'file' => null,
+                'file' => 'Hisense.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Huawei',
-                'file' => null,
+                'file' => 'huawei.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Motorola',
-                'file' => null,
+                'file' => 'Motorola.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'OnePlus',
-                'file' => null,
+                'file' => 'oneplus.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Realme',
-                'file' => null,
+                'file' => 'realme.webp',
                 'verified' => true,
             ],
             [
@@ -224,32 +223,32 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Garmin',
-                'file' => null,
+                'file' => 'garmin.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'HyperX',
-                'file' => null,
+                'file' => 'HyperX.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'SteelSeries',
-                'file' => null,
+                'file' => 'SteelSeries.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Marshall',
-                'file' => null,
+                'file' => 'Marshall.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Edifier',
-                'file' => null,
+                'file' => 'Edifier.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Philips',
-                'file' => null,
+                'file' => 'Phillips.webp',
                 'verified' => true,
             ],
             [
@@ -259,22 +258,22 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Redragon',
-                'file' => null,
+                'file' => 'Redragon.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Microsoft',
-                'file' => null,
+                'file' => 'Microsoft.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'SanDisk',
-                'file' => null,
+                'file' => 'SanDisk.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Toshiba',
-                'file' => null,
+                'file' => 'Toshiba.webp',
                 'verified' => true,
             ],
             [
@@ -284,37 +283,37 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'ViewSonic',
-                'file' => null,
+                'file' => 'ViewSonic.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Logitech G',
-                'file' => null,
+                'file' => 'Logitech-G.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'NZXT',
-                'file' => null,
+                'file' => 'NZXT.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Thermaltake',
-                'file' => null,
+                'file' => 'Thermaltake.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'EVGA',
-                'file' => null,
+                'file' => 'EVGA.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Crucial',
-                'file' => null,
+                'file' => 'crucial.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Google',
-                'file' => null,
+                'file' => 'google.webp',
                 'verified' => true,
             ],
             [
@@ -324,17 +323,17 @@ class BrandSeeder extends Seeder
             ],
             [
                 'name' => 'Sennheiser',
-                'file' => null,
+                'file' => 'Sennheiser.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'D-Link',
-                'file' => null,
+                'file' => 'D-Link.webp',
                 'verified' => true,
             ],
             [
                 'name' => 'Zyxel',
-                'file' => null,
+                'file' => 'Zyxel.webp',
                 'verified' => true,
             ],
         ];
