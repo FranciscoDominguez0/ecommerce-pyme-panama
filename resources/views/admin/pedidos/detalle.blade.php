@@ -100,56 +100,18 @@
         <!-- Columna Izquierda: Items y Actualización -->
         <div class="lg:col-span-2 space-y-6">
             
-            <!-- Actualizar Estado -->
+            <!-- Estado del Pedido -->
             <div class="card-elevated rounded-xl p-6">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                     <h2 class="text-lg font-bold text-slate-900">Estado del Pedido</h2>
-                    @if($ultimoEstado === 'reembolsado')
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-800 border border-slate-300">
-                            <span class="material-symbols-outlined text-[15px]">lock</span> Ciclo Cerrado (Reembolsado)
-                        </span>
-                    @endif
                 </div>
 
                 @if($ultimoEstado === 'reembolsado')
-                    @php
-                        $estadoReembolso = $pedido->estados->where('estado', 'reembolsado')->last();
-                    @endphp
-                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
-                        <div class="flex items-start gap-4">
-                            <div class="p-3 bg-slate-800 text-white rounded-xl shadow-sm flex-shrink-0">
-                                <span class="material-symbols-outlined text-2xl">currency_exchange</span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="text-base font-bold text-slate-900">Pedido Reembolsado y Bloqueado</h3>
-                                <p class="text-xs text-slate-600 mt-0.5">
-                                    Este pedido fue reembolsado financieramente. Por seguridad e integridad contable, su estado se encuentra bloqueado permanentemente contra modificaciones o despachos posteriores.
-                                </p>
-                                
-                                <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-200">
-                                    <div class="bg-white rounded-lg p-2.5 border border-slate-200 shadow-2xs">
-                                        <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Monto Reembolsado</span>
-                                        <span class="text-base font-black text-slate-900">${{ number_format($pedido->monto_reembolsado ?: $pedido->total, 2) }} <span class="text-xs font-normal text-slate-500">USD</span></span>
-                                    </div>
-                                    <div class="bg-white rounded-lg p-2.5 border border-slate-200 shadow-2xs">
-                                        <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Fecha del Reembolso</span>
-                                        <span class="text-sm font-semibold text-slate-800">{{ $estadoReembolso?->creado_en ? $estadoReembolso->creado_en->format('d/m/Y H:i') : 'Registrado' }}</span>
-                                    </div>
-                                    <div class="bg-white rounded-lg p-2.5 border border-slate-200 shadow-2xs">
-                                        <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Procesado Por</span>
-                                        <span class="text-sm font-semibold text-slate-800 truncate block" title="{{ $estadoReembolso?->usuario?->email ?? 'Sistema' }}">
-                                            {{ $estadoReembolso?->usuario?->nombre ? $estadoReembolso->usuario->nombre . ' ' . $estadoReembolso->usuario->apellido : 'Administrador' }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                @if($estadoReembolso?->comentario)
-                                    <div class="mt-3 text-xs bg-white rounded-lg p-2.5 border border-slate-200 text-slate-700">
-                                        <span class="font-bold text-slate-900">Motivo registrado:</span> {{ $estadoReembolso->comentario }}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
+                    <div class="flex items-center gap-3 py-1">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Estado actual:</span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Reembolsado
+                        </span>
                     </div>
                 @else
                     <form action="{{ route('admin.pedidos.estado', $pedido->id) }}" method="POST" class="flex flex-col sm:flex-row gap-4 items-end" x-data="{ sub: false, estadoSel: '{{ $ultimoEstado }}' }" @submit="sub = true">

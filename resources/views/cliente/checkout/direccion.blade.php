@@ -31,7 +31,7 @@
 
     <div class="mb-8 max-w-4xl mx-auto">
         <h1 class="text-lg sm:text-xl font-bold text-primary mb-2">
-            {{ ($requiereEnvio ?? true) ? 'Seleccione su dirección de entrega' : 'Datos de entrega y facturación' }}
+            {{ ($requiereEnvio ?? true) ? 'Seleccione su dirección de envío' : 'Datos de entrega y facturación' }}
         </h1>
         <p class="text-on-surface-variant text-sm">
             Elija una dirección guardada o agregue una nueva para su pedido.
