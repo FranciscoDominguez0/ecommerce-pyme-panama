@@ -252,20 +252,6 @@
                             <div class="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
                         </label>
                     </div>
-
-                    @if($esEdicion && $categoria->padre && $categoria->padre->exento_envio)
-                        <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 flex items-start gap-2">
-                            <span class="material-symbols-outlined text-[16px] text-emerald-600 shrink-0 mt-0.5">account_tree</span>
-                            <div class="leading-tight">
-                                <strong>Heredado de {{ $categoria->padre->nombre }}:</strong> La categoría padre tiene activo que no lleva envío. Esta subcategoría y sus productos ya están exentos de cobro automáticamente.
-                            </div>
-                        </div>
-                    @elseif($esEdicion && $categoria->esPrincipal() && $categoria->hijas->count() > 0)
-                        <div class="text-[10px] text-slate-500 flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[13px] text-slate-400">info</span>
-                            <span>Al activar esta opción, sus <strong>{{ $categoria->hijas->count() }} subcategorías dependientes</strong> heredarán la exención.</span>
-                        </div>
-                    @endif
                 </div>
 
                 <!-- Orden de Visualización -->

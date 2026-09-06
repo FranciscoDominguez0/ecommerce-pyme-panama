@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
+use App\Services\AuditoriaService;
 use App\Services\PedidoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,9 +66,19 @@ class PedidoController extends Controller
             'comentario' => 'nullable|string',
         ]);
 
-        $pedido = Pedido::with('envio')->findOrFail($id);
+        $pedido = Pedido::with(['envio', 'ultimoEstado'])->findOrFail($id);
         
+        // Un pedido reembolsado tiene su ciclo financiero y logístico cerrado permanentemente
+        if ($pedido->ultimoEstado?->estado === 'reembolsado') {
+            return back()->with('toast_error', 'Este pedido ya se encuentra reembolsado y su ciclo está cerrado. No se permiten más cambios de estado.');
+        }
+
         $nuevoEstado = $request->estado;
+        
+        // Bloquear reembolsos directos desde el selector genérico de logística
+        if ($nuevoEstado === 'reembolsado') {
+            return back()->with('toast_error', 'Los reembolsos financieros no pueden procesarse desde el selector de estado. Deben ejecutarse formalmente mediante el botón de Reembolso con Stripe con su debida justificación.');
+        }
         
         // Validar que exista información de envío antes de avanzar a estados exclusivos de logística
         if (in_array($nuevoEstado, ['en_transito', 'problema_entrega']) && !$pedido->envio) {
@@ -116,7 +127,11 @@ class PedidoController extends Controller
             'accion' => 'required|string|in:iniciar_preparacion,marcar_listo,marcar_transito,marcar_entregado'
         ]);
 
-        $pedido = Pedido::with('envio')->findOrFail($id);
+        $pedido = Pedido::with(['envio', 'ultimoEstado'])->findOrFail($id);
+        
+        if ($pedido->ultimoEstado?->estado === 'reembolsado') {
+            return back()->with('toast_error', 'Este pedido ya se encuentra reembolsado y su ciclo está cerrado.');
+        }
         
         $nuevoEstado = '';
         $comentario = '';
@@ -174,16 +189,28 @@ class PedidoController extends Controller
 
     public function reembolsar(Request $request, $id)
     {
-        $request->validate([
-            'monto' => 'nullable|numeric|min:0.01',
-            'motivo' => 'nullable|string|max:255',
-        ]);
+        $user = Auth::user();
+        if (!$user || (!$user->hasAnyRole(['Admin', 'super_admin']) && !$user->can('admin.pedidos.reembolsar'))) {
+            abort(403, 'No tienes autorización para procesar reembolsos financieros.');
+        }
 
-        $pedido = Pedido::findOrFail($id);
+        $pedido = Pedido::with('ultimoEstado')->findOrFail($id);
+
+        if ($pedido->metodo_pago !== 'stripe') {
+            return back()->with('toast_error', 'El reembolso automatizado solo está disponible para pedidos procesados mediante Stripe.');
+        }
 
         if ($pedido->ultimoEstado?->estado === 'reembolsado') {
             return back()->with('toast_error', 'Este pedido ya se encuentra reembolsado.');
         }
+
+        $request->validate([
+            'monto' => 'nullable|numeric|min:0.01|max:' . $pedido->total,
+            'motivo' => 'required|string|min:5|max:255',
+        ], [
+            'motivo.required' => 'Es obligatorio ingresar un motivo o justificación para procesar el reembolso.',
+            'motivo.min' => 'El motivo debe tener al menos 5 caracteres descriptivos para el registro de auditoría.',
+        ]);
 
         $pagoService = app(\App\Services\PagoService::class);
         $montoSolicitado = $request->filled('monto') ? (float) $request->monto : (float) $pedido->total;
@@ -207,6 +234,23 @@ class PedidoController extends Controller
         }
 
         $this->pedidoService->cambiarEstado($pedido, 'reembolsado', Auth::id(), $comentario);
+
+        // Registro de auditoría para control de fraude y supervisión administrativa
+        AuditoriaService::registrar(
+            'pedidos',
+            'reembolso_stripe',
+            "Reembolso emitido por \${$montoReembolsado} en pedido #{$pedido->numero_pedido} por {$user->nombre} {$user->apellido}. Motivo: {$request->motivo}",
+            null,
+            [
+                'pedido_id' => $pedido->id,
+                'numero_pedido' => $pedido->numero_pedido,
+                'monto_reembolsado' => $montoReembolsado,
+                'motivo' => $request->motivo,
+                'refund_id' => $resultado['refund_id'] ?? null,
+                'autorizado_por_id' => $user->id,
+                'autorizado_por_email' => $user->email,
+            ]
+        );
 
         return back()->with('toast_success', $resultado['mensaje']);
     }

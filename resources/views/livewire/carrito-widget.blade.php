@@ -217,13 +217,9 @@
                         <div class="flex justify-between items-center text-gray-600">
                             <div class="flex items-center gap-1">
                                 <span>Envío Estimado</span>
-                                <span class="text-[10px] text-gray-400">
-                                    @if(!($resumen['requiere_envio'] ?? true))
-                                        (Digital / Servicio)
-                                    @else
-                                        ({{ $this->nombreUbicacion }})
-                                    @endif
-                                </span>
+                                @if($resumen['requiere_envio'] ?? true)
+                                    <span class="text-[10px] text-gray-400">({{ $this->nombreUbicacion }})</span>
+                                @endif
                             </div>
                             <span class="font-bold font-mono {{ $resumen['envio'] == 0 ? 'text-emerald-600' : 'text-gray-900' }}">
                                 @if(!($resumen['requiere_envio'] ?? true))
@@ -236,13 +232,8 @@
                             </span>
                         </div>
 
-                        <!-- Indicador de Ubicación o Exención de Envío -->
-                        @if(!($resumen['requiere_envio'] ?? true))
-                            <div class="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200/70 text-xs text-emerald-800 mt-2">
-                                <span class="material-symbols-outlined text-[16px] text-emerald-600 shrink-0">verified</span>
-                                <span class="text-[11px] leading-tight font-medium">Tus productos están exentos de costo de envío (servicio o entrega digital).</span>
-                            </div>
-                        @else
+                        <!-- Indicador de Ubicación si requiere envío -->
+                        @if($resumen['requiere_envio'] ?? true)
                             <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/70 text-xs text-slate-600 mt-2">
                                 <div class="flex items-center gap-1.5 min-w-0">
                                     <span class="material-symbols-outlined text-[15px] text-emerald-600 shrink-0">location_on</span>

@@ -27,7 +27,7 @@ class RolesSeeder extends Seeder
             'admin.productos.editar', 'admin.productos.eliminar',
 
             // Pedidos
-            'admin.pedidos.ver',      'admin.pedidos.gestionar',
+            'admin.pedidos.ver',      'admin.pedidos.gestionar', 'admin.pedidos.reembolsar',
 
             // Zonas y logística
             'admin.zonas.ver',        'admin.zonas.gestionar',

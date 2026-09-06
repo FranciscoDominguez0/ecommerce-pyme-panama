@@ -3,19 +3,6 @@
         {{-- ====================== MODO CHECKOUT (compact) ====================== --}}
         <form wire:submit="continuar" novalidate class="max-w-4xl mx-auto space-y-8">
 
-            {{-- Banner informativo si el pedido no requiere flete físico (licencias / digitales) --}}
-            @if(!$this->requiereEnvio)
-                <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-start gap-3 shadow-2xs">
-                    <span class="material-symbols-outlined text-emerald-600 text-2xl shrink-0 mt-0.5">verified</span>
-                    <div>
-                        <h3 class="text-sm font-bold text-emerald-900">Entrega Digital / Sin Costo de Envío</h3>
-                        <p class="text-xs text-emerald-800 mt-1 leading-relaxed">
-                            Tu pedido contiene licencias o productos digitales. La entrega de claves de activación y software se coordinará directamente contigo vía correo o WhatsApp sin costo de envío.
-                        </p>
-                    </div>
-                </div>
-            @endif
-
             {{-- Direcciones guardadas --}}
             @if($this->direcciones->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -65,8 +52,8 @@
                             </div>
                         @elseif(!$this->requiereEnvio)
                             <div class="mt-4 pt-3 border-t border-outline-variant/60 flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
-                                <span class="material-symbols-outlined text-[16px]">verified</span>
-                                Entrega digital (Envío gratis)
+                                <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                Envío gratis
                             </div>
                         @endif
                     </div>

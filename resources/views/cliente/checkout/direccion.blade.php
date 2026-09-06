@@ -34,9 +34,7 @@
             {{ ($requiereEnvio ?? true) ? 'Seleccione su dirección de entrega' : 'Datos de entrega y facturación' }}
         </h1>
         <p class="text-on-surface-variant text-sm">
-            {{ ($requiereEnvio ?? true) 
-                ? 'Elija una dirección guardada o agregue una nueva para su entrega.' 
-                : 'Indique sus datos de contacto para la entrega digital de sus licencias y emisión de factura.' }}
+            Elija una dirección guardada o agregue una nueva para su pedido.
         </p>
     </div>
 

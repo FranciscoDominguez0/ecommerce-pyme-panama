@@ -49,6 +49,7 @@ class CheckAdminPermissions
         'admin.pedidos.avanzar-estado' => 'admin.pedidos.gestionar',
         'admin.pedidos.aprobar-pago' => 'admin.pedidos.gestionar',
         'admin.pedidos.rechazar-pago' => 'admin.pedidos.gestionar',
+        'admin.pedidos.reembolsar' => 'admin.pedidos.reembolsar',
         'admin.pedidos.envio.update' => 'admin.pedidos.gestionar',
         
         // Zonas de envío

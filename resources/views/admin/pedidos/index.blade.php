@@ -102,7 +102,7 @@
                                     'entregado' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
                                     'cancelado' => 'bg-red-50 text-red-700 border-red-200',
                                     'devolucion_solicitada' => 'bg-orange-50 text-orange-700 border-orange-200',
-                                    'reembolsado' => 'bg-purple-50 text-purple-700 border-purple-200',
+                                    'reembolsado' => 'bg-slate-100 text-slate-800 border-slate-300',
                                 ];
                                 $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
                                 $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 text-slate-700 border-slate-200';

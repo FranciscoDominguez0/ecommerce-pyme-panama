@@ -61,9 +61,9 @@
                             'icon' => 'flag',
                         ],
                         'reembolsado' => [
-                            'bar' => 'bg-purple-600',
-                            'chip_bg' => 'bg-purple-50',
-                            'chip_text' => 'text-purple-700',
+                            'bar' => 'bg-slate-700',
+                            'chip_bg' => 'bg-slate-100',
+                            'chip_text' => 'text-slate-800',
                             'icon' => 'currency_exchange',
                         ],
                         default => [
