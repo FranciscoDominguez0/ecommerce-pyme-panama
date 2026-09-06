@@ -109,6 +109,7 @@ class CategoriaController extends Controller
             'descripcion' => 'nullable|string|max:1000',
             'orden_visualizacion' => 'nullable|integer|min:0',
             'activo' => 'nullable|boolean',
+            'exento_envio' => 'nullable|boolean',
             'imagen' => 'nullable|file|mimes:jpeg,png,jpg,webp,svg|max:2048',
         ], [
             'nombre.required' => 'El nombre de la categoría es obligatorio.',
@@ -150,6 +151,7 @@ class CategoriaController extends Controller
             'descripcion' => $validated['descripcion'] ?? null,
             'imagen_ruta' => $imagenRuta,
             'activo' => $request->has('activo') ? (bool) $request->input('activo') : true,
+            'exento_envio' => $request->boolean('exento_envio'),
             'orden_visualizacion' => isset($validated['orden_visualizacion']) ? (int) $validated['orden_visualizacion'] : 0,
         ]);
 
@@ -216,6 +218,7 @@ class CategoriaController extends Controller
             'descripcion' => 'nullable|string|max:1000',
             'orden_visualizacion' => 'nullable|integer|min:0',
             'activo' => 'nullable|boolean',
+            'exento_envio' => 'nullable|boolean',
             'imagen' => 'nullable|file|mimes:jpeg,png,jpg,webp,svg|max:2048',
             'eliminar_imagen' => 'nullable|boolean',
         ], [
@@ -292,6 +295,7 @@ class CategoriaController extends Controller
             'descripcion' => $validated['descripcion'] ?? null,
             'imagen_ruta' => $imagenRuta,
             'activo' => $request->has('activo') ? (bool) $request->input('activo') : false,
+            'exento_envio' => $request->boolean('exento_envio'),
             'orden_visualizacion' => isset($validated['orden_visualizacion']) ? (int) $validated['orden_visualizacion'] : 0,
         ]);
 
@@ -393,6 +397,53 @@ class CategoriaController extends Controller
         return redirect()
             ->route('admin.categorias.index')
             ->with('success', "Estado actualizado exitosamente.");
+    }
+
+    /**
+     * Alterna la exención de cobro de envío de una categoría mediante AJAX o formulario rápido.
+     * Si la categoría padre tiene activo que no lleva envío, las hijas lo heredan automáticamente.
+     */
+    public function toggleExentoEnvio(Request $request, int $id): JsonResponse|RedirectResponse
+    {
+        $categoria = Categoria::sinEliminar()->find($id);
+
+        if (!$categoria) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Categoría no encontrada.'], 404);
+            }
+            return redirect()->route('admin.categorias.index')->with('error', 'Categoría no encontrada.');
+        }
+
+        $nuevoEstado = !$categoria->exento_envio_directo;
+        $categoria->exento_envio = $nuevoEstado;
+        $categoria->save();
+
+        $descripcion = $nuevoEstado
+            ? ($categoria->esPrincipal()
+                ? "Categoría '{$categoria->nombre}' marcada como sin envío (aplicado a todas sus subcategorías hijas)."
+                : "Subcategoría '{$categoria->nombre}' marcada como sin envío.")
+            : ($categoria->esPrincipal()
+                ? "Categoría '{$categoria->nombre}' configurada con cobro de envío."
+                : "Subcategoría '{$categoria->nombre}' configurada con cobro de envío.");
+
+        $this->registrarAuditoria(
+            'actualizar_exento_envio',
+            $descripcion,
+            ['exento_envio' => !$nuevoEstado],
+            ['exento_envio' => $nuevoEstado]
+        );
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'exento_envio' => $nuevoEstado,
+                'message' => $descripcion,
+            ]);
+        }
+
+        return redirect()
+            ->route('admin.categorias.index', request()->query())
+            ->with('success', $descripcion);
     }
 
     /**

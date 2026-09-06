@@ -70,10 +70,16 @@ class Producto extends Model
             return false;
         }
 
+        // Si la categoría (o su padre por herencia) está exenta de envío:
+        if ($this->categoria?->exento_envio) {
+            return false;
+        }
+
         $categoriaSlug = $this->categoria?->slug;
         if (in_array($categoriaSlug, [
             'software-y-licencias',
             'servicios-informaticos',
+            'armado-de-pc',
             'formateo-e-instalacion-de-software',
             'soporte-tecnico-a-domicilio',
             'recuperacion-de-datos',

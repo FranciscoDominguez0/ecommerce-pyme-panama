@@ -67,6 +67,7 @@ class CarritoService
         if ($usuarioId) {
             $carrito = Carrito::with([
                 'items.producto.imagenes',
+                'items.producto.categoria.padre',
                 'items.variante.opciones',
                 'cupon'
             ])->where('usuario_id', $usuarioId)->first();
@@ -77,7 +78,7 @@ class CarritoService
                     'sesion_id' => null,
                     'descuento_aplicado' => 0.00,
                 ]);
-                $carrito->load(['items.producto.imagenes', 'items.variante.opciones', 'cupon']);
+                $carrito->load(['items.producto.imagenes', 'items.producto.categoria.padre', 'items.variante.opciones', 'cupon']);
             }
 
             return $carrito;
@@ -86,6 +87,7 @@ class CarritoService
         if ($sesionId) {
             $carrito = Carrito::with([
                 'items.producto.imagenes',
+                'items.producto.categoria.padre',
                 'items.variante.opciones',
                 'cupon'
             ])->where('sesion_id', $sesionId)->first();
@@ -96,7 +98,7 @@ class CarritoService
                     'sesion_id' => $sesionId,
                     'descuento_aplicado' => 0.00,
                 ]);
-                $carrito->load(['items.producto.imagenes', 'items.variante.opciones', 'cupon']);
+                $carrito->load(['items.producto.imagenes', 'items.producto.categoria.padre', 'items.variante.opciones', 'cupon']);
             }
 
             return $carrito;
@@ -452,6 +454,24 @@ class CarritoService
     }
 
     /**
+     * Determina si el carrito contiene al menos un producto que requiere flete/envío físico.
+     */
+    public function carritoRequiereEnvioFisico(Carrito $carrito): bool
+    {
+        $items = $carrito->relationLoaded('items')
+            ? $carrito->items
+            : $carrito->items()->with(['producto.categoria.padre'])->get();
+
+        if ($items->isEmpty()) {
+            return false;
+        }
+
+        return $items->contains(function ($item) {
+            return $item->producto?->requiere_envio ?? true;
+        });
+    }
+
+    /**
      * Calcula el total desglosado con ITBMS (7%), envío y descuentos aplicados.
      */
     public function calcularTotal(Carrito $carrito, ?float $costoEnvio = 0.0, ?int $zonaEnvioId = null): array
@@ -462,9 +482,13 @@ class CarritoService
         $itbms = $desglose['itbms'];
         $descuento = round((float) $carrito->descuento_aplicado, 2);
         $envio = round((float) ($costoEnvio ?? 0.0), 2);
+        $requiereEnvio = $this->carritoRequiereEnvioFisico($carrito);
 
-        // Si la promoción de envío gratis aplica para esta zona, anular costo de envío
-        if ($zonaEnvioId && $this->cuponService->evaluarEnvioGratis($zonaEnvioId, $subtotal)) {
+        // Si el carrito no contiene productos que requieran flete físico (ej: Armado de PC o digital), no cobrar envío
+        if (!$requiereEnvio) {
+            $envio = 0.0;
+        } elseif ($zonaEnvioId && $this->cuponService->evaluarEnvioGratis($zonaEnvioId, $subtotal)) {
+            // Si la promoción de envío gratis aplica para esta zona, anular costo de envío
             $envio = 0.0;
         }
 
@@ -477,6 +501,7 @@ class CarritoService
             'envio' => $envio,
             'total' => $total,
             'cantidad_items' => $desglose['cantidad_items'],
+            'requiere_envio' => $requiereEnvio,
         ];
     }
 

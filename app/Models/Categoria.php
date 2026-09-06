@@ -24,12 +24,14 @@ class Categoria extends Model
         'descripcion',
         'imagen_ruta',
         'activo',
+        'exento_envio',
         'orden_visualizacion',
         'eliminado_en',
     ];
 
     protected $casts = [
         'activo' => 'boolean',
+        'exento_envio' => 'boolean',
         'orden_visualizacion' => 'integer',
         'padre_id' => 'integer',
         'eliminado_en' => 'datetime',
@@ -131,5 +133,39 @@ class Categoria extends Model
     {
         $padres = $this->ruta_padres;
         return $padres ? "{$padres} > {$this->nombre}" : $this->nombre;
+    }
+
+    /**
+     * Determina si la categoría está exenta de cobro de envío.
+     * Si la categoría padre tiene activo que no lleva envío, las hijas lo heredan automáticamente.
+     */
+    public function getExentoEnvioAttribute(): bool
+    {
+        if ((bool) ($this->attributes['exento_envio'] ?? false)) {
+            return true;
+        }
+
+        // Si tiene categoría padre, hereda la exención del padre recursivamente
+        return (bool) ($this->padre?->exento_envio ?? false);
+    }
+
+    /**
+     * Retorna si la exención fue configurada directamente en esta categoría.
+     */
+    public function getExentoEnvioDirectoAttribute(): bool
+    {
+        return (bool) ($this->attributes['exento_envio'] ?? false);
+    }
+
+    /**
+     * Retorna si la exención de envío proviene heredada de la categoría padre.
+     */
+    public function getExentoEnvioHeredadoAttribute(): bool
+    {
+        if ((bool) ($this->attributes['exento_envio'] ?? false)) {
+            return false;
+        }
+
+        return (bool) ($this->padre?->exento_envio ?? false);
     }
 }

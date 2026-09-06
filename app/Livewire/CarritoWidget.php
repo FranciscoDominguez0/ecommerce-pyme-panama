@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Direccion;
 use App\Models\Producto;
+use App\Models\ZonaEnvio;
 use App\Services\CarritoService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +14,7 @@ class CarritoWidget extends Component
 {
     public string $codigoCupon = '';
     public float $costoEnvio = 5.00;
+    public string $nombreUbicacion = 'Panamá Centro';
     public array $stockAdvertencias = [];
     public ?string $mensajeCupon = null;
     public ?string $tipoMensajeCupon = null;
@@ -193,6 +196,83 @@ class CarritoWidget extends Component
         }
     }
 
+    /**
+     * Resuelve la ubicación y tarifa de envío a partir de la dirección configurada del usuario o sesión.
+     */
+    public function resolverUbicacionEnvio(): array
+    {
+        $usuarioId = Auth::id();
+        $direccion = null;
+
+        if ($usuarioId) {
+            // 1. Si ya se eligió una dirección en la sesión actual
+            if (session()->has('checkout_direccion_id')) {
+                $direccion = Direccion::where('id', session('checkout_direccion_id'))
+                    ->where('usuario_id', $usuarioId)
+                    ->sinEliminar()
+                    ->first();
+            }
+
+            // 2. Dirección predeterminada del usuario
+            if (!$direccion) {
+                $direccion = Direccion::where('usuario_id', $usuarioId)
+                    ->where('es_predeterminada', true)
+                    ->sinEliminar()
+                    ->first();
+            }
+
+            // 3. Primera dirección activa guardada del usuario
+            if (!$direccion) {
+                $direccion = Direccion::where('usuario_id', $usuarioId)
+                    ->sinEliminar()
+                    ->first();
+            }
+        }
+
+        if ($direccion) {
+            $zona = $direccion->zonaEnvioCalculada;
+            if ($zona && $zona->activo) {
+                session([
+                    'checkout_direccion_id' => (int) $direccion->id,
+                    'checkout_zona_envio_id' => (int) $zona->id,
+                ]);
+
+                $nombreUbicacion = $direccion->provincia;
+                if (!empty($direccion->distrito)) {
+                    $nombreUbicacion .= " ({$direccion->distrito})";
+                }
+
+                return [
+                    'costo' => (float) $zona->costo,
+                    'zona_id' => (int) $zona->id,
+                    'ubicacion' => $nombreUbicacion,
+                    'direccion_id' => (int) $direccion->id,
+                ];
+            }
+        }
+
+        // Si hay una zona de envío previamente guardada en sesión
+        if (session()->has('checkout_zona_envio_id')) {
+            $zona = ZonaEnvio::find(session('checkout_zona_envio_id'));
+            if ($zona && $zona->activo) {
+                return [
+                    'costo' => (float) $zona->costo,
+                    'zona_id' => (int) $zona->id,
+                    'ubicacion' => $zona->nombre,
+                    'direccion_id' => null,
+                ];
+            }
+        }
+
+        // Fallback por defecto: tarifa estimada Panamá Centro ($5.00)
+        return [
+            'costo' => 5.00,
+            'zona_id' => null,
+            'ubicacion' => 'Panamá Centro',
+            'direccion_id' => null,
+        ];
+    }
+
     public function render(CarritoService $carritoService)
     {
         $usuarioId = Auth::id();
@@ -201,11 +281,18 @@ class CarritoWidget extends Component
         $carrito = $carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
         $items = $carrito->items()->with([
             'producto.imagenes',
-            'producto.categoria',
+            'producto.categoria.padre',
             'variante.opciones',
         ])->get();
 
-        $resumen = $carritoService->calcularTotal($carrito, $this->costoEnvio, null);
+        // Asegurar que el carrito tenga asignados los items con sus relaciones cargadas
+        $carrito->setRelation('items', $items);
+
+        $ubicacion = $this->resolverUbicacionEnvio();
+        $this->costoEnvio = $ubicacion['costo'];
+        $this->nombreUbicacion = $ubicacion['ubicacion'];
+
+        $resumen = $carritoService->calcularTotal($carrito, $this->costoEnvio, $ubicacion['zona_id']);
 
         // Obtener productos de la lista de deseos
         $productosDeseos = collect();
@@ -222,6 +309,6 @@ class CarritoWidget extends Component
                 ->get();
         }
 
-        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos'));
+        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'ubicacion'));
     }
 }

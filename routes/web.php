@@ -141,6 +141,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
 
     // Módulo de Categorías
     Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');
+    Route::post('/categorias/{id}/toggle-exento-envio', [CategoriaController::class, 'toggleExentoEnvio'])->name('admin.categorias.toggle-exento-envio');
     Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
 
     // Módulo de Pedidos

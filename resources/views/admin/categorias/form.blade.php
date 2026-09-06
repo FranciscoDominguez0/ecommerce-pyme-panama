@@ -233,6 +233,41 @@
                     </label>
                 </div>
 
+                <!-- Toggle Exento de Cobro de Envío (Con Regla de Herencia) -->
+                <div class="p-3.5 rounded-lg bg-slate-50 border border-slate-200/80 flex flex-col gap-2.5">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-[16px] text-emerald-600">local_shipping</span>
+                                <span class="text-xs font-bold text-slate-900">Exento de Envío</span>
+                            </div>
+                            <span class="text-[11px] text-slate-500 block mt-0.5">No cobra flete (servicios, licencias o armados)</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" 
+                                   name="exento_envio" 
+                                   value="1" 
+                                   class="sr-only peer" 
+                                   {{ old('exento_envio', $categoria->exento_envio_directo ?? false) ? 'checked' : '' }}>
+                            <div class="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                        </label>
+                    </div>
+
+                    @if($esEdicion && $categoria->padre && $categoria->padre->exento_envio)
+                        <div class="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 flex items-start gap-2">
+                            <span class="material-symbols-outlined text-[16px] text-emerald-600 shrink-0 mt-0.5">account_tree</span>
+                            <div class="leading-tight">
+                                <strong>Heredado de {{ $categoria->padre->nombre }}:</strong> La categoría padre tiene activo que no lleva envío. Esta subcategoría y sus productos ya están exentos de cobro automáticamente.
+                            </div>
+                        </div>
+                    @elseif($esEdicion && $categoria->esPrincipal() && $categoria->hijas->count() > 0)
+                        <div class="text-[10px] text-slate-500 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[13px] text-slate-400">info</span>
+                            <span>Al activar esta opción, sus <strong>{{ $categoria->hijas->count() }} subcategorías dependientes</strong> heredarán la exención.</span>
+                        </div>
+                    @endif
+                </div>
+
                 <!-- Orden de Visualización -->
                 <div class="space-y-1.5">
                     <label for="orden_visualizacion" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">

@@ -178,7 +178,7 @@
                                 <form method="POST" action="{{ route('admin.categorias.toggle-estado', $categoria->id) }}" class="inline-block">
                                     @csrf
                                     <button type="submit" 
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all {{ $categoria->activo ? 'bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200' }}"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all {{ $categoria->activo ? 'bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200' }}"
                                             title="Click para cambiar estado">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $categoria->activo ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
                                         <span>{{ $categoria->activo ? 'Activa' : 'Inactiva' }}</span>
