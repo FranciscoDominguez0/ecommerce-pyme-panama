@@ -275,14 +275,30 @@
                 </thead>
                 <tbody class="text-xs divide-y divide-slate-100">
                     @forelse($topProductos as $prod)
+                        @php
+                            $imgPrincipal = $prod->imagenPrincipal();
+                        @endphp
                         <tr class="hover:bg-slate-50/70 transition-colors">
                             <td class="py-3">
-                                <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center shrink-0 border border-slate-200 overflow-hidden shadow-xs">
-                                    <img src="{{ $prod->imagen_url }}" class="w-full h-full object-cover" alt="img">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200 overflow-hidden shadow-xs">
+                                    @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
+                                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="w-full h-full object-cover">
+                                    @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
+                                        <div class="w-6 h-6 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
+                                    @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
+                                        <span class="material-symbols-outlined text-[20px] text-slate-700">{{ $imgPrincipal->ruta }}</span>
+                                    @else
+                                        <img src="{{ asset('images/placeholder-product.png') }}" class="w-full h-full object-cover" alt="{{ $prod->nombre }}">
+                                    @endif
                                 </div>
                             </td>
                             <td class="py-3">
-                                <div class="font-bold text-slate-900">{{ $prod->nombre }}</div>
+                                <a href="{{ route('admin.productos.edit', $prod) }}" class="font-bold text-slate-900 hover:text-emerald-600 transition-colors line-clamp-1" title="{{ $prod->nombre }}">
+                                    {{ $prod->nombre }}
+                                </a>
+                                @if($prod->sku)
+                                    <div class="text-[10px] text-slate-400 font-mono">{{ $prod->sku }}</div>
+                                @endif
                             </td>
                             <td class="py-3 text-slate-500 font-medium">
                                 {{ $prod->categoria->nombre ?? 'Sin categoría' }}

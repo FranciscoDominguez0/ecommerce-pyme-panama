@@ -119,9 +119,16 @@ class DashboardController extends Controller
                 });
             });
         }], 'cantidad')
-        ->with('categoria')
+        ->with(['categoria', 'imagenes'])
+        ->whereHas('itemsPedido', function ($query) {
+            $query->whereHas('pedido', function ($q) {
+                $q->whereDoesntHave('estados', function ($sq) {
+                    $sq->where('estado', 'cancelado');
+                });
+            });
+        })
         ->orderByDesc('ventas_totales')
-        ->take(4)
+        ->take(5)
         ->get();
 
         return view('admin.dashboard', compact(

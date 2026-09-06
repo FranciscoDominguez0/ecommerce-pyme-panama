@@ -61,24 +61,24 @@ class LoginController extends Controller
         // Si el usuario tiene 2FA habilitado, interceptamos el login
         if ($usuario->two_fa_habilitado) {
             // Generar código numérico de 4 dígitos
-            $code = str_pad((string)random_int(0, 9999), 4, '0', STR_PAD_LEFT);
-            
+            $code = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+
             // Guardar en caché por 10 minutos
             Cache::put('2fa_code_' . $usuario->id, $code, now()->addMinutes(10));
-            
+
             // Guardar datos en la sesión temporalmente
             session([
                 '2fa:user:id' => $usuario->id,
                 '2fa:remember' => $request->boolean('remember')
             ]);
-            
+
             // Enviar correo
             try {
                 Mail::to($usuario->email)->send(new TwoFactorCodeMail($code, $usuario->nombre));
             } catch (\Exception $e) {
                 \Illuminate\Support\Facades\Log::error('Error al enviar correo de 2FA: ' . $e->getMessage());
             }
-            
+
             // Redirigir a la pantalla de verificación
             if ($request->wantsJson()) {
                 return response()->json([
@@ -107,13 +107,13 @@ class LoginController extends Controller
 
         // Forzar carga de roles para evitar problemas de caché (Spatie) justo al iniciar sesión
         $usuario->load('roles');
-        
+
         $esAdmin = $usuario->roles->whereIn('name', ['admin', 'Admin', 'super_admin', 'Administrador'])->isNotEmpty();
 
         if ($esAdmin) {
             // Un admin siempre debe ir al panel, a menos que el intendedUrl sea de admin
             $url = ($intendedUrl && str_contains($intendedUrl, '/admin')) ? $intendedUrl : '/admin/dashboard';
-            
+
             if ($request->wantsJson()) {
                 return response()->json(['redirect' => url($url), 'isAdmin' => true]);
             }
@@ -126,7 +126,7 @@ class LoginController extends Controller
         }
 
         $url = $intendedUrl ?? route('dashboard');
-        
+
         if ($request->wantsJson()) {
             return response()->json(['redirect' => url($url), 'isAdmin' => false]);
         }
