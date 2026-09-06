@@ -27,6 +27,10 @@ class ProductoObserver
         }
 
         AuditoriaService::registrar('Productos', 'actualizado', $desc, $original, $cambios);
+
+        if ($producto->stock > 0) {
+            app(\App\Services\InventarioService::class)->procesarNotificacionesStock($producto);
+        }
     }
 
     public function deleted(Producto $producto)

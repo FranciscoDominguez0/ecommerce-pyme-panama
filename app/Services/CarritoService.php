@@ -286,11 +286,18 @@ class CarritoService
 
         $this->olvidarCarritos();
 
+        $carritoActualizado = $carrito->fresh(['items.producto.imagenes', 'items.variante.opciones', 'cupon']);
+        $item->load(['producto.imagenes', 'variante.opciones']);
+
         return [
             'exito' => true,
             'mensaje' => 'Producto añadido al carrito correctamente.',
             'item' => $item,
-            'carrito' => $carrito->fresh(['items.producto.imagenes', 'items.variante.opciones', 'cupon']),
+            'producto_nombre' => $producto->nombre,
+            'producto_imagen' => $item->imagen_url,
+            'variante_texto' => $item->variante_texto,
+            'cantidad_total' => $carritoActualizado->cantidad_total,
+            'carrito' => $carritoActualizado,
         ];
     }
 

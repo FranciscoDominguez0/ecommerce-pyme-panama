@@ -114,7 +114,7 @@ class InventarioService
                 $stockDespues = $stockAntes + $cantidad;
             }
 
-            return MovimientoInventario::create([
+            $movimiento = MovimientoInventario::create([
                 'producto_id'          => $producto->id,
                 'variante_producto_id' => $variante?->id,
                 'usuario_id'           => $usuarioId,
@@ -128,6 +128,12 @@ class InventarioService
                 'factura_proveedor'    => $facturaProveedor,
                 'notas'                => $notas,
             ]);
+
+            if ($stockDespues > 0) {
+                $this->procesarNotificacionesStock($producto);
+            }
+
+            return $movimiento;
         });
     }
 
@@ -279,6 +285,11 @@ class InventarioService
                 }
             }
 
+            // Notificar a clientes en espera si el producto vuelve a tener stock
+            if ($nuevoStock > 0) {
+                $this->procesarNotificacionesStock($producto);
+            }
+
             return $movimiento;
         });
     }
@@ -308,5 +319,54 @@ class InventarioService
                 pedidoId:         $pedido->id,
             );
         }
+    }
+
+    // ─── Notificación a Clientes por Stock Disponible ──────────────────────────
+
+    /**
+     * Procesa y envía notificaciones por correo a los clientes en espera
+     * cuando un producto vuelve a tener stock disponible.
+     */
+    public function procesarNotificacionesStock(Producto $producto): int
+    {
+        $productoFresh = $producto->fresh();
+        if (!$productoFresh) {
+            return 0;
+        }
+
+        $stockTotal = (int) $productoFresh->stock;
+        if ($productoFresh->variantes()->exists()) {
+            $stockTotal = (int) $productoFresh->variantes()->where('activo', true)->sum('stock');
+        }
+
+        if ($stockTotal <= 0) {
+            return 0;
+        }
+
+        $pendientes = \App\Models\NotificacionStock::where('producto_id', $productoFresh->id)
+            ->where('notificado', false)
+            ->get();
+
+        if ($pendientes->isEmpty()) {
+            return 0;
+        }
+
+        $productoFresh->load(['imagenes', 'brand', 'categoria']);
+        $enviados = 0;
+
+        foreach ($pendientes as $notificacion) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($notificacion->email)->send(new \App\Mail\StockDisponibleMail($productoFresh));
+                $notificacion->update([
+                    'notificado' => true,
+                    'notificado_en' => now(),
+                ]);
+                $enviados++;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error("Error enviando notificación de stock disponible a {$notificacion->email}: " . $e->getMessage());
+            }
+        }
+
+        return $enviados;
     }
 }

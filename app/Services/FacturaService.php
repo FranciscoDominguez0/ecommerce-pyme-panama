@@ -45,18 +45,8 @@ class FacturaService
                 'emitida_en' => now(),
             ]);
 
-            // Cargar relaciones necesarias para el PDF
-            $factura->load(['pedido.items.producto.imagenes', 'usuario']);
-
-            // Generar PDF
-            $pdf = Pdf::loadView('admin.facturacion.factura-pdf', [
-                'factura' => $factura,
-            ]);
-
-            $pdfRuta = 'facturas/' . $numeroFactura . '.pdf';
-            Storage::disk('local')->put($pdfRuta, $pdf->output());
-
-            $factura->update(['pdf_ruta' => $pdfRuta]);
+            // Generar PDF y almacenarlo con imágenes incrustadas en Base64
+            $pdfRuta = $this->generarPdf($factura);
 
             // Enviar correo automático en segundo plano usando defer() de Laravel 11+
             // Esto asegura que la transacción de BD se haya cerrado y el usuario reciba
@@ -71,6 +61,157 @@ class FacturaService
 
             return $factura;
         });
+    }
+
+    /**
+     * Genera o regenera el archivo PDF de la factura garantizando
+     * que todas las imágenes (locales o remotas por URL) se incrusten en Base64.
+     */
+    public function generarPdf(Factura $factura): string
+    {
+        $factura->load(['pedido.items.producto.imagenes', 'pedido.items.variante', 'usuario', 'pedido.direccion']);
+        $itemsFactura = $this->prepararItemsParaPdf($factura);
+
+        $pdf = Pdf::loadView('admin.facturacion.factura-pdf', [
+            'factura' => $factura,
+            'itemsFactura' => $itemsFactura,
+        ]);
+
+        $pdfRuta = 'facturas/' . $factura->numero . '.pdf';
+        Storage::disk('local')->put($pdfRuta, $pdf->output());
+
+        $factura->update(['pdf_ruta' => $pdfRuta]);
+
+        return $pdfRuta;
+    }
+
+    /**
+     * Prepara los items del pedido resolviendo sus imágenes a Base64 para el PDF.
+     */
+    public function prepararItemsParaPdf(Factura $factura): array
+    {
+        $items = [];
+        $itemsPedido = $factura->pedido ? $factura->pedido->items : collect();
+
+        foreach ($itemsPedido as $item) {
+            $imgRuta = null;
+            if ($item->variante && !empty($item->variante->imagen_ruta)) {
+                $imgRuta = $item->variante->imagen_ruta;
+            } elseif ($item->producto) {
+                $imgPrinc = $item->producto->imagenPrincipal();
+                $imgRuta = $imgPrinc ? $imgPrinc->ruta : null;
+            }
+
+            $items[] = [
+                'cantidad' => $item->cantidad,
+                'nombre' => $item->producto->nombre ?? 'Producto Eliminado',
+                'sku' => $item->variante ? $item->variante->sku : ($item->producto ? $item->producto->sku : 'N/A'),
+                'precio_unitario' => (float) $item->precio_unitario,
+                'subtotal' => (float) $item->subtotal,
+                'imagen_base64' => $this->resolverImagenBase64($imgRuta),
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
+     * Convierte una ruta o enlace de imagen (incluyendo URLs remotas https://...)
+     * en Data URI Base64 compatible con DomPDF.
+     */
+    public function resolverImagenBase64(?string $ruta): string
+    {
+        $placeholderPath = public_path('images/placeholder-product.png');
+        $fallback = '';
+        if (file_exists($placeholderPath)) {
+            $fallback = 'data:image/png;base64,' . base64_encode(file_get_contents($placeholderPath));
+        }
+
+        if (empty($ruta)) {
+            return $fallback;
+        }
+
+        // 1. Data URI existente
+        if (str_starts_with($ruta, 'data:image')) {
+            return $ruta;
+        }
+
+        // 2. URL externa (http:// o https://)
+        if (str_starts_with($ruta, 'http://') || str_starts_with($ruta, 'https://')) {
+            try {
+                $ctx = stream_context_create([
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                    ],
+                    'http' => [
+                        'timeout' => 5,
+                        'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\nAccept: image/*\r\n"
+                    ]
+                ]);
+
+                $contenido = @file_get_contents($ruta, false, $ctx);
+                if ($contenido) {
+                    $pathUrl = parse_url($ruta, PHP_URL_PATH);
+                    $ext = strtolower(pathinfo($pathUrl, PATHINFO_EXTENSION));
+
+                    $mime = match ($ext) {
+                        'png' => 'image/png',
+                        'gif' => 'image/gif',
+                        'webp' => 'image/webp',
+                        'svg' => 'image/svg+xml',
+                        default => 'image/jpeg',
+                    };
+
+                    // Si es WebP, convertir a JPEG para compatibilidad nativa con DomPDF si GD está disponible
+                    if ($ext === 'webp' && function_exists('imagecreatefromstring')) {
+                        $gdImg = @imagecreatefromstring($contenido);
+                        if ($gdImg) {
+                            ob_start();
+                            imagejpeg($gdImg, null, 90);
+                            $contenido = ob_get_clean();
+                            imagedestroy($gdImg);
+                            $mime = 'image/jpeg';
+                        }
+                    }
+
+                    return 'data:' . $mime . ';base64,' . base64_encode($contenido);
+                }
+            } catch (\Throwable $e) {
+                // Silencioso, usará fallback
+            }
+
+            return $fallback;
+        }
+
+        // 3. Almacenamiento local (storage/ o public)
+        $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $ruta);
+        $localPath = storage_path('app/public/' . $cleanRoute);
+        if (file_exists($localPath)) {
+            $ext = strtolower(pathinfo($localPath, PATHINFO_EXTENSION));
+            $mime = match ($ext) {
+                'png' => 'image/png',
+                'gif' => 'image/gif',
+                'webp' => 'image/webp',
+                'svg' => 'image/svg+xml',
+                default => 'image/jpeg',
+            };
+            return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($localPath));
+        }
+
+        $publicPath = public_path(ltrim($ruta, '/'));
+        if (file_exists($publicPath)) {
+            $ext = strtolower(pathinfo($publicPath, PATHINFO_EXTENSION));
+            $mime = match ($ext) {
+                'png' => 'image/png',
+                'gif' => 'image/gif',
+                'webp' => 'image/webp',
+                default => 'image/jpeg',
+            };
+            return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($publicPath));
+        }
+
+        return $fallback;
     }
 
     /**
@@ -102,14 +243,7 @@ class FacturaService
             $factura->update(['estado' => 'anulada']);
             
             // Regenerar el PDF para que muestre el estado "ANULADA"
-            $factura->load(['pedido.items.producto', 'usuario']);
-            $pdf = Pdf::loadView('admin.facturacion.factura-pdf', [
-                'factura' => $factura,
-            ]);
-            
-            if ($factura->pdf_ruta) {
-                Storage::disk('public')->put($factura->pdf_ruta, $pdf->output());
-            }
+            $this->generarPdf($factura);
         }
     }
 

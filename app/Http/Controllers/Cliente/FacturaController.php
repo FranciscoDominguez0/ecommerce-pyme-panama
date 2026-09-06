@@ -20,10 +20,15 @@ class FacturaController extends Controller
         return view('cliente.facturas', compact('facturas'));
     }
 
-    public function descargarPdf(Factura $factura)
+    public function descargarPdf(Factura $factura, Request $request, \App\Services\FacturaService $facturaService)
     {
         if ($factura->usuario_id !== Auth::id()) {
             abort(403, 'No tienes permiso para ver esta factura.');
+        }
+
+        if ($request->has('regenerar')) {
+            $facturaService->generarPdf($factura);
+            $factura->refresh();
         }
 
         if ($factura->pdf_ruta && Storage::disk('local')->exists($factura->pdf_ruta)) {

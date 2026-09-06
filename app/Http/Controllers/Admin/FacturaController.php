@@ -56,8 +56,13 @@ class FacturaController extends Controller
         return view('admin.facturacion.show', compact('factura'));
     }
 
-    public function descargarPdf(Factura $factura)
+    public function descargarPdf(Factura $factura, Request $request)
     {
+        if ($request->has('regenerar')) {
+            $this->facturaService->generarPdf($factura);
+            $factura->refresh();
+        }
+
         if ($factura->pdf_ruta && Storage::disk('local')->exists($factura->pdf_ruta)) {
             /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
             $disk = Storage::disk('local');

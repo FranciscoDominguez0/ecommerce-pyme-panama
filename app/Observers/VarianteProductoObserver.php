@@ -30,6 +30,10 @@ class VarianteProductoObserver
         }
 
         AuditoriaService::registrar('Catálogo', 'actualizado', $desc, $original, $cambios);
+
+        if ($variante->stock > 0 && $variante->producto) {
+            app(\App\Services\InventarioService::class)->procesarNotificacionesStock($variante->producto);
+        }
     }
 
     public function deleted(VarianteProducto $variante)

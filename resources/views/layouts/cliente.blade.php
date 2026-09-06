@@ -87,15 +87,6 @@
     class="bg-[#F8F9FF] text-[#0b1c30] flex flex-col min-h-screen text-sm antialiased selection:bg-[#8af5be] selection:text-[#00714b]"
     x-data="{ mobileMenuOpen: false }">
 
-    <!-- Top Notification Banner -->
-    <div
-        class="bg-[#002349] text-white text-[11px] font-semibold py-1.5 px-4 text-center flex items-center justify-center gap-2">
-        <span>Envíos a todo Panamá</span>
-        <span class="opacity-40">•</span>
-        <span class="flex items-center gap-1 text-[#8af5be]">
-            <span class="material-symbols-outlined text-[13px]">verified_user</span> Pagos con Yappy, Tarjeta & ACH
-        </span>
-    </div>
 
     <!-- Main Navigation Bar -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/80 shadow-xs">
@@ -369,6 +360,9 @@
 
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
     <x-toast-alert />
+
+    <!-- Modal Profesional de Confirmación de Artículo Agregado -->
+    <x-modal-articulo-agregado />
 
     @livewireScripts
     <script>

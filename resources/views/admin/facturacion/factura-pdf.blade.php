@@ -234,61 +234,66 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($factura->pedido->items as $item)
-            <tr>
-                <td class="text-center">{{ $item->cantidad }}</td>
-                <td>
-                    <table style="width: 100%; border: none; padding: 0; margin: 0; background: transparent;">
-                        <tr>
-                            <td style="width: 45px; padding: 0; padding-right: 10px; border: none;">
-                                @php
-                                    $img = $item->producto ? $item->producto->imagenPrincipal() : null;
-                                    
-                                    // Placeholder by default (Base64)
-                                    $placeholderPath = public_path('images/placeholder-product.png');
-                                    $imgPath = $placeholderPath;
-                                    if (file_exists($placeholderPath)) {
-                                        $imgPath = 'data:image/png;base64,' . base64_encode(file_get_contents($placeholderPath));
-                                    }
-
-                                    if ($img && !empty($img->ruta)) {
-                                        $isWebp = strtolower(pathinfo($img->ruta, PATHINFO_EXTENSION)) === 'webp';
-                                        
-                                        if ($isWebp && !function_exists('imagecreatefromwebp')) {
-                                            // Fallback to placeholder if server lacks WebP support for DomPDF
-                                            $imgPath = $placeholderPath;
-                                            if (file_exists($placeholderPath)) {
-                                                $imgPath = 'data:image/png;base64,' . base64_encode(file_get_contents($placeholderPath));
-                                            }
-                                        } else {
-                                            if (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, 'data:')) {
-                                                $imgPath = $img->ruta;
-                                            } else {
-                                                $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $img->ruta);
-                                                $localPath = storage_path('app/public/' . $cleanRoute);
-                                                if (file_exists($localPath)) {
-                                                    $ext = pathinfo($localPath, PATHINFO_EXTENSION);
-                                                    $imgPath = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($localPath));
-                                                }
-                                            }
-                                        }
-                                    }
-                                @endphp
-                                <img src="{{ $imgPath }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" alt="">
-                            </td>
-                            <td style="padding: 0; border: none; vertical-align: middle;">
-                                <strong>{{ $item->producto->nombre ?? 'Producto Eliminado' }}</strong>
-                                <div style="font-size: 11px; color: #777; margin-top: 3px;">
-                                    SKU: {{ $item->variante ? $item->variante->sku : ($item->producto ? $item->producto->sku : 'N/A') }}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td class="text-right text-muted">${{ number_format($item->precio_unitario, 2) }}</td>
-                <td class="text-right">${{ number_format($item->subtotal, 2) }}</td>
-            </tr>
-            @endforeach
+            @php
+                $itemsParaRender = $itemsFactura ?? null;
+            @endphp
+            @if(!empty($itemsParaRender))
+                @foreach($itemsParaRender as $item)
+                <tr>
+                    <td class="text-center">{{ $item['cantidad'] }}</td>
+                    <td>
+                        <table style="width: 100%; border: none; padding: 0; margin: 0; background: transparent;">
+                            <tr>
+                                <td style="width: 45px; padding: 0; padding-right: 10px; border: none;">
+                                    <img src="{{ $item['imagen_base64'] }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" alt="">
+                                </td>
+                                <td style="padding: 0; border: none; vertical-align: middle;">
+                                    <strong>{{ $item['nombre'] }}</strong>
+                                    <div style="font-size: 11px; color: #777; margin-top: 3px;">
+                                        SKU: {{ $item['sku'] }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="text-right text-muted">${{ number_format($item['precio_unitario'], 2) }}</td>
+                    <td class="text-right">${{ number_format($item['subtotal'], 2) }}</td>
+                </tr>
+                @endforeach
+            @else
+                @foreach($factura->pedido->items as $item)
+                @php
+                    $imgRuta = null;
+                    if ($item->variante && !empty($item->variante->imagen_ruta)) {
+                        $imgRuta = $item->variante->imagen_ruta;
+                    } elseif ($item->producto) {
+                        $imgPrinc = $item->producto->imagenPrincipal();
+                        $imgRuta = $imgPrinc ? $imgPrinc->ruta : null;
+                    }
+                    $imgBase64 = app(\App\Services\FacturaService::class)->resolverImagenBase64($imgRuta);
+                @endphp
+                <tr>
+                    <td class="text-center">{{ $item->cantidad }}</td>
+                    <td>
+                        <table style="width: 100%; border: none; padding: 0; margin: 0; background: transparent;">
+                            <tr>
+                                <td style="width: 45px; padding: 0; padding-right: 10px; border: none;">
+                                    <img src="{{ $imgBase64 }}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" alt="">
+                                </td>
+                                <td style="padding: 0; border: none; vertical-align: middle;">
+                                    <strong>{{ $item->producto->nombre ?? 'Producto Eliminado' }}</strong>
+                                    <div style="font-size: 11px; color: #777; margin-top: 3px;">
+                                        SKU: {{ $item->variante ? $item->variante->sku : ($item->producto ? $item->producto->sku : 'N/A') }}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="text-right text-muted">${{ number_format($item->precio_unitario, 2) }}</td>
+                    <td class="text-right">${{ number_format($item->subtotal, 2) }}</td>
+                </tr>
+                @endforeach
+            @endif
         </tbody>
     </table>
 

@@ -124,7 +124,14 @@
                         if (window.Livewire) {
                             Livewire.dispatch('carrito-actualizado');
                         }
-                        if (window.mostrarToast) {
+                        if (window.ModalArticuloAgregado) {
+                            window.ModalArticuloAgregado.abrir({
+                                nombre: data.producto_nombre,
+                                imagen: data.producto_imagen,
+                                cantidadTotal: data.cantidad_total || 1,
+                                variante: data.variante_texto
+                            });
+                        } else if (window.mostrarToast) {
                             window.mostrarToast('success', data.mensaje);
                         }
                     } else {

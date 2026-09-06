@@ -453,6 +453,9 @@ class ProductoController extends Controller
             $this->guardarVariantes($request, $producto);
         });
 
+        // Notificar clientes en espera si el producto tiene stock
+        app(\App\Services\InventarioService::class)->procesarNotificacionesStock($producto);
+
         return redirect()
             ->route('admin.productos.edit', ['id' => $id] + request()->query())
             ->with('success', 'Producto actualizado correctamente.');

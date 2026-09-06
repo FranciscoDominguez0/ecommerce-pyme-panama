@@ -6,22 +6,29 @@
 <div class="min-h-screen bg-slate-50 py-6 sm:py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        <!-- Breadcrumbs Navegables -->
-        <nav class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 font-medium" aria-label="Breadcrumb">
-            <a href="{{ route('inicio') }}" wire:navigate class="hover:text-emerald-700 transition-colors flex items-center gap-1">
-                <span class="material-symbols-outlined text-[16px]">home</span>
+        <!-- Breadcrumbs Navegables en Una Sola Línea -->
+        <nav class="flex items-center gap-1.5 text-xs text-slate-500 font-medium min-w-0 flex-nowrap overflow-hidden py-0.5" aria-label="Breadcrumb">
+            <a href="{{ route('inicio') }}" wire:navigate class="hover:text-emerald-700 transition-colors flex items-center gap-1 shrink-0">
+                <span class="material-symbols-outlined text-[15px]">home</span>
                 <span>Inicio</span>
             </a>
-            <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
-            <a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-emerald-700 transition-colors">Catálogo</a>
+
             @if($producto->categoria)
-                <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
-                <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria->slug]) }}" wire:navigate class="text-slate-600 hover:text-emerald-700">
+                <span class="material-symbols-outlined text-[13px] text-slate-400 shrink-0">chevron_right</span>
+                <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria->slug]) }}" wire:navigate class="text-slate-600 hover:text-emerald-700 shrink-0 max-w-[130px] sm:max-w-[200px] truncate" title="{{ $producto->categoria->nombre }}">
                     {{ $producto->categoria->nombre }}
                 </a>
+            @else
+                <span class="material-symbols-outlined text-[13px] text-slate-400 shrink-0">chevron_right</span>
+                <a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-emerald-700 transition-colors shrink-0">
+                    Catálogo
+                </a>
             @endif
-            <span class="material-symbols-outlined text-[14px] text-slate-400">chevron_right</span>
-            <span class="text-slate-900 font-bold">{{ $producto->nombre }}</span>
+
+            <span class="material-symbols-outlined text-[13px] text-slate-400 shrink-0">chevron_right</span>
+            <span class="text-slate-900 font-bold truncate min-w-0" title="{{ $producto->nombre }}">
+                {{ $producto->nombre }}
+            </span>
         </nav>
 
         <!-- Bloque Principal de Producto (Galería Prioritaria + Compra) -->
@@ -715,7 +722,14 @@
                 if (window.Livewire) {
                     Livewire.dispatch('carrito-actualizado');
                 }
-                if (window.mostrarToast) {
+                if (window.ModalArticuloAgregado) {
+                    window.ModalArticuloAgregado.abrir({
+                        nombre: data.producto_nombre,
+                        imagen: data.producto_imagen,
+                        cantidadTotal: data.cantidad_total || 1,
+                        variante: data.variante_texto
+                    });
+                } else if (window.mostrarToast) {
                     window.mostrarToast('success', data.mensaje);
                 }
             } else {
