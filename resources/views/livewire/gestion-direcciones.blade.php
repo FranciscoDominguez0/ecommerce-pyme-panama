@@ -3,38 +3,72 @@
         {{-- ====================== MODO CHECKOUT (compact) ====================== --}}
         <form wire:submit="continuar" novalidate class="max-w-4xl mx-auto space-y-8">
 
+            {{-- Banner informativo si el pedido no requiere flete físico (licencias / digitales) --}}
+            @if(!$this->requiereEnvio)
+                <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-start gap-3 shadow-2xs">
+                    <span class="material-symbols-outlined text-emerald-600 text-2xl shrink-0 mt-0.5">verified</span>
+                    <div>
+                        <h3 class="text-sm font-bold text-emerald-900">Entrega Digital / Sin Costo de Envío</h3>
+                        <p class="text-xs text-emerald-800 mt-1 leading-relaxed">
+                            Tu pedido contiene licencias o productos digitales. La entrega de claves de activación y software se coordinará directamente contigo vía correo o WhatsApp sin costo de envío.
+                        </p>
+                    </div>
+                </div>
+            @endif
+
             {{-- Direcciones guardadas --}}
             @if($this->direcciones->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 @foreach($this->direcciones as $dir)
+                @php
+                    $zonaDir = $dir->zonaEnvioCalculada;
+                @endphp
                 <label class="relative block cursor-pointer group">
                     <input type="radio" name="seleccion" value="{{ $dir->id }}" wire:model.live="seleccion" class="peer sr-only" />
-                    <div class="h-full bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary text-2xl">
-                                    {{ strtolower($dir->alias) == 'casa' ? 'home' : (strtolower($dir->alias) == 'oficina' ? 'work' : 'location_on') }}
-                                </span>
-                                <span class="text-base font-semibold text-primary">{{ $dir->alias }}</span>
-                                @if($dir->es_predeterminada)
-                                    <span class="bg-secondary/10 text-secondary font-label-caps text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-sm ml-2">Predeterminada</span>
+                    <div class="h-full bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)] flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary text-2xl">
+                                        {{ strtolower($dir->alias) == 'casa' ? 'home' : (strtolower($dir->alias) == 'oficina' ? 'work' : 'location_on') }}
+                                    </span>
+                                    <span class="text-base font-semibold text-primary">{{ $dir->alias }}</span>
+                                    @if($dir->es_predeterminada)
+                                        <span class="bg-secondary/10 text-secondary font-label-caps text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded-sm ml-2">Predeterminada</span>
+                                    @endif
+                                </div>
+                                <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors">
+                                    <span class="material-symbols-outlined text-on-secondary text-[14px] opacity-0 peer-checked:group-[]:opacity-100">check</span>
+                                </div>
+                            </div>
+                            <div class="space-y-1 text-on-surface-variant text-sm">
+                                <p class="font-semibold text-on-background">{{ $dir->nombre_receptor }}</p>
+                                <p>{{ $dir->direccion_exacta }}</p>
+                                <p>{{ $dir->corregimiento }}, {{ $dir->distrito }}</p>
+                                <p>{{ $dir->provincia }}</p>
+                                @if($dir->referencia)
+                                    <p class="text-xs mt-2 text-outline">
+                                        <span class="font-label-caps font-semibold uppercase tracking-wider text-xs">Referencia:</span> {{ $dir->referencia }}
+                                    </p>
                                 @endif
                             </div>
-                            <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors">
-                                <span class="material-symbols-outlined text-on-secondary text-[14px] opacity-0 peer-checked:group-[]:opacity-100">check</span>
+                        </div>
+
+                        {{-- Detalle del costo de envío calculado según la ubicación --}}
+                        @if($this->requiereEnvio && $zonaDir)
+                            <div class="mt-4 pt-3 border-t border-outline-variant/60 flex items-center justify-between text-xs">
+                                <span class="flex items-center gap-1 font-medium text-slate-600">
+                                    <span class="material-symbols-outlined text-[16px] text-emerald-600">local_shipping</span>
+                                    {{ $zonaDir->nombre }}
+                                </span>
+                                <span class="font-bold text-emerald-700 font-mono text-sm">${{ number_format($zonaDir->costo, 2) }}</span>
                             </div>
-                        </div>
-                        <div class="space-y-1 text-on-surface-variant text-sm">
-                            <p class="font-semibold text-on-background">{{ $dir->nombre_receptor }}</p>
-                            <p>{{ $dir->direccion_exacta }}</p>
-                            <p>{{ $dir->corregimiento }}, {{ $dir->distrito }}</p>
-                            <p>{{ $dir->provincia }}</p>
-                            @if($dir->referencia)
-                                <p class="text-xs mt-2 text-outline">
-                                    <span class="font-label-caps font-semibold uppercase tracking-wider text-xs">Referencia:</span> {{ $dir->referencia }}
-                                </p>
-                            @endif
-                        </div>
+                        @elseif(!$this->requiereEnvio)
+                            <div class="mt-4 pt-3 border-t border-outline-variant/60 flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
+                                <span class="material-symbols-outlined text-[16px]">verified</span>
+                                Entrega digital (Envío gratis)
+                            </div>
+                        @endif
                     </div>
                 </label>
                 @endforeach
@@ -56,23 +90,6 @@
             <div id="form_nueva_direccion" class="{{ $this->seleccion === 'nueva' ? 'block' : 'hidden' }} bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm mb-8">
                 <h2 class="text-base font-bold text-primary mb-6">Detalles de la nueva dirección</h2>
                 @include('livewire.partials.direccion-fields')
-            </div>
-
-            {{-- Zona de Envío --}}
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm mb-8">
-                <h2 class="text-base font-bold text-primary mb-2">Zona de Envío</h2>
-                <p class="text-on-surface-variant text-xs mb-4">Selecciona la zona de envío correspondiente para calcular el costo.</p>
-
-                <select name="zona_envio_id" id="zona_envio_id" wire:model="zonaEnvioId" required
-                    class="block w-full rounded-md border-outline-variant shadow-sm py-3 pl-3 pr-10 text-sm focus:border-secondary focus:outline-none focus:ring-secondary bg-surface-container-lowest @error('zonaEnvioId') border-error @enderror">
-                    <option value="">Seleccione una zona...</option>
-                    @foreach($this->zonasEnvio as $zona)
-                        <option value="{{ $zona['id'] }}">{{ $zona['nombre'] }} - ${{ number_format($zona['costo'], 2) }}</option>
-                    @endforeach
-                </select>
-                @error('zonaEnvioId')
-                    <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
-                @enderror
             </div>
 
             {{-- Botones de acción --}}

@@ -60,6 +60,12 @@
                             'chip_text' => 'text-primary',
                             'icon' => 'flag',
                         ],
+                        'reembolsado' => [
+                            'bar' => 'bg-purple-600',
+                            'chip_bg' => 'bg-purple-50',
+                            'chip_text' => 'text-purple-700',
+                            'icon' => 'currency_exchange',
+                        ],
                         default => [
                             'bar' => 'bg-blue-500',
                             'chip_bg' => 'bg-blue-100',

@@ -38,6 +38,12 @@
         @error('provincia')
             <p class="mt-1 text-xs text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">error</span> {{ $message }}</p>
         @enderror
+        @if($this->zonaAuto && $this->requiereEnvio)
+            <p class="mt-1.5 text-xs text-emerald-700 flex items-center gap-1 font-medium">
+                <span class="material-symbols-outlined text-[15px]">local_shipping</span>
+                Zona asignada: <span class="font-semibold">{{ $this->zonaAuto->nombre }}</span> (${{ number_format($this->zonaAuto->costo, 2) }})
+            </p>
+        @endif
     </div>
 
     <div>

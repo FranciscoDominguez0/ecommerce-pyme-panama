@@ -24,8 +24,12 @@
                         'en_preparacion' => 'bg-amber-50 text-amber-700 border-amber-200',
                         'listo_para_envio' => 'bg-teal-50 text-teal-700 border-teal-200',
                         'enviado' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
+                        'en_transito' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
                         'entregado' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                        'problema_entrega' => 'bg-rose-50 text-rose-700 border-rose-200',
+                        'devolucion_solicitada' => 'bg-orange-50 text-orange-700 border-orange-200',
                         'cancelado' => 'bg-red-50 text-red-700 border-red-200',
+                        'reembolsado' => 'bg-purple-50 text-purple-700 border-purple-200',
                     ];
                     $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 text-slate-700 border-slate-200';
                     $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
@@ -38,6 +42,12 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
+            @if($pedido->metodo_pago === 'stripe' && $ultimoEstado !== 'reembolsado' && in_array($ultimoEstado, ['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'en_transito', 'entregado', 'devolucion_solicitada']))
+                <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.remove('hidden')" class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-700 focus:bg-purple-700 focus:outline-none transition shadow-sm">
+                    <span class="material-symbols-outlined text-[16px] mr-1.5">currency_exchange</span> Reembolsar (Stripe)
+                </button>
+            @endif
+
             @if($ultimoEstado === 'pendiente' && in_array($pedido->metodo_pago, ['transferencia']))
                 <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
                     @csrf
@@ -90,6 +100,18 @@
         </div>
     </div>
 
+    @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
+        <div class="mb-6 p-4 rounded-xl bg-purple-50 border border-purple-200 text-purple-900 flex items-start gap-3 shadow-2xs">
+            <span class="material-symbols-outlined text-purple-600 text-2xl shrink-0 mt-0.5">currency_exchange</span>
+            <div>
+                <h3 class="text-sm font-bold text-purple-900">Pedido Reembolsado</h3>
+                <p class="text-xs text-purple-800 mt-0.5 leading-relaxed">
+                    Este pedido fue reembolsado por un monto de <span class="font-bold">${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }} USD</span> mediante Stripe. Su factura fiscal vinculada fue anulada automáticamente.
+                </p>
+            </div>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Columna Izquierda: Items y Actualización -->
         <div class="lg:col-span-2 space-y-6">
@@ -110,7 +132,9 @@
                             <option value="en_transito" {{ $ultimoEstado == 'en_transito' ? 'selected' : '' }}>En Tránsito</option>
                             <option value="entregado" {{ $ultimoEstado == 'entregado' ? 'selected' : '' }}>Entregado</option>
                             <option value="problema_entrega" {{ $ultimoEstado == 'problema_entrega' ? 'selected' : '' }}>Problema de Entrega</option>
+                            <option value="devolucion_solicitada" {{ $ultimoEstado == 'devolucion_solicitada' ? 'selected' : '' }}>Devolución Solicitada</option>
                             <option value="cancelado" {{ $ultimoEstado == 'cancelado' ? 'selected' : '' }}>Cancelado</option>
+                            <option value="reembolsado" {{ $ultimoEstado == 'reembolsado' ? 'selected' : '' }}>Reembolsado</option>
                         </select>
                     </div>
                     <div class="w-full sm:w-1/2">
@@ -247,6 +271,15 @@
                         <dt class="text-base font-bold text-slate-900">Total Pagado</dt>
                         <dd class="text-lg font-bold text-slate-900">${{ number_format($pedido->total, 2) }}</dd>
                     </div>
+                    @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
+                    <div class="flex items-center justify-between bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 text-purple-800 font-semibold text-sm">
+                        <dt class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px]">currency_exchange</span>
+                            Reembolsado
+                        </dt>
+                        <dd>-${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }}</dd>
+                    </div>
+                    @endif
                 </dl>
                 <div class="mt-4 pt-4 border-t border-slate-200">
                     <p class="text-sm text-slate-500 mb-2">
@@ -429,6 +462,64 @@
                         </button>
                         <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm font-sans">
                             Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reembolsar con Stripe -->
+    <div id="modal-reembolsar-stripe" class="fixed inset-0 z-[100] hidden overflow-y-auto font-sans" aria-labelledby="modal-reembolso-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" aria-hidden="true" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200">
+                <form action="{{ route('admin.pedidos.reembolsar', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
+                    @csrf
+                    <div class="bg-white px-6 pt-6 pb-5">
+                        <div class="sm:flex sm:items-start gap-4">
+                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0">
+                                <span class="material-symbols-outlined text-purple-600 text-2xl">currency_exchange</span>
+                            </div>
+                            <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-bold text-slate-900" id="modal-reembolso-title">
+                                    Reembolsar Pedido con Stripe
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1">
+                                    Esta acción emitirá un reembolso directo al método de pago original del cliente en Stripe por el monto indicado.
+                                </p>
+
+                                <div class="mt-4 space-y-3">
+                                    <div>
+                                        <label for="monto_reembolso" class="block text-xs font-semibold text-slate-700 mb-1">Monto a Reembolsar (USD)</label>
+                                        <div class="relative rounded-md shadow-sm">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <span class="text-slate-500 text-sm font-semibold">$</span>
+                                            </div>
+                                            <input type="number" step="0.01" min="0.01" max="{{ $pedido->total }}" name="monto" id="monto_reembolso" value="{{ number_format($pedido->total, 2, '.', '') }}" class="block w-full pl-7 pr-12 rounded-lg border-slate-300 focus:border-purple-500 focus:ring-purple-500 sm:text-sm font-semibold text-slate-900" required>
+                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                <span class="text-slate-400 text-xs font-mono">USD</span>
+                                            </div>
+                                        </div>
+                                        <p class="text-[11px] text-slate-400 mt-1">Total original del pedido: ${{ number_format($pedido->total, 2) }}</p>
+                                    </div>
+
+                                    <div>
+                                        <label for="motivo_reembolso" class="block text-xs font-semibold text-slate-700 mb-1">Motivo o justificación</label>
+                                        <textarea name="motivo" id="motivo_reembolso" rows="2" class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm font-sans" placeholder="Ej: Solicitud de cliente / Devolución de producto..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-2 border-t border-slate-100">
+                        <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-slate-300 px-4 py-2 bg-white text-xs font-semibold uppercase tracking-wider text-slate-700 hover:bg-slate-50 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" :disabled="sub" class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg border border-transparent px-4 py-2 bg-purple-600 text-xs font-bold uppercase tracking-wider text-white hover:bg-purple-700 focus:outline-none transition-colors shadow-sm disabled:opacity-75 disabled:cursor-wait">
+                            <span class="material-symbols-outlined mr-1.5 animate-spin text-[16px]" x-show="sub" style="display: none;">progress_activity</span>
+                            <span x-text="sub ? 'Procesando en Stripe...' : 'Confirmar Reembolso'">Confirmar Reembolso</span>
                         </button>
                     </div>
                 </form>

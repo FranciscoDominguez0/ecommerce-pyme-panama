@@ -43,8 +43,9 @@ class CheckoutController extends Controller
         }
 
         $zonasEnvio = ZonaEnvio::activo()->get();
+        $requiereEnvio = $this->pedidoService->carritoRequiereEnvioFisico($carrito);
 
-        return view('cliente.checkout.direccion', compact('zonasEnvio'));
+        return view('cliente.checkout.direccion', compact('zonasEnvio', 'requiereEnvio'));
     }
 
     /**
@@ -150,6 +151,7 @@ class CheckoutController extends Controller
         try {
             // Guardar metadatos de la tarjeta si el pago fue mediante Stripe
             $notasInternas = null;
+            $stripePiId = session('checkout_stripe_pi');
             if ($metodoPago === 'stripe') {
                 $stripeBrand = session('checkout_stripe_brand');
                 $stripeLast4 = session('checkout_stripe_last4');
@@ -158,6 +160,7 @@ class CheckoutController extends Controller
                     'tarjeta_marca' => $stripeBrand,
                     'tarjeta_last4' => $stripeLast4,
                     'stripe_pm' => is_string($stripePm) ? $stripePm : ($stripePm['id'] ?? 'simulacion'),
+                    'stripe_payment_intent_id' => $stripePiId,
                 ]);
             }
 
@@ -170,6 +173,10 @@ class CheckoutController extends Controller
                 $comprobanteRuta,
                 $notasInternas
             );
+
+            if ($stripePiId) {
+                $pedido->update(['stripe_payment_intent_id' => $stripePiId]);
+            }
 
             // Si el cobro de Stripe fue exitoso en tiempo real, confirmamos el pago de inmediato.
             // Esto genera la factura fiscal PDF y envía el correo con el comprobante al cliente automáticamente.
@@ -190,6 +197,7 @@ class CheckoutController extends Controller
                 'checkout_stripe_pm',
                 'checkout_stripe_last4',
                 'checkout_stripe_brand',
+                'checkout_stripe_pi',
             ]);
 
             return redirect()->route('cliente.perfil.pedidos.detalle', $pedido->id)

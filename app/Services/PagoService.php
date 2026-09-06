@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Pedido;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\CardException;
 use Stripe\PaymentIntent;
@@ -24,6 +25,7 @@ class PagoService
 
         // Si es una simulación en pruebas unitarias
         if (is_array($paymentMethodId) && isset($paymentMethodId['simulacion'])) {
+            session(['checkout_stripe_pi' => 'pi_simulacion_' . uniqid()]);
             return true;
         }
 
@@ -32,6 +34,7 @@ class PagoService
         // Si no hay clave secreta configurada aún, simular si no es producción
         if (empty($secretKey)) {
             Log::warning('Stripe: STRIPE_SECRET no está configurada en .env.');
+            session(['checkout_stripe_pi' => 'pi_simulacion_' . uniqid()]);
             return true;
         }
 
@@ -45,6 +48,7 @@ class PagoService
             $intent = $this->crearPaymentIntentStripe($secretKey, $metodoId, $monto);
 
             if ($intent->status === 'succeeded') {
+                session(['checkout_stripe_pi' => $intent->id]);
                 return true;
             }
 
@@ -139,5 +143,87 @@ class PagoService
     public function procesarContraEntrega(): bool
     {
         return true;
+    }
+
+    /**
+     * Procesa un reembolso con Stripe para un pedido.
+     *
+     * @param Pedido $pedido
+     * @param float|null $monto Monto a reembolsar en USD (si es null, reembolsa el total)
+     * @param string|null $motivo Motivo del reembolso
+     * @return array ['exito' => bool, 'mensaje' => string, 'refund_id' => string|null, 'monto' => float]
+     */
+    public function reembolsarStripe(Pedido $pedido, ?float $monto = null, ?string $motivo = null): array
+    {
+        $montoReembolso = $monto !== null && $monto > 0 ? $monto : (float) $pedido->total;
+        $secretKey = config('services.stripe.secret');
+
+        $paymentIntentId = $pedido->stripe_payment_intent_id;
+        if (!$paymentIntentId && !empty($pedido->notas_internas)) {
+            $detalles = json_decode($pedido->notas_internas, true);
+            $paymentIntentId = $detalles['stripe_payment_intent_id'] ?? null;
+        }
+
+        // Si es una simulación o no hay clave secreta
+        if (empty($secretKey) || str_starts_with((string) $paymentIntentId, 'pi_simulacion')) {
+            return [
+                'exito' => true,
+                'mensaje' => 'Reembolso de $' . number_format($montoReembolso, 2) . ' simulado correctamente.',
+                'refund_id' => 're_simulacion_' . uniqid(),
+                'monto' => $montoReembolso,
+            ];
+        }
+
+        if (empty($paymentIntentId)) {
+            return [
+                'exito' => false,
+                'mensaje' => 'No se encontró el ID de transacción de Stripe (PaymentIntent) para este pedido.',
+                'refund_id' => null,
+                'monto' => 0.00,
+            ];
+        }
+
+        try {
+            Stripe::setApiKey($secretKey);
+
+            $params = [
+                'payment_intent' => $paymentIntentId,
+                'amount' => (int) round($montoReembolso * 100),
+            ];
+
+            if (!empty($motivo)) {
+                $params['metadata'] = [
+                    'motivo' => $motivo,
+                    'pedido_id' => $pedido->id,
+                    'numero_pedido' => $pedido->numero_pedido,
+                ];
+            }
+
+            /** @var \Stripe\Refund $refund */
+            $refund = \Stripe\Refund::create($params);
+
+            return [
+                'exito' => true,
+                'mensaje' => 'Reembolso de $' . number_format($montoReembolso, 2) . ' procesado con éxito en Stripe.',
+                'refund_id' => $refund->id,
+                'monto' => (float) ($refund->amount / 100),
+            ];
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            Log::error('Error al emitir reembolso en Stripe: ' . $e->getMessage());
+            return [
+                'exito' => false,
+                'mensaje' => 'Error de Stripe: ' . $e->getMessage(),
+                'refund_id' => null,
+                'monto' => 0.00,
+            ];
+        } catch (Throwable $e) {
+            Log::error('Error general en reembolso Stripe: ' . $e->getMessage());
+            return [
+                'exito' => false,
+                'mensaje' => 'Error inesperado: ' . $e->getMessage(),
+                'refund_id' => null,
+                'monto' => 0.00,
+            ];
+        }
     }
 }

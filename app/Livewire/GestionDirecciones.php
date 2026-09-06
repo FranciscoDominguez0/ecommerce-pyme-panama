@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Helpers\GeolocalizacionPanama;
 use App\Models\Direccion;
+use App\Services\EnvioService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
@@ -52,16 +53,17 @@ class GestionDirecciones extends Component
 
     public string $seleccion = '';
 
-    public ?int $zonaEnvioId = null;
+    public bool $requiereEnvio = true;
 
     public bool $mostrarFormulario = false;
 
     public ?int $editandoId = null;
 
-    public function mount($compact = false, $mostrarPredeterminada = true, $zonasEnvio = [])
+    public function mount($compact = false, $mostrarPredeterminada = true, $zonasEnvio = [], $requiereEnvio = true)
     {
         $this->compact = (bool) $compact;
         $this->mostrarPredeterminada = (bool) $mostrarPredeterminada;
+        $this->requiereEnvio = (bool) $requiereEnvio;
 
         if ($zonasEnvio instanceof \Illuminate\Support\Collection) {
             $zonasEnvio = $zonasEnvio->toArray();
@@ -88,6 +90,12 @@ class GestionDirecciones extends Component
             ->get();
     }
 
+    #[Computed]
+    public function zonaAuto(): ?\App\Models\ZonaEnvio
+    {
+        return $this->provincia ? app(EnvioService::class)->obtenerZonaPorProvincia($this->provincia) : null;
+    }
+
     /**
      * Reglas de validación — única fuente de verdad para ambos contextos.
      */
@@ -110,6 +118,7 @@ class GestionDirecciones extends Component
         $this->corregimiento = '';
         $this->distritos = $value ? GeolocalizacionPanama::distritosPorProvincia($value) : [];
         $this->corregimientos = [];
+        unset($this->zonaAuto);
     }
 
     public function updatedDistrito($value)
@@ -191,10 +200,13 @@ class GestionDirecciones extends Component
                     ->update(['es_predeterminada' => false]);
             }
 
+            $zona = app(EnvioService::class)->obtenerZonaPorProvincia($this->provincia);
+
             $data = [
                 'alias' => $this->alias,
                 'nombre_receptor' => $this->nombreReceptor,
                 'provincia' => $this->provincia,
+                'zona_envio_id' => $zona?->id,
                 'distrito' => $this->distrito,
                 'corregimiento' => $this->corregimiento,
                 'direccion_exacta' => $this->direccionExacta,
@@ -267,6 +279,7 @@ class GestionDirecciones extends Component
     /**
      * Acción exclusiva del modo checkout (compact = true):
      * guarda la nueva dirección si hace falta y continúa hacia el paso de pago.
+     * La zona de envío y su costo se determinan automáticamente a partir de la dirección seleccionada.
      */
     public function continuar()
     {
@@ -275,19 +288,26 @@ class GestionDirecciones extends Component
         }
 
         if ($this->seleccion === '' || $this->seleccion === 'nueva') {
-            $this->addError('seleccion', 'Selecciona una dirección de envío o ingresa una nueva.');
+            $this->addError('seleccion', 'Selecciona una dirección de entrega o ingresa una nueva.');
             return;
         }
 
-        $this->validate(
-            ['zonaEnvioId' => ['required', 'exists:zonas_envio,id']],
-            [],
-            ['zonaEnvioId' => 'zona de envío']
-        );
+        $direccion = Direccion::where('id', $this->seleccion)
+            ->where('usuario_id', Auth::id())
+            ->sinEliminar()
+            ->first();
+
+        if (!$direccion) {
+            $this->addError('seleccion', 'La dirección seleccionada no es válida.');
+            return;
+        }
+
+        // Resolver la zona de envío vinculada a la dirección (o por provincia)
+        $zona = $direccion->zonaEnvioCalculada;
 
         session([
-            'checkout_direccion_id' => (int) $this->seleccion,
-            'checkout_zona_envio_id' => (int) $this->zonaEnvioId,
+            'checkout_direccion_id' => (int) $direccion->id,
+            'checkout_zona_envio_id' => $zona ? (int) $zona->id : null,
         ]);
 
         $this->redirect(route('cliente.checkout.pago'));

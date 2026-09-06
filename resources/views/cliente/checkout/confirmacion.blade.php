@@ -55,7 +55,14 @@
                             <div class="ml-4 flex flex-1 flex-col justify-center">
                                 <div>
                                     <div class="flex justify-between text-sm font-semibold text-primary">
-                                        <h3>{{ $item->producto->nombre }}</h3>
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <h3>{{ $item->producto->nombre }}</h3>
+                                            @if($item->producto->es_digital)
+                                                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">
+                                                    <span class="material-symbols-outlined text-[13px]">key</span> Digital / Licencia
+                                                </span>
+                                            @endif
+                                        </div>
                                         <p class="ml-4">${{ number_format($item->subtotal, 2) }}</p>
                                     </div>
                                     @if($item->variante)
@@ -81,7 +88,7 @@
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary text-xl">location_on</span>
-                            <h2 class="text-sm font-bold text-primary">Envío a</h2>
+                            <h2 class="text-sm font-bold text-primary">{{ ($totales['requiere_envio'] ?? true) ? 'Envío a' : 'Datos del Cliente' }}</h2>
                         </div>
                         <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
                     </div>
@@ -90,8 +97,10 @@
                         <p>{{ $direccion->direccion_exacta }}</p>
                         <p>{{ $direccion->corregimiento }}, {{ $direccion->distrito }}</p>
                         <p>{{ $direccion->provincia }}</p>
-                        @if($zonaEnvio)
+                        @if(($totales['requiere_envio'] ?? true) && $zonaEnvio)
                             <p class="mt-3 text-xs font-semibold text-secondary bg-secondary/10 inline-block px-2 py-1 rounded">Zona: {{ $zonaEnvio->nombre }}</p>
+                        @elseif(!($totales['requiere_envio'] ?? true))
+                            <p class="mt-3 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 inline-block px-2 py-1 rounded">Entrega Digital (Sin costo de envío)</p>
                         @endif
                     </address>
                 </div>
@@ -202,7 +211,15 @@
 
                         <div class="flex justify-between items-center">
                             <dt>Envío</dt>
-                            <dd class="font-semibold text-on-background">${{ number_format($totales['costo_envio'], 2) }}</dd>
+                            <dd class="font-semibold text-on-background">
+                                @if(!($totales['requiere_envio'] ?? true))
+                                    <span class="text-emerald-600 font-semibold">Gratis (Digital)</span>
+                                @elseif(($totales['costo_envio'] ?? 0) == 0)
+                                    <span class="text-secondary font-semibold">Gratis</span>
+                                @else
+                                    ${{ number_format($totales['costo_envio'], 2) }}
+                                @endif
+                            </dd>
                         </div>
                         
                         <div class="flex justify-between items-center">

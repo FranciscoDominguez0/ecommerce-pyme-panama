@@ -26,6 +26,7 @@
                     <option value="entregado" {{ request('estado') === 'entregado' ? 'selected' : '' }}>Entregado</option>
                     <option value="cancelado" {{ request('estado') === 'cancelado' ? 'selected' : '' }}>Cancelado</option>
                     <option value="devolucion_solicitada" {{ request('estado') === 'devolucion_solicitada' ? 'selected' : '' }}>Devolución Solicitada</option>
+                    <option value="reembolsado" {{ request('estado') === 'reembolsado' ? 'selected' : '' }}>Reembolsado</option>
                 </select>
             </div>
             <div class="w-full sm:w-64">
@@ -101,6 +102,7 @@
                                     'entregado' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
                                     'cancelado' => 'bg-red-50 text-red-700 border-red-200',
                                     'devolucion_solicitada' => 'bg-orange-50 text-orange-700 border-orange-200',
+                                    'reembolsado' => 'bg-purple-50 text-purple-700 border-purple-200',
                                 ];
                                 $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
                                 $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 text-slate-700 border-slate-200';

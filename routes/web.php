@@ -150,6 +150,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::post('/pedidos/{id}/avanzar-estado', [AdminPedidoController::class, 'avanzarEstado'])->name('admin.pedidos.avanzar-estado');
     Route::post('/pedidos/{id}/aprobar-pago', [AdminPedidoController::class, 'aprobarPago'])->name('admin.pedidos.aprobar-pago');
     Route::post('/pedidos/{id}/rechazar-pago', [AdminPedidoController::class, 'rechazarPago'])->name('admin.pedidos.rechazar-pago');
+    Route::post('/pedidos/{id}/reembolsar', [AdminPedidoController::class, 'reembolsar'])->name('admin.pedidos.reembolsar');
     Route::put('/pedidos/{id}/envio', [EnvioPedidoController::class, 'update'])->name('admin.pedidos.envio.update');
 
     // Módulo de Marcas (Brands)
@@ -281,3 +282,7 @@ Route::middleware('auth')->group(function () {
 
 // Rutas de Autenticación (Login, Registro, Recuperación de Contraseña)
 require __DIR__ . '/auth.php';
+
+// Webhooks de Stripe (sin protección CSRF configurado en bootstrap/app.php)
+Route::post('/api/webhooks/stripe', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handleWebhook'])->name('webhooks.stripe');
+Route::post('/stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handleWebhook']);

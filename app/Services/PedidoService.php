@@ -54,11 +54,18 @@ class PedidoService
             $descuento = $carrito->descuento_aplicado;
         }
 
-        $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
+        // Evaluar si el carrito requiere flete físico o si todos los productos son digitales/licencias
+        $requiereEnvioFisico = $this->carritoRequiereEnvioFisico($carrito);
 
-        if ($zonaEnvio && $this->cuponService->evaluarEnvioGratis($zonaEnvio->id, $subtotal)) {
-            $descuentoEnvio = $costoEnvio;
+        if (!$requiereEnvioFisico) {
             $costoEnvio = 0.00;
+        } else {
+            $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
+
+            if ($zonaEnvio && $this->cuponService->evaluarEnvioGratis($zonaEnvio->id, $subtotal)) {
+                $descuentoEnvio = $costoEnvio;
+                $costoEnvio = 0.00;
+            }
         }
 
         $itbmsMonto = $desglose['itbms'];
@@ -71,7 +78,22 @@ class PedidoService
             'costo_envio' => round($costoEnvio, 2),
             'itbms_monto' => round($itbmsMonto, 2),
             'total' => round($total, 2),
+            'requiere_envio' => $requiereEnvioFisico,
         ];
+    }
+
+    /**
+     * Determina si el carrito contiene al menos un producto que requiere flete físico.
+     */
+    public function carritoRequiereEnvioFisico(Carrito $carrito): bool
+    {
+        if ($carrito->items->isEmpty()) {
+            return false;
+        }
+
+        return $carrito->items->contains(function ($item) {
+            return $item->producto?->requiere_envio ?? true;
+        });
     }
 
     /**
@@ -217,8 +239,8 @@ class PedidoService
             app(FacturaService::class)->generarFactura($pedido);
         }
 
-        // Regla de negocio: Anular factura cuando el pedido se cancela
-        if ($nuevoEstado === 'cancelado') {
+        // Regla de negocio: Anular factura cuando el pedido se cancela o reembolsa
+        if (in_array($nuevoEstado, ['cancelado', 'reembolsado'])) {
             app(FacturaService::class)->anularFactura($pedido);
         }
 

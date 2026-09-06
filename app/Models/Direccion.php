@@ -17,6 +17,7 @@ class Direccion extends Model
 
     protected $fillable = [
         'usuario_id',
+        'zona_envio_id',
         'alias',
         'nombre_receptor',
         'provincia',
@@ -29,6 +30,7 @@ class Direccion extends Model
     ];
 
     protected $casts = [
+        'zona_envio_id' => 'integer',
         'es_predeterminada' => 'boolean',
         'creado_en' => 'datetime',
         'actualizado_en' => 'datetime',
@@ -43,5 +45,26 @@ class Direccion extends Model
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class, 'usuario_id');
+    }
+
+    public function zonaEnvio(): BelongsTo
+    {
+        return $this->belongsTo(ZonaEnvio::class, 'zona_envio_id');
+    }
+
+    /**
+     * Resuelve la zona de envío vinculada o la deduce automáticamente desde la provincia.
+     */
+    public function getZonaEnvioCalculadaAttribute(): ?ZonaEnvio
+    {
+        if ($this->zonaEnvio) {
+            return $this->zonaEnvio;
+        }
+
+        if (!empty($this->provincia)) {
+            return app(\App\Services\EnvioService::class)->obtenerZonaPorProvincia($this->provincia);
+        }
+
+        return null;
     }
 }

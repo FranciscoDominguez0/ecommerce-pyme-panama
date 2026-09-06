@@ -23,11 +23,13 @@ class Pedido extends Model
         'zona_envio_id',
         'numero_pedido',
         'metodo_pago',
+        'stripe_payment_intent_id',
         'subtotal',
         'descuento',
         'costo_envio',
         'itbms_monto',
         'total',
+        'monto_reembolsado',
         'notas_cliente',
         'notas_internas',
         'comprobante_pago_ruta',
@@ -40,6 +42,7 @@ class Pedido extends Model
         'costo_envio' => 'decimal:2',
         'itbms_monto' => 'decimal:2',
         'total' => 'decimal:2',
+        'monto_reembolsado' => 'decimal:2',
         'creado_en' => 'datetime',
         'actualizado_en' => 'datetime',
     ];
@@ -89,6 +92,11 @@ class Pedido extends Model
         return $this->hasOne(EnvioPedido::class, 'pedido_id');
     }
 
+    public function devolucion(): HasOne
+    {
+        return $this->hasOne(Devolucion::class, 'pedido_id');
+    }
+
     /**
      * Obtiene los metadatos de tarjeta guardados en notas_internas (JSON).
      */
@@ -112,5 +120,10 @@ class Pedido extends Model
     public function getTarjetaLast4Attribute(): ?string
     {
         return $this->detalles_tarjeta['tarjeta_last4'] ?? null;
+    }
+
+    public function getEsReembolsadoAttribute(): bool
+    {
+        return $this->ultimoEstado?->estado === 'reembolsado' || (float) $this->monto_reembolsado > 0;
     }
 }

@@ -171,4 +171,43 @@ class PedidoController extends Controller
         
         return back()->with('toast_success', 'Pago rechazado.');
     }
+
+    public function reembolsar(Request $request, $id)
+    {
+        $request->validate([
+            'monto' => 'nullable|numeric|min:0.01',
+            'motivo' => 'nullable|string|max:255',
+        ]);
+
+        $pedido = Pedido::findOrFail($id);
+
+        if ($pedido->ultimoEstado?->estado === 'reembolsado') {
+            return back()->with('toast_error', 'Este pedido ya se encuentra reembolsado.');
+        }
+
+        $pagoService = app(\App\Services\PagoService::class);
+        $montoSolicitado = $request->filled('monto') ? (float) $request->monto : (float) $pedido->total;
+        
+        $resultado = $pagoService->reembolsarStripe(
+            $pedido, 
+            $montoSolicitado, 
+            $request->motivo
+        );
+
+        if (!$resultado['exito']) {
+            return back()->with('toast_error', $resultado['mensaje']);
+        }
+
+        $montoReembolsado = $resultado['monto'] ?: $montoSolicitado;
+        $pedido->update(['monto_reembolsado' => $montoReembolsado]);
+
+        $comentario = 'Reembolso de $' . number_format($montoReembolsado, 2) . ' procesado con Stripe.';
+        if ($request->filled('motivo')) {
+            $comentario .= ' Motivo: ' . $request->motivo;
+        }
+
+        $this->pedidoService->cambiarEstado($pedido, 'reembolsado', Auth::id(), $comentario);
+
+        return back()->with('toast_success', $resultado['mensaje']);
+    }
 }

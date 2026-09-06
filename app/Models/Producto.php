@@ -38,6 +38,7 @@ class Producto extends Model
         'destacado',
         'activo',
         'aplica_itbms',
+        'es_digital',
         'eliminado_en',
     ];
 
@@ -50,6 +51,7 @@ class Producto extends Model
         'destacado' => 'boolean',
         'activo' => 'boolean',
         'aplica_itbms' => 'boolean',
+        'es_digital' => 'boolean',
         'stock' => 'integer',
         'stock_minimo' => 'integer',
         'categoria_id' => 'integer',
@@ -58,6 +60,31 @@ class Producto extends Model
         'creado_en' => 'datetime',
         'actualizado_en' => 'datetime',
     ];
+
+    /**
+     * Determina si el producto requiere flete/envío físico o si es licencia/servicio digital.
+     */
+    public function getRequiereEnvioAttribute(): bool
+    {
+        if ($this->es_digital) {
+            return false;
+        }
+
+        $categoriaSlug = $this->categoria?->slug;
+        if (in_array($categoriaSlug, [
+            'software-y-licencias',
+            'servicios-informaticos',
+            'formateo-e-instalacion-de-software',
+            'soporte-tecnico-a-domicilio',
+            'recuperacion-de-datos',
+            'instalacion-de-redes',
+            'mantenimiento-y-limpieza-de-equipos',
+        ])) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * Categoría a la que pertenece el producto.

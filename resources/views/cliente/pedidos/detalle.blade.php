@@ -55,6 +55,12 @@
                 'icon' => 'flag',
                 'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
             ],
+            'reembolsado' => [
+                'badge_bg' => 'bg-purple-100',
+                'badge_text' => 'text-purple-800',
+                'icon' => 'currency_exchange',
+                'label' => 'Reembolsado',
+            ],
             default => [
                 'badge_bg' => 'bg-surface-container-high',
                 'badge_text' => 'text-on-surface',
@@ -79,10 +85,14 @@
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Volver a mis pedidos
             </a>
-            <h1 class="text-lg sm:text-xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
-            <p class="text-on-surface-variant text-sm mt-1">
-                Realizado el {{ $pedido->creado_en->translatedFormat('d M, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}
-            </p>
+            <div class="flex items-center gap-3">
+                <h1 class="text-xl md:text-2xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold {{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }}">
+                    <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
+                    {{ $configEstado['label'] }}
+                </span>
+            </div>
+            <p class="text-sm text-on-surface-variant mt-1">Realizado el {{ $pedido->creado_en->translatedFormat('d \d\e F, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}</p>
         </div>
         <div class="flex flex-col items-end gap-3">
             @if($pedido->factura)
@@ -92,14 +102,11 @@
                 </a>
             @endif
 
-            @if(in_array($ultimoEstado, ['entregado', 'enviado']))
-                @php
-                    $tieneDevolucion = \App\Models\Devolucion::where('pedido_id', $pedido->id)->exists();
-                @endphp
-                @if(!$tieneDevolucion)
+            @if(in_array($ultimoEstado, ['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'en_transito', 'entregado']) && $ultimoEstado !== 'reembolsado')
+                @if(!$pedido->devolucion)
                     <a href="{{ route('cliente.perfil.pedidos.devolucion.create', $pedido->id) }}" wire:navigate class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary-container transition-colors shadow-sm">
                         <span class="material-symbols-outlined text-[16px]">assignment_return</span>
-                        Solicitar Devolución
+                        Solicitar Devolución / Reembolso
                     </a>
                 @else
                     <span class="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface-variant text-xs font-bold uppercase tracking-wider rounded-lg border border-outline-variant/30">
@@ -110,6 +117,18 @@
             @endif
         </div>
     </div>
+
+    @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
+        <div class="mb-8 p-5 rounded-2xl bg-purple-50 border border-purple-200 text-purple-900 flex items-start gap-4 shadow-sm">
+            <span class="material-symbols-outlined text-purple-600 text-3xl shrink-0 mt-0.5">currency_exchange</span>
+            <div>
+                <h3 class="text-base font-bold text-purple-900">Reembolso Procesado</h3>
+                <p class="text-sm text-purple-800 mt-1 leading-relaxed">
+                    Este pedido fue reembolsado por un monto total de <span class="font-bold">${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }} USD</span> a tu método de pago original con Stripe.
+                </p>
+            </div>
+        </div>
+    @endif
 
     <!-- Grid principal -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -151,10 +170,14 @@
                         @php
                             $esActual = $loop->last;
                             $esProblema = $historial->estado === 'problema_entrega';
+                            $esReembolso = $historial->estado === 'reembolsado';
                             
                             if ($esProblema) {
                                 $dotClass = $esActual ? 'bg-red-500 animate-pulse' : 'bg-red-500';
                                 $textClass = 'text-red-600';
+                            } elseif ($esReembolso) {
+                                $dotClass = $esActual ? 'bg-purple-600 animate-pulse' : 'bg-purple-600';
+                                $textClass = 'text-purple-700';
                             } else {
                                 $dotClass = $esActual
                                     ? 'bg-tertiary-container animate-pulse'
@@ -217,9 +240,16 @@
                         <div class="flex-1 min-w-0 w-full flex flex-col sm:flex-row justify-between gap-4">
                             <!-- Info Producto -->
                             <div class="flex-1">
-                                <h3 class="text-sm font-semibold text-on-surface line-clamp-2">
-                                    {{ $item->producto?->nombre ?? 'Producto no disponible' }}
-                                </h3>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="text-sm font-semibold text-on-surface line-clamp-2">
+                                        {{ $item->producto?->nombre ?? 'Producto no disponible' }}
+                                    </h3>
+                                    @if($item->producto?->es_digital)
+                                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-200">
+                                            <span class="material-symbols-outlined text-[13px]">key</span> Entrega digital
+                                        </span>
+                                    @endif
+                                </div>
                                 @if($item->variante && $item->variante->opciones->isNotEmpty())
                                     <p class="text-on-surface-variant text-sm mt-1">
                                         @foreach($item->variante->opciones as $opcion)
@@ -266,7 +296,11 @@
                     @endif
                     <div class="flex justify-between text-on-surface-variant text-sm">
                         <span>Envío</span>
-                        <span class="font-numeric-data font-semibold">${{ number_format($pedido->costo_envio, 2) }}</span>
+                        @if((float) $pedido->costo_envio === 0.0)
+                            <span class="font-semibold text-emerald-600">Gratis (Digital)</span>
+                        @else
+                            <span class="font-numeric-data font-semibold">${{ number_format($pedido->costo_envio, 2) }}</span>
+                        @endif
                     </div>
                     <div class="flex justify-between text-on-surface-variant text-sm">
                         <span>ITBMS (7%)</span>
@@ -277,6 +311,15 @@
                     <span class="text-sm font-bold text-on-surface">Total</span>
                     <span class="text-base font-bold text-primary">${{ number_format($pedido->total, 2) }}</span>
                 </div>
+                @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
+                    <div class="flex justify-between items-center bg-purple-50 px-3 py-2 rounded-lg border border-purple-200 text-purple-800 font-semibold text-xs mb-6">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">currency_exchange</span>
+                            Monto Reembolsado
+                        </span>
+                        <span class="font-numeric-data font-bold">-${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }}</span>
+                    </div>
+                @endif
                 <a href="{{ route('cliente.catalogo') }}" wire:navigate class="block w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-xs font-bold tracking-wider uppercase text-center shadow-sm hover:bg-on-secondary-container transition-colors">
                     Seguir comprando
                 </a>
@@ -352,7 +395,7 @@
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
                 <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">location_on</span>
-                    Dirección de envío
+                    {{ (float) $pedido->costo_envio === 0.0 ? 'Datos del cliente' : 'Dirección de envío' }}
                 </h3>
                 <div class="text-sm text-on-surface space-y-1">
                     <p class="font-semibold">{{ $pedido->direccion->nombre_receptor }}</p>

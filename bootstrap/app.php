@@ -21,6 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\AuthenticateSession::class,
         ]);
 
+        $middleware->preventRequestForgery(except: [
+            'stripe/*',
+            'api/webhooks/*',
+        ]);
+
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,

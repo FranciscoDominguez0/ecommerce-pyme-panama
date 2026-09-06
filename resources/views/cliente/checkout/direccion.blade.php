@@ -30,10 +30,16 @@
     </div>
 
     <div class="mb-8 max-w-4xl mx-auto">
-        <h1 class="text-lg sm:text-xl font-bold text-primary mb-2">Seleccione su dirección de envío</h1>
-        <p class="text-on-surface-variant text-sm">Elija una dirección guardada o agregue una nueva para su entrega.</p>
+        <h1 class="text-lg sm:text-xl font-bold text-primary mb-2">
+            {{ ($requiereEnvio ?? true) ? 'Seleccione su dirección de entrega' : 'Datos de entrega y facturación' }}
+        </h1>
+        <p class="text-on-surface-variant text-sm">
+            {{ ($requiereEnvio ?? true) 
+                ? 'Elija una dirección guardada o agregue una nueva para su entrega.' 
+                : 'Indique sus datos de contacto para la entrega digital de sus licencias y emisión de factura.' }}
+        </p>
     </div>
 
-    <livewire:gestion-direcciones :compact="true" :mostrarPredeterminada="false" :zonasEnvio="$zonasEnvio" />
+    <livewire:gestion-direcciones :compact="true" :mostrarPredeterminada="false" :zonasEnvio="$zonasEnvio" :requiereEnvio="$requiereEnvio ?? true" />
 </div>
 @endsection
