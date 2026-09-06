@@ -36,26 +36,26 @@
                     </p>
 
                     <!-- Botones CTA originales -->
-                    <div class="flex flex-wrap gap-3.5 pt-2">
+                    <div class="flex flex-row items-center gap-2 sm:gap-3.5 pt-2 w-full sm:w-auto">
                         <a href="#catalogo"
-                            class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white transition-all shadow-lg hover:brightness-110 active:scale-95"
+                            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg font-bold text-[11px] sm:text-sm text-white transition-all shadow-lg hover:brightness-110 active:scale-95 whitespace-nowrap"
                             style="background:#22c55e;">
-                            <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+                            <span class="material-symbols-outlined text-[16px] sm:text-[18px]">shopping_bag</span>
                             <span>Explorar Catálogo</span>
                         </a>
 
                         @guest
                             <a href="{{ route('register') }}" wire:navigate
-                                class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white border transition-all hover:bg-white/10 active:scale-95"
+                                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg font-bold text-[11px] sm:text-sm text-white border transition-all hover:bg-white/10 active:scale-95 whitespace-nowrap"
                                 style="border-color:rgba(255,255,255,0.3);">
-                                <span class="material-symbols-outlined text-[18px]">person_add</span>
+                                <span class="material-symbols-outlined text-[16px] sm:text-[18px]">person_add</span>
                                 <span>Crear Cuenta</span>
                             </a>
                         @else
                             <a href="{{ route('dashboard') }}" wire:navigate
-                                class="inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-bold text-sm text-white border transition-all hover:bg-white/10 active:scale-95"
+                                class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg font-bold text-[11px] sm:text-sm text-white border transition-all hover:bg-white/10 active:scale-95 whitespace-nowrap"
                                 style="border-color:rgba(255,255,255,0.3);">
-                                <span class="material-symbols-outlined text-[18px]">account_circle</span>
+                                <span class="material-symbols-outlined text-[16px] sm:text-[18px]">account_circle</span>
                                 <span>Ir a Mi Cuenta</span>
                             </a>
                         @endguest
@@ -147,13 +147,20 @@
         =========================================== -->
         <section id="catalogo" class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-6">
 
-            <div class="mb-8 text-center max-w-xl mx-auto">
+            <div class="mb-6 text-center max-w-xl mx-auto">
                 <h2 class="font-headline-md text-2xl sm:text-3xl text-primary font-bold mb-2">
                     Equipos & Soluciones Tecnológicas Destacadas
                 </h2>
                 <p class="font-body-md text-sm text-on-surface-variant">
                     Laptops de alta gama, periféricos profesionales y componentes con garantía local directa.
                 </p>
+            </div>
+
+            <div class="flex justify-end mb-4">
+                <a href="{{ route('cliente.catalogo') }}" wire:navigate class="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-800 hover:underline">
+                    <span>Ver todo el catálogo</span>
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </a>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
