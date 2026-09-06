@@ -289,21 +289,61 @@
                     Método de pago
                 </h3>
                 <div class="flex items-center gap-3">
-                    @if($pedido->metodo_pago === 'yappy')
-                    <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">
-                        <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">
-                    </div>
+                    @if($pedido->metodo_pago === 'stripe')
+                        @php
+                            $detallesTarjeta = $pedido->detalles_tarjeta;
+                            $stripeBrand = strtolower($detallesTarjeta['tarjeta_marca'] ?? '');
+                            $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
+                            $brandLabels = [
+                                'visa' => 'Visa',
+                                'mastercard' => 'Mastercard',
+                                'amex' => 'American Express',
+                                'discover' => 'Discover',
+                                'diners' => 'Diners Club',
+                                'jcb' => 'JCB',
+                                'unionpay' => 'UnionPay',
+                            ];
+                            $nombreMarca = $brandLabels[$stripeBrand] ?? (!empty($stripeBrand) ? ucfirst($stripeBrand) : 'Tarjeta de crédito / débito');
+                        @endphp
+                        <div class="shrink-0 shadow-2xs rounded-md overflow-hidden border border-slate-200">
+                            <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-12 h-8 block" />
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <p class="text-sm font-semibold text-on-surface">{{ $nombreMarca }}</p>
+                                @if($stripeLast4)
+                                    <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $stripeLast4 }}</span>
+                                @endif
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Pago seguro en tiempo real vía Stripe</p>
+                        </div>
+                    @elseif($pedido->metodo_pago === 'yappy')
+                        <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">
+                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Pago verificado vía Yappy</p>
+                        </div>
+                    @elseif($pedido->metodo_pago === 'transferencia')
+                        <span class="material-symbols-outlined text-2xl text-on-surface-variant">account_balance</span>
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
+                            @if($pedido->comprobante_pago_ruta)
+                                <p class="text-xs text-secondary mt-0.5 flex items-center gap-1 font-semibold">
+                                    <span class="material-symbols-outlined text-[14px]">done</span> Comprobante adjunto
+                                </p>
+                            @else
+                                <p class="text-xs text-slate-500 mt-0.5">Pendiente de comprobante</p>
+                            @endif
+                        </div>
                     @else
-                    <span class="material-symbols-outlined text-2xl text-on-surface-variant">{{ $pagoInfo['icon'] }}</span>
+                        <span class="material-symbols-outlined text-2xl text-on-surface-variant">{{ $pagoInfo['icon'] }}</span>
+                        <div>
+                            <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Pago registrado al recibir el pedido</p>
+                        </div>
                     @endif
-                    <div>
-                        <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
-                        @if($pedido->metodo_pago === 'transferencia' && $pedido->comprobante_pago_ruta)
-                            <p class="text-sm text-on-surface-variant">Comprobante adjunto</p>
-                        @else
-                            <p class="text-sm text-on-surface-variant">Pago registrado al confirmar el pedido</p>
-                        @endif
-                    </div>
                 </div>
             </div>
 

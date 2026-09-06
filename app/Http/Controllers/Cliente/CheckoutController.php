@@ -74,6 +74,9 @@ class CheckoutController extends Controller
         session([
             'checkout_metodo_pago' => $request->metodo_pago,
             'checkout_comprobante_ruta' => $comprobanteRuta,
+            'checkout_stripe_pm' => $request->input('stripe_payment_method_id'),
+            'checkout_stripe_last4' => $request->input('stripe_last4'),
+            'checkout_stripe_brand' => $request->input('stripe_brand'),
         ]);
 
         return redirect()->route('cliente.checkout.confirmacion');
@@ -129,7 +132,8 @@ class CheckoutController extends Controller
 
         // Intentar procesar el pago antes de crear el pedido
         if ($metodoPago === 'stripe') {
-            $pagoExitoso = $this->pagoService->procesarStripe(['simulacion' => true], $totales['total']);
+            $stripePm = session('checkout_stripe_pm') ?: ['simulacion' => true];
+            $pagoExitoso = $this->pagoService->procesarStripe($stripePm, $totales['total']);
         } elseif ($metodoPago === 'yappy') {
             $pagoExitoso = $this->pagoService->procesarYappy('6000-0000', $totales['total']);
         } elseif ($metodoPago === 'transferencia') {
@@ -139,21 +143,54 @@ class CheckoutController extends Controller
         }
 
         if (!$pagoExitoso) {
-            return redirect()->route('cliente.checkout.pago')->with('error', 'No se pudo procesar el pago. Por favor intenta con otro método.');
+            $errorMsg = session('error') ?: 'No se pudo procesar el pago. Por favor intenta con otro método.';
+            return redirect()->route('cliente.checkout.pago')->with('error', $errorMsg);
         }
 
         try {
+            // Guardar metadatos de la tarjeta si el pago fue mediante Stripe
+            $notasInternas = null;
+            if ($metodoPago === 'stripe') {
+                $stripeBrand = session('checkout_stripe_brand');
+                $stripeLast4 = session('checkout_stripe_last4');
+                $stripePm = session('checkout_stripe_pm');
+                $notasInternas = json_encode([
+                    'tarjeta_marca' => $stripeBrand,
+                    'tarjeta_last4' => $stripeLast4,
+                    'stripe_pm' => is_string($stripePm) ? $stripePm : ($stripePm['id'] ?? 'simulacion'),
+                ]);
+            }
+
             $pedido = $this->pedidoService->crearDesdeCarrito(
                 $carrito, 
                 $direccionId, 
                 $metodoPago, 
                 $request->notas_cliente,
                 $zonaEnvio,
-                $comprobanteRuta
+                $comprobanteRuta,
+                $notasInternas
             );
 
+            // Si el cobro de Stripe fue exitoso en tiempo real, confirmamos el pago de inmediato.
+            // Esto genera la factura fiscal PDF y envía el correo con el comprobante al cliente automáticamente.
+            if ($metodoPago === 'stripe' && $pagoExitoso) {
+                $tarjetaTexto = strtoupper(session('checkout_stripe_brand', 'Tarjeta'));
+                $last4Texto = session('checkout_stripe_last4');
+                $comentario = "Pago confirmado automáticamente con Stripe ({$tarjetaTexto}" . ($last4Texto ? " •••• {$last4Texto}" : "") . ").";
+
+                $this->pedidoService->cambiarEstado($pedido, 'pago_confirmado', $usuario->id, $comentario);
+            }
+
             // Limpiar sesión
-            session()->forget(['checkout_direccion_id', 'checkout_zona_envio_id', 'checkout_metodo_pago', 'checkout_comprobante_ruta']);
+            session()->forget([
+                'checkout_direccion_id',
+                'checkout_zona_envio_id',
+                'checkout_metodo_pago',
+                'checkout_comprobante_ruta',
+                'checkout_stripe_pm',
+                'checkout_stripe_last4',
+                'checkout_stripe_brand',
+            ]);
 
             return redirect()->route('cliente.perfil.pedidos.detalle', $pedido->id)
                 ->with('pedido_creado_animacion', true);

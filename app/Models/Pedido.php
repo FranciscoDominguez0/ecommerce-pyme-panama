@@ -88,4 +88,29 @@ class Pedido extends Model
     {
         return $this->hasOne(EnvioPedido::class, 'pedido_id');
     }
+
+    /**
+     * Obtiene los metadatos de tarjeta guardados en notas_internas (JSON).
+     */
+    public function getDetallesTarjetaAttribute(): array
+    {
+        if (!empty($this->notas_internas)) {
+            $datos = json_decode($this->notas_internas, true);
+            if (is_array($datos) && (isset($datos['tarjeta_marca']) || isset($datos['tarjeta_last4']))) {
+                return $datos;
+            }
+        }
+
+        return [];
+    }
+
+    public function getTarjetaMarcaAttribute(): ?string
+    {
+        return $this->detalles_tarjeta['tarjeta_marca'] ?? null;
+    }
+
+    public function getTarjetaLast4Attribute(): ?string
+    {
+        return $this->detalles_tarjeta['tarjeta_last4'] ?? null;
+    }
 }

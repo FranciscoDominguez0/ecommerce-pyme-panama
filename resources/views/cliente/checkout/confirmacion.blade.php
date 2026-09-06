@@ -107,8 +107,32 @@
                     </div>
                     <div class="text-xs text-on-surface-variant flex items-center gap-3">
                         @if($metodoPago === 'stripe')
-                            <span class="material-symbols-outlined text-3xl text-outline">credit_card</span>
-                            <span class="font-semibold text-on-background">Tarjeta de Crédito / Débito</span>
+                            @php
+                                $stripeBrand = strtolower(session('checkout_stripe_brand', ''));
+                                $stripeLast4 = session('checkout_stripe_last4');
+                                $brandLabels = [
+                                    'visa' => 'Visa',
+                                    'mastercard' => 'Mastercard',
+                                    'amex' => 'American Express',
+                                    'discover' => 'Discover',
+                                    'diners' => 'Diners Club',
+                                    'jcb' => 'JCB',
+                                    'unionpay' => 'UnionPay',
+                                ];
+                                $nombreMarca = $brandLabels[$stripeBrand] ?? (!empty($stripeBrand) ? ucfirst($stripeBrand) : 'Tarjeta de Crédito / Débito');
+                            @endphp
+                            <div class="shrink-0 shadow-2xs rounded-md overflow-hidden border border-slate-200">
+                                <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-12 h-8 block" />
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-semibold text-on-background">{{ $nombreMarca }}</span>
+                                    @if($stripeLast4)
+                                        <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $stripeLast4 }}</span>
+                                    @endif
+                                </div>
+                                <p class="text-xs text-slate-500 mt-0.5">Pago seguro en tiempo real vía Stripe</p>
+                            </div>
                         @elseif($metodoPago === 'yappy')
                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">
                                 <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">

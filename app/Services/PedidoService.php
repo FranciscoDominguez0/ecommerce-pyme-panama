@@ -84,9 +84,10 @@ class PedidoService
         string $metodoPago,
         ?string $notasCliente,
         ?ZonaEnvio $zonaEnvio = null,
-        ?string $comprobantePagoRuta = null
+        ?string $comprobantePagoRuta = null,
+        ?string $notasInternas = null
     ): Pedido {
-        return DB::transaction(function () use ($carrito, $direccionId, $metodoPago, $notasCliente, $zonaEnvio, $comprobantePagoRuta) {
+        return DB::transaction(function () use ($carrito, $direccionId, $metodoPago, $notasCliente, $zonaEnvio, $comprobantePagoRuta, $notasInternas) {
             // 1. Validar stock
             foreach ($carrito->items as $item) {
                 $stockDisponible = $item->variante ? $item->variante->stock : $item->producto->stock;
@@ -114,6 +115,7 @@ class PedidoService
                 'itbms_monto' => $totales['itbms_monto'],
                 'total' => $totales['total'],
                 'notas_cliente' => $notasCliente,
+                'notas_internas' => $notasInternas,
                 'comprobante_pago_ruta' => $comprobantePagoRuta,
             ]);
 

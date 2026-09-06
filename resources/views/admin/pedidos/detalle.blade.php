@@ -253,8 +253,23 @@
                         <span class="font-medium text-slate-900">Método de pago:</span> 
                         <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $pedido->metodo_pago) }}</span>
                     </p>
+                    @if($pedido->metodo_pago === 'stripe')
+                        @php
+                            $detallesTarjeta = $pedido->detalles_tarjeta;
+                            $stripeBrand = strtolower($detallesTarjeta['tarjeta_marca'] ?? '');
+                            $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
+                        @endphp
+                        <div class="flex items-center gap-2 mt-2">
+                            <div class="shrink-0 shadow-2xs rounded border border-slate-200 overflow-hidden">
+                                <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-10 h-6.5 block" />
+                            </div>
+                            <span class="text-xs font-mono font-medium text-slate-700">
+                                {{ strtoupper($stripeBrand ?: 'Tarjeta') }} •••• {{ $stripeLast4 ?: '****' }}
+                            </span>
+                        </div>
+                    @endif
                     @if($pedido->comprobante_pago_ruta)
-                        <a href="{{ asset('storage/' . $pedido->comprobante_pago_ruta) }}" target="_blank" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800">
+                        <a href="{{ asset('storage/' . $pedido->comprobante_pago_ruta) }}" target="_blank" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 mt-2">
                             <span class="material-symbols-outlined text-[18px] mr-1">receipt</span> Ver comprobante
                         </a>
                     @endif
