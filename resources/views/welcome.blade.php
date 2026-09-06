@@ -242,7 +242,7 @@
                 display: flex;
                 align-items: center;
                 gap: 20px;
-                transition: transform 0.45s cubic-bezier(.25, .46, .45, .94);
+                transition: transform 0.5s cubic-bezier(.25, .46, .45, .94);
                 will-change: transform;
             }
 
@@ -315,31 +315,187 @@
                 font-size: 22px;
                 line-height: 1;
             }
+
+            /* Adaptabilidad móvil: tarjetas más proporcionadas (2 a 3 visibles a la vez) y controles compactos */
+            @media (max-width: 640px) {
+                .brands-slider-outer {
+                    gap: 6px;
+                }
+                .brands-track-manual {
+                    gap: 10px;
+                }
+                .brand-logo-card-m {
+                    width: 112px;
+                    height: 64px;
+                    padding: 8px 12px;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+                }
+                .brands-arrow {
+                    width: 32px;
+                    height: 32px;
+                }
+                .brands-arrow .material-symbols-outlined {
+                    font-size: 18px;
+                }
+            }
         </style>
 
         <script>
             (function () {
-                const track = document.getElementById('brandsTrack');
-                const vp = document.getElementById('brandsViewport');
-                const prev = document.getElementById('brandsPrev');
-                const next = document.getElementById('brandsNext');
-                if (!track || !prev || !next) return;
-                const GAP = 20, CW = 160, STEP = CW + GAP;
-                const total = track.querySelectorAll('.brand-logo-card-m').length;
-                let cur = 0;
-                const vis = () => Math.floor((vp.offsetWidth + GAP) / STEP) || 1;
-                const max = () => Math.max(0, total - vis());
-                const upd = (a = true) => {
-                    if (!a) track.style.transition = 'none';
-                    track.style.transform = `translateX(-${cur * STEP}px)`;
-                    if (!a) requestAnimationFrame(() => { track.style.transition = ''; });
-                    prev.disabled = cur === 0;
-                    next.disabled = cur >= max();
-                };
-                prev.addEventListener('click', () => { if (cur > 0) { cur--; upd(); } });
-                next.addEventListener('click', () => { if (cur < max()) { cur++; upd(); } });
-                window.addEventListener('resize', () => { cur = Math.min(cur, max()); upd(false); });
-                upd(false);
+                function initBrandsCarousel() {
+                    const track = document.getElementById('brandsTrack');
+                    const vp = document.getElementById('brandsViewport');
+                    const prev = document.getElementById('brandsPrev');
+                    const next = document.getElementById('brandsNext');
+                    const outer = document.querySelector('.brands-slider-outer');
+                    if (!track || !vp) return;
+
+                    // Destruir cualquier instancia previa para evitar duplicación de timers y listeners
+                    if (window.__brandsCarouselInstance) {
+                        window.__brandsCarouselInstance.destroy();
+                    }
+
+                    const cards = track.querySelectorAll('.brand-logo-card-m');
+                    const total = cards.length;
+                    if (total === 0) return;
+
+                    let cur = 0;
+                    let autoTimer = null;
+                    let isPaused = false;
+
+                    const getStep = () => {
+                        const firstCard = cards[0];
+                        const cardWidth = firstCard ? firstCard.offsetWidth : 160;
+                        const style = window.getComputedStyle(track);
+                        const gap = parseFloat(style.gap) || 16;
+                        return { width: cardWidth, gap, step: cardWidth + gap };
+                    };
+
+                    const vis = () => {
+                        const { gap, step } = getStep();
+                        return Math.max(1, Math.floor((vp.offsetWidth + gap) / step));
+                    };
+
+                    const max = () => Math.max(0, total - vis());
+
+                    const upd = (animate = true) => {
+                        const { step } = getStep();
+                        track.style.transition = animate ? 'transform 0.5s cubic-bezier(.25, .46, .45, .94)' : 'none';
+                        track.style.transform = `translateX(-${cur * step}px)`;
+                        if (!animate) {
+                            requestAnimationFrame(() => {
+                                track.style.transition = 'transform 0.5s cubic-bezier(.25, .46, .45, .94)';
+                            });
+                        }
+                    };
+
+                    const nextSlide = () => {
+                        const limit = max();
+                        if (limit <= 0) return;
+                        if (cur >= limit) {
+                            cur = 0; // Al llegar al final, reinicia cíclicamente
+                        } else {
+                            cur++;
+                        }
+                        upd(true);
+                    };
+
+                    const prevSlide = () => {
+                        const limit = max();
+                        if (limit <= 0) return;
+                        if (cur <= 0) {
+                            cur = limit;
+                        } else {
+                            cur--;
+                        }
+                        upd(true);
+                    };
+
+                    const startTimer = () => {
+                        stopTimer();
+                        autoTimer = setInterval(() => {
+                            if (!isPaused) {
+                                nextSlide();
+                            }
+                        }, 3000);
+                    };
+
+                    const stopTimer = () => {
+                        if (autoTimer) {
+                            clearInterval(autoTimer);
+                            autoTimer = null;
+                        }
+                    };
+
+                    // Al hacer clic en las flechas, avanza/retrocede y el auto-avance continúa desde ahí
+                    if (next) {
+                        next.onclick = function(e) {
+                            e.preventDefault();
+                            nextSlide();
+                            startTimer();
+                        };
+                    }
+                    if (prev) {
+                        prev.onclick = function(e) {
+                            e.preventDefault();
+                            prevSlide();
+                            startTimer();
+                        };
+                    }
+
+                    // En PC: pausar mientras el usuario interactúa encima y reanudar al salir
+                    const container = outer || vp;
+                    const onMouseEnter = () => { isPaused = true; };
+                    const onMouseLeave = () => { isPaused = false; };
+
+                    container.addEventListener('mouseenter', onMouseEnter);
+                    container.addEventListener('mouseleave', onMouseLeave);
+
+                    // Soporte táctil en móvil (Swipe)
+                    let touchStartX = 0;
+                    let touchEndX = 0;
+                    const onTouchStart = (e) => {
+                        isPaused = true;
+                        touchStartX = e.changedTouches[0].screenX;
+                    };
+                    const onTouchEnd = (e) => {
+                        isPaused = false;
+                        touchEndX = e.changedTouches[0].screenX;
+                        const diff = touchStartX - touchEndX;
+                        if (Math.abs(diff) > 35) {
+                            if (diff > 0) nextSlide();
+                            else prevSlide();
+                            startTimer();
+                        }
+                    };
+
+                    vp.addEventListener('touchstart', onTouchStart, { passive: true });
+                    vp.addEventListener('touchend', onTouchEnd, { passive: true });
+
+                    const onResize = () => {
+                        cur = Math.min(cur, max());
+                        upd(false);
+                    };
+                    window.addEventListener('resize', onResize);
+
+                    upd(false);
+                    startTimer();
+
+                    window.__brandsCarouselInstance = {
+                        destroy: () => {
+                            stopTimer();
+                            container.removeEventListener('mouseenter', onMouseEnter);
+                            container.removeEventListener('mouseleave', onMouseLeave);
+                            vp.removeEventListener('touchstart', onTouchStart);
+                            vp.removeEventListener('touchend', onTouchEnd);
+                            window.removeEventListener('resize', onResize);
+                        }
+                    };
+                }
+
+                initBrandsCarousel();
+                document.addEventListener('livewire:navigated', initBrandsCarousel);
             })();
         </script>
 
