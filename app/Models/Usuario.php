@@ -75,4 +75,19 @@ class Usuario extends Authenticatable
     {
         return trim("{$this->nombre} {$this->apellido}");
     }
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'usuario_id');
+    }
+
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class, 'usuario_id');
+    }
+
+    public function devoluciones()
+    {
+        return $this->hasMany(Devolucion::class, 'usuario_id');
+    }
 }

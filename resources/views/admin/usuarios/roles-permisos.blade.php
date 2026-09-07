@@ -38,16 +38,6 @@
                 <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Usuarios</span>
                 <span class="font-bold text-2xl text-slate-900">{{ $rol->users()->count() }}</span>
             </div>
-            <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 flex flex-col items-center min-w-[120px] shadow-sm">
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Nivel</span>
-                @if($rol->name === 'super_admin')
-                    <span class="font-bold text-xl text-red-600">Crítico</span>
-                @elseif($rol->name === 'Admin')
-                    <span class="font-bold text-xl text-orange-500">Elevado</span>
-                @else
-                    <span class="font-bold text-xl text-slate-900">Estándar</span>
-                @endif
-            </div>
             <div class="flex items-center ml-2">
                 <button type="submit" class="px-6 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all flex items-center gap-2">
                     <span class="material-symbols-outlined text-[18px]">save</span>

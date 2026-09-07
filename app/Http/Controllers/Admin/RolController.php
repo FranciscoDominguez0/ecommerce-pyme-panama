@@ -45,10 +45,8 @@ class RolController extends Controller
      */
     public function updatePermisos(Request $request, Role $rol)
     {
-        // Protección de Superadmin: evitar que le quiten permisos vitales o evitar edición si se requiere.
-        if ($rol->name === 'Superadmin' && !auth()->user()->hasRole('Superadmin')) {
-            return redirect()->back()->with('toast_error', 'No tienes permiso para modificar al Superadmin.');
-        }
+        // Autorización basada en permisos
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
 
         $request->validate([
             'permisos' => 'nullable|array',
@@ -68,10 +66,8 @@ class RolController extends Controller
      */
     public function store(Request $request)
     {
-        // Solo el superadmin puede crear roles (doble validación)
-        if (!auth()->user()->hasRole('Superadmin')) {
-            return redirect()->back()->with('toast_error', 'No tienes permisos para crear roles.');
-        }
+        // Autorización basada en permisos
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
 
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name',
@@ -86,5 +82,45 @@ class RolController extends Controller
         ]);
 
         return redirect()->back()->with('toast_success', 'Rol creado correctamente. Ya puedes asignarle permisos.');
+    }
+
+    /**
+     * Actualiza un rol existente.
+     */
+    public function update(Request $request, Role $rol)
+    {
+        // Autorización basada en permisos
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
+
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name,' . $rol->id,
+            'descripcion' => 'nullable|string|max:255',
+        ]);
+
+        $rol->update([
+            'nombre' => $request->name,
+            'name' => $request->name,
+            'descripcion' => $request->descripcion,
+        ]);
+
+        return redirect()->back()->with('toast_success', 'Rol actualizado correctamente.');
+    }
+
+    /**
+     * Elimina un rol.
+     */
+    public function destroy(Role $rol)
+    {
+        // Autorización basada en permisos
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
+
+        // Validar si el rol tiene usuarios asignados antes de eliminarlo
+        if ($rol->users()->count() > 0) {
+            return redirect()->back()->with('toast_error', 'No puedes eliminar un rol que tiene usuarios asignados. Reasigna a los usuarios primero.');
+        }
+
+        $rol->delete();
+
+        return redirect()->route('admin.usuarios.index')->with('toast_success', 'Rol eliminado correctamente.');
     }
 }

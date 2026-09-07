@@ -119,6 +119,9 @@
                             </td>
                             <td class="py-3 px-4 text-right">
                                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <a href="{{ route('admin.usuarios.show', $user->id) }}" class="text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 p-1.5 rounded transition-colors" title="Ver Detalles">
+                                        <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                    </a>
                                     <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-slate-900 hover:bg-slate-100 p-1.5 rounded transition-colors" title="Editar">
                                         <span class="material-symbols-outlined text-[20px]">edit</span>
                                     </a>

@@ -24,6 +24,32 @@ class UsuarioController extends Controller
     }
 
     /**
+     * Muestra el detalle completo de un usuario.
+     */
+    public function show(Usuario $usuario)
+    {
+        $usuario->load([
+            'roles', 
+            'direcciones',
+            'pedidos' => function($q) {
+                $q->orderBy('creado_en', 'desc')->take(10); // Mostrar los 10 más recientes
+            },
+            'facturas' => function($q) {
+                $q->orderBy('creado_en', 'desc')->take(5);
+            }
+        ]);
+
+        $pedidos = $usuario->pedidos()->with('ultimoEstado')->get();
+        $totalPedidos = $pedidos->count();
+        $totalGastado = $pedidos->reject(function($pedido) {
+            $estado = strtolower($pedido->ultimoEstado?->estado ?? '');
+            return in_array($estado, ['cancelado', 'rechazado', 'devuelto']);
+        })->sum('total');
+
+        return view('admin.usuarios.show', compact('usuario', 'totalPedidos', 'totalGastado'));
+    }
+
+    /**
      * Muestra formulario de creación.
      */
     public function create(Role $rol)
@@ -37,14 +63,6 @@ class UsuarioController extends Controller
      */
     public function store(Request $request, Role $rol)
     {
-        // Protección: Solo un Superadmin puede crear otro Superadmin
-        if ($request->rol_id) {
-            $nuevoRol = Role::find($request->rol_id);
-            if ($nuevoRol && $nuevoRol->name === 'Superadmin' && !auth()->user()->hasRole('Superadmin')) {
-                return back()->withInput()->with('toast_error', 'No tienes permiso para asignar el rol Superadmin.');
-            }
-        }
-
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'nullable|string|max:255',
@@ -88,19 +106,6 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, Usuario $usuario)
     {
-        // Protección: No dejar modificar un Superadmin a menos que sea Superadmin
-        if ($usuario->hasRole('Superadmin') && !auth()->user()->hasRole('Superadmin')) {
-            return back()->with('toast_error', 'No tienes permiso para modificar un Superadmin.');
-        }
-
-        // Protección: Evitar asignar Superadmin
-        if ($request->rol_id) {
-            $nuevoRol = Role::find($request->rol_id);
-            if ($nuevoRol && $nuevoRol->name === 'Superadmin' && !auth()->user()->hasRole('Superadmin')) {
-                return back()->withInput()->with('toast_error', 'No tienes permiso para asignar el rol Superadmin.');
-            }
-        }
-
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'nullable|string|max:255',
@@ -138,11 +143,6 @@ class UsuarioController extends Controller
         // Protección: No permitir que el usuario logueado se elimine a sí mismo
         if ($usuario->id === auth()->id()) {
             return back()->with('toast_error', 'No puedes eliminar tu propia cuenta.');
-        }
-
-        // Protección: No dejar eliminar a un Superadmin a menos que sea Superadmin
-        if ($usuario->hasRole('super_admin') && !auth()->user()->hasRole('super_admin')) {
-            return back()->with('toast_error', 'No tienes permiso para eliminar un Super Administrador.');
         }
 
         try {

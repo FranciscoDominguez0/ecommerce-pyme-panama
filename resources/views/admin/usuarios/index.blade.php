@@ -19,37 +19,34 @@
             <span class="material-symbols-outlined text-[18px]">add</span>
             Crear Rol
         </button>
-    @else
-        <button class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 uppercase tracking-wide opacity-50 cursor-not-allowed" title="Solo el Superadmin puede crear roles">
-            <span class="material-symbols-outlined text-[18px]">add</span>
-            Crear Rol
-        </button>
     @endcan
 </div>
 
 <!-- Bento Grid for Roles -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach($roles as $role)
-    @php
-        $accentColor = match($role->name) {
-            'Superadmin' => 'bg-error',
-            'Administrador' => 'bg-brand-gold',
-            'Usuario' => 'bg-secondary-fixed-dim',
-            default => 'bg-primary'
-        };
-    @endphp
     <!-- Role Card -->
     <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:shadow-sm transition-all flex flex-col h-full relative overflow-hidden group">
-        <div class="absolute top-0 left-0 w-1 h-full {{ $accentColor }}"></div>
+        <div class="absolute top-0 left-0 w-1 h-full bg-slate-800"></div>
         <div class="flex justify-between items-start mb-4">
             <div>
                 <h4 class="font-label-caps text-xs text-on-surface font-bold tracking-wider mb-1 uppercase">{{ $role->nombre ?: $role->name }}</h4>
                 <p class="font-body-sm text-sm text-on-surface-variant h-10 line-clamp-2">{{ $role->descripcion ?? 'Acceso al sistema.' }}</p>
             </div>
-            <span class="inline-flex items-center gap-1 bg-secondary-container text-secondary px-2 py-1 rounded-sm font-label-caps text-[10px] uppercase">
-                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                Activo
-            </span>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1 bg-secondary-container text-secondary px-2 py-1 rounded-sm font-label-caps text-[10px] uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Activo
+                </span>
+                @can('admin.usuarios.gestionar')
+                    <button type="button" onclick="abrirEditarRol('{{ $role->id }}', '{{ $role->name }}', '{{ $role->descripcion }}')" class="text-slate-400 hover:text-slate-800 transition-colors" title="Editar Rol">
+                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                    </button>
+                    <button type="button" onclick="window.ModalEliminar.abrir('{{ route('admin.usuarios.roles.destroy', $role->id) }}', 'Rol {{ $role->name }}', 'Esto podría dejar a usuarios sin acceso si no los reasigna.')" class="text-slate-400 hover:text-red-600 transition-colors" title="Eliminar Rol">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                @endcan
+            </div>
         </div>
         <div class="flex-grow">
             <div class="flex gap-8 mb-6 mt-4">
@@ -111,13 +108,18 @@
                     <p class="font-body-sm text-sm text-on-surface-variant">{{ $user->email }}</p>
                 </div>
             </div>
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-4">
                 @foreach($user->roles as $r)
                     <span class="font-label-caps text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-sm uppercase">{{ $r->name }}</span>
                 @endforeach
-                <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-outline hover:text-primary">
-                    <span class="material-symbols-outlined">edit</span>
-                </a>
+                <div class="flex items-center gap-2 ml-2">
+                    <a href="{{ route('admin.usuarios.show', $user->id) }}" class="text-outline hover:text-emerald-600 transition-colors" title="Ver Detalles">
+                        <span class="material-symbols-outlined">visibility</span>
+                    </a>
+                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-outline hover:text-primary transition-colors" title="Editar">
+                        <span class="material-symbols-outlined">edit</span>
+                    </a>
+                </div>
             </div>
         </div>
         @empty
@@ -160,5 +162,48 @@
         </form>
     </div>
 </dialog>
+
+<!-- Modal Editar Rol -->
+<dialog id="editarRolModal" class="p-0 rounded-xl shadow-xl backdrop:bg-slate-900/50 open:animate-in open:fade-in-90 open:zoom-in-95 border border-slate-200">
+    <div class="bg-white p-6 w-[400px] max-w-[90vw]">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-bold text-slate-900">Editar Rol</h3>
+            <button onclick="document.getElementById('editarRolModal').close()" type="button" class="text-slate-400 hover:text-slate-900 transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form id="editarRolForm" action="" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="space-y-4 mb-8">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Nombre del Rol <span class="text-red-500">*</span></label>
+                    <input type="text" id="edit_rol_name" name="name" required class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Descripción</label>
+                    <input type="text" id="edit_rol_desc" name="descripcion" class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none">
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onclick="document.getElementById('editarRolModal').close()" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 transition-colors">
+                    Cancelar
+                </button>
+                <button type="submit" class="px-5 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all">
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<script>
+    function abrirEditarRol(id, name, descripcion) {
+        document.getElementById('edit_rol_name').value = name;
+        document.getElementById('edit_rol_desc').value = descripcion;
+        document.getElementById('editarRolForm').action = '/admin/usuarios/roles/' + id;
+        document.getElementById('editarRolModal').showModal();
+    }
+</script>
 @endcan
 @endsection

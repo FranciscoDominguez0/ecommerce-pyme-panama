@@ -239,13 +239,16 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::get('/roles/{rol}/crear', [\App\Http\Controllers\Admin\UsuarioController::class, 'create'])->name('create');
         Route::post('/roles/{rol}', [\App\Http\Controllers\Admin\UsuarioController::class, 'store'])->name('store');
         
-        // Editar usuario
+        // Editar y Ver usuario
+        Route::get('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'show'])->name('show');
         Route::get('/{usuario}/editar', [\App\Http\Controllers\Admin\UsuarioController::class, 'edit'])->name('edit');
         Route::put('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'update'])->name('update');
         Route::delete('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'destroy'])->name('destroy');
         
-        // Roles (Crear y Permisos)
+        // Roles (Crear, Editar, Eliminar y Permisos)
         Route::post('/roles', [\App\Http\Controllers\Admin\RolController::class, 'store'])->name('roles.store');
+        Route::put('/roles/{rol}', [\App\Http\Controllers\Admin\RolController::class, 'update'])->name('roles.update');
+        Route::delete('/roles/{rol}', [\App\Http\Controllers\Admin\RolController::class, 'destroy'])->name('roles.destroy');
         Route::get('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'permisos'])->name('roles-permisos');
         Route::put('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'updatePermisos'])->name('update-permisos');
     });
