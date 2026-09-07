@@ -46,7 +46,7 @@ class RolController extends Controller
     public function updatePermisos(Request $request, Role $rol)
     {
         // Autorización basada en permisos
-        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.editar');
 
         $request->validate([
             'permisos' => 'nullable|array',
@@ -67,7 +67,7 @@ class RolController extends Controller
     public function store(Request $request)
     {
         // Autorización basada en permisos
-        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.crear');
 
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name',
@@ -90,7 +90,7 @@ class RolController extends Controller
     public function update(Request $request, Role $rol)
     {
         // Autorización basada en permisos
-        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.editar');
 
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name,' . $rol->id,
@@ -112,7 +112,7 @@ class RolController extends Controller
     public function destroy(Role $rol)
     {
         // Autorización basada en permisos
-        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.gestionar');
+        \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.eliminar');
 
         // Validar si el rol tiene usuarios asignados antes de eliminarlo
         if ($rol->users()->count() > 0) {

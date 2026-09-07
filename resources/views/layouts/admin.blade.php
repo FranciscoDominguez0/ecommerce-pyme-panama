@@ -178,98 +178,123 @@
             <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-4">
                 
                 <!-- Grupo 1: General -->
+                @canany(['admin.dashboard', 'admin.pedidos.ver', 'admin.devoluciones.ver'])
                 <div>
                     <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         General
                     </div>
                     <div class="space-y-0.5">
+                        @can('admin.dashboard')
                         <!-- Dashboard -->
                         <a href="{{ route('admin.dashboard') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
                             <span class="sidebar-text truncate transition-all duration-300">Dashboard</span>
                         </a>
+                        @endcan
 
+                        @can('admin.pedidos.ver')
                         <!-- Pedidos & Ventas -->
                         <a href="{{ url('/admin/pedidos') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
                             <span class="sidebar-text truncate transition-all duration-300">Pedidos & Ventas</span>
                         </a>
+                        @endcan
 
+                        @can('admin.devoluciones.ver')
                         <!-- Devoluciones -->
                         <a href="{{ route('admin.devoluciones.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.devoluciones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">assignment_return</span>
                             <span class="sidebar-text truncate transition-all duration-300">Devoluciones</span>
                         </a>
+                        @endcan
                     </div>
                 </div>
+                @endcanany
 
                 <!-- Grupo 2: Catálogo & Stock -->
+                @canany(['admin.productos.ver', 'admin.categorias.ver', 'admin.marcas.ver', 'admin.inventario.ver', 'admin.zonas.ver', 'admin.cupones.ver', 'admin.promociones.ver'])
                 <div>
                     <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         Catálogo & Stock
                     </div>
                     <div class="space-y-0.5">
+                        @can('admin.productos.ver')
                         <!-- Productos -->
                         <a href="{{ route('admin.productos.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.productos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.productos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">sell</span>
                             <span class="sidebar-text truncate transition-all duration-300">Productos</span>
                         </a>
+                        @endcan
 
+                        @can('admin.categorias.ver')
                         <!-- Categorías -->
                         <a href="{{ route('admin.categorias.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.categorias*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.categorias*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">category</span>
                             <span class="sidebar-text truncate transition-all duration-300">Categorías</span>
                         </a>
+                        @endcan
 
+                        @can('admin.marcas.ver')
                         <!-- Marcas -->
                         <a href="{{ route('admin.brands.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.brands*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.brands*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">verified</span>
                             <span class="sidebar-text truncate transition-all duration-300">Marcas & Logos</span>
                         </a>
+                        @endcan
 
+                        @can('admin.inventario.ver')
                         <!-- Inventario -->
                         <a href="{{ url('/admin/inventario') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/inventario*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/inventario*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">warehouse</span>
                             <span class="sidebar-text truncate transition-all duration-300">Inventario</span>
                         </a>
+                        @endcan
 
+                        @can('admin.zonas.ver')
                         <!-- Zonas de Envío -->
                         <a href="{{ route('admin.zonas-envio.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.zonas-envio*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.zonas-envio*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_shipping</span>
                             <span class="sidebar-text truncate transition-all duration-300">Zonas de Envío</span>
                         </a>
+                        @endcan
 
+                        @can('admin.cupones.ver')
                         <!-- Cupones de Descuento -->
                         <a href="{{ route('admin.promociones.cupones') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.cupones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.promociones.cupones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_offer</span>
                             <span class="sidebar-text truncate transition-all duration-300">Cupones de Descuento</span>
                         </a>
+                        @endcan
 
+                        @can('admin.promociones.ver')
                         <!-- Promociones Especiales -->
                         <a href="{{ route('admin.promociones.envio-gratis') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">campaign</span>
                             <span class="sidebar-text truncate transition-all duration-300">Promociones Especiales</span>
                         </a>
+                        @endcan
                     </div>
                 </div>
+                @endcanany
 
                 <!-- Grupo 3: Clientes & Facturación -->
+                @canany(['admin.usuarios.ver', 'admin.facturas.ver', 'admin.reportes.ver'])
                 <div>
                     <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         Clientes & Finanzas
                     </div>
                     <div class="space-y-0.5">
-                        @can('admin.usuarios.gestionar')
+                        @can('admin.usuarios.ver')
                         <!-- Usuarios y Roles -->
                         <a href="{{ route('admin.usuarios.index') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/usuarios*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
@@ -278,43 +303,54 @@
                         </a>
                         @endcan
 
+                        @can('admin.facturas.ver')
                         <!-- Facturación Fiscal -->
                         <a href="{{ url('/admin/facturas') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/facturas*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/facturas*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">receipt_long</span>
                             <span class="sidebar-text truncate transition-all duration-300">Facturación Fiscal</span>
                         </a>
+                        @endcan
 
+                        @can('admin.reportes.ver')
                         <!-- Reportes -->
                         <a href="{{ url('/admin/reportes') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/reportes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/reportes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">bar_chart</span>
                             <span class="sidebar-text truncate transition-all duration-300">Reportes</span>
                         </a>
+                        @endcan
                     </div>
                 </div>
+                @endcanany
 
                 <!-- Grupo 4: Sistema & Auditoría -->
+                @canany(['admin.auditoria.ver', 'admin.configuracion.ver'])
                 <div>
                     <div class="sidebar-group-title text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-3 transition-all duration-300">
                         Sistema & Seguridad
                     </div>
                     <div class="space-y-0.5">
+                        @can('admin.auditoria.ver')
                         <!-- Auditoría -->
                         <a href="{{ url('/admin/auditoria') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/auditoria*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/auditoria*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">security</span>
                             <span class="sidebar-text truncate transition-all duration-300">Auditoría</span>
                         </a>
+                        @endcan
 
+                        @can('admin.configuracion.ver')
                         <!-- Configuración -->
                         <a href="{{ url('/admin/configuracion') }}" 
                            class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/configuracion*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/configuracion*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">settings</span>
                             <span class="sidebar-text truncate transition-all duration-300">Configuración</span>
                         </a>
+                        @endcan
                     </div>
                 </div>
+                @endcanany
 
             </nav>
         </div>

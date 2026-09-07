@@ -14,7 +14,7 @@
 <!-- Section Title -->
 <div class="flex justify-between items-center mb-6">
     <h3 class="text-lg font-bold text-slate-900">Roles del sistema</h3>
-    @can('admin.usuarios.gestionar')
+    @can('admin.usuarios.crear')
         <button onclick="document.getElementById('crearRolModal').showModal()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-slate-800 shadow-sm transition-all flex items-center gap-2 uppercase tracking-wide">
             <span class="material-symbols-outlined text-[18px]">add</span>
             Crear Rol
@@ -38,7 +38,7 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
                     Activo
                 </span>
-                @can('admin.usuarios.gestionar')
+                @can('admin.usuarios.editar')
                     <button type="button" onclick="abrirEditarRol('{{ $role->id }}', '{{ $role->name }}', '{{ $role->descripcion }}')" class="text-slate-400 hover:text-slate-800 transition-colors" title="Editar Rol">
                         <span class="material-symbols-outlined text-[18px]">edit</span>
                     </button>
@@ -130,7 +130,7 @@
     </div>
 </div>
 
-@can('admin.usuarios.gestionar')
+@can('admin.usuarios.editar')
 <dialog id="crearRolModal" class="p-0 rounded-xl shadow-xl backdrop:bg-slate-900/50 open:animate-in open:fade-in-90 open:zoom-in-95 border border-slate-200">
     <div class="bg-white p-6 w-[400px] max-w-[90vw]">
         <div class="flex justify-between items-center mb-6">

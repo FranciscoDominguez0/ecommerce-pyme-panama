@@ -167,13 +167,11 @@
                         @php
                             $isSelected = $selectedRoleId == $r->id;
                             $icon = match($r->name) {
-                                'super_admin' => 'admin_panel_settings',
-                                'Administrador' => 'manage_accounts',
+                                'super_admin', 'Administrador' => 'manage_accounts',
                                 default => 'person'
                             };
                             $iconColor = match($r->name) {
-                                'super_admin' => 'text-red-600',
-                                'Administrador' => 'text-slate-900',
+                                'super_admin', 'Administrador' => 'text-slate-900',
                                 default => 'text-slate-500'
                             };
                         @endphp

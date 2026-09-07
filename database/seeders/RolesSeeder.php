@@ -27,17 +27,22 @@ class RolesSeeder extends Seeder
             'admin.productos.editar', 'admin.productos.eliminar',
 
             // Pedidos
-            'admin.pedidos.ver',      'admin.pedidos.gestionar', 'admin.pedidos.reembolsar',
+            'admin.pedidos.ver',      'admin.pedidos.crear',
+            'admin.pedidos.editar',   'admin.pedidos.eliminar', 'admin.pedidos.reembolsar',
 
             // Zonas y logística
-            'admin.zonas.ver',        'admin.zonas.gestionar',
+            'admin.zonas.ver',        'admin.zonas.crear',
+            'admin.zonas.editar',     'admin.zonas.eliminar',
 
             // Promociones y cupones
-            'admin.cupones.ver',      'admin.cupones.gestionar',
-            'admin.promociones.ver',  'admin.promociones.gestionar',
+            'admin.cupones.ver',      'admin.cupones.crear',
+            'admin.cupones.editar',   'admin.cupones.eliminar',
+            'admin.promociones.ver',  'admin.promociones.crear',
+            'admin.promociones.editar', 'admin.promociones.eliminar',
 
             // Usuarios y Roles
-            'admin.usuarios.gestionar',
+            'admin.usuarios.ver',     'admin.usuarios.crear',
+            'admin.usuarios.editar',  'admin.usuarios.eliminar',
         ];
 
         // ── Permisos del cliente (storefront) ────────────────────────────────
