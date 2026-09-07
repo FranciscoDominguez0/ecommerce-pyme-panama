@@ -51,8 +51,7 @@ class AutorizacionUsuariosTest extends BaseAdminTest
 
     /**
      * Verifica que para poder listar o modificar roles, se necesita un permiso explícito.
-     * En FASE 18 usamos 'admin.usuarios.gestionar' para agrupar, así que si lo tiene,
-     * debería poder entrar, y si no, 403.
+     * En FASE 18 usamos 'admin.usuarios.editar' para acceder a roles y permisos.
      */
     public function test_administrador_regular_no_puede_modificar_roles_ni_permisos_sin_autorizacion(): void
     {
@@ -66,7 +65,7 @@ class AutorizacionUsuariosTest extends BaseAdminTest
         $responseRoles->assertStatus(403);
 
         // Le asignamos el permiso
-        $rolAdmin->givePermissionTo('admin.usuarios.gestionar');
+        $rolAdmin->givePermissionTo('admin.usuarios.editar');
 
         // Intento de ver roles (ahora con permiso)
         $responseRolesOk = $this->actingAs($adminSinPermiso)

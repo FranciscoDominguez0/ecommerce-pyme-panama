@@ -145,6 +145,11 @@ class UsuarioController extends Controller
             return back()->with('toast_error', 'No puedes eliminar tu propia cuenta.');
         }
 
+        // Protección: Un administrador regular no puede eliminar a un super administrador
+        if ($usuario->hasRole('super_admin') && !auth()->user()->hasRole('super_admin')) {
+            return back()->with('toast_error', 'No tienes permiso para eliminar un Super Administrador.');
+        }
+
         try {
             \DB::transaction(function() use ($usuario) {
                 $userId = $usuario->id;
