@@ -23,6 +23,12 @@ Route::middleware('guest')->group(function () {
         ->name('login');
     Route::post('login', [LoginController::class, 'login']);
 
+    // Inicio de Sesión con Google
+    Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])
+        ->name('auth.google');
+    Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])
+        ->name('auth.google.callback');
+
     // 2FA Challenge
     Route::get('2fa-challenge', [TwoFactorController::class, 'showChallenge'])
         ->name('2fa.challenge');

@@ -129,6 +129,19 @@
                 </button>
             </form>
 
+            <!-- Google Login -->
+            <div class="mt-4 flex flex-col gap-3">
+                <div class="relative flex items-center justify-center">
+                    <span class="absolute inset-x-0 h-px bg-gray-200"></span>
+                    <span class="relative glass-card px-3 text-xs text-gray-500 font-medium">O continuar con</span>
+                </div>
+                
+                <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 active:bg-gray-100 text-gray-700 font-medium text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-200">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                    Continuar con Google
+                </a>
+            </div>
+
             <!-- Register Link -->
             <div class="mt-4 text-center border-t border-gray-100 pt-3">
                 <p class="text-xs text-gray-600">
