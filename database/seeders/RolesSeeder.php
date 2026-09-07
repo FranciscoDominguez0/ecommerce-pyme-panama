@@ -43,6 +43,14 @@ class RolesSeeder extends Seeder
             // Usuarios y Roles
             'admin.usuarios.ver',     'admin.usuarios.crear',
             'admin.usuarios.editar',  'admin.usuarios.eliminar',
+
+            // Módulos Adicionales (Devoluciones, Facturas, Auditoria, Config, Inventario, Reportes)
+            'admin.devoluciones.ver', 'admin.devoluciones.crear', 'admin.devoluciones.editar', 'admin.devoluciones.eliminar',
+            'admin.facturas.ver',     'admin.facturas.crear',     'admin.facturas.editar',     'admin.facturas.eliminar',
+            'admin.auditoria.ver',    'admin.auditoria.crear',    'admin.auditoria.editar',    'admin.auditoria.eliminar',
+            'admin.configuracion.ver','admin.configuracion.crear','admin.configuracion.editar','admin.configuracion.eliminar',
+            'admin.inventario.ver',   'admin.inventario.crear',   'admin.inventario.editar',   'admin.inventario.eliminar',
+            'admin.reportes.ver',     'admin.reportes.crear',     'admin.reportes.editar',     'admin.reportes.eliminar',
         ];
 
         // ── Permisos del cliente (storefront) ────────────────────────────────
