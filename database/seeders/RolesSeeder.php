@@ -56,9 +56,18 @@ class RolesSeeder extends Seeder
 
         // Crear todos los permisos
         foreach (array_merge($permisosAdmin, $permisosCliente) as $permiso) {
+            $parts = explode('.', $permiso);
+            $modulo = $parts[0];
+            
+            if ($parts[0] === 'admin') {
+                $modulo = count($parts) >= 3 ? $parts[1] : $parts[1];
+            } else if ($parts[0] === 'cliente') {
+                $modulo = 'cliente';
+            }
+
             Permission::firstOrCreate(
                 ['name' => $permiso, 'guard_name' => 'web'],
-                ['nombre' => $permiso, 'modulo' => explode('.', $permiso)[0]]
+                ['nombre' => $permiso, 'modulo' => $modulo]
             );
         }
 
