@@ -15,6 +15,31 @@ use Illuminate\Validation\ValidationException;
 class TwoFactorController extends Controller
 {
     /**
+     * Prepara el desafío 2FA para un usuario (genera código, guarda sesión y envía correo).
+     */
+    public static function triggerChallenge(Usuario $usuario, bool $remember = false): void
+    {
+        // Generar código numérico de 4 dígitos
+        $code = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+
+        // Guardar en caché por 10 minutos
+        Cache::put('2fa_code_' . $usuario->id, $code, now()->addMinutes(10));
+
+        // Guardar datos en la sesión temporalmente
+        session([
+            '2fa:user:id' => $usuario->id,
+            '2fa:remember' => $remember
+        ]);
+
+        // Enviar correo
+        try {
+            Mail::to($usuario->email)->send(new TwoFactorCodeMail($code, $usuario->nombre));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Error al enviar correo de 2FA: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Muestra la vista de desafío de 2FA.
      */
     public function showChallenge(Request $request)

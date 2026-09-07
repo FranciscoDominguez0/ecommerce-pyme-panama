@@ -55,7 +55,15 @@ class GoogleAuthController extends Controller
                 $usuario->assignRole('cliente');
             }
 
-            // Iniciar sesión
+            // Si el usuario tiene 2FA habilitado, interceptamos el login
+            if ($usuario->two_fa_habilitado) {
+                \App\Http\Controllers\Auth\TwoFactorController::triggerChallenge($usuario, true);
+
+                // Redirigir a la pantalla de verificación 2FA
+                return redirect()->route('2fa.challenge');
+            }
+
+            // Iniciar sesión (flujo normal sin 2FA)
             Auth::login($usuario, true);
 
             // Redirigir al home o donde corresponda
