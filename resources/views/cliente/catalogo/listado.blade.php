@@ -238,7 +238,7 @@
                                    class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                     <span class="flex items-center gap-2">
                                         <input type="radio" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
-                                        {{ $cat->nombre }} <span class="text-slate-400 font-normal">({{ $cat->productos_count }})</span>
+                                        {{ $cat->nombre }} <span class="text-slate-400 font-normal">({{ $cat->total_productos_count ?? $cat->productos_count }})</span>
                                     </span>
                                 </a>
                             @endforeach
