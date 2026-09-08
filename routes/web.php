@@ -112,10 +112,36 @@ Route::middleware('auth')->group(function () {
 Route::get('/dashboard', function () {
     $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
         ->sinEliminar()
-        ->activos()
+        ->where('activo', true)
+        ->where('es_digital', false)
+        ->whereHas('categoria', function($q) {
+            $q->where('exento_envio', false);
+        })
+        ->inRandomOrder()
         ->take(8)
         ->get();
-    return view('dashboard', compact('productos'));
+        
+    $slugsOrdenados = [
+        'laptops-y-computadoras',
+        'componentes-de-pc',
+        'perifericos',
+        'monitores',
+        'audio',
+        'redes-y-conectividad',
+        'almacenamiento',
+        'accesorios'
+    ];
+    $categoriasPrincipales = \App\Models\Categoria::whereIn('slug', $slugsOrdenados)
+        ->where('activo', true)
+        ->get()
+        ->sortBy(function($cat) use ($slugsOrdenados) {
+            return array_search($cat->slug, $slugsOrdenados);
+        });
+        
+    $marcas = \App\Models\Brand::verified()
+        ->get();
+        
+    return view('dashboard', compact('productos', 'categoriasPrincipales', 'marcas'));
 })->middleware(['auth'])->name('dashboard');
 
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')

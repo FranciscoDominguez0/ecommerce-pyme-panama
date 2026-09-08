@@ -115,7 +115,7 @@
                 <!-- Search Bar -->
                 <div class="hidden md:flex flex-1 max-w-md mx-4">
                     <form action="{{ route('cliente.catalogo') }}" method="GET" class="w-full relative">
-                        <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar productos, categorías..."
+                        <input type="text" name="buscar" id="global-search-input" value="{{ request('buscar') }}" placeholder="Buscar productos, categorías..."
                             class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 focus:bg-white focus:ring-1 focus:ring-[#006148] focus:border-[#006148] transition-all" />
                         <button type="submit" class="absolute left-2.5 top-2 text-gray-400 hover:text-[#006148] transition-colors">
                             <span class="material-symbols-outlined text-[16px]">search</span>
@@ -169,10 +169,32 @@
                             </a>
                         </div>
                     @endauth
-                </div>
             </div>
         </div>
         
+        @auth
+        <!-- Navegación Secundaria (Categorías Rápidas) -->
+        <div class="bg-[#f8f9fa] border-b border-gray-200 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex items-center h-12 gap-8 overflow-x-auto hide-scrollbar" aria-label="Navegación principal">
+                    
+                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="flex items-center gap-1 text-[14px] font-semibold text-slate-800 hover:text-[#0056b3] transition-colors shrink-0">
+                        Todas las Categorías
+                        <span class="material-symbols-outlined text-[16px] text-slate-500">expand_more</span>
+                    </a>
+                    
+                    @if(isset($categoriasPrincipales))
+                        @foreach($categoriasPrincipales->take(7) as $cat)
+                            <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate class="text-[14px] font-medium text-slate-600 hover:text-[#0056b3] transition-colors whitespace-nowrap shrink-0">
+                                {{ $cat->nombre }}
+                            </a>
+                        @endforeach
+                    @endif
+                    
+                </nav>
+            </div>
+        </div>
+        @endauth
         </div>
     </header>
     
@@ -399,6 +421,72 @@
             }
         }
 
+        function initTypewriterSearch() {
+            const searchInput = document.getElementById('global-search-input');
+            if (!searchInput) return;
+
+            if (searchInput.typewriterTimeout) clearTimeout(searchInput.typewriterTimeout);
+            
+            if (searchInput.value.trim() !== '') return;
+
+            const phrases = [
+                "Buscar laptops...", 
+                "Buscar celulares...", 
+                "Buscar componentes...", 
+                "Buscar monitores...",
+                "Buscar audífonos..."
+            ];
+            
+            let phraseIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            
+            function type() {
+                if (document.activeElement === searchInput || searchInput.value.trim() !== '') {
+                    searchInput.setAttribute('placeholder', 'Buscar productos, categorías...');
+                    return;
+                }
+
+                const currentPhrase = phrases[phraseIndex];
+                
+                if (isDeleting) {
+                    searchInput.setAttribute('placeholder', currentPhrase.substring(0, charIndex - 1));
+                    charIndex--;
+                } else {
+                    searchInput.setAttribute('placeholder', currentPhrase.substring(0, charIndex + 1));
+                    charIndex++;
+                }
+
+                let typeSpeed = isDeleting ? 30 : 80;
+
+                if (!isDeleting && charIndex === currentPhrase.length) {
+                    typeSpeed = 2000;
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    typeSpeed = 400;
+                }
+
+                searchInput.typewriterTimeout = setTimeout(type, typeSpeed);
+            }
+            
+            searchInput.setAttribute('placeholder', '');
+            type();
+            
+            searchInput.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    clearTimeout(searchInput.typewriterTimeout);
+                    isDeleting = false;
+                    charIndex = 0;
+                    type();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initTypewriterSearch);
+        document.addEventListener('livewire:navigated', initTypewriterSearch);
+        
         document.addEventListener('DOMContentLoaded', handleLoginSkeleton);
         document.addEventListener('livewire:navigated', handleLoginSkeleton);
     </script>
