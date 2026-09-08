@@ -13,15 +13,15 @@
                 <span>Inicio</span>
             </a>
 
+            <span class="material-symbols-outlined text-[13px] text-slate-400 shrink-0">chevron_right</span>
+            <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-slate-600 hover:text-emerald-700 transition-colors shrink-0">
+                Catálogo
+            </a>
+
             @if($producto->categoria)
                 <span class="material-symbols-outlined text-[13px] text-slate-400 shrink-0">chevron_right</span>
                 <a href="{{ route('cliente.catalogo', ['categoria' => $producto->categoria->slug]) }}" wire:navigate class="text-slate-600 hover:text-emerald-700 shrink-0 max-w-[130px] sm:max-w-[200px] truncate" title="{{ $producto->categoria->nombre }}">
                     {{ $producto->categoria->nombre }}
-                </a>
-            @else
-                <span class="material-symbols-outlined text-[13px] text-slate-400 shrink-0">chevron_right</span>
-                <a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-emerald-700 transition-colors shrink-0">
-                    Catálogo
                 </a>
             @endif
 
