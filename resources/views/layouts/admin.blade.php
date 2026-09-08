@@ -195,12 +195,12 @@
 
                         @can('admin.pedidos.ver')
                         @php
-                            // Un pedido es "nuevo" si su único estado ha sido 'pendiente' o no tiene estado diferente
+                            // Un pedido es "nuevo" (por procesar) si no tiene estados avanzados
                             $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
                                 $query->select(\Illuminate\Support\Facades\DB::raw(1))
                                       ->from('estados_pedido')
                                       ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
-                                      ->where('estados_pedido.estado', '!=', 'pendiente');
+                                      ->whereNotIn('estados_pedido.estado', ['pendiente', 'pago_confirmado']);
                             })->count();
                         @endphp
                         <!-- Pedidos & Ventas -->

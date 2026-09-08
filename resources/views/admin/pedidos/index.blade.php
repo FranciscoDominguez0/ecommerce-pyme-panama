@@ -71,7 +71,7 @@
                     @forelse($pedidos as $pedido)
                     @php
                         $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
-                        $esNuevo = $ultimoEstado === 'pendiente';
+                        $esNuevo = in_array($ultimoEstado, ['pendiente', 'pago_confirmado']);
                     @endphp
                     <tr class="hover:bg-slate-50 transition-colors {{ $esNuevo ? 'bg-emerald-50/40 border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}">
                         <td class="px-6 py-4 whitespace-nowrap">
