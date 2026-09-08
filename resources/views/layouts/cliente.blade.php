@@ -172,29 +172,7 @@
             </div>
         </div>
         
-        @auth
-        <!-- Navegación Secundaria (Categorías Rápidas) -->
-        <div class="bg-[#f8f9fa] border-b border-gray-200 hidden md:block">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <nav class="flex items-center h-12 gap-8 overflow-x-auto hide-scrollbar" aria-label="Navegación principal">
-                    
-                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="flex items-center gap-1 text-[14px] font-semibold text-slate-800 hover:text-[#0056b3] transition-colors shrink-0">
-                        Todas las Categorías
-                        <span class="material-symbols-outlined text-[16px] text-slate-500">expand_more</span>
-                    </a>
-                    
-                    @if(isset($categoriasPrincipales))
-                        @foreach($categoriasPrincipales->take(7) as $cat)
-                            <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate class="text-[14px] font-medium text-slate-600 hover:text-[#0056b3] transition-colors whitespace-nowrap shrink-0">
-                                {{ $cat->nombre }}
-                            </a>
-                        @endforeach
-                    @endif
-                    
-                </nav>
-            </div>
-        </div>
-        @endauth
+
         </div>
     </header>
     

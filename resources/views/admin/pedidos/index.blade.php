@@ -69,15 +69,34 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-slate-100">
                     @forelse($pedidos as $pedido)
-                    <tr class="hover:bg-slate-50 transition-colors">
+                    @php
+                        $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
+                        $esNuevo = $ultimoEstado === 'pendiente';
+                    @endphp
+                    <tr class="hover:bg-slate-50 transition-colors {{ $esNuevo ? 'bg-emerald-50/40 border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}">
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-sm font-bold text-slate-900">{{ $pedido->numero_pedido }}</span>
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-sm font-bold text-slate-900">{{ $pedido->numero_pedido }}</span>
+                                @if($esNuevo)
+                                    <span class="inline-flex items-center px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] font-bold rounded uppercase tracking-wide relative overflow-visible">
+                                        <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                        </span>
+                                        Nuevo
+                                    </span>
+                                @endif
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
-                                <div class="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs uppercase shrink-0">
-                                    {{ substr($pedido->usuario->nombre ?? 'U', 0, 1) }}
-                                </div>
+                                @if($pedido->usuario && $pedido->usuario->foto_perfil_ruta)
+                                    <img src="{{ str_starts_with($pedido->usuario->foto_perfil_ruta, 'http') ? $pedido->usuario->foto_perfil_ruta : asset(ltrim($pedido->usuario->foto_perfil_ruta, '/')) }}" alt="{{ $pedido->usuario->nombre }}" class="h-8 w-8 rounded-full object-cover shrink-0 border border-slate-200">
+                                @else
+                                    <div class="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs uppercase shrink-0">
+                                        {{ substr($pedido->usuario->nombre ?? 'U', 0, 1) }}
+                                    </div>
+                                @endif
                                 <div class="ml-3">
                                     <p class="text-sm font-medium text-slate-900">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</p>
                                     <p class="text-xs text-slate-500">{{ $pedido->usuario->email ?? '' }}</p>

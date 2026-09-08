@@ -3,56 +3,38 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-[#F4F6F8] pb-12">
+<div class="min-h-screen bg-[#F4F6F8] pb-12 pt-6 sm:pt-8">
     
-    <!-- 1. Hero Banner -->
-    <div class="relative w-full overflow-hidden text-white" style="background: linear-gradient(135deg, #060d18 0%, #0b1628 40%, #091a10 100%);">
-        
-        <!-- Glow blobs estilo Welcome -->
-        <div class="absolute inset-0 pointer-events-none overflow-hidden">
-            <div class="absolute top-[-80px] right-[-60px] w-[500px] h-[500px] rounded-full opacity-20"
-                style="background: radial-gradient(circle, #22c55e 0%, transparent 65%);"></div>
-            <div class="absolute bottom-[-60px] left-[-40px] w-[300px] h-[300px] rounded-full opacity-10"
-                style="background: radial-gradient(circle, #3b82f6 0%, transparent 65%);"></div>
-        </div>
+    <!-- 1. Hero Banner Compacto -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative w-full overflow-hidden text-white rounded-3xl shadow-xl border border-white/5" style="background: linear-gradient(135deg, #060d18 0%, #0b1628 40%, #091a10 100%);">
+            
+            <!-- Glow blobs estilo Welcome -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden">
+                <div class="absolute top-[-80px] right-[-60px] w-[500px] h-[500px] rounded-full opacity-20"
+                    style="background: radial-gradient(circle, #22c55e 0%, transparent 65%);"></div>
+                <div class="absolute bottom-[-60px] left-[-40px] w-[300px] h-[300px] rounded-full opacity-10"
+                    style="background: radial-gradient(circle, #3b82f6 0%, transparent 65%);"></div>
+            </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 relative z-10">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                <!-- Columna Texto -->
-                <div class="w-full md:w-3/5">
-                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-white drop-shadow-md">
-                        ¡Hola, <span class="text-emerald-400">{{ Auth::check() ? Auth::user()->nombre : 'Bienvenido' }}</span>!
-                    </h1>
-                    <p class="text-base md:text-lg text-slate-300 mb-8 max-w-lg leading-relaxed drop-shadow-sm">
-                        Es el momento perfecto para renovar tu setup. Descubre nuestro catálogo de tecnología con envío a todo Panamá y garantía directa.
-                    </p>
-                    <div class="flex items-center gap-4">
-                        <a href="{{ route('cliente.catalogo', ['ofertas' => 1]) }}" wire:navigate class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-6 py-3 rounded-xl font-black transition-colors shadow-lg shadow-emerald-500/20">
+            <div class="py-8 lg:py-10 relative z-10 px-6 sm:px-10">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <!-- Texto a la Izquierda -->
+                    <div class="flex-1 w-full text-left">
+                        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-md mb-3">
+                            ¡Hola, <span class="text-emerald-400">{{ Auth::check() ? Auth::user()->nombre : 'Bienvenido' }}</span>!
+                        </h1>
+                        <p class="text-base text-slate-300 max-w-2xl leading-relaxed drop-shadow-sm">
+                            Es el momento perfecto para renovar tu setup. Descubre nuestro catálogo de tecnología con envío a todo Panamá y garantía directa.
+                        </p>
+                    </div>
+                    
+                    <!-- Botón a la Derecha -->
+                    <div class="shrink-0 w-full md:w-auto flex justify-start md:justify-end">
+                        <a href="{{ route('cliente.catalogo', ['ofertas' => 1]) }}" wire:navigate class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 px-8 py-3.5 rounded-xl font-black transition-all shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 text-base whitespace-nowrap">
                             Ver Ofertas Especiales
                             <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
                         </a>
-                    </div>
-                </div>
-                
-                <!-- Columna Showcase (Productos Reales con Glassmorphism Oscuro) -->
-                <div class="w-full md:w-2/5 hidden md:block">
-                    <div class="grid grid-cols-2 gap-4">
-                        @foreach($productos->take(2) as $heroProd)
-                        <a href="{{ route('cliente.producto.detalle', $heroProd->slug) }}" wire:navigate class="bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl p-5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group relative flex flex-col items-center text-center overflow-hidden">
-                            <!-- Efecto de brillo interior hover -->
-                            <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/0 to-emerald-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            
-                            <div class="w-28 h-28 mb-4 flex items-center justify-center p-3 bg-black/40 backdrop-blur-md border border-white/5 rounded-2xl shadow-inner relative z-10 overflow-hidden">
-                                @if($heroProd->imagenPrincipal())
-                                    <img src="{{ str_starts_with($heroProd->imagenPrincipal()->ruta, 'http') ? $heroProd->imagenPrincipal()->ruta : asset(ltrim($heroProd->imagenPrincipal()->ruta, '/')) }}" alt="{{ $heroProd->nombre }}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 relative z-10 drop-shadow-lg">
-                                @else
-                                    <span class="material-symbols-outlined text-[40px] text-white/30 group-hover:text-white/50 transition-colors">image</span>
-                                @endif
-                            </div>
-                            <h4 class="text-sm font-bold text-slate-200 mb-1.5 truncate w-full relative z-10 drop-shadow-sm">{{ $heroProd->nombre }}</h4>
-                            <span class="text-emerald-400 font-black text-base relative z-10 drop-shadow-sm">${{ number_format($heroProd->precioFinalPromocional(), 2) }}</span>
-                        </a>
-                        @endforeach
                     </div>
                 </div>
             </div>

@@ -97,7 +97,10 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @foreach($devoluciones as $dev)
-                        <tr class="hover:bg-slate-50/50 transition-colors cursor-pointer group" 
+                        @php
+                            $esNuevaDevolucion = $dev->estado === 'pendiente';
+                        @endphp
+                        <tr class="hover:bg-slate-50/50 transition-colors cursor-pointer group {{ $esNuevaDevolucion ? 'bg-emerald-50/40 border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}" 
                             @click="abrirModal({
                                 id: '{{ $dev->id }}',
                                 pedido_id: '{{ $dev->pedido->id }}',
@@ -122,7 +125,20 @@
                                     @endforeach
                                 ]
                             })">
-                            <td class="px-6 py-4 font-mono text-sm font-bold text-slate-900">DEV-{{ str_pad($dev->id, 4, '0', STR_PAD_LEFT) }}</td>
+                            <td class="px-6 py-4 font-mono text-sm font-bold text-slate-900">
+                                <div class="flex items-center gap-2.5">
+                                    DEV-{{ str_pad($dev->id, 4, '0', STR_PAD_LEFT) }}
+                                    @if($esNuevaDevolucion)
+                                        <span class="inline-flex items-center px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] font-bold rounded uppercase tracking-wide relative overflow-visible font-sans">
+                                            <span class="absolute -top-1 -right-1 flex h-2 w-2">
+                                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                            </span>
+                                            Nuevo
+                                        </span>
+                                    @endif
+                                </div>
+                            </td>
                             <td class="px-6 py-4 text-sm text-slate-500">{{ $dev->pedido->numero_pedido }}</td>
                             <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ $dev->usuario->nombre }} {{ $dev->usuario->apellido }}</td>
                             <td class="px-6 py-4 text-sm text-slate-500">{{ ucfirst($dev->motivo) }}</td>

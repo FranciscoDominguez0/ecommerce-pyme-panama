@@ -194,20 +194,46 @@
                         @endcan
 
                         @can('admin.pedidos.ver')
+                        @php
+                            // Un pedido es "nuevo" si su único estado ha sido 'pendiente' o no tiene estado diferente
+                            $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
+                                $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                                      ->from('estados_pedido')
+                                      ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
+                                      ->where('estados_pedido.estado', '!=', 'pendiente');
+                            })->count();
+                        @endphp
                         <!-- Pedidos & Ventas -->
                         <a href="{{ url('/admin/pedidos') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
-                            <span class="sidebar-text truncate transition-all duration-300">Pedidos & Ventas</span>
+                           class="group relative flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
+                                <span class="sidebar-text truncate transition-all duration-300">Pedidos & Ventas</span>
+                            </div>
+                            @if($nuevosPedidosCount > 0)
+                                <span class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative">
+                                    {{ $nuevosPedidosCount }}
+                                </span>
+                            @endif
                         </a>
                         @endcan
 
                         @can('admin.devoluciones.ver')
+                        @php
+                            $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
+                        @endphp
                         <!-- Devoluciones -->
                         <a href="{{ route('admin.devoluciones.index') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.devoluciones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
-                            <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">assignment_return</span>
-                            <span class="sidebar-text truncate transition-all duration-300">Devoluciones</span>
+                           class="group relative flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.devoluciones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">assignment_return</span>
+                                <span class="sidebar-text truncate transition-all duration-300">Devoluciones</span>
+                            </div>
+                            @if($nuevasDevolucionesCount > 0)
+                                <span class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative">
+                                    {{ $nuevasDevolucionesCount }}
+                                </span>
+                            @endif
                         </a>
                         @endcan
                     </div>
