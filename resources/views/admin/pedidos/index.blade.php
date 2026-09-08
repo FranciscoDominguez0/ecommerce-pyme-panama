@@ -77,15 +77,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center gap-2.5">
                                 <span class="text-sm font-bold text-slate-900">{{ $pedido->numero_pedido }}</span>
-                                @if($esNuevo)
-                                    <span class="inline-flex items-center px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] font-bold rounded uppercase tracking-wide relative overflow-visible">
-                                        <span class="absolute -top-1 -right-1 flex h-2 w-2">
-                                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                                        </span>
-                                        Nuevo
-                                    </span>
-                                @endif
+                                <x-badge-nuevo :condicion="$esNuevo" />
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

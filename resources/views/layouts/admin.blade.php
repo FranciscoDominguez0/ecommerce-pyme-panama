@@ -210,11 +210,7 @@
                                 <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
                                 <span class="sidebar-text truncate transition-all duration-300">Pedidos & Ventas</span>
                             </div>
-                            @if($nuevosPedidosCount > 0)
-                                <span class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative">
-                                    {{ $nuevosPedidosCount }}
-                                </span>
-                            @endif
+                            <x-sidebar-badge :count="$nuevosPedidosCount" />
                         </a>
                         @endcan
 
@@ -229,11 +225,7 @@
                                 <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">assignment_return</span>
                                 <span class="sidebar-text truncate transition-all duration-300">Devoluciones</span>
                             </div>
-                            @if($nuevasDevolucionesCount > 0)
-                                <span class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative">
-                                    {{ $nuevasDevolucionesCount }}
-                                </span>
-                            @endif
+                            <x-sidebar-badge :count="$nuevasDevolucionesCount" />
                         </a>
                         @endcan
                     </div>
