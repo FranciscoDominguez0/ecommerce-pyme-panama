@@ -169,7 +169,26 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
             <!-- Sidebar de Filtros -->
-            <aside class="lg:col-span-3 space-y-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+            <aside x-data
+                   x-init="
+                       const update = () => {
+                           if (window.innerWidth < 1024) {
+                               $el.style.top = '';
+                               return;
+                           }
+                           let h = $el.offsetHeight;
+                           let wh = window.innerHeight;
+                           if (h > wh - 96) {
+                               $el.style.top = (wh - h - 20) + 'px';
+                           } else {
+                               $el.style.top = '6rem';
+                           }
+                       };
+                       update();
+                       window.addEventListener('resize', update);
+                       new ResizeObserver(update).observe($el);
+                   "
+                   class="lg:col-span-3 space-y-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs lg:sticky lg:z-10">
 
                 <!-- Encabezado de Filtros -->
                 <div class="hidden sm:flex items-center justify-between border-b border-slate-100 pb-3">
