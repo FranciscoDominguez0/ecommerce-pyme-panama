@@ -200,13 +200,13 @@ class CatalogoTest extends TestCase
         $categoria = Categoria::factory()->create();
         $producto = Producto::factory()->create(['categoria_id' => $categoria->id]);
 
-        $tipo = TipoVariante::factory()->create(['nombre' => 'Color']);
-        $opcionNegro = OpcionVariante::factory()->create(['tipo_variante_id' => $tipo->id, 'valor' => 'Negro']);
-        $opcionBlanco = OpcionVariante::factory()->create(['tipo_variante_id' => $tipo->id, 'valor' => 'Blanco']);
+        $tipo = TipoVariante::firstOrCreate(['nombre' => 'Color']);
+        $opcionNegro = OpcionVariante::firstOrCreate(['tipo_variante_id' => $tipo->id, 'valor' => 'Negro']);
+        $opcionBlanco = OpcionVariante::firstOrCreate(['tipo_variante_id' => $tipo->id, 'valor' => 'Blanco']);
 
         $variante = VarianteProducto::factory()->create([
             'producto_id' => $producto->id,
-            'sku' => 'VARIANTE-COLOR',
+            'sku' => 'VAR-COL-' . uniqid(),
             'precio' => 89.99,
             'stock' => 7,
         ]);
@@ -228,19 +228,16 @@ class CatalogoTest extends TestCase
 
     public function test_el_detalle_de_un_producto_inactivo_devuelve_404(): void
     {
-        // REPORTE: la especificación pediría ocultar los productos inactivos, pero la
-        // implementación ACTUAL de CatalogoController::show() usa sinEliminar() SIN
-        // filtrar por activo. Por eso un producto inactivo SÍ renderiza su detalle (200),
-        // no devuelve 404. Documentamos el comportamiento real hasta corregirlo.
         $categoria = Categoria::factory()->create();
         $producto = Producto::factory()->create([
             'categoria_id' => $categoria->id,
-            'activo' => false,
+            'activo'       => false,
         ]);
 
         $this->get('/producto/' . $producto->slug)
-            ->assertStatus(200);
+            ->assertNotFound();
     }
+
 
     public function test_el_detalle_de_un_producto_con_stock_cero_muestra_fuera_de_stock(): void
     {

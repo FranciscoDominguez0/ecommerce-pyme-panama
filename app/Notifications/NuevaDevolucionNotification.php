@@ -2,10 +2,9 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
 use App\Models\Devolucion;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 
 class NuevaDevolucionNotification extends Notification
 {
@@ -14,7 +13,7 @@ class NuevaDevolucionNotification extends Notification
     public $devolucion;
 
     /**
-     * Create a new notification instance.
+     * Inicializa la notificación con la devolución creada.
      */
     public function __construct(Devolucion $devolucion)
     {
@@ -22,7 +21,7 @@ class NuevaDevolucionNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Define los canales de entrega (almacenamiento en base de datos).
      *
      * @return array<int, string>
      */
@@ -32,7 +31,7 @@ class NuevaDevolucionNotification extends Notification
     }
 
     /**
-     * Get the array representation of the notification.
+     * Prepara el arreglo de datos para la campanita del panel administrativo.
      *
      * @return array<string, mixed>
      */

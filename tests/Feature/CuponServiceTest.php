@@ -14,20 +14,11 @@ use Tests\Feature\Admin\BaseAdminTest;
 
 /**
  * Pruebas de la lógica de validación y registro de cupones (CuponService).
- *
- * HALLAZGOS documentados:
- *  1. Un cupón de tipo "envio_gratis" es aceptado por validarCupon pero con descuento $0:
- *     el envío gratis real se maneja aparte con PromocionEnvioGratis (evaluarEnvioGratis).
- *  2. El límite por cliente lee la tabla "usos_cupon", pero "registrarUso()" (que la
- *     alimenta) NO se invoca en ningún flujo actual de la aplicación.
- *  3. El descuento de un cupón con "aplica_a = categoria/producto" se calcula sobre el
- *     subtotal total del carrito, no solo sobre los ítems del alcance.
+ * Pruebas de la lógica de validación y registro de cupones.
  */
 class CuponServiceTest extends BaseAdminTest
 {
-    // =====================================================================
-    //  VALIDACIÓN — activo, vigencia, límites y monto mínimo
-    // =====================================================================
+    // Validación de estado, vigencia, límites y monto mínimo
 
     public function test_un_cupon_valido_activo_y_vigente_es_aceptado(): void
     {
@@ -121,9 +112,7 @@ class CuponServiceTest extends BaseAdminTest
         $this->assertSame('El código de cupón ingresado no existe.', $resultado['mensaje']);
     }
 
-    // =====================================================================
-    //  ALCAYCE — aplica_a: categoria y producto
-    // =====================================================================
+    // Validación por alcance (categoría o producto específico)
 
     public function test_un_cupon_de_categoria_solo_aplica_si_el_carrito_contiene_esa_categoria(): void
     {
@@ -155,9 +144,7 @@ class CuponServiceTest extends BaseAdminTest
         $this->assertStringContainsString('solo aplica para el producto', $resultado['mensaje']);
     }
 
-    // =====================================================================
-    //  CÁLCULO DEL DESCUENTO — según tipo
-    // =====================================================================
+    // Cálculo de descuentos según el tipo de cupón
 
     public function test_el_descuento_porcentual_se_calcula_sobre_el_subtotal(): void
     {
@@ -210,9 +197,7 @@ class CuponServiceTest extends BaseAdminTest
         $this->assertSame($cupon->id, $resultado['cupon']->id);
     }
 
-    // =====================================================================
-    //  LÍMITE POR CLIENTE — usos_por_cliente vs usos_cupon
-    // =====================================================================
+    // Límites de uso por cliente
 
     public function test_un_cupon_de_un_solo_uso_no_se_puede_reutilizar_por_el_mismo_usuario(): void
     {
@@ -255,9 +240,7 @@ class CuponServiceTest extends BaseAdminTest
         $this->assertStringContainsString('límite máximo de 2 uso', $resultado['mensaje']);
     }
 
-    // =====================================================================
-    //  REGISTRO DE USO — registrarUso (incrementa usos y crea fila en usos_cupon)
-    // =====================================================================
+    // Registro de uso de cupón en base de datos
 
     public function test_registrar_uso_incrementa_el_contador_y_crea_el_registro_en_usos_cupon(): void
     {
@@ -290,9 +273,7 @@ class CuponServiceTest extends BaseAdminTest
         app(CuponService::class)->registrarUso($cupon->id, $cliente->id, $pedido->id, 10.00);
     }
 
-    // =====================================================================
-    //  HELPERS
-    // =====================================================================
+    // Helpers
 
     /**
      * Crea un pedido mínimo válido para el usuario indicado (cumple las CHECK constraints).

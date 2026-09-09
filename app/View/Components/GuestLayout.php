@@ -8,7 +8,7 @@ use Illuminate\View\View;
 class GuestLayout extends Component
 {
     /**
-     * Get the view / contents that represents the component.
+     * Renderiza la plantilla base para invitados (autenticación).
      */
     public function render(): View
     {

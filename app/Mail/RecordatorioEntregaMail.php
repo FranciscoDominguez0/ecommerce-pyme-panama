@@ -5,6 +5,7 @@ namespace App\Mail;
 use App\Models\Pedido;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -13,10 +14,10 @@ class RecordatorioEntregaMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $pedido;
+    public Pedido $pedido;
 
     /**
-     * Create a new message instance.
+     * Inicializa el mailable con el pedido a consultar.
      */
     public function __construct(Pedido $pedido)
     {
@@ -24,7 +25,7 @@ class RecordatorioEntregaMail extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Define el asunto del correo con el número de pedido.
      */
     public function envelope(): Envelope
     {
@@ -34,7 +35,7 @@ class RecordatorioEntregaMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Define la plantilla Markdown del mensaje de seguimiento.
      */
     public function content(): Content
     {
@@ -44,9 +45,9 @@ class RecordatorioEntregaMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * Retorna los adjuntos del correo (vacío para este mensaje).
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

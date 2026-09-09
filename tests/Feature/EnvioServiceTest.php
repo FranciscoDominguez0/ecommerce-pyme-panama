@@ -14,22 +14,10 @@ use Tests\Feature\Admin\BaseAdminTest;
 
 /**
  * Pruebas del cálculo de envío (EnvioService) y su aplicación al pedido (PedidoService).
- *
- * HALLAZGOS documentados en estas pruebas:
- *  1. EnvioService coincide contra el "nombre" de la zona, NO contra la columna
- *     "provincias" (aunque el esquema la tenga).
- *  2. Sin zona coincidente o con zona inactiva, el costo de envío es $0.00 (sin error).
- *  3. El checkout no deriva la zona automáticamente desde la provincia de la dirección:
- *     el usuario la elige en el Livewire GestionDirecciones y se guarda en sesión.
- *     El costo termina aplicándose al pedido vía PedidoService::calcularTotales()
- *     y PedidoService::crearDesdeCarrito().
- *  4. PedidoService::calcularTotales NO verifica que la zona recibida esté "activa".
  */
 class EnvioServiceTest extends BaseAdminTest
 {
-    // =====================================================================
-    //  EnvioService — Resolución de zona por provincia
-    // =====================================================================
+    // Resolución de zona por provincia
 
     public function test_obtiene_la_zona_por_coincidencia_exacta_del_nombre(): void
     {
@@ -87,9 +75,7 @@ class EnvioServiceTest extends BaseAdminTest
         $this->assertSame(0.0, $servicio->obtenerCostoEnvio('Panamá'));
     }
 
-    // =====================================================================
-    //  EnvioService — Sin coincidencia, inactivas y valores vacíos
-    // =====================================================================
+    // Comportamiento sin coincidencia, inactivas y valores vacíos
 
     public function test_sin_zona_coincidente_el_costo_de_envio_es_cero(): void
     {
@@ -123,9 +109,7 @@ class EnvioServiceTest extends BaseAdminTest
         $this->assertSame(0.0, $servicio->obtenerCostoEnvio(''));
     }
 
-    // =====================================================================
-    //  Checkout — Desde la provincia de la dirección hasta el costo del pedido
-    // =====================================================================
+    // Checkout: Desde la provincia de la dirección hasta el costo del pedido
 
     public function test_desde_la_provincia_de_la_direccion_se_resuelve_el_costo_de_envio(): void
     {
@@ -199,9 +183,7 @@ class EnvioServiceTest extends BaseAdminTest
         $this->assertSame(9.99, $totales['costo_envio']);
     }
 
-    // =====================================================================
-    //  HELPERS
-    // =====================================================================
+    // Helpers
 
     /**
      * Crea un carrito con un único producto (cantidad y precio indicados).

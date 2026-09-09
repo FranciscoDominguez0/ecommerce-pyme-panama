@@ -9,8 +9,7 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Storage;
 
 class FacturaMail extends Mailable
 {
@@ -20,7 +19,7 @@ class FacturaMail extends Mailable
     public ?string $mensajePersonalizado;
 
     /**
-     * Create a new message instance.
+     * Inicializa el mailable con los datos de la factura y mensaje opcional.
      */
     public function __construct(Factura $factura, ?string $mensajePersonalizado = null)
     {
@@ -29,7 +28,7 @@ class FacturaMail extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Define el asunto y remitente del correo.
      */
     public function envelope(): Envelope
     {
@@ -39,7 +38,7 @@ class FacturaMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Define la vista Blade para el cuerpo del correo.
      */
     public function content(): Content
     {
@@ -49,7 +48,7 @@ class FacturaMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * Adjunta el archivo PDF de la factura si existe en el almacenamiento local.
      *
      * @return array<int, Attachment>
      */
@@ -57,7 +56,7 @@ class FacturaMail extends Mailable
     {
         $attachments = [];
 
-        if ($this->factura->pdf_ruta && \Storage::disk('local')->exists($this->factura->pdf_ruta)) {
+        if ($this->factura->pdf_ruta && Storage::disk('local')->exists($this->factura->pdf_ruta)) {
             $attachments[] = Attachment::fromStorageDisk('local', $this->factura->pdf_ruta)
                 ->as('Factura_' . $this->factura->numero . '.pdf')
                 ->withMime('application/pdf');

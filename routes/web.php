@@ -19,7 +19,6 @@ use App\Http\Controllers\Cliente\CatalogoController;
 use App\Http\Controllers\Cliente\CheckoutController;
 use App\Http\Controllers\Cliente\ListaDeseosController;
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -303,12 +302,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::get('/auditoria/{id}', [\App\Http\Controllers\Admin\AuditoriaController::class, 'show'])->name('admin.auditoria.show');
 });
 
-// 5. Gestión de Perfil de Usuario
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 // Rutas de Autenticación (Login, Registro, Recuperación de Contraseña)
 require __DIR__ . '/auth.php';

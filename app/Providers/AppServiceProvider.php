@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Registra servicios del contenedor de dependencias.
      */
     public function register(): void
     {
@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Configura el entorno de la aplicación al arrancar.
      */
     public function boot(): void
     {
@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         } elseif ($this->app->environment('local')) {
             @ini_set('max_execution_time', '120');
         } else {
-            // Forzar HTTPS en producción (VPS) para arreglar Mixed Content (iconos y CSS rotos)
+            // En producción forzamos HTTPS para evitar Mixed Content (iconos y CSS rotos en VPS)
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 

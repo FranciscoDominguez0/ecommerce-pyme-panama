@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Pedido;
-use App\Models\EstadoPedido;
 use App\Models\LogAuditoria;
 use App\Mail\RecordatorioEntregaMail;
 use Illuminate\Console\Command;
@@ -13,23 +12,23 @@ use Illuminate\Support\Carbon;
 class RecordarEntregaCommand extends Command
 {
     /**
-     * The name and signature of the console command.
+     * Firma del comando en consola.
      *
      * @var string
      */
     protected $signature = 'app:recordar-entrega';
 
     /**
-     * The console command description.
+     * Descripción de la tarea del comando.
      *
      * @var string
      */
     protected $description = 'Envía un email a los clientes para que confirmen la entrega de su pedido 3 días después de ser enviado';
 
     /**
-     * Execute the console command.
+     * Ejecuta el recordatorio de entrega para pedidos despachados hace 3 días.
      */
-    public function handle()
+    public function handle(): void
     {
         $fechaObjetivo = Carbon::now()->subDays(3)->toDateString();
 
@@ -42,9 +41,9 @@ class RecordarEntregaCommand extends Command
         foreach ($pedidos as $pedido) {
             $ultimo = $pedido->ultimoEstado;
             
-            // Si el estado se creó hace exactamente 3 días
+            // Evaluamos si el pedido fue marcado como enviado hace 3 días
             if ($ultimo && $ultimo->creado_en->toDateString() === $fechaObjetivo) {
-                // Verificar que no se haya enviado ya en el Log de Auditoría
+                // Comprobamos en auditoría si ya se despachó el recordatorio para evitar duplicados
                 $yaNotificado = LogAuditoria::where('modulo', 'pedidos')
                     ->where('accion', 'recordatorio_entrega')
                     ->where('valor_nuevo', $pedido->id)
@@ -53,7 +52,6 @@ class RecordarEntregaCommand extends Command
                 if (!$yaNotificado) {
                     Mail::to($pedido->usuario->email)->send(new RecordatorioEntregaMail($pedido));
                     
-                    // Marcar como notificado
                     LogAuditoria::create([
                         'modulo' => 'pedidos',
                         'accion' => 'recordatorio_entrega',

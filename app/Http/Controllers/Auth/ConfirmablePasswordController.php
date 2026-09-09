@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class ConfirmablePasswordController extends Controller
 {
     /**
-     * Show the confirm password view.
+     * Muestra el formulario de confirmación de contraseña.
      */
     public function show(): View
     {
@@ -20,7 +20,7 @@ class ConfirmablePasswordController extends Controller
     }
 
     /**
-     * Confirm the user's password.
+     * Valida la contraseña del usuario y guarda la confirmación en la sesión.
      */
     public function store(Request $request): RedirectResponse
     {

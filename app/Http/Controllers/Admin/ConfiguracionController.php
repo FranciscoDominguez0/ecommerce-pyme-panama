@@ -48,7 +48,6 @@ class ConfiguracionController extends Controller
             Configuracion::guardar('empresa.logo_ruta', $rutaLogo, 'empresa', 'Ruta del logo de la empresa');
         }
 
-        // TODO: AuditoriaService::registrar(..., modulo: 'Configuración', accion: 'actualizado', ...);
 
         return redirect()->route('admin.configuracion.general')->with('toast_success', 'Configuración general guardada exitosamente.');
     }
@@ -82,8 +81,6 @@ class ConfiguracionController extends Controller
             Configuracion::guardar("pagos.$metodo.activo", $activo, 'pagos', "Estado del método de pago $metodo");
         }
 
-        // TODO: AuditoriaService::registrar(..., modulo: 'Configuración', accion: 'actualizado', ...);
-
         return redirect()->route('admin.configuracion.pagos')->with('toast_success', 'Métodos de pago actualizados exitosamente.');
     }
 
@@ -112,8 +109,6 @@ class ConfiguracionController extends Controller
         Configuracion::guardar('impuestos.itbms.activo', $activo, 'impuestos', 'Indica si se aplica ITBMS de forma global');
         Configuracion::guardar('impuestos.itbms.tasa', $request->itbms_tasa, 'impuestos', 'Tasa por defecto del ITBMS');
 
-        // TODO: AuditoriaService::registrar(..., modulo: 'Configuración', accion: 'actualizado', ...);
-
         return redirect()->route('admin.configuracion.impuestos')->with('toast_success', 'Configuración de impuestos guardada exitosamente.');
     }
 
@@ -123,7 +118,7 @@ class ConfiguracionController extends Controller
     public function notificaciones()
     {
         $configuraciones = Configuracion::porGrupo('correos')->pluck('valor', 'clave')->toArray();
-        $roles = \App\Models\Role::all(); // Usar Spatie o el modelo de roles que exista
+        $roles = \App\Models\Role::all();
 
         return view('admin.configuracion.notificaciones', compact('configuraciones', 'roles'));
     }

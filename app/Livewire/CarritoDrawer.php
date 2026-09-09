@@ -91,7 +91,8 @@ class CarritoDrawer extends Component
     public function incrementar(int $itemId)
     {
         $item = ItemCarrito::find($itemId);
-        if (!$item) return;
+        if (!$item)
+            return;
 
         $res = $this->carritoService->actualizarCantidad($itemId, $item->cantidad + 1, Auth::id(), Session::getId());
         if ($res['exito']) {
@@ -105,7 +106,8 @@ class CarritoDrawer extends Component
     public function decrementar(int $itemId)
     {
         $item = ItemCarrito::find($itemId);
-        if (!$item) return;
+        if (!$item)
+            return;
 
         $res = $this->carritoService->actualizarCantidad($itemId, $item->cantidad - 1, Auth::id(), Session::getId());
         if ($res['exito']) {

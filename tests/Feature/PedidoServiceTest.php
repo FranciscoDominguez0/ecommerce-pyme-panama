@@ -20,27 +20,12 @@ use Illuminate\Support\Facades\DB;
 use Tests\Feature\Admin\BaseAdminTest;
 
 /**
- * Pruebas de la lógica central de creación de pedidos (PedidoService) — FASE 12.
- *
- * Este módulo es crítico (dinero, stock e integridad de pedidos).
- *
- * NOTAS DE ARQUITECTURA (comportamiento actual fijado por las correcciones):
- *  1. numero_pedido se genera en PHP (PedidoService::generarNumeroPedido) con formato
- *     "#PM-XXXXXX"; el trigger DB "P-YYYY-000001" fue eliminado.
- *  2. Cada descuento de stock por venta registra un movimiento de inventario
- *     (tipo = salida) en movimientos_inventario, en la misma transacción.
- *  3. El ITBMS respeta el flag "aplica_itbms" de cada producto (cálculo compartido
- *     con CarritoService::calcularSubtotalEItbms) — carrito y pedido son consistentes.
- *  4. El estado inicial "pendiente" lo inserta ÚNICAMENTE PedidoService::cambiarEstado
- *     (el trigger DB trg_estado_inicial_pedido fue eliminado) → exactamente 1 fila.
- *  5. Cancelar un pedido NO restaura el stock descontado (pendiente de confirmación
- *     de negocio — ver AGENTS.md).
+ * Pruebas de la lógica central de creación de pedidos (PedidoService).
+ * Cubre: conversión de carrito, generación de número, descuento de stock y totales.
  */
 class PedidoServiceTest extends BaseAdminTest
 {
-    // =====================================================================
-    //  CONVERSIÓN CARRITO → PEDIDO
-    // =====================================================================
+    // Conversión carrito a pedido
 
     public function test_crear_un_pedido_desde_el_carrito_copia_items_y_calcula_los_totales(): void
     {
@@ -93,9 +78,7 @@ class PedidoServiceTest extends BaseAdminTest
         $this->assertSame('0.00', (string) $carrito->descuento_aplicado);
     }
 
-    // =====================================================================
-    //  NÚMERO DE PEDIDO — formato REAL guardado
-    // =====================================================================
+    // Formato real guardado del número de pedido
 
     public function test_el_numero_de_pedido_guardado_usa_el_formato_del_sistema(): void
     {
@@ -155,9 +138,7 @@ class PedidoServiceTest extends BaseAdminTest
         $this->assertGreaterThan($pedidoPrevio->id, $pedidoNuevo->id);
     }
 
-    // =====================================================================
-    //  ESTADO INICIAL — trigger DB
-    // =====================================================================
+    // Estado inicial
 
     public function test_el_pedido_creado_tiene_una_unica_fila_de_estado_inicial_pendiente(): void
     {
@@ -176,9 +157,7 @@ class PedidoServiceTest extends BaseAdminTest
         );
     }
 
-    // =====================================================================
-    //  DESCUENTO DE STOCK
-    // =====================================================================
+    // Descuento de stock
 
     public function test_el_stock_del_producto_se_descuenta_al_confirmar_el_pedido(): void
     {
@@ -267,9 +246,7 @@ class PedidoServiceTest extends BaseAdminTest
         $this->assertSame(0, DB::table('movimientos_inventario')->count());
     }
 
-    // =====================================================================
-    //  STOCK INSUFICIENTE — atomicidad
-    // =====================================================================
+    // Control de stock insuficiente (atomicidad)
 
     public function test_no_se_crea_el_pedido_si_el_stock_es_insuficiente_al_confirmar(): void
     {
@@ -300,9 +277,7 @@ class PedidoServiceTest extends BaseAdminTest
         $this->assertSame(3, $carrito->items()->first()->cantidad);
     }
 
-    // =====================================================================
-    //  CÁLCULO DE TOTALES
-    // =====================================================================
+    // Cálculo de totales
 
     public function test_calcular_totales_aplica_descuento_de_cupon_porcentaje(): void
     {
@@ -356,9 +331,7 @@ class PedidoServiceTest extends BaseAdminTest
         $this->assertSame($totalesCarrito['total'], $totalesPedido['total']);
     }
 
-    // =====================================================================
-    //  TRANSICIONES DE ESTADO
-    // =====================================================================
+    // Transiciones de estado
 
     public function test_las_transiciones_de_estado_agregan_historial_sin_sobrescribir(): void
     {
@@ -405,9 +378,7 @@ class PedidoServiceTest extends BaseAdminTest
         $this->assertSame(8, $producto->fresh()->stock); // sin restauración
     }
 
-    // =====================================================================
-    //  HELPERS
-    // =====================================================================
+    // Helpers
 
     /**
      * Crea un carrito con un item (producto o variante).

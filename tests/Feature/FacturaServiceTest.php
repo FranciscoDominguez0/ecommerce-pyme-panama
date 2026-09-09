@@ -13,28 +13,12 @@ use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Admin\BaseAdminTest;
 
 /**
- * Pruebas del módulo de FACTURACIÓN (FASE 15) — FacturaService.
- *
- * Cubre: generación automática al confirmar el pago, numeración correlativa y
- * única (que nunca se reutiliza al anular), cálculo de ITBMS, totales copiados
- * del pedido, generación del PDF, reenvío por email y anti-duplicación.
- *
- * NOTAS DE IMPLEMENTACIÓN (para que las pruebas sean deterministas):
- *  1. `generarFactura()` difiere la generación del PDF y el envío del correo con
- *     `defer()`. En pruebas se ejecutan de inmediato con `$this->withoutDefer()`.
- *  2. El facade `Pdf` se mockea (`shouldReceive('loadView')`) para no renderizar
- *     DomPDF real; el stub devuelve contenido falso de PDF.
- *  3. El disco `public` se emula con `Storage::fake('public')` y el correo con
- *     `Mail::fake()`.
- *  4. El número de factura (F-YYYY-XXXX) sale del correlativo atómico de
- *     `configuracion` (clave `factura_correlativo_{año}`) y se reinicia en cada
- *     prueba gracias a RefreshDatabase.
+ * Pruebas del módulo de Facturación (FacturaService).
+ * Cubre: generación, numeración correlativa, ITBMS, PDF, reenvío y anti-duplicación.
  */
 class FacturaServiceTest extends BaseAdminTest
 {
-    // =====================================================================
-    //  GENERACIÓN AUTOMÁTICA — al confirmar el pago del pedido
-    // =====================================================================
+    // Generación automática al confirmar el pago del pedido
 
     public function test_genera_factura_automaticamente_al_confirmar_pago(): void
     {
@@ -56,9 +40,7 @@ class FacturaServiceTest extends BaseAdminTest
         $this->assertSame('pago_confirmado', $pedido->ultimoEstado->estado);
     }
 
-    // =====================================================================
-    //  NUMERACIÓN — correlativo único y secuencial
-    // =====================================================================
+    // Numeración secuencial y correlativa
 
     public function test_numero_de_factura_es_correlativo_y_unico(): void
     {
@@ -112,9 +94,7 @@ class FacturaServiceTest extends BaseAdminTest
         ]);
     }
 
-    // =====================================================================
-    //  CÁLCULOS — ITBMS y totales copiados del pedido
-    // =====================================================================
+    // Cálculos de ITBMS y totales del pedido
 
     public function test_calculo_correcto_de_itbms(): void
     {
@@ -156,9 +136,7 @@ class FacturaServiceTest extends BaseAdminTest
         $this->assertSame($pedido->usuario_id, $factura->usuario_id);
     }
 
-    // =====================================================================
-    //  PDF — generación y ruta guardada
-    // =====================================================================
+    // Generación de PDF y ruta guardada
 
     public function test_genera_pdf_y_guarda_ruta(): void
     {
@@ -179,9 +157,7 @@ class FacturaServiceTest extends BaseAdminTest
         Mail::assertSent(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo($pedido->usuario->email));
     }
 
-    // =====================================================================
-    //  REENVÍO — registro por email
-    // =====================================================================
+    // Reenvío de factura por email
 
     public function test_registra_reenvio_de_factura_por_email(): void
     {
@@ -209,9 +185,7 @@ class FacturaServiceTest extends BaseAdminTest
         Mail::assertSent(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo('destinatario@example.com'));
     }
 
-    // =====================================================================
-    //  ANTI-DUPLICACIÓN — un pedido no puede tener dos facturas
-    // =====================================================================
+    // Anti-duplicación: un pedido no puede tener dos facturas
 
     public function test_no_se_genera_factura_duplicada_para_el_mismo_pedido(): void
     {
@@ -233,9 +207,7 @@ class FacturaServiceTest extends BaseAdminTest
         $this->assertDatabaseCount('estados_pedido', 2);
     }
 
-    // =====================================================================
-    //  HELPERS
-    // =====================================================================
+    // Helpers
 
     /**
      * Prepara el entorno para ejecutar la generación de facturas de forma

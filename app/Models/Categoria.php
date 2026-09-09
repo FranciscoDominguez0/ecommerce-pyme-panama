@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Categoria extends Model
 {
@@ -86,6 +88,53 @@ class Categoria extends Model
     public function scopePrincipales(Builder $query): Builder
     {
         return $query->whereNull('padre_id')->whereNull('eliminado_en');
+    }
+
+    /**
+     * Carga las categorías raíz con el conteo total de productos activos (propios + hijas)
+     * en una sola query SQL optimizada, evitando N+1.
+     */
+    public static function raicesConConteoDeProductos(): Collection
+    {
+        // LEFT JOIN doble: primero a hijas, luego a productos de padre o hija.
+        // Así contamos productos propios Y de subcategorías en una sola pasada.
+        $sql = <<<SQL
+            SELECT
+                c.id,
+                c.nombre,
+                c.slug,
+                c.imagen_ruta,
+                c.activo,
+                c.padre_id,
+                c.orden_visualizacion,
+                COALESCE(SUM(
+                    CASE
+                        WHEN p.eliminado_en IS NULL AND p.activo = TRUE THEN 1
+                        ELSE 0
+                    END
+                ), 0) AS total_productos_count
+            FROM categorias c
+            LEFT JOIN categorias hija
+                ON hija.padre_id = c.id
+                AND hija.eliminado_en IS NULL
+            LEFT JOIN productos p
+                ON (p.categoria_id = c.id OR p.categoria_id = hija.id)
+                AND p.eliminado_en IS NULL
+                AND p.activo = TRUE
+            WHERE c.padre_id IS NULL
+              AND c.eliminado_en IS NULL
+            GROUP BY c.id, c.nombre, c.slug, c.imagen_ruta, c.activo, c.padre_id, c.orden_visualizacion
+            ORDER BY c.nombre ASC
+        SQL;
+
+        $categorias = static::hydrate(
+            array_map(fn($fila) => (array) $fila, DB::select($sql))
+        );
+
+        // Una query adicional para cargar hijas (necesaria para el sidebar).
+        $categorias->load(['hijas' => fn($q) => $q->sinEliminar()->orderBy('nombre')]);
+
+        return $categorias;
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -17,7 +17,7 @@ class TwoFactorCodeMail extends Mailable
     public string $nombreUsuario;
 
     /**
-     * Create a new message instance.
+     * Inicializa el mailable con el código de seguridad y el nombre del usuario.
      */
     public function __construct(string $code, string $nombreUsuario)
     {
@@ -26,7 +26,7 @@ class TwoFactorCodeMail extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Define el asunto del correo de verificación.
      */
     public function envelope(): Envelope
     {
@@ -36,7 +36,7 @@ class TwoFactorCodeMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Define la plantilla Blade y variables del mensaje.
      */
     public function content(): Content
     {
@@ -50,9 +50,9 @@ class TwoFactorCodeMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * Retorna los adjuntos del correo (vacío para este tipo de mensaje).
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

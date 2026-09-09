@@ -38,6 +38,16 @@ class Usuario extends Authenticatable
     ];
 
     /**
+     * Sobrescribe el método por defecto de Laravel para enviar la notificación
+     * de restablecimiento de contraseña usando nuestra propia plantilla personalizada.
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        \Illuminate\Support\Facades\Mail::to($this->email)
+            ->send(new \App\Mail\ResetPasswordMail($token, $this->email));
+    }
+
+    /**
      * Obtiene el nombre del atributo de la contraseña para autenticación.
      */
     public function getAuthPasswordName(): string

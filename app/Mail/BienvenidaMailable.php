@@ -4,8 +4,8 @@ namespace App\Mail;
 
 use App\Models\Usuario;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -14,10 +14,10 @@ class BienvenidaMailable extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $usuario;
+    public Usuario $usuario;
 
     /**
-     * Create a new message instance.
+     * Inicializa el correo de bienvenida con los datos del nuevo usuario.
      */
     public function __construct(Usuario $usuario)
     {
@@ -25,7 +25,7 @@ class BienvenidaMailable extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Define el asunto del correo de bienvenida.
      */
     public function envelope(): Envelope
     {
@@ -35,7 +35,7 @@ class BienvenidaMailable extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Define la vista Blade para el mensaje de bienvenida.
      */
     public function content(): Content
     {
@@ -45,9 +45,9 @@ class BienvenidaMailable extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * Retorna los adjuntos del correo (vacío para este mensaje).
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {
