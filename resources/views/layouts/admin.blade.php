@@ -37,8 +37,18 @@
             font-size: 20px;
             line-height: 1;
             display: inline-block;
-            -webkit-font-smoothing: antialiased;
+        -webkit-font-smoothing: antialiased;
         }
+
+        :root {
+            --admin-bg-light: #f8fafc;
+            --admin-bg-dark: #111827;
+            --admin-bg: var(--admin-bg-light);
+        }
+        html.dark {
+            --admin-bg: var(--admin-bg-dark);
+        }
+
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
@@ -115,7 +125,7 @@
 
         @media (min-width: 768px) {
             .sidebar-active-item {
-                background-color: #F8FAFC;
+                background-color: var(--admin-bg) !important;
                 color: #059669 !important;
                 border-top-left-radius: 9999px;
                 border-bottom-left-radius: 9999px;
@@ -126,7 +136,6 @@
                 padding-right: 1.625rem !important; /* Compensa el mr-3 inactivo para alinear badges */
             }
             html.dark .sidebar-active-item {
-                background-color: #111827; /* gray-900 */
                 color: #10b981 !important; /* emerald-500 */
             }
             .sidebar-active-item::before,
@@ -140,22 +149,16 @@
             }
             .sidebar-active-item::before {
                 top: -20px;
-                background-image: radial-gradient(circle at top left, transparent 20px, #F8FAFC 20.5px);
-            }
-            html.dark .sidebar-active-item::before {
-                background-image: radial-gradient(circle at top left, transparent 20px, #111827 20.5px);
+                background-image: radial-gradient(circle at top left, transparent 20px, var(--admin-bg) 20.5px) !important;
             }
             .sidebar-active-item::after {
                 bottom: -20px;
-                background-image: radial-gradient(circle at bottom left, transparent 20px, #F8FAFC 20.5px);
-            }
-            html.dark .sidebar-active-item::after {
-                background-image: radial-gradient(circle at bottom left, transparent 20px, #111827 20.5px);
+                background-image: radial-gradient(circle at bottom left, transparent 20px, var(--admin-bg) 20.5px) !important;
             }
         }
         @media (max-width: 767px) {
             .sidebar-active-item {
-                background-color: #F8FAFC;
+                background-color: var(--admin-bg) !important;
                 color: #059669 !important;
                 border-radius: 9999px;
                 margin-right: 0.75rem !important; /* mr-3 */
@@ -210,7 +213,7 @@
 
     @stack('styles')
 </head>
-<body class="bg-[#F8FAFC] dark:bg-gray-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
+<body class="text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative" style="background-color: var(--admin-bg);">
     
     @php
         $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
