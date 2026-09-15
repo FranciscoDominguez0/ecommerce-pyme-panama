@@ -43,6 +43,11 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        /* Firefox Scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
         .card-elevated {
             background-color: #FFFFFF;
             border: 1px solid #E5E7EB;
@@ -109,6 +114,7 @@
                 border-bottom-right-radius: 0;
                 position: relative;
                 margin-right: 0 !important;
+                padding-right: 1.625rem !important; /* Compensa el mr-3 inactivo para alinear badges */
             }
             html.dark .sidebar-active-item {
                 background-color: #111827; /* gray-900 */
@@ -438,7 +444,7 @@
         </div>
 
         <!-- Sidebar Footer / Actions -->
-        <div class="px-5 py-4 bg-black/20 flex justify-between items-center">
+        <div class="px-4 py-4 bg-black/20 flex justify-between items-center">
 
             <!-- System Version (Subtle) -->
             <div class="text-[10px] font-medium text-slate-500 tracking-wider cursor-default select-none">
