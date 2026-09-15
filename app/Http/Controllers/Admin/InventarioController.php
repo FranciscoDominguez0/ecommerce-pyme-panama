@@ -55,8 +55,13 @@ class InventarioController extends Controller
 
     public function stock(Request $request)
     {
-        $qProductos = Producto::with(['categoria', 'imagenes', 'variantes' => function($q) {
-                $q->where('activo', true)->with('opciones.tipo');
+        $qProductos = Producto::with(['categoria', 'imagenes', 'variantes' => function($q) use ($request) {
+                $q->where('variantes_producto.activo', true)->with('opciones.tipo');
+                if ($request->boolean('stock_bajo')) {
+                    $q->join('productos', 'variantes_producto.producto_id', '=', 'productos.id')
+                      ->whereRaw('variantes_producto.stock <= productos.stock_minimo')
+                      ->select('variantes_producto.*');
+                }
             }])
             ->sinEliminar()
             ->orderBy('nombre');
