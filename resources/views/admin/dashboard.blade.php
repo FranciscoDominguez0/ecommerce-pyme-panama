@@ -22,22 +22,36 @@
         border-radius: 12px;
         box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     }
+    .dark .card-saas {
+        background-color: #1F2937; /* gray-800 */
+        border-color: #374151; /* gray-700 */
+    }
+    .dark .apexcharts-tooltip-title {
+        background: #1F2937 !important;
+        border-bottom-color: #374151 !important;
+        color: #f8fafc !important;
+    }
+    .dark .apexcharts-tooltip {
+        background: #111827 !important;
+        border-color: #374151 !important;
+        color: #f8fafc !important;
+    }
 </style>
 
 <div class="space-y-6">
     
     <!-- Page Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-700/80">
         <div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Resumen del Dashboard</h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Métricas de rendimiento en tiempo real.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Resumen del Dashboard</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Métricas de rendimiento en tiempo real.</p>
         </div>
         <div class="flex items-center gap-3">
-            <div class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 shadow-xs">
-                <span class="material-symbols-outlined text-[16px] text-slate-400">calendar_today</span>
+            <div class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 shadow-xs">
+                <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500">calendar_today</span>
                 <span>Últimos 7 días</span>
             </div>
-            <a href="{{ url('/') }}" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors shadow-xs">
+            <a href="{{ url('/') }}" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 dark:bg-gray-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 dark:hover:bg-gray-600 transition-colors shadow-xs">
                 <span class="material-symbols-outlined text-[16px]">storefront</span>
                 <span>Ver Tienda</span>
             </a>
@@ -48,13 +62,13 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         
         <!-- Card 1: Ventas Totales -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Ventas Totales</span>
-                    <div class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">${{ number_format(array_sum($ventas7Dias), 0) }}</div>
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ventas Totales</span>
+                    <div class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">${{ number_format(array_sum($ventas7Dias), 0) }}</div>
                 </div>
-                <span class="px-2 py-0.5 rounded {{ $crecimientoVentas >= 0 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-50 text-red-600 border border-red-200' }} text-[10px] font-bold">
+                <span class="px-2 py-0.5 rounded {{ $crecimientoVentas >= 0 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800/50 dark:text-emerald-400' : 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/30 dark:border-red-800/50 dark:text-red-400' }} text-[10px] font-bold">
                     {{ $crecimientoVentas >= 0 ? '+' : '' }}{{ $crecimientoVentas }}%
                 </span>
             </div>
@@ -62,13 +76,13 @@
         </div>
 
         <!-- Card 2: Total Pedidos -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total de Pedidos</span>
-                    <div class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{{ number_format(array_sum($pedidos7Dias)) }}</div>
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total de Pedidos</span>
+                    <div class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">{{ number_format(array_sum($pedidos7Dias)) }}</div>
                 </div>
-                <span class="px-2 py-0.5 rounded {{ $crecimientoPedidos >= 0 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-50 text-red-600 border border-red-200' }} text-[10px] font-bold">
+                <span class="px-2 py-0.5 rounded {{ $crecimientoPedidos >= 0 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800/50 dark:text-emerald-400' : 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/30 dark:border-red-800/50 dark:text-red-400' }} text-[10px] font-bold">
                     {{ $crecimientoPedidos >= 0 ? '+' : '' }}{{ $crecimientoPedidos }}%
                 </span>
             </div>
@@ -76,13 +90,13 @@
         </div>
 
         <!-- Card 3: Clientes Registrados -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Nuevos Clientes</span>
-                    <div class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">{{ array_sum($clientes7Dias) }}</div>
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nuevos Clientes</span>
+                    <div class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">{{ array_sum($clientes7Dias) }}</div>
                 </div>
-                <span class="px-2 py-0.5 rounded {{ $crecimientoClientes >= 0 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-50 text-red-600 border border-red-200' }} text-[10px] font-bold">
+                <span class="px-2 py-0.5 rounded {{ $crecimientoClientes >= 0 ? 'bg-emerald-50 text-emerald-600 border border-emerald-200 dark:bg-emerald-900/30 dark:border-emerald-800/50 dark:text-emerald-400' : 'bg-red-50 text-red-600 border border-red-200 dark:bg-red-900/30 dark:border-red-800/50 dark:text-red-400' }} text-[10px] font-bold">
                     {{ $crecimientoClientes >= 0 ? '+' : '' }}{{ $crecimientoClientes }}%
                 </span>
             </div>
@@ -90,15 +104,15 @@
         </div>
 
         <!-- Card 4: Ticket Promedio -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Ticket Promedio</span>
-                    <div class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket Promedio</span>
+                    <div class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
                         ${{ array_sum($pedidos7Dias) > 0 ? number_format(array_sum($ventas7Dias)/array_sum($pedidos7Dias), 2) : '0.00' }}
                     </div>
                 </div>
-                <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200 text-[10px] font-bold">
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200 dark:bg-blue-900/30 dark:border-blue-800/50 dark:text-blue-400 text-[10px] font-bold">
                     Al día
                 </span>
             </div>
@@ -113,8 +127,8 @@
         <!-- Revenue Chart (Ventas) -->
         <div class="lg:col-span-2 card-saas p-5 flex flex-col justify-between">
             <div class="flex justify-between items-center mb-2">
-                <h3 class="text-sm sm:text-base font-bold text-slate-900">Resumen de Ventas</h3>
-                <div class="flex items-center gap-2 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded text-xs font-semibold text-slate-600">
+                <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Resumen de Ventas</h3>
+                <div class="flex items-center gap-2 px-2.5 py-1 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded text-xs font-semibold text-slate-600 dark:text-slate-300">
                     <span class="material-symbols-outlined text-[14px]">calendar_today</span>
                     <span>Últimos 6 Meses</span>
                 </div>
@@ -123,16 +137,16 @@
             <!-- Totales del Gráfico -->
             <div class="flex gap-6 mb-2 mt-2">
                 <div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 mb-0.5">
+                    <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">
                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ingresos
                     </div>
-                    <div class="font-bold text-slate-900 text-lg">${{ number_format(array_sum($ventasMeses) / 1000, 1) }}k</div>
+                    <div class="font-bold text-slate-900 dark:text-white text-lg">${{ number_format(array_sum($ventasMeses) / 1000, 1) }}k</div>
                 </div>
                 <div>
-                    <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 mb-0.5">
-                        <span class="w-2 h-2 rounded-full bg-slate-400"></span> Pedidos
+                    <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">
+                        <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></span> Pedidos
                     </div>
-                    <div class="font-bold text-slate-900 text-lg">{{ number_format(array_sum($ordenesMeses)/1000, 1) }}k</div>
+                    <div class="font-bold text-slate-900 dark:text-white text-lg">{{ number_format(array_sum($ordenesMeses)/1000, 1) }}k</div>
                 </div>
             </div>
 
@@ -145,29 +159,29 @@
         <!-- Activity Feed (1 Col) -->
         <div class="card-saas p-5 flex flex-col">
             <div class="flex justify-between items-center mb-5">
-                <h3 class="text-sm sm:text-base font-bold text-slate-900">Actividad Reciente</h3>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Actividad Reciente</h3>
             </div>
 
             <div class="flex flex-col gap-4 relative flex-1">
                 @forelse($transaccionesRecientes as $pedido)
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                        <div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800/50">
                             <span class="material-symbols-outlined text-[18px]">receipt_long</span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-xs font-bold text-slate-900 truncate">
+                            <p class="text-xs font-bold text-slate-900 dark:text-white truncate">
                                 Nuevo Pedido {{ $pedido->numero_pedido }}
                             </p>
-                            <p class="text-[11px] text-slate-500 truncate mt-0.5">
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                                 {{ $pedido->usuario ? $pedido->usuario->nombre_completo : 'Cliente' }} - {{ $pedido->creado_en->format('d M') }}
                             </p>
                         </div>
-                        <div class="text-xs font-extrabold text-slate-900">
+                        <div class="text-xs font-extrabold text-slate-900 dark:text-white">
                             ${{ number_format($pedido->total, 0) }}
                         </div>
                     </div>
                 @empty
-                    <div class="text-center text-slate-500 text-xs py-10">
+                    <div class="text-center text-slate-500 dark:text-slate-400 text-xs py-10">
                         No hay actividad reciente.
                     </div>
                 @endforelse
@@ -179,8 +193,8 @@
     <!-- Bottom Layout: Order Management -->
     <div class="card-saas p-5 flex flex-col">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-sm sm:text-base font-bold text-slate-900">Gestión de Pedidos</h3>
-            <a href="{{ url('/admin/pedidos') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1">
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Gestión de Pedidos</h3>
+            <a href="{{ url('/admin/pedidos') }}" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1">
                 <span>Ver todos</span>
                 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
@@ -189,7 +203,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         <th class="pb-3 pl-1">Nº Pedido</th>
                         <th class="pb-3">Cliente</th>
                         <th class="pb-3">Fecha</th>
@@ -199,16 +213,16 @@
                         <th class="pb-3 pr-1 text-center">Acción</th>
                     </tr>
                 </thead>
-                <tbody class="text-xs divide-y divide-slate-100">
+                <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/80">
                     @forelse($transaccionesRecientes as $pedido)
-                        <tr class="hover:bg-slate-50/70 transition-colors">
-                            <td class="py-3 pl-1 font-bold text-slate-900">
+                        <tr class="hover:bg-slate-50/70 dark:hover:bg-gray-700/30 transition-colors">
+                            <td class="py-3 pl-1 font-bold text-slate-900 dark:text-white">
                                 {{ $pedido->numero_pedido }}
                             </td>
-                            <td class="py-3 text-slate-600 font-medium">
+                            <td class="py-3 text-slate-600 dark:text-slate-300 font-medium">
                                 {{ $pedido->usuario ? $pedido->usuario->nombre_completo : 'Cliente' }}
                             </td>
-                            <td class="py-3 text-slate-500">
+                            <td class="py-3 text-slate-500 dark:text-slate-400">
                                 {{ $pedido->creado_en->format('M d, h:i A') }}
                             </td>
                             <td class="py-3 text-center">
@@ -221,20 +235,20 @@
                                     elseif(in_array($estadoNombre, ['en_proceso', 'enviado'])) $estadoColor = 'purple';
                                     else $estadoColor = 'amber';
                                 @endphp
-                                <span class="px-2 py-0.5 rounded-full bg-{{$estadoColor}}-50 text-{{$estadoColor}}-700 border border-{{$estadoColor}}-200 text-[10px] font-bold">
+                                <span class="px-2 py-0.5 rounded-full bg-{{$estadoColor}}-50 dark:bg-{{$estadoColor}}-900/30 text-{{$estadoColor}}-700 dark:text-{{$estadoColor}}-400 border border-{{$estadoColor}}-200 dark:border-{{$estadoColor}}-800/50 text-[10px] font-bold">
                                     {{ ucfirst($estadoNombre) }}
                                 </span>
                             </td>
-                            <td class="py-3 text-right font-medium text-slate-500">
-                                <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-semibold">
+                            <td class="py-3 text-right font-medium text-slate-500 dark:text-slate-400">
+                                <span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-gray-700 text-[10px] font-semibold">
                                     {{ $pedido->metodo_pago ?? 'Tarjeta' }}
                                 </span>
                             </td>
-                            <td class="py-3 text-right font-extrabold text-slate-900">
+                            <td class="py-3 text-right font-extrabold text-slate-900 dark:text-white">
                                 ${{ number_format($pedido->total, 2) }}
                             </td>
                             <td class="py-3 pr-1 text-center">
-                                <a href="{{ url('/admin/pedidos/'.$pedido->id) }}" class="text-blue-600 hover:text-blue-800 font-semibold transition-colors">
+                                <a href="{{ url('/admin/pedidos/'.$pedido->id) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-semibold transition-colors">
                                     Ver/Gst.
                                 </a>
                             </td>
@@ -414,56 +428,58 @@
             series: [{ name: 'Ticket Promedio', data: aov7Dias }]
         }).render();
 
-        // 5. Main Chart (Sales Overview)
-        const mainChartOptions = {
-            series: [
-                { name: 'Ingresos', data: ventasMeses },
-                { name: 'Pedidos', data: ordenesMeses }
-            ],
-            chart: {
-                height: 300,
-                type: 'area',
-                toolbar: { show: false },
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                background: 'transparent'
-            },
-            colors: ['#10b981', '#cbd5e1'], // emerald-500, slate-300
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.4,
-                    opacityTo: 0,
-                    stops: [0, 100]
-                }
-            },
-            dataLabels: { enabled: false },
-            stroke: { curve: 'smooth', width: 2 },
-            xaxis: {
-                categories: mesesLabels,
-                axisBorder: { show: false },
-                axisTicks: { show: false },
-                labels: {
-                    style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 } // slate-500
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 },
-                    formatter: function(val, index) {
-                        return val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            // 5. Main Chart (Sales Overview)
+            const mainChartOptions = {
+                series: [
+                    { name: 'Ingresos', data: ventasMeses },
+                    { name: 'Pedidos', data: ordenesMeses }
+                ],
+                chart: {
+                    height: 300,
+                    type: 'area',
+                    toolbar: { show: false },
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    background: 'transparent'
+                },
+                colors: isDark ? ['#10b981', '#64748b'] : ['#10b981', '#cbd5e1'], // emerald-500, slate-500/300
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.4,
+                        opacityTo: 0,
+                        stops: [0, 100]
                     }
-                }
-            },
-            grid: {
-                borderColor: '#e2e8f0', // slate-200
-                strokeDashArray: 4,
-                xaxis: { lines: { show: true } },
-                yaxis: { lines: { show: true } }
-            },
-            legend: { show: false },
-            theme: { mode: 'light' }
-        };
+                },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth', width: 2 },
+                xaxis: {
+                    categories: mesesLabels,
+                    axisBorder: { show: false },
+                    axisTicks: { show: false },
+                    labels: {
+                        style: { colors: isDark ? '#94a3b8' : '#64748b', fontSize: '11px', fontWeight: 600 } // slate-400 / 500
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: { colors: isDark ? '#94a3b8' : '#64748b', fontSize: '11px', fontWeight: 600 },
+                        formatter: function(val, index) {
+                            return val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: isDark ? '#374151' : '#e2e8f0', // gray-700 / 200
+                    strokeDashArray: 4,
+                    xaxis: { lines: { show: true } },
+                    yaxis: { lines: { show: true } }
+                },
+                legend: { show: false },
+                theme: { mode: isDark ? 'dark' : 'light' }
+            };
 
         new ApexCharts(document.querySelector("#mainChart"), mainChartOptions).render();
     }
@@ -473,6 +489,14 @@
 
     // Re-ejecutar si Livewire hace una navegación SPA (wire:navigate)
     document.addEventListener('livewire:navigated', function() {
+        document.querySelectorAll("#spark1, #spark2, #spark3, #spark4, #mainChart").forEach(el => {
+            if (el) el.dataset.rendered = "0"; // Reset para permitir redibujado
+        });
+        renderDashboardCharts();
+    });
+
+    // Re-renderizar si el tema cambia
+    window.addEventListener('theme-changed', function() {
         document.querySelectorAll("#spark1, #spark2, #spark3, #spark4, #mainChart").forEach(el => {
             if (el) el.dataset.rendered = "0"; // Reset para permitir redibujado
         });

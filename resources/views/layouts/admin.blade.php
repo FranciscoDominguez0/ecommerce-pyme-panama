@@ -93,6 +93,59 @@
             transition: opacity 0.2s ease-out !important;
         }
 
+        /* Seamless Active Sidebar Item */
+        .sidebar-active-item .material-symbols-outlined {
+            color: #059669 !important;
+            font-variation-settings: 'FILL' 1;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar-active-item {
+                background-color: #F8FAFC;
+                color: #059669 !important;
+                border-top-left-radius: 9999px;
+                border-bottom-left-radius: 9999px;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                position: relative;
+                margin-right: 0 !important;
+            }
+            html.dark .sidebar-active-item {
+                background-color: #111827; /* gray-900 */
+                color: #10b981 !important; /* emerald-500 */
+            }
+            .sidebar-active-item::before,
+            .sidebar-active-item::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                width: 20px;
+                height: 20px;
+                z-index: -1;
+            }
+            .sidebar-active-item::before {
+                top: -20px;
+                background-image: radial-gradient(circle at top left, transparent 20px, #F8FAFC 20.5px);
+            }
+            html.dark .sidebar-active-item::before {
+                background-image: radial-gradient(circle at top left, transparent 20px, #111827 20.5px);
+            }
+            .sidebar-active-item::after {
+                bottom: -20px;
+                background-image: radial-gradient(circle at bottom left, transparent 20px, #F8FAFC 20.5px);
+            }
+            html.dark .sidebar-active-item::after {
+                background-image: radial-gradient(circle at bottom left, transparent 20px, #111827 20.5px);
+            }
+        }
+        @media (max-width: 767px) {
+            .sidebar-active-item {
+                background-color: #F8FAFC;
+                color: #059669 !important;
+                border-radius: 9999px;
+                margin-right: 0.75rem !important; /* mr-3 */
+            }
+        }
     </style>
 
 
@@ -129,9 +182,20 @@
         html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
     </style>
 
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
+    
+    <!-- Dark Mode Initializer -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
     @stack('styles')
 </head>
-<body class="bg-[#F8FAFC] text-slate-900 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
+<body class="bg-[#F8FAFC] dark:bg-gray-900 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative">
     
     @php
         $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
@@ -150,8 +214,8 @@
     <!-- Mobile Sidebar Drawer (Overlay) -->
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
 
-    <!-- Sidebar Admin (Fondo #1F2937, Bordes #E5E7EB/20) -->
-    <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out border-r border-gray-700/60 shadow-2xl flex flex-col justify-between select-none">
+    <!-- Sidebar Admin (Fondo #1F2937) -->
+    <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl flex flex-col justify-between select-none">
         
         <!-- Header & Navigation -->
         <div class="flex flex-col flex-1 min-h-0">
@@ -175,7 +239,7 @@
             </div>
 
             <!-- Navigation Links (Scrollable with custom scrollbar) -->
-            <nav class="flex-1 px-3 py-3 overflow-y-auto space-y-4">
+            <nav class="flex-1 pl-3 py-3 pr-0 overflow-y-auto space-y-4">
                 
                 <!-- Grupo 1: General -->
                 @canany(['admin.dashboard', 'admin.pedidos.ver', 'admin.devoluciones.ver'])
@@ -187,7 +251,7 @@
                         @can('admin.dashboard')
                         <!-- Dashboard -->
                         <a href="{{ route('admin.dashboard') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.dashboard') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ request()->routeIs('admin.dashboard') ? 'font-variation-settings: \'FILL\' 1;' : '' }}">dashboard</span>
                             <span class="sidebar-text truncate transition-all duration-300">Dashboard</span>
                         </a>
@@ -205,7 +269,7 @@
                         @endphp
                         <!-- Pedidos & Ventas -->
                         <a href="{{ url('/admin/pedidos') }}" 
-                           class="group relative flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/pedidos*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <div class="flex items-center gap-3">
                                 <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/pedidos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">shopping_bag</span>
                                 <span class="sidebar-text truncate transition-all duration-300">Pedidos & Ventas</span>
@@ -220,7 +284,7 @@
                         @endphp
                         <!-- Devoluciones -->
                         <a href="{{ route('admin.devoluciones.index') }}" 
-                           class="group relative flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.devoluciones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.devoluciones*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <div class="flex items-center gap-3">
                                 <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">assignment_return</span>
                                 <span class="sidebar-text truncate transition-all duration-300">Devoluciones</span>
@@ -242,7 +306,7 @@
                         @can('admin.productos.ver')
                         <!-- Productos -->
                         <a href="{{ route('admin.productos.index') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.productos*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.productos*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.productos*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">sell</span>
                             <span class="sidebar-text truncate transition-all duration-300">Productos</span>
                         </a>
@@ -251,7 +315,7 @@
                         @can('admin.categorias.ver')
                         <!-- Categorías -->
                         <a href="{{ route('admin.categorias.index') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.categorias*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.categorias*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.categorias*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">category</span>
                             <span class="sidebar-text truncate transition-all duration-300">Categorías</span>
                         </a>
@@ -260,7 +324,7 @@
                         @can('admin.marcas.ver')
                         <!-- Marcas -->
                         <a href="{{ route('admin.brands.index') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.brands*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.brands*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.brands*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">verified</span>
                             <span class="sidebar-text truncate transition-all duration-300">Marcas & Logos</span>
                         </a>
@@ -269,7 +333,7 @@
                         @can('admin.inventario.ver')
                         <!-- Inventario -->
                         <a href="{{ url('/admin/inventario') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/inventario*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/inventario*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/inventario*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">warehouse</span>
                             <span class="sidebar-text truncate transition-all duration-300">Inventario</span>
                         </a>
@@ -278,7 +342,7 @@
                         @can('admin.zonas.ver')
                         <!-- Zonas de Envío -->
                         <a href="{{ route('admin.zonas-envio.index') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.zonas-envio*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.zonas-envio*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.zonas-envio*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_shipping</span>
                             <span class="sidebar-text truncate transition-all duration-300">Zonas de Envío</span>
                         </a>
@@ -287,7 +351,7 @@
                         @can('admin.cupones.ver')
                         <!-- Cupones de Descuento -->
                         <a href="{{ route('admin.promociones.cupones') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.cupones*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.cupones*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.promociones.cupones*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">local_offer</span>
                             <span class="sidebar-text truncate transition-all duration-300">Cupones de Descuento</span>
                         </a>
@@ -296,7 +360,7 @@
                         @can('admin.promociones.ver')
                         <!-- Promociones Especiales -->
                         <a href="{{ route('admin.promociones.envio-gratis') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->routeIs('admin.promociones.envio-gratis*') || request()->routeIs('admin.promociones.producto-del-mes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">campaign</span>
                             <span class="sidebar-text truncate transition-all duration-300">Promociones Especiales</span>
                         </a>
@@ -315,7 +379,7 @@
                         @can('admin.usuarios.ver')
                         <!-- Usuarios y Roles -->
                         <a href="{{ route('admin.usuarios.index') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/usuarios*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/usuarios*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/usuarios*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">admin_panel_settings</span>
                             <span class="sidebar-text truncate transition-all duration-300">Usuarios y Roles</span>
                         </a>
@@ -324,7 +388,7 @@
                         @can('admin.facturas.ver')
                         <!-- Facturación Fiscal -->
                         <a href="{{ url('/admin/facturas') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/facturas*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/facturas*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/facturas*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">receipt_long</span>
                             <span class="sidebar-text truncate transition-all duration-300">Facturación Fiscal</span>
                         </a>
@@ -333,7 +397,7 @@
                         @can('admin.reportes.ver')
                         <!-- Reportes -->
                         <a href="{{ url('/admin/reportes') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/reportes*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/reportes*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/reportes*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">bar_chart</span>
                             <span class="sidebar-text truncate transition-all duration-300">Reportes</span>
                         </a>
@@ -352,7 +416,7 @@
                         @can('admin.auditoria.ver')
                         <!-- Auditoría -->
                         <a href="{{ url('/admin/auditoria') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/auditoria*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/auditoria*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/auditoria*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">security</span>
                             <span class="sidebar-text truncate transition-all duration-300">Auditoría</span>
                         </a>
@@ -361,7 +425,7 @@
                         @can('admin.configuracion.ver')
                         <!-- Configuración -->
                         <a href="{{ url('/admin/configuracion') }}" 
-                           class="group relative flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs font-bold transition-all {{ request()->is('admin/configuracion*') ? 'bg-[#2B3648] text-[#34D399] shadow-2xs' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                           class="group relative flex items-center gap-3 px-3.5 py-2.5 text-xs font-bold transition-all {{ request()->is('admin/configuracion*') ? 'sidebar-active-item' : 'rounded-full mr-3 text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ request()->is('admin/configuracion*') ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}">settings</span>
                             <span class="sidebar-text truncate transition-all duration-300">Configuración</span>
                         </a>
@@ -374,18 +438,26 @@
         </div>
 
         <!-- Sidebar Footer / Actions -->
-        <div class="p-3 border-t border-gray-700/60 bg-black/20 space-y-1.5">
+        <div class="px-5 py-4 bg-black/20 flex justify-between items-center">
 
-            <!-- Logout Button -->
-            <form method="POST" action="{{ route('logout') }}" class="w-full">
-                @csrf
-                <button type="submit" 
-                        class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-full text-xs font-semibold text-rose-300/90 hover:text-rose-200 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all group">
-                    <span class="material-symbols-outlined text-[17px] text-rose-400 group-hover:-translate-x-0.5 transition-transform">logout</span>
-                    <span class="sidebar-text transition-all duration-300">Cerrar Sesión</span>
-                </button>
-            </form>
+            <!-- System Version (Subtle) -->
+            <div class="text-[10px] font-medium text-slate-500 tracking-wider cursor-default select-none">
+                PayMe v1.0.0
+            </div>
 
+            <!-- Dark Mode Toggle Switch Premium -->
+            <button id="theme-toggle" type="button" 
+                    class="relative inline-flex h-8 w-16 items-center rounded-full bg-slate-900 border border-slate-700 shadow-inner transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-1 focus:ring-offset-slate-800">
+                <span class="sr-only">Toggle Dark Mode</span>
+                <span id="theme-toggle-thumb" 
+                      class="inline-flex h-6 w-6 transform items-center justify-center rounded-full bg-white transition-transform duration-300 translate-x-1 shadow-sm">
+                    <!-- Sun Icon (Claro) -->
+                    <span id="theme-toggle-light-icon" class="material-symbols-outlined text-[14px] text-amber-500 transition-opacity duration-300" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+                    <!-- Moon Icon (Oscuro) -->
+                    <span id="theme-toggle-dark-icon" class="material-symbols-outlined text-[14px] text-slate-800 transition-opacity duration-300 absolute opacity-0" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
+                </span>
+            </button>
+            
         </div>
     </aside>
 
@@ -393,7 +465,7 @@
     <div id="main-content" class="md:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full transition-all duration-300 ease-in-out">
         
         <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
-        <header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+        <header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
             
             <!-- Left: Toggle & Responsive Breadcrumbs -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
@@ -420,8 +492,8 @@
                     <input type="text" 
                            name="buscar" 
                            placeholder="Buscar productos, SKU, marca..." 
-                           class="w-full pl-9 pr-9 py-1.5 text-xs bg-slate-100/90 border border-slate-200/80 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 placeholder-slate-400 transition-all outline-none">
-                    <span class="absolute right-2.5 text-[10px] font-mono font-bold text-slate-400 bg-white px-1.5 py-0.5 rounded border border-slate-200 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
+                           class="w-full pl-9 pr-9 py-1.5 text-xs bg-slate-100/90 dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700/80 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none">
+                    <span class="absolute right-2.5 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-gray-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-gray-600 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
                 </form>
 
                 <!-- Notifications Livewire Component -->
@@ -434,7 +506,7 @@
 
                     {{-- Trigger: Avatar + Nombre --}}
                     <button @click="open = !open"
-                            class="flex items-center gap-2 sm:gap-2.5 rounded-xl px-2 py-1.5 hover:bg-slate-100 transition-colors cursor-pointer select-none"
+                            class="flex items-center gap-2 sm:gap-2.5 rounded-xl px-2 py-1.5 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer select-none"
                             :aria-expanded="open">
 
                         @if(Auth::user() && Auth::user()->foto_perfil_ruta)
@@ -448,10 +520,10 @@
                         @endif
 
                         <div class="hidden sm:flex flex-col text-left">
-                            <span class="text-xs font-bold text-slate-900 leading-tight truncate max-w-[120px] md:max-w-none">
+                            <span class="text-xs font-bold text-slate-900 dark:text-slate-100 leading-tight truncate max-w-[120px] md:max-w-none">
                                 {{ Auth::user()->nombre_completo ?? Auth::user()->nombre ?? 'Administrador' }}
                             </span>
-                            <span class="text-[10px] font-semibold text-emerald-700 leading-tight">
+                            <span class="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 leading-tight">
                                 {{ (Auth::user() && Auth::user()->hasRole('super_admin')) ? 'Super Administrador' : 'Administrador' }}
                             </span>
                         </div>
@@ -469,22 +541,22 @@
                          x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                          x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
                          style="display:none;"
-                         class="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-50 origin-top-right">
+                         class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-slate-100 dark:border-gray-700 py-1.5 z-50 origin-top-right">
 
                         {{-- Perfil --}}
                         <a href="{{ route('admin.perfil') }}"
-                           class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-emerald-700 transition-colors">
+                           class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-700/50 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
                             <span class="material-symbols-outlined text-[18px] text-slate-400">manage_accounts</span>
                             Perfil
                         </a>
 
-                        <div class="my-1 h-px bg-slate-100 mx-3"></div>
+                        <div class="my-1 h-px bg-slate-100 dark:bg-gray-700 mx-3"></div>
 
                         {{-- Cerrar sesión --}}
                         <form method="POST" action="{{ route('logout') }}" id="admin-logout-form">
                             @csrf
                             <button type="submit"
-                                    class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-50 transition-colors">
+                                    class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-gray-700/50 transition-colors">
                                 <span class="material-symbols-outlined text-[18px] text-rose-400">logout</span>
                                 Cerrar sesión
                             </button>
@@ -659,7 +731,62 @@
         document.addEventListener('livewire:navigated', () => {
             cleanupTransition();
             handleLoginSkeleton();
+            
+            // Re-bind theme toggle si Livewire reemplaza el DOM
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if(themeToggleBtn) {
+                themeToggleBtn.removeEventListener('click', window.toggleThemeHandler);
+                themeToggleBtn.addEventListener('click', window.toggleThemeHandler);
+            }
         });
+
+        // Theme Toggle Logic
+        function updateThemeToggleUI() {
+            const thumb = document.getElementById('theme-toggle-thumb');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            
+            if(!thumb || !darkIcon || !lightIcon) return;
+
+            if (document.documentElement.classList.contains('dark')) {
+                thumb.classList.remove('translate-x-1');
+                thumb.classList.add('translate-x-9');
+                thumb.classList.remove('bg-white');
+                thumb.classList.add('bg-slate-800');
+                darkIcon.classList.remove('opacity-0');
+                darkIcon.classList.add('text-white');
+                lightIcon.classList.add('opacity-0');
+            } else {
+                thumb.classList.remove('translate-x-9');
+                thumb.classList.add('translate-x-1');
+                thumb.classList.remove('bg-slate-800');
+                thumb.classList.add('bg-white');
+                darkIcon.classList.add('opacity-0');
+                darkIcon.classList.remove('text-white');
+                lightIcon.classList.remove('opacity-0');
+            }
+        }
+
+        window.toggleThemeHandler = function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+            updateThemeToggleUI();
+            window.dispatchEvent(new Event('theme-changed'));
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateThemeToggleUI();
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', window.toggleThemeHandler);
+            }
+        });
+
     </script>
 
     <!-- Sistema Global de Alertas y Notificaciones Toast -->

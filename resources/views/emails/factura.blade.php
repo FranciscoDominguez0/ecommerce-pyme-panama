@@ -45,11 +45,7 @@
                         <p>
                             <strong>Pago:</strong> 
                             @if(strtolower($factura->metodo_pago) === 'stripe')
-                                @if(isset($message) && file_exists(public_path('images/stripe.webp')))
-                                    <img src="{{ $message->embed(public_path('images/stripe.webp')) }}" alt="Stripe" style="height: 16px; vertical-align: middle; margin-left: 4px;">
-                                @else
-                                    <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" style="height: 16px; vertical-align: middle; margin-left: 4px;">
-                                @endif
+                                <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" style="height: 16px; vertical-align: middle; margin-left: 4px;">
                             @else
                                 {{ ucfirst(str_replace('_', ' ', $factura->metodo_pago)) }}
                             @endif
