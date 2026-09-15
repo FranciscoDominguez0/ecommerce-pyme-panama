@@ -126,7 +126,7 @@
             <div>
                 <h3 class="text-base font-bold text-slate-900">Reembolso Procesado</h3>
                 <p class="text-sm text-slate-600 mt-1 leading-relaxed">
-                    Este pedido fue reembolsado por un monto total de <span class="font-bold text-slate-900">${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }} USD</span> a tu método de pago original con Stripe.
+                    Este pedido fue reembolsado por un monto total de <span class="font-bold text-slate-900">${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }} USD</span> a tu método de pago original con <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" class="h-4 inline-block align-text-bottom ml-1">.
                 </p>
             </div>
         </div>
@@ -355,7 +355,10 @@
                                     <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $stripeLast4 }}</span>
                                 @endif
                             </div>
-                            <p class="text-xs text-slate-500 mt-0.5">Pago seguro en tiempo real vía Stripe</p>
+                            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+                                Pago seguro en tiempo real vía 
+                                <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" class="h-4 object-contain">
+                            </p>
                         </div>
                     @elseif($pedido->metodo_pago === 'yappy')
                         <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">

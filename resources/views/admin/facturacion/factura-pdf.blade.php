@@ -215,7 +215,23 @@
             <td>
                 <div class="section-title">Información de Pago</div>
                 <div class="customer-info">
-                    <strong>Método:</strong> {{ ucfirst(str_replace('_', ' ', $factura->metodo_pago)) }}<br>
+                    <strong>Método:</strong> 
+                    @if(strtolower($factura->metodo_pago) === 'stripe')
+                        @php
+                            $stripeImgPath = public_path('images/stripe.webp');
+                            $stripeImgSrc = file_exists($stripeImgPath) 
+                                ? 'data:image/webp;base64,' . base64_encode(file_get_contents($stripeImgPath)) 
+                                : '';
+                        @endphp
+                        @if($stripeImgSrc)
+                            <img src="{{ $stripeImgSrc }}" alt="Stripe" style="height: 12px; vertical-align: middle; margin-left: 2px;">
+                        @else
+                            Stripe
+                        @endif
+                    @else
+                        {{ ucfirst(str_replace('_', ' ', $factura->metodo_pago)) }}
+                    @endif
+                    <br>
                     @if($factura->referencia_pago_externo)
                         <strong>Referencia:</strong> Comprobante Adjunto<br>
                     @endif

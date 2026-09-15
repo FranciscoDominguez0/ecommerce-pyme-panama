@@ -107,6 +107,15 @@
     </div>
 
     <script>
+        function openGoogleSignIn(event, url) {
+            event.preventDefault();
+            const width = 500;
+            const height = 600;
+            const left = window.screenX + (window.outerWidth - width) / 2;
+            const top = window.screenY + (window.outerHeight - height) / 2;
+            window.open(url, 'GoogleSignIn', `width=${width},height=${height},left=${left},top=${top},toolbar=0,scrollbars=1,status=1,resizable=1,location=1,menuBar=0`);
+        }
+
         // BFCache fix global para cuando el usuario presiona el botón "Atrás" del navegador
         window.addEventListener('pageshow', (event) => {
             const mainContent = document.querySelector('main.fade-in-up');

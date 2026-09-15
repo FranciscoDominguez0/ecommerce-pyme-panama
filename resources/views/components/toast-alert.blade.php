@@ -73,8 +73,15 @@
                 <span class="material-symbols-outlined text-[22px] {{ $config['icon_color'] }}" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
             </div>
             
-            <div class="flex-1 text-[13px] font-bold leading-tight tracking-wide">
-                {{ $mensaje }}
+            <div class="flex-1 leading-tight tracking-wide">
+                @if(is_array($mensaje))
+                    <div class="text-[13px] font-bold">{{ $mensaje['title'] ?? 'Atención' }}</div>
+                    @if(isset($mensaje['message']))
+                        <div class="text-[11.5px] font-medium text-slate-300 mt-0.5">{{ $mensaje['message'] }}</div>
+                    @endif
+                @else
+                    <div class="text-[13px] font-bold">{{ $mensaje }}</div>
+                @endif
             </div>
             
             <button type="button" 

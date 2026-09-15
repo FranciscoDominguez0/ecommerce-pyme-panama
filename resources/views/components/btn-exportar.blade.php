@@ -6,7 +6,7 @@
 ])
 
 <!-- Dropdown Exportar -->
-<div x-data="{ open: false }" class="relative inline-block text-left z-40">
+<div x-data="{ open: false }" class="relative inline-block text-left z-30">
     <button type="button" @click="open = !open" @click.away="open = false" 
             class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-xs h-full w-full justify-center sm:w-auto">
         <span class="material-symbols-outlined text-[18px] text-slate-500">file_download</span>

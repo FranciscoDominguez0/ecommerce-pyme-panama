@@ -57,11 +57,17 @@ class PagoService
 
         } catch (CardException $e) {
             Log::error('Stripe CardException: ' . $e->getMessage());
-            session()->flash('error', 'Pago rechazado: ' . $this->traducirErrorStripe($e));
+            session()->flash('error', [
+                'title' => 'Pago rechazado',
+                'message' => $this->traducirErrorStripe($e)
+            ]);
             return false;
         } catch (Throwable $e) {
             Log::error('Stripe Error: ' . $e->getMessage());
-            session()->flash('error', 'Error al procesar tarjeta con Stripe: ' . $e->getMessage());
+            session()->flash('error', [
+                'title' => 'Error de procesamiento',
+                'message' => 'Ocurrió un problema inesperado con la pasarela.'
+            ]);
             return false;
         }
     }

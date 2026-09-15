@@ -60,20 +60,46 @@ class GoogleAuthController extends Controller
                 \App\Http\Controllers\Auth\TwoFactorController::triggerChallenge($usuario, true);
 
                 // Redirigir a la pantalla de verificación 2FA
-                return redirect()->route('2fa.challenge');
+                return $this->closePopupAndRedirect(route('2fa.challenge'));
             }
 
             // Iniciar sesión (flujo normal sin 2FA)
             Auth::login($usuario, true);
 
             // Redirigir al home o donde corresponda
-            return redirect()->intended(route('home'));
+            return $this->closePopupAndRedirect(redirect()->intended(route('home'))->getTargetUrl());
 
         } catch (\Exception $e) {
             // En caso de error o cancelación, redirigir al login con un mensaje
-            return redirect()->route('login')->withErrors([
-                'email' => 'Ocurrió un error al intentar iniciar sesión con Google: ' . $e->getMessage(),
-            ]);
+            return $this->closePopupAndRedirect(route('login'), 'Ocurrió un error al intentar iniciar sesión con Google: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Cierra el popup (si existe) y redirige la ventana padre.
+     * Si no hay ventana padre, simplemente redirige.
+     */
+    private function closePopupAndRedirect($url, $error = null)
+    {
+        if ($error) {
+            session()->flash('errors', (new \Illuminate\Support\MessageBag)->add('email', $error));
+        }
+
+        $html = "<!DOCTYPE html>
+        <html>
+        <head><title>Autenticando...</title></head>
+        <body>
+            <script>
+                if (window.opener && !window.opener.closed) {
+                    window.opener.location.href = '" . $url . "';
+                    window.close();
+                } else {
+                    window.location.href = '" . $url . "';
+                }
+            </script>
+        </body>
+        </html>";
+
+        return response($html);
     }
 }

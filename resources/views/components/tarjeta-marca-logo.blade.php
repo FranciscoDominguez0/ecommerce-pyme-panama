@@ -9,10 +9,7 @@
 
 @if($b === 'visa')
     <!-- Visa -->
-    <svg class="{{ $class }}" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Visa">
-        <rect width="48" height="32" rx="4" fill="#FFFFFF" stroke="#E2E8F0"/>
-        <path d="M19.8 21.2H16.9L18.7 10.8H21.6L19.8 21.2ZM15.5 10.8L12.7 18L12.4 16.4C11.9 14.6 10.3 12.7 8.5 11.7L10.9 21.2H13.8L18 10.8H15.5ZM31.8 17.9C31.8 15.3 28 15.1 28 13.6C28 13.1 28.6 12.6 29.6 12.4C30.1 12.3 31.5 12.2 33.1 13L33.6 10.9C32.9 10.6 31.8 10.3 30.4 10.3C27.3 10.3 25.1 12 25.1 14.3C25.1 17.8 30.1 17.6 30.1 19.9C30.1 20.6 29.4 21 28.4 21C26.9 21 25.5 20.4 24.7 19.9L24.1 22.1C25.2 22.6 26.9 23 28.5 23C31.8 23 34 21.3 34 18.8L31.8 17.9ZM41.4 21.2H44L42.1 10.8H39.9C39.4 10.8 38.8 11.1 38.6 11.7L34.8 21.2H37.8L38.4 19.6H41.2L41.4 21.2ZM39.1 17.6L40.3 13.8L40.9 17.6H39.1ZM7.7 10.8H4.7L4.6 11C7 11.6 9 13.4 10 15.4L9.1 11.2C9 10.9 8.4 10.8 7.7 10.8Z" fill="#1434CB"/>
-    </svg>
+    <img src="{{ asset('images/VISA-Logo.webp') }}" alt="Visa" class="{{ $class }} object-contain" />
 @elseif($b === 'mastercard')
     <!-- Mastercard -->
     <svg class="{{ $class }}" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mastercard">

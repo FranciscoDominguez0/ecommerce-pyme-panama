@@ -133,7 +133,10 @@
                                         <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $stripeLast4 }}</span>
                                     @endif
                                 </div>
-                                <p class="text-xs text-slate-500 mt-0.5">Pago seguro en tiempo real vía Stripe</p>
+                                <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+                                    Pago seguro en tiempo real vía 
+                                    <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" class="h-4 object-contain">
+                                </p>
                             </div>
                         @elseif($metodoPago === 'yappy')
                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">

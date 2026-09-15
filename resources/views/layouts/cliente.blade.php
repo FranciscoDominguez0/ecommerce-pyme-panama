@@ -131,16 +131,6 @@
                     <!-- User Authentication -->
                     @auth
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('cliente.perfil.datos') }}" wire:navigate
-                                class="flex items-center gap-2 py-0.5 {{ Auth::user()->foto_perfil_ruta ? 'pl-0.5' : 'pl-2.5' }} pr-3.5 rounded-full bg-gray-100 hover:bg-gray-200 text-sm font-bold text-[#002349] transition-colors">
-                                @if(Auth::user()->foto_perfil_ruta)
-                                    <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Perfil" class="w-9 h-9 rounded-full object-cover shadow-sm border border-white">
-                                @else
-                                    <span class="material-symbols-outlined text-[22px]">account_circle</span>
-                                @endif
-                                <span>{{ Auth::user() ? strtoupper(substr(Auth::user()->nombre, 0, 1) . (Auth::user()->apellido ? substr(Auth::user()->apellido, 0, 1) : '')) : 'MC' }}</span>
-                            </a>
-
                             @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
                                 <a href="{{ route('admin.dashboard') }}"
                                     class="hidden sm:inline-flex items-center gap-1 py-1 px-2.5 rounded-lg bg-[#002349] text-white text-xs font-semibold hover:bg-[#00132b] transition-colors">
@@ -149,13 +139,53 @@
                                 </a>
                             @endif
 
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit" class="text-xs text-gray-500 hover:text-red-600 p-1"
-                                    title="Cerrar Sesión">
-                                    <span class="material-symbols-outlined text-[17px]">logout</span>
+                            <div class="relative shrink-0" x-data="{ open: false }" @click.outside="open = false">
+                                <button @click="open = !open"
+                                    class="flex items-center gap-2 py-0.5 pl-0.5 pr-3.5 rounded-full bg-gray-100 hover:bg-gray-200 text-sm font-bold text-[#002349] transition-colors cursor-pointer select-none"
+                                    :aria-expanded="open">
+                                    @if(Auth::user()->foto_perfil_ruta)
+                                        <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Perfil" class="w-9 h-9 rounded-full object-cover shadow-sm border border-white shrink-0">
+                                    @else
+                                        <div class="w-9 h-9 rounded-full bg-[#006148] text-white flex items-center justify-center text-sm shadow-sm border border-white shrink-0">
+                                            {{ Auth::user() ? strtoupper(substr(Auth::user()->nombre, 0, 1) . (Auth::user()->apellido ? substr(Auth::user()->apellido, 0, 1) : '')) : 'MC' }}
+                                        </div>
+                                    @endif
+                                    <span>{{ Auth::user() ? strtok(Auth::user()->nombre, ' ') : 'Usuario' }}</span>
+                                    <span class="material-symbols-outlined text-[16px] text-gray-500 hidden sm:inline transition-transform duration-200"
+                                          :class="open ? 'rotate-180' : ''">expand_more</span>
                                 </button>
-                            </form>
+
+                                {{-- Dropdown Panel --}}
+                                <div x-show="open"
+                                     x-transition:enter="transition ease-out duration-150"
+                                     x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                                     x-transition:leave="transition ease-in duration-100"
+                                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                                     x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                                     style="display:none;"
+                                     class="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50 origin-top-right">
+            
+                                    {{-- Mi Perfil --}}
+                                    <a href="{{ route('cliente.perfil.datos') }}" wire:navigate
+                                       class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#006148] transition-colors">
+                                        <span class="material-symbols-outlined text-[18px] text-gray-400">person</span>
+                                        Mi Perfil
+                                    </a>
+            
+                                    <div class="my-1 h-px bg-gray-100 mx-3"></div>
+            
+                                    {{-- Cerrar sesión --}}
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit"
+                                                class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
+                                            <span class="material-symbols-outlined text-[18px] text-red-400">logout</span>
+                                            Cerrar sesión
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     @else
                         <div class="flex items-center gap-1.5">
@@ -318,7 +348,7 @@
                         <!-- Visa Official Logo -->
                         <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                             title="Visa">
-                            <img src="{{ asset('images/visa-logo.png') }}" alt="Visa"
+                            <img src="{{ asset('images/VISA-Logo.webp') }}" alt="Visa"
                                 class="max-h-full max-w-full w-auto h-auto object-contain block" />
                         </div>
 
