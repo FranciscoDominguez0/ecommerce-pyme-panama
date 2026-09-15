@@ -48,6 +48,15 @@
             scrollbar-width: thin;
             scrollbar-color: #475569 transparent;
         }
+        
+        /* Ocultar barra de scroll en el Sidebar */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
         .card-elevated {
             background-color: #FFFFFF;
             border: 1px solid #E5E7EB;
@@ -221,7 +230,7 @@
     <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
 
     <!-- Sidebar Admin (Fondo #1F2937) -->
-    <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl flex flex-col justify-between select-none">
+    <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl md:shadow-none flex flex-col justify-between select-none">
         
         <!-- Header & Navigation -->
         <div class="flex flex-col flex-1 min-h-0">
@@ -245,7 +254,7 @@
             </div>
 
             <!-- Navigation Links (Scrollable with custom scrollbar) -->
-            <nav class="flex-1 pl-3 py-3 pr-0 overflow-y-auto space-y-4">
+            <nav class="flex-1 pl-3 py-3 pr-0 overflow-y-auto space-y-4 hide-scrollbar">
                 
                 <!-- Grupo 1: General -->
                 @canany(['admin.dashboard', 'admin.pedidos.ver', 'admin.devoluciones.ver'])
@@ -493,13 +502,23 @@
             <div class="flex items-center gap-2 sm:gap-3 text-slate-800 shrink-0 ml-auto">
                 
                 <!-- Buscador Global en TopBar -->
-                <form action="{{ route('admin.productos.index') }}" method="GET" class="relative hidden sm:flex items-center w-56 md:w-72 lg:w-80">
+                <form id="top-search-form" action="{{ route('admin.productos.index') }}" method="GET" class="relative hidden sm:flex items-center w-56 md:w-72 lg:w-80 group">
                     <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px] pointer-events-none">search</span>
                     <input type="text" 
                            name="buscar" 
                            placeholder="Buscar productos, SKU, marca..." 
-                           class="w-full pl-9 pr-9 py-1.5 text-xs bg-slate-100/90 dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700/80 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none">
-                    <span class="absolute right-2.5 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-gray-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-gray-600 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
+                           class="w-full pl-9 pr-10 lg:pr-20 py-1.5 text-xs bg-slate-100/90 dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700/80 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none">
+                    
+                    <!-- Botón Escáner -->
+                    <button type="button" 
+                            onclick="window.ModalEscaner.abrir()"
+                            title="Escanear Código de Barras"
+                            class="absolute right-2 lg:right-10 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
+                        <span class="material-symbols-outlined text-[16px]">barcode_scanner</span>
+                    </button>
+
+                    <!-- Acceso rápido teclado -->
+                    <span class="absolute right-2 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-gray-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-gray-600 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
                 </form>
 
                 <!-- Notifications Livewire Component -->
@@ -795,6 +814,9 @@
 
     </script>
 
+    <!-- Modal Escáner -->
+    <x-modal-escaner inputId="buscar" formId="top-search-form" />
+
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
     <x-toast-alert />
 
@@ -804,4 +826,3 @@
     @stack('scripts')
 </body>
 </html>
-  
