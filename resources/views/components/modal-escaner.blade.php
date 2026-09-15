@@ -45,7 +45,13 @@
         const modalContent = document.getElementById('modal-escaner-content');
         
         window.ModalEscaner = {
-            abrir: function() {
+            targetInputName: '{{ $inputId }}',
+            targetFormId: '{{ $formId }}',
+
+            abrir: function(inputName = '{{ $inputId }}', formId = '{{ $formId }}') {
+                this.targetInputName = inputName;
+                this.targetFormId = formId;
+
                 modal.style.display = 'flex';
                 // Trigger reflow
                 void modal.offsetWidth;
@@ -119,8 +125,12 @@
                 this.cerrar();
                 
                 // Buscar el input global
-                const searchInput = document.querySelector('input[name="{{ $inputId }}"]');
-                const searchForm = document.getElementById('{{ $formId }}');
+                const searchInput = document.querySelector('input[name="' + this.targetInputName + '"]');
+                let searchForm = null;
+                
+                if (this.targetFormId) {
+                    searchForm = document.getElementById(this.targetFormId);
+                }
                 
                 if (searchInput) {
                     searchInput.value = codigo;

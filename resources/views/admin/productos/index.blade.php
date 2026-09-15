@@ -100,7 +100,7 @@
     </div>
 
     <!-- Barra de Búsqueda y Filtros con Formularios Reales -->
-    <form method="GET" action="{{ route('admin.productos.index') }}" class="card-elevated p-4 rounded-xl">
+    <form id="form-filtro-productos" method="GET" action="{{ route('admin.productos.index') }}" class="card-elevated p-4 rounded-xl">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             
             <!-- Búsqueda por Nombre -->
@@ -122,14 +122,19 @@
             <div class="lg:col-span-2">
                 <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">SKU / Código</label>
                 <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
-                        <span class="material-symbols-outlined text-[16px]">qr_code</span>
-                    </span>
+                    <!-- Botón Escáner (Funcionando) -->
+                    <button type="button" 
+                            onclick="window.ModalEscaner.abrir('sku', 'form-filtro-productos')"
+                            title="Escanear Código"
+                            class="absolute left-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1.5 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
+                        <span class="material-symbols-outlined text-[18px]">barcode_scanner</span>
+                    </button>
+                    
                     <input type="text" 
                            name="sku" 
                            value="{{ $buscarSku }}" 
                            placeholder="PROD-001..." 
-                           class="w-full pl-8 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                           class="w-full pl-10 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>
             </div>
 
