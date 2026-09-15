@@ -266,7 +266,7 @@
                             <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
                                 @foreach($marcas as $marca)
                                     <label x-show="searchBrand === '' || '{{ strtolower($marca->name) }}'.includes(searchBrand.toLowerCase())" class="relative group cursor-pointer">
-                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}" {{ in_array($marca->id, request('marca', [])) ? 'checked' : '' }}>
+                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}" {{ in_array($marca->id, request('marca', [])) ? 'checked' : '' }} onchange="document.querySelectorAll('input[name=\'marca[]\']').forEach(cb => { if(cb !== this) cb.checked = false; }); this.form.submit()">
                                         <div class="h-12 border border-slate-200 rounded p-1.5 flex items-center justify-center peer-checked:border-emerald-600 peer-checked:shadow-sm transition-all bg-white hover:border-slate-300">
                                             @if($marca->logo_url)
                                                 <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" class="max-h-full max-w-full object-contain transition-all">

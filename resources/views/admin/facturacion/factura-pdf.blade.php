@@ -316,7 +316,7 @@
     <div class="totals-container">
         <div class="notes">
             <strong>Notas Adicionales:</strong><br>
-            Cualquier consulta relacionada con esta factura, por favor contáctenos a soporte@paymepanama.com o llámenos al +507 830-4500.
+            Cualquier consulta relacionada con esta factura, por favor contáctenos a {{ $emailEmpresa }} @if($telefonoEmpresa) o llámenos al {{ $telefonoEmpresa }}@endif.
         </div>
         
         <table class="totals-table">

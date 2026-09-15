@@ -163,7 +163,7 @@ class CatalogoController extends Controller
     /**
      * Aplica los filtros de búsqueda, categoría, marca y precio al query de productos.
      */
-    private function aplicarFiltros(Builder $query, string $buscar, ?Categoria $categoriaActiva, array $marcas, float $precioMin, float $precioMax): void
+    private function aplicarFiltros(Builder $query, ?string $buscar, ?Categoria $categoriaActiva, array $marcas, float $precioMin, float $precioMax): void
     {
         if (! empty($buscar)) {
             $query->where(function (Builder $q) use ($buscar) {

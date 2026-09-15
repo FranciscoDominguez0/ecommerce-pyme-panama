@@ -107,12 +107,7 @@ class Categoria extends Model
                 c.activo,
                 c.padre_id,
                 c.orden_visualizacion,
-                COALESCE(SUM(
-                    CASE
-                        WHEN p.eliminado_en IS NULL AND p.activo = TRUE THEN 1
-                        ELSE 0
-                    END
-                ), 0) AS total_productos_count
+                COUNT(DISTINCT p.id) AS total_productos_count
             FROM categorias c
             LEFT JOIN categorias hija
                 ON hija.padre_id = c.id

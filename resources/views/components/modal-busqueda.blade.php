@@ -131,9 +131,13 @@
                 }
             },
 
+            normalizeText(str) {
+                return str ? str.toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : '';
+            },
+
             filtrar(id, texto) {
                 if (this.registros[id]) {
-                    this.registros[id].filtro = texto.trim().toLowerCase();
+                    this.registros[id].filtro = this.normalizeText(texto.trim());
                     this.registros[id].pagina = 1;
                     this.renderizar(id);
                 }
@@ -159,7 +163,7 @@
                 if (reg.filtro) {
                     filtrados = reg.items.filter(item => {
                         const texto = typeof item === 'string' ? item : (item.nombre || item.name || item.titulo || '');
-                        return texto.toLowerCase().includes(reg.filtro);
+                        return this.normalizeText(texto).includes(reg.filtro);
                     });
                 }
 

@@ -346,116 +346,114 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-50 text-xs">
-                        {{-- Productos sin variantes --}}
-                        @foreach($productos as $producto)
-                            @php
-                                $stockBajo  = $producto->stock <= $producto->stock_minimo;
-                                $sinStock   = $producto->stock === 0;
-                            @endphp
-                            <tr class="hover:bg-slate-50/70 transition-colors group">
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center shadow-sm">
-                                            @if($producto->imagenes->isNotEmpty())
-                                                <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                        @forelse($productos as $producto)
+                            @if($producto->variantes->isEmpty())
+                                @php
+                                    $stockBajo  = $producto->stock <= $producto->stock_minimo;
+                                    $sinStock   = $producto->stock === 0;
+                                @endphp
+                                <tr class="hover:bg-slate-50/70 transition-colors group">
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center shadow-sm">
+                                                @if($producto->imagenes->isNotEmpty())
+                                                    <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                                                @else
+                                                    <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
+                                                @endif
+                                            </div>
+                                            <span class="font-semibold text-slate-800">{{ $producto->nombre }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-5 py-3.5 font-mono text-slate-500 text-[11px]">{{ $producto->sku ?? '—' }}</td>
+                                    <td class="px-5 py-3.5 text-slate-400">—</td>
+                                    <td class="px-5 py-3.5">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold tabular-nums {{ $sinStock ? 'text-red-600' : ($stockBajo ? 'text-amber-600' : 'text-slate-800') }}">
+                                                {{ $producto->stock }}
+                                            </span>
+                                            @if($sinStock)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">Sin Stock</span>
+                                            @elseif($stockBajo)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">Stock Bajo</span>
                                             @else
-                                                <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">Disponible</span>
                                             @endif
                                         </div>
-                                        <span class="font-semibold text-slate-800">{{ $producto->nombre }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-3.5 font-mono text-slate-500 text-[11px]">{{ $producto->sku ?? '—' }}</td>
-                                <td class="px-5 py-3.5 text-slate-400">—</td>
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-bold tabular-nums {{ $sinStock ? 'text-red-600' : ($stockBajo ? 'text-amber-600' : 'text-slate-800') }}">
-                                            {{ $producto->stock }}
-                                        </span>
-                                        @if($sinStock)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">Sin Stock</span>
-                                        @elseif($stockBajo)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">Stock Bajo</span>
-                                        @else
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">Disponible</span>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="px-5 py-3.5 text-slate-500 tabular-nums">{{ $producto->stock_minimo }}</td>
-                                <td class="px-5 py-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <a href="{{ route('admin.inventario.entrada.form') }}?producto_id={{ $producto->id }}"
-                                           title="Registrar entrada"
-                                           class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors">
-                                            <span class="material-symbols-outlined text-[16px]">south_east</span>
-                                        </a>
-                                        <a href="{{ route('admin.inventario.ajuste.form') }}?producto_id={{ $producto->id }}"
-                                           title="Ajustar stock"
-                                           class="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
-                                            <span class="material-symbols-outlined text-[16px]">edit</span>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-
-                        {{-- Variantes --}}
-                        @foreach($variantes as $variante)
-                            @php
-                                $stockBajoV  = $variante->stock <= $variante->producto->stock_minimo;
-                                $sinStockV   = $variante->stock === 0;
-                                $labelV = $variante->opciones->map(fn($o) => ($o->tipo?->nombre ?? '') . ': ' . $o->valor)->join(' / ');
-                            @endphp
-                            <tr class="hover:bg-slate-50/70 transition-colors group">
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center shadow-sm">
-                                            @if($variante->imagen_ruta)
-                                                <img src="{{ asset('storage/' . $variante->imagen_ruta) }}" alt="{{ $variante->producto->nombre }}" class="w-full h-full object-cover">
-                                            @elseif($variante->producto->imagenes->isNotEmpty())
-                                                <img src="{{ $variante->producto->imagen_url }}" alt="{{ $variante->producto->nombre }}" class="w-full h-full object-cover">
-                                            @else
-                                                <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
-                                            @endif
+                                    </td>
+                                    <td class="px-5 py-3.5 text-slate-500 tabular-nums">{{ $producto->stock_minimo }}</td>
+                                    <td class="px-5 py-3.5 text-right">
+                                        <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <a href="{{ route('admin.inventario.entrada.form') }}?producto_id={{ $producto->id }}"
+                                               title="Registrar entrada"
+                                               class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">south_east</span>
+                                            </a>
+                                            <a href="{{ route('admin.inventario.ajuste.form') }}?producto_id={{ $producto->id }}"
+                                               title="Ajustar stock"
+                                               class="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                                                <span class="material-symbols-outlined text-[16px]">edit</span>
+                                            </a>
                                         </div>
-                                        <span class="font-semibold text-slate-800">{{ $variante->producto->nombre }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-5 py-3.5 font-mono text-slate-500 text-[11px]">{{ $variante->sku ?? '—' }}</td>
-                                <td class="px-5 py-3.5 text-slate-500 text-[11px]">{{ $labelV ?: '—' }}</td>
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-bold tabular-nums {{ $sinStockV ? 'text-red-600' : ($stockBajoV ? 'text-amber-600' : 'text-slate-800') }}">
-                                            {{ $variante->stock }}
-                                        </span>
-                                        @if($sinStockV)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">Sin Stock</span>
-                                        @elseif($stockBajoV)
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">Stock Bajo</span>
-                                        @else
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">Disponible</span>
-                                        @endif
-                                    </div>
-                                </td>
-                                <td class="px-5 py-3.5 text-slate-500 tabular-nums">{{ $variante->producto->stock_minimo }}</td>
-                                <td class="px-5 py-3.5 text-right">
-                                    <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <a href="{{ route('admin.inventario.entrada.form') }}?producto_id={{ $variante->producto_id }}&variante_id={{ $variante->id }}"
-                                           title="Registrar entrada"
-                                           class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors">
-                                            <span class="material-symbols-outlined text-[16px]">south_east</span>
-                                        </a>
-                                        <a href="{{ route('admin.inventario.ajuste.form') }}?producto_id={{ $variante->producto_id }}&variante_id={{ $variante->id }}"
-                                           title="Ajustar stock"
-                                           class="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
-                                            <span class="material-symbols-outlined text-[16px]">edit</span>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-
-                        @if($productos->isEmpty() && $variantes->isEmpty())
+                                    </td>
+                                </tr>
+                            @else
+                                @foreach($producto->variantes as $variante)
+                                    @php
+                                        $stockBajoV  = $variante->stock <= $producto->stock_minimo;
+                                        $sinStockV   = $variante->stock === 0;
+                                        $labelV = $variante->opciones->map(fn($o) => ($o->tipo?->nombre ?? '') . ': ' . $o->valor)->join(' / ');
+                                    @endphp
+                                    <tr class="hover:bg-slate-50/70 transition-colors group">
+                                        <td class="px-5 py-3.5">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-12 h-12 rounded-lg border border-slate-200 overflow-hidden flex-shrink-0 bg-slate-100 flex items-center justify-center shadow-sm">
+                                                    @if($variante->imagen_ruta)
+                                                        <img src="{{ asset('storage/' . $variante->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                                                    @elseif($producto->imagenes->isNotEmpty())
+                                                        <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                                                    @else
+                                                        <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
+                                                    @endif
+                                                </div>
+                                                <span class="font-semibold text-slate-800">{{ $producto->nombre }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-5 py-3.5 font-mono text-slate-500 text-[11px]">{{ $variante->sku ?? '—' }}</td>
+                                        <td class="px-5 py-3.5 text-slate-500 text-[11px]">{{ $labelV ?: '—' }}</td>
+                                        <td class="px-5 py-3.5">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold tabular-nums {{ $sinStockV ? 'text-red-600' : ($stockBajoV ? 'text-amber-600' : 'text-slate-800') }}">
+                                                    {{ $variante->stock }}
+                                                </span>
+                                                @if($sinStockV)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">Sin Stock</span>
+                                                @elseif($stockBajoV)
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">Stock Bajo</span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">Disponible</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                        <td class="px-5 py-3.5 text-slate-500 tabular-nums">{{ $producto->stock_minimo }}</td>
+                                        <td class="px-5 py-3.5 text-right">
+                                            <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <a href="{{ route('admin.inventario.entrada.form') }}?producto_id={{ $producto->id }}&variante_id={{ $variante->id }}"
+                                                   title="Registrar entrada"
+                                                   class="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-colors">
+                                                    <span class="material-symbols-outlined text-[16px]">south_east</span>
+                                                </a>
+                                                <a href="{{ route('admin.inventario.ajuste.form') }}?producto_id={{ $producto->id }}&variante_id={{ $variante->id }}"
+                                                   title="Ajustar stock"
+                                                   class="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                                                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        @empty
                             <tr>
                                 <td colspan="6" class="px-5 py-16 text-center">
                                     <div class="flex flex-col items-center gap-3">
@@ -467,27 +465,15 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endif
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
             {{-- Pagination --}}
-            @if($productos->total() > 0 || $variantes->total() > 0)
-                <div class="flex flex-col border-t border-slate-100 bg-slate-50/40 divide-y divide-slate-100">
-                    @if($productos->total() > 0)
-                        <div class="px-6 py-4">
-                            <div class="text-xs text-slate-500 font-bold mb-2">Paginación de Productos (Sin Variantes)</div>
-                            {{ $productos->links('vendor.pagination.admin-tailwind') }}
-                        </div>
-                    @endif
-                    
-                    @if($variantes->total() > 0)
-                        <div class="px-6 py-4">
-                            <div class="text-xs text-slate-500 font-bold mb-2">Paginación de Variantes</div>
-                            {{ $variantes->links('vendor.pagination.admin-tailwind') }}
-                        </div>
-                    @endif
+            @if($productos->total() > 0)
+                <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/40">
+                    {{ $productos->links('vendor.pagination.admin-tailwind') }}
                 </div>
             @endif
         </div>

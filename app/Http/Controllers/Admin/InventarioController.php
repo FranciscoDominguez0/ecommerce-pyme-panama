@@ -55,17 +55,20 @@ class InventarioController extends Controller
 
     public function stock(Request $request)
     {
-        // Obtener productos sin variantes
-        $qProductos = Producto::with(['categoria', 'imagenes'])
+        $qProductos = Producto::with(['categoria', 'imagenes', 'variantes' => function($q) {
+                $q->where('activo', true)->with('opciones.tipo');
+            }])
             ->sinEliminar()
-            ->whereDoesntHave('variantes')
             ->orderBy('nombre');
 
         if ($request->filled('q')) {
             $buscar = $request->q;
             $qProductos->where(function ($q) use ($buscar) {
                 $q->where('nombre', 'ilike', "%{$buscar}%")
-                  ->orWhere('sku', 'ilike', "%{$buscar}%");
+                  ->orWhere('sku', 'ilike', "%{$buscar}%")
+                  ->orWhereHas('variantes', function($qv) use($buscar) {
+                      $qv->where('sku', 'ilike', "%{$buscar}%");
+                  });
             });
         }
 
@@ -74,39 +77,25 @@ class InventarioController extends Controller
         }
 
         if ($request->boolean('stock_bajo')) {
-            $qProductos->whereRaw('stock <= stock_minimo');
-        }
-
-        // Obtener variantes con su producto
-        $qVariantes = VarianteProducto::with(['producto.imagenes', 'producto.categoria', 'opciones.tipo'])
-            ->whereHas('producto', fn($p) => $p->sinEliminar())
-            ->where('activo', true)
-            ->orderBy('id');
-
-        if ($request->filled('q')) {
-            $buscar = $request->q;
-            $qVariantes->where(function ($q) use ($buscar) {
-                $q->where('sku', 'ilike', "%{$buscar}%")
-                  ->orWhereHas('producto', fn($p) => $p->where('nombre', 'ilike', "%{$buscar}%"));
+            $qProductos->where(function ($q) {
+                $q->whereDoesntHave('variantes', function($qv) {
+                      $qv->where('activo', true);
+                  })
+                  ->whereRaw('stock <= stock_minimo')
+                  ->orWhereHas('variantes', function($qv) {
+                      $qv->where('activo', true)
+                         ->whereRaw('variantes_producto.stock <= productos.stock_minimo');
+                  });
             });
         }
 
-        if ($request->filled('categoria')) {
-            $qVariantes->whereHas('producto', fn($p) => $p->where('categoria_id', $request->categoria));
-        }
-
-        if ($request->boolean('stock_bajo')) {
-            $qVariantes->whereHas('producto', fn($p) => $p->whereRaw('variantes_producto.stock <= productos.stock_minimo'));
-        }
-
-        // Unificamos en una lista paginada de forma simple: products first, then variants
-        $productos = $qProductos->paginate(15, ['*'], 'p_page')->withQueryString();
-        $variantes = $qVariantes->paginate(15, ['*'], 'v_page')->withQueryString();
+        // Unificamos en una lista paginada por producto
+        $productos = $qProductos->paginate(20)->withQueryString();
 
         $kpis       = $this->inventario->calcularKpis();
         $categorias = \App\Models\Categoria::orderBy('nombre')->get(['id', 'nombre']);
 
-        return view('admin.inventario.index', compact('productos', 'variantes', 'kpis', 'categorias'))
+        return view('admin.inventario.index', compact('productos', 'kpis', 'categorias'))
             ->with('vista', 'stock');
     }
 

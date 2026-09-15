@@ -1,4 +1,15 @@
 @if ($paginator->total() > 0)
+    @php
+        $paginator->onEachSide(1);
+        $window = \Illuminate\Pagination\UrlWindow::make($paginator);
+        $elements = array_filter([
+            $window['first'],
+            is_array($window['slider']) ? '...' : null,
+            $window['slider'],
+            is_array($window['last']) ? '...' : null,
+            $window['last'],
+        ]);
+    @endphp
     <nav role="navigation" aria-label="Paginación" class="flex flex-col items-center gap-2 w-full py-1">
 
         {{-- Controles de página --}}
