@@ -200,10 +200,25 @@
                     </div>
                 </dl>
                 <div class="mt-4 pt-4 border-t border-slate-200">
-                    <p class="text-sm text-slate-500">
+                    <p class="text-sm text-slate-500 mb-2">
                         <span class="font-medium text-slate-900">Método de pago:</span> 
                         <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $factura->metodo_pago) }}</span>
                     </p>
+                    @if($factura->metodo_pago === 'stripe')
+                        @php
+                            $detallesTarjeta = $factura->pedido->detalles_tarjeta;
+                            $stripeBrand = strtolower($detallesTarjeta['tarjeta_marca'] ?? '');
+                            $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
+                        @endphp
+                        <div class="flex items-center gap-2 mt-2">
+                            <div class="shrink-0 shadow-2xs rounded border border-slate-200 overflow-hidden">
+                                <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-10 h-6.5 block" />
+                            </div>
+                            <span class="text-xs font-mono font-medium text-slate-700">
+                                {{ strtoupper($stripeBrand ?: 'Tarjeta') }} •••• {{ $stripeLast4 ?: '****' }}
+                            </span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
