@@ -188,7 +188,7 @@
         html.sidebar-collapsed #admin-sidebar .sidebar-text { display: none; }
         html.sidebar-collapsed #admin-sidebar .sidebar-group-title { display: none; }
         html.sidebar-collapsed #admin-sidebar .brand-text { display: none; }
-        html.sidebar-collapsed #admin-sidebar a, html.sidebar-collapsed #admin-sidebar button { 
+        html.sidebar-collapsed #admin-sidebar a, html.sidebar-collapsed #admin-sidebar button:not(#theme-toggle) { 
             justify-content: center; 
             padding-left: 0; 
             padding-right: 0; 
@@ -198,6 +198,13 @@
         }
         html.sidebar-collapsed #admin-sidebar .sidebar-header { justify-content: center; padding-left: 0; padding-right: 0; }
         html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
+        html.sidebar-collapsed #admin-sidebar .sidebar-version { display: none; }
+        html.sidebar-collapsed #admin-sidebar .sidebar-footer { padding-left: 0; padding-right: 0; justify-content: center; }
+        html.sidebar-collapsed #admin-sidebar #theme-toggle { transform: scale(0.85); margin: 0 auto; }
+        html.sidebar-collapsed #admin-sidebar .sidebar-active-item { 
+            padding-right: 0 !important; 
+            width: 52px !important; 
+        }
     </style>
 
     
@@ -455,10 +462,10 @@
         </div>
 
         <!-- Sidebar Footer / Actions -->
-        <div class="px-4 py-4 bg-black/20 flex justify-between items-center">
+        <div class="sidebar-footer px-4 py-4 bg-black/20 flex justify-between items-center transition-all duration-300">
 
             <!-- System Version (Subtle) -->
-            <div class="text-[10px] font-medium text-slate-500 tracking-wider cursor-default select-none">
+            <div class="sidebar-version text-[10px] font-medium text-slate-500 tracking-wider cursor-default select-none transition-all duration-300">
                 PayMe v1.0.0
             </div>
 
@@ -509,18 +516,15 @@
                     <input type="text" 
                            name="buscar" 
                            placeholder="Buscar productos, SKU, marca..." 
-                           class="w-full pl-9 pr-10 lg:pr-20 py-1.5 text-xs bg-slate-100/90 dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700/80 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none">
+                           class="w-full pl-9 pr-10 py-1.5 text-xs bg-slate-100/90 dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700/80 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none">
                     
-                    <!-- Botón Escáner -->
+                    <!-- Botón Escáner Funcional -->
                     <button type="button" 
                             onclick="window.ModalEscaner.abrir()"
                             title="Escanear Código de Barras"
-                            class="absolute right-2 lg:right-10 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
+                            class="absolute right-2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
                         <span class="material-symbols-outlined text-[16px]">barcode_scanner</span>
                     </button>
-
-                    <!-- Acceso rápido teclado -->
-                    <span class="absolute right-2 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-gray-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-gray-600 shadow-2xs pointer-events-none hidden lg:inline">⌘K</span>
                 </form>
 
                 <!-- Notifications Livewire Component -->
@@ -851,6 +855,67 @@
 
     <!-- Sistema Global de Confirmación Defensiva para Eliminación -->
     <x-modal-eliminar />
+
+    <!-- Sistema de Tooltips Profesional para el Sidebar -->
+    <div id="sidebar-tooltip-container" class="fixed z-[100] pointer-events-none opacity-0 transition-all duration-200 ease-out bg-slate-800 text-white text-xs font-semibold pl-3 pr-2.5 py-1.5 rounded-lg shadow-xl whitespace-nowrap border border-slate-700/80" style="transform: scale(0.95);">
+        <!-- Flechita (renderizada detrás del texto) -->
+        <div class="absolute w-2.5 h-2.5 bg-slate-800 border-l border-b border-slate-700/80 -left-[5px] top-1/2 rounded-sm z-0" style="transform: translateY(-50%) rotate(45deg);"></div>
+        <span id="sidebar-tooltip-text" class="relative z-10 block"></span>
+    </div>
+
+    <script>
+        document.addEventListener('mouseover', (e) => {
+            if (!document.documentElement.classList.contains('sidebar-collapsed') || window.innerWidth < 768) return;
+            
+            const target = e.target.closest('#admin-sidebar a, #admin-sidebar button');
+            if (target) {
+                const tooltip = document.getElementById('sidebar-tooltip-container');
+                const tooltipText = document.getElementById('sidebar-tooltip-text');
+                
+                let text = '';
+                const textSpan = target.querySelector('.sidebar-text');
+                if (textSpan) {
+                    text = textSpan.textContent.trim();
+                } else if (target.id === 'theme-toggle') {
+                    text = document.documentElement.classList.contains('dark') ? 'Modo Claro' : 'Modo Oscuro';
+                }
+                
+                if (!text) return;
+                
+                tooltipText.textContent = text;
+                
+                const rect = target.getBoundingClientRect();
+                tooltip.style.left = (rect.right + 14) + 'px';
+                tooltip.style.top = (rect.top + (rect.height / 2) - (tooltip.offsetHeight / 2)) + 'px';
+                
+                tooltip.classList.remove('opacity-0');
+                tooltip.classList.add('opacity-100');
+                tooltip.style.transform = 'scale(1)';
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('#admin-sidebar a, #admin-sidebar button');
+            if (target) {
+                const tooltip = document.getElementById('sidebar-tooltip-container');
+                tooltip.classList.add('opacity-0');
+                tooltip.classList.remove('opacity-100');
+                tooltip.style.transform = 'scale(0.95)';
+            }
+        });
+        
+        const sidebarNav = document.querySelector('#admin-sidebar nav');
+        if (sidebarNav) {
+            sidebarNav.addEventListener('scroll', () => {
+                const tooltip = document.getElementById('sidebar-tooltip-container');
+                if (!tooltip.classList.contains('opacity-0')) {
+                    tooltip.classList.add('opacity-0');
+                    tooltip.classList.remove('opacity-100');
+                    tooltip.style.transform = 'scale(0.95)';
+                }
+            }, { passive: true });
+        }
+    </script>
 
     @stack('scripts')
 </body>
