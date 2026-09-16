@@ -54,6 +54,14 @@ class FacturaService
             defer(function () use ($factura) {
                 try {
                     Mail::to($factura->usuario->email)->send(new FacturaMail($factura));
+                    
+                    ReenvioFactura::create([
+                        'factura_id' => $factura->id,
+                        'usuario_id' => $factura->usuario_id, // Atribuido al sistema o al usuario del pedido
+                        'email_destino' => $factura->usuario->email,
+                        'mensaje_personalizado' => 'Envío automático inicial',
+                        'enviado_en' => now(),
+                    ]);
                 } catch (\Throwable $e) {
                     \Illuminate\Support\Facades\Log::error('Error al enviar factura por correo (defer): ' . $e->getMessage());
                 }

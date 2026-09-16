@@ -91,10 +91,8 @@
         {{ $slot }}
     </div>
 
-    <!-- Sistema Global de Alertas y Notificaciones Toast (Desactivado solo en Olvidar Contraseña) -->
-    @if (!request()->is('forgot-password'))
-        <x-toast-alert />
-    @endif
+    <!-- Sistema Global de Alertas y Notificaciones Toast -->
+    <x-toast-alert />
 
     <!-- Skeletons Transition Overlays (compartido para login y 2fa) -->
     <div id="skeleton-container" class="hidden">

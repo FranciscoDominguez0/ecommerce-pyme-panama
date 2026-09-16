@@ -1,107 +1,144 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>Restablecer tu contraseña</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablece tu contraseña - PayMe Panamá</title>
     <style>
         body {
-            font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #f8fafc; /* slate-50 */
-            color: #334155; /* slate-700 */
             margin: 0;
             padding: 0;
+            background-color: #f8f9ff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #0b1c30;
+            -webkit-font-smoothing: antialiased;
         }
         .container {
-            max-width: 600px;
-            margin: 40px auto;
+            max-width: 580px;
+            margin: 30px auto;
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
             overflow: hidden;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e5eeff;
+            box-shadow: 0 4px 24px rgba(0, 35, 73, 0.06);
         }
         .header {
-            background-color: #059669; /* emerald-600 */
-            padding: 24px;
+            background-color: #002349;
+            padding: 32px 24px;
             text-align: center;
-            color: #ffffff;
         }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 600;
-        }
-        .content {
-            padding: 32px;
-        }
-        .content p {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
-        .button-container {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .button {
+        .logo-badge {
             display: inline-block;
-            background-color: #059669;
-            color: #ffffff !important;
-            text-decoration: none;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 12px;
         }
-        .button:hover {
-            background-color: #047857; /* emerald-700 */
+        .title {
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0;
+        }
+        .body {
+            padding: 32px 28px;
+        }
+        .greeting {
+            font-size: 18px;
+            font-weight: 600;
+            color: #002349;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+        .text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #43474e;
+            margin-bottom: 24px;
+        }
+        .btn-wrapper {
+            text-align: center;
+            margin: 32px 0;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #002349;
+            color: #ffffff !important;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 35, 73, 0.15);
+        }
+        .notice-box {
+            background-color: #e5eeff;
+            border-left: 4px solid #006c47;
+            padding: 14px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #002349;
+            margin-bottom: 24px;
+        }
+        .url-fallback {
+            font-size: 12px;
+            color: #74777f;
+            word-break: break-all;
+            line-height: 1.4;
+            border-top: 1px solid #e5eeff;
+            padding-top: 20px;
+            margin-top: 20px;
         }
         .footer {
-            background-color: #f1f5f9; /* slate-100 */
-            padding: 16px;
+            background-color: #f8f9ff;
+            padding: 20px 24px;
             text-align: center;
-            font-size: 14px;
-            color: #64748b; /* slate-500 */
-            border-top: 1px solid #e2e8f0;
-        }
-        .small {
-            font-size: 13px;
-            color: #64748b;
-            word-break: break-all;
-        }
-        a {
-            color: #059669;
+            font-size: 12px;
+            color: #74777f;
+            border-top: 1px solid #e5eeff;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>Restablecer Contraseña</h1>
-        </div>
-        <div class="content">
-            <p>¡Hola!</p>
-            <p>Estás recibiendo este correo electrónico porque solicitaste restablecer la contraseña de tu cuenta en <strong>{{ config('app.name') }}</strong>.</p>
-            
-            <div class="button-container">
-                <a href="{{ $url }}" class="button">Restablecer Mi Contraseña</a>
+            <div class="logo-badge">
+                @if(isset($message) && file_exists(public_path('images/logo.png')))
+                    <img src="{{ $message->embed(public_path('images/logo.png')) }}" alt="PayMe Panamá Logo" style="width: 48px; height: 48px; display: block;">
+                @else
+                    <img src="{{ asset('images/logo.png') }}" alt="PayMe Panamá Logo" style="width: 48px; height: 48px; display: block;">
+                @endif
             </div>
-            
-            <p>Este enlace de restablecimiento de contraseña expirará en 60 minutos.</p>
-            <p>Si no solicitaste restablecer tu contraseña, no es necesario realizar ninguna otra acción. Tu cuenta está segura.</p>
-            
-            <p>Saludos cordiales,<br>El equipo de {{ config('app.name') }}</p>
-            
-            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 32px 0;">
-            
-            <p class="small">
-                Si tienes problemas haciendo clic en el botón "Restablecer Mi Contraseña", copia y pega el siguiente enlace en tu navegador web:<br>
-                <a href="{{ $url }}">{{ $url }}</a>
-            </p>
+            <h1 class="title">PayMe Panamá</h1>
         </div>
+
+        <!-- Content -->
+        <div class="body">
+            <h2 class="greeting">¡Hola, {{ $usuario->nombre ?? 'Estimado usuario' }}!</h2>
+            <p class="text">
+                Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en <strong>PayMe Panamá</strong>. Si fuiste tú quien solicitó este cambio, haz clic en el siguiente botón para continuar:
+            </p>
+
+            <div class="btn-wrapper">
+                <a href="{{ $resetUrl }}" class="btn" target="_blank">Restablecer Contraseña</a>
+            </div>
+
+            <div class="notice-box">
+                ⏱️ <strong>Aviso de seguridad:</strong> Este enlace de recuperación expirará en <strong>60 minutos</strong>. Si no solicitaste este cambio, puedes ignorar este correo de manera segura; tu cuenta permanece protegida.
+            </div>
+
+            <div class="url-fallback">
+                Si el botón no funciona, copia y pega el siguiente enlace en tu navegador web:<br>
+                <a href="{{ $resetUrl }}" style="color: #006c47;">{{ $resetUrl }}</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
         <div class="footer">
-            &copy; {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.
+            © {{ date('Y') }} PayMe Panamá. Todos los derechos reservados.<br>
+            Plataforma de Comercio Electrónico y Pagos Seguros.
         </div>
     </div>
 </body>
