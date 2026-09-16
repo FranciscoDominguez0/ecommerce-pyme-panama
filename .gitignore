@@ -29,3 +29,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Documentación interna e ignorados temporales
+/ESTRUCTURA_PROYECTO.md
+/scratch_*.php
