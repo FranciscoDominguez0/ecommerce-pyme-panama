@@ -194,18 +194,18 @@ class PerfilController extends Controller
         if (preg_match('/windows|win32/i', $userAgent)) {
             $platform = 'Windows';
             $icon = 'desktop_windows';
+        } elseif (preg_match('/android/i', $userAgent)) {
+            $platform = 'Android';
+            $icon = 'phone_android';
+        } elseif (preg_match('/iphone|ipad|ipod/i', $userAgent)) {
+            $platform = 'iOS';
+            $icon = 'phone_iphone';
         } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
             $platform = 'macOS';
             $icon = 'desktop_mac';
         } elseif (preg_match('/linux/i', $userAgent)) {
             $platform = 'Linux';
             $icon = 'computer';
-        } elseif (preg_match('/iphone|ipad|ipod/i', $userAgent)) {
-            $platform = 'iOS';
-            $icon = 'phone_iphone';
-        } elseif (preg_match('/android/i', $userAgent)) {
-            $platform = 'Android';
-            $icon = 'phone_android';
         }
 
         if (preg_match('/edge/i', $userAgent)) {
