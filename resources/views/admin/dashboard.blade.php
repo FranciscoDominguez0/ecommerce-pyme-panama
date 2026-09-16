@@ -23,7 +23,7 @@
         box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
     }
     .dark .card-saas {
-        background-color: #1F2937; /* gray-800 */
+        background-color: #181a1b;
         border-color: #374151; /* gray-700 */
     }
     .dark .apexcharts-tooltip-title {
@@ -32,7 +32,7 @@
         color: #f8fafc !important;
     }
     .dark .apexcharts-tooltip {
-        background: #111827 !important;
+        background: #181a1b !important;
         border-color: #374151 !important;
         color: #f8fafc !important;
     }

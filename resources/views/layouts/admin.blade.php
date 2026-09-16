@@ -42,7 +42,7 @@
 
         :root {
             --admin-bg-light: #f8fafc;
-            --admin-bg-dark: #111827;
+            --admin-bg-dark: #181a1b;
             --admin-bg: var(--admin-bg-light);
         }
         html.dark {
@@ -200,7 +200,6 @@
         html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
     
     <!-- Dark Mode Initializer -->
     <script>
@@ -465,14 +464,14 @@
 
             <!-- Dark Mode Toggle Switch Premium -->
             <button id="theme-toggle" type="button" 
-                    class="relative inline-flex h-8 w-16 items-center rounded-full bg-slate-900 border border-slate-700 shadow-inner transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-1 focus:ring-offset-slate-800">
+                    class="relative inline-flex h-8 w-16 items-center rounded-full bg-slate-900 border border-slate-700 shadow-inner focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-1 focus:ring-offset-slate-800">
                 <span class="sr-only">Toggle Dark Mode</span>
                 <span id="theme-toggle-thumb" 
-                      class="inline-flex h-6 w-6 transform items-center justify-center rounded-full bg-white transition-transform duration-300 translate-x-1 shadow-sm">
+                      class="inline-flex h-6 w-6 transform items-center justify-center rounded-full bg-white translate-x-1 shadow-sm">
                     <!-- Sun Icon (Claro) -->
-                    <span id="theme-toggle-light-icon" class="material-symbols-outlined text-[14px] text-amber-500 transition-opacity duration-300" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+                    <span id="theme-toggle-light-icon" class="material-symbols-outlined text-[14px] text-amber-500" style="font-variation-settings: 'FILL' 1;">light_mode</span>
                     <!-- Moon Icon (Oscuro) -->
-                    <span id="theme-toggle-dark-icon" class="material-symbols-outlined text-[14px] text-slate-800 transition-opacity duration-300 absolute opacity-0" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
+                    <span id="theme-toggle-dark-icon" class="material-symbols-outlined text-[14px] text-slate-800 absolute opacity-0" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
                 </span>
             </button>
             
@@ -483,7 +482,7 @@
     <div id="main-content" class="md:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full transition-all duration-300 ease-in-out">
         
         <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
-        <header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+        <header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
             
             <!-- Left: Toggle & Responsive Breadcrumbs -->
             <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
@@ -755,14 +754,35 @@
         // BFCache (Back/Forward Cache) Fix
         window.addEventListener('pageshow', cleanupTransition);
         
-        // Livewire Navigation Fix (Borra estados de navegación tras SPA swap)
+        // Livewire Navigation Fix (Borra estados de navegación tras SPA swap y restaura UI)
         document.addEventListener('livewire:navigated', () => {
             cleanupTransition();
             handleLoginSkeleton();
             
-            // Re-bind theme toggle si Livewire reemplaza el DOM
+            // 1. Restaurar el estado del modo oscuro
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            if (typeof updateThemeToggleUI === 'function') {
+                updateThemeToggleUI();
+            }
+
+            // 2. Restaurar el estado del sidebar
+            if (localStorage.getItem('sidebarExpanded') === 'false') {
+                document.documentElement.classList.add('sidebar-collapsed');
+                const icon = document.getElementById('desktop-sidebar-icon');
+                if (icon) icon.textContent = 'menu';
+            } else {
+                document.documentElement.classList.remove('sidebar-collapsed');
+                const icon = document.getElementById('desktop-sidebar-icon');
+                if (icon) icon.textContent = 'menu_open';
+            }
+            
+            // 3. Re-bind theme toggle si Livewire reemplaza el DOM
             const themeToggleBtn = document.getElementById('theme-toggle');
-            if(themeToggleBtn) {
+            if (themeToggleBtn) {
                 themeToggleBtn.removeEventListener('click', window.toggleThemeHandler);
                 themeToggleBtn.addEventListener('click', window.toggleThemeHandler);
             }
@@ -796,6 +816,12 @@
         }
 
         window.toggleThemeHandler = function() {
+            // Habilitamos las transiciones solo al hacer clic manual para que haya animación
+            document.getElementById('theme-toggle').classList.add('transition-colors', 'duration-300');
+            document.getElementById('theme-toggle-thumb').classList.add('transition-transform', 'duration-300');
+            document.getElementById('theme-toggle-dark-icon').classList.add('transition-opacity', 'duration-300');
+            document.getElementById('theme-toggle-light-icon').classList.add('transition-opacity', 'duration-300');
+
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
@@ -808,7 +834,7 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateThemeToggleUI();
+            updateThemeToggleUI(true);
             const themeToggleBtn = document.getElementById('theme-toggle');
             if (themeToggleBtn) {
                 themeToggleBtn.addEventListener('click', window.toggleThemeHandler);
