@@ -90,6 +90,8 @@ class LoginController extends Controller
 
         // Forzar carga de roles para evitar problemas de caché (Spatie) justo al iniciar sesión
         $usuario->load('roles');
+        
+        $request->session()->put('is_from_login', true);
 
         $esAdmin = $usuario->roles->whereIn('name', ['admin', 'Admin', 'super_admin', 'Administrador'])->isNotEmpty();
 

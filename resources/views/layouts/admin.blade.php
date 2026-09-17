@@ -23,7 +23,7 @@
 <body class="text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative" style="background-color: var(--admin-bg);">
     
     @php
-        $isFromLogin = session('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
+        $isFromLogin = session()->pull('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
     @endphp
 
     @if($isFromLogin)

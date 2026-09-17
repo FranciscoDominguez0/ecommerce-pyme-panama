@@ -78,8 +78,7 @@ class ForgotPasswordController extends Controller
         }
 
         // Mensaje genérico de confirmación por seguridad
-        return back()->with('status', 'Si el correo electrónico existe en nuestra base de datos, te hemos enviado un enlace para restablecer tu contraseña.')
-                     ->with('toast_success', 'Enlace enviado al correo si existe en nuestros registros.');
+        return back()->with('status', 'Si el correo electrónico existe en nuestra base de datos, te hemos enviado un enlace para restablecer tu contraseña.');
     }
 
     /**

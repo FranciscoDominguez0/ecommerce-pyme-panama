@@ -123,6 +123,9 @@ class TwoFactorController extends Controller
 
         // Lógica de redirección basada en roles
         $usuario->load('roles');
+        
+        $request->session()->put('is_from_login', true);
+        
         $esAdmin = $usuario->roles->whereIn('name', ['admin', 'Admin', 'super_admin', 'Administrador'])->isNotEmpty();
 
         if ($esAdmin) {

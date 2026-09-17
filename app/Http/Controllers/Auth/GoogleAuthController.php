@@ -65,6 +65,8 @@ class GoogleAuthController extends Controller
 
             // Iniciar sesión (flujo normal sin 2FA)
             Auth::login($usuario, true);
+            
+            session()->put('is_from_login', true);
 
             // Redirigir al home o donde corresponda
             return $this->closePopupAndRedirect(redirect()->intended(route('home'))->getTargetUrl());
