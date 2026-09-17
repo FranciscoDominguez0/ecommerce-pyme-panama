@@ -1,12 +1,7 @@
 <!-- Sidebar Admin (Fondo #1F2937) -->
 <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl md:shadow-none flex flex-col justify-between select-none">
     
-    <!-- Desktop Edge Toggle Button -->
-    <button onclick="toggleDesktopSidebar()" 
-            class="hidden md:flex absolute w-7 h-7 rounded-full items-center justify-center transition-colors z-[60] box-content cursor-pointer bg-emerald-500 hover:bg-emerald-600"
-            style="right: -22px; top: 24px; border: 8px solid #1F2937; box-shadow: 4px 0 10px rgba(0,0,0,0.15);">
-        <span id="desktop-sidebar-icon" class="material-symbols-outlined transition-transform duration-300" style="font-size: 20px; color: #ffffff;">chevron_left</span>
-    </button>
+
     
     <!-- Encabezado y Navegación -->
     <div class="flex flex-col flex-1 min-h-0">
@@ -57,7 +52,7 @@
             @endphp
             <div x-data="{ open: {{ $isVentasActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
-                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isVentasActive ? 'text-white' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isVentasActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[19px] transition-colors {{ $isVentasActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isVentasActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">shopping_cart</span>
                         <span class="sidebar-text truncate transition-all duration-300">Ventas</span>
@@ -106,7 +101,7 @@
             @endphp
             <div x-data="{ open: {{ $isCatalogoActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
-                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isCatalogoActive ? 'text-white' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isCatalogoActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[19px] transition-colors {{ $isCatalogoActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isCatalogoActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">sell</span>
                         <span class="sidebar-text truncate transition-all duration-300">Catálogo</span>
@@ -153,7 +148,7 @@
             @endphp
             <div x-data="{ open: {{ $isLogisticaActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
-                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isLogisticaActive ? 'text-white' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isLogisticaActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[19px] transition-colors {{ $isLogisticaActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isLogisticaActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">local_shipping</span>
                         <span class="sidebar-text truncate transition-all duration-300">Logística & Stock</span>
@@ -192,7 +187,7 @@
             @endphp
             <div x-data="{ open: {{ $isMarketingActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
-                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isMarketingActive ? 'text-white' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isMarketingActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[19px] transition-colors {{ $isMarketingActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isMarketingActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">campaign</span>
                         <span class="sidebar-text truncate transition-all duration-300">Marketing</span>
@@ -253,7 +248,7 @@
             @endphp
             <div x-data="{ open: {{ $isSistemaActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
-                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isSistemaActive ? 'text-white' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
+                        class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isSistemaActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[19px] transition-colors {{ $isSistemaActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isSistemaActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">settings</span>
                         <span class="sidebar-text truncate transition-all duration-300">Sistema</span>

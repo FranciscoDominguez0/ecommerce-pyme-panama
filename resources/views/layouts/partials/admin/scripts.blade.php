@@ -12,16 +12,7 @@
         html.classList.toggle('sidebar-collapsed');
         const isCollapsed = html.classList.contains('sidebar-collapsed');
         localStorage.setItem('sidebarExpanded', !isCollapsed);
-        const icon = document.getElementById('desktop-sidebar-icon');
-        if (icon) icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
     }
-
-    // Initialize desktop icon
-    document.addEventListener('DOMContentLoaded', () => {
-        const isCollapsed = document.documentElement.classList.contains('sidebar-collapsed');
-        const icon = document.getElementById('desktop-sidebar-icon');
-        if (icon) icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
-    });
 
     // Mantener la posición del scroll del sidebar entre recargas de página
     document.addEventListener("DOMContentLoaded", function() {

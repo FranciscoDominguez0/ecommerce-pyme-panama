@@ -198,6 +198,7 @@
         margin: 0;
         padding: 0;
         pointer-events: none;
+        position: absolute;
     }
     
     html.sidebar-collapsed #admin-sidebar .sidebar-group-title,
@@ -244,7 +245,7 @@
 
     /* Estilos del panel colapsado */
     html.sidebar-collapsed #admin-sidebar nav > div > a, 
-    html.sidebar-collapsed #admin-sidebar nav > div > .nav-group > button { 
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button { 
         padding: 0 !important;
         justify-content: center !important;
         width: 40px !important; 
@@ -255,8 +256,8 @@
     
     /* Eliminar gaps internos que desfasaban el centrado */
     html.sidebar-collapsed #admin-sidebar nav > div > a,
-    html.sidebar-collapsed #admin-sidebar nav > div > .nav-group > button,
-    html.sidebar-collapsed #admin-sidebar nav > div > .nav-group > button > div {
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button,
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button > div {
         gap: 0 !important;
     }
     
@@ -293,9 +294,7 @@
     }
     
     /* Tooltips oscuros (etiquetas) solo para items individuales */
-    html.sidebar-collapsed #admin-sidebar a.group:hover .sidebar-text {
-        opacity: 1 !important;
-        max-width: 200px !important;
+    html.sidebar-collapsed #admin-sidebar a.group .sidebar-text {
         position: absolute;
         left: 52px;
         top: 50%;
@@ -310,14 +309,22 @@
         z-index: 10000;
         pointer-events: none;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        will-change: opacity, transform;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+        max-width: 200px !important;
+        margin: 0;
     }
     
-    html.dark.sidebar-collapsed #admin-sidebar a.group:hover .sidebar-text {
+    html.dark.sidebar-collapsed #admin-sidebar a.group .sidebar-text {
         background-color: #f8fafc;
         color: #0f172a;
     }
 
+    html.sidebar-collapsed #admin-sidebar a.group:hover .sidebar-text {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
     /* Cabecera del popover flotante */
     .popover-header { 
         display: none; 
@@ -370,11 +377,29 @@
     html.sidebar-collapsed #admin-sidebar #theme-toggle { transform: scale(0.85); margin: 0 auto; }
     
     /* Ítem activo en modo colapsado */
-    html.sidebar-collapsed #admin-sidebar nav > div > a.sidebar-active-item { 
-        padding-right: 0 !important; 
-        width: 44px !important; 
-        margin-left: 10px !important;
-        padding-left: 12px !important;
+    html.sidebar-collapsed #admin-sidebar nav > div > a.sidebar-active-item,
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button.is-active-parent { 
+        padding: 0 !important; 
+        width: 40px !important; 
+        height: 40px !important; 
+        margin-left: auto !important;
+        margin-right: auto !important;
+        border-radius: 9999px !important;
+        background-color: var(--admin-bg) !important;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar nav > div > a.sidebar-active-item::before,
+    html.sidebar-collapsed #admin-sidebar nav > div > a.sidebar-active-item::after,
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button.is-active-parent::before,
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button.is-active-parent::after {
+        display: none !important;
+    }
+
+    html.sidebar-collapsed #admin-sidebar nav > .nav-group > button.is-active-parent .material-symbols-outlined {
+        color: #059669 !important;
+    }
+    html.dark.sidebar-collapsed #admin-sidebar nav > .nav-group > button.is-active-parent .material-symbols-outlined {
+        color: #10B981 !important;
     }
     
     /* Desactivar corte transparente (seamless) en sub-ítems del menú flotante */
