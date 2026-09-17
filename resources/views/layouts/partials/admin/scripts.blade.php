@@ -3,7 +3,8 @@
         const sidebar = document.getElementById('admin-sidebar');
         const backdrop = document.getElementById('mobile-sidebar-backdrop');
         sidebar.classList.toggle('-translate-x-full');
-        backdrop.classList.toggle('hidden');
+        backdrop.classList.toggle('opacity-0');
+        backdrop.classList.toggle('pointer-events-none');
     }
 
     function toggleDesktopSidebar() {

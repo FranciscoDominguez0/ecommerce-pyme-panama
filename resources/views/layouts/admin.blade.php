@@ -34,7 +34,7 @@
 
     <div id="top-progress-bar"></div>
 
-    <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 hidden md:hidden transition-opacity backdrop-blur-sm"></div>
+    <div id="mobile-sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/80 z-40 opacity-0 pointer-events-none md:hidden transition-opacity duration-300 backdrop-blur-sm"></div>
 
     @include('layouts.partials.admin.sidebar')
 

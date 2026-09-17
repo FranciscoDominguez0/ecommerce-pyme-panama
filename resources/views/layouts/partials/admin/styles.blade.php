@@ -163,26 +163,88 @@
         #admin-sidebar { width: var(--sidebar-width) !important; }
         #main-content { margin-left: var(--sidebar-width) !important; }
     }
-    /* Collapsible Sidebar Styles */
-    html.sidebar-collapsed #admin-sidebar .sidebar-text { display: none; }
-    html.sidebar-collapsed #admin-sidebar .sidebar-group-title { display: none; }
-    html.sidebar-collapsed #admin-sidebar .brand-text { display: none; }
-    html.sidebar-collapsed #admin-sidebar a, html.sidebar-collapsed #admin-sidebar button:not(#theme-toggle) { 
-        justify-content: center; 
-        padding-left: 0; 
-        padding-right: 0; 
+    /* Collapsible Sidebar Styles - Smooth Animations */
+    #admin-sidebar .sidebar-text,
+    #admin-sidebar .brand-text,
+    #admin-sidebar .sidebar-version {
+        transition: opacity 0.25s ease, max-width 0.3s ease, margin 0.3s ease;
+        white-space: nowrap;
+        opacity: 1;
+        max-width: 200px;
+        overflow: hidden;
+    }
+    
+    #admin-sidebar .sidebar-group-title {
+        transition: opacity 0.2s ease, max-width 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+        white-space: nowrap;
+        opacity: 1;
+        max-width: 200px;
+        height: 16px;
+        overflow: hidden;
+    }
+
+    html.sidebar-collapsed #admin-sidebar .sidebar-text,
+    html.sidebar-collapsed #admin-sidebar .brand-text,
+    html.sidebar-collapsed #admin-sidebar .sidebar-version { 
+        opacity: 0;
+        max-width: 0;
+        margin: 0;
+        padding: 0;
+        pointer-events: none;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar .sidebar-group-title {
+        opacity: 0;
+        max-width: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+        pointer-events: none;
+    }
+
+    html.sidebar-collapsed #admin-sidebar nav a, 
+    html.sidebar-collapsed #admin-sidebar button:not(#theme-toggle) { 
+        gap: 0;
+        padding-left: 10px; /* Centra el icono */
+        padding-right: 10px;
         width: 40px; 
         height: 40px; 
+        margin-left: 12px !important;
+        margin-right: 12px !important;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar .sidebar-header { 
+        padding: 0;
+        justify-content: center;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar .sidebar-header a {
+        justify-content: center;
+        gap: 0;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar .brand-logo-container { 
         margin: 0 auto; 
     }
-    html.sidebar-collapsed #admin-sidebar .sidebar-header { justify-content: center; padding-left: 0; padding-right: 0; }
-    html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
-    html.sidebar-collapsed #admin-sidebar .sidebar-version { display: none; }
-    html.sidebar-collapsed #admin-sidebar .sidebar-footer { padding-left: 0; padding-right: 0; justify-content: center; }
-    html.sidebar-collapsed #admin-sidebar #theme-toggle { transform: scale(0.85); margin: 0 auto; }
+    
+    html.sidebar-collapsed #admin-sidebar .sidebar-footer { 
+        padding-left: 0; 
+        padding-right: 0; 
+        padding-top: 16px;
+        padding-bottom: 16px;
+        justify-content: center; 
+    }
+    
+    html.sidebar-collapsed #admin-sidebar #theme-toggle { 
+        transform: scale(0.85); 
+        margin: 0 auto; 
+    }
+    
     html.sidebar-collapsed #admin-sidebar .sidebar-active-item { 
         padding-right: 0 !important; 
-        width: 52px !important; 
+        width: 44px !important; 
+        margin-left: 10px !important;
+        padding-left: 12px !important;
     }
 </style>
 
