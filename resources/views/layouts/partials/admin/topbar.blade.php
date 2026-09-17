@@ -8,10 +8,7 @@
             <span class="material-symbols-outlined text-[22px]">menu</span>
         </button>
         
-        <!-- Desktop Sidebar Toggle -->
-        <button onclick="toggleDesktopSidebar()" class="hidden md:block p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Alternar menú lateral">
-            <span class="material-symbols-outlined text-[22px]" id="desktop-sidebar-icon">menu</span>
-        </button>
+        <!-- Desktop Sidebar Toggle removed (Moved to edge of sidebar) -->
 
         <!-- Breadcrumbs de Navegación -->
         <x-admin-breadcrumb />

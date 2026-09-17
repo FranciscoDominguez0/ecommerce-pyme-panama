@@ -12,18 +12,15 @@
         html.classList.toggle('sidebar-collapsed');
         const isCollapsed = html.classList.contains('sidebar-collapsed');
         localStorage.setItem('sidebarExpanded', !isCollapsed);
-        document.getElementById('desktop-sidebar-icon').textContent = isCollapsed ? 'menu' : 'menu_open';
+        const icon = document.getElementById('desktop-sidebar-icon');
+        if (icon) icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
     }
 
     // Initialize desktop icon
     document.addEventListener('DOMContentLoaded', () => {
-        if (document.documentElement.classList.contains('sidebar-collapsed')) {
-            const icon = document.getElementById('desktop-sidebar-icon');
-            if (icon) icon.textContent = 'menu';
-        } else {
-            const icon = document.getElementById('desktop-sidebar-icon');
-            if (icon) icon.textContent = 'menu_open';
-        }
+        const isCollapsed = document.documentElement.classList.contains('sidebar-collapsed');
+        const icon = document.getElementById('desktop-sidebar-icon');
+        if (icon) icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
     });
 
     // Mantener la posición del scroll del sidebar entre recargas de página
@@ -155,11 +152,11 @@
         if (localStorage.getItem('sidebarExpanded') === 'false') {
             document.documentElement.classList.add('sidebar-collapsed');
             const icon = document.getElementById('desktop-sidebar-icon');
-            if (icon) icon.textContent = 'menu';
+            if (icon) icon.style.transform = 'rotate(180deg)';
         } else {
             document.documentElement.classList.remove('sidebar-collapsed');
             const icon = document.getElementById('desktop-sidebar-icon');
-            if (icon) icon.textContent = 'menu_open';
+            if (icon) icon.style.transform = 'rotate(0deg)';
         }
         
         // 3. Re-bind theme toggle si Livewire reemplaza el DOM
@@ -237,6 +234,12 @@
         
         const target = e.target.closest('#admin-sidebar a, #admin-sidebar button');
         if (target) {
+            // Despachar evento para que Alpine cierre los popovers pineados de otros grupos
+            window.dispatchEvent(new CustomEvent('sidebar-hover', { detail: target.closest('.nav-group') || target }));
+
+            // Ignorar botones de grupo porque abren un popover flotante
+            if (target.closest('.nav-group')) return;
+
             const tooltip = document.getElementById('sidebar-tooltip-container');
             const tooltipText = document.getElementById('sidebar-tooltip-text');
             

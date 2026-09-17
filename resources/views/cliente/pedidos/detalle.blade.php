@@ -87,12 +87,6 @@
             </a>
             <div class="flex items-center gap-3">
                 <h1 class="text-xl md:text-2xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
-                @if($ultimoEstado !== 'reembolsado')
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold {{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }}">
-                        <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
-                        {{ $configEstado['label'] }}
-                    </span>
-                @endif
             </div>
             <p class="text-sm text-on-surface-variant mt-1">Realizado el {{ $pedido->creado_en->translatedFormat('d \d\e F, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}</p>
         </div>

@@ -163,23 +163,30 @@
         #admin-sidebar { width: var(--sidebar-width) !important; }
         #main-content { margin-left: var(--sidebar-width) !important; }
     }
-    /* Collapsible Sidebar Styles - Smooth Animations */
+    /* Animaciones optimizadas para el panel lateral */
     #admin-sidebar .sidebar-text,
     #admin-sidebar .brand-text,
     #admin-sidebar .sidebar-version {
-        transition: opacity 0.25s ease, max-width 0.3s ease, margin 0.3s ease;
+        transition: opacity 0.2s ease, max-width 0.2s ease, margin 0.2s ease;
+        will-change: opacity, max-width;
         white-space: nowrap;
         opacity: 1;
         max-width: 200px;
         overflow: hidden;
     }
     
-    #admin-sidebar .sidebar-group-title {
-        transition: opacity 0.2s ease, max-width 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
+    #admin-sidebar .sidebar-group-title,
+    #admin-sidebar .submenu-container {
+        /* Se removieron transiciones de height/max-height que causaban lag al no ser animables desde "auto" */
+        transition: max-width 0.2s ease;
+        will-change: max-width;
         white-space: nowrap;
         opacity: 1;
-        max-width: 200px;
-        height: 16px;
+        max-width: 250px;
+    }
+    
+    /* Ocultar desbordamiento al colapsar para evitar saltos visuales */
+    html.sidebar-collapsed #admin-sidebar .submenu-container:not(:hover) {
         overflow: hidden;
     }
 
@@ -193,58 +200,193 @@
         pointer-events: none;
     }
     
-    html.sidebar-collapsed #admin-sidebar .sidebar-group-title {
+    html.sidebar-collapsed #admin-sidebar .sidebar-group-title,
+    html.sidebar-collapsed #admin-sidebar .submenu-container {
         opacity: 0;
         max-width: 0;
+        max-height: 0;
         height: 0;
         margin: 0;
         padding: 0;
         pointer-events: none;
-    }
-
-    html.sidebar-collapsed #admin-sidebar nav a, 
-    html.sidebar-collapsed #admin-sidebar button:not(#theme-toggle) { 
-        gap: 0;
-        padding-left: 10px; /* Centra el icono */
-        padding-right: 10px;
-        width: 40px; 
-        height: 40px; 
-        margin-left: 12px !important;
-        margin-right: 12px !important;
+        border: none;
     }
     
-    html.sidebar-collapsed #admin-sidebar .sidebar-header { 
+    /* Líneas conectoras para submenús */
+    #admin-sidebar .submenu-item::before {
+        content: '';
+        position: absolute;
+        left: 23px;
+        top: 0;
+        bottom: 50%;
+        width: 12px;
+        border-bottom: 1.5px solid #334155;
+        border-left: 1.5px solid #334155;
+        border-bottom-left-radius: 8px;
+        pointer-events: none;
+        transition: border-color 0.2s ease;
+    }
+    
+    #admin-sidebar .submenu-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 23px;
+        top: 50%;
+        bottom: 0;
+        width: 1.5px;
+        background-color: #334155;
+        pointer-events: none;
+    }
+    
+    #admin-sidebar .submenu-item.is-active::before {
+        border-color: #10B981;
+    }
+
+    /* Estilos del panel colapsado */
+    html.sidebar-collapsed #admin-sidebar nav > div > a, 
+    html.sidebar-collapsed #admin-sidebar nav > div > .nav-group > button { 
+        padding: 0 !important;
+        justify-content: center !important;
+        width: 40px !important; 
+        height: 40px !important; 
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    
+    /* Eliminar gaps internos que desfasaban el centrado */
+    html.sidebar-collapsed #admin-sidebar nav > div > a,
+    html.sidebar-collapsed #admin-sidebar nav > div > .nav-group > button,
+    html.sidebar-collapsed #admin-sidebar nav > div > .nav-group > button > div {
+        gap: 0 !important;
+    }
+    
+    /* Permitir menús flotantes fuera del contenedor */
+    html.sidebar-collapsed #admin-sidebar nav {
+        overflow: visible !important;
+    }
+    
+    /* Menús flotantes (Popovers) al pasar el cursor o fijar con click */
+    html.sidebar-collapsed #admin-sidebar .nav-group:hover .submenu-container,
+    html.sidebar-collapsed #admin-sidebar .nav-group.is-pinned .submenu-container {
+        display: flex !important;
+        opacity: 1 !important;
+        max-width: 250px !important;
+        max-height: 800px !important;
+        height: auto !important;
+        pointer-events: auto !important;
+        position: absolute;
+        left: 56px;
+        top: 0;
+        background-color: #1f2937;
+        border-radius: 12px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        padding: 8px 0 !important;
+        border: 1px solid #374151;
+        will-change: opacity, transform;
+    }
+    
+    html.dark.sidebar-collapsed #admin-sidebar .nav-group:hover .submenu-container,
+    html.dark.sidebar-collapsed #admin-sidebar .nav-group.is-pinned .submenu-container {
+        background-color: #111827;
+        border-color: #1f2937;
+    }
+    
+    /* Tooltips oscuros (etiquetas) solo para items individuales */
+    html.sidebar-collapsed #admin-sidebar a.group:hover .sidebar-text {
+        opacity: 1 !important;
+        max-width: 200px !important;
+        position: absolute;
+        left: 52px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #1e293b;
+        color: #f8fafc;
+        padding: 4px 12px !important;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        z-index: 10000;
+        pointer-events: none;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        will-change: opacity, transform;
+    }
+    
+    html.dark.sidebar-collapsed #admin-sidebar a.group:hover .sidebar-text {
+        background-color: #f8fafc;
+        color: #0f172a;
+    }
+
+    /* Cabecera del popover flotante */
+    .popover-header { 
+        display: none; 
+    }
+    html.sidebar-collapsed #admin-sidebar .popover-header { 
+        display: block; 
+        padding: 8px 16px 8px 16px;
+        margin-bottom: 4px;
+        font-size: 13px;
+        font-weight: 800;
+        color: #f8fafc;
+        border-bottom: 1px solid #374151;
+        position: relative;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar .popover-header::after {
+        content: '';
+        position: absolute;
+        left: 23px;
+        top: 32px;
+        bottom: -4px;
+        width: 1.5px;
+        background-color: #334155;
+    }
+
+    html.dark.sidebar-collapsed #admin-sidebar .popover-header {
+        border-bottom-color: #1f2937;
+    }
+    
+    html.sidebar-collapsed #admin-sidebar .nav-group:hover > button .sidebar-text:not(.material-symbols-outlined) {
+        top: -16px;
+        transform: none;
+    }
+    
+    /* Centrado de elementos generales */
+    html.sidebar-collapsed #admin-sidebar .sidebar-header,
+    html.sidebar-collapsed #admin-sidebar .sidebar-footer { 
         padding: 0;
         justify-content: center;
     }
-    
+    html.sidebar-collapsed #admin-sidebar .sidebar-footer {
+        padding-top: 16px;
+        padding-bottom: 16px;
+    }
     html.sidebar-collapsed #admin-sidebar .sidebar-header a {
         justify-content: center;
         gap: 0;
     }
+    html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
+    html.sidebar-collapsed #admin-sidebar #theme-toggle { transform: scale(0.85); margin: 0 auto; }
     
-    html.sidebar-collapsed #admin-sidebar .brand-logo-container { 
-        margin: 0 auto; 
-    }
-    
-    html.sidebar-collapsed #admin-sidebar .sidebar-footer { 
-        padding-left: 0; 
-        padding-right: 0; 
-        padding-top: 16px;
-        padding-bottom: 16px;
-        justify-content: center; 
-    }
-    
-    html.sidebar-collapsed #admin-sidebar #theme-toggle { 
-        transform: scale(0.85); 
-        margin: 0 auto; 
-    }
-    
-    html.sidebar-collapsed #admin-sidebar .sidebar-active-item { 
+    /* Ítem activo en modo colapsado */
+    html.sidebar-collapsed #admin-sidebar nav > div > a.sidebar-active-item { 
         padding-right: 0 !important; 
         width: 44px !important; 
         margin-left: 10px !important;
         padding-left: 12px !important;
+    }
+    
+    /* Desactivar corte transparente (seamless) en sub-ítems del menú flotante */
+    html.sidebar-collapsed #admin-sidebar .submenu-container .sidebar-active-item {
+        border-radius: 8px !important;
+        margin-right: 12px !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #34D399 !important;
+    }
+    html.sidebar-collapsed #admin-sidebar .submenu-container .sidebar-active-item::before,
+    html.sidebar-collapsed #admin-sidebar .submenu-container .sidebar-active-item::after {
+        display: none !important;
     }
 </style>
 
