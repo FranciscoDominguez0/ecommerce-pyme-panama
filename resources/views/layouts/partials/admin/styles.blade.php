@@ -204,7 +204,16 @@
         pointer-events: none;
         position: absolute;
     }
-    
+
+    /* El badge del ícono solo se muestra cuando el sidebar está colapsado */
+    #admin-sidebar .sidebar-collapsed-badge {
+        display: none !important;
+    }
+    html.sidebar-collapsed #admin-sidebar .sidebar-collapsed-badge {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
     html.sidebar-collapsed #admin-sidebar .sidebar-group-title,
     html.sidebar-collapsed #admin-sidebar .submenu-container {
         opacity: 0;
