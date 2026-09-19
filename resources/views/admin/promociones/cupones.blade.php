@@ -129,7 +129,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($cupones as $cupon)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 /60 transition-colors group">
                             <!-- Código -->
                             <td class="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
                                 <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-100 dark:bg-transparent/90 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-mono font-bold tracking-wider transition-all duration-300 group/code">

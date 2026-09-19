@@ -203,7 +203,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
                         <th class="pb-3 pl-1">Nº Pedido</th>
                         <th class="pb-3">Cliente</th>
                         <th class="pb-3">Fecha</th>
@@ -215,7 +215,7 @@
                 </thead>
                 <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/80">
                     @forelse($transaccionesRecientes as $pedido)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3 pl-1 font-bold text-slate-900 dark:text-white">
                                 {{ $pedido->numero_pedido }}
                             </td>
@@ -278,7 +278,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
                         <th class="pb-3 w-10"></th>
                         <th class="pb-3">Producto</th>
                         <th class="pb-3">Categoría</th>
@@ -292,7 +292,7 @@
                         @php
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3">
                                 <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))

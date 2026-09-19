@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'brand' => 'unknown',
     'class' => 'w-12 h-8',
 ])
@@ -71,8 +71,8 @@
         <text x="24" y="27" font-size="5" font-weight="900" fill="#00478B" text-anchor="middle" font-family="sans-serif">UnionPay</text>
     </svg>
 @else
-    <!-- Tarjeta GenÃ©rica -->
-    <svg class="{{ $class }}" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tarjeta de crÃ©dito">
+    <!-- Tarjeta Genérica -->
+    <svg class="{{ $class }}" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tarjeta de crédito">
         <rect width="48" height="32" rx="4" fill="#1E293B"/>
         <rect y="6" width="48" height="6" fill="#0F172A"/>
         <rect x="6" y="18" width="8" height="6" rx="1.5" fill="#F59E0B"/>

@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'excelUrl' => null,
     'pdfUrl' => null,
     'excelOnclick' => null,
@@ -24,7 +24,7 @@
          class="absolute right-0 sm:left-auto mt-2 w-48 bg-white dark:bg-[#181a1b] rounded-xl shadow-lg border border-slate-100 dark:border-gray-700/80 overflow-hidden py-1"
          style="display: none;">
         
-        <!-- OpciÃ³n Excel -->
+        <!-- Opción Excel -->
         @if($excelUrl)
             <a href="{{ $excelUrl }}" target="_blank" @click="open = false"
                class="flex items-center gap-2 px-4 py-2.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 transition-colors w-full text-left">
@@ -39,7 +39,7 @@
             </button>
         @endif
         
-        <!-- OpciÃ³n PDF -->
+        <!-- Opción PDF -->
         @if($pdfUrl)
             <a href="{{ $pdfUrl }}" target="_blank" @click="open = false"
                class="flex items-center gap-2 px-4 py-2.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-rose-50 hover:text-rose-700 transition-colors w-full text-left">

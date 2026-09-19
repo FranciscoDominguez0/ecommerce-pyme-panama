@@ -583,7 +583,7 @@
 
         paginaItems.forEach(({ item, indexOriginal }) => {
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors';
+            tr.className = 'hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors';
             tr.innerHTML = `
                 <td class="py-2.5 px-4">
                     <div class="flex items-center gap-2">

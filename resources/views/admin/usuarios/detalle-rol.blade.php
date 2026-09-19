@@ -85,7 +85,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50">
                         @foreach($usuarios as $user)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                             <td class="py-3 px-4">
                                 @if($user->foto_perfil_ruta)
                                     <div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-gray-700 overflow-hidden border border-slate-200 dark:border-gray-700">
@@ -122,7 +122,7 @@
                                     <a href="{{ route('admin.usuarios.show', $user->id) }}" class="text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 p-1.5 rounded transition-colors" title="Ver Detalles">
                                         <span class="material-symbols-outlined text-[20px]">visibility</span>
                                     </a>
-                                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent p-1.5 rounded transition-colors" title="Editar">
+                                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-gray-800 p-1.5 rounded transition-colors" title="Editar">
                                         <span class="material-symbols-outlined text-[20px]">edit</span>
                                     </a>
                                     @if($user->id !== auth()->id())

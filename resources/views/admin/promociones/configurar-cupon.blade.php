@@ -78,10 +78,10 @@
                             <select id="tipo" 
                                     name="tipo" 
                                     required 
-                                    class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none cursor-pointer">
-                                <option value="porcentaje" {{ old('tipo', $cupon->tipo) === 'porcentaje' ? 'selected' : '' }}>Porcentaje (%)</option>
-                                <option value="monto_fijo" {{ old('tipo', $cupon->tipo) === 'monto_fijo' ? 'selected' : '' }}>Monto Fijo ($ USD/PAB)</option>
-                                <option value="envio_gratis" {{ old('tipo', $cupon->tipo) === 'envio_gratis' ? 'selected' : '' }}>Envío Gratis</option>
+                                    class="w-full bg-slate-50 dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none cursor-pointer">
+                                <option value="porcentaje" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white" {{ old('tipo', $cupon->tipo) === 'porcentaje' ? 'selected' : '' }}>Porcentaje (%)</option>
+                                <option value="monto_fijo" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white" {{ old('tipo', $cupon->tipo) === 'monto_fijo' ? 'selected' : '' }}>Monto Fijo ($ USD/PAB)</option>
+                                <option value="envio_gratis" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white" {{ old('tipo', $cupon->tipo) === 'envio_gratis' ? 'selected' : '' }}>Envío Gratis</option>
                             </select>
                         </div>
 
@@ -211,10 +211,10 @@
                         <select id="aplica_a" 
                                 name="aplica_a" 
                                 onchange="cambiarAlcance(this.value)" 
-                                class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none cursor-pointer">
-                            <option value="catalogo" {{ old('aplica_a', $cupon->aplica_a) === 'catalogo' || old('aplica_a', $cupon->aplica_a) === 'todo' ? 'selected' : '' }}>Todo el Catálogo</option>
-                            <option value="categoria" {{ old('aplica_a', $cupon->aplica_a) === 'categoria' ? 'selected' : '' }}>Categoría Específica</option>
-                            <option value="producto" {{ old('aplica_a', $cupon->aplica_a) === 'producto' ? 'selected' : '' }}>Producto Específico</option>
+                                class="w-full bg-slate-50 dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none cursor-pointer">
+                            <option value="catalogo" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white" {{ old('aplica_a', $cupon->aplica_a) === 'catalogo' || old('aplica_a', $cupon->aplica_a) === 'todo' ? 'selected' : '' }}>Todo el Catálogo</option>
+                            <option value="categoria" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white" {{ old('aplica_a', $cupon->aplica_a) === 'categoria' ? 'selected' : '' }}>Categoría Específica</option>
+                            <option value="producto" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white" {{ old('aplica_a', $cupon->aplica_a) === 'producto' ? 'selected' : '' }}>Producto Específico</option>
                         </select>
                     </div>
 
@@ -319,10 +319,10 @@
 
                 <div class="p-5 space-y-5">
                     <!-- Ticket Card Simulation -->
-                    <div class="border border-slate-200 dark:border-gray-700 rounded-2xl p-5 bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 shadow-xs relative overflow-hidden">
+                    <div class="border border-slate-200 dark:border-gray-700 rounded-2xl p-5 bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 dark:from-[#181a1b] dark:via-[#121415] dark:to-emerald-900/10 shadow-xs relative overflow-hidden">
                         <!-- Top Accent Badge -->
                         <div class="flex items-center justify-between mb-4">
-                            <span id="preview-tipo-badge" class="px-2.5 py-1 bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                            <span id="preview-tipo-badge" class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 rounded-lg text-[10px] font-bold uppercase tracking-wider">
                                 Porcentaje
                             </span>
                             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -370,7 +370,7 @@
                         </button>
 
                         <a href="{{ route('admin.promociones.cupones') }}" 
-                           class="w-full py-2.5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all flex items-center justify-center">
+                           class="w-full py-2.5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all flex items-center justify-center">
                             Cancelar
                         </a>
                     </div>

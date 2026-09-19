@@ -66,7 +66,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($promociones as $promo)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 /60 transition-colors">
                             <td class="py-3.5 px-5 font-bold text-slate-900 dark:text-white">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
@@ -170,10 +170,10 @@
             <!-- Zona de Envío -->
             <div>
                 <label for="zona_envio_id" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Zona de Envío</label>
-                <select id="zona_envio_id" name="zona_envio_id" required class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:bg-[#121415] focus:border-emerald-500 outline-none">
-                    <option value="">-- Selecciona una zona --</option>
+                <select id="zona_envio_id" name="zona_envio_id" required class="w-full bg-slate-50 dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 outline-none">
+                    <option value="" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white">-- Selecciona una zona --</option>
                     @foreach($zonasEnvio as $zona)
-                        <option value="{{ $zona->id }}">{{ $zona->nombre }} (${{ number_format($zona->costo, 2) }})</option>
+                        <option value="{{ $zona->id }}" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white">{{ $zona->nombre }} (${{ number_format($zona->costo, 2) }})</option>
                     @endforeach
                 </select>
             </div>

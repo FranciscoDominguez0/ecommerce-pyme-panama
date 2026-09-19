@@ -1,4 +1,4 @@
-﻿@props([
+@props([
     'active' => '',
 ])
 
@@ -79,8 +79,8 @@
                         class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary dark:text-blue-400">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">local_shipping</span>
                         <div class="text-left min-w-0">
-                            <p class="text-sm font-medium">Direcciones de EnvÃ­o</p>
-                            <p class="text-[11px] text-outline leading-tight">Gestiona tus envÃ­os</p>
+                            <p class="text-sm font-medium">Direcciones de Envío</p>
+                            <p class="text-[11px] text-outline leading-tight">Gestiona tus envíos</p>
                         </div>
                     </a>
 
@@ -89,7 +89,7 @@
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">lock</span>
                         <div class="text-left min-w-0">
                             <p class="text-sm font-medium">Seguridad</p>
-                            <p class="text-[11px] text-outline leading-tight">ContraseÃ±a y 2FA</p>
+                            <p class="text-[11px] text-outline leading-tight">Contraseña y 2FA</p>
                         </div>
                     </a>
 
@@ -97,7 +97,7 @@
                         class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary dark:text-blue-400">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">settings</span>
                         <div class="text-left min-w-0">
-                            <p class="text-sm font-medium">ConfiguraciÃ³n</p>
+                            <p class="text-sm font-medium">Configuración</p>
                             <p class="text-[11px] text-outline leading-tight">Datos personales</p>
                         </div>
                     </a>
@@ -216,7 +216,7 @@
                                     setCargando(false);
                                     if (failCallback) failCallback();
                                     if (window.mostrarToast) {
-                                        window.mostrarToast('error', 'Error de conexiÃ³n al guardar la foto.');
+                                        window.mostrarToast('error', 'Error de conexión al guardar la foto.');
                                     }
                                 });
                         }
@@ -229,7 +229,7 @@
 
                             if (!file.type || file.type.indexOf('image/') !== 0) {
                                 input.value = '';
-                                if (window.mostrarToast) window.mostrarToast('error', 'Selecciona un archivo de imagen vÃ¡lido.');
+                                if (window.mostrarToast) window.mostrarToast('error', 'Selecciona un archivo de imagen válido.');
                                 return;
                             }
 

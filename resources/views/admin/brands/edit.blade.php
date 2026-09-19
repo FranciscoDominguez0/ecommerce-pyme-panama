@@ -46,7 +46,7 @@
                            required
                            placeholder="Ej: Nintendo, Corsair, Kingston" 
                            oninput="generarSlugAutomatico(this.value)"
-                           class="w-full text-sm rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3.5 @error('name') border-rose-500 ring-rose-500/10 @enderror">
+                           class="w-full text-sm rounded-xl bg-white dark:bg-[#121415] text-slate-900 dark:text-white border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3.5 @error('name') border-rose-500 ring-rose-500/10 @enderror">
                     @error('name')
                         <p class="text-rose-600 text-xs font-semibold mt-1">{{ $message }}</p>
                     @enderror
@@ -68,7 +68,7 @@
                            name="slug" 
                            value="{{ old('slug', $brand->slug) }}" 
                            placeholder="ej: nintendo, corsair-gaming" 
-                           class="w-full text-sm font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3.5 @error('slug') border-rose-500 ring-rose-500/10 @enderror">
+                           class="w-full text-sm font-mono rounded-xl bg-white dark:bg-[#121415] text-slate-900 dark:text-white border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3.5 @error('slug') border-rose-500 ring-rose-500/10 @enderror">
                     @error('slug')
                         <p class="text-rose-600 text-xs font-semibold mt-1">{{ $message }}</p>
                     @enderror

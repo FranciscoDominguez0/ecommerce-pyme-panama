@@ -101,7 +101,7 @@
         <div class="overflow-x-auto overflow-y-auto max-h-[65vh] xl:max-h-[75vh]">
             <table class="w-full text-left border-collapse">
                 <thead class="sticky top-0 z-30 shadow-sm">
-                    <tr class="bg-slate-100 dark:bg-transparent border-b border-slate-300 dark:border-gray-700">
+                    <tr class="border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
                         <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-1/4">Módulo</th>
                         <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-24">Todos</th>
                         <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Ver</th>
@@ -116,10 +116,10 @@
                     
                     <tbody x-data="{ open: true }" class="border-b border-slate-200 dark:border-gray-700">
                         <!-- Group Header Row -->
-                        <tr @click="open = !open" class="bg-slate-50 dark:bg-transparent hover:bg-slate-100 dark:bg-transparent cursor-pointer transition-colors group">
+                        <tr @click="open = !open" class="bg-slate-50 dark:bg-transparent hover:bg-slate-100 dark:hover:bg-gray-700/30 cursor-pointer transition-colors group">
                             <td colspan="6" class="py-3 px-6">
                                 <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 transition-all duration-300 text-[20px]" :class="open ? 'rotate-180' : ''">expand_more</span>
+                                    <span class="material-symbols-outlined text-slate-400 group-hover:text-emerald-600 transition-all duration-300 text-[20px]" :class="open ? 'rotate-180' : ''">expand_more</span>
                                     <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ $nombreGrupo }}</h3>
                                     <span class="ml-auto text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-200 dark:bg-gray-700 px-2.5 py-0.5 rounded-full">{{ $modulosDelGrupo->count() }}</span>
                                 </div>
@@ -136,37 +136,37 @@
                                 $pEliminar = $permisos->first(fn($p) => str_ends_with($p->name, '.eliminar'));
                             @endphp
                             @if($pVer || $pCrear || $pEditar || $pEliminar)
-                            <tr x-show="open" class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/50 dark:hover:bg-gray-700/30 transition-colors border-t border-slate-100 dark:border-gray-700" id="row-{{ $slug }}">
+                            <tr x-show="open" class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors border-t border-slate-100 dark:border-gray-700" id="row-{{ $slug }}">
                                 <td class="py-4 px-6 pl-10">
                                     <span class="text-sm font-bold text-slate-900 dark:text-white capitalize block">{{ $moduloNombre ?: 'General' }}</span>
                                 </td>
                                 <td class="py-4 px-6 text-center bg-slate-50 dark:bg-transparent/30">
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 dark:border-gray-700 focus:ring-indigo-600 cursor-pointer select-all-row" onchange="toggleRowCheckboxes(this, 'row-{{ $slug }}')">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-emerald-600 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-emerald-600 cursor-pointer select-all-row" onchange="toggleRowCheckboxes(this, 'row-{{ $slug }}')">
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pVer)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pVer->name }}" class="form-checkbox h-5 w-5 text-slate-900 dark:text-white rounded border-slate-300 dark:border-gray-700 focus:ring-slate-900 cursor-pointer perm-checkbox ver-checkbox" onchange="togglePermissionsState(this, 'row-{{ $slug }}')" {{ in_array($pVer->name, $permisosRol) ? 'checked' : '' }} title="{{ $pVer->nombre ?? $pVer->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pVer->name }}" class="form-checkbox h-5 w-5 text-emerald-600 dark:text-emerald-500 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-emerald-600 cursor-pointer perm-checkbox ver-checkbox" onchange="togglePermissionsState(this, 'row-{{ $slug }}')" {{ in_array($pVer->name, $permisosRol) ? 'checked' : '' }} title="{{ $pVer->nombre ?? $pVer->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pCrear)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pCrear->name }}" class="form-checkbox h-5 w-5 text-slate-900 dark:text-white rounded border-slate-300 dark:border-gray-700 focus:ring-slate-900 cursor-pointer perm-checkbox" {{ in_array($pCrear->name, $permisosRol) ? 'checked' : '' }} title="{{ $pCrear->nombre ?? $pCrear->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pCrear->name }}" class="form-checkbox h-5 w-5 text-emerald-600 dark:text-emerald-500 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-emerald-600 cursor-pointer perm-checkbox" {{ in_array($pCrear->name, $permisosRol) ? 'checked' : '' }} title="{{ $pCrear->nombre ?? $pCrear->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pEditar)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pEditar->name }}" class="form-checkbox h-5 w-5 text-slate-900 dark:text-white rounded border-slate-300 dark:border-gray-700 focus:ring-slate-900 cursor-pointer perm-checkbox" {{ in_array($pEditar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEditar->nombre ?? $pEditar->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pEditar->name }}" class="form-checkbox h-5 w-5 text-emerald-600 dark:text-emerald-500 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-emerald-600 cursor-pointer perm-checkbox" {{ in_array($pEditar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEditar->nombre ?? $pEditar->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pEliminar)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pEliminar->name }}" class="form-checkbox h-5 w-5 text-red-600 rounded border-slate-300 dark:border-gray-700 focus:ring-red-600 cursor-pointer perm-checkbox" {{ in_array($pEliminar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEliminar->nombre ?? $pEliminar->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pEliminar->name }}" class="form-checkbox h-5 w-5 text-red-600 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-red-600 cursor-pointer perm-checkbox" {{ in_array($pEliminar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEliminar->nombre ?? $pEliminar->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
@@ -195,8 +195,8 @@
                         $pOtras = $permisos->filter(fn($p) => !preg_match('/\.(ver|crear|editar|eliminar)$/', $p->name) && str_starts_with($p->name, 'admin.'));
                     @endphp
                     @foreach($pOtras as $pOtra)
-                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
-                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-slate-300 dark:border-gray-700 focus:ring-emerald-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
+                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
+                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-emerald-600 dark:text-emerald-500 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-emerald-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
                             <span class="text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">{{ str_replace(['admin.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
                         </label>
                     @endforeach
@@ -207,7 +207,7 @@
         <!-- Storefront Cliente -->
         <div>
             <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                <span class="material-symbols-outlined text-indigo-600">storefront</span>
+                <span class="material-symbols-outlined text-emerald-600">storefront</span>
                 Permisos de Tienda (Cliente)
             </h3>
             <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -216,8 +216,8 @@
                         $pOtras = $permisos->filter(fn($p) => str_starts_with($p->name, 'cliente.'));
                     @endphp
                     @foreach($pOtras as $pOtra)
-                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
-                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 dark:border-gray-700 focus:ring-indigo-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
+                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
+                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-emerald-600 bg-white dark:bg-[#121415] rounded border-slate-300 dark:border-gray-600 focus:ring-emerald-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
                             <span class="text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">{{ str_replace(['cliente.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
                         </label>
                     @endforeach

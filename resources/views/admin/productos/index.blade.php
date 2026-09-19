@@ -210,7 +210,7 @@
                         @php
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                             
                             <!-- Miniatura / Ícono del Producto -->
                             <td class="py-3 px-4 text-center w-12">

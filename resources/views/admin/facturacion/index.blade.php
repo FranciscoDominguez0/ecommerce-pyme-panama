@@ -68,7 +68,7 @@
                 </thead>
                 <tbody class="bg-white dark:bg-[#181a1b] divide-y divide-slate-100 dark:divide-gray-700/50">
                     @forelse($facturas as $factura)
-                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 dark:bg-transparent transition-colors {{ $factura->estado === 'anulada' ? 'opacity-75' : '' }}">
+                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors {{ $factura->estado === 'anulada' ? 'opacity-75' : '' }}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="text-sm font-bold {{ $factura->estado === 'anulada' ? 'text-slate-500 dark:text-slate-400 line-through' : 'text-slate-900 dark:text-white' }}">{{ $factura->numero }}</span>
                         </td>

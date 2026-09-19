@@ -26,15 +26,15 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach($roles as $role)
     <!-- Role Card -->
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-6 hover:shadow-sm transition-all flex flex-col h-full relative overflow-hidden group">
+    <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-sm transition-all flex flex-col h-full relative overflow-hidden group">
         <div class="absolute top-0 left-0 w-1 h-full bg-slate-800"></div>
         <div class="flex justify-between items-start mb-4">
             <div>
-                <h4 class="font-label-caps text-xs text-on-surface font-bold tracking-wider mb-1 uppercase">{{ $role->nombre ?: $role->name }}</h4>
-                <p class="font-body-sm text-sm text-on-surface-variant h-10 line-clamp-2">{{ $role->descripcion ?? 'Acceso al sistema.' }}</p>
+                <h4 class=" text-xs text-slate-900 dark:text-white font-bold tracking-wider mb-1 uppercase">{{ $role->nombre ?: $role->name }}</h4>
+                <p class=" text-sm text-slate-500 dark:text-slate-400 h-10 line-clamp-2">{{ $role->descripcion ?? 'Acceso al sistema.' }}</p>
             </div>
             <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1 bg-secondary-container text-secondary px-2 py-1 rounded-sm font-label-caps text-[10px] uppercase">
+                <span class="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-2 py-1 rounded-sm  text-[10px] uppercase">
                     <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
                     Activo
                 </span>
@@ -51,34 +51,34 @@
         <div class="flex-grow">
             <div class="flex gap-8 mb-6 mt-4">
                 <div>
-                    <p class="font-body-sm text-sm text-on-surface-variant mb-1">Usuarios</p>
-                    <p class="font-numeric-data text-xl font-semibold text-on-surface">{{ $role->users_count }}</p>
+                    <p class=" text-sm text-slate-500 dark:text-slate-400 mb-1">Usuarios</p>
+                    <p class=" text-xl font-semibold text-slate-900 dark:text-white">{{ $role->users_count }}</p>
                 </div>
                 <div>
-                    <p class="font-body-sm text-sm text-on-surface-variant mb-1">Permisos</p>
-                    <p class="font-numeric-data text-xl font-semibold text-on-surface">{{ $role->permissions_count }}</p>
+                    <p class=" text-sm text-slate-500 dark:text-slate-400 mb-1">Permisos</p>
+                    <p class=" text-xl font-semibold text-slate-900 dark:text-white">{{ $role->permissions_count }}</p>
                 </div>
             </div>
         </div>
-        <div class="pt-4 border-t border-outline-variant flex justify-between items-center mt-auto">
+        <div class="pt-4 border-t border-slate-200 dark:border-gray-700 flex justify-between items-center mt-auto">
             <div class="flex -space-x-2">
                 {{-- Muestra los avatares de algunos usuarios (hasta 3) --}}
                 @foreach($role->users()->take(3)->get() as $user)
                     @if($user->foto_perfil_ruta)
-                        <img alt="{{ $user->nombre }}" class="w-8 h-8 rounded-full border-2 border-surface-container-lowest object-cover" src="{{ asset($user->foto_perfil_ruta) }}"/>
+                        <img alt="{{ $user->nombre }}" class="w-8 h-8 rounded-full border-2 border-white dark:border-[#181a1b] object-cover" src="{{ asset($user->foto_perfil_ruta) }}"/>
                     @else
-                        <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container flex items-center justify-center text-xs text-on-surface-variant font-medium">
+                        <div class="w-8 h-8 rounded-full border-2 border-white dark:border-[#181a1b] bg-slate-100 dark:bg-gray-800 flex items-center justify-center text-xs text-slate-500 dark:text-slate-400 font-medium">
                             {{ $user->iniciales }}
                         </div>
                     @endif
                 @endforeach
                 @if($role->users_count > 3)
-                    <div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-surface-container flex items-center justify-center text-xs text-on-surface-variant font-medium">
+                    <div class="w-8 h-8 rounded-full border-2 border-white dark:border-[#181a1b] bg-slate-100 dark:bg-gray-800 flex items-center justify-center text-xs text-slate-500 dark:text-slate-400 font-medium">
                         +{{ $role->users_count - 3 }}
                     </div>
                 @endif
             </div>
-            <a href="{{ route('admin.usuarios.por-rol', $role->id) }}" class="text-primary dark:text-blue-400 font-label-caps text-xs font-medium hover:text-primary dark:text-blue-400-fixed-variant transition-colors flex items-center gap-1 group-hover:underline">
+            <a href="{{ route('admin.usuarios.por-rol', $role->id) }}" class="text-emerald-600  text-xs font-medium hover:text-emerald-600 transition-colors flex items-center gap-1 group-hover:underline">
                 Administrar
                 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
@@ -88,35 +88,35 @@
 </div>
 
 <!-- Recent Users Quick List (Decorative Context) -->
-<div class="mt-12 bg-surface-container-lowest border border-outline-variant rounded-lg p-6">
-    <div class="flex justify-between items-center border-b border-outline-variant pb-4 mb-4">
-        <h3 class="font-headline-md text-lg font-semibold text-on-surface">Usuarios Recientes</h3>
+<div class="mt-12 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg p-6">
+    <div class="flex justify-between items-center border-b border-slate-200 dark:border-gray-700 pb-4 mb-4">
+        <h3 class=" text-lg font-semibold text-slate-900 dark:text-white">Usuarios Recientes</h3>
     </div>
     <div class="space-y-0">
         @forelse($usuariosRecientes as $user)
-        <div class="flex items-center justify-between py-3 border-b border-surface-variant hover:bg-surface-dim transition-colors px-2">
+        <div class="flex items-center justify-between py-3 border-b border-slate-100 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-700/30 transition-colors px-2">
             <div class="flex items-center gap-4">
                 @if($user->foto_perfil_ruta)
                     <img src="{{ asset($user->foto_perfil_ruta) }}" class="w-10 h-10 rounded-full object-cover">
                 @else
-                    <div class="w-10 h-10 bg-primary dark:bg-blue-600-container rounded-full flex items-center justify-center text-on-primary font-bold">
+                    <div class="w-10 h-10 bg-primary dark:bg-emerald-800 rounded-full flex items-center justify-center text-white font-bold">
                         {{ $user->iniciales }}
                     </div>
                 @endif
                 <div>
-                    <p class="font-body-md text-base font-medium text-on-surface">{{ $user->nombre_completo }}</p>
-                    <p class="font-body-sm text-sm text-on-surface-variant">{{ $user->email }}</p>
+                    <p class=" text-base font-medium text-slate-900 dark:text-white">{{ $user->nombre_completo }}</p>
+                    <p class=" text-sm text-slate-500 dark:text-slate-400">{{ $user->email }}</p>
                 </div>
             </div>
             <div class="flex items-center gap-4">
                 @foreach($user->roles as $r)
-                    <span class="font-label-caps text-xs text-on-surface-variant bg-surface-container px-2 py-1 rounded-sm uppercase">{{ $r->name }}</span>
+                    <span class=" text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded-sm uppercase">{{ $r->name }}</span>
                 @endforeach
                 <div class="flex items-center gap-2 ml-2">
-                    <a href="{{ route('admin.usuarios.show', $user->id) }}" class="text-outline hover:text-emerald-600 transition-colors" title="Ver Detalles">
+                    <a href="{{ route('admin.usuarios.show', $user->id) }}" class="text-slate-400 hover:text-emerald-600 transition-colors" title="Ver Detalles">
                         <span class="material-symbols-outlined">visibility</span>
                     </a>
-                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-outline hover:text-primary dark:text-blue-400 transition-colors" title="Editar">
+                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-emerald-600 transition-colors" title="Editar">
                         <span class="material-symbols-outlined">edit</span>
                     </a>
                 </div>
@@ -144,15 +144,15 @@
             <div class="space-y-4 mb-8">
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nombre del Rol <span class="text-red-500">*</span></label>
-                    <input type="text" name="name" required class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none" placeholder="Ej. Editor">
+                    <input type="text" name="name" required class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-lg p-3 text-sm focus:border-slate-900 dark:focus:border-emerald-500 focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 outline-none" placeholder="Ej. Editor">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Descripción</label>
-                    <input type="text" name="descripcion" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none" placeholder="Breve resumen de acceso">
+                    <input type="text" name="descripcion" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-lg p-3 text-sm focus:border-slate-900 dark:focus:border-emerald-500 focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 outline-none" placeholder="Breve resumen de acceso">
                 </div>
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-gray-700">
-                <button type="button" onclick="document.getElementById('crearRolModal').close()" class="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                <button type="button" onclick="document.getElementById('crearRolModal').close()" class="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                     Cancelar
                 </button>
                 <button type="submit" class="px-5 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all">
@@ -178,15 +178,15 @@
             <div class="space-y-4 mb-8">
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nombre del Rol <span class="text-red-500">*</span></label>
-                    <input type="text" id="edit_rol_name" name="name" required class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none">
+                    <input type="text" id="edit_rol_name" name="name" required class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-lg p-3 text-sm focus:border-slate-900 dark:focus:border-emerald-500 focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Descripción</label>
-                    <input type="text" id="edit_rol_desc" name="descripcion" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none">
+                    <input type="text" id="edit_rol_desc" name="descripcion" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 text-slate-900 dark:text-white rounded-lg p-3 text-sm focus:border-slate-900 dark:focus:border-emerald-500 focus:ring-1 focus:ring-slate-900 dark:focus:ring-emerald-500 outline-none">
                 </div>
             </div>
             <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-gray-700">
-                <button type="button" onclick="document.getElementById('editarRolModal').close()" class="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                <button type="button" onclick="document.getElementById('editarRolModal').close()" class="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                     Cancelar
                 </button>
                 <button type="submit" class="px-5 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all">

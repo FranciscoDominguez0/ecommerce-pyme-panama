@@ -36,7 +36,7 @@
                     Eliminar
                 </button>
             @endif
-            <a href="{{ $backRoute }}" class="px-6 py-2 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+            <a href="{{ $backRoute }}" class="px-6 py-2 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                 Cancelar
             </a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all flex items-center">
@@ -58,7 +58,7 @@
                     
                     <!-- Avatar Upload -->
                     <div class="flex flex-col items-center justify-start space-y-3 w-32 shrink-0">
-                        <div class="w-24 h-24 rounded-full bg-slate-50 dark:bg-transparent border border-dashed border-slate-300 dark:border-gray-700 flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:bg-transparent hover:border-slate-400 cursor-pointer transition-all group overflow-hidden relative">
+                        <div class="w-24 h-24 rounded-full bg-slate-50 dark:bg-transparent border border-dashed border-slate-300 dark:border-gray-700 flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-gray-800 hover:border-slate-400 cursor-pointer transition-all group overflow-hidden relative">
                             @if($isEdit && $usuario->foto_perfil_ruta)
                                 <img src="{{ asset($usuario->foto_perfil_ruta) }}" class="w-full h-full object-cover">
                             @else
@@ -178,7 +178,7 @@
                         
                         <label class="block cursor-pointer relative" onclick="selectRole('{{ $r->id }}', '{{ $r->name }}')">
                             <input class="peer sr-only" name="rol_id" type="radio" value="{{ $r->id }}" {{ $isSelected ? 'checked' : '' }}/>
-                            <div id="card-{{ $r->id }}" class="p-4 rounded-lg border {{ $isSelected ? 'border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30' }} transition-colors flex gap-4 items-start">
+                            <div id="card-{{ $r->id }}" class="p-4 rounded-lg border {{ $isSelected ? 'border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 ' }} transition-colors flex gap-4 items-start">
                                 <div class="mt-0.5 {{ $iconColor }}">
                                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">{{ $icon }}</span>
                                 </div>
@@ -207,7 +207,7 @@
         rolesIds.forEach(id => {
             const card = document.getElementById('card-' + id);
             if (card) {
-                card.className = "p-4 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors flex gap-4 items-start";
+                card.className = "p-4 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors flex gap-4 items-start";
             }
         });
 

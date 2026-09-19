@@ -1,4 +1,4 @@
-﻿@props(['id' => 'producto_id', 'name' => 'producto_id', 'value' => '', 'error' => false])
+@props(['id' => 'producto_id', 'name' => 'producto_id', 'value' => '', 'error' => false])
 
 <input type="hidden" id="{{ $id }}" name="{{ $name }}" value="{{ $value }}" required>
 
@@ -11,7 +11,7 @@
             <div class="w-10 h-10 rounded-lg bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-400 shrink-0">
                 <span class="material-symbols-outlined text-[20px]">inventory_2</span>
             </div>
-            <span class="text-sm font-semibold text-slate-500">Seleccionar productoâ€¦</span>
+            <span class="text-sm font-semibold text-slate-500">Seleccionar producto…</span>
         </div>
 
         {{-- Selected state (Hidden by default) --}}

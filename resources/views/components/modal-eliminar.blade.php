@@ -1,13 +1,13 @@
-﻿@props([
+@props([
     'id' => 'modal-eliminar-global',
-    'titulo' => 'Â¿Eliminar este registro?',
-    'mensaje' => 'EstÃ¡s a punto de eliminar este elemento. Esta acciÃ³n no se puede deshacer.',
+    'titulo' => '¿Eliminar este registro?',
+    'mensaje' => 'Estás a punto de eliminar este elemento. Esta acción no se puede deshacer.',
     'icono' => 'delete_forever',
-    'textoBoton' => 'SÃ­, Eliminar',
+    'textoBoton' => 'Sí, Eliminar',
     'textoCancelar' => 'Cancelar',
 ])
 
-<!-- Componente Reutilizable: Modal Defensivo de ConfirmaciÃ³n de EliminaciÃ³n -->
+<!-- Componente Reutilizable: Modal Defensivo de Confirmación de Eliminación -->
 <div id="{{ $id }}" 
      class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 transition-all duration-200 select-none" 
      style="background-color: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px);"
@@ -17,7 +17,7 @@
     
     <div class="bg-white dark:bg-[#181a1b] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 dark:border-gray-700/80 space-y-4 animate-in fade-in zoom-in-95 duration-150 relative z-10">
         
-        <!-- Ãcono de Alerta / Peligro -->
+        <!-- Ícono de Alerta / Peligro -->
         <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 mx-auto shadow-2xs">
             <span class="material-symbols-outlined text-[28px]">{{ $icono }}</span>
         </div>
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <!-- Botones de AcciÃ³n -->
+        <!-- Botones de Acción -->
         <div class="flex items-center gap-3 pt-2">
             <button type="button" 
                     onclick="window.ModalEliminar.cerrar('{{ $id }}')" 
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<!-- Formulario Oculto para EnvÃ­o DELETE -->
+<!-- Formulario Oculto para Envío DELETE -->
 <form id="{{ $id }}-form" method="POST" action="" class="hidden">
     @csrf
     @method('DELETE')
@@ -112,7 +112,7 @@
                 }
             }
 
-            // InformaciÃ³n extra o advertencia
+            // Información extra o advertencia
             const extraEl = document.getElementById(id + '-extra');
             if (extraEl) {
                 if (opts.extra) {
@@ -123,7 +123,7 @@
                 }
             }
 
-            // Restablecer botÃ³n confirmar
+            // Restablecer botón confirmar
             const btnConfirmar = document.getElementById(id + '-btn-confirmar');
             const textoBtn = document.getElementById(id + '-texto-btn');
             if (btnConfirmar) btnConfirmar.disabled = false;

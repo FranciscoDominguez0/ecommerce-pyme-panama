@@ -187,7 +187,7 @@
                             </thead>
                             <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 bg-white dark:bg-[#181a1b]">
                                 @foreach($usuario->pedidos as $pedido)
-                                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                                         <td class="py-4 px-6">
                                             <div class="flex flex-col">
                                                 <span class="text-sm font-bold text-slate-900 dark:text-white">#{{ str_pad($pedido->numero_pedido ?? $pedido->id, 5, '0', STR_PAD_LEFT) }}</span>
@@ -215,7 +215,7 @@
                                         </td>
                                         <td class="py-4 px-6 text-sm font-bold text-slate-900 dark:text-white">${{ number_format($pedido->total, 2) }}</td>
                                         <td class="py-4 px-6 text-right">
-                                            <a href="{{ route('admin.pedidos.detalle', $pedido->id) }}" class="inline-flex items-center px-3 py-1.5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-md text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors shadow-sm">
+                                            <a href="{{ route('admin.pedidos.detalle', $pedido->id) }}" class="inline-flex items-center px-3 py-1.5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-md text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors shadow-sm">
                                                 Ver detalle
                                             </a>
                                         </td>

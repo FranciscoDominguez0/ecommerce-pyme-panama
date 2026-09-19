@@ -110,7 +110,7 @@
                                 default => 'pl-20',
                             };
                         @endphp
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                             
                             <!-- Nombre & Slug con Sangría Jerárquica Progresiva -->
                             <td class="py-3.5 px-4 sm:px-6">

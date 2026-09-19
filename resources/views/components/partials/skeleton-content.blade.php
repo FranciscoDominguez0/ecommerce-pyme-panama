@@ -1,10 +1,10 @@
-﻿<!-- Skeleton Header (TÃ­tulo y Breadcrumbs) -->
+<!-- Skeleton Header (Título y Breadcrumbs) -->
 <div class="flex flex-col gap-3 mb-2">
     <div class="h-10 bg-slate-200 dark:bg-gray-700/70 rounded-xl w-64 shimmer-bg"></div>
     <div class="h-5 bg-slate-200 dark:bg-gray-700/50 rounded-lg w-48 shimmer-bg stagger-1"></div>
 </div>
 
-<!-- Skeleton Acciones/Filtros (Barra superior de mÃ³dulos) -->
+<!-- Skeleton Acciones/Filtros (Barra superior de módulos) -->
 <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-2 gap-4">
     <div class="flex gap-3">
         <div class="h-10 w-56 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/60 rounded-xl shimmer-bg stagger-1 shadow-sm"></div>

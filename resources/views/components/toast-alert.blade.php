@@ -1,4 +1,4 @@
-﻿{{-- Componente Reutilizable: Alertas Toast Flotantes (Ã‰xito, Error/Fallo, Advertencia, InformaciÃ³n) --}}
+{{-- Componente Reutilizable: Alertas Toast Flotantes (Éxito, Error/Fallo, Advertencia, Información) --}}
 <div id="toast-container" class="fixed top-8 z-[9999] flex flex-col items-center gap-3 pointer-events-none w-full px-4 sm:max-w-md" style="left: 50%; transform: translateX(calc(-50% + var(--sidebar-offset, 0px) / 2));" aria-live="polite" aria-atomic="true">
     @php
         $toasts = [];
@@ -26,7 +26,7 @@
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('info')];
         } elseif (session('toast_info')) {
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('toast_info')];
-        } elseif (session('status') && !in_array(session('status'), ['profile-updated', 'password-updated', 'verification-link-sent']) && !str_contains(session('status'), 'restablecer tu contraseÃ±a')) {
+        } elseif (session('status') && !in_array(session('status'), ['profile-updated', 'password-updated', 'verification-link-sent']) && !str_contains(session('status'), 'restablecer tu contraseña')) {
             $toasts[] = ['tipo' => 'info', 'mensaje' => session('status')];
         }
     @endphp
@@ -75,7 +75,7 @@
             
             <div class="flex-1 leading-tight tracking-wide">
                 @if(is_array($mensaje))
-                    <div class="text-[13px] font-bold">{{ $mensaje['title'] ?? 'AtenciÃ³n' }}</div>
+                    <div class="text-[13px] font-bold">{{ $mensaje['title'] ?? 'Atención' }}</div>
                     @if(isset($mensaje['message']))
                         <div class="text-[11.5px] font-medium text-slate-300 mt-0.5">{{ $mensaje['message'] }}</div>
                     @endif
@@ -87,7 +87,7 @@
             <button type="button" 
                     onclick="cerrarToast(this.closest('[data-toast]'))" 
                     class="opacity-50 hover:opacity-100 transition-opacity p-1.5 shrink-0 rounded-lg hover:bg-slate-700/50 text-slate-300 hover:text-white" 
-                    aria-label="Cerrar notificaciÃ³n">
+                    aria-label="Cerrar notificación">
                 <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
         </div>
@@ -131,7 +131,7 @@
         // Ejecutar inmediatamente
         inicializarToasts();
         
-        // Ejecutar tambiÃ©n en DOMContentLoaded o navegaciÃ³n Livewire
+        // Ejecutar también en DOMContentLoaded o navegación Livewire
         document.addEventListener('DOMContentLoaded', inicializarToasts);
         document.addEventListener('livewire:navigated', inicializarToasts);
 
@@ -206,7 +206,7 @@
                 <button type="button" 
                         onclick="cerrarToast(this.closest('[data-toast]'))" 
                         class="opacity-50 hover:opacity-100 transition-opacity p-1.5 shrink-0 rounded-lg hover:bg-slate-700/50 text-slate-300 hover:text-white" 
-                        aria-label="Cerrar notificaciÃ³n">
+                        aria-label="Cerrar notificación">
                     <span class="material-symbols-outlined text-[18px]">close</span>
                 </button>
             `;
