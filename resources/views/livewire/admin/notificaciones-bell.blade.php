@@ -15,7 +15,7 @@
     <!-- Notifications Toggle Button -->
     <button @click="open = !open" 
             class="relative p-1.5 rounded-lg transition-colors shrink-0 outline-none"
-            :class="open ? 'bg-emerald-50 text-emerald-600' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100'"
+            :class="open ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800'"
             title="Notificaciones">
         <span class="material-symbols-outlined text-[20px] transition-transform duration-200" :class="open ? 'scale-110' : ''">
             notifications
@@ -37,14 +37,14 @@
          x-transition:leave-start="opacity-100 scale-100 translate-y-0"
          x-transition:leave-end="opacity-0 scale-95 translate-y-2"
          style="display:none;"
-         class="absolute right-0 sm:-right-2 top-full mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-[100] origin-top-right overflow-hidden">
+         class="absolute right-0 sm:-right-2 top-full mt-3 w-80 sm:w-96 bg-white dark:bg-[#181a1b] rounded-2xl shadow-xl border border-slate-100 dark:border-gray-700 py-2 z-[100] origin-top-right overflow-hidden">
         
         <!-- Header -->
-        <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-white/50 backdrop-blur-sm">
-            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+        <div class="px-4 py-3 border-b border-slate-100 dark:border-gray-700 flex items-center justify-between bg-white/50 dark:bg-[#181a1b]/50 backdrop-blur-sm">
+            <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 Notificaciones
                 @if($unreadCount > 0)
-                    <span class="bg-emerald-100 text-emerald-700 py-0.5 px-2 rounded-full text-[10px] font-bold">{{ $unreadCount }} nuevas</span>
+                    <span class="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 py-0.5 px-2 rounded-full text-[10px] font-bold">{{ $unreadCount }} nuevas</span>
                 @endif
             </h3>
             @if($unreadCount > 0)
@@ -57,7 +57,7 @@
         <!-- List -->
         <div class="max-h-[400px] overflow-y-auto overscroll-contain">
             @forelse($notificaciones as $notificacion)
-                <div class="px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 relative group {{ is_null($notificacion->read_at) ? 'bg-slate-50/50' : '' }}">
+                <div class="px-4 py-3 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors border-b border-slate-50 dark:border-gray-700/50 last:border-0 relative group {{ is_null($notificacion->read_at) ? 'bg-slate-50/50 dark:bg-gray-800/50' : '' }}">
                     @if(is_null($notificacion->read_at))
                         <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
                     @endif
@@ -65,10 +65,10 @@
                     <div class="flex items-start gap-3">
                         <!-- Icon -->
                         <div class="shrink-0 mt-1 flex items-center justify-center w-8 h-8 rounded-full shadow-sm border
-                            @if($notificacion->data['tipo'] === 'nuevo_pedido') bg-blue-50 border-blue-100 text-blue-600
-                            @elseif($notificacion->data['tipo'] === 'stock_minimo') bg-amber-50 border-amber-100 text-amber-600
-                            @elseif($notificacion->data['tipo'] === 'nueva_devolucion') bg-rose-50 border-rose-100 text-rose-600
-                            @else bg-slate-50 border-slate-200 text-slate-600 @endif">
+                            @if($notificacion->data['tipo'] === 'nuevo_pedido') bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800/50 text-blue-600 dark:text-blue-400
+                            @elseif($notificacion->data['tipo'] === 'stock_minimo') bg-amber-50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-800/50 text-amber-600 dark:text-amber-400
+                            @elseif($notificacion->data['tipo'] === 'nueva_devolucion') bg-rose-50 dark:bg-rose-900/20 border-rose-100 dark:border-rose-800/50 text-rose-600 dark:text-rose-400
+                            @else bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 @endif">
                             <span class="material-symbols-outlined text-[16px]">
                                 @if($notificacion->data['tipo'] === 'nuevo_pedido') shopping_bag
                                 @elseif($notificacion->data['tipo'] === 'stock_minimo') warning
@@ -82,10 +82,10 @@
                             <a href="#" 
                                wire:click.prevent="leerYRedirigir('{{ $notificacion->id }}', '{{ $notificacion->data['url'] ?? '#' }}')"
                                class="block focus:outline-none cursor-pointer">
-                                <p class="text-xs font-bold text-slate-800 mb-0.5 truncate group-hover:text-emerald-600 transition-colors">
+                                <p class="text-xs font-bold text-slate-800 dark:text-slate-200 mb-0.5 truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                                     {{ $notificacion->data['titulo'] ?? 'Notificación' }}
                                 </p>
-                                <p class="text-[11px] text-slate-500 leading-snug line-clamp-2">
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-snug line-clamp-2">
                                     {{ $notificacion->data['mensaje'] ?? '' }}
                                 </p>
                             </a>
@@ -98,7 +98,7 @@
                         <!-- Acciones (Marcar como leída individualmente) -->
                         @if(is_null($notificacion->read_at))
                             <button wire:click.stop="marcarComoLeida('{{ $notificacion->id }}')" 
-                                    class="shrink-0 p-1 text-slate-300 hover:text-emerald-600 hover:bg-emerald-50 rounded transition-colors opacity-0 group-hover:opacity-100" 
+                                    class="shrink-0 p-1 text-slate-300 dark:text-slate-600 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded transition-colors opacity-0 group-hover:opacity-100" 
                                     title="Marcar como leída">
                                 <span class="material-symbols-outlined text-[14px]">done</span>
                             </button>
@@ -107,19 +107,19 @@
                 </div>
             @empty
                 <div class="px-4 py-8 text-center flex flex-col items-center justify-center">
-                    <div class="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mb-3">
-                        <span class="material-symbols-outlined text-slate-300 text-[24px]">notifications_paused</span>
+                    <div class="w-12 h-12 bg-slate-50 dark:bg-gray-800 rounded-full flex items-center justify-center mb-3">
+                        <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-[24px]">notifications_paused</span>
                     </div>
-                    <p class="text-xs font-semibold text-slate-500">No tienes notificaciones</p>
-                    <p class="text-[10px] text-slate-400 mt-1">Cuando ocurra algo importante aparecerá aquí.</p>
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400">No tienes notificaciones</p>
+                    <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Cuando ocurra algo importante aparecerá aquí.</p>
                 </div>
             @endforelse
         </div>
         
         <!-- Footer -->
         @if(count($notificaciones) > 0)
-            <div class="px-4 py-2.5 border-t border-slate-100 bg-slate-50/50 text-center">
-                <a href="#" class="text-[11px] font-bold text-slate-600 hover:text-emerald-600 transition-colors flex items-center justify-center gap-1 group">
+            <div class="px-4 py-2.5 border-t border-slate-100 dark:border-gray-700 bg-slate-50/50 dark:bg-[#181a1b]/50 text-center">
+                <a href="#" class="text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center justify-center gap-1 group">
                     Ver todas las notificaciones
                     <span class="material-symbols-outlined text-[14px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
                 </a>

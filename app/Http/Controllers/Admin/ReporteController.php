@@ -32,7 +32,7 @@ class ReporteController extends Controller
      */
     private function prepararDatosReporte(Request $request)
     {
-        $tipoFiltro = $request->query('tipo', 'todos'); // mes, año, todos
+        $tipoFiltro = $request->query('tipo', 'año'); // mes, año, todos
         $fechaInicioStr = $request->query('fecha_inicio');
         $fechaFinStr = $request->query('fecha_fin');
         $tipoReporte = $request->query('reporte', 'ventas'); // ventas, productos, clientes, stock
@@ -79,15 +79,20 @@ class ReporteController extends Controller
                 )
                 ->groupBy(DB::raw('DATE(emitida_en)'))
                 ->orderBy('fecha')
-                ->get();
+                ->get()
+                ->keyBy('fecha');
             
-            $ventasPorPeriodo = $ventasDB->map(function ($item) {
-                return [
-                    'etiqueta' => Carbon::parse($item->fecha)->format('d M Y'),
-                    'total' => (float) $item->total_ventas,
-                    'descuentos' => (float) $item->total_descuentos
+            $ventasPorPeriodo = [];
+            $currentDate = clone $fechaInicio;
+            while ($currentDate <= $fechaFin) {
+                $fechaStr = $currentDate->format('Y-m-d');
+                $ventasPorPeriodo[] = [
+                    'etiqueta' => $currentDate->format('d M Y'),
+                    'total' => isset($ventasDB[$fechaStr]) ? (float) $ventasDB[$fechaStr]->total_ventas : 0,
+                    'descuentos' => isset($ventasDB[$fechaStr]) ? (float) $ventasDB[$fechaStr]->total_descuentos : 0
                 ];
-            })->toArray();
+                $currentDate->addDay();
+            }
         } else {
             $ventasDB = (clone $queryFacturas)
                 ->select(
@@ -97,15 +102,24 @@ class ReporteController extends Controller
                 )
                 ->groupBy(DB::raw('TO_CHAR(emitida_en, \'YYYY-MM\')'))
                 ->orderBy('mes')
-                ->get();
+                ->get()
+                ->keyBy('mes');
                 
-            $ventasPorPeriodo = $ventasDB->map(function ($item) {
-                return [
-                    'etiqueta' => Carbon::parse($item->mes . '-01')->format('M Y'),
-                    'total' => (float) $item->total_ventas,
-                    'descuentos' => (float) $item->total_descuentos
+            $ventasPorPeriodo = [];
+            $currentMonth = clone $fechaInicio;
+            $currentMonth->startOfMonth();
+            $endMonth = clone $fechaFin;
+            $endMonth->startOfMonth();
+            
+            while ($currentMonth <= $endMonth) {
+                $mesStr = $currentMonth->format('Y-m');
+                $ventasPorPeriodo[] = [
+                    'etiqueta' => $currentMonth->format('M Y'),
+                    'total' => isset($ventasDB[$mesStr]) ? (float) $ventasDB[$mesStr]->total_ventas : 0,
+                    'descuentos' => isset($ventasDB[$mesStr]) ? (float) $ventasDB[$mesStr]->total_descuentos : 0
                 ];
-            })->toArray();
+                $currentMonth->addMonth();
+            }
         }
 
         // --- 3. Productos más vendidos ---
@@ -159,25 +173,61 @@ class ReporteController extends Controller
         // --- 6. (Removido: Ventas por Método de Pago) ---
 
         // --- 7. Ventas por Categoría (Gráfica de Barras / Donut) ---
-        $ventasPorCategoria = DB::table('items_pedido')
+        $todasLasCategorias = DB::table('items_pedido')
             ->join('pedidos', 'items_pedido.pedido_id', '=', 'pedidos.id')
             ->join('facturas', 'pedidos.id', '=', 'facturas.pedido_id')
             ->join('productos', 'items_pedido.producto_id', '=', 'productos.id')
-            ->join('categorias', 'productos.categoria_id', '=', 'categorias.id')
+            ->leftJoin('categorias', 'productos.categoria_id', '=', 'categorias.id')
             ->where('facturas.estado', 'emitida')
             ->whereBetween('facturas.emitida_en', [$fechaInicio, $fechaFin])
-            ->select('categorias.nombre as categoria', DB::raw('SUM(items_pedido.subtotal) as total_ventas'))
-            ->groupBy('categorias.nombre')
+            ->select(DB::raw('COALESCE(categorias.nombre, \'Sin Categoría\') as categoria'), DB::raw('SUM(items_pedido.subtotal) as total_ventas'))
+            ->groupBy(DB::raw('COALESCE(categorias.nombre, \'Sin Categoría\')'))
             ->orderBy('total_ventas', 'desc')
-            ->take(8)
+            ->get();
+
+        $ventasPorCategoria = $todasLasCategorias->take(5)->map(function ($item) {
+            return [
+                'categoria' => $item->categoria,
+                'total_ventas' => (float) $item->total_ventas
+            ];
+        })->toArray();
+
+        $restantes = $todasLasCategorias->skip(5)->sum('total_ventas');
+        if ($restantes > 0) {
+            $ventasPorCategoria[] = [
+                'categoria' => 'Otras',
+                'total_ventas' => (float) $restantes
+            ];
+        }
+
+        // --- 8. Ventas por Método de Pago ---
+        $ventasPorMetodoPago = DB::table('pedidos')
+            ->join('facturas', 'pedidos.id', '=', 'facturas.pedido_id')
+            ->where('facturas.estado', 'emitida')
+            ->whereBetween('facturas.emitida_en', [$fechaInicio, $fechaFin])
+            ->select('pedidos.metodo_pago', DB::raw('SUM(facturas.total) as total_ventas'))
+            ->groupBy('pedidos.metodo_pago')
+            ->orderBy('total_ventas', 'desc')
             ->get()
             ->map(function ($item) {
                 return [
-                    'categoria' => $item->categoria,
+                    'metodo' => ucfirst($item->metodo_pago),
                     'total_ventas' => (float) $item->total_ventas
                 ];
-            })
-            ->toArray();
+            })->toArray();
+
+        // --- 9. Estado de las Facturas (Aprobadas, Anuladas, Pendientes) ---
+        $estadosFacturas = DB::table('facturas')
+            ->whereBetween('emitida_en', [$fechaInicio, $fechaFin])
+            ->select('estado', DB::raw('COUNT(id) as cantidad'))
+            ->groupBy('estado')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'estado' => ucfirst($item->estado),
+                    'cantidad' => (int) $item->cantidad
+                ];
+            })->toArray();
 
         return compact(
             'tipoFiltro',
@@ -193,7 +243,9 @@ class ReporteController extends Controller
             'productosMasVendidos',
             'clientesFrecuentes',
             'stockCritico',
-            'ventasPorCategoria'
+            'ventasPorCategoria',
+            'ventasPorMetodoPago',
+            'estadosFacturas'
         );
     }
 
