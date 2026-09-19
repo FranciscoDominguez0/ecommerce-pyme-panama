@@ -72,7 +72,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs text-slate-700 dark:text-slate-300 font-medium">
                         @foreach($zonas as $zona)
-                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors">
+                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors">
                                 <!-- Provincia / Zona -->
                                 <td class="py-4 px-5">
                                     <div class="flex items-center gap-3">
@@ -114,7 +114,7 @@
                                         <!-- Botón Editar -->
                                         <button type="button" 
                                                 onclick="abrirModalEditarZona({{ $zona->id }}, '{{ addslashes($zona->nombre) }}', {{ (float) ($zona->costo ?? 0) }}, {{ $zona->activo ? 'true' : 'false' }})" 
-                                                class="px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 hover:border-slate-300 dark:border-gray-700 transition-all shadow-2xs flex items-center gap-1 cursor-pointer"
+                                                class="px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 hover:border-slate-300 dark:border-gray-700 transition-all shadow-2xs flex items-center gap-1 cursor-pointer"
                                                 title="Editar zona">
                                             <span class="material-symbols-outlined text-[15px] text-slate-500 dark:text-slate-400">edit</span>
                                             <span class="hidden sm:inline">Editar</span>
@@ -186,7 +186,7 @@
                        name="nombre" 
                        required 
                        placeholder="Ej. Panamá, Coclé, Colón, Chiriquí" 
-                       class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                       class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
             </div>
 
             <!-- Campo Costo de envío -->
@@ -204,7 +204,7 @@
                            max="99999999.99"
                            required 
                            placeholder="0.00" 
-                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
+                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                 </div>
             </div>
 
@@ -228,7 +228,7 @@
             <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-gray-700">
                 <button type="button" 
                         onclick="cerrarModalZona()" 
-                        class="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                        class="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                     Cancelar
                 </button>
                 <button type="submit" 
@@ -280,5 +280,6 @@
     }
 </script>
 @endsection
+
 
 

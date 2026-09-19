@@ -105,18 +105,18 @@
                                 <a href="{{ route('admin.facturas.pdf', $factura) }}" 
                                    x-data="{ downloading: false }" 
                                    @click="downloading = true; setTimeout(() => downloading = false, 4000)"
-                                   class="text-primary dark:text-blue-400 hover:text-primary dark:text-blue-400/80 dark:hover:text-blue-300 bg-primary/10 dark:bg-blue-900/30 hover:bg-primary/20 dark:hover:bg-blue-900/50 p-2 rounded-md transition-colors inline-flex items-center w-[34px] h-[34px] justify-center" title="Descargar PDF">
+                                   class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent p-2 rounded-md transition-colors inline-flex items-center w-[34px] h-[34px] justify-center" title="Descargar PDF">
                                     <span x-show="!downloading" class="material-symbols-outlined text-[18px]">download</span>
                                     <span x-show="downloading" style="display: none;" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
                                 </a>
-                                <a href="{{ route('admin.facturas.show', $factura) }}" class="text-primary dark:text-blue-400 hover:text-primary dark:text-blue-400/80 dark:hover:text-blue-300 bg-primary/10 dark:bg-blue-900/30 hover:bg-primary/20 dark:hover:bg-blue-900/50 p-2 rounded-md transition-colors inline-flex items-center" title="Ver Detalle">
+                                <a href="{{ route('admin.facturas.show', $factura) }}" class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent p-2 rounded-md transition-colors inline-flex items-center" title="Ver Detalle">
                                     <span class="material-symbols-outlined text-[18px]">visibility</span>
                                 </a>
                                 @if($factura->estado === 'emitida')
                                 <form action="{{ route('admin.facturas.reenviar', $factura) }}" method="POST" class="inline" x-data="{ sending: false }" @submit="sending = true">
                                     @csrf
                                     <input type="hidden" name="email_destino" value="{{ $factura->usuario->email }}">
-                                    <button type="submit" class="text-primary dark:text-blue-400 hover:text-primary dark:text-blue-400/80 dark:hover:text-blue-300 bg-primary/10 dark:bg-blue-900/30 hover:bg-primary/20 dark:hover:bg-blue-900/50 p-2 rounded-md transition-colors inline-flex items-center relative w-[34px] h-[34px] justify-center" title="Reenviar" :class="{ 'opacity-75 cursor-wait': sending }" :disabled="sending">
+                                    <button type="submit" class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent p-2 rounded-md transition-colors inline-flex items-center relative w-[34px] h-[34px] justify-center" title="Reenviar" :class="{ 'opacity-75 cursor-wait': sending }" :disabled="sending">
                                         <span x-show="!sending" class="material-symbols-outlined text-[18px]">mail</span>
                                         <span x-show="sending" style="display: none;" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
                                         @if($factura->reenvios()->count() > 0)

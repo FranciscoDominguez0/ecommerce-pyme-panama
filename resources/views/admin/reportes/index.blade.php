@@ -224,7 +224,7 @@
                         </thead>
                         <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                             @forelse($productosMasVendidos->take(5) as $prod)
-                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="py-3 pl-1">
                                         <div class="font-bold text-slate-900 dark:text-white">{{ $prod->nombre }}</div>
                                         <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">SKU: {{ $prod->sku }}</div>
@@ -267,7 +267,7 @@
                         </thead>
                         <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                             @forelse($clientesFrecuentes->take(5) as $cli)
-                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="py-3 pl-1">
                                         <div class="font-bold text-slate-900 dark:text-white">{{ $cli->nombre }} {{ $cli->apellido }}</div>
                                         <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{{ $cli->email }}</div>
@@ -312,7 +312,7 @@
                     </thead>
                     <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                         @forelse($stockCritico->take(5) as $stock)
-                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                                 <td class="py-3 pl-1">
                                     <div class="font-bold text-slate-900 dark:text-white">{{ $stock->nombre }}</div>
                                 </td>
@@ -453,4 +453,6 @@
         });
     </script>
 @endpush
+
+
 

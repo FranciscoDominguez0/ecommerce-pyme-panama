@@ -199,7 +199,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-50 text-xs">
                         @forelse($movimientos as $mov)
-                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors group">
+                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors group">
                                 {{-- Fecha --}}
                                 <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap font-mono text-[11px]">
                                     {{ $mov->creado_en->format('d/m/Y') }}<br>
@@ -314,7 +314,7 @@
                             <option value="{{ $cat->id }}" {{ request('categoria') == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>
                         @endforeach
                     </select>
-                    <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 cursor-pointer px-2 py-1.5 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                    <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 cursor-pointer px-2 py-1.5 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                         <input type="checkbox" name="stock_bajo" value="1" {{ request('stock_bajo') ? 'checked' : '' }}
                                class="rounded text-slate-900 dark:text-white focus:ring-slate-900 border-slate-300 dark:border-gray-700">
                         Solo stock bajo
@@ -352,7 +352,7 @@
                                     $stockBajo  = $producto->stock <= $producto->stock_minimo;
                                     $sinStock   = $producto->stock === 0;
                                 @endphp
-                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors group">
+                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors group">
                                     <td class="px-5 py-3.5">
                                         <div class="flex items-center gap-3">
                                             <div class="w-12 h-12 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-transparent flex items-center justify-center shadow-sm">
@@ -404,7 +404,7 @@
                                         $sinStockV   = $variante->stock === 0;
                                         $labelV = $variante->opciones->map(fn($o) => ($o->tipo?->nombre ?? '') . ': ' . $o->valor)->join(' / ');
                                     @endphp
-                                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors group">
+                                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors group">
                                         <td class="px-5 py-3.5">
                                             <div class="flex items-center gap-3">
                                                 <div class="w-12 h-12 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-transparent flex items-center justify-center shadow-sm">
@@ -509,5 +509,7 @@
     }
 </script>
 @endpush
+
+
 
 

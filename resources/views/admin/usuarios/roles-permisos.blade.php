@@ -136,7 +136,7 @@
                                 $pEliminar = $permisos->first(fn($p) => str_ends_with($p->name, '.eliminar'));
                             @endphp
                             @if($pVer || $pCrear || $pEditar || $pEliminar)
-                            <tr x-show="open" class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/50 dark:hover:bg-gray-700/30 transition-colors border-t border-slate-100 dark:border-gray-700" id="row-{{ $slug }}">
+                            <tr x-show="open" class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/50 dark:hover:bg-gray-700/30 transition-colors border-t border-slate-100 dark:border-gray-700" id="row-{{ $slug }}">
                                 <td class="py-4 px-6 pl-10">
                                     <span class="text-sm font-bold text-slate-900 dark:text-white capitalize block">{{ $moduloNombre ?: 'General' }}</span>
                                 </td>
@@ -195,7 +195,7 @@
                         $pOtras = $permisos->filter(fn($p) => !preg_match('/\.(ver|crear|editar|eliminar)$/', $p->name) && str_starts_with($p->name, 'admin.'));
                     @endphp
                     @foreach($pOtras as $pOtra)
-                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
+                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
                             <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-slate-300 dark:border-gray-700 focus:ring-emerald-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
                             <span class="text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">{{ str_replace(['admin.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
                         </label>
@@ -216,7 +216,7 @@
                         $pOtras = $permisos->filter(fn($p) => str_starts_with($p->name, 'cliente.'));
                     @endphp
                     @foreach($pOtras as $pOtra)
-                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
+                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
                             <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 dark:border-gray-700 focus:ring-indigo-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
                             <span class="text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">{{ str_replace(['cliente.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
                         </label>
@@ -309,5 +309,7 @@
     });
 </script>
 @endsection
+
+
 
 

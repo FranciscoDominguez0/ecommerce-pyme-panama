@@ -217,7 +217,7 @@
                         @method('PUT')
                         <input type="hidden" name="two_fa_habilitado" value="0">
                         
-                        <label class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                        <label class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                             <div class="relative inline-flex items-center">
                                 <input type="checkbox" name="two_fa_habilitado" value="1" class="sr-only peer" onchange="this.form.submit()" {{ $usuario->two_fa_habilitado ? 'checked' : '' }}>
                                 <div class="w-9 h-5 bg-slate-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
@@ -392,5 +392,7 @@
     });
 </script>
 @endpush
+
+
 
 

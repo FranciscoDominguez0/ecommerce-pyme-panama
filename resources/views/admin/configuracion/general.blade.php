@@ -52,7 +52,7 @@
                             <input type="file" name="logo" x-ref="logoInput" class="hidden" accept="image/*" @change="fileChosen">
                         </div>
                         <div class="flex flex-col justify-center gap-3 h-32">
-                            <button type="button" @click="$refs.logoInput.click()" class="px-4 py-2 border border-slate-300 dark:border-gray-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors w-fit shadow-sm">
+                            <button type="button" @click="$refs.logoInput.click()" class="px-4 py-2 border border-slate-300 dark:border-gray-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors w-fit shadow-sm">
                                 Cambiar logo
                             </button>
                         </div>
@@ -109,5 +109,7 @@
     </div>
 </div>
 @endsection
+
+
 
 

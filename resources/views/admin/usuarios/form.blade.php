@@ -36,7 +36,7 @@
                     Eliminar
                 </button>
             @endif
-            <a href="{{ $backRoute }}" class="px-6 py-2 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+            <a href="{{ $backRoute }}" class="px-6 py-2 rounded-lg border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-slate-300 font-semibold text-xs uppercase tracking-wide hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                 Cancelar
             </a>
             <button type="submit" class="px-6 py-2 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all flex items-center">
@@ -178,7 +178,7 @@
                         
                         <label class="block cursor-pointer relative" onclick="selectRole('{{ $r->id }}', '{{ $r->name }}')">
                             <input class="peer sr-only" name="rol_id" type="radio" value="{{ $r->id }}" {{ $isSelected ? 'checked' : '' }}/>
-                            <div id="card-{{ $r->id }}" class="p-4 rounded-lg border {{ $isSelected ? 'border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30' }} transition-colors flex gap-4 items-start">
+                            <div id="card-{{ $r->id }}" class="p-4 rounded-lg border {{ $isSelected ? 'border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30' }} transition-colors flex gap-4 items-start">
                                 <div class="mt-0.5 {{ $iconColor }}">
                                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">{{ $icon }}</span>
                                 </div>
@@ -207,7 +207,7 @@
         rolesIds.forEach(id => {
             const card = document.getElementById('card-' + id);
             if (card) {
-                card.className = "p-4 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors flex gap-4 items-start";
+                card.className = "p-4 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors flex gap-4 items-start";
             }
         });
 
@@ -220,5 +220,7 @@
     }
 </script>
 @endsection
+
+
 
 

@@ -82,7 +82,7 @@
                 </thead>
                 <tbody class="bg-white dark:bg-[#181a1b] divide-y divide-slate-100 dark:divide-gray-700/50">
                     @foreach($logs as $log)
-                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white font-medium">
                             {{ $log->creado_en->format('d M Y, H:i') }}
                         </td>
@@ -242,5 +242,7 @@
     });
 </script>
 @endsection
+
+
 
 

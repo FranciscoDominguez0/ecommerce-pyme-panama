@@ -73,7 +73,7 @@
                         $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
                         $esNuevo = in_array($ultimoEstado, ['pendiente', 'pago_confirmado']);
                     @endphp
-                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/50 transition-colors {{ $esNuevo ? 'bg-emerald-50/40 dark:bg-transparent border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}">
+                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/50 transition-colors {{ $esNuevo ? 'bg-emerald-50/40 dark:bg-transparent border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center gap-2.5">
                                 <span class="text-sm font-bold text-slate-900 dark:text-white">{{ $pedido->numero_pedido }}</span>
@@ -149,5 +149,7 @@
     </div>
 </div>
 @endsection
+
+
 
 

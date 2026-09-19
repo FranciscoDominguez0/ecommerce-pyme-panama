@@ -370,7 +370,7 @@
                         </button>
 
                         <a href="{{ route('admin.promociones.cupones') }}" 
-                           class="w-full py-2.5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all flex items-center justify-center">
+                           class="w-full py-2.5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 text-slate-700 dark:text-slate-300 font-bold text-xs rounded-xl transition-all flex items-center justify-center">
                             Cancelar
                         </a>
                     </div>
@@ -563,5 +563,7 @@
 </script>
 @endpush
 @endsection
+
+
 
 

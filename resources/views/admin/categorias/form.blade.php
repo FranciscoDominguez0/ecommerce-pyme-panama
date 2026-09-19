@@ -32,7 +32,7 @@
 
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.categorias.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
-               class="px-4 py-2 border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors shadow-xs">
+               class="px-4 py-2 border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors shadow-xs">
                 Cancelar
             </a>
             <button type="submit" form="categoria-form" 
@@ -308,7 +308,7 @@
                                class="hidden" 
                                onchange="previewImage(this);" />
                         <label for="imagen" 
-                               class="w-full py-2 px-3 border border-slate-200 dark:border-gray-700 rounded-lg text-slate-700 dark:text-slate-300 font-semibold text-xs hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 text-center transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+                               class="w-full py-2 px-3 border border-slate-200 dark:border-gray-700 rounded-lg text-slate-700 dark:text-slate-300 font-semibold text-xs hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 text-center transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
                             <span class="material-symbols-outlined text-[16px]">upload</span>
                             <span>{{ $categoria->imagen_ruta ? 'Cambiar Imagen' : 'Seleccionar Imagen' }}</span>
                         </label>
@@ -426,7 +426,7 @@
         <!-- Footer Modal -->
         <div class="flex items-center justify-between border-t border-slate-100 dark:border-gray-700 pt-3">
             <span id="contador-padres-modal" class="text-[11px] text-slate-400 font-medium">Categorías disponibles</span>
-            <button type="button" onclick="cerrarModalPadres()" class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+            <button type="button" onclick="cerrarModalPadres()" class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                 Cerrar
             </button>
         </div>
@@ -523,7 +523,7 @@
             card.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${
                 isSelected 
                     ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
-                    : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/80 hover:border-slate-300 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 hover:shadow-2xs'
+                    : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/80 hover:border-slate-300 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 hover:shadow-2xs'
             }`;
 
             // Mover horizontalmente según el nivel de profundidad (20px por nivel)
@@ -679,5 +679,7 @@
 </script>
 @endpush
 @endsection
+
+
 
 

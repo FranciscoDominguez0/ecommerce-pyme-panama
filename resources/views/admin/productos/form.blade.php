@@ -49,7 +49,7 @@
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <a href="{{ route('admin.productos.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
-                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-all shadow-xs">
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-all shadow-xs">
                             <span class="material-symbols-outlined text-[17px] text-slate-400">arrow_back</span>
                             <span class="hidden sm:inline">Cancelar</span>
                         </a>
@@ -93,7 +93,7 @@
                                             <input type="text" id="nombre" name="nombre" required
                                                 value="{{ old('nombre', $producto->nombre ?? '') }}"
                                                 placeholder="Ej. Enrutador Inalámbrico TP-Link ARCHER AX23"
-                                                class="input-panama w-full text-sm rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-medium">
+                                                class="input-panama w-full text-sm rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-medium bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                         </div>
 
                                         <div class="md:col-span-4">
@@ -103,7 +103,7 @@
                                             </label>
                                             <input type="text" id="sku" name="sku" required
                                                 value="{{ old('sku', $producto->sku ?? '') }}" placeholder="PRDO-13"
-                                                class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                                class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                         </div>
                                     </div>
 
@@ -128,7 +128,7 @@
                                                 <input type="text" id="slug" name="slug" required
                                                     value="{{ old('slug', $producto->slug ?? '') }}"
                                                     placeholder="enrutador-inalambrico-tp-link-archer-ax23"
-                                                    class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100">
+                                                    class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                             </div>
                                         </div>
 
@@ -140,7 +140,7 @@
                                             <input type="text" id="modelo" name="modelo"
                                                 value="{{ old('modelo', $producto->modelo ?? '') }}"
                                                 placeholder="ARCHER AX23"
-                                                class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                                class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                             <p class="text-[10px] text-slate-400 mt-1">
                                                 Modelo de fábrica exacto.
                                             </p>
@@ -284,7 +284,7 @@
                                                     oninput="calcularMargen()"
                                                     value="{{ old('precio', $producto->precio ?? '134.04') }}"
                                                     placeholder="134.04"
-                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 dark:text-white rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 dark:text-white rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                             </div>
                                         </div>
 
@@ -300,7 +300,7 @@
                                                     name="precio_oferta" oninput="calcularMargen()"
                                                     value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}"
                                                     placeholder="Opcional"
-                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                             </div>
                                         </div>
                                     </div>
@@ -317,7 +317,7 @@
                                                 name="costo_unitario" oninput="calcularMargen()"
                                                 value="{{ old('costo_unitario', $producto->costo_unitario ?? '0.00') }}"
                                                 placeholder="0.00"
-                                                class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                                class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                         </div>
                                     </div>
 
@@ -356,7 +356,7 @@
                                         <div class="relative flex items-center">
                                             <input type="number" id="stock" name="stock" min="0"
                                                 value="{{ old('stock', $producto->stock ?? 12) }}"
-                                                class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                                class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                         </div>
                                     </div>
 
@@ -369,7 +369,7 @@
                                         </label>
                                         <input type="number" id="stock_minimo" name="stock_minimo" min="0"
                                             value="{{ old('stock_minimo', $producto->stock_minimo ?? 3) }}"
-                                            class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                            class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                     </div>
                                 </div>
                             </div>
@@ -397,7 +397,7 @@
                                 <textarea id="descripcion_corta" name="descripcion_corta" rows="2" maxlength="180"
                                     oninput="actualizarContador(this, 'contador-desc-corta', 180)"
                                     placeholder="Router WiFi 6 de alta velocidad con cobertura de hasta 150 m²..."
-                                    class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
+                                    class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
                             </div>
 
                             <!-- Descripción Detallada -->
@@ -423,7 +423,7 @@
                                 </div>
                                 <textarea id="descripcion" name="descripcion" rows="8"
                                     placeholder="Escribe la descripción completa, características técnicas y especificaciones..."
-                                    class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
+                                    class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -455,7 +455,7 @@
                                             Estado del Producto
                                         </label>
                                         <select id="activo" name="activo"
-                                            class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold">
+                                            class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                             <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>
                                                 Activo (Visible en tienda)</option>
                                             <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>
@@ -833,4 +833,5 @@
             });
     </script>
 @endsection
+
 

@@ -85,7 +85,7 @@
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50">
                         @foreach($usuarios as $user)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                             <td class="py-3 px-4">
                                 @if($user->foto_perfil_ruta)
                                     <div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-gray-700 overflow-hidden border border-slate-200 dark:border-gray-700">
@@ -150,5 +150,7 @@
     @endif
 </div>
 @endsection
+
+
 
 

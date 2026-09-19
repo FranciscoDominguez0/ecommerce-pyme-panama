@@ -66,7 +66,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($promociones as $promo)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors">
                             <td class="py-3.5 px-5 font-bold text-slate-900 dark:text-white">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
@@ -241,5 +241,7 @@
 </script>
 @endpush
 @endsection
+
+
 
 

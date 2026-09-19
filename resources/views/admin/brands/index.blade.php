@@ -96,7 +96,7 @@
                 </thead>
                 <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                     @forelse($marcas as $brand)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 transition-colors group">
                             
                             <!-- Nombre & Detalle -->
                             <td class="py-3.5 px-4 sm:px-6 font-semibold text-slate-900 dark:text-white max-w-[280px]">
@@ -198,5 +198,7 @@
 </div>
 
 @endsection
+
+
 
 

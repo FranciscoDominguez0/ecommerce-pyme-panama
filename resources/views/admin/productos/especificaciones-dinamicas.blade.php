@@ -25,9 +25,9 @@
             <template x-for="(item, index) in destacados" :key="index">
                 <div class="p-3 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl flex gap-2 relative group">
                     <div class="flex-1 space-y-2">
-                        <input type="text" x-model="item.icono" placeholder="Icono (Ej: tv, wifi)" class="input-panama w-full text-xs py-1.5 px-2 rounded-lg border-slate-200 dark:border-gray-700">
-                        <input type="text" x-model="item.titulo" placeholder="Título (Ej: Resolución)" class="input-panama w-full text-xs py-1.5 px-2 rounded-lg border-slate-200 dark:border-gray-700">
-                        <input type="text" x-model="item.valor" placeholder="Valor (Ej: 4K (2160p))" class="input-panama w-full text-xs py-1.5 px-2 rounded-lg border-slate-200 dark:border-gray-700 font-bold">
+                        <input type="text" x-model="item.icono" placeholder="Icono (Ej: tv, wifi)" class="input-panama w-full text-xs py-1.5 px-2 rounded-lg border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
+                        <input type="text" x-model="item.titulo" placeholder="Título (Ej: Resolución)" class="input-panama w-full text-xs py-1.5 px-2 rounded-lg border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
+                        <input type="text" x-model="item.valor" placeholder="Valor (Ej: 4K (2160p))" class="input-panama w-full text-xs py-1.5 px-2 rounded-lg border-slate-200 dark:border-gray-700 font-bold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                     </div>
                     <button type="button" @click="eliminarDestacado(index)" class="text-rose-500 hover:bg-rose-100 p-1 rounded-md h-fit">
                         <span class="material-symbols-outlined text-[18px]">delete</span>
@@ -50,8 +50,8 @@
             <template x-for="(item, index) in caracteristicas" :key="index">
                 <div class="p-3 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl flex gap-2">
                     <div class="flex-1 space-y-2">
-                        <input type="text" x-model="item.titulo" placeholder="Título de la característica" class="input-panama w-full text-sm py-1.5 px-3 rounded-lg border-slate-200 dark:border-gray-700 font-bold">
-                        <textarea x-model="item.descripcion" placeholder="Descripción breve" rows="2" class="input-panama w-full text-xs py-1.5 px-3 rounded-lg border-slate-200 dark:border-gray-700"></textarea>
+                        <input type="text" x-model="item.titulo" placeholder="Título de la característica" class="input-panama w-full text-sm py-1.5 px-3 rounded-lg border-slate-200 dark:border-gray-700 font-bold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
+                        <textarea x-model="item.descripcion" placeholder="Descripción breve" rows="2" class="input-panama w-full text-xs py-1.5 px-3 rounded-lg border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white"></textarea>
                     </div>
                     <button type="button" @click="eliminarCaracteristica(index)" class="text-rose-500 hover:bg-rose-100 p-1 rounded-md h-fit">
                         <span class="material-symbols-outlined text-[18px]">delete</span>
@@ -73,8 +73,8 @@
         <div class="space-y-2">
             <template x-for="(item, index) in especificaciones" :key="index">
                 <div class="flex gap-2 items-center">
-                    <input type="text" x-model="item.clave" placeholder="Atributo (Ej: Tipo de Pantalla)" class="input-panama w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700 font-bold">
-                    <input type="text" x-model="item.valor" placeholder="Valor (Ej: LED)" class="input-panama w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700">
+                    <input type="text" x-model="item.clave" placeholder="Atributo (Ej: Tipo de Pantalla)" class="input-panama w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700 font-bold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
+                    <input type="text" x-model="item.valor" placeholder="Valor (Ej: LED)" class="input-panama w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                     <button type="button" @click="eliminarEspecificacion(index)" class="text-rose-500 hover:bg-rose-100 p-1.5 rounded-md">
                         <span class="material-symbols-outlined text-[18px]">delete</span>
                     </button>
@@ -122,5 +122,6 @@
         }));
     });
 </script>
+
 
 

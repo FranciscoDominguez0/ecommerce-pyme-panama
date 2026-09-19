@@ -49,7 +49,7 @@
                 @php
                     $activo = isset($configuraciones["pagos.{$clave}.activo"]) && $configuraciones["pagos.{$clave}.activo"] === 'true';
                 @endphp
-                <div class="flex items-center justify-between p-4 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group {{ !$activo ? 'opacity-75' : '' }}">
+                <div class="flex items-center justify-between p-4 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group {{ !$activo ? 'opacity-75' : '' }}">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-transparent flex items-center justify-center {{ $activo ? 'text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600' }} transition-colors p-1.5 overflow-hidden">
                             @if($clave === 'yappy')
@@ -80,5 +80,7 @@
     </div>
 </div>
 @endsection
+
+
 
 

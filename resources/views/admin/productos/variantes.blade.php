@@ -412,7 +412,7 @@
                     <input type="text" 
                            placeholder="+ Nueva opción..." 
                            onkeydown="handleNuevaOpcionInput(event, ${idx}, this)" 
-                           class="text-xs py-1 px-2.5 rounded-lg border-dashed border-slate-300 dark:border-gray-700 focus:border-solid focus:border-emerald-500 focus:ring-emerald-500 w-32 bg-slate-50 dark:bg-transparent focus:bg-white dark:focus:bg-[#121415] text-slate-900 dark:text-white">
+                           class="text-xs py-1 px-2.5 rounded-lg border-dashed border-slate-300 dark:border-gray-700 focus:border-solid focus:border-emerald-500 focus:ring-emerald-500 w-32 bg-slate-50 dark:bg-transparent focus:bg-white dark:bg-[#121415] dark:focus:bg-[#121415] text-slate-900 dark:text-white">
                 </div>
             </div>`;
 
@@ -583,7 +583,7 @@
 
         paginaItems.forEach(({ item, indexOriginal }) => {
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors';
+            tr.className = 'hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors';
             tr.innerHTML = `
                 <td class="py-2.5 px-4">
                     <div class="flex items-center gap-2">
@@ -695,5 +695,7 @@
         }
     });
 </script>
+
+
 
 

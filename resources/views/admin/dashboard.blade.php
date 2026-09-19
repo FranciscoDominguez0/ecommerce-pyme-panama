@@ -215,7 +215,7 @@
                 </thead>
                 <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/80">
                     @forelse($transaccionesRecientes as $pedido)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3 pl-1 font-bold text-slate-900 dark:text-white">
                                 {{ $pedido->numero_pedido }}
                             </td>
@@ -292,7 +292,7 @@
                         @php
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3">
                                 <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
@@ -505,4 +505,6 @@
 })();
 </script>
 @endpush
+
+
 
