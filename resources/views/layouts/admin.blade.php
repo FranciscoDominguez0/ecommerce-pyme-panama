@@ -19,6 +19,21 @@
     @include('layouts.partials.admin.styles')
 
     @stack('styles')
+
+    {{-- Script inline: aplica dark mode desde localStorage ANTES del primer render para evitar flash blanco --}}
+    <script>
+        (function() {
+            var theme = localStorage.getItem('color-theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+        })();
+    </script>
 </head>
 <body class="text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative" style="background-color: var(--admin-bg);">
     
@@ -27,7 +42,18 @@
     @endphp
 
     @if($isFromLogin)
-        <div id="global-admin-skeleton-wrapper" class="fixed inset-0 z-[9999] bg-[#F8FAFC] transition-opacity duration-300">
+        <div id="global-admin-skeleton-wrapper" class="fixed inset-0 z-[9999] transition-opacity duration-300"
+             style="background-color: #F8FAFC;"
+             data-dark-bg="#121415"
+             data-light-bg="#F8FAFC">
+            <script>
+                (function(){
+                    var el = document.getElementById('global-admin-skeleton-wrapper');
+                    if (!el) return;
+                    var isDark = document.documentElement.classList.contains('dark');
+                    el.style.backgroundColor = isDark ? el.dataset.darkBg : el.dataset.lightBg;
+                })();
+            </script>
             <x-admin-skeleton :fullScreen="true" />
         </div>
     @endif
