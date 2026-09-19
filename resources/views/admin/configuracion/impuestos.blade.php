@@ -73,7 +73,7 @@
                         <div class="p-4 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:shadow-sm transition-shadow h-full">
                             <label for="itbms_tasa" class="block text-sm font-medium text-slate-900 dark:text-white mb-2">Tasa de ITBMS (%)</label>
                             <div class="relative">
-                                <input type="number" id="itbms_tasa" name="itbms_tasa" value="{{ old('itbms_tasa', $itbmsTasa) }}" step="0.01" min="0" max="100" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-4 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" required>
+                                <input type="number" id="itbms_tasa" name="itbms_tasa" value="{{ old('itbms_tasa', $itbmsTasa) }}" step="0.01" min="0" max="100" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-4 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" required>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-500 dark:text-slate-400">%</div>
                             </div>
                             @error('itbms_tasa') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
@@ -84,7 +84,7 @@
             
             <!-- Footer Actions -->
             <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex justify-end gap-4 mt-auto rounded-b-xl">
-                <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:bg-gray-700 transition-colors border border-transparent">Cancelar</a>
+                <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:bg-gray-700 transition-colors border border-transparent">Cancelar</a>
                 <button type="submit" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">Guardar cambios</button>
             </div>
         </form>

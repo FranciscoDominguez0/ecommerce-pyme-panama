@@ -84,7 +84,7 @@
         <div class="card-elevated rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
-                    <thead class="bg-slate-50 dark:bg-transparent border-b border-slate-100 dark:border-gray-700">
+                    <thead class="border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
                         <tr>
                             <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">ID Devolución</th>
                             <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pedido</th>

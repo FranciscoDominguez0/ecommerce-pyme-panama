@@ -456,7 +456,7 @@
                     series: @json(collect($ventasPorCategoria)->pluck('total_ventas')),
                     labels: @json(collect($ventasPorCategoria)->pluck('categoria')),
                     chart: { type: 'pie', height: 260, ...fontConfig },
-                    colors: ['#059669', '#cbd5e1', '#94a3b8', '#64748b', '#475569'], // Tonos de verde y grises (estilo imagen)
+                    colors: ['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a'], // Tonos de verde y grises (estilo imagen)
                     dataLabels: { enabled: false }, // Limpio
                     legend: { show: false }, // Ocultamos la leyenda estándar para que se vea más limpio
                     theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' },

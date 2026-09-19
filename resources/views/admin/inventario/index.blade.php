@@ -35,18 +35,18 @@
                 <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                      class="absolute right-0 mt-2 w-52 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl shadow-lg z-50 overflow-hidden">
                     <a href="{{ route('admin.inventario.entrada.form') }}"
-                       class="flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 transition-colors">
-                        <span class="material-symbols-outlined text-emerald-600 text-[18px]">south_east</span>
+                       class="flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400 transition-colors">
+                        <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-500 text-[18px]">south_east</span>
                         Registrar Entrada
                     </a>
                     <a href="{{ route('admin.inventario.salida.form') }}"
-                       class="flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-red-50 hover:text-red-700 transition-colors">
+                       class="flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/30 dark:hover:text-red-400 transition-colors">
                         <span class="material-symbols-outlined text-red-500 text-[18px]">north_east</span>
                         Registrar Salida
                     </a>
                     <div class="border-t border-slate-100 dark:border-gray-700"></div>
                     <a href="{{ route('admin.inventario.ajuste.form') }}"
-                       class="flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-700 transition-colors">
+                       class="flex items-center gap-3 px-4 py-3 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-700 dark:hover:bg-amber-900/30 dark:hover:text-amber-400 transition-colors">
                         <span class="material-symbols-outlined text-amber-500 text-[18px]">sync_alt</span>
                         Ajuste Manual
                     </a>

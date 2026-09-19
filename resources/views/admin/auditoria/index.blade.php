@@ -7,8 +7,8 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Auditoría del Sistema</h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Monitorea y revisa las acciones realizadas en el sistema.</p>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white dark:text-white tracking-tight">Auditoría del Sistema</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-400 mt-1">Monitorea y revisa las acciones realizadas en el sistema.</p>
         </div>
     </div>
 
@@ -16,8 +16,8 @@
     <div class="card-elevated rounded-xl p-4 sm:p-5">
         <form action="{{ route('admin.auditoria.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
             <div class="w-full sm:w-64">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Usuario</label>
-                <select name="usuario_id" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 uppercase tracking-wider mb-1">Usuario</label>
+                <select name="usuario_id" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
                     <option value="">Todos los usuarios</option>
                     @foreach($usuarios as $user)
                         <option value="{{ $user->id }}" {{ request('usuario_id') == $user->id ? 'selected' : '' }}>
@@ -31,8 +31,8 @@
             </div>
             
             <div class="w-full sm:w-48">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Módulo</label>
-                <select name="modulo" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 uppercase tracking-wider mb-1">Módulo</label>
+                <select name="modulo" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
                     <option value="">Todos los módulos</option>
                     @foreach($modulos as $mod)
                         <option value="{{ $mod }}" {{ request('modulo') == $mod ? 'selected' : '' }}>{{ $mod }}</option>
@@ -41,8 +41,8 @@
             </div>
 
             <div class="w-full sm:w-48">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Acción</label>
-                <select name="accion" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 uppercase tracking-wider mb-1">Acción</label>
+                <select name="accion" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
                     <option value="">Todas las acciones</option>
                     @foreach($acciones as $act)
                         <option value="{{ $act }}" {{ request('accion') == $act ? 'selected' : '' }}>{{ ucfirst($act) }}</option>
@@ -51,13 +51,13 @@
             </div>
 
             <div class="w-full sm:w-48">
-                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Desde Fecha</label>
-                <input type="date" name="fecha_inicio" value="{{ request('fecha_inicio') }}" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 uppercase tracking-wider mb-1">Desde Fecha</label>
+                <input type="date" name="fecha_inicio" value="{{ request('fecha_inicio') }}" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
             </div>
 
             @if(request()->anyFilled(['usuario_id', 'modulo', 'accion', 'fecha_inicio']))
             <div class="flex items-end mb-1">
-                <a href="{{ route('admin.auditoria.index') }}" class="inline-flex items-center text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300">
+                <a href="{{ route('admin.auditoria.index') }}" class="inline-flex items-center text-sm text-slate-500 dark:text-slate-400 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 dark:text-slate-300">
                     <span class="material-symbols-outlined text-[18px] mr-1">close</span> Limpiar
                 </a>
             </div>
@@ -70,30 +70,30 @@
         @if($logs->count() > 0)
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-200 dark:divide-gray-700/50">
-                <thead class="bg-slate-50 dark:bg-transparent">
+                <thead class="border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha / Hora</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Usuario</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Módulo</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Acción</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Descripción</th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Acciones</th>
+                        <th scope="col" class="px-6 py-3 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha / Hora</th>
+                        <th scope="col" class="px-6 py-3 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Usuario</th>
+                        <th scope="col" class="px-6 py-3 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Módulo</th>
+                        <th scope="col" class="px-6 py-3 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Acción</th>
+                        <th scope="col" class="px-6 py-3 text-left text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Descripción</th>
+                        <th scope="col" class="px-6 py-3 text-right text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#181a1b] divide-y divide-slate-100 dark:divide-gray-700/50">
                     @foreach($logs as $log)
-                    <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white font-medium">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-gray-700/30 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white dark:text-white font-medium">
                             {{ $log->creado_en->format('d M Y, H:i') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 @if($log->usuario)
-                                    <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center text-slate-600 dark:text-slate-400 font-bold text-xs uppercase shrink-0">
+                                    <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center text-slate-600 dark:text-slate-400 dark:text-slate-400 font-bold text-xs uppercase shrink-0">
                                         {{ substr($log->usuario->nombre, 0, 1) }}{{ substr($log->usuario->apellido, 0, 1) }}
                                     </div>
                                     <div class="ml-3">
-                                        <p class="text-sm font-medium text-slate-900 dark:text-white">
+                                        <p class="text-sm font-medium text-slate-900 dark:text-white dark:text-white">
                                             {{ $log->usuario->nombre }}
                                             @if($log->usuario->hasRole(['super_admin', 'admin', 'Admin', 'Superadmin']))
                                                 <span class="inline-flex items-center ml-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">ADMIN</span>
@@ -105,12 +105,12 @@
                                         S
                                     </div>
                                     <div class="ml-3">
-                                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 italic">Sistema / Anónimo</p>
+                                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 dark:text-slate-400 italic">Sistema / Anónimo</p>
                                     </div>
                                 @endif
                             </div>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white font-medium">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white dark:text-white font-medium">
                             {{ $log->modulo }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -126,7 +126,7 @@
                                 {{ ucfirst($log->accion) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400 truncate max-w-[200px]" title="{{ $log->descripcion }}">
+                        <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-400 truncate max-w-[200px]" title="{{ $log->descripcion }}">
                             {{ $log->descripcion }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -141,12 +141,12 @@
         </div>
         
         @if($logs->hasPages())
-            <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
+            <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 dark:bg-transparent/50">
                 {{ $logs->links('vendor.pagination.admin-tailwind') }}
             </div>
         @endif
         @else
-        <div class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+        <div class="px-6 py-12 text-center text-slate-500 dark:text-slate-400 dark:text-slate-400">
             <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">manage_search</span>
             <p>No se encontraron registros de auditoría.</p>
         </div>
@@ -168,22 +168,22 @@
 
                 <!-- Contenido Modal -->
                 <div x-show="!cargando && logDetalle">
-                    <div class="flex justify-between items-start mb-5 pb-4 border-b border-slate-100 dark:border-gray-700">
+                    <div class="flex justify-between items-start mb-5 pb-4 border-b border-slate-100 dark:border-gray-700 dark:border-gray-700">
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white">Detalle de Registro</h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1" x-text="logDetalle?.descripcion"></p>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white dark:text-white">Detalle de Registro</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 dark:text-slate-400 mt-1" x-text="logDetalle?.descripcion"></p>
                         </div>
-                        <button @click="cerrarDetalle()" class="text-slate-400 hover:text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 rounded-md p-1.5 transition">
+                        <button @click="cerrarDetalle()" class="text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:text-slate-400 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 rounded-md p-1.5 transition">
                             <span class="material-symbols-outlined text-[20px]">close</span>
                         </button>
                     </div>
 
                     <!-- Meta info -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-slate-50 dark:bg-transparent p-4 rounded-xl text-sm border border-slate-100 dark:border-gray-700">
-                        <div><span class="block text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Módulo</span><span class="font-semibold text-slate-900 dark:text-white" x-text="logDetalle?.modulo"></span></div>
-                        <div><span class="block text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Acción</span><span class="font-semibold text-slate-900 dark:text-white capitalize" x-text="logDetalle?.accion"></span></div>
-                        <div><span class="block text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">IP</span><span class="font-mono text-slate-900 dark:text-white" x-text="logDetalle?.ip || 'N/A'"></span></div>
-                        <div><span class="block text-slate-500 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Navegador</span><span class="text-slate-700 dark:text-slate-300 truncate block" :title="logDetalle?.agente_usuario" x-text="logDetalle?.agente_usuario || 'N/A'"></span></div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-slate-50 dark:bg-transparent/50 dark:bg-transparent p-4 rounded-xl text-sm border border-slate-100 dark:border-gray-700 dark:border-gray-700">
+                        <div><span class="block text-slate-500 dark:text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Módulo</span><span class="font-semibold text-slate-900 dark:text-white dark:text-white" x-text="logDetalle?.modulo"></span></div>
+                        <div><span class="block text-slate-500 dark:text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Acción</span><span class="font-semibold text-slate-900 dark:text-white dark:text-white capitalize" x-text="logDetalle?.accion"></span></div>
+                        <div><span class="block text-slate-500 dark:text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">IP</span><span class="font-mono text-slate-900 dark:text-white dark:text-white" x-text="logDetalle?.ip || 'N/A'"></span></div>
+                        <div><span class="block text-slate-500 dark:text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Navegador</span><span class="text-slate-700 dark:text-slate-300 dark:text-slate-300 truncate block" :title="logDetalle?.agente_usuario" x-text="logDetalle?.agente_usuario || 'N/A'"></span></div>
                     </div>
 
                     <!-- Comparación Diff -->
@@ -194,7 +194,7 @@
                                 <span class="material-symbols-outlined text-[16px]">remove</span> Valor Anterior
                             </div>
                             <div class="p-4 overflow-x-auto flex-1">
-                                <pre class="text-[12px] font-mono text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-all" x-text="formatearJSON(logDetalle?.valor_anterior)"></pre>
+                                <pre class="text-[12px] font-mono text-slate-700 dark:text-slate-300 dark:text-slate-300 whitespace-pre-wrap break-all" x-text="formatearJSON(logDetalle?.valor_anterior)"></pre>
                             </div>
                         </div>
 
@@ -204,7 +204,7 @@
                                 <span class="material-symbols-outlined text-[16px]">add</span> Valor Nuevo
                             </div>
                             <div class="p-4 overflow-x-auto flex-1">
-                                <pre class="text-[12px] font-mono text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-all" x-text="formatearJSON(logDetalle?.valor_nuevo)"></pre>
+                                <pre class="text-[12px] font-mono text-slate-700 dark:text-slate-300 dark:text-slate-300 whitespace-pre-wrap break-all" x-text="formatearJSON(logDetalle?.valor_nuevo)"></pre>
                             </div>
                         </div>
                     </div>

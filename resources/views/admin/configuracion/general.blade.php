@@ -35,7 +35,7 @@
             <div class="p-6 space-y-8">
                 <!-- Logo Upload Section (utilizando Alpine.js para la preview real-time) -->
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">Logo de la empresa</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 uppercase tracking-wider mb-3">Logo de la empresa</label>
                     <div class="flex items-start gap-6" x-data="{ 
                         previewUrl: '{{ isset($configuraciones['empresa.logo_ruta']) ? asset('storage/' . $configuraciones['empresa.logo_ruta']) : asset('images/placeholder-logo.png') }}',
                         fileChosen(event) {
@@ -52,7 +52,7 @@
                             <input type="file" name="logo" x-ref="logoInput" class="hidden" accept="image/*" @change="fileChosen">
                         </div>
                         <div class="flex flex-col justify-center gap-3 h-32">
-                            <button type="button" @click="$refs.logoInput.click()" class="px-4 py-2 border border-slate-300 dark:border-gray-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors w-fit shadow-sm">
+                            <button type="button" @click="$refs.logoInput.click()" class="px-4 py-2 border border-slate-300 dark:border-gray-700 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors w-fit shadow-sm">
                                 Cambiar logo
                             </button>
                         </div>
@@ -63,36 +63,36 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
                     <!-- Company Name -->
                     <div class="col-span-1 md:col-span-2 lg:col-span-1">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="nombre">Nombre de la empresa</label>
-                        <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $configuraciones['empresa.nombre'] ?? '') }}" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" required>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 mb-1 uppercase tracking-wider" for="nombre">Nombre de la empresa</label>
+                        <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $configuraciones['empresa.nombre'] ?? '') }}" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" required>
                         @error('nombre') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     
                     <!-- RUC -->
                     <div class="col-span-1 md:col-span-2 lg:col-span-1">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="ruc">RUC / Aviso de operación</label>
-                        <input type="text" id="ruc" name="ruc" value="{{ old('ruc', $configuraciones['empresa.ruc'] ?? '') }}" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" required>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 mb-1 uppercase tracking-wider" for="ruc">RUC / Aviso de operación</label>
+                        <input type="text" id="ruc" name="ruc" value="{{ old('ruc', $configuraciones['empresa.ruc'] ?? '') }}" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" required>
                         @error('ruc') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     
                     <!-- Phone -->
                     <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="telefono">Teléfono de contacto</label>
-                        <input type="tel" id="telefono" name="telefono" value="{{ old('telefono', $configuraciones['empresa.telefono'] ?? '') }}" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 mb-1 uppercase tracking-wider" for="telefono">Teléfono de contacto</label>
+                        <input type="tel" id="telefono" name="telefono" value="{{ old('telefono', $configuraciones['empresa.telefono'] ?? '') }}" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
                         @error('telefono') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     
                     <!-- Email -->
                     <div class="col-span-1 lg:col-span-1">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="correo_contacto">Correo de contacto</label>
-                        <input type="email" id="correo_contacto" name="correo_contacto" value="{{ old('correo_contacto', $configuraciones['empresa.correo_contacto'] ?? '') }}" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 mb-1 uppercase tracking-wider" for="correo_contacto">Correo de contacto</label>
+                        <input type="email" id="correo_contacto" name="correo_contacto" value="{{ old('correo_contacto', $configuraciones['empresa.correo_contacto'] ?? '') }}" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
                         @error('correo_contacto') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     
                     <!-- Address -->
                     <div class="col-span-1 md:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="direccion">Dirección</label>
-                        <textarea id="direccion" name="direccion" rows="3" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 resize-y">{{ old('direccion', $configuraciones['empresa.direccion'] ?? '') }}</textarea>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 mb-1 uppercase tracking-wider" for="direccion">Dirección</label>
+                        <textarea id="direccion" name="direccion" rows="3" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 resize-y">{{ old('direccion', $configuraciones['empresa.direccion'] ?? '') }}</textarea>
                         @error('direccion') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>

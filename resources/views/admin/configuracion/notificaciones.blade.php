@@ -79,7 +79,7 @@
                                 @foreach($roles as $rol)
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" name="stock_email_roles[]" value="{{ $rol->name }}" class="form-checkbox h-4 w-4 text-emerald-600 border-slate-300 dark:border-gray-700 rounded focus:ring-emerald-500" {{ in_array($rol->name, $rolesSeleccionados) ? 'checked' : '' }}>
-                                        <span class="ml-2 text-sm text-slate-700 dark:text-slate-300">{{ ucfirst(str_replace('_', ' ', $rol->name)) }}</span>
+                                        <span class="ml-2 text-sm text-slate-700 dark:text-slate-300 dark:text-slate-300">{{ ucfirst(str_replace('_', ' ', $rol->name)) }}</span>
                                     </label><br>
                                 @endforeach
                             </div>
@@ -91,7 +91,7 @@
                             <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Notificar a personas sin cuenta (separar con comas).</p>
                             
                             <div class="relative">
-                                <textarea id="stock_email_adicionales" name="stock_email_adicionales" rows="3" class="block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" placeholder="ejemplo@correo.com, jefe@tienda.com">{{ old('stock_email_adicionales', $adicionales) }}</textarea>
+                                <textarea id="stock_email_adicionales" name="stock_email_adicionales" rows="3" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" placeholder="ejemplo@correo.com, jefe@tienda.com">{{ old('stock_email_adicionales', $adicionales) }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
             
             <!-- Footer Actions -->
             <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex justify-end gap-4 mt-auto rounded-b-xl">
-                <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:bg-gray-700 transition-colors border border-transparent">Cancelar</a>
+                <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:bg-gray-700 transition-colors border border-transparent">Cancelar</a>
                 <button type="submit" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">Guardar cambios</button>
             </div>
         </form>
