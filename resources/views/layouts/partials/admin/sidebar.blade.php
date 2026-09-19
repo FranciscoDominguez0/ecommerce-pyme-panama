@@ -244,7 +244,7 @@
             <!-- 8. Sistema & Seguridad (Desplegable) -->
             @canany(['admin.auditoria.ver', 'admin.configuracion.ver'])
             @php
-                $isSistemaActive = request()->is('admin/auditoria*') || request()->is('admin/configuracion*');
+                $isSistemaActive = request()->is('admin/auditoria*') || request()->routeIs('admin.configuracion.*');
             @endphp
             <div x-data="{ open: {{ $isSistemaActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
@@ -269,9 +269,9 @@
                     </div>
                     @endcan
                     @can('admin.configuracion.ver')
-                    <div class="submenu-item relative {{ request()->is('admin/configuracion*') ? 'is-active' : '' }}">
+                    <div class="submenu-item relative {{ request()->routeIs('admin.configuracion.*') ? 'is-active' : '' }}">
                         <a href="{{ url('/admin/configuracion') }}" 
-                           class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->is('admin/configuracion*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
+                           class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->routeIs('admin.configuracion.*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
                             <span>Configuración</span>
                         </a>
                     </div>

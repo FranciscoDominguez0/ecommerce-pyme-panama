@@ -227,11 +227,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::post('/devoluciones/{id}/rechazar', [DevolucionController::class, 'rechazar'])->name('admin.devoluciones.rechazar');
 
     // Módulo de Zonas de Envío (FASE 9)
-    Route::get('/configuracion/zonas-envio', [ZonaEnvioController::class, 'index'])->name('admin.zonas-envio.index');
-    Route::post('/configuracion/zonas-envio', [ZonaEnvioController::class, 'store'])->name('admin.zonas-envio.store');
-    Route::put('/configuracion/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'update'])->name('admin.zonas-envio.update');
-    Route::post('/configuracion/zonas-envio/{zonaEnvio}/toggle', [ZonaEnvioController::class, 'toggle'])->name('admin.zonas-envio.toggle');
-    Route::delete('/configuracion/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'destroy'])->name('admin.zonas-envio.destroy');
+    Route::get('/zonas-envio', [ZonaEnvioController::class, 'index'])->name('admin.zonas-envio.index');
+    Route::post('/zonas-envio', [ZonaEnvioController::class, 'store'])->name('admin.zonas-envio.store');
+    Route::put('/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'update'])->name('admin.zonas-envio.update');
+    Route::post('/zonas-envio/{zonaEnvio}/toggle', [ZonaEnvioController::class, 'toggle'])->name('admin.zonas-envio.toggle');
+    Route::delete('/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'destroy'])->name('admin.zonas-envio.destroy');
 
     // Módulo de Cupones y Promociones (FASE 11)
     Route::get('/promociones/cupones', [CuponController::class, 'index'])->name('admin.promociones.cupones');

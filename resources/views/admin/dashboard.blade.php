@@ -268,7 +268,7 @@
     <!-- Bottom Layout: Top Selling Products -->
     <div class="card-saas p-5 flex flex-col mb-4">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-sm sm:text-base font-bold text-slate-900">Productos Más Vendidos</h3>
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Productos Más Vendidos</h3>
             <a href="{{ url('/admin/productos') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span>Ir al catálogo</span>
                 <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
@@ -278,7 +278,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         <th class="pb-3 w-10"></th>
                         <th class="pb-3">Producto</th>
                         <th class="pb-3">Categoría</th>
@@ -287,14 +287,14 @@
                         <th class="pb-3 text-center">Ventas Totales</th>
                     </tr>
                 </thead>
-                <tbody class="text-xs divide-y divide-slate-100">
+                <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/80">
                     @forelse($topProductos as $prod)
                         @php
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
-                        <tr class="hover:bg-slate-50/70 transition-colors">
+                        <tr class="hover:bg-slate-50/70 dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3">
-                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200 overflow-hidden shadow-xs">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
                                         <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="w-full h-full object-cover">
                                     @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
@@ -307,20 +307,20 @@
                                 </div>
                             </td>
                             <td class="py-3">
-                                <a href="{{ route('admin.productos.edit', $prod) }}" class="font-bold text-slate-900 hover:text-emerald-600 transition-colors line-clamp-1" title="{{ $prod->nombre }}">
+                                <a href="{{ route('admin.productos.edit', $prod) }}" class="font-bold text-slate-900 dark:text-white hover:text-emerald-600 transition-colors line-clamp-1" title="{{ $prod->nombre }}">
                                     {{ $prod->nombre }}
                                 </a>
                                 @if($prod->sku)
                                     <div class="text-[10px] text-slate-400 font-mono">{{ $prod->sku }}</div>
                                 @endif
                             </td>
-                            <td class="py-3 text-slate-500 font-medium">
+                            <td class="py-3 text-slate-500 dark:text-slate-400 font-medium">
                                 {{ $prod->categoria->nombre ?? 'Sin categoría' }}
                             </td>
-                            <td class="py-3 font-semibold text-slate-700">
+                            <td class="py-3 font-semibold text-slate-700 dark:text-slate-300">
                                 ${{ number_format($prod->precio, 2) }}
                             </td>
-                            <td class="py-3 text-center text-slate-500">
+                            <td class="py-3 text-center text-slate-500 dark:text-slate-400">
                                 {{ $prod->stock }} disp.
                             </td>
                             <td class="py-3 text-center font-extrabold text-emerald-600">
@@ -329,7 +329,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-8 text-center text-slate-500 text-xs">
+                            <td colspan="6" class="py-8 text-center text-slate-500 dark:text-slate-400 text-xs">
                                 Aún no hay ventas de productos para calcular esta métrica.
                             </td>
                         </tr>

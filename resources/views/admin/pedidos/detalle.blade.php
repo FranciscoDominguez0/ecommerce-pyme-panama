@@ -13,12 +13,12 @@
     <!-- Header del Pedido -->
     <div class="card-elevated rounded-xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-3">
                 Pedido {{ $pedido->numero_pedido }}
                 @php
                     $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
                     $estadoClasses = [
-                        'pendiente' => 'bg-slate-100 text-slate-700 border-slate-200',
+                        'pendiente' => 'bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 border-slate-200 dark:border-gray-700',
                         'pago_confirmado' => 'bg-blue-50 text-blue-700 border-blue-200',
                         'pago_rechazado' => 'bg-red-50 text-red-700 border-red-200',
                         'en_preparacion' => 'bg-amber-50 text-amber-700 border-amber-200',
@@ -29,9 +29,9 @@
                         'problema_entrega' => 'bg-rose-50 text-rose-700 border-rose-200',
                         'devolucion_solicitada' => 'bg-orange-50 text-orange-700 border-orange-200',
                         'cancelado' => 'bg-red-50 text-red-700 border-red-200',
-                        'reembolsado' => 'bg-slate-100 text-slate-800 border-slate-300',
+                        'reembolsado' => 'bg-slate-100 dark:bg-transparent text-slate-800 border-slate-300 dark:border-gray-700',
                     ];
-                    $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 text-slate-700 border-slate-200';
+                    $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 border-slate-200 dark:border-gray-700';
                     $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
                 @endphp
                 @if($ultimoEstado !== 'reembolsado')
@@ -40,7 +40,7 @@
                     </span>
                 @endif
             </h1>
-            <p class="text-sm text-slate-500 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y H:i') }} por <span class="font-medium text-slate-700">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span></p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y H:i') }} por <span class="font-medium text-slate-700 dark:text-slate-300">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span></p>
         </div>
         
         <div class="flex flex-wrap gap-2">
@@ -102,23 +102,23 @@
             
             <!-- Estado del Pedido -->
             <div class="card-elevated rounded-xl p-6">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                    <h2 class="text-lg font-bold text-slate-900">Estado del Pedido</h2>
+                <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-3 mb-4">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">Estado del Pedido</h2>
                 </div>
 
                 @if($ultimoEstado === 'reembolsado')
                     <div class="flex items-center gap-3 py-1">
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Estado actual:</span>
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-800 border border-slate-300">
-                            <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> Reembolsado
+                        <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado actual:</span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-transparent text-slate-800 border border-slate-300 dark:border-gray-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-slate-50 dark:bg-transparent0"></span> Reembolsado
                         </span>
                     </div>
                 @else
                     <form action="{{ route('admin.pedidos.estado', $pedido->id) }}" method="POST" class="flex flex-col sm:flex-row gap-4 items-end" x-data="{ sub: false, estadoSel: '{{ $ultimoEstado }}' }" @submit="sub = true">
                         @csrf
                         <div class="w-full sm:w-1/3">
-                            <label for="estado" class="block text-sm font-medium text-slate-700 mb-1">Nuevo Estado</label>
-                            <select name="estado" id="estado" x-model="estadoSel" class="block w-full rounded-md border-slate-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                            <label for="estado" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nuevo Estado</label>
+                            <select name="estado" id="estado" x-model="estadoSel" class="block w-full rounded-md border-slate-300 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
                                 <option value="pendiente" {{ $ultimoEstado == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                                 <option value="pago_confirmado" {{ $ultimoEstado == 'pago_confirmado' ? 'selected' : '' }}>Pago Confirmado</option>
                                 <option value="en_preparacion" {{ $ultimoEstado == 'en_preparacion' ? 'selected' : '' }}>En Preparación</option>
@@ -132,8 +132,8 @@
                             </select>
                         </div>
                         <div class="w-full sm:w-1/2">
-                            <label for="comentario" class="block text-sm font-medium text-slate-700 mb-1">Comentario (Opcional)</label>
-                            <input type="text" name="comentario" id="comentario" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" placeholder="Ej: Paquete entregado a mensajería">
+                            <label for="comentario" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Comentario (Opcional)</label>
+                            <input type="text" name="comentario" id="comentario" class="block w-full rounded-md border-slate-300 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm placeholder-slate-400 dark:placeholder-gray-500" placeholder="Ej: Paquete entregado a mensajería">
                         </div>
                         <div class="w-full sm:w-auto">
                             <button type="submit" :disabled="sub" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-colors h-10 disabled:opacity-75 disabled:cursor-wait">
@@ -145,14 +145,14 @@
 
                     {{-- Botón de Reembolso con Stripe condicionado a estados de cancelación o devolución --}}
                     @if((auth()->user()->hasAnyRole(['Admin', 'super_admin']) || auth()->user()->can('admin.pedidos.reembolsar')) && $pedido->metodo_pago === 'stripe' && in_array($ultimoEstado, ['cancelado', 'devolucion_solicitada', 'problema_entrega']))
-                        <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 dark:bg-transparent p-4 rounded-xl border border-slate-200 dark:border-gray-700">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center shrink-0">
                                     <span class="material-symbols-outlined text-lg">currency_exchange</span>
                                 </div>
                                 <div>
-                                    <p class="text-xs font-bold text-slate-900">Pedido en estado: {{ ucfirst(str_replace('_', ' ', $ultimoEstado)) }}</p>
-                                    <p class="text-[11px] text-slate-500">Puedes emitir el reembolso al método de pago original con Stripe con justificación.</p>
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white">Pedido en estado: {{ ucfirst(str_replace('_', ' ', $ultimoEstado)) }}</p>
+                                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Puedes emitir el reembolso al método de pago original con Stripe con justificación.</p>
                                 </div>
                             </div>
                             <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.remove('hidden')" class="inline-flex items-center px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition shadow-sm shrink-0">
@@ -165,31 +165,31 @@
 
             <!-- Items del Pedido -->
             <div class="card-elevated rounded-xl p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-2">Artículos ({{ $pedido->items->count() }})</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-gray-700 pb-2">Artículos ({{ $pedido->items->count() }})</h2>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-slate-200">
+                    <table class="min-w-full divide-y divide-slate-200 dark:divide-gray-700">
                         <thead>
                             <tr>
-                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Producto</th>
-                                <th scope="col" class="px-3 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Precio U.</th>
-                                <th scope="col" class="px-3 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider">Cant.</th>
-                                <th scope="col" class="px-3 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Total</th>
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Producto</th>
+                                <th scope="col" class="px-3 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Precio U.</th>
+                                <th scope="col" class="px-3 py-3 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cant.</th>
+                                <th scope="col" class="px-3 py-3 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50">
                             @foreach($pedido->items as $item)
                             <tr>
                                 <td class="px-3 py-4">
                                     <div class="flex items-center">
-                                        <div class="h-10 w-10 flex-shrink-0 rounded bg-slate-100 overflow-hidden border border-slate-200">
+                                        <div class="h-10 w-10 flex-shrink-0 rounded bg-slate-100 dark:bg-transparent overflow-hidden border border-slate-200 dark:border-gray-700">
                                             @if($item->producto)
                                                 <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="h-full w-full object-cover">
                                             @endif
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-slate-900">{{ $item->producto->nombre ?? 'Producto Desconocido' }}</div>
+                                            <div class="text-sm font-medium text-slate-900 dark:text-white">{{ $item->producto->nombre ?? 'Producto Desconocido' }}</div>
                                             @if($item->variante)
-                                            <div class="text-xs text-slate-500">
+                                            <div class="text-xs text-slate-500 dark:text-slate-400">
                                                 @foreach($item->variante->opciones as $opcion)
                                                     {{ $opcion->tipo->nombre }}: {{ $opcion->valor }}@if(!$loop->last), @endif
                                                 @endforeach
@@ -198,13 +198,13 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-3 py-4 whitespace-nowrap text-right text-sm text-slate-500">
+                                <td class="px-3 py-4 whitespace-nowrap text-right text-sm text-slate-500 dark:text-slate-400">
                                     ${{ number_format($item->precio_unitario, 2) }}
                                 </td>
-                                <td class="px-3 py-4 whitespace-nowrap text-center text-sm font-medium text-slate-900">
+                                <td class="px-3 py-4 whitespace-nowrap text-center text-sm font-medium text-slate-900 dark:text-white">
                                     {{ $item->cantidad }}
                                 </td>
-                                <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-900">
+                                <td class="px-3 py-4 whitespace-nowrap text-right text-sm font-medium text-slate-900 dark:text-white">
                                     ${{ number_format($item->subtotal, 2) }}
                                 </td>
                             </tr>
@@ -216,7 +216,7 @@
 
             <!-- Historial -->
             <div class="card-elevated rounded-xl p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-6 border-b border-slate-100 pb-2">Historial del Pedido</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-100 dark:border-gray-700 pb-2">Historial del Pedido</h2>
                 <div class="flow-root">
                     <ul role="list" class="-mb-8">
                         @foreach($pedido->estados as $index => $historial)
@@ -227,20 +227,20 @@
                                     @endif
                                     <div class="relative flex space-x-3">
                                         <div>
-                                            <span class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center ring-8 ring-white">
-                                                <span class="material-symbols-outlined text-slate-500 text-sm">
+                                            <span class="h-8 w-8 rounded-full bg-slate-100 dark:bg-transparent flex items-center justify-center ring-8 ring-white">
+                                                <span class="material-symbols-outlined text-slate-500 dark:text-slate-400 text-sm">
                                                     {{ $historial->estado === 'cancelado' ? 'close' : 'check' }}
                                                 </span>
                                             </span>
                                         </div>
                                         <div class="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                                             <div>
-                                                <p class="text-sm text-slate-900 font-medium">{{ ucfirst(str_replace('_', ' ', $historial->estado)) }}</p>
+                                                <p class="text-sm text-slate-900 dark:text-white font-medium">{{ ucfirst(str_replace('_', ' ', $historial->estado)) }}</p>
                                                 @if($historial->comentario)
-                                                    <p class="mt-1 text-sm text-slate-500">{{ $historial->comentario }}</p>
+                                                    <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ $historial->comentario }}</p>
                                                 @endif
                                             </div>
-                                            <div class="whitespace-nowrap text-right text-sm text-slate-500 flex flex-col">
+                                            <div class="whitespace-nowrap text-right text-sm text-slate-500 dark:text-slate-400 flex flex-col">
                                                 <time datetime="{{ $historial->creado_en }}">{{ $historial->creado_en->format('d/m/Y H:i') }}</time>
                                                 <span class="text-xs text-slate-400 mt-1">{{ $historial->usuario->nombre ?? 'Sistema' }}</span>
                                             </div>
@@ -259,11 +259,11 @@
             
             <!-- Resumen Financiero -->
             <div class="card-elevated rounded-xl p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-2">Resumen Financiero</h2>
-                <dl class="space-y-3 text-sm text-slate-600">
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-gray-700 pb-2">Resumen Financiero</h2>
+                <dl class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
                     <div class="flex justify-between">
                         <dt>Subtotal</dt>
-                        <dd class="font-medium text-slate-900">${{ number_format($pedido->subtotal, 2) }}</dd>
+                        <dd class="font-medium text-slate-900 dark:text-white">${{ number_format($pedido->subtotal, 2) }}</dd>
                     </div>
                     @if($pedido->descuento > 0)
                     <div class="flex justify-between text-emerald-600">
@@ -273,29 +273,29 @@
                     @endif
                     <div class="flex justify-between">
                         <dt>Envío</dt>
-                        <dd class="font-medium text-slate-900">${{ number_format($pedido->costo_envio, 2) }}</dd>
+                        <dd class="font-medium text-slate-900 dark:text-white">${{ number_format($pedido->costo_envio, 2) }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt>ITBMS (7%)</dt>
-                        <dd class="font-medium text-slate-900">${{ number_format($pedido->itbms_monto, 2) }}</dd>
+                        <dd class="font-medium text-slate-900 dark:text-white">${{ number_format($pedido->itbms_monto, 2) }}</dd>
                     </div>
-                    <div class="flex items-center justify-between border-t border-slate-200 pt-3">
-                        <dt class="text-base font-bold text-slate-900">Total Pagado</dt>
-                        <dd class="text-lg font-bold text-slate-900">${{ number_format($pedido->total, 2) }}</dd>
+                    <div class="flex items-center justify-between border-t border-slate-200 dark:border-gray-700 pt-3">
+                        <dt class="text-base font-bold text-slate-900 dark:text-white">Total Pagado</dt>
+                        <dd class="text-lg font-bold text-slate-900 dark:text-white">${{ number_format($pedido->total, 2) }}</dd>
                     </div>
                     @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
-                    <div class="flex items-center justify-between bg-slate-100 px-3 py-2 rounded-lg border border-slate-200 text-slate-800 font-semibold text-sm">
+                    <div class="flex items-center justify-between bg-slate-100 dark:bg-transparent px-3 py-2 rounded-lg border border-slate-200 dark:border-gray-700 text-slate-800 font-semibold text-sm">
                         <dt class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[16px] text-slate-600">currency_exchange</span>
+                            <span class="material-symbols-outlined text-[16px] text-slate-600 dark:text-slate-300">currency_exchange</span>
                             Reembolsado
                         </dt>
                         <dd class="text-rose-600">-${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }}</dd>
                     </div>
                     @endif
                 </dl>
-                <div class="mt-4 pt-4 border-t border-slate-200">
-                    <p class="text-sm text-slate-500 mb-2">
-                        <span class="font-medium text-slate-900">Método de pago:</span> 
+                <div class="mt-4 pt-4 border-t border-slate-200 dark:border-gray-700">
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">
+                        <span class="font-medium text-slate-900 dark:text-white">Método de pago:</span> 
                         <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $pedido->metodo_pago) }}</span>
                     </p>
                     @if($pedido->metodo_pago === 'stripe')
@@ -305,10 +305,10 @@
                             $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
                         @endphp
                         <div class="flex items-center gap-2 mt-2">
-                            <div class="shrink-0 shadow-2xs rounded border border-slate-200 overflow-hidden">
+                            <div class="shrink-0 shadow-2xs rounded border border-slate-200 dark:border-gray-700 overflow-hidden">
                                 <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-10 h-6.5 block" />
                             </div>
-                            <span class="text-xs font-mono font-medium text-slate-700">
+                            <span class="text-xs font-mono font-medium text-slate-700 dark:text-slate-300">
                                 {{ strtoupper($stripeBrand ?: 'Tarjeta') }} •••• {{ $stripeLast4 ?: '****' }}
                             </span>
                         </div>
@@ -323,29 +323,29 @@
 
             <!-- Datos del Cliente & Envío -->
             <div class="card-elevated rounded-xl p-6">
-                <h2 class="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-2">Datos del Cliente</h2>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-gray-700 pb-2">Datos del Cliente</h2>
                 <div class="mb-4">
-                    <p class="font-medium text-slate-900 text-sm">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</p>
-                    <p class="text-sm text-slate-500">{{ $pedido->usuario->email ?? '' }}</p>
-                    <p class="text-sm text-slate-500">{{ $pedido->usuario->telefono ?? '' }}</p>
+                    <p class="font-medium text-slate-900 dark:text-white text-sm">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $pedido->usuario->email ?? '' }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $pedido->usuario->telefono ?? '' }}</p>
                 </div>
                 
                 @if($pedido->direccion)
-                <h3 class="text-sm font-bold text-slate-900 mb-2 mt-4">Dirección de Entrega</h3>
-                <address class="text-sm text-slate-600 not-italic space-y-1">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-2 mt-4">Dirección de Entrega</h3>
+                <address class="text-sm text-slate-600 dark:text-slate-300 not-italic space-y-1">
                     <p>{{ $pedido->direccion->nombre_receptor }}</p>
                     <p>{{ $pedido->direccion->direccion_exacta }}</p>
                     <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
                     <p>{{ $pedido->direccion->provincia }}</p>
                     @if($pedido->direccion->referencia)
-                        <p class="text-slate-500 italic mt-1">Ref: {{ $pedido->direccion->referencia }}</p>
+                        <p class="text-slate-500 dark:text-slate-400 italic mt-1">Ref: {{ $pedido->direccion->referencia }}</p>
                     @endif
                 </address>
                 @endif
                 
                 @if($pedido->zonaEnvio)
                     <div class="mt-3">
-                        <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 text-xs font-medium text-slate-700 border border-slate-200">
+                        <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 dark:bg-transparent text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700">
                             Zona: {{ $pedido->zonaEnvio->nombre }}
                         </span>
                     </div>
@@ -361,12 +361,12 @@
 
             <!-- Formulario de Envío -->
             <div id="form-envio" class="card-elevated rounded-xl shadow-sm">
-                <div class="p-6 border-b border-slate-100 bg-slate-50 rounded-t-xl">
-                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-slate-700">local_shipping</span>
+                <div class="p-6 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent rounded-t-xl">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">local_shipping</span>
                         Gestión de Envío
                     </h3>
-                    <p class="text-xs text-slate-500 mt-1">Configure los detalles logísticos para despachar el pedido.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Configure los detalles logísticos para despachar el pedido.</p>
                 </div>
                 
                 @php
@@ -388,9 +388,9 @@
                     @method('PUT')
 
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="metodo_envio">Método de Envío <span class="text-red-500">*</span></label>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="metodo_envio">Método de Envío <span class="text-red-500">*</span></label>
                         <div class="relative">
-                            <select class="w-full bg-white border {{ $errors->has('metodo_envio') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 pr-10 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 appearance-none transition-all" 
+                            <select class="w-full bg-white dark:bg-[#121415] border {{ $errors->has('metodo_envio') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 pr-10 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 appearance-none transition-all" 
                                     id="metodo_envio" name="metodo_envio" x-model="metodoEnvio" required>
                                 <option value="Company Delivery">Entrega Propia (Driver)</option>
                                 <option value="Courier Service">Mensajería Local (Courier)</option>
@@ -405,8 +405,8 @@
                     </div>
 
                     <div x-show="metodoEnvio !== 'Store Pickup' && metodoEnvio !== 'Company Delivery'">
-                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="empresa_mensajeria">Empresa de Mensajería / Courier</label>
-                        <input class="w-full bg-white border {{ $errors->has('empresa_mensajeria') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="empresa_mensajeria">Empresa de Mensajería / Courier</label>
+                        <input class="w-full bg-white dark:bg-[#121415] border {{ $errors->has('empresa_mensajeria') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
                                id="empresa_mensajeria" name="empresa_mensajeria" type="text" placeholder="Ej: Fletes Chavale, UnoExpress..."
                                value="{{ $empresaMensajeriaDefault }}">
                         @error('empresa_mensajeria')
@@ -415,8 +415,8 @@
                     </div>
 
                     <div x-show="metodoEnvio !== 'Store Pickup'">
-                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="numero_guia">Número de Guía / Referencia</label>
-                        <input class="w-full bg-white border {{ $errors->has('numero_guia') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all font-mono" 
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="numero_guia">Número de Guía / Referencia</label>
+                        <input class="w-full bg-white dark:bg-[#121415] border {{ $errors->has('numero_guia') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all font-mono" 
                                id="numero_guia" name="numero_guia" placeholder="Opcional" type="text"
                                value="{{ old('numero_guia', $pedido->envio->numero_guia ?? '') }}">
                         @error('numero_guia')
@@ -425,16 +425,16 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5" for="fecha_estimada_entrega">Fecha Estimada de Entrega</label>
+                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="fecha_estimada_entrega">Fecha Estimada de Entrega</label>
                         <div class="relative flex items-center">
                             <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px]">calendar_today</span>
-                            <input class="w-full pl-9 bg-white border {{ $errors->has('fecha_estimada_entrega') ? 'border-red-400' : 'border-slate-200' }} rounded-lg py-2 px-3 text-sm text-slate-900 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
+                            <input class="w-full pl-9 bg-white dark:bg-[#121415] border {{ $errors->has('fecha_estimada_entrega') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
                                    id="fecha_estimada_entrega" name="fecha_estimada_entrega" type="date"
                                    value="{{ old('fecha_estimada_entrega', $pedido->envio?->fecha_estimada_entrega?->format('Y-m-d') ?? '') }}">
                         </div>
                     </div>
 
-                    <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-2">
+                    <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-700 flex flex-col gap-2">
                         <button type="submit" class="w-full bg-slate-900 text-white py-2.5 px-4 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined text-[18px]">save</span>
                             Guardar Info. de Envío
@@ -450,10 +450,10 @@
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="document.getElementById('modal-rechazar').classList.add('hidden')"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="inline-block align-bottom bg-white dark:bg-[#181a1b] rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <form action="{{ route('admin.pedidos.rechazar-pago', $pedido->id) }}" method="POST">
                     @csrf
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="bg-white dark:bg-[#181a1b] px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                                 <span class="material-symbols-outlined text-red-600">warning</span>
@@ -472,7 +472,7 @@
                             <span class="material-symbols-outlined mr-1.5 animate-spin text-[18px]" x-show="sub" style="display: none;">progress_activity</span>
                             <span x-text="sub ? 'Rechazando...' : 'Rechazar Pago'">Rechazar Pago</span>
                         </button>
-                        <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm font-sans">
+                        <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-[#181a1b] text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm font-sans">
                             Cancelar
                         </button>
                     </div>
@@ -487,9 +487,9 @@
         <div class="min-h-screen px-4 text-center flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity" aria-hidden="true" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')"></div>
             
-            <div class="relative bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all max-w-md w-full p-6 border border-slate-200 z-10">
+            <div class="relative bg-white dark:bg-[#181a1b] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all max-w-md w-full p-6 border border-slate-200 dark:border-gray-700 z-10">
                 {{-- Botón de cerrar X en esquina --}}
-                <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+                <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:bg-transparent transition-colors cursor-pointer">
                     <span class="material-symbols-outlined text-[20px] block">close</span>
                 </button>
 
@@ -497,16 +497,16 @@
                     @csrf
                     
                     {{-- Ícono centrado --}}
-                    <div class="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 mx-auto shadow-2xs mb-3">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 flex items-center justify-center text-slate-800 mx-auto shadow-2xs mb-3">
                         <span class="material-symbols-outlined text-[26px]">currency_exchange</span>
                     </div>
 
                     {{-- Textos centrados --}}
                     <div class="text-center space-y-1 mb-5">
-                        <h3 class="text-base font-bold text-slate-900" id="modal-reembolso-title">
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white" id="modal-reembolso-title">
                             Reembolsar Pedido con Stripe
                         </h3>
-                        <p class="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
                             Esta acción emitirá un reembolso directo al método de pago original del cliente en Stripe por el monto indicado.
                         </p>
                     </div>
@@ -514,12 +514,12 @@
                     {{-- Formulario a ancho completo --}}
                     <div class="space-y-3.5 mb-6">
                         <div>
-                            <label for="monto_reembolso" class="block text-xs font-semibold text-slate-700 mb-1">Monto a Reembolsar (USD) <span class="text-red-500">*</span></label>
+                            <label for="monto_reembolso" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Monto a Reembolsar (USD) <span class="text-red-500">*</span></label>
                             <div class="relative rounded-xl shadow-xs">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-slate-500 text-sm font-semibold">$</span>
+                                    <span class="text-slate-500 dark:text-slate-400 text-sm font-semibold">$</span>
                                 </div>
-                                <input type="number" step="0.01" min="0.01" max="{{ $pedido->total }}" name="monto" id="monto_reembolso" value="{{ number_format($pedido->total, 2, '.', '') }}" class="block w-full pl-7 pr-12 rounded-xl border-slate-300 focus:border-slate-800 focus:ring-slate-800 sm:text-sm font-semibold text-slate-900" required>
+                                <input type="number" step="0.01" min="0.01" max="{{ $pedido->total }}" name="monto" id="monto_reembolso" value="{{ number_format($pedido->total, 2, '.', '') }}" class="block w-full pl-7 pr-12 rounded-xl border-slate-300 dark:border-gray-700 bg-white dark:bg-[#121415] focus:border-slate-800 focus:ring-slate-800 sm:text-sm font-semibold text-slate-900 dark:text-white" required>
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                     <span class="text-slate-400 text-xs font-mono">USD</span>
                                 </div>
@@ -528,15 +528,15 @@
                         </div>
 
                         <div>
-                            <label for="motivo_reembolso" class="block text-xs font-semibold text-slate-700 mb-1">Motivo o Justificación del Reembolso <span class="text-red-500">*</span></label>
-                            <textarea name="motivo" id="motivo_reembolso" rows="2" minlength="5" maxlength="255" class="block w-full rounded-xl border-slate-300 shadow-xs focus:border-slate-800 focus:ring-slate-800 sm:text-sm font-sans" placeholder="Ej: Devolución acordada por producto defectuoso / Cancelación..." required></textarea>
+                            <label for="motivo_reembolso" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Motivo o Justificación del Reembolso <span class="text-red-500">*</span></label>
+                            <textarea name="motivo" id="motivo_reembolso" rows="2" minlength="5" maxlength="255" class="block w-full rounded-xl border-slate-300 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white shadow-xs focus:border-slate-800 focus:ring-slate-800 sm:text-sm font-sans placeholder-slate-400 dark:placeholder-gray-500" placeholder="Ej: Devolución acordada por producto defectuoso / Cancelación..." required></textarea>
                             <p class="text-[11px] text-slate-400 mt-1">Mínimo 5 caracteres descriptivos requeridos.</p>
                         </div>
                     </div>
 
                     {{-- Botones de acción centrados / equilibrados --}}
                     <div class="flex items-center gap-3 pt-2">
-                        <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl transition-all cursor-pointer text-center">
+                        <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 active:bg-slate-300 rounded-xl transition-all cursor-pointer text-center">
                             Cancelar
                         </button>
                         <button type="submit" :disabled="sub" class="flex-1 py-2.5 px-4 text-xs font-bold text-white bg-slate-800 hover:bg-slate-900 active:bg-slate-950 rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-75 disabled:cursor-wait">
@@ -551,3 +551,5 @@
     @endif
 </div>
 @endsection
+
+
