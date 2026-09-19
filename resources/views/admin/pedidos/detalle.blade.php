@@ -29,7 +29,7 @@
                         'problema_entrega' => 'bg-rose-50 text-rose-700 border-rose-200',
                         'devolucion_solicitada' => 'bg-orange-50 text-orange-700 border-orange-200',
                         'cancelado' => 'bg-red-50 text-red-700 border-red-200',
-                        'reembolsado' => 'bg-slate-100 dark:bg-transparent text-slate-800 border-slate-300 dark:border-gray-700',
+                        'reembolsado' => 'bg-slate-100 dark:bg-transparent text-slate-800 dark:text-gray-100 border-slate-300 dark:border-gray-700',
                     ];
                     $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 border-slate-200 dark:border-gray-700';
                     $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
@@ -109,7 +109,7 @@
                 @if($ultimoEstado === 'reembolsado')
                     <div class="flex items-center gap-3 py-1">
                         <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado actual:</span>
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-transparent text-slate-800 border border-slate-300 dark:border-gray-700">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-transparent text-slate-800 dark:text-gray-100 border border-slate-300 dark:border-gray-700">
                             <span class="w-1.5 h-1.5 rounded-full bg-slate-50 dark:bg-transparent0"></span> Reembolsado
                         </span>
                     </div>
@@ -147,7 +147,7 @@
                     @if((auth()->user()->hasAnyRole(['Admin', 'super_admin']) || auth()->user()->can('admin.pedidos.reembolsar')) && $pedido->metodo_pago === 'stripe' && in_array($ultimoEstado, ['cancelado', 'devolucion_solicitada', 'problema_entrega']))
                         <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 dark:bg-transparent p-4 rounded-xl border border-slate-200 dark:border-gray-700">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center shrink-0">
+                                <div class="w-9 h-9 rounded-lg bg-slate-200 dark:bg-gray-700 text-slate-800 dark:text-gray-100 flex items-center justify-center shrink-0">
                                     <span class="material-symbols-outlined text-lg">currency_exchange</span>
                                 </div>
                                 <div>
@@ -223,7 +223,7 @@
                             <li>
                                 <div class="relative pb-8">
                                     @if(!$loop->last)
-                                        <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-slate-200" aria-hidden="true"></span>
+                                        <span class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-slate-200 dark:bg-gray-700" aria-hidden="true"></span>
                                     @endif
                                     <div class="relative flex space-x-3">
                                         <div>
@@ -260,7 +260,7 @@
             <!-- Resumen Financiero -->
             <div class="card-elevated rounded-xl p-6">
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-gray-700 pb-2">Resumen Financiero</h2>
-                <dl class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                <dl class="space-y-3 text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300">
                     <div class="flex justify-between">
                         <dt>Subtotal</dt>
                         <dd class="font-medium text-slate-900 dark:text-white">${{ number_format($pedido->subtotal, 2) }}</dd>
@@ -284,9 +284,9 @@
                         <dd class="text-lg font-bold text-slate-900 dark:text-white">${{ number_format($pedido->total, 2) }}</dd>
                     </div>
                     @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
-                    <div class="flex items-center justify-between bg-slate-100 dark:bg-transparent px-3 py-2 rounded-lg border border-slate-200 dark:border-gray-700 text-slate-800 font-semibold text-sm">
+                    <div class="flex items-center justify-between bg-slate-100 dark:bg-transparent px-3 py-2 rounded-lg border border-slate-200 dark:border-gray-700 text-slate-800 dark:text-gray-100 font-semibold text-sm">
                         <dt class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-[16px] text-slate-600 dark:text-slate-300">currency_exchange</span>
+                            <span class="material-symbols-outlined text-[16px] text-slate-600 dark:text-slate-400 dark:text-slate-300">currency_exchange</span>
                             Reembolsado
                         </dt>
                         <dd class="text-rose-600">-${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }}</dd>
@@ -332,7 +332,7 @@
                 
                 @if($pedido->direccion)
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-2 mt-4">Dirección de Entrega</h3>
-                <address class="text-sm text-slate-600 dark:text-slate-300 not-italic space-y-1">
+                <address class="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300 not-italic space-y-1">
                     <p>{{ $pedido->direccion->nombre_receptor }}</p>
                     <p>{{ $pedido->direccion->direccion_exacta }}</p>
                     <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
@@ -489,7 +489,7 @@
             
             <div class="relative bg-white dark:bg-[#181a1b] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all max-w-md w-full p-6 border border-slate-200 dark:border-gray-700 z-10">
                 {{-- Botón de cerrar X en esquina --}}
-                <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:bg-transparent transition-colors cursor-pointer">
+                <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:bg-transparent transition-colors cursor-pointer">
                     <span class="material-symbols-outlined text-[20px] block">close</span>
                 </button>
 
@@ -497,7 +497,7 @@
                     @csrf
                     
                     {{-- Ícono centrado --}}
-                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 flex items-center justify-center text-slate-800 mx-auto shadow-2xs mb-3">
+                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 flex items-center justify-center text-slate-800 dark:text-gray-100 mx-auto shadow-2xs mb-3">
                         <span class="material-symbols-outlined text-[26px]">currency_exchange</span>
                     </div>
 
@@ -536,7 +536,7 @@
 
                     {{-- Botones de acción centrados / equilibrados --}}
                     <div class="flex items-center gap-3 pt-2">
-                        <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 active:bg-slate-300 rounded-xl transition-all cursor-pointer text-center">
+                        <button type="button" onclick="document.getElementById('modal-reembolsar-stripe').classList.add('hidden')" class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 active:bg-slate-300 rounded-xl transition-all cursor-pointer text-center">
                             Cancelar
                         </button>
                         <button type="submit" :disabled="sub" class="flex-1 py-2.5 px-4 text-xs font-bold text-white bg-slate-800 hover:bg-slate-900 active:bg-slate-950 rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-75 disabled:cursor-wait">
@@ -551,5 +551,7 @@
     @endif
 </div>
 @endsection
+
+
 
 

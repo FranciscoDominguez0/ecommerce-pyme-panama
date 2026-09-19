@@ -4,17 +4,17 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 truncate">Productos</span>
+    <span class="font-bold text-slate-900 dark:text-white truncate">Productos</span>
 @endsection
 
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
     <!-- Page Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Productos & Variantes</h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Administra el catálogo de artículos, control de stock multivariante, precios y visibilidad.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Productos & Variantes</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Administra el catálogo de artículos, control de stock multivariante, precios y visibilidad.</p>
         </div>
         <div class="flex items-center gap-3">
             <x-btn-exportar 
@@ -36,9 +36,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Catálogo</p>
-                    <h3 class="text-2xl font-extrabold text-slate-900 mt-1">{{ $kpiTotal }}</h3>
+                    <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">{{ $kpiTotal }}</h3>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-transparent text-slate-600 dark:text-slate-400 flex items-center justify-center group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
                     <span class="material-symbols-outlined text-[22px]">category</span>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                     <span class="material-symbols-outlined text-[22px]">check_circle</span>
                 </div>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500">
+            <div class="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
                 <span>{{ $kpiTotal > 0 ? number_format(($kpiEnStock / $kpiTotal) * 100, 1) : 0 }}% disponible</span>
             </div>
@@ -93,7 +93,7 @@
                     <span class="material-symbols-outlined text-[22px]">style</span>
                 </div>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500">
+            <div class="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
                 <span>Combinaciones SKU activas</span>
             </div>
         </div>
@@ -105,7 +105,7 @@
             
             <!-- Búsqueda por Nombre -->
             <div class="lg:col-span-4">
-                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Buscar por nombre</label>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Buscar por nombre</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                         <span class="material-symbols-outlined text-[18px]">search</span>
@@ -114,19 +114,19 @@
                            name="buscar" 
                            value="{{ $buscar }}" 
                            placeholder="Ej. MacBook Air, Teclado, Impresora..." 
-                           class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                           class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>
             </div>
 
             <!-- Búsqueda por SKU -->
             <div class="lg:col-span-2">
-                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">SKU / Código</label>
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">SKU / Código</label>
                 <div class="relative">
                     <!-- Botón Escáner (Funcionando) -->
                     <button type="button" 
                             onclick="window.ModalEscaner.abrir('sku', 'form-filtro-productos')"
                             title="Escanear Código"
-                            class="absolute left-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1.5 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
+                            class="absolute left-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1.5 rounded hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
                         <span class="material-symbols-outlined text-[18px]">barcode_scanner</span>
                     </button>
                     
@@ -134,14 +134,14 @@
                            name="sku" 
                            value="{{ $buscarSku }}" 
                            placeholder="PROD-001..." 
-                           class="w-full pl-10 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 font-mono placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                           class="w-full pl-10 pr-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 font-mono placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>
             </div>
 
             <!-- Filtro por Categoría -->
             <div class="lg:col-span-2">
-                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Categoría</label>
-                <select name="categoria_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Categoría</label>
+                <select name="categoria_id" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     <option value="all">Todas las categorías</option>
                     @foreach($categorias as $cat)
                         <option value="{{ $cat->id }}" @selected($categoriaId == $cat->id)>{{ $cat->nombre }}</option>
@@ -151,8 +151,8 @@
 
             <!-- Filtro por Estado -->
             <div class="lg:col-span-2">
-                <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Estado</label>
-                <select name="estado" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Estado</label>
+                <select name="estado" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     <option value="all" @selected($filtroEstado == 'all')>Todos los estados</option>
                     <option value="activo" @selected($filtroEstado == 'activo')>Activo (Visible)</option>
                     <option value="inactivo" @selected($filtroEstado == 'inactivo')>Inactivo (Borrador)</option>
@@ -162,8 +162,8 @@
             <!-- Filtro por Stock -->
             <div class="lg:col-span-2 flex items-end gap-2">
                 <div class="flex-1">
-                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Stock</label>
-                    <select name="stock" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Stock</label>
+                    <select name="stock" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                         <option value="all" @selected($filtroStock == 'all')>Todos</option>
                         <option value="en_stock" @selected($filtroStock == 'en_stock')>En Stock (>5)</option>
                         <option value="bajo_stock" @selected($filtroStock == 'bajo_stock')>Bajo Stock (1-5)</option>
@@ -179,12 +179,12 @@
     </form>
 
     <!-- Tabla Principal de Productos -->
-    <div class="card-elevated rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs">
+    <div class="card-elevated rounded-2xl overflow-hidden border border-slate-200 dark:border-gray-700/80 shadow-xs">
         
         <!-- Header de la Tabla -->
-        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
+        <div class="px-5 py-4 border-b border-slate-100 dark:border-gray-700 flex items-center justify-between flex-wrap gap-3">
             <div class="flex items-center gap-2">
-                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Catálogo de Productos</h3>
+                <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Catálogo de Productos</h3>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                     {{ $productos->total() }} productos registrados
                 </span>
@@ -195,7 +195,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse min-w-[850px]">
                 <thead>
-                    <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                    <tr class="border-b border-slate-100 dark:border-gray-700 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
                         <th class="py-3.5 px-4 w-10 text-center"></th>
                         <th class="py-3.5 px-4">Producto & SKU</th>
                         <th class="py-3.5 px-4">Precio (USD/PAB)</th>
@@ -204,23 +204,23 @@
                         <th class="py-3.5 px-4 text-right">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-xs">
+                <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs">
                     
                     @forelse($productos as $prod)
                         @php
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
-                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 transition-colors group">
                             
                             <!-- Miniatura / Ícono del Producto -->
                             <td class="py-3 px-4 text-center w-12">
-                                <div class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 overflow-hidden shrink-0">
+                                <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 flex items-center justify-center text-slate-600 dark:text-slate-400 overflow-hidden shrink-0">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
                                         <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="w-full h-full object-cover">
                                     @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
                                         <div class="w-7 h-7 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
                                     @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
-                                        <span class="material-symbols-outlined text-[24px] text-slate-700">{{ $imgPrincipal->ruta }}</span>
+                                        <span class="material-symbols-outlined text-[24px] text-slate-700 dark:text-slate-300">{{ $imgPrincipal->ruta }}</span>
                                     @else
                                         <span class="material-symbols-outlined text-[24px] text-slate-400">image</span>
                                     @endif
@@ -231,7 +231,7 @@
                             <td class="py-3 px-4">
                                 <div class="space-y-1">
                                     <div class="flex items-center gap-1.5">
-                                        <a href="{{ route('admin.productos.edit', $prod->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="font-bold text-slate-900 text-sm hover:text-emerald-700 transition-colors">
+                                        <a href="{{ route('admin.productos.edit', $prod->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="font-bold text-slate-900 dark:text-white text-sm hover:text-emerald-700 transition-colors">
                                             {{ Str::limit($prod->nombre, 60) }}
                                         </a>
                                         @if($prod->destacado)
@@ -239,7 +239,7 @@
                                         @endif
                                     </div>
                                     <div class="flex items-center gap-2 text-[11px] flex-wrap">
-                                        <span class="font-mono font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">SKU: {{ $prod->sku ?? 'N/A' }}</span>
+                                        <span class="font-mono font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-transparent px-1.5 py-0.5 rounded border border-slate-200 dark:border-gray-700">SKU: {{ $prod->sku ?? 'N/A' }}</span>
                                         
                                         @if($prod->categoria)
                                             <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
@@ -260,7 +260,7 @@
                                         <div class="font-extrabold text-emerald-700">${{ number_format($prod->precio_oferta, 2) }}</div>
                                         <div class="text-[10px] text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</div>
                                     @else
-                                        <div class="font-bold text-slate-900">${{ number_format($prod->precio, 2) }}</div>
+                                        <div class="font-bold text-slate-900 dark:text-white">${{ number_format($prod->precio, 2) }}</div>
                                         @if($prod->aplica_itbms)
                                             <span class="text-[10px] text-slate-400">+ ITBMS (7%)</span>
                                         @endif
@@ -297,7 +297,7 @@
                                         @endif
                                     </div>
                                     
-                                    <div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                    <div class="w-24 h-1.5 bg-slate-100 dark:bg-transparent rounded-full overflow-hidden">
                                         <div class="h-full rounded-full {{ $prod->stock > ($prod->stock_minimo ?? 5) ? 'bg-emerald-500' : ($prod->stock > 0 ? 'bg-amber-500' : 'bg-rose-500') }}" style="width: {{ min(100, max(5, ($prod->stock / max(1, $prod->stock_minimo ?? 5)) * 50)) }}%"></div>
                                     </div>
                                 </div>
@@ -311,7 +311,7 @@
                                         <span>Activo</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-500">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-transparent text-slate-500 dark:text-slate-400">
                                         <span>Inactivo</span>
                                     </span>
                                 @endif
@@ -329,7 +329,7 @@
                                     </a>
                                     <!-- Botón Editar -->
                                     <a href="{{ route('admin.productos.edit', $prod->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
-                                       class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors" 
+                                       class="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent rounded-lg transition-colors" 
                                        title="Editar producto">
                                         <span class="material-symbols-outlined text-[17px]">edit</span>
                                     </a>
@@ -345,12 +345,12 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-12 text-center text-slate-500">
+                            <td colspan="6" class="py-12 text-center text-slate-500 dark:text-slate-400">
                                 <div class="max-w-xs mx-auto space-y-3">
-                                    <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+                                    <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-transparent text-slate-400 flex items-center justify-center mx-auto">
                                         <span class="material-symbols-outlined text-[28px]">inventory_2</span>
                                     </div>
-                                    <p class="text-xs font-bold text-slate-700">No hay productos registrados con estos filtros.</p>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">No hay productos registrados con estos filtros.</p>
                                     <a href="{{ route('admin.productos.create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors shadow-xs">
                                         <span class="material-symbols-outlined text-[16px]">add</span>
                                         <span>Agregar Primer Producto</span>
@@ -365,11 +365,11 @@
         </div>
 
         <!-- Paginación -->
-        <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/50">
+        <div class="px-5 py-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
             @if($productos->hasPages())
                 {{ $productos->links('vendor.pagination.admin-tailwind') }}
             @else
-                <p class="text-xs text-center text-slate-500">
+                <p class="text-xs text-center text-slate-500 dark:text-slate-400">
                     Mostrando <strong>{{ $productos->total() }}</strong> producto(s)
                 </p>
             @endif
@@ -379,3 +379,5 @@
 
 </div>
 @endsection
+
+

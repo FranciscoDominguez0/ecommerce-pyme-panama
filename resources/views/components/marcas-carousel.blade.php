@@ -1,4 +1,4 @@
-@props(['marcas'])
+﻿@props(['marcas'])
 
 <section class="py-10 bg-transparent">
     <div class="max-w-container-max mx-auto">
@@ -23,7 +23,7 @@
                             @if(!empty($logo))
                                 <img src="{{ $logo }}" alt="{{ $nombre }}" loading="lazy" class="brand-logo-img-m" />
                             @else
-                                <span class="text-xs font-black uppercase text-slate-700 tracking-wider">{{ $nombre }}</span>
+                                <span class="text-xs font-black uppercase text-slate-700 dark:text-slate-300 tracking-wider">{{ $nombre }}</span>
                             @endif
                         </div>
                     @endforeach
@@ -282,3 +282,4 @@
         document.addEventListener('livewire:navigated', initBrandsCarousel);
     })();
 </script>
+

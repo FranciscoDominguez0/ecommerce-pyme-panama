@@ -4,19 +4,19 @@
 
 <!-- Submódulo: Galería de Imágenes del Producto -->
 <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+    <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-3">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-emerald-600 text-[20px]">photo_library</span>
-            <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Galería de Imágenes</h2>
+            <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Galería de Imágenes</h2>
         </div>
-        <span class="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full" id="contador-imagenes">
+        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-transparent px-2.5 py-1 rounded-full" id="contador-imagenes">
             {{ count($imagenes ?? []) }} imágenes cargadas
         </span>
     </div>
 
     <!-- Dropzone Visual para Cargar Archivos (Drag & Drop + Clic) Compacto -->
     <div id="dropzone-imagenes" 
-         class="relative border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50/50 hover:bg-emerald-50/30 rounded-xl p-3.5 text-center cursor-pointer transition-all group">
+         class="relative border-2 border-dashed border-slate-300 dark:border-gray-700 hover:border-emerald-500 bg-slate-50 dark:bg-transparent/50 hover:bg-emerald-50/30 rounded-xl p-3.5 text-center cursor-pointer transition-all group">
         
         <input type="file" 
                id="input-archivos-imagenes" 
@@ -27,11 +27,11 @@
                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
 
         <div class="flex items-center justify-center gap-3 pointer-events-none">
-            <div class="w-8 h-8 rounded-lg bg-white border border-slate-200 shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-emerald-600 group-hover:border-emerald-300 transition-all shrink-0">
+            <div class="w-8 h-8 rounded-lg bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-emerald-600 group-hover:border-emerald-300 transition-all shrink-0">
                 <span class="material-symbols-outlined text-[20px]">cloud_upload</span>
             </div>
             <div class="text-left">
-                <div class="text-xs text-slate-700 font-medium">
+                <div class="text-xs text-slate-700 dark:text-slate-300 font-medium">
                     <span class="font-bold text-emerald-700 group-hover:underline">Haz clic para subir fotos</span> o arrástralas aquí
                 </div>
                 <p class="text-[10px] text-slate-400">PNG, JPG, WebP o SVG (Máx 5MB)</p>
@@ -47,11 +47,11 @@
                    id="input-url-imagen-rapida" 
                    placeholder="O pega una URL de imagen o ícono..." 
                    onkeydown="if(event.key==='Enter'){event.preventDefault(); agregarImagenPorUrl();}"
-                   class="pl-8 text-xs py-1.5 px-3 rounded-xl border border-slate-200 bg-slate-50/50 w-full focus:bg-white focus:ring-emerald-500 focus:border-emerald-500 text-slate-800">
+                   class="pl-8 text-xs py-1.5 px-3 rounded-xl border border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 w-full focus:bg-white dark:bg-[#121415] focus:ring-emerald-500 focus:border-emerald-500 text-slate-800 dark:text-gray-100">
         </div>
         <button type="button" 
                 onclick="agregarImagenPorUrl()" 
-                class="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl transition-colors shadow-2xs shrink-0">
+                class="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 px-3 py-1.5 rounded-xl transition-colors shadow-2xs shrink-0">
             <span class="material-symbols-outlined text-[15px]">add</span>
             <span>Añadir URL</span>
         </button>
@@ -66,7 +66,7 @@
         @forelse($imagenes ?? [] as $idx => $img)
             @php /** @var \App\Models\ImagenProducto $img */ @endphp
             {{-- Input oculto para marcar esta imagen como existente; si se elimina, el JS lo convierte a imagenes_eliminar[] --}}
-            <div class="relative group card-elevated rounded-2xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200/90 hover:border-slate-300 shadow-2xs' }} bg-white flex flex-col item-imagen transition-all duration-200" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
+            <div class="relative group card-elevated rounded-2xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200 dark:border-gray-700/90 hover:border-slate-300 dark:border-gray-700 shadow-2xs' }} bg-white dark:bg-[#181a1b] flex flex-col item-imagen transition-all duration-200" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
                 
                 <!-- Badge de Portada / Principal -->
                 <div class="badge-principal-container {{ $img->es_principal ? '' : 'hidden' }}">
@@ -105,14 +105,14 @@
                 </div>
 
                 <!-- Contenedor de la Imagen Elegante -->
-                <div class="h-32 w-full bg-slate-50/80 flex items-center justify-center p-3 group-hover:bg-slate-100/50 transition-colors">
-                    <div class="w-full h-full flex items-center justify-center text-slate-700">
+                <div class="h-32 w-full bg-slate-50 dark:bg-transparent/80 flex items-center justify-center p-3 group-hover:bg-slate-100 dark:bg-transparent/50 transition-colors">
+                    <div class="w-full h-full flex items-center justify-center text-slate-700 dark:text-slate-300">
                         @if(!empty($img->ruta) && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'storage/')))
                             <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain mix-blend-multiply transition-transform group-hover:scale-105">
                         @elseif(!empty($img->ruta) && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
                             <div class="w-full h-full flex items-center justify-center svg-container">{!! $img->ruta !!}</div>
                         @elseif(!empty($img->ruta))
-                            <span class="material-symbols-outlined text-[42px] text-slate-600">{{ $img->ruta }}</span>
+                            <span class="material-symbols-outlined text-[42px] text-slate-600 dark:text-slate-400">{{ $img->ruta }}</span>
                         @else
                             <span class="material-symbols-outlined text-[42px] text-slate-400">image</span>
                         @endif
@@ -120,7 +120,7 @@
                 </div>
 
                 <!-- Footer sin nombre de archivo, centrado y limpio -->
-                <div class="p-1.5 border-t border-slate-100 bg-white flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
+                <div class="p-1.5 border-t border-slate-100 dark:border-gray-700 bg-white dark:bg-[#181a1b] flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
                     <div class="estado-portada-container w-full text-center">
                         @if($img->es_principal)
                             <span class="text-emerald-600 font-extrabold text-[11px] badge-texto-portada flex items-center justify-center gap-1">
@@ -130,7 +130,7 @@
                         @else
                             <button type="button" 
                                     onclick="hacerImagenPrincipal(this)" 
-                                    class="w-full text-[11px] font-bold text-slate-500 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
+                                    class="w-full text-[11px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
                                 Hacer Portada
                             </button>
                         @endif
@@ -139,10 +139,10 @@
             </div>
         @empty
             <div id="empty-state-galeria" class="col-span-full py-8 text-center text-slate-400 text-xs">
-                <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-1.5">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-transparent flex items-center justify-center mx-auto text-slate-400 mb-1.5">
                     <span class="material-symbols-outlined text-[24px]">add_photo_alternate</span>
                 </div>
-                <p class="font-medium text-slate-600">No hay imágenes cargadas para este producto.</p>
+                <p class="font-medium text-slate-600 dark:text-slate-400">No hay imágenes cargadas para este producto.</p>
                 <p class="text-[11px] text-slate-400 mt-0.5">Sube archivos desde tu equipo o añade una URL arriba.</p>
             </div>
         @endforelse
@@ -196,7 +196,7 @@
     function crearCardImagenHtml(rutaOrBase64, nombreArchivo, esPrincipal, esUrl) {
         const grid = document.getElementById('grid-imagenes-producto');
         const div = document.createElement('div');
-        div.className = `relative group card-elevated rounded-2xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200/90 hover:border-slate-300 shadow-2xs'} bg-white flex flex-col item-imagen transition-all duration-200`;
+        div.className = `relative group card-elevated rounded-2xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200 dark:border-gray-700/90 hover:border-slate-300 dark:border-gray-700 shadow-2xs'} bg-white dark:bg-[#181a1b] flex flex-col item-imagen transition-all duration-200`;
 
         let contentPreview = '';
         if (rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http') || rutaOrBase64.startsWith('/storage') || rutaOrBase64.startsWith('storage/')) {
@@ -204,7 +204,7 @@
         } else if (rutaOrBase64.includes('<svg') || rutaOrBase64.includes('</svg>')) {
             contentPreview = `<div class="w-full h-full flex items-center justify-center svg-container">${rutaOrBase64}</div>`;
         } else {
-            contentPreview = `<span class="material-symbols-outlined text-[42px] text-slate-600">${rutaOrBase64}</span>`;
+            contentPreview = `<span class="material-symbols-outlined text-[42px] text-slate-600 dark:text-slate-400">${rutaOrBase64}</span>`;
         }
 
         // Input oculto para enviar al backend si fue ingresada por URL
@@ -238,13 +238,13 @@
                 </button>
             </div>
 
-            <div class="h-32 w-full bg-slate-50/80 flex items-center justify-center p-3 group-hover:bg-slate-100/50 transition-colors">
-                <div class="w-full h-full flex items-center justify-center text-slate-700">
+            <div class="h-32 w-full bg-slate-50 dark:bg-transparent/80 flex items-center justify-center p-3 group-hover:bg-slate-100 dark:bg-transparent/50 transition-colors">
+                <div class="w-full h-full flex items-center justify-center text-slate-700 dark:text-slate-300">
                     ${contentPreview}
                 </div>
             </div>
 
-            <div class="p-1.5 border-t border-slate-100 bg-white flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
+            <div class="p-1.5 border-t border-slate-100 dark:border-gray-700 bg-white dark:bg-[#181a1b] flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
                 <div class="estado-portada-container w-full text-center">
                     ${esPrincipal ? `
                         <span class="text-emerald-600 font-extrabold text-[11px] badge-texto-portada flex items-center justify-center gap-1">
@@ -252,7 +252,7 @@
                             <span>Portada</span>
                         </span>
                     ` : `
-                        <button type="button" onclick="hacerImagenPrincipal(this)" class="w-full text-[11px] font-bold text-slate-500 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
+                        <button type="button" onclick="hacerImagenPrincipal(this)" class="w-full text-[11px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
                             Hacer Portada
                         </button>
                     `}
@@ -277,7 +277,7 @@
         // Resetear todas las tarjetas
         grid.querySelectorAll('.item-imagen').forEach(card => {
             card.classList.remove('border-2', 'border-emerald-500', 'shadow-md', 'ring-2', 'ring-emerald-500/20');
-            card.classList.add('border', 'border-slate-200/90', 'shadow-2xs');
+            card.classList.add('border', 'border-slate-200 dark:border-gray-700/90', 'shadow-2xs');
 
             // Ocultar badge principal
             const badgeContainer = card.querySelector('.badge-principal-container');
@@ -289,7 +289,7 @@
             const estadoContainer = card.querySelector('.estado-portada-container');
             if (estadoContainer) {
                 estadoContainer.innerHTML = `
-                    <button type="button" onclick="hacerImagenPrincipal(this)" class="w-full text-[11px] font-bold text-slate-500 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
+                    <button type="button" onclick="hacerImagenPrincipal(this)" class="w-full text-[11px] font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-700 opacity-0 group-hover:opacity-100 transition-all duration-200 btn-hacer-portada py-0.5">
                         Hacer Portada
                     </button>
                 `;
@@ -297,7 +297,7 @@
         });
 
         // Activar borde y estilo de tarjeta seleccionada
-        cardActual.classList.remove('border', 'border-slate-200/90', 'shadow-2xs');
+        cardActual.classList.remove('border', 'border-slate-200 dark:border-gray-700/90', 'shadow-2xs');
         cardActual.classList.add('border-2', 'border-emerald-500', 'shadow-md', 'ring-2', 'ring-emerald-500/20');
 
         // Mostrar badge principal en la seleccionada
@@ -374,13 +374,15 @@
         if (total === 0 && grid && !document.getElementById('empty-state-galeria')) {
             grid.innerHTML = `
                 <div id="empty-state-galeria" class="col-span-full py-8 text-center text-slate-400 text-xs">
-                    <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mx-auto text-slate-400 mb-1.5">
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-transparent flex items-center justify-center mx-auto text-slate-400 mb-1.5">
                         <span class="material-symbols-outlined text-[24px]">add_photo_alternate</span>
                     </div>
-                    <p class="font-medium text-slate-600">No hay imágenes cargadas para este producto.</p>
+                    <p class="font-medium text-slate-600 dark:text-slate-400">No hay imágenes cargadas para este producto.</p>
                     <p class="text-[11px] text-slate-400 mt-0.5">Sube archivos desde tu equipo o añade una URL arriba.</p>
                 </div>
             `;
         }
     }
 </script>
+
+

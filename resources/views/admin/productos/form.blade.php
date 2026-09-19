@@ -5,9 +5,9 @@
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <a href="{{ route('admin.productos.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
-       class="text-slate-500 hover:text-slate-900 transition-colors truncate max-w-[85px] sm:max-w-none">Productos</a>
+       class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors truncate max-w-[85px] sm:max-w-none">Productos</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 truncate">{{ ($esEdicion ?? false) ? 'Editar' : 'Nuevo' }}</span>
+    <span class="font-bold text-slate-900 dark:text-white truncate">{{ ($esEdicion ?? false) ? 'Editar' : 'Nuevo' }}</span>
 @endsection
 
 @section('content')
@@ -29,10 +29,10 @@
                             class="material-symbols-outlined text-[22px]">{{ ($esEdicion ?? false) ? 'edit_note' : 'add_box' }}</span>
                     </div>
                     <div>
-                        <h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-tight">
+                        <h1 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
                             {{ ($esEdicion ?? false) ? 'Editar Artículo' : 'Nuevo Artículo' }}
                         </h1>
-                        <p class="text-xs text-slate-500 mt-0.5">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                             Ficha técnica, precios, inventario, imágenes y variantes.
                         </p>
                     </div>
@@ -40,16 +40,16 @@
 
                 <!-- Barra de Acciones Fija (siempre visible) -->
                 <div
-                    class="sticky top-16 z-30 -mx-3.5 sm:-mx-8 px-3.5 sm:px-8 py-2.5 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs flex items-center justify-between gap-3">
+                    class="sticky top-16 z-30 -mx-3.5 sm:-mx-8 px-3.5 sm:px-8 py-2.5 bg-white dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200 dark:border-gray-700/80 shadow-xs flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2 min-w-0">
                         <span class="material-symbols-outlined text-slate-400 text-[18px] shrink-0">inventory_2</span>
-                        <span class="text-xs font-bold text-slate-700 truncate">
+                        <span class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate">
                             {{ ($esEdicion ?? false) ? 'Editando: ' . ($producto->nombre ?? '') : 'Nuevo artículo' }}
                         </span>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <a href="{{ route('admin.productos.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}"
-                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-all shadow-xs">
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-all shadow-xs">
                             <span class="material-symbols-outlined text-[17px] text-slate-400">arrow_back</span>
                             <span class="hidden sm:inline">Cancelar</span>
                         </a>
@@ -76,9 +76,9 @@
                     <!-- Columna Principal: Ficha de Artículo (8 cols) -->
                     <div class="lg:col-span-9 xl:col-span-9 2xl:col-span-10 space-y-5 order-2 lg:order-1 min-w-0">
                         <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-                                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-gray-700 pb-3">
                                     <span class="material-symbols-outlined text-emerald-600 text-[20px]">info</span>
-                                    <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Información del
+                                    <h2 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Información del
                                         Artículo</h2>
                                 </div>
 
@@ -87,23 +87,23 @@
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                                         <div class="md:col-span-8">
                                             <label for="nombre"
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 Nombre del Producto <span class="text-rose-500">*</span>
                                             </label>
                                             <input type="text" id="nombre" name="nombre" required
                                                 value="{{ old('nombre', $producto->nombre ?? '') }}"
                                                 placeholder="Ej. Enrutador Inalámbrico TP-Link ARCHER AX23"
-                                                class="input-panama w-full text-sm rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-medium">
+                                                class="input-panama w-full text-sm rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-medium">
                                         </div>
 
                                         <div class="md:col-span-4">
                                             <label for="sku"
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 SKU Base <span class="text-rose-500">*</span>
                                             </label>
                                             <input type="text" id="sku" name="sku" required
                                                 value="{{ old('sku', $producto->sku ?? '') }}" placeholder="PRDO-13"
-                                                class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                                class="input-panama w-full text-xs font-mono uppercase rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                                         </div>
                                     </div>
 
@@ -112,7 +112,7 @@
                                         <div class="md:col-span-8">
                                             <div class="flex items-center justify-between mb-1">
                                                 <label for="slug"
-                                                    class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                                                    class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                                     Slug / Enlace Permanente <span class="text-rose-500">*</span>
                                                 </label>
                                                 <button type="button" onclick="regenerarSlugDesdeNombre()"
@@ -128,19 +128,19 @@
                                                 <input type="text" id="slug" name="slug" required
                                                     value="{{ old('slug', $producto->slug ?? '') }}"
                                                     placeholder="enrutador-inalambrico-tp-link-archer-ax23"
-                                                    class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800">
+                                                    class="input-panama w-full sm:pl-44 pr-3 py-2 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100">
                                             </div>
                                         </div>
 
                                         <div class="md:col-span-4">
                                             <label for="modelo"
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 Modelo Técnico
                                             </label>
                                             <input type="text" id="modelo" name="modelo"
                                                 value="{{ old('modelo', $producto->modelo ?? '') }}"
                                                 placeholder="ARCHER AX23"
-                                                class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                                class="input-panama w-full text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                                             <p class="text-[10px] text-slate-400 mt-1">
                                                 Modelo de fábrica exacto.
                                             </p>
@@ -152,7 +152,7 @@
                                         <!-- Categoría -->
                                         <div>
                                             <label
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 Categoría <span class="text-rose-500">*</span>
                                             </label>
                                             <input type="hidden" id="input-categoria-valor" name="categoria_id" required
@@ -160,22 +160,22 @@
 
                                             <div id="contenedor-categoria-card" class="relative">
                                                 <div id="card-categoria-activa"
-                                                    class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
+                                                    class="hidden items-center justify-between p-1.5 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl hover:border-slate-300 dark:border-gray-700 transition-all h-[44px]">
                                                     <div class="flex items-center gap-2 min-w-0">
                                                         <div id="display-categoria-logo"
-                                                            class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center shrink-0 overflow-hidden p-0.5 shadow-2xs">
+                                                            class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0 overflow-hidden p-0.5 shadow-2xs">
                                                             <span
                                                                 class="material-symbols-outlined text-[18px]">category</span>
                                                         </div>
                                                         <div class="min-w-0">
                                                             <div id="display-categoria-nombre"
-                                                                class="text-xs font-bold text-slate-900 truncate">Redes
+                                                                class="text-xs font-bold text-slate-900 dark:text-white truncate">Redes
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-center gap-0.5 shrink-0">
                                                         <button type="button" onclick="abrirModalCategorias()"
-                                                            class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
+                                                            class="px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:bg-gray-700 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
                                                             <span
                                                                 class="material-symbols-outlined text-[13px]">sync_alt</span>
                                                             <span>Cambiar</span>
@@ -190,15 +190,15 @@
 
                                                 <button type="button" id="btn-abrir-modal-categorias"
                                                     onclick="abrirModalCategorias()"
-                                                    class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
+                                                    class="w-full flex items-center justify-between px-3 bg-slate-50 dark:bg-transparent hover:bg-slate-100 dark:bg-transparent/80 border border-dashed border-slate-300 dark:border-gray-700 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
                                                     <div class="flex items-center gap-2">
                                                         <span
-                                                            class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">category</span>
-                                                        <span class="text-xs font-medium text-slate-600">Seleccionar
+                                                            class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 dark:text-slate-300 text-[18px]">category</span>
+                                                        <span class="text-xs font-medium text-slate-600 dark:text-slate-400">Seleccionar
                                                             Categoría...</span>
                                                     </div>
                                                     <span
-                                                        class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
+                                                        class="px-2 py-0.5 rounded-md bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300 dark:border-gray-700">
                                                         <span class="material-symbols-outlined text-[12px]">search</span>
                                                         <span>Explorar</span>
                                                     </span>
@@ -209,7 +209,7 @@
                                         <!-- Marca -->
                                         <div>
                                             <label
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 Marca (Fabricante)
                                             </label>
                                             <input type="hidden" id="input-marca-valor" name="marca"
@@ -217,20 +217,20 @@
 
                                             <div id="contenedor-marca-card" class="relative">
                                                 <div id="card-marca-activa"
-                                                    class="hidden items-center justify-between p-1.5 bg-slate-50 border border-slate-200 rounded-xl hover:border-slate-300 transition-all h-[44px]">
+                                                    class="hidden items-center justify-between p-1.5 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl hover:border-slate-300 dark:border-gray-700 transition-all h-[44px]">
                                                     <div class="flex items-center gap-2 min-w-0">
                                                         <div id="display-marca-logo"
-                                                            class="w-9 h-7 bg-white border border-slate-200/80 rounded-md flex items-center justify-center p-0.5 shadow-2xs shrink-0 overflow-hidden">
+                                                            class="w-9 h-7 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/80 rounded-md flex items-center justify-center p-0.5 shadow-2xs shrink-0 overflow-hidden">
                                                         </div>
                                                         <div class="min-w-0">
                                                             <div id="display-marca-nombre"
-                                                                class="text-xs font-bold text-slate-900 truncate">Adata
+                                                                class="text-xs font-bold text-slate-900 dark:text-white truncate">Adata
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="flex items-center gap-0.5 shrink-0">
                                                         <button type="button" onclick="abrirModalMarcas()"
-                                                            class="px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-200 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
+                                                            class="px-2 py-1 text-[11px] font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:bg-gray-700 rounded-md transition-colors cursor-pointer flex items-center gap-0.5">
                                                             <span
                                                                 class="material-symbols-outlined text-[13px]">sync_alt</span>
                                                             <span>Cambiar</span>
@@ -245,15 +245,15 @@
 
                                                 <button type="button" id="btn-abrir-modal-marcas"
                                                     onclick="abrirModalMarcas()"
-                                                    class="w-full flex items-center justify-between px-3 bg-slate-50 hover:bg-slate-100/80 border border-dashed border-slate-300 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
+                                                    class="w-full flex items-center justify-between px-3 bg-slate-50 dark:bg-transparent hover:bg-slate-100 dark:bg-transparent/80 border border-dashed border-slate-300 dark:border-gray-700 hover:border-slate-400 rounded-xl transition-all group text-left cursor-pointer h-[44px]">
                                                     <div class="flex items-center gap-2">
                                                         <span
-                                                            class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 text-[18px]">verified</span>
-                                                        <span class="text-xs font-medium text-slate-600">Seleccionar
+                                                            class="material-symbols-outlined text-slate-400 group-hover:text-slate-700 dark:text-slate-300 text-[18px]">verified</span>
+                                                        <span class="text-xs font-medium text-slate-600 dark:text-slate-400">Seleccionar
                                                             Marca...</span>
                                                     </div>
                                                     <span
-                                                        class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300">
+                                                        class="px-2 py-0.5 rounded-md bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 text-[10px] font-bold flex items-center gap-1 shadow-2xs group-hover:border-slate-300 dark:border-gray-700">
                                                         <span class="material-symbols-outlined text-[12px]">search</span>
                                                         <span>Explorar</span>
                                                     </span>
@@ -264,10 +264,10 @@
                                 </div>
 
                             <!-- Sub-bloque: Precios & Rentabilidad -->
-                            <div class="pt-4 border-t border-slate-100">
+                            <div class="pt-4 border-t border-slate-100 dark:border-gray-700">
                                 <div class="flex items-center gap-1.5 mb-3">
                                     <span class="material-symbols-outlined text-emerald-600 text-[17px]">payments</span>
-                                    <h3 class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Precios &
+                                    <h3 class="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Precios &
                                         Rentabilidad</h3>
                                 </div>
                                 <div class="space-y-4">
@@ -275,7 +275,7 @@
                                         <!-- Precio Base -->
                                         <div>
                                             <label for="precio"
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 Precio Base <span class="text-rose-500">*</span>
                                             </label>
                                             <div class="relative flex items-center">
@@ -284,14 +284,14 @@
                                                     oninput="calcularMargen()"
                                                     value="{{ old('precio', $producto->precio ?? '134.04') }}"
                                                     placeholder="134.04"
-                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-slate-900 dark:text-white rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
                                             </div>
                                         </div>
 
                                         <!-- Precio Oferta -->
                                         <div>
                                             <label for="precio_oferta"
-                                                class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                                class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                                 Precio Oferta
                                             </label>
                                             <div class="relative flex items-center">
@@ -300,7 +300,7 @@
                                                     name="precio_oferta" oninput="calcularMargen()"
                                                     value="{{ old('precio_oferta', $producto->precio_oferta ?? '') }}"
                                                     placeholder="Opcional"
-                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                                    class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-bold text-emerald-700 rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
                                             </div>
                                         </div>
                                     </div>
@@ -308,7 +308,7 @@
                                     <!-- Costo Unitario -->
                                     <div>
                                         <label for="costo_unitario"
-                                            class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                            class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                             Costo Unitario (Privado)
                                         </label>
                                         <div class="relative flex items-center">
@@ -317,20 +317,20 @@
                                                 name="costo_unitario" oninput="calcularMargen()"
                                                 value="{{ old('costo_unitario', $producto->costo_unitario ?? '0.00') }}"
                                                 placeholder="0.00"
-                                                class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                                                class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
                                         </div>
                                     </div>
 
                                     <!-- Indicator Margen -->
                                     <div id="badge-margen"
-                                        class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col gap-1 text-xs">
-                                        <div class="flex items-center gap-1.5 text-slate-600">
+                                        class="p-3.5 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700 flex flex-col gap-1 text-xs">
+                                        <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
                                             <span
                                                 class="material-symbols-outlined text-[16px] text-emerald-600">trending_up</span>
                                             <span class="font-medium text-[11px]">Rentabilidad calculada estimada:</span>
                                         </div>
                                         <div class="flex items-center justify-between pt-0.5">
-                                            <span id="margen-monto" class="font-bold text-slate-900 text-sm">+$0.00 por
+                                            <span id="margen-monto" class="font-bold text-slate-900 dark:text-white text-sm">+$0.00 por
                                                 unidad</span>
                                             <span id="margen-porcentaje"
                                                 class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">0%
@@ -341,35 +341,35 @@
                             </div>
 
                             <!-- Sub-bloque: Inventario & Stock -->
-                            <div class="pt-4 border-t border-slate-100">
+                            <div class="pt-4 border-t border-slate-100 dark:border-gray-700">
                                 <div class="flex items-center gap-1.5 mb-3">
                                     <span class="material-symbols-outlined text-emerald-600 text-[17px]">warehouse</span>
-                                    <h3 class="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Inventario &
+                                    <h3 class="text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Inventario &
                                         Stock</h3>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label for="stock"
-                                            class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                            class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                             Stock Total
                                         </label>
                                         <div class="relative flex items-center">
                                             <input type="number" id="stock" name="stock" min="0"
                                                 value="{{ old('stock', $producto->stock ?? 12) }}"
-                                                class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                                class="input-panama w-full text-xs font-bold rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                                         </div>
                                     </div>
 
                                     <div>
                                         <label for="stock_minimo"
-                                            class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1 flex items-center justify-between">
+                                            class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1 flex items-center justify-between">
                                             <span>Mínimo Alerta</span>
                                             <span class="material-symbols-outlined text-[14px] text-amber-500"
                                                 title="Alerta de stock bajo">warning</span>
                                         </label>
                                         <input type="number" id="stock_minimo" name="stock_minimo" min="0"
                                             value="{{ old('stock_minimo', $producto->stock_minimo ?? 3) }}"
-                                            class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                                            class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                                     </div>
                                 </div>
                             </div>
@@ -377,9 +377,9 @@
 
                         <!-- ── SECCIÓN: DESCRIPCIÓN DETALLADA ── -->
                     <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-                        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2 border-b border-slate-100 dark:border-gray-700 pb-3">
                             <span class="material-symbols-outlined text-emerald-600 text-[20px]">description</span>
-                            <h2 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Descripciones &
+                            <h2 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Descripciones &
                                 Especificaciones</h2>
                         </div>
 
@@ -388,7 +388,7 @@
                             <div>
                                 <div class="flex items-center justify-between mb-1">
                                     <label for="descripcion_corta"
-                                        class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                                        class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                                         Descripción Corta (Resumen)
                                     </label>
                                     <span id="contador-desc-corta" class="text-[10px] text-slate-400">0 / 180
@@ -397,33 +397,33 @@
                                 <textarea id="descripcion_corta" name="descripcion_corta" rows="2" maxlength="180"
                                     oninput="actualizarContador(this, 'contador-desc-corta', 180)"
                                     placeholder="Router WiFi 6 de alta velocidad con cobertura de hasta 150 m²..."
-                                    class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
+                                    class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion_corta', $producto->descripcion_corta ?? '') }}</textarea>
                             </div>
 
                             <!-- Descripción Detallada -->
                             <div>
                                 <label for="descripcion"
-                                    class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                    class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                     Descripción Detallada & Especificaciones
                                 </label>
 
                                 <!-- Barra de herramientas simulada -->
                                 <div
-                                    class="flex items-center gap-1 bg-slate-50 border border-slate-200 border-b-0 rounded-t-xl px-3 py-1.5 text-slate-500 text-xs">
-                                    <button type="button" class="p-1 hover:bg-slate-200 rounded font-bold">B</button>
+                                    class="flex items-center gap-1 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 border-b-0 rounded-t-xl px-3 py-1.5 text-slate-500 dark:text-slate-400 text-xs">
+                                    <button type="button" class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded font-bold">B</button>
                                     <button type="button"
-                                        class="p-1 hover:bg-slate-200 rounded italic font-serif">I</button>
+                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded italic font-serif">I</button>
                                     <span class="text-slate-300 mx-1">|</span>
                                     <button type="button"
-                                        class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">format_list_bulleted</button>
+                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded material-symbols-outlined text-[16px]">format_list_bulleted</button>
                                     <button type="button"
-                                        class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">link</button>
+                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded material-symbols-outlined text-[16px]">link</button>
                                     <button type="button"
-                                        class="p-1 hover:bg-slate-200 rounded material-symbols-outlined text-[16px]">image</button>
+                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded material-symbols-outlined text-[16px]">image</button>
                                 </div>
                                 <textarea id="descripcion" name="descripcion" rows="8"
                                     placeholder="Escribe la descripción completa, características técnicas y especificaciones..."
-                                    class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
+                                    class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -442,20 +442,20 @@
                     <div class="lg:col-span-3 xl:col-span-3 2xl:col-span-2 space-y-5 order-1 lg:order-2">
                         <div class="lg:sticky lg:top-36">
                             <div class="card-elevated p-5 rounded-2xl space-y-4">
-                                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                                <div class="flex items-center gap-2 border-b border-slate-100 dark:border-gray-700 pb-3">
                                     <span class="material-symbols-outlined text-emerald-600 text-[20px]">toggle_on</span>
-                                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Estado &
+                                    <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Estado &
                                         Visibilidad</h3>
                                 </div>
 
                                 <div class="space-y-4">
                                     <div>
                                         <label for="activo"
-                                            class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                                            class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                                             Estado del Producto
                                         </label>
                                         <select id="activo" name="activo"
-                                            class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold">
+                                            class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3 font-semibold">
                                             <option value="1" @selected(old('activo', $producto->activo ?? true) == true)>
                                                 Activo (Visible en tienda)</option>
                                             <option value="0" @selected(old('activo', $producto->activo ?? true) == false)>
@@ -466,40 +466,40 @@
                                     <div class="space-y-2.5">
                                         <!-- Switch Destacado -->
                                         <div
-                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700">
                                             <div class="space-y-0.5">
-                                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                                <p class="text-xs font-bold text-slate-800 dark:text-gray-100 flex items-center gap-1">
                                                     <span
                                                         class="material-symbols-outlined text-amber-500 text-[16px]">star</span>
                                                     <span>Destacado</span>
                                                 </p>
-                                                <p class="text-[9px] text-slate-500">Sección destacados</p>
+                                                <p class="text-[9px] text-slate-500 dark:text-slate-400">Sección destacados</p>
                                             </div>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" name="destacado" value="1" class="sr-only peer"
                                                     @checked(old('destacado', $producto->destacado ?? false))>
                                                 <div
-                                                    class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500">
+                                                    class="w-9 h-5 bg-slate-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500">
                                                 </div>
                                             </label>
                                         </div>
 
                                         <!-- Switch ITBMS 7% -->
                                         <div
-                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                            class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700">
                                             <div class="space-y-0.5">
-                                                <p class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                                                <p class="text-xs font-bold text-slate-800 dark:text-gray-100 flex items-center gap-1">
                                                     <span
                                                         class="material-symbols-outlined text-emerald-600 text-[16px]">receipt_long</span>
                                                     <span>ITBMS (7%)</span>
                                                 </p>
-                                                <p class="text-[9px] text-slate-500">Impuesto Panamá</p>
+                                                <p class="text-[9px] text-slate-500 dark:text-slate-400">Impuesto Panamá</p>
                                             </div>
                                             <label class="relative inline-flex items-center cursor-pointer">
                                                 <input type="checkbox" name="aplica_itbms" value="1" class="sr-only peer"
                                                     @checked(old('aplica_itbms', $producto->aplica_itbms ?? true))>
                                                 <div
-                                                    class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600">
+                                                    class="w-9 h-5 bg-slate-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600">
                                                 </div>
                                             </label>
                                         </div>
@@ -635,17 +635,17 @@
                         const card = document.createElement('div');
                         card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${isSelected
                             ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs'
+                            : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs'
                             }`;
                         card.onclick = () => seleccionarCategoria(cat.id, cat.nombre);
 
                         card.innerHTML = `
                                 <div class="flex items-center gap-2.5 min-w-0">
-                                    <div class="w-8 h-8 rounded-lg ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 group-hover:bg-emerald-600 group-hover:text-white'} flex items-center justify-center shrink-0 transition-colors overflow-hidden p-0.5 shadow-2xs">
+                                    <div class="w-8 h-8 rounded-lg ${isSelected ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 group-hover:bg-emerald-600 group-hover:text-white'} flex items-center justify-center shrink-0 transition-colors overflow-hidden p-0.5 shadow-2xs">
                                         ${getImageHtmlForCategory(cat)}
                                     </div>
                                     <div class="min-w-0">
-                                        <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-emerald-950'} truncate">${cat.nombre}</div>
+                                        <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-950'} truncate">${cat.nombre}</div>
                                     </div>
                                 </div>
                                 ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
@@ -665,16 +665,16 @@
                         const card = document.createElement('div');
                         card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group relative ${isSelected
                             ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs'
+                            : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs'
                             }`;
                         card.onclick = () => seleccionarMarca(brand.nombre);
 
                         card.innerHTML = `
                                 ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[16px] absolute top-1.5 right-1.5">check_circle</span>' : ''}
-                                <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+                                <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
                                     ${getLogoHtmlForBrand(brand)}
                                 </div>
-                                <span class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 group-hover:text-emerald-950'} truncate max-w-full leading-tight">${brand.nombre}</span>
+                                <span class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-950'} truncate max-w-full leading-tight">${brand.nombre}</span>
                             `;
                         return card;
                     }
@@ -833,3 +833,4 @@
             });
     </script>
 @endsection
+

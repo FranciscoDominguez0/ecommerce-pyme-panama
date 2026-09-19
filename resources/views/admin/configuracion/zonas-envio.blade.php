@@ -3,12 +3,12 @@
 @section('title', 'Zonas de Envío — Panel de Administración')
 
 @section('breadcrumbs')
-    <span class="hidden sm:inline-flex items-center gap-1.5 text-slate-500">
+    <span class="hidden sm:inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
         <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
         <span>Logística</span>
     </span>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 truncate">Zonas de Envío</span>
+    <span class="font-bold text-slate-900 dark:text-white truncate">Zonas de Envío</span>
 @endsection
 
 @section('content')
@@ -21,8 +21,8 @@
                 <span class="material-symbols-outlined text-[26px]">local_shipping</span>
             </div>
             <div>
-                <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">Zonas de Envío</h1>
-                <p class="text-xs text-slate-500 mt-0.5">
+                <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Zonas de Envío</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     Administra las provincias o zonas de cobertura y establece el costo correspondiente para cada una.
                 </p>
             </div>
@@ -39,13 +39,13 @@
     <!-- ── ESTADO VACÍO ── -->
     @if($zonas->isEmpty())
         <div class="card-elevated p-8 sm:p-12 rounded-2xl text-center flex flex-col items-center justify-center space-y-4">
-            <div class="w-16 h-16 rounded-full bg-slate-100 border border-slate-200 text-slate-400 flex items-center justify-center shadow-inner">
+            <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 text-slate-400 flex items-center justify-center shadow-inner">
                 <span class="material-symbols-outlined text-[36px]">map</span>
             </div>
             
             <div class="max-w-md space-y-1">
-                <h3 class="text-base font-bold text-slate-900">Todavía no existen zonas de envío</h3>
-                <p class="text-xs text-slate-500 leading-relaxed">
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">Todavía no existen zonas de envío</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Configura las provincias o regiones de Panamá a las que realizas entregas y establece sus tarifas correspondientes para el checkout.
                 </p>
             </div>
@@ -63,24 +63,24 @@
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                        <tr class="bg-slate-50 dark:bg-transparent/80 border-b border-slate-200 dark:border-gray-700/80 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                             <th class="py-3.5 px-5">Provincia / Zona</th>
                             <th class="py-3.5 px-5">Costo de envío</th>
                             <th class="py-3.5 px-5">Estado</th>
                             <th class="py-3.5 px-5 text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 text-xs text-slate-700 font-medium">
+                    <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs text-slate-700 dark:text-slate-300 font-medium">
                         @foreach($zonas as $zona)
-                            <tr class="hover:bg-slate-50/60 transition-colors">
+                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors">
                                 <!-- Provincia / Zona -->
                                 <td class="py-4 px-5">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-600 flex items-center justify-center shrink-0">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700/80 text-slate-600 dark:text-slate-400 flex items-center justify-center shrink-0">
                                             <span class="material-symbols-outlined text-[18px]">location_on</span>
                                         </div>
                                         <div>
-                                            <span class="font-bold text-slate-900 text-sm block">{{ $zona->nombre }}</span>
+                                            <span class="font-bold text-slate-900 dark:text-white text-sm block">{{ $zona->nombre }}</span>
                                         </div>
                                     </div>
                                 </td>
@@ -100,7 +100,7 @@
                                             <span>Activa</span>
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-[11px] font-semibold">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 text-[11px] font-semibold">
                                             <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                                             <span>Inactiva</span>
                                         </span>
@@ -114,9 +114,9 @@
                                         <!-- Botón Editar -->
                                         <button type="button" 
                                                 onclick="abrirModalEditarZona({{ $zona->id }}, '{{ addslashes($zona->nombre) }}', {{ (float) ($zona->costo ?? 0) }}, {{ $zona->activo ? 'true' : 'false' }})" 
-                                                class="px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all shadow-2xs flex items-center gap-1 cursor-pointer"
+                                                class="px-2.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 hover:border-slate-300 dark:border-gray-700 transition-all shadow-2xs flex items-center gap-1 cursor-pointer"
                                                 title="Editar zona">
-                                            <span class="material-symbols-outlined text-[15px] text-slate-500">edit</span>
+                                            <span class="material-symbols-outlined text-[15px] text-slate-500 dark:text-slate-400">edit</span>
                                             <span class="hidden sm:inline">Editar</span>
                                         </button>
 
@@ -153,20 +153,20 @@
 
 <!-- ── MODAL: CREAR / EDITAR ZONA DE ENVÍO ── -->
 <div id="modal-zona-envio" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity">
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-5 transform transition-all">
+    <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700 shadow-2xl max-w-md w-full p-6 space-y-5 transform transition-all">
         
         <!-- Modal Header -->
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-4">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100/80 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
                     <span class="material-symbols-outlined text-[20px]">local_shipping</span>
                 </div>
                 <div>
-                    <h3 id="modal-zona-titulo" class="text-base font-bold text-slate-900">Nueva zona de envío</h3>
-                    <p class="text-[11px] text-slate-500">Ingresa la provincia o zona y el costo correspondiente.</p>
+                    <h3 id="modal-zona-titulo" class="text-base font-bold text-slate-900 dark:text-white">Nueva zona de envío</h3>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400">Ingresa la provincia o zona y el costo correspondiente.</p>
                 </div>
             </div>
-            <button type="button" onclick="cerrarModalZona()" class="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-100 transition-colors">
+            <button type="button" onclick="cerrarModalZona()" class="text-slate-400 hover:text-slate-700 dark:text-slate-300 p-1 rounded-lg hover:bg-slate-100 dark:bg-transparent transition-colors">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
@@ -178,7 +178,7 @@
 
             <!-- Campo Provincia / Zona -->
             <div>
-                <label for="input-zona-nombre" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label for="input-zona-nombre" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Provincia / Zona <span class="text-rose-500">*</span>
                 </label>
                 <input type="text" 
@@ -186,12 +186,12 @@
                        name="nombre" 
                        required 
                        placeholder="Ej. Panamá, Coclé, Colón, Chiriquí" 
-                       class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                       class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
             </div>
 
             <!-- Campo Costo de envío -->
             <div>
-                <label for="input-zona-costo" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                <label for="input-zona-costo" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
                     Costo de envío ($ USD) <span class="text-rose-500">*</span>
                 </label>
                 <div class="relative flex items-center">
@@ -204,31 +204,31 @@
                            max="99999999.99"
                            required 
                            placeholder="0.00" 
-                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                           class="input-panama w-full pl-7 pr-3 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20">
                 </div>
             </div>
 
             <!-- Campo Estado -->
             <div class="pt-1">
-                <label class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100/80 transition-colors">
+                <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-slate-100 dark:bg-transparent/80 transition-colors">
                     <input type="checkbox" 
                            id="input-zona-activo" 
                            name="activo" 
                            value="1" 
                            checked
-                           class="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4 border-slate-300">
+                           class="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4 border-slate-300 dark:border-gray-700">
                     <div>
-                        <span class="text-xs font-bold text-slate-900 block">Zona activa</span>
-                        <span class="text-[11px] text-slate-500 block">Permite aplicar esta tarifa durante el proceso de checkout.</span>
+                        <span class="text-xs font-bold text-slate-900 dark:text-white block">Zona activa</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400 block">Permite aplicar esta tarifa durante el proceso de checkout.</span>
                     </div>
                 </label>
             </div>
 
             <!-- Acciones Footer -->
-            <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100">
+            <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-gray-700">
                 <button type="button" 
                         onclick="cerrarModalZona()" 
-                        class="px-4 py-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                        class="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                     Cancelar
                 </button>
                 <button type="submit" 
@@ -280,3 +280,5 @@
     }
 </script>
 @endsection
+
+

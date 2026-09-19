@@ -1,4 +1,4 @@
-@props([
+﻿@props([
     'inputId' => 'buscar',
     'formId' => 'top-search-form'
 ])
@@ -14,7 +14,7 @@
         <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-gray-800/50">
             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">barcode_scanner</span>
-                Escanear Código
+                Escanear CÃ³digo
             </h3>
             <button type="button" 
                     onclick="window.ModalEscaner.cerrar()"
@@ -25,12 +25,12 @@
 
         <!-- Body / Scanner area -->
         <div class="p-6">
-            <!-- Contenedor relativo para evitar que el canvas rompa el diseño -->
+            <!-- Contenedor relativo para evitar que el canvas rompa el diseÃ±o -->
             <div class="relative w-full bg-black rounded-xl overflow-hidden shadow-inner border border-slate-200 dark:border-gray-700 min-h-[300px] flex items-center justify-center">
                 <div id="reader" class="w-full"></div>
             </div>
             <p class="text-xs text-center text-slate-500 dark:text-slate-400 mt-4">
-                Apunta la cámara al código de barras o código QR.
+                Apunta la cÃ¡mara al cÃ³digo de barras o cÃ³digo QR.
             </p>
         </div>
     </div>
@@ -73,12 +73,12 @@
             
             iniciarScanner: function() {
                 if (html5Qrcode) {
-                    return; // Ya está iniciado
+                    return; // Ya estÃ¡ iniciado
                 }
                 
-                // Solo inicializar si la librería ha cargado
+                // Solo inicializar si la librerÃ­a ha cargado
                 if (typeof Html5Qrcode === 'undefined') {
-                    console.error("html5-qrcode no está cargado");
+                    console.error("html5-qrcode no estÃ¡ cargado");
                     setTimeout(() => this.iniciarScanner(), 500); // Reintentar
                     return;
                 }
@@ -99,13 +99,13 @@
                 };
                 
                 html5Qrcode.start(
-                    { facingMode: "environment" }, // Preferir cámara trasera
+                    { facingMode: "environment" }, // Preferir cÃ¡mara trasera
                     config,
                     qrCodeSuccessCallback
                 ).catch((err) => {
-                    console.error("Error al iniciar la cámara", err);
+                    console.error("Error al iniciar la cÃ¡mara", err);
                     // Opcional: mostrar un Toast de error
-                    alert("No se pudo acceder a la cámara. Revisa los permisos de tu navegador.");
+                    alert("No se pudo acceder a la cÃ¡mara. Revisa los permisos de tu navegador.");
                 });
             },
             
@@ -146,7 +146,7 @@
 </script>
 
 <style>
-    /* Ocultar botones y textos nativos de la librería html5-qrcode para un look más limpio */
+    /* Ocultar botones y textos nativos de la librerÃ­a html5-qrcode para un look mÃ¡s limpio */
     #reader__dashboard_section_csr span {
         display: none !important;
     }
@@ -167,3 +167,4 @@
         object-fit: cover;
     }
 </style>
+

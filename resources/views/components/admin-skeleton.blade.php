@@ -1,4 +1,4 @@
-@props(['fullScreen' => false])
+﻿@props(['fullScreen' => false])
 
 <style>
     .shimmer-bg {
@@ -38,27 +38,27 @@
     <!-- Fake Sidebar -->
     <div class="hidden md:flex w-64 bg-[#1F2937] h-full shrink-0 flex-col border-r border-gray-700/60 shadow-2xl relative overflow-hidden">
         <div class="h-16 border-b border-gray-700/60 w-full flex items-center px-5">
-            <div class="h-9 w-9 bg-white/10 rounded-xl shimmer-bg"></div>
-            <div class="h-4 bg-white/10 rounded w-24 ml-3 shimmer-bg stagger-1"></div>
+            <div class="h-9 w-9 bg-white dark:bg-[#181a1b]/10 rounded-xl shimmer-bg"></div>
+            <div class="h-4 bg-white dark:bg-[#181a1b]/10 rounded w-24 ml-3 shimmer-bg stagger-1"></div>
         </div>
         <div class="flex-1 p-4 flex flex-col gap-5 mt-2">
-            <div class="h-10 bg-white/5 rounded-full w-full shimmer-bg stagger-1"></div>
-            <div class="h-10 bg-white/5 rounded-full w-full shimmer-bg stagger-2"></div>
-            <div class="h-10 bg-white/5 rounded-full w-full shimmer-bg stagger-3"></div>
-            <div class="h-10 bg-white/5 rounded-full w-full shimmer-bg stagger-1"></div>
-            <div class="h-10 bg-white/5 rounded-full w-full shimmer-bg stagger-2"></div>
+            <div class="h-10 bg-white dark:bg-[#181a1b]/5 rounded-full w-full shimmer-bg stagger-1"></div>
+            <div class="h-10 bg-white dark:bg-[#181a1b]/5 rounded-full w-full shimmer-bg stagger-2"></div>
+            <div class="h-10 bg-white dark:bg-[#181a1b]/5 rounded-full w-full shimmer-bg stagger-3"></div>
+            <div class="h-10 bg-white dark:bg-[#181a1b]/5 rounded-full w-full shimmer-bg stagger-1"></div>
+            <div class="h-10 bg-white dark:bg-[#181a1b]/5 rounded-full w-full shimmer-bg stagger-2"></div>
         </div>
     </div>
     
     <!-- Fake Main Area -->
     <div class="flex-1 flex flex-col h-full min-w-0">
         <!-- Fake Topbar -->
-        <div class="h-16 bg-white/95 border-b border-slate-200/80 shadow-xs shrink-0 w-full flex items-center px-8 justify-between relative overflow-hidden">
-            <div class="h-5 bg-slate-200/60 rounded-md w-32 shimmer-bg"></div>
+        <div class="h-16 bg-white dark:bg-[#181a1b]/95 border-b border-slate-200 dark:border-gray-700/80 shadow-xs shrink-0 w-full flex items-center px-8 justify-between relative overflow-hidden">
+            <div class="h-5 bg-slate-200 dark:bg-gray-700/60 rounded-md w-32 shimmer-bg"></div>
             <div class="flex gap-4 items-center">
-                <div class="h-8 w-64 bg-slate-100 rounded-xl shimmer-bg hidden md:block"></div>
-                <div class="h-8 w-8 bg-slate-200/60 rounded-lg shimmer-bg stagger-1"></div>
-                <div class="h-8 w-8 bg-slate-200/80 rounded-full shimmer-bg stagger-2"></div>
+                <div class="h-8 w-64 bg-slate-100 dark:bg-transparent rounded-xl shimmer-bg hidden md:block"></div>
+                <div class="h-8 w-8 bg-slate-200 dark:bg-gray-700/60 rounded-lg shimmer-bg stagger-1"></div>
+                <div class="h-8 w-8 bg-slate-200 dark:bg-gray-700/80 rounded-full shimmer-bg stagger-2"></div>
             </div>
         </div>
         <!-- Main Content Skeleton -->
@@ -72,3 +72,4 @@
     @include('components.partials.skeleton-content')
 </div>
 @endif
+

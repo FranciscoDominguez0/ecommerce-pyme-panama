@@ -11,20 +11,20 @@
     <div class="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
         <div>
             <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('admin.usuarios.index') }}" class="text-slate-500 hover:text-slate-900 transition-colors">
+                <a href="{{ route('admin.usuarios.index') }}" class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
                     <span class="material-symbols-outlined">arrow_back</span>
                 </a>
-                <span class="material-symbols-outlined text-slate-700 text-3xl" style="font-variation-settings: 'FILL' 1;">shield</span>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $rol->nombre ?: $rol->name }}</h2>
+                <span class="material-symbols-outlined text-slate-700 dark:text-slate-300 text-3xl" style="font-variation-settings: 'FILL' 1;">shield</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $rol->nombre ?: $rol->name }}</h2>
             </div>
-            <p class="text-sm text-slate-500 max-w-2xl ml-[4.5rem]">
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-2xl ml-[4.5rem]">
                 {{ $rol->descripcion ?? 'Acceso al sistema.' }}
             </p>
         </div>
         <div class="flex gap-4">
-            <div class="bg-white px-4 py-3 rounded-xl border border-slate-200 flex flex-col items-center min-w-[120px] shadow-sm">
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Usuarios</span>
-                <span class="font-bold text-2xl text-slate-900">{{ $rol->users()->count() }}</span>
+            <div class="bg-white dark:bg-[#181a1b] px-4 py-3 rounded-xl border border-slate-200 dark:border-gray-700 flex flex-col items-center min-w-[120px] shadow-sm">
+                <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Usuarios</span>
+                <span class="font-bold text-2xl text-slate-900 dark:text-white">{{ $rol->users()->count() }}</span>
             </div>
             <div class="flex items-center ml-2">
                 <button type="submit" class="px-6 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs uppercase tracking-wide hover:bg-slate-800 shadow-sm transition-all flex items-center gap-2">
@@ -36,12 +36,12 @@
     </div>
 
     <!-- Tabs -->
-    <div class="border-b border-slate-200 mb-8 flex gap-8 ml-[4.5rem] md:ml-0">
-        <a href="{{ route('admin.usuarios.por-rol', $rol->id) }}" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300 font-medium transition-colors flex items-center gap-2">
+    <div class="border-b border-slate-200 dark:border-gray-700 mb-8 flex gap-8 ml-[4.5rem] md:ml-0">
+        <a href="{{ route('admin.usuarios.por-rol', $rol->id) }}" class="pb-3 border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:border-slate-300 dark:border-gray-700 font-medium transition-colors flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px]">group</span>
             Usuarios
         </a>
-        <button type="button" class="pb-3 border-b-2 border-slate-900 text-slate-900 font-medium flex items-center gap-2">
+        <button type="button" class="pb-3 border-b-2 border-slate-900 text-slate-900 dark:text-white font-medium flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px]">key</span>
             Permisos
         </button>
@@ -97,31 +97,31 @@
     @endphp
 
     <!-- Permissions Content Area (Unified Table with Accordions) -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden ml-[4.5rem] md:ml-0 mb-12">
+    <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden ml-[4.5rem] md:ml-0 mb-12">
         <div class="overflow-x-auto overflow-y-auto max-h-[65vh] xl:max-h-[75vh]">
             <table class="w-full text-left border-collapse">
                 <thead class="sticky top-0 z-30 shadow-sm">
-                    <tr class="bg-slate-100 border-b border-slate-300">
-                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-1/4">Módulo</th>
-                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center w-24">Todos</th>
-                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">Ver</th>
-                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">Crear</th>
-                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">Editar</th>
-                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">Eliminar</th>
+                    <tr class="bg-slate-100 dark:bg-transparent border-b border-slate-300 dark:border-gray-700">
+                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-1/4">Módulo</th>
+                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-24">Todos</th>
+                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Ver</th>
+                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Crear</th>
+                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Editar</th>
+                        <th class="py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Eliminar</th>
                     </tr>
                 </thead>
                 
                 @foreach($modulosPorGrupo as $nombreGrupo => $modulosDelGrupo)
                     @if($modulosDelGrupo->isEmpty()) @continue @endif
                     
-                    <tbody x-data="{ open: true }" class="border-b border-slate-200">
+                    <tbody x-data="{ open: true }" class="border-b border-slate-200 dark:border-gray-700">
                         <!-- Group Header Row -->
-                        <tr @click="open = !open" class="bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors group">
+                        <tr @click="open = !open" class="bg-slate-50 dark:bg-transparent hover:bg-slate-100 dark:bg-transparent cursor-pointer transition-colors group">
                             <td colspan="6" class="py-3 px-6">
                                 <div class="flex items-center gap-2">
                                     <span class="material-symbols-outlined text-slate-400 group-hover:text-indigo-600 transition-all duration-300 text-[20px]" :class="open ? 'rotate-180' : ''">expand_more</span>
-                                    <h3 class="text-sm font-bold text-slate-900">{{ $nombreGrupo }}</h3>
-                                    <span class="ml-auto text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-200 px-2.5 py-0.5 rounded-full">{{ $modulosDelGrupo->count() }}</span>
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ $nombreGrupo }}</h3>
+                                    <span class="ml-auto text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-200 dark:bg-gray-700 px-2.5 py-0.5 rounded-full">{{ $modulosDelGrupo->count() }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -136,37 +136,37 @@
                                 $pEliminar = $permisos->first(fn($p) => str_ends_with($p->name, '.eliminar'));
                             @endphp
                             @if($pVer || $pCrear || $pEditar || $pEliminar)
-                            <tr x-show="open" class="hover:bg-slate-50/50 transition-colors border-t border-slate-100" id="row-{{ $slug }}">
+                            <tr x-show="open" class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/50 dark:hover:bg-gray-700/30 transition-colors border-t border-slate-100 dark:border-gray-700" id="row-{{ $slug }}">
                                 <td class="py-4 px-6 pl-10">
-                                    <span class="text-sm font-bold text-slate-900 capitalize block">{{ $moduloNombre ?: 'General' }}</span>
+                                    <span class="text-sm font-bold text-slate-900 dark:text-white capitalize block">{{ $moduloNombre ?: 'General' }}</span>
                                 </td>
-                                <td class="py-4 px-6 text-center bg-slate-50/30">
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-600 cursor-pointer select-all-row" onchange="toggleRowCheckboxes(this, 'row-{{ $slug }}')">
+                                <td class="py-4 px-6 text-center bg-slate-50 dark:bg-transparent/30">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 dark:border-gray-700 focus:ring-indigo-600 cursor-pointer select-all-row" onchange="toggleRowCheckboxes(this, 'row-{{ $slug }}')">
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pVer)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pVer->name }}" class="form-checkbox h-5 w-5 text-slate-900 rounded border-slate-300 focus:ring-slate-900 cursor-pointer perm-checkbox ver-checkbox" onchange="togglePermissionsState(this, 'row-{{ $slug }}')" {{ in_array($pVer->name, $permisosRol) ? 'checked' : '' }} title="{{ $pVer->nombre ?? $pVer->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pVer->name }}" class="form-checkbox h-5 w-5 text-slate-900 dark:text-white rounded border-slate-300 dark:border-gray-700 focus:ring-slate-900 cursor-pointer perm-checkbox ver-checkbox" onchange="togglePermissionsState(this, 'row-{{ $slug }}')" {{ in_array($pVer->name, $permisosRol) ? 'checked' : '' }} title="{{ $pVer->nombre ?? $pVer->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pCrear)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pCrear->name }}" class="form-checkbox h-5 w-5 text-slate-900 rounded border-slate-300 focus:ring-slate-900 cursor-pointer perm-checkbox" {{ in_array($pCrear->name, $permisosRol) ? 'checked' : '' }} title="{{ $pCrear->nombre ?? $pCrear->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pCrear->name }}" class="form-checkbox h-5 w-5 text-slate-900 dark:text-white rounded border-slate-300 dark:border-gray-700 focus:ring-slate-900 cursor-pointer perm-checkbox" {{ in_array($pCrear->name, $permisosRol) ? 'checked' : '' }} title="{{ $pCrear->nombre ?? $pCrear->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pEditar)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pEditar->name }}" class="form-checkbox h-5 w-5 text-slate-900 rounded border-slate-300 focus:ring-slate-900 cursor-pointer perm-checkbox" {{ in_array($pEditar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEditar->nombre ?? $pEditar->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pEditar->name }}" class="form-checkbox h-5 w-5 text-slate-900 dark:text-white rounded border-slate-300 dark:border-gray-700 focus:ring-slate-900 cursor-pointer perm-checkbox" {{ in_array($pEditar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEditar->nombre ?? $pEditar->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
                                 </td>
                                 <td class="py-4 px-6 text-center">
                                     @if($pEliminar)
-                                        <input type="checkbox" name="permisos[]" value="{{ $pEliminar->name }}" class="form-checkbox h-5 w-5 text-red-600 rounded border-slate-300 focus:ring-red-600 cursor-pointer perm-checkbox" {{ in_array($pEliminar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEliminar->nombre ?? $pEliminar->name }}">
+                                        <input type="checkbox" name="permisos[]" value="{{ $pEliminar->name }}" class="form-checkbox h-5 w-5 text-red-600 rounded border-slate-300 dark:border-gray-700 focus:ring-red-600 cursor-pointer perm-checkbox" {{ in_array($pEliminar->name, $permisosRol) ? 'checked' : '' }} title="{{ $pEliminar->nombre ?? $pEliminar->name }}">
                                     @else
                                         <span class="text-slate-300">-</span>
                                     @endif
@@ -185,19 +185,19 @@
         
         <!-- Especiales de Admin -->
         <div>
-            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                 <span class="material-symbols-outlined text-emerald-600">admin_panel_settings</span>
                 Permisos Especiales de Panel (Admin)
             </h3>
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 @foreach($modulos as $moduloNombre => $permisos)
                     @php
                         $pOtras = $permisos->filter(fn($p) => !preg_match('/\.(ver|crear|editar|eliminar)$/', $p->name) && str_starts_with($p->name, 'admin.'));
                     @endphp
                     @foreach($pOtras as $pOtra)
-                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
-                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-slate-300 focus:ring-emerald-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
-                            <span class="text-sm font-medium text-slate-700 capitalize">{{ str_replace(['admin.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
+                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
+                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-emerald-600 rounded border-slate-300 dark:border-gray-700 focus:ring-emerald-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">{{ str_replace(['admin.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
                         </label>
                     @endforeach
                 @endforeach
@@ -206,19 +206,19 @@
 
         <!-- Storefront Cliente -->
         <div>
-            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                 <span class="material-symbols-outlined text-indigo-600">storefront</span>
                 Permisos de Tienda (Cliente)
             </h3>
-            <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 @foreach($modulos as $moduloNombre => $permisos)
                     @php
                         $pOtras = $permisos->filter(fn($p) => str_starts_with($p->name, 'cliente.'));
                     @endphp
                     @foreach($pOtras as $pOtra)
-                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
-                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
-                            <span class="text-sm font-medium text-slate-700 capitalize">{{ str_replace(['cliente.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
+                        <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 border border-transparent hover:border-slate-200 dark:border-gray-700 cursor-pointer transition-all" title="{{ $pOtra->nombre ?? $pOtra->name }}">
+                            <input type="checkbox" name="permisos[]" value="{{ $pOtra->name }}" class="form-checkbox h-5 w-5 text-indigo-600 rounded border-slate-300 dark:border-gray-700 focus:ring-indigo-600 cursor-pointer" {{ in_array($pOtra->name, $permisosRol) ? 'checked' : '' }}>
+                            <span class="text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">{{ str_replace(['cliente.', '-', '_'], ['',' ', ' '], $pOtra->name) }}</span>
                         </label>
                     @endforeach
                 @endforeach
@@ -309,3 +309,5 @@
     });
 </script>
 @endsection
+
+

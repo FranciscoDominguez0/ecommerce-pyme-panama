@@ -4,14 +4,14 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="capitalize font-bold text-slate-900 truncate">Mi Perfil</span>
+    <span class="capitalize font-bold text-slate-900 dark:text-white truncate">Mi Perfil</span>
 @endsection
 
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- Hero de Perfil -->
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden relative">
+    <div class="bg-white dark:bg-[#181a1b] rounded-3xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden relative">
         <!-- Banner Background -->
         <div class="h-28 md:h-40 w-full relative bg-[#1F2937]" style="background-image: linear-gradient(to right, #1e293b, #0f172a);">
             <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
@@ -27,11 +27,11 @@
                         
                         <label for="foto_upload" class="cursor-pointer relative block">
                             <template x-if="imageUrl">
-                                <img :src="imageUrl" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md bg-white">
+                                <img :src="imageUrl" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md bg-white dark:bg-[#181a1b]">
                             </template>
                             <template x-if="!imageUrl">
                                 @if($usuario->foto_perfil_ruta)
-                                    <img src="{{ asset($usuario->foto_perfil_ruta) }}" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md bg-white">
+                                    <img src="{{ asset($usuario->foto_perfil_ruta) }}" class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-md bg-white dark:bg-[#181a1b]">
                                 @else
                                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-slate-800 text-white flex items-center justify-center text-3xl font-bold border-4 border-white shadow-md">
                                         {{ $usuario->iniciales }}
@@ -50,13 +50,13 @@
 
                 <!-- Textos del Hero (Garantizados sobre fondo blanco) -->
                 <div class="flex-1 pt-2 md:pt-4 pb-2">
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">{{ $usuario->nombre_completo }}</h2>
-                    <div class="flex flex-wrap items-center gap-3 mt-2 text-slate-600 text-sm md:text-base font-semibold">
-                        <span class="flex items-center gap-1.5 bg-slate-100 px-3 py-1 rounded-lg text-slate-800 border border-slate-200 shadow-sm">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $usuario->nombre_completo }}</h2>
+                    <div class="flex flex-wrap items-center gap-3 mt-2 text-slate-600 dark:text-slate-400 text-sm md:text-base font-semibold">
+                        <span class="flex items-center gap-1.5 bg-slate-100 dark:bg-transparent px-3 py-1 rounded-lg text-slate-800 dark:text-gray-100 border border-slate-200 dark:border-gray-700 shadow-sm">
                             <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
                             {{ $usuario->getRoleNames()->first() ?? 'Administrador' }}
                         </span>
-                        <span class="flex items-center gap-1.5 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 text-slate-700 shadow-sm">
+                        <span class="flex items-center gap-1.5 bg-slate-50 dark:bg-transparent px-3 py-1 rounded-lg border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 shadow-sm">
                             <span class="material-symbols-outlined text-[18px]">mail</span>
                             {{ $usuario->email }}
                         </span>
@@ -64,10 +64,10 @@
                 </div>
                 
                 <!-- Mini estadísticas -->
-                <div class="flex gap-6 sm:gap-8 border-t md:border-t-0 md:border-l border-slate-200 pt-5 md:pt-4 md:pl-8 text-center shrink-0 mt-4 md:mt-0">
+                <div class="flex gap-6 sm:gap-8 border-t md:border-t-0 md:border-l border-slate-200 dark:border-gray-700 pt-5 md:pt-4 md:pl-8 text-center shrink-0 mt-4 md:mt-0">
                     <div class="flex flex-col items-center justify-center">
-                        <div class="text-3xl font-black text-slate-800">{{ $actividadReciente->count() }}</div>
-                        <div class="text-[11px] uppercase font-extrabold tracking-widest text-slate-500 mt-1">Acciones Recientes</div>
+                        <div class="text-3xl font-black text-slate-800 dark:text-gray-100">{{ $actividadReciente->count() }}</div>
+                        <div class="text-[11px] uppercase font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mt-1">Acciones Recientes</div>
                     </div>
                     <div class="flex flex-col items-center justify-center">
                         <div class="text-3xl font-black text-emerald-600">
@@ -75,7 +75,7 @@
                                 {{ $usuario->two_fa_habilitado ? 'verified_user' : 'gpp_bad' }}
                             </span>
                         </div>
-                        <div class="text-[11px] uppercase font-extrabold tracking-widest text-slate-500 mt-1">
+                        <div class="text-[11px] uppercase font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mt-1">
                             {{ $usuario->two_fa_habilitado ? '2FA Activo' : '2FA Inactivo' }}
                         </div>
                     </div>
@@ -93,13 +93,13 @@
         <div class="lg:col-span-2 space-y-6">
             
             <!-- Tarjeta: Información Personal -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <div class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <div class="p-1.5 bg-blue-100 text-blue-600 rounded-lg">
                             <span class="material-symbols-outlined text-[20px]">person</span>
                         </div>
-                        <h3 class="font-bold text-slate-800">Información Personal</h3>
+                        <h3 class="font-bold text-slate-800 dark:text-gray-100">Información Personal</h3>
                     </div>
                 </div>
                 <div class="p-6">
@@ -109,27 +109,27 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nombre <span class="text-red-500">*</span></label>
-                                <input type="text" name="nombre" value="{{ old('nombre', $usuario->nombre) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nombre <span class="text-red-500">*</span></label>
+                                <input type="text" name="nombre" value="{{ old('nombre', $usuario->nombre) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
                                 @error('nombre') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Apellido <span class="text-red-500">*</span></label>
-                                <input type="text" name="apellido" value="{{ old('apellido', $usuario->apellido) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Apellido <span class="text-red-500">*</span></label>
+                                <input type="text" name="apellido" value="{{ old('apellido', $usuario->apellido) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
                                 @error('apellido') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Correo Electrónico (Solo Lectura)</label>
-                                <input type="email" value="{{ $usuario->email }}" disabled class="w-full px-3.5 py-2.5 text-sm bg-slate-100 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed">
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Correo Electrónico (Solo Lectura)</label>
+                                <input type="email" value="{{ $usuario->email }}" disabled class="w-full px-3.5 py-2.5 text-sm bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-slate-500 dark:text-slate-400 cursor-not-allowed">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Teléfono</label>
-                                <input type="text" name="telefono" value="{{ old('telefono', $usuario->telefono) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label>
+                                <input type="text" name="telefono" value="{{ old('telefono', $usuario->telefono) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
                                 @error('telefono') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Fecha de Nacimiento</label>
-                                <input type="date" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', $usuario->fecha_nacimiento?->format('Y-m-d')) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Fecha de Nacimiento</label>
+                                <input type="date" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', $usuario->fecha_nacimiento?->format('Y-m-d')) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
                                 @error('fecha_nacimiento') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -144,13 +144,13 @@
             </div>
 
             <!-- Tarjeta: Seguridad (Contraseña) -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <div class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <div class="p-1.5 bg-amber-100 text-amber-600 rounded-lg">
                             <span class="material-symbols-outlined text-[20px]">lock</span>
                         </div>
-                        <h3 class="font-bold text-slate-800">Seguridad de la Cuenta</h3>
+                        <h3 class="font-bold text-slate-800 dark:text-gray-100">Seguridad de la Cuenta</h3>
                     </div>
                 </div>
                 <div class="p-6">
@@ -160,17 +160,17 @@
 
                         <div class="space-y-4 max-w-md">
                             <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Contraseña Actual <span class="text-red-500">*</span></label>
-                                <input type="password" name="current_password" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Contraseña Actual <span class="text-red-500">*</span></label>
+                                <input type="password" name="current_password" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
                                 @error('current_password') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             
                             <!-- Inputs de Contraseña con Toggle (Alpine) -->
                             <div x-data="{ show: false }">
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nueva Contraseña <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nueva Contraseña <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input :type="show ? 'text' : 'password'" name="password" class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
-                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                    <input :type="show ? 'text' : 'password'" name="password" class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400">
                                         <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
                                     </button>
                                 </div>
@@ -178,10 +178,10 @@
                             </div>
 
                             <div x-data="{ show: false }">
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Confirmar Nueva Contraseña <span class="text-red-500">*</span></label>
+                                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Confirmar Nueva Contraseña <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input :type="show ? 'text' : 'password'" name="password_confirmation" class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 transition-all outline-none">
-                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                    <input :type="show ? 'text' : 'password'" name="password_confirmation" class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400">
                                         <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
                                     </button>
                                 </div>
@@ -203,12 +203,12 @@
         <div class="space-y-6">
             
             <!-- Tarjeta: 2FA -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                    <h3 class="font-bold text-slate-800 text-sm">Autenticación de 2 Factores</h3>
+            <div class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 dark:text-gray-100 text-sm">Autenticación de 2 Factores</h3>
                 </div>
                 <div class="p-5">
-                    <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
                         Añade una capa de seguridad extra con un código de verificación.
                     </p>
                     
@@ -217,12 +217,12 @@
                         @method('PUT')
                         <input type="hidden" name="two_fa_habilitado" value="0">
                         
-                        <label class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                        <label class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
                             <div class="relative inline-flex items-center">
                                 <input type="checkbox" name="two_fa_habilitado" value="1" class="sr-only peer" onchange="this.form.submit()" {{ $usuario->two_fa_habilitado ? 'checked' : '' }}>
-                                <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                                <div class="w-9 h-5 bg-slate-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
                             </div>
-                            <span class="text-sm font-bold text-slate-700 select-none">
+                            <span class="text-sm font-bold text-slate-700 dark:text-slate-300 select-none">
                                 {{ $usuario->two_fa_habilitado ? 'Desactivar 2FA' : 'Activar 2FA' }}
                             </span>
                         </label>
@@ -231,27 +231,27 @@
             </div>
 
             <!-- Tarjeta: Sesiones Activas -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden" x-data="{ modalOpen: false }">
-                <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-                    <h3 class="font-bold text-slate-800 text-sm">Sesiones Activas</h3>
+            <div class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden" x-data="{ modalOpen: false }">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 dark:text-gray-100 text-sm">Sesiones Activas</h3>
                 </div>
                 <div class="p-5 space-y-4">
-                    <p class="text-xs text-slate-500 leading-relaxed">
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                         Cierra la sesión en otros dispositivos por seguridad si notas actividad inusual.
                     </p>
                     
                     @if(isset($sesionesActivas) && count($sesionesActivas) > 0)
                         <div class="space-y-3">
                             @foreach($sesionesActivas as $sesion)
-                                <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                                <div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl">
                                     <span class="material-symbols-outlined text-3xl {{ $sesion->is_current_device ? 'text-emerald-500' : 'text-slate-400' }}">
                                         {{ $sesion->agent->icon }}
                                     </span>
                                     <div class="flex-1 min-w-0 text-left">
-                                        <div class="text-sm font-bold text-slate-800 truncate">
+                                        <div class="text-sm font-bold text-slate-800 dark:text-gray-100 truncate">
                                             {{ $sesion->agent->platform }} - {{ $sesion->agent->browser }}
                                         </div>
-                                        <div class="text-[11px] text-slate-500 truncate flex gap-1 items-center">
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate flex gap-1 items-center">
                                             <span>{{ $sesion->ip_address }}</span>
                                             <span>&bull;</span>
                                             @if($sesion->is_current_device)
@@ -275,7 +275,7 @@
 
                 <!-- Modal de Confirmación para Cerrar Sesiones -->
                 <div x-show="modalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm" style="display: none;">
-                    <div @click.outside="modalOpen = false" class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full mx-4 p-6"
+                    <div @click.outside="modalOpen = false" class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-xl border border-slate-200 dark:border-gray-700 max-w-md w-full mx-4 p-6"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 scale-95"
                          x-transition:enter-end="opacity-100 scale-100"
@@ -283,12 +283,12 @@
                          x-transition:leave-start="opacity-100 scale-100"
                          x-transition:leave-end="opacity-0 scale-95">
                         
-                        <div class="flex items-center gap-3 mb-4 text-slate-800">
+                        <div class="flex items-center gap-3 mb-4 text-slate-800 dark:text-gray-100">
                             <span class="material-symbols-outlined text-3xl text-rose-500">warning</span>
                             <h3 class="text-lg font-bold">Cerrar Sesión en Otros Dispositivos</h3>
                         </div>
                         
-                        <p class="text-sm text-slate-600 mb-5">
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mb-5">
                             Ingresa tu contraseña para confirmar que deseas cerrar la sesión en todos los demás dispositivos y navegadores.
                         </p>
                         
@@ -298,8 +298,8 @@
                             
                             <div x-data="{ show: false }" class="mb-5">
                                 <div class="relative">
-                                    <input :type="show ? 'text' : 'password'" name="password" placeholder="Contraseña Actual" required class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 text-slate-800 transition-all outline-none">
-                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600">
+                                    <input :type="show ? 'text' : 'password'" name="password" placeholder="Contraseña Actual" required class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400">
                                         <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
                                     </button>
                                 </div>
@@ -307,7 +307,7 @@
                             </div>
 
                             <div class="flex justify-end gap-2">
-                                <button type="button" @click="modalOpen = false" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
+                                <button type="button" @click="modalOpen = false" class="px-4 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-xl transition-colors">
                                     Cancelar
                                 </button>
                                 <button type="submit" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors">
@@ -320,23 +320,23 @@
             </div>
 
             <!-- Tarjeta: Actividad Reciente -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
-                    <h3 class="font-bold text-slate-800 text-sm">Actividad Reciente</h3>
+            <div class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-sm border border-slate-200 dark:border-gray-700 overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
+                    <h3 class="font-bold text-slate-800 dark:text-gray-100 text-sm">Actividad Reciente</h3>
                 </div>
                 <div class="p-5">
                     @if($actividadReciente->count() > 0)
-                        <div class="relative border-l border-slate-200 ml-3 space-y-6">
+                        <div class="relative border-l border-slate-200 dark:border-gray-700 ml-3 space-y-6">
                             @foreach($actividadReciente as $log)
                                 <div class="relative pl-6">
-                                    <span class="absolute top-1.5 w-2.5 h-2.5 bg-white border-2 border-slate-300 rounded-full" style="left: -5px;"></span>
+                                    <span class="absolute top-1.5 w-2.5 h-2.5 bg-white dark:bg-[#181a1b] border-2 border-slate-300 dark:border-gray-700 rounded-full" style="left: -5px;"></span>
                                     <div class="text-xs text-slate-400 font-medium mb-0.5">
                                         {{ $log->creado_en->locale('es')->diffForHumans() }}
                                     </div>
-                                    <div class="text-sm font-bold text-slate-700">
+                                    <div class="text-sm font-bold text-slate-700 dark:text-slate-300">
                                         {{ $log->accion }}
                                     </div>
-                                    <div class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                                         {{ $log->descripcion }}
                                     </div>
                                 </div>
@@ -345,7 +345,7 @@
                     @else
                         <div class="text-center py-6">
                             <span class="material-symbols-outlined text-4xl text-slate-200 mb-2">history</span>
-                            <p class="text-sm text-slate-500">No hay actividad reciente registrada.</p>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">No hay actividad reciente registrada.</p>
                         </div>
                     @endif
                 </div>
@@ -392,3 +392,5 @@
     });
 </script>
 @endpush
+
+

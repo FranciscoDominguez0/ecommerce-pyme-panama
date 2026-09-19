@@ -4,22 +4,22 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="text-slate-600">Promociones</span>
+    <span class="text-slate-600 dark:text-slate-400">Promociones</span>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 truncate">Cupones</span>
+    <span class="font-bold text-slate-900 dark:text-white truncate">Cupones</span>
 @endsection
 
 @section('content')
 <div class="space-y-6">
 
     <!-- Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#181a1b] p-5 rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs">
         <div>
-            <h1 class="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
                 <span class="material-symbols-outlined text-emerald-600 text-[24px]">local_offer</span>
                 Gestión de Cupones
             </h1>
-            <p class="text-xs text-slate-500 mt-0.5">Administra códigos de descuento, vigencias y límites de uso en la tienda.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Administra códigos de descuento, vigencias y límites de uso en la tienda.</p>
         </div>
 
         <a href="{{ route('admin.promociones.cupones.crear') }}" 
@@ -32,7 +32,7 @@
     <!-- Metrics Bento (3 KPI Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <!-- Card 1: Total Cupones -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs relative overflow-hidden group">
+        <div class="bg-white dark:bg-[#181a1b] rounded-2xl p-5 border border-slate-200 dark:border-gray-700/80 shadow-2xs relative overflow-hidden group">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-100/50 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
             <div class="flex items-center justify-between mb-3 relative z-10">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Cupones</span>
@@ -40,12 +40,12 @@
                     <span class="material-symbols-outlined text-[18px]">local_offer</span>
                 </div>
             </div>
-            <div class="text-2xl font-extrabold text-slate-900 relative z-10">{{ number_format($totalCupones) }}</div>
-            <div class="text-[11px] text-slate-500 font-medium mt-1 relative z-10">Registrados en el sistema</div>
+            <div class="text-2xl font-extrabold text-slate-900 dark:text-white relative z-10">{{ number_format($totalCupones) }}</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 relative z-10">Registrados en el sistema</div>
         </div>
 
         <!-- Card 2: Cupones Activos -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs relative overflow-hidden group">
+        <div class="bg-white dark:bg-[#181a1b] rounded-2xl p-5 border border-slate-200 dark:border-gray-700/80 shadow-2xs relative overflow-hidden group">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-100/60 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
             <div class="flex items-center justify-between mb-3 relative z-10">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cupones Activos</span>
@@ -53,7 +53,7 @@
                     <span class="material-symbols-outlined text-[18px]">check_circle</span>
                 </div>
             </div>
-            <div class="text-2xl font-extrabold text-slate-900 relative z-10">{{ number_format($cuponesActivosCount) }}</div>
+            <div class="text-2xl font-extrabold text-slate-900 dark:text-white relative z-10">{{ number_format($cuponesActivosCount) }}</div>
             <div class="text-[11px] text-emerald-700 font-medium mt-1 relative z-10 flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 Generando conversión en tienda
@@ -61,7 +61,7 @@
         </div>
 
         <!-- Card 3: Descuentos Aplicados -->
-        <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-2xs relative overflow-hidden group">
+        <div class="bg-white dark:bg-[#181a1b] rounded-2xl p-5 border border-slate-200 dark:border-gray-700/80 shadow-2xs relative overflow-hidden group">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-amber-100/40 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
             <div class="flex items-center justify-between mb-3 relative z-10">
                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Descuentos Ahorrados</span>
@@ -69,32 +69,32 @@
                     <span class="material-symbols-outlined text-[18px]">savings</span>
                 </div>
             </div>
-            <div class="text-2xl font-extrabold text-slate-900 relative z-10">${{ number_format($totalDescuentosMonto, 2) }}</div>
-            <div class="text-[11px] text-slate-500 font-medium mt-1 relative z-10">Acumulado en ventas realizadas</div>
+            <div class="text-2xl font-extrabold text-slate-900 dark:text-white relative z-10">${{ number_format($totalDescuentosMonto, 2) }}</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 relative z-10">Acumulado en ventas realizadas</div>
         </div>
     </div>
 
     <!-- Data Table & Filter Toolbar -->
-    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-2xs overflow-hidden">
+    <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs overflow-hidden">
         
         <!-- Table Toolbar -->
-        <div class="p-4 border-b border-slate-100 flex flex-col md:flex-row gap-3 items-center justify-between bg-slate-50/50">
+        <div class="p-4 border-b border-slate-100 dark:border-gray-700 flex flex-col md:flex-row gap-3 items-center justify-between bg-slate-50 dark:bg-transparent/50">
             <!-- Filter Pills -->
             <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
                 <a href="{{ route('admin.promociones.cupones', array_merge(request()->except('tipo', 'page'), ['tipo' => 'all'])) }}"
-                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'all' ? 'bg-slate-900 text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100' }}">
+                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'all' ? 'bg-slate-900 text-white shadow-2xs' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent' }}">
                     Todos los Cupones
                 </a>
                 <a href="{{ route('admin.promociones.cupones', array_merge(request()->except('tipo', 'page'), ['tipo' => 'porcentaje'])) }}"
-                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'porcentaje' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100' }}">
+                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'porcentaje' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent' }}">
                     Porcentaje (%)
                 </a>
                 <a href="{{ route('admin.promociones.cupones', array_merge(request()->except('tipo', 'page'), ['tipo' => 'monto_fijo'])) }}"
-                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'monto_fijo' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100' }}">
+                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'monto_fijo' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent' }}">
                     Monto Fijo ($)
                 </a>
                 <a href="{{ route('admin.promociones.cupones', array_merge(request()->except('tipo', 'page'), ['tipo' => 'envio_gratis'])) }}"
-                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'envio_gratis' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100' }}">
+                   class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'envio_gratis' ? 'bg-emerald-600 text-white shadow-2xs' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent' }}">
                     Envío Gratis
                 </a>
             </div>
@@ -109,7 +109,7 @@
                        name="buscar" 
                        value="{{ $busqueda }}" 
                        placeholder="Buscar por código..." 
-                       class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none">
+                       class="w-full pl-9 pr-3 py-1.5 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none">
             </form>
         </div>
 
@@ -117,7 +117,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-slate-100 bg-slate-50/70 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <tr class="border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/70 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         <th class="py-3 px-4">Código</th>
                         <th class="py-3 px-4">Tipo & Valor</th>
                         <th class="py-3 px-4">Aplicación</th>
@@ -127,16 +127,16 @@
                         <th class="py-3 px-4 text-right">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($cupones as $cupon)
-                        <tr class="hover:bg-slate-50/60 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/60 transition-colors group">
                             <!-- Código -->
-                            <td class="py-3.5 px-4 font-bold text-slate-900">
-                                <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-100/90 border border-slate-200 rounded-lg text-xs font-mono font-bold tracking-wider transition-all duration-300 group/code">
-                                    <span class="select-all text-slate-900 font-extrabold">{{ $cupon->codigo }}</span>
+                            <td class="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
+                                <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-100 dark:bg-transparent/90 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-mono font-bold tracking-wider transition-all duration-300 group/code">
+                                    <span class="select-all text-slate-900 dark:text-white font-extrabold">{{ $cupon->codigo }}</span>
                                     <button type="button" 
                                             onclick="copiarCodigo(this, '{{ addslashes($cupon->codigo) }}')" 
-                                            class="relative inline-flex items-center justify-center w-5 h-5 text-slate-400 hover:text-emerald-600 hover:bg-white active:scale-90 rounded transition-all duration-200 cursor-pointer"
+                                            class="relative inline-flex items-center justify-center w-5 h-5 text-slate-400 hover:text-emerald-600 hover:bg-white dark:bg-[#181a1b] active:scale-90 rounded transition-all duration-200 cursor-pointer"
                                             title="Copiar código"
                                             aria-label="Copiar código {{ $cupon->codigo }}">
                                         <span class="material-symbols-outlined text-[15px] transition-transform duration-200 pointer-events-none">content_copy</span>
@@ -149,13 +149,13 @@
                                 <div class="flex items-center gap-2">
                                     @if($cupon->tipo === 'porcentaje')
                                         <span class="material-symbols-outlined text-emerald-600 text-[18px]">percent</span>
-                                        <span class="font-bold text-slate-900">{{ number_format($cupon->valor, 0) }}% OFF</span>
+                                        <span class="font-bold text-slate-900 dark:text-white">{{ number_format($cupon->valor, 0) }}% OFF</span>
                                     @elseif($cupon->tipo === 'monto_fijo')
                                         <span class="material-symbols-outlined text-emerald-600 text-[18px]">attach_money</span>
-                                        <span class="font-bold text-slate-900">${{ number_format($cupon->valor, 2) }} OFF</span>
+                                        <span class="font-bold text-slate-900 dark:text-white">${{ number_format($cupon->valor, 2) }} OFF</span>
                                     @else
                                         <span class="material-symbols-outlined text-emerald-600 text-[18px]">local_shipping</span>
-                                        <span class="font-bold text-slate-900">Envío Gratis</span>
+                                        <span class="font-bold text-slate-900 dark:text-white">Envío Gratis</span>
                                     @endif
                                 </div>
                                 @if($cupon->monto_minimo)
@@ -164,19 +164,19 @@
                             </td>
 
                             <!-- Aplicación -->
-                            <td class="py-3.5 px-4 text-slate-600">
+                            <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">
                                 @if($cupon->aplica_a === 'catalogo' || $cupon->aplica_a === 'todo')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 text-[11px] font-semibold">
                                         <span class="material-symbols-outlined text-[14px]">storefront</span>
                                         Todo el catálogo
                                     </span>
                                 @elseif($cupon->aplica_a === 'categoria')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold truncate max-w-[180px]">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 text-[11px] font-semibold truncate max-w-[180px]">
                                         <span class="material-symbols-outlined text-[14px]">category</span>
                                         {{ $cupon->categoria ? $cupon->categoria->nombre : 'Categoría' }}
                                     </span>
                                 @elseif($cupon->aplica_a === 'producto')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-semibold truncate max-w-[180px]">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 text-[11px] font-semibold truncate max-w-[180px]">
                                         <span class="material-symbols-outlined text-[14px]">inventory_2</span>
                                         {{ $cupon->producto ? $cupon->producto->nombre : 'Producto' }}
                                     </span>
@@ -185,7 +185,7 @@
 
                             <!-- Vigencia -->
                             <td class="py-3.5 px-4">
-                                <div class="text-[11px] font-medium text-slate-800">
+                                <div class="text-[11px] font-medium text-slate-800 dark:text-gray-100">
                                     {{ $cupon->inicio_en ? $cupon->inicio_en->format('d/m/Y') : 'Inmediata' }}
                                     <span class="text-slate-400 mx-0.5">&rarr;</span>
                                     {{ $cupon->fin_en ? $cupon->fin_en->format('d/m/Y') : 'Indefinida' }}
@@ -204,12 +204,12 @@
                                 @endphp
                                 <div class="flex items-center gap-2">
                                     @if($maxUsos && $maxUsos > 0)
-                                        <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden shrink-0">
+                                        <div class="w-16 h-1.5 bg-slate-100 dark:bg-transparent rounded-full overflow-hidden shrink-0">
                                             <div class="h-full bg-emerald-500 rounded-full" style="width: {{ $pctUso }}%;"></div>
                                         </div>
-                                        <span class="text-xs font-mono font-bold text-slate-800">{{ $usosAct }}/{{ $maxUsos }}</span>
+                                        <span class="text-xs font-mono font-bold text-slate-800 dark:text-gray-100">{{ $usosAct }}/{{ $maxUsos }}</span>
                                     @else
-                                        <span class="text-xs font-mono font-bold text-slate-800">{{ $usosAct }}</span>
+                                        <span class="text-xs font-mono font-bold text-slate-800 dark:text-gray-100">{{ $usosAct }}</span>
                                         <span class="text-[10px] text-slate-400">ilimitado</span>
                                     @endif
                                 </div>
@@ -224,7 +224,7 @@
                                         Activo
                                     </span>
                                 @elseif($estado === 'Inactivo')
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-transparent text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-gray-700">
                                         <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
                                         Inactivo
                                     </span>
@@ -246,7 +246,7 @@
                                 <div class="flex items-center justify-end gap-1">
                                     <!-- Editar -->
                                     <a href="{{ route('admin.promociones.cupones.editar', $cupon->id) }}" 
-                                       class="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                                       class="p-1.5 text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-transparent rounded-lg transition-colors"
                                        title="Editar cupón">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </a>
@@ -255,7 +255,7 @@
                                     <form action="{{ route('admin.promociones.cupones.toggle', $cupon->id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" 
-                                                class="p-1.5 {{ $cupon->activo ? 'text-emerald-600 hover:bg-emerald-50' : 'text-slate-400 hover:bg-slate-100' }} rounded-lg transition-colors"
+                                                class="p-1.5 {{ $cupon->activo ? 'text-emerald-600 hover:bg-emerald-50' : 'text-slate-400 hover:bg-slate-100 dark:bg-transparent' }} rounded-lg transition-colors"
                                                 title="{{ $cupon->activo ? 'Desactivar' : 'Activar' }}">
                                             <span class="material-symbols-outlined text-[18px]">{{ $cupon->activo ? 'toggle_on' : 'toggle_off' }}</span>
                                         </button>
@@ -274,10 +274,10 @@
                     @empty
                         <tr>
                             <td colspan="7" class="py-12 text-center text-slate-400">
-                                <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                                <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-transparent text-slate-400 flex items-center justify-center mx-auto mb-3">
                                     <span class="material-symbols-outlined text-[24px]">local_offer</span>
                                 </div>
-                                <p class="text-sm font-semibold text-slate-700 mb-1">No se encontraron cupones</p>
+                                <p class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">No se encontraron cupones</p>
                                 <p class="text-xs text-slate-400 mb-4">Crea tu primer código promocional para incentivar ventas.</p>
                                 <a href="{{ route('admin.promociones.cupones.crear') }}" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl hover:bg-emerald-700 transition-colors inline-flex items-center gap-1.5">
                                     <span class="material-symbols-outlined text-[16px]">add</span>
@@ -292,7 +292,7 @@
 
         <!-- Paginación -->
         @if($cupones->hasPages())
-            <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+            <div class="p-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
                 {{ $cupones->links('vendor.pagination.admin-tailwind') }}
             </div>
         @endif
@@ -316,12 +316,12 @@
                     icon.textContent = 'check';
                     icon.classList.add('text-emerald-600', 'scale-110');
                 }
-                btn.classList.add('text-emerald-600', 'bg-white', 'shadow-xs');
+                btn.classList.add('text-emerald-600', 'bg-white dark:bg-[#181a1b]', 'shadow-xs');
                 btn.setAttribute('title', '¡Copiado!');
 
                 if (badge) {
                     badge.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-900', 'ring-2', 'ring-emerald-500/10');
-                    badge.classList.remove('bg-slate-100/90', 'border-slate-200');
+                    badge.classList.remove('bg-slate-100 dark:bg-transparent/90', 'border-slate-200 dark:border-gray-700');
                 }
 
                 // Restaurar estado visual original tras 2 segundos
@@ -330,12 +330,12 @@
                         icon.textContent = 'content_copy';
                         icon.classList.remove('text-emerald-600', 'scale-110');
                     }
-                    btn.classList.remove('text-emerald-600', 'bg-white', 'shadow-xs');
+                    btn.classList.remove('text-emerald-600', 'bg-white dark:bg-[#181a1b]', 'shadow-xs');
                     btn.setAttribute('title', originalTitle);
 
                     if (badge) {
                         badge.classList.remove('bg-emerald-50', 'border-emerald-300', 'text-emerald-900', 'ring-2', 'ring-emerald-500/10');
-                        badge.classList.add('bg-slate-100/90', 'border-slate-200');
+                        badge.classList.add('bg-slate-100 dark:bg-transparent/90', 'border-slate-200 dark:border-gray-700');
                     }
                 }, 2000);
             }
@@ -379,3 +379,5 @@
 </script>
 @endpush
 @endsection
+
+

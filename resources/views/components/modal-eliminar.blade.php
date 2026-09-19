@@ -1,13 +1,13 @@
-@props([
+﻿@props([
     'id' => 'modal-eliminar-global',
-    'titulo' => '¿Eliminar este registro?',
-    'mensaje' => 'Estás a punto de eliminar este elemento. Esta acción no se puede deshacer.',
+    'titulo' => 'Â¿Eliminar este registro?',
+    'mensaje' => 'EstÃ¡s a punto de eliminar este elemento. Esta acciÃ³n no se puede deshacer.',
     'icono' => 'delete_forever',
-    'textoBoton' => 'Sí, Eliminar',
+    'textoBoton' => 'SÃ­, Eliminar',
     'textoCancelar' => 'Cancelar',
 ])
 
-<!-- Componente Reutilizable: Modal Defensivo de Confirmación de Eliminación -->
+<!-- Componente Reutilizable: Modal Defensivo de ConfirmaciÃ³n de EliminaciÃ³n -->
 <div id="{{ $id }}" 
      class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 transition-all duration-200 select-none" 
      style="background-color: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px);"
@@ -15,33 +15,33 @@
      aria-modal="true" 
      role="dialog">
     
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in-95 duration-150 relative z-10">
+    <div class="bg-white dark:bg-[#181a1b] rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 dark:border-gray-700/80 space-y-4 animate-in fade-in zoom-in-95 duration-150 relative z-10">
         
-        <!-- Ícono de Alerta / Peligro -->
+        <!-- Ãcono de Alerta / Peligro -->
         <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 mx-auto shadow-2xs">
             <span class="material-symbols-outlined text-[28px]">{{ $icono }}</span>
         </div>
 
         <!-- Textos del Modal -->
         <div class="text-center space-y-1.5">
-            <h3 class="text-base font-bold text-slate-900" id="{{ $id }}-titulo">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white" id="{{ $id }}-titulo">
                 {{ $titulo }}
             </h3>
             <p class="text-xs text-slate-500 leading-relaxed" id="{{ $id }}-descripcion">
                 {{ $mensaje }}
             </p>
-            <div id="{{ $id }}-nombre-container" class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded-lg mt-1 max-w-full truncate border border-slate-200/80">
+            <div id="{{ $id }}-nombre-container" class="inline-block px-3 py-1 bg-slate-100 dark:bg-transparent text-slate-800 dark:text-gray-100 text-xs font-bold rounded-lg mt-1 max-w-full truncate border border-slate-200 dark:border-gray-700/80">
                 <span id="{{ $id }}-nombre"></span>
             </div>
             <div id="{{ $id }}-extra" class="hidden text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded-xl p-2.5 mt-2 font-medium text-left">
             </div>
         </div>
 
-        <!-- Botones de Acción -->
+        <!-- Botones de AcciÃ³n -->
         <div class="flex items-center gap-3 pt-2">
             <button type="button" 
                     onclick="window.ModalEliminar.cerrar('{{ $id }}')" 
-                    class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl transition-all cursor-pointer">
+                    class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 active:bg-slate-300 rounded-xl transition-all cursor-pointer">
                 {{ $textoCancelar }}
             </button>
             <button type="button" 
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<!-- Formulario Oculto para Envío DELETE -->
+<!-- Formulario Oculto para EnvÃ­o DELETE -->
 <form id="{{ $id }}-form" method="POST" action="" class="hidden">
     @csrf
     @method('DELETE')
@@ -112,7 +112,7 @@
                 }
             }
 
-            // Información extra o advertencia
+            // InformaciÃ³n extra o advertencia
             const extraEl = document.getElementById(id + '-extra');
             if (extraEl) {
                 if (opts.extra) {
@@ -123,7 +123,7 @@
                 }
             }
 
-            // Restablecer botón confirmar
+            // Restablecer botÃ³n confirmar
             const btnConfirmar = document.getElementById(id + '-btn-confirmar');
             const textoBtn = document.getElementById(id + '-texto-btn');
             if (btnConfirmar) btnConfirmar.disabled = false;
@@ -184,3 +184,4 @@
         }
     });
 </script>
+

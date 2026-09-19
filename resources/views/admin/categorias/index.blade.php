@@ -4,17 +4,17 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 truncate">Categorías</span>
+    <span class="font-bold text-slate-900 dark:text-white truncate">Categorías</span>
 @endsection
 
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
     <!-- Page Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Gestión de Categorías</h2>
-            <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Organiza tu catálogo de productos y servicios con estructura jerárquica.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Gestión de Categorías</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Organiza tu catálogo de productos y servicios con estructura jerárquica.</p>
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('admin.categorias.create') }}" 
@@ -31,15 +31,15 @@
             
             <!-- Barra de búsqueda -->
             <div class="flex-1 w-full sm:w-auto relative">
-                <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 w-full focus-within:border-slate-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-slate-900/5 transition-all">
+                <div class="flex items-center bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-lg px-3.5 py-2 w-full focus-within:border-slate-400 focus-within:bg-white dark:bg-[#181a1b] focus-within:ring-2 focus-within:ring-slate-900/5 transition-all">
                     <span class="material-symbols-outlined text-slate-400 text-[18px]">search</span>
                     <input type="text" 
                            name="buscar" 
                            value="{{ $busqueda }}" 
                            placeholder="Buscar por nombre o slug..." 
-                           class="bg-transparent border-none focus:ring-0 w-full text-xs text-slate-800 placeholder:text-slate-400 p-0 ml-2 outline-none"/>
+                           class="bg-transparent border-none focus:ring-0 w-full text-xs text-slate-800 dark:text-gray-100 placeholder:text-slate-400 p-0 ml-2 outline-none"/>
                     @if(!empty($busqueda))
-                        <a href="{{ route('admin.categorias.index', ['estado' => $filtroEstado]) }}" class="text-slate-400 hover:text-slate-600">
+                        <a href="{{ route('admin.categorias.index', ['estado' => $filtroEstado]) }}" class="text-slate-400 hover:text-slate-600 dark:text-slate-400">
                             <span class="material-symbols-outlined text-[16px]">close</span>
                         </a>
                     @endif
@@ -51,7 +51,7 @@
                 <div class="relative w-full sm:w-44">
                     <select name="estado" 
                             onchange="this.form.submit()" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 font-medium focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
+                            class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 dark:text-gray-100 font-medium focus:bg-white dark:bg-[#121415] focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
                         <option value="all" {{ $filtroEstado === 'all' ? 'selected' : '' }}>Todos los estados</option>
                         <option value="active" {{ $filtroEstado === 'active' ? 'selected' : '' }}>Solo Activas</option>
                         <option value="inactive" {{ $filtroEstado === 'inactive' ? 'selected' : '' }}>Solo Inactivas</option>
@@ -61,13 +61,13 @@
                     </span>
                 </div>
 
-                <button type="submit" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 shrink-0">
+                <button type="submit" class="px-3.5 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 shrink-0">
                     <span class="material-symbols-outlined text-[15px]">filter_list</span>
                     <span>Filtrar</span>
                 </button>
 
                 @if(!empty($busqueda) || $filtroEstado !== 'all')
-                    <a href="{{ route('admin.categorias.index') }}" class="px-3 py-2 text-xs text-slate-500 hover:text-slate-800 font-semibold transition-colors flex items-center gap-1 shrink-0">
+                    <a href="{{ route('admin.categorias.index') }}" class="px-3 py-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-gray-100 font-semibold transition-colors flex items-center gap-1 shrink-0">
                         <span class="material-symbols-outlined text-[15px]">restart_alt</span>
                         <span>Limpiar</span>
                     </a>
@@ -83,7 +83,7 @@
         <div class="overflow-x-auto w-full max-w-full">
             <table class="w-full text-left border-collapse min-w-[800px]">
                 <thead>
-                    <tr class="border-b border-slate-100 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                    <tr class="border-b border-slate-100 dark:border-gray-700 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
                         <th class="py-3.5 px-4 sm:px-6">Nombre & Slug</th>
                         <th class="py-3.5 px-3 text-center w-20">Ícono</th>
                         <th class="py-3.5 px-4 text-center w-44">Categoría Padre</th>
@@ -93,7 +93,7 @@
                         <th class="py-3.5 px-4 sm:px-6 text-right w-28">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="text-xs divide-y divide-slate-100">
+                <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                     @forelse($categorias as $categoria)
                         @php
                             $esHija = !is_null($categoria->padre_id);
@@ -110,7 +110,7 @@
                                 default => 'pl-20',
                             };
                         @endphp
-                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30/80 transition-colors group">
                             
                             <!-- Nombre & Slug con Sangría Jerárquica Progresiva -->
                             <td class="py-3.5 px-4 sm:px-6">
@@ -118,16 +118,16 @@
                                     @if($esHija)
                                         <span class="material-symbols-outlined text-slate-400 text-[18px] shrink-0">subdirectory_arrow_right</span>
                                     @else
-                                        <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+                                        <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 flex items-center justify-center shrink-0">
                                             <span class="material-symbols-outlined text-[18px]">folder</span>
                                         </div>
                                     @endif
 
                                     <div>
-                                        <div class="font-bold text-slate-900 {{ $esHija ? 'text-xs' : 'text-sm' }} flex items-center gap-1.5">
+                                        <div class="font-bold text-slate-900 dark:text-white {{ $esHija ? 'text-xs' : 'text-sm' }} flex items-center gap-1.5">
                                             <span>{{ $categoria->nombre }}</span>
                                             @if($tieneHijas)
-                                                <span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-semibold">
+                                                <span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-transparent text-slate-600 dark:text-slate-400 font-semibold">
                                                     {{ $categoria->hijas->count() }} sub
                                                 </span>
                                             @endif
@@ -142,13 +142,13 @@
                             <!-- Ícono SVG / Imagen Compacta -->
                             <td class="py-3 px-3 text-center">
                                 @if($categoria->imagen_ruta)
-                                    <div class="w-9 h-9 rounded-lg bg-white border border-slate-200 shadow-2xs overflow-hidden mx-auto group-hover:border-slate-300 transition-all flex items-center justify-center p-1.5" title="{{ $categoria->nombre }}">
+                                    <div class="w-9 h-9 rounded-lg bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 shadow-2xs overflow-hidden mx-auto group-hover:border-slate-300 dark:border-gray-700 transition-all flex items-center justify-center p-1.5" title="{{ $categoria->nombre }}">
                                         <img src="{{ asset($categoria->imagen_ruta) }}" 
                                              alt="{{ $categoria->nombre }}" 
                                              class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-200" />
                                     </div>
                                 @else
-                                    <div class="w-9 h-9 rounded-lg bg-slate-50 border border-dashed border-slate-200 flex items-center justify-center mx-auto text-slate-300" title="Sin ícono">
+                                    <div class="w-9 h-9 rounded-lg bg-slate-50 dark:bg-transparent border border-dashed border-slate-200 dark:border-gray-700 flex items-center justify-center mx-auto text-slate-300" title="Sin ícono">
                                         <span class="material-symbols-outlined text-[17px]">category</span>
                                     </div>
                                 @endif
@@ -157,7 +157,7 @@
                             <!-- Categoría Padre -->
                             <td class="py-3.5 px-4 text-center">
                                 @if($categoria->padre)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700">
                                         <span class="material-symbols-outlined text-[13px] text-slate-400">folder</span>
                                         <span class="truncate max-w-[140px]">{{ $categoria->padre->nombre }}</span>
                                     </span>
@@ -168,7 +168,7 @@
 
                             <!-- Total Productos -->
                             <td class="py-3.5 px-4 text-center">
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold {{ $tieneProductos ? 'bg-emerald-50 text-emerald-800 border border-emerald-100' : 'bg-slate-50 text-slate-400 border border-slate-200' }}">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold {{ $tieneProductos ? 'bg-emerald-50 text-emerald-800 border border-emerald-100' : 'bg-slate-50 dark:bg-transparent text-slate-400 border border-slate-200 dark:border-gray-700' }}">
                                     {{ $categoria->productos_count }} prod.
                                 </span>
                             </td>
@@ -178,7 +178,7 @@
                                 <form method="POST" action="{{ route('admin.categorias.toggle-estado', $categoria->id) }}" class="inline-block">
                                     @csrf
                                     <button type="submit" 
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all {{ $categoria->activo ? 'bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200 hover:bg-slate-200' }}"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all {{ $categoria->activo ? 'bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100' : 'bg-slate-100 dark:bg-transparent text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-gray-700 hover:bg-slate-200 dark:bg-gray-700' }}"
                                             title="Click para cambiar estado">
                                         <span class="w-1.5 h-1.5 rounded-full {{ $categoria->activo ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
                                         <span>{{ $categoria->activo ? 'Activa' : 'Inactiva' }}</span>
@@ -187,7 +187,7 @@
                             </td>
 
                             <!-- Orden -->
-                            <td class="py-3.5 px-4 text-center font-mono text-slate-600 text-[11px]">
+                            <td class="py-3.5 px-4 text-center font-mono text-slate-600 dark:text-slate-400 text-[11px]">
                                 {{ $categoria->orden_visualizacion }}
                             </td>
 
@@ -197,7 +197,7 @@
                                     
                                     <!-- Botón Editar -->
                                     <a href="{{ route('admin.categorias.edit', $categoria->id) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" 
-                                       class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors" 
+                                       class="p-1.5 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent rounded-lg transition-colors" 
                                        title="Editar categoría">
                                         <span class="material-symbols-outlined text-[17px]">edit</span>
                                     </a>
@@ -235,10 +235,10 @@
                     @empty
                         <tr>
                             <td colspan="7" class="py-12 text-center text-slate-400">
-                                <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+                                <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-transparent text-slate-400 flex items-center justify-center mx-auto mb-3">
                                     <span class="material-symbols-outlined text-[24px]">category</span>
                                 </div>
-                                <p class="font-bold text-slate-700 text-sm">No se encontraron categorías</p>
+                                <p class="font-bold text-slate-700 dark:text-slate-300 text-sm">No se encontraron categorías</p>
                                 <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
                                     @if(!empty($busqueda) || $filtroEstado !== 'all')
                                         No hay resultados para los filtros seleccionados. Intenta restablecer los términos de búsqueda.
@@ -248,7 +248,7 @@
                                 </p>
                                 <div class="mt-4">
                                     @if(!empty($busqueda) || $filtroEstado !== 'all')
-                                        <a href="{{ route('admin.categorias.index') }}" class="inline-flex items-center gap-1 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors">
+                                        <a href="{{ route('admin.categorias.index') }}" class="inline-flex items-center gap-1 px-3.5 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition-colors">
                                             <span>Limpiar Filtros</span>
                                         </a>
                                     @else
@@ -267,7 +267,7 @@
 
         <!-- Paginación -->
         @if($categorias->hasPages())
-            <div class="px-5 py-4 border-t border-slate-100 bg-slate-50/50">
+            <div class="px-5 py-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
                 {{ $categorias->links('vendor.pagination.admin-tailwind') }}
             </div>
         @endif
@@ -276,3 +276,5 @@
 
 </div>
 @endsection
+
+

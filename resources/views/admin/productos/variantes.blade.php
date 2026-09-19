@@ -2,20 +2,20 @@
 <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-6" id="contenedor-constructor-variantes">
     
     <!-- Header y Switch de Activación -->
-    <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+    <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700/80">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
                 <span class="material-symbols-outlined text-[22px]">tune</span>
             </div>
             <div>
-                <h3 class="text-sm font-bold text-slate-900">¿Este producto tiene múltiples variantes?</h3>
-                <p class="text-xs text-slate-500">Activa si el artículo cuenta con diferentes opciones como color, almacenamiento, RAM, tamaño, etc.</p>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">¿Este producto tiene múltiples variantes?</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Activa si el artículo cuenta con diferentes opciones como color, almacenamiento, RAM, tamaño, etc.</p>
             </div>
         </div>
 
         <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" name="tiene_variantes" id="toggle-habilitar-variantes" value="1" class="sr-only peer" {{ ($esEdicion ?? false) && ($producto->variantes->count() > 0) ? 'checked' : '' }} onchange="toggleVariantesSection(this.checked)">
-            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+            <div class="w-11 h-6 bg-slate-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
         </label>
     </div>
 
@@ -26,11 +26,11 @@
         <div class="space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[16px] text-slate-500">list_alt</span>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px] text-slate-500 dark:text-slate-400">list_alt</span>
                         <span>1. Atributos Principales y Opciones</span>
                     </h4>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Selecciona un atributo de la lista para agregarlo y haz clic en las opciones que aplican a este producto.</p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Selecciona un atributo de la lista para agregarlo y haz clic en las opciones que aplican a este producto.</p>
                 </div>
 
                 <!-- Selector de Atributos Principales (Modal) -->
@@ -51,16 +51,16 @@
         </div>
 
         <!-- Bloque 2: Matriz de Combinaciones Generadas (Optimizada & Paginada) -->
-        <div class="space-y-3 pt-4 border-t border-slate-200/80">
+        <div class="space-y-3 pt-4 border-t border-slate-200 dark:border-gray-700/80">
             <input type="hidden" name="variantes_json" id="input-variantes-json">
 
             <div class="flex items-center justify-between flex-wrap gap-2">
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[16px] text-emerald-600">grid_view</span>
                         <span>2. Matriz de Combinaciones (<span id="contador-combinaciones">0</span> variantes generadas)</span>
                     </h4>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Asigna precios, SKU y stock individual para cada combinación.</p>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Asigna precios, SKU y stock individual para cada combinación.</p>
                 </div>
 
                 <div class="flex items-center gap-2 flex-wrap">
@@ -71,12 +71,12 @@
                                id="input-buscar-matriz" 
                                oninput="filtrarMatrizCombinaciones(this.value)" 
                                placeholder="Filtrar variantes..." 
-                               class="text-xs py-1 pl-8 pr-2.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-emerald-500 w-40">
+                               class="text-xs py-1 pl-8 pr-2.5 rounded-lg border border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent focus:bg-white dark:bg-[#121415] focus:border-emerald-500 w-40">
                     </div>
 
                     <button type="button" 
                             onclick="regenerarMatrizCombinaciones()" 
-                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors shadow-2xs">
+                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 transition-colors shadow-2xs">
                         <span class="material-symbols-outlined text-[15px]">autorenew</span>
                         <span>Regenerar Matriz</span>
                     </button>
@@ -84,11 +84,11 @@
             </div>
 
             <!-- Tabla de Combinaciones Paginada -->
-            <div class="border border-slate-200 rounded-xl overflow-hidden shadow-2xs bg-white">
+            <div class="border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-2xs bg-white dark:bg-[#181a1b]">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse min-w-[720px]">
                         <thead>
-                            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/80">
+                            <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/80">
                                 <th class="py-2.5 px-4">Combinación / Variante</th>
                                 <th class="py-2.5 px-4 w-44">SKU Específico</th>
                                 <th class="py-2.5 px-4 w-36 text-right">Precio ($ USD)</th>
@@ -97,14 +97,14 @@
                                 <th class="py-2.5 px-4 w-12 text-center"></th>
                             </tr>
                         </thead>
-                        <tbody id="tbody-matriz-variantes" class="text-xs divide-y divide-slate-100">
+                        <tbody id="tbody-matriz-variantes" class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                             <!-- Filas de variantes paginadas -->
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Footer de Paginación de la Matriz -->
-                <div id="footer-paginacion-matriz" class="px-4 py-2 bg-slate-50/70 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 flex-wrap gap-2">
+                <div id="footer-paginacion-matriz" class="px-4 py-2 bg-slate-50 dark:bg-transparent/70 border-t border-slate-200 dark:border-gray-700/80 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 flex-wrap gap-2">
                     <div id="info-paginacion-matriz" class="font-medium text-[11px]">
                         Mostrando 0 - 0 de 0 variantes
                     </div>
@@ -134,7 +134,7 @@
                    id="input-nuevo-atributo-modal" 
                    placeholder="+ Crear atributo personalizado..." 
                    onkeydown="if(event.key==='Enter'){event.preventDefault(); agregarAtributoPersonalizadoModal();}"
-                   class="w-full py-1 px-3 text-xs bg-slate-50 border border-dashed border-slate-300 rounded-xl focus:bg-white focus:border-solid focus:border-emerald-500 text-slate-800">
+                   class="w-full py-1 px-3 text-xs bg-slate-50 dark:bg-transparent border border-dashed border-slate-300 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-solid focus:border-emerald-500 text-slate-800 dark:text-gray-100">
             <button type="button" 
                     onclick="agregarAtributoPersonalizadoModal()" 
                     class="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shrink-0 transition-colors shadow-2xs cursor-pointer">
@@ -169,22 +169,22 @@
                     };
                     div.className = `flex items-center justify-between p-3 rounded-xl border transition-all select-none ${
                         yaAgregado 
-                        ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed' 
-                        : 'bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs cursor-pointer'
+                        ? 'bg-slate-50 dark:bg-transparent border-slate-200 dark:border-gray-700 opacity-60 cursor-not-allowed' 
+                        : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs cursor-pointer'
                     }`;
                     div.innerHTML = `
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg ${yaAgregado ? 'bg-slate-200 text-slate-500' : 'bg-slate-900 text-white'} flex items-center justify-center font-bold text-xs shadow-2xs">
+                            <div class="w-8 h-8 rounded-lg ${yaAgregado ? 'bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-slate-400' : 'bg-slate-900 text-white'} flex items-center justify-center font-bold text-xs shadow-2xs">
                                 ${nombre.charAt(0).toUpperCase()}
                             </div>
                             <div>
-                                <span class="text-xs font-bold ${yaAgregado ? 'text-slate-500' : 'text-slate-900'} block leading-tight">${nombre}</span>
+                                <span class="text-xs font-bold ${yaAgregado ? 'text-slate-500 dark:text-slate-400' : 'text-slate-900 dark:text-white'} block leading-tight">${nombre}</span>
                                 <span class="text-[10px] text-slate-400 font-medium">${numOpciones} opciones predefinidas</span>
                             </div>
                         </div>
                         <div>
                             ${yaAgregado ? `
-                                <span class="text-[10px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-md">
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-200 dark:bg-gray-700 px-2 py-0.5 rounded-md">
                                     Ya agregado
                                 </span>
                             ` : `
@@ -212,10 +212,10 @@
                 stockInput.readOnly = true;
                 const totalStock = combinacionesMatrizState.reduce((sum, item) => sum + (parseInt(item.stock) || 0), 0);
                 stockInput.value = totalStock;
-                stockInput.classList.add('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
+                stockInput.classList.add('bg-slate-100 dark:bg-transparent', 'cursor-not-allowed', 'text-slate-500 dark:text-slate-400');
             } else {
                 stockInput.readOnly = false;
-                stockInput.classList.remove('bg-slate-100', 'cursor-not-allowed', 'text-slate-500');
+                stockInput.classList.remove('bg-slate-100 dark:bg-transparent', 'cursor-not-allowed', 'text-slate-500 dark:text-slate-400');
             }
         }
     }
@@ -309,22 +309,22 @@
             };
             div.className = `flex items-center justify-between p-3 rounded-xl border transition-all select-none ${
                 yaAgregado 
-                ? 'bg-slate-50 border-slate-200 opacity-60 cursor-not-allowed' 
-                : 'bg-white border-slate-200/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs cursor-pointer'
+                ? 'bg-slate-50 dark:bg-transparent border-slate-200 dark:border-gray-700 opacity-60 cursor-not-allowed' 
+                : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs cursor-pointer'
             }`;
             div.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg ${yaAgregado ? 'bg-slate-200 text-slate-500' : 'bg-slate-900 text-white'} flex items-center justify-center font-bold text-xs shadow-2xs">
+                    <div class="w-8 h-8 rounded-lg ${yaAgregado ? 'bg-slate-200 dark:bg-gray-700 text-slate-500 dark:text-slate-400' : 'bg-slate-900 text-white'} flex items-center justify-center font-bold text-xs shadow-2xs">
                         ${nombre.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                        <span class="text-xs font-bold ${yaAgregado ? 'text-slate-500' : 'text-slate-900'} block leading-tight">${nombre}</span>
+                        <span class="text-xs font-bold ${yaAgregado ? 'text-slate-500 dark:text-slate-400' : 'text-slate-900 dark:text-white'} block leading-tight">${nombre}</span>
                         <span class="text-[10px] text-slate-400 font-medium">${numOpciones} opciones predefinidas</span>
                     </div>
                 </div>
                 <div>
                     ${yaAgregado ? `
-                        <span class="text-[10px] font-bold text-slate-400 bg-slate-200 px-2 py-0.5 rounded-md">
+                        <span class="text-[10px] font-bold text-slate-400 bg-slate-200 dark:bg-gray-700 px-2 py-0.5 rounded-md">
                             Ya agregado
                         </span>
                     ` : `
@@ -347,9 +347,9 @@
 
         if (atributosActivos.length === 0) {
             contenedor.innerHTML = `
-                <div class="p-6 text-center rounded-xl border border-dashed border-slate-200 text-slate-400 text-xs">
+                <div class="p-6 text-center rounded-xl border border-dashed border-slate-200 dark:border-gray-700 text-slate-400 text-xs">
                     <span class="material-symbols-outlined text-[24px] text-slate-300 mb-1">tune</span>
-                    <p class="font-medium text-slate-600">No hay atributos agregados aún.</p>
+                    <p class="font-medium text-slate-600 dark:text-slate-400">No hay atributos agregados aún.</p>
                     <p class="text-[11px] text-slate-400 mt-0.5">Haz clic en <strong>"+ Seleccionar Atributo Principal"</strong> en el menú superior para empezar.</p>
                 </div>
             `;
@@ -361,14 +361,14 @@
             const todasOpciones = Array.from(new Set([...(cat.opciones || []), ...(attr.seleccionadas || [])]));
 
             const div = document.createElement('div');
-            div.className = 'p-4 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-3';
+            div.className = 'p-4 rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] shadow-2xs space-y-3';
             
             // Header del Atributo
             let headerHtml = `
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2 flex-1">
                         <span class="material-symbols-outlined text-slate-400 text-[18px]">drag_indicator</span>
-                        <span class="text-xs font-extrabold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                        <span class="text-xs font-extrabold text-slate-900 dark:text-white bg-slate-100 dark:bg-transparent px-2.5 py-1 rounded-lg border border-slate-200 dark:border-gray-700">
                             ${attr.nombre}
                         </span>
                         <span class="text-[11px] text-slate-400">(${attr.seleccionadas.length} opciones seleccionadas)</span>
@@ -388,7 +388,7 @@
 
                 let colorCircle = '';
                 if (hex) {
-                    colorCircle = `<span class="w-3 h-3 rounded-full inline-block border border-slate-300 shadow-2xs" style="background-color: ${hex}"></span>`;
+                    colorCircle = `<span class="w-3 h-3 rounded-full inline-block border border-slate-300 dark:border-gray-700 shadow-2xs" style="background-color: ${hex}"></span>`;
                 }
 
                 chipsHtml += `
@@ -397,7 +397,7 @@
                             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer ${
                                 estaSeleccionada 
                                 ? 'bg-slate-900 text-white border-slate-900 shadow-xs' 
-                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                                : 'bg-slate-50 dark:bg-transparent text-slate-600 dark:text-slate-400 border-slate-200 dark:border-gray-700 hover:bg-slate-100 dark:bg-transparent'
                             }">
                         ${colorCircle}
                         <span>${opc}</span>
@@ -412,7 +412,7 @@
                     <input type="text" 
                            placeholder="+ Nueva opción..." 
                            onkeydown="handleNuevaOpcionInput(event, ${idx}, this)" 
-                           class="text-xs py-1 px-2.5 rounded-lg border-dashed border-slate-300 focus:border-solid focus:border-emerald-500 focus:ring-emerald-500 w-32 bg-slate-50/50">
+                           class="text-xs py-1 px-2.5 rounded-lg border-dashed border-slate-300 dark:border-gray-700 focus:border-solid focus:border-emerald-500 focus:ring-emerald-500 w-32 bg-slate-50 dark:bg-transparent focus:bg-white dark:focus:bg-[#121415] text-slate-900 dark:text-white">
                 </div>
             </div>`;
 
@@ -583,31 +583,31 @@
 
         paginaItems.forEach(({ item, indexOriginal }) => {
             const tr = document.createElement('tr');
-            tr.className = 'hover:bg-slate-50/70 transition-colors';
+            tr.className = 'hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors';
             tr.innerHTML = `
                 <td class="py-2.5 px-4">
                     <div class="flex items-center gap-2">
-                        <span class="font-bold text-slate-900">${item.nombre}</span>
+                        <span class="font-bold text-slate-900 dark:text-white">${item.nombre}</span>
                     </div>
                 </td>
                 <td class="py-2.5 px-4">
                     <input type="text" 
                            value="${item.sku}" 
                            oninput="actualizarCampoMatriz(${indexOriginal}, 'sku', this.value)"
-                           class="text-xs font-mono py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500">
+                           class="text-xs font-mono py-1 px-2.5 rounded-lg border border-slate-200 dark:border-gray-700 w-full focus:ring-emerald-500 focus:border-emerald-500 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                 </td>
                 <td class="py-2.5 px-4 text-right">
                     <input type="number" 
                            step="0.01" 
                            value="${item.precio}" 
                            oninput="actualizarCampoMatriz(${indexOriginal}, 'precio', this.value)"
-                           class="text-xs text-right py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500 font-bold text-slate-900">
+                           class="text-xs text-right py-1 px-2.5 rounded-lg border border-slate-200 dark:border-gray-700 w-full focus:ring-emerald-500 focus:border-emerald-500 font-bold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                 </td>
                 <td class="py-2.5 px-4 text-center">
                     <input type="number" 
                            value="${item.stock}" 
                            oninput="actualizarCampoMatriz(${indexOriginal}, 'stock', this.value)"
-                           class="text-xs text-center py-1 px-2.5 rounded-lg border border-slate-200 w-full focus:ring-emerald-500 focus:border-emerald-500 font-semibold">
+                           class="text-xs text-center py-1 px-2.5 rounded-lg border border-slate-200 dark:border-gray-700 w-full focus:ring-emerald-500 focus:border-emerald-500 font-semibold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                 </td>
                 <td class="py-2.5 px-4 text-center">
                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -663,14 +663,14 @@
                     <button type="button" 
                             onclick="cambiarPaginaMatriz(${paginaActualMatriz - 1})" 
                             ${paginaActualMatriz === 1 ? 'disabled' : ''} 
-                            class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                            class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-100 dark:bg-transparent disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
                         Anterior
                     </button>
-                    <span class="text-xs font-bold text-slate-700 px-2">Pág. ${paginaActualMatriz} de ${paginasTotal}</span>
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300 px-2">Pág. ${paginaActualMatriz} de ${paginasTotal}</span>
                     <button type="button" 
                             onclick="cambiarPaginaMatriz(${paginaActualMatriz + 1})" 
                             ${paginaActualMatriz === paginasTotal ? 'disabled' : ''} 
-                            class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
+                            class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-100 dark:bg-transparent disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
                         Siguiente
                     </button>
                 `;
@@ -695,3 +695,5 @@
         }
     });
 </script>
+
+

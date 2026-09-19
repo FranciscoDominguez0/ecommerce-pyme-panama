@@ -7,34 +7,34 @@
 <div class="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
     <div>
         <div class="flex items-center gap-3 mb-2">
-            <a href="{{ route('admin.usuarios.index') }}" class="text-slate-500 hover:text-slate-900 transition-colors">
+            <a href="{{ route('admin.usuarios.index') }}" class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors">
                 <span class="material-symbols-outlined">arrow_back</span>
             </a>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">{{ $rol->name }}</h2>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $rol->name }}</h2>
         </div>
-        <p class="text-xs sm:text-sm text-slate-500 font-medium ml-9">{{ $rol->descripcion ?? 'Gestión de usuarios y permisos del rol' }}</p>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium ml-9">{{ $rol->descripcion ?? 'Gestión de usuarios y permisos del rol' }}</p>
     </div>
     <!-- Role Stats Bento -->
     <div class="flex gap-4 ml-9 md:ml-0">
-        <div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center min-w-[120px] shadow-sm">
-            <span class="font-bold text-2xl text-slate-900 mb-1">{{ $rol->users()->count() }}</span>
-            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Usuarios</span>
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-4 flex flex-col items-center justify-center min-w-[120px] shadow-sm">
+            <span class="font-bold text-2xl text-slate-900 dark:text-white mb-1">{{ $rol->users()->count() }}</span>
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Usuarios</span>
         </div>
-        <div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center min-w-[120px] shadow-sm">
-            <span class="font-bold text-2xl text-slate-900 mb-1">{{ $rol->permissions()->count() }}</span>
-            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Permisos</span>
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-4 flex flex-col items-center justify-center min-w-[120px] shadow-sm">
+            <span class="font-bold text-2xl text-slate-900 dark:text-white mb-1">{{ $rol->permissions()->count() }}</span>
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Permisos</span>
         </div>
     </div>
 </div>
 
 <!-- Tabs -->
-<div class="border-b border-slate-200 mb-8 ml-9 md:ml-0">
+<div class="border-b border-slate-200 dark:border-gray-700 mb-8 ml-9 md:ml-0">
     <nav aria-label="Tabs" class="flex space-x-8">
-        <button class="border-b-2 border-slate-900 py-4 px-1 text-slate-900 font-medium flex items-center gap-2">
+        <button class="border-b-2 border-slate-900 py-4 px-1 text-slate-900 dark:text-white font-medium flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px]">group</span>
             Usuarios
         </button>
-        <a href="{{ route('admin.usuarios.roles-permisos', $rol->id) }}" class="border-b-2 border-transparent py-4 px-1 text-slate-500 hover:text-slate-900 hover:border-slate-300 transition-colors flex items-center gap-2">
+        <a href="{{ route('admin.usuarios.roles-permisos', $rol->id) }}" class="border-b-2 border-transparent py-4 px-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white hover:border-slate-300 dark:border-gray-700 transition-colors flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px]">key</span>
             Permisos
         </a>
@@ -45,13 +45,13 @@
 <div class="ml-9 md:ml-0">
     @if($usuarios->isEmpty())
         <!-- Empty State Container -->
-        <div class="bg-white border border-slate-200 rounded-xl p-8 sm:p-16 flex flex-col items-center justify-center text-center min-h-[400px]">
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-8 sm:p-16 flex flex-col items-center justify-center text-center min-h-[400px]">
             <div class="w-48 h-48 mb-6 opacity-80 flex items-center justify-center">
                 <!-- Icono representativo para el estado vacío -->
                 <span class="material-symbols-outlined text-slate-200" style="font-size: 120px;">group_off</span>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-3">No hay usuarios asignados a este rol</h3>
-            <p class="text-sm text-slate-500 max-w-md mb-8">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">No hay usuarios asignados a este rol</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mb-8">
                 Actualmente no existen usuarios bajo el nivel de acceso {{ $rol->name }}. Crea un usuario nuevo para asignarle este rol.
             </p>
             <div class="flex gap-4">
@@ -63,7 +63,7 @@
         </div>
     @else
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-bold text-slate-900">Usuarios con este rol</h3>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Usuarios con este rol</h3>
             <a href="{{ route('admin.usuarios.create', $rol->id) }}" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2 tracking-wide">
                 <span class="material-symbols-outlined text-[18px]">add</span>
                 Agregar usuario
@@ -71,36 +71,36 @@
         </div>
         
         <!-- Data Table -->
-        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[600px]">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200">
-                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-16">Foto</th>
-                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Usuario</th>
-                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Estado</th>
-                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Último Acceso</th>
-                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 uppercase tracking-wider text-right">Acciones</th>
+                        <tr class="bg-slate-50 dark:bg-transparent border-b border-slate-200 dark:border-gray-700">
+                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-16">Foto</th>
+                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Usuario</th>
+                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado</th>
+                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Último Acceso</th>
+                            <th class="py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50">
                         @foreach($usuarios as $user)
-                        <tr class="hover:bg-slate-50 transition-colors group">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                             <td class="py-3 px-4">
                                 @if($user->foto_perfil_ruta)
-                                    <div class="h-10 w-10 rounded-full bg-slate-200 overflow-hidden border border-slate-200">
+                                    <div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-gray-700 overflow-hidden border border-slate-200 dark:border-gray-700">
                                         <img alt="{{ $user->nombre }}" class="w-full h-full object-cover" src="{{ asset($user->foto_perfil_ruta) }}"/>
                                     </div>
                                 @else
-                                    <div class="h-10 w-10 rounded-full bg-slate-200 overflow-hidden border border-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs uppercase">
+                                    <div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-gray-700 overflow-hidden border border-slate-200 dark:border-gray-700 flex items-center justify-center text-slate-500 dark:text-slate-400 font-bold text-xs uppercase">
                                         {{ $user->iniciales }}
                                     </div>
                                 @endif
                             </td>
                             <td class="py-3 px-4">
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-semibold text-slate-900">{{ $user->nombre_completo }}</span>
-                                    <span class="text-xs text-slate-500">{{ $user->email }}</span>
+                                    <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ $user->nombre_completo }}</span>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400">{{ $user->email }}</span>
                                 </div>
                             </td>
                             <td class="py-3 px-4">
@@ -114,7 +114,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="py-3 px-4 text-xs text-slate-500">
+                            <td class="py-3 px-4 text-xs text-slate-500 dark:text-slate-400">
                                 {{ $user->ultimo_login_en ? \Carbon\Carbon::parse($user->ultimo_login_en)->diffForHumans() : 'Nunca' }}
                             </td>
                             <td class="py-3 px-4 text-right">
@@ -122,7 +122,7 @@
                                     <a href="{{ route('admin.usuarios.show', $user->id) }}" class="text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 p-1.5 rounded transition-colors" title="Ver Detalles">
                                         <span class="material-symbols-outlined text-[20px]">visibility</span>
                                     </a>
-                                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-slate-900 hover:bg-slate-100 p-1.5 rounded transition-colors" title="Editar">
+                                    <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="text-slate-400 hover:text-slate-900 dark:text-white hover:bg-slate-100 dark:bg-transparent p-1.5 rounded transition-colors" title="Editar">
                                         <span class="material-symbols-outlined text-[20px]">edit</span>
                                     </a>
                                     @if($user->id !== auth()->id())
@@ -142,7 +142,7 @@
             </div>
             
             @if($usuarios->hasPages())
-            <div class="p-4 border-t border-slate-200">
+            <div class="p-4 border-t border-slate-200 dark:border-gray-700">
                 {{ $usuarios->links() }}
             </div>
             @endif
@@ -150,3 +150,5 @@
     @endif
 </div>
 @endsection
+
+

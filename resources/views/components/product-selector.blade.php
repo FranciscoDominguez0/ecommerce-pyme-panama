@@ -1,26 +1,26 @@
-@props(['id' => 'producto_id', 'name' => 'producto_id', 'value' => '', 'error' => false])
+﻿@props(['id' => 'producto_id', 'name' => 'producto_id', 'value' => '', 'error' => false])
 
 <input type="hidden" id="{{ $id }}" name="{{ $name }}" value="{{ $value }}" required>
 
 <button type="button" onclick="window.ModalBuscador.abrir('modal-productos')" id="btn-seleccionar-{{ $id }}"
-        class="w-full p-3 border {{ $error ? 'border-red-400' : 'border-slate-200 hover:border-emerald-500' }} rounded-xl bg-white text-left flex items-center justify-between shadow-sm group transition-all">
+        class="w-full p-3 border {{ $error ? 'border-red-400' : 'border-slate-200 dark:border-gray-700 hover:border-emerald-500' }} rounded-xl bg-white dark:bg-[#181a1b] text-left flex items-center justify-between shadow-sm group transition-all">
     
     <div class="flex items-center gap-3 min-w-0" id="preview-container-{{ $id }}">
         {{-- Empty state --}}
         <div id="empty-state-{{ $id }}" class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+            <div class="w-10 h-10 rounded-lg bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-400 shrink-0">
                 <span class="material-symbols-outlined text-[20px]">inventory_2</span>
             </div>
-            <span class="text-sm font-semibold text-slate-500">Seleccionar producto…</span>
+            <span class="text-sm font-semibold text-slate-500">Seleccionar productoâ€¦</span>
         </div>
 
         {{-- Selected state (Hidden by default) --}}
         <div id="selected-state-{{ $id }}" class="hidden items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-lg border border-slate-200 overflow-hidden bg-slate-100 flex items-center justify-center shrink-0" id="img-container-{{ $id }}">
+            <div class="w-10 h-10 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden bg-slate-100 dark:bg-transparent flex items-center justify-center shrink-0" id="img-container-{{ $id }}">
                 <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
             </div>
             <div class="min-w-0 flex-1 flex flex-col justify-center">
-                <p class="text-sm font-bold text-slate-800 truncate leading-tight" id="title-{{ $id }}"></p>
+                <p class="text-sm font-bold text-slate-800 dark:text-gray-100 truncate leading-tight" id="title-{{ $id }}"></p>
                 <p class="text-[11px] text-slate-500 font-medium truncate mt-0.5" id="subtitle-{{ $id }}"></p>
             </div>
         </div>
@@ -59,3 +59,4 @@
 </script>
 @endpush
 @endonce
+

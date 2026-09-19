@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="capitalize font-bold text-slate-900 truncate max-w-[90px] sm:max-w-none">Reportes</span>
+    <span class="capitalize font-bold text-slate-900 dark:text-white truncate max-w-[90px] sm:max-w-none">Reportes</span>
 @endsection
 
 @push('styles')
@@ -34,10 +34,10 @@
     <div class="space-y-6 max-w-[1600px] mx-auto">
 
         <!-- Header y Filtros -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
             <div>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Reportes Avanzados</h2>
-                <p class="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Métricas clave e inteligencia de negocio.
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Reportes Avanzados</h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Métricas clave e inteligencia de negocio.
                 </p>
             </div>
 
@@ -45,7 +45,7 @@
                 class="flex flex-wrap items-center gap-3 w-full sm:w-auto" id="form-filtros">
                 <div class="relative">
                     <select name="tipo"
-                        class="pl-8 pr-8 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg focus:ring-emerald-500 focus:border-emerald-500 appearance-none shadow-xs cursor-pointer"
+                        class="pl-8 pr-8 py-1.5 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-lg focus:ring-emerald-500 focus:border-emerald-500 appearance-none shadow-xs cursor-pointer"
                         onchange="document.getElementById('form-filtros').submit()">
                         <option value="mes" {{ $tipoFiltro === 'mes' ? 'selected' : '' }}>Este mes</option>
                         <option value="año" {{ $tipoFiltro === 'año' ? 'selected' : '' }}>Este año</option>
@@ -66,20 +66,20 @@
         <!-- KPIs Principales -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             <!-- KPI 1: Ventas Totales -->
-            <div class="card-saas p-5 hover:border-slate-300 transition-all flex flex-col justify-between">
+            <div class="card-saas p-5 hover:border-slate-300 dark:border-gray-700 transition-all flex flex-col justify-between">
                 <div class="flex items-center justify-between gap-3 mb-2">
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Ingresos Totales</span>
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ingresos Totales</span>
                     <div
                         class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
                         <span class="material-symbols-outlined text-[18px]">account_balance_wallet</span>
                     </div>
                 </div>
                 <div class="my-1.5">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                         ${{ number_format($totalVentas, 2) }}
                     </div>
                 </div>
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-2">
+                <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                     <span class="inline-flex items-center gap-1 font-bold text-emerald-600">
                         <span class="material-symbols-outlined text-[14px]">trending_up</span>
                         <span>Facturado</span>
@@ -89,20 +89,20 @@
             </div>
 
             <!-- KPI 2: Total Pedidos -->
-            <div class="card-saas p-5 hover:border-slate-300 transition-all flex flex-col justify-between">
+            <div class="card-saas p-5 hover:border-slate-300 dark:border-gray-700 transition-all flex flex-col justify-between">
                 <div class="flex items-center justify-between gap-3 mb-2">
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total de Pedidos</span>
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total de Pedidos</span>
                     <div
                         class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
                         <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
                     </div>
                 </div>
                 <div class="my-1.5">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                         {{ $numeroPedidos }}
                     </div>
                 </div>
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-2">
+                <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                     <span class="inline-flex items-center gap-1 font-bold text-blue-600">
                         <span class="material-symbols-outlined text-[14px]">done_all</span>
                         <span>Órdenes procesadas</span>
@@ -112,20 +112,20 @@
             </div>
 
             <!-- KPI 3: Ticket Promedio -->
-            <div class="card-saas p-5 hover:border-slate-300 transition-all flex flex-col justify-between">
+            <div class="card-saas p-5 hover:border-slate-300 dark:border-gray-700 transition-all flex flex-col justify-between">
                 <div class="flex items-center justify-between gap-3 mb-2">
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Ticket Promedio</span>
+                    <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket Promedio</span>
                     <div
                         class="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100">
                         <span class="material-symbols-outlined text-[18px]">receipt_long</span>
                     </div>
                 </div>
                 <div class="my-1.5">
-                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                         ${{ number_format($ticketPromedio, 2) }}
                     </div>
                 </div>
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs mt-2">
+                <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                     <span class="inline-flex items-center gap-1 font-bold text-purple-600">
                         <span class="material-symbols-outlined text-[14px]">sell</span>
                         <span>Por transacción</span>
@@ -141,7 +141,7 @@
             <!-- 1. Revenue Overview (Área) -->
             <div class="card-saas p-6 flex flex-col">
                 <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-base font-bold text-slate-900">Resumen de Ingresos</h3>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Resumen de Ingresos</h3>
                     <span
                         class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-600 border border-emerald-200 text-xs font-bold flex items-center gap-1">
                         <span class="material-symbols-outlined text-[14px]">arrow_upward</span>
@@ -155,7 +155,7 @@
                 @else
                     <div class="flex flex-col items-center justify-center py-10 text-center flex-1">
                         <span class="material-symbols-outlined text-4xl text-slate-200 mb-2">analytics</span>
-                        <p class="text-sm font-semibold text-slate-500">Sin datos.</p>
+                        <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Sin datos.</p>
                     </div>
                 @endif
             </div>
@@ -163,9 +163,9 @@
             <!-- 2. Expense By (Ingresos vs Descuentos - Barras Agrupadas) -->
             <div class="card-saas p-6 flex flex-col">
                 <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-base font-bold text-slate-900">Ingresos vs Descuentos</h3>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Ingresos vs Descuentos</h3>
                     <span
-                        class="px-2 py-0.5 rounded bg-slate-50 text-slate-600 border border-slate-200 text-xs font-bold flex items-center gap-1">
+                        class="px-2 py-0.5 rounded bg-slate-50 dark:bg-transparent text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-gray-700 text-xs font-bold flex items-center gap-1">
                         {{ $numeroPedidos }} Órdenes
                     </span>
                 </div>
@@ -176,7 +176,7 @@
                 @else
                     <div class="flex flex-col items-center justify-center py-10 text-center flex-1">
                         <span class="material-symbols-outlined text-4xl text-slate-200 mb-2">bar_chart</span>
-                        <p class="text-sm font-semibold text-slate-500">Sin datos.</p>
+                        <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Sin datos.</p>
                     </div>
                 @endif
             </div>
@@ -184,7 +184,7 @@
             <!-- 3. Income Sources (Categorías - Donut) -->
             <div class="card-saas p-6 flex flex-col">
                 <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-base font-bold text-slate-900">Fuentes de Ingreso</h3>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Fuentes de Ingreso</h3>
                 </div>
                 @if(count($ventasPorCategoria) > 0)
                     <div class="w-full relative mt-auto flex justify-center items-center">
@@ -193,7 +193,7 @@
                 @else
                     <div class="flex flex-col items-center justify-center py-10 text-center flex-1">
                         <span class="material-symbols-outlined text-4xl text-slate-200 mb-2">pie_chart</span>
-                        <p class="text-sm font-semibold text-slate-500">Sin datos.</p>
+                        <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">Sin datos.</p>
                     </div>
                 @endif
             </div>
@@ -210,26 +210,26 @@
                         class="w-8 h-8 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center border border-orange-100">
                         <span class="material-symbols-outlined text-[16px]">star</span>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Top Productos</h3>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Top Productos</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr
-                                class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 <th class="pb-3 pl-1">Producto</th>
                                 <th class="pb-3 text-center">Cant.</th>
                                 <th class="pb-3 text-right">Ingresos</th>
                             </tr>
                         </thead>
-                        <tbody class="text-xs divide-y divide-slate-100">
+                        <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                             @forelse($productosMasVendidos->take(5) as $prod)
-                                <tr class="hover:bg-slate-50/70 transition-colors">
+                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="py-3 pl-1">
-                                        <div class="font-bold text-slate-900">{{ $prod->nombre }}</div>
-                                        <div class="text-[10px] text-slate-500 mt-0.5">SKU: {{ $prod->sku }}</div>
+                                        <div class="font-bold text-slate-900 dark:text-white">{{ $prod->nombre }}</div>
+                                        <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">SKU: {{ $prod->sku }}</div>
                                     </td>
-                                    <td class="py-3 text-center font-medium text-slate-600">
+                                    <td class="py-3 text-center font-medium text-slate-600 dark:text-slate-400">
                                         {{ $prod->total_vendido }}
                                     </td>
                                     <td class="py-3 text-right font-extrabold text-emerald-600">
@@ -238,7 +238,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-6 text-center text-slate-500 text-xs">Sin datos.</td>
+                                    <td colspan="3" class="py-6 text-center text-slate-500 dark:text-slate-400 text-xs">Sin datos.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -253,26 +253,26 @@
                         class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100">
                         <span class="material-symbols-outlined text-[16px]">group</span>
                     </div>
-                    <h3 class="text-base font-bold text-slate-900">Mejores Clientes</h3>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Mejores Clientes</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr
-                                class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 <th class="pb-3 pl-1">Cliente</th>
                                 <th class="pb-3 text-center">Pedidos</th>
                                 <th class="pb-3 text-right">Gastado</th>
                             </tr>
                         </thead>
-                        <tbody class="text-xs divide-y divide-slate-100">
+                        <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                             @forelse($clientesFrecuentes->take(5) as $cli)
-                                <tr class="hover:bg-slate-50/70 transition-colors">
+                                <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                                     <td class="py-3 pl-1">
-                                        <div class="font-bold text-slate-900">{{ $cli->nombre }} {{ $cli->apellido }}</div>
-                                        <div class="text-[10px] text-slate-500 mt-0.5">{{ $cli->email }}</div>
+                                        <div class="font-bold text-slate-900 dark:text-white">{{ $cli->nombre }} {{ $cli->apellido }}</div>
+                                        <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{{ $cli->email }}</div>
                                     </td>
-                                    <td class="py-3 text-center font-medium text-slate-600">
+                                    <td class="py-3 text-center font-medium text-slate-600 dark:text-slate-400">
                                         {{ $cli->total_pedidos }}
                                     </td>
                                     <td class="py-3 text-right font-extrabold text-purple-600">
@@ -281,7 +281,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-6 text-center text-slate-500 text-xs">Sin datos.</td>
+                                    <td colspan="3" class="py-6 text-center text-slate-500 dark:text-slate-400 text-xs">Sin datos.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -298,28 +298,28 @@
                     class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100">
                     <span class="material-symbols-outlined text-[16px]">warning</span>
                 </div>
-                <h3 class="text-base font-bold text-slate-900">Alerta de Stock Crítico</h3>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white">Alerta de Stock Crítico</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                        <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                             <th class="pb-3 pl-1">Producto</th>
                             <th class="pb-3 text-center">Stock Actual</th>
                             <th class="pb-3 text-center">Mínimo Requerido</th>
                             <th class="pb-3 text-center">Estado</th>
                         </tr>
                     </thead>
-                    <tbody class="text-xs divide-y divide-slate-100">
+                    <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/50">
                         @forelse($stockCritico->take(5) as $stock)
-                            <tr class="hover:bg-slate-50/70 transition-colors">
+                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                                 <td class="py-3 pl-1">
-                                    <div class="font-bold text-slate-900">{{ $stock->nombre }}</div>
+                                    <div class="font-bold text-slate-900 dark:text-white">{{ $stock->nombre }}</div>
                                 </td>
                                 <td class="py-3 text-center font-extrabold text-rose-600">
                                     {{ $stock->stock }}
                                 </td>
-                                <td class="py-3 text-center font-bold text-slate-500">
+                                <td class="py-3 text-center font-bold text-slate-500 dark:text-slate-400">
                                     {{ $stock->stock_minimo }}
                                 </td>
                                 <td class="py-3 text-center">
@@ -331,7 +331,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="py-8 text-center text-slate-500 text-xs">
+                                <td colspan="4" class="py-8 text-center text-slate-500 dark:text-slate-400 text-xs">
                                     <span
                                         class="material-symbols-outlined text-3xl text-emerald-300 mb-2 block">check_circle</span>
                                     Todo el inventario está en niveles saludables.
@@ -453,3 +453,4 @@
         });
     </script>
 @endpush
+

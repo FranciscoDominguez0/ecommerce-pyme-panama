@@ -1,9 +1,9 @@
-@props(['fullScreen' => false])
+﻿@props(['fullScreen' => false])
 
 <div id="global-cliente-skeleton" class="{{ $fullScreen ? 'fixed inset-0 z-[100] bg-[#F8F9FF]' : 'w-full h-full' }} flex flex-col pointer-events-none transition-opacity duration-300">
     
     <!-- Skeleton Top Navbar -->
-    <div class="h-15 py-2.5 px-4 sm:px-6 lg:px-8 bg-white border-b border-gray-200/80 shadow-xs flex items-center justify-between shrink-0">
+    <div class="h-15 py-2.5 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#181a1b] border-b border-gray-200/80 shadow-xs flex items-center justify-between shrink-0">
         <!-- Logo Area -->
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 bg-gray-200 rounded animate-pulse"></div>
@@ -31,7 +31,7 @@
         <!-- Grid of products/cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @for($i = 0; $i < 8; $i++)
-            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col h-72">
+            <div class="bg-white dark:bg-[#181a1b] p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col h-72">
                 <div class="w-full h-40 bg-gray-200 rounded-lg animate-pulse mb-4"></div>
                 <div class="w-3/4 h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
                 <div class="w-1/2 h-4 bg-gray-200 rounded animate-pulse mb-auto"></div>
@@ -42,3 +42,4 @@
     </div>
 
 </div>
+

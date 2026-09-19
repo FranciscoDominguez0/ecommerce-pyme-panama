@@ -1,4 +1,4 @@
-@props(['condicion' => true])
+﻿@props(['condicion' => true])
 
 @if($condicion)
     <span {{ $attributes->merge(['class' => 'inline-flex items-center px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] font-bold rounded uppercase tracking-wide relative overflow-visible font-sans']) }}>
@@ -9,3 +9,4 @@
         Nuevo
     </span>
 @endif
+

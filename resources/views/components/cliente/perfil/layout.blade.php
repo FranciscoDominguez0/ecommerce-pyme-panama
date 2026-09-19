@@ -1,4 +1,4 @@
-@props([
+﻿@props([
     'active' => '',
 ])
 
@@ -7,7 +7,7 @@
 @endphp
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
-    <div class="bg-white border border-outline-variant rounded-2xl shadow-sm overflow-clip md:h-[calc(100vh-140px)] flex flex-col md:flex-row" x-data="{ mobileMenuOpen: false }">
+    <div class="bg-white dark:bg-[#181a1b] border border-outline-variant rounded-2xl shadow-sm overflow-clip md:h-[calc(100vh-140px)] flex flex-col md:flex-row" x-data="{ mobileMenuOpen: false }">
 
         {{-- LEFT: Profile + Navigation (persisted across routes) --}}
         <aside x-persist="mi-cuenta-sidebar" class="w-full md:w-[32%] md:min-w-[260px] md:max-w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-outline-variant/30 md:p-7 overflow-y-auto md:h-full bg-surface-container-lowest md:bg-transparent">
@@ -23,7 +23,7 @@
                         @endif
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold text-primary leading-tight">{{ $usuario->nombre_completo }}</h2>
+                        <h2 class="text-sm font-bold text-primary dark:text-blue-400 leading-tight">{{ $usuario->nombre_completo }}</h2>
                         <p class="text-[11px] text-outline font-medium mt-0.5">Opciones de mi cuenta</p>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
             <div class="p-6 pt-2 md:p-0 md:!block" x-show="mobileMenuOpen" x-transition.opacity style="display: none;">
                 
                 <a href="{{ route('dashboard') }}" wire:navigate
-                    class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors">
+                    class="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant hover:text-primary dark:text-blue-400 transition-colors">
                     <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                     Volver al Dashboard
                 </a>
@@ -49,7 +49,7 @@
                                 <img id="avatar-preview-img" src="" alt="" class="w-full h-full object-cover hidden">
                             @endif
                         </div>
-                        <div id="avatar-uploading" class="absolute inset-0 rounded-full bg-primary/40 items-center justify-center hidden">
+                        <div id="avatar-uploading" class="absolute inset-0 rounded-full bg-primary dark:bg-blue-600/40 items-center justify-center hidden">
                             <span class="material-symbols-outlined text-white text-2xl animate-spin">progress_activity</span>
                         </div>
                         <button type="button" id="btn-eliminar-foto"
@@ -57,17 +57,17 @@
                             title="Eliminar foto">
                             <span class="material-symbols-outlined text-[12px]">close</span>
                         </button>
-                        <div class="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md cursor-pointer hover:bg-primary-container transition-colors" id="camera-badge">
+                        <div class="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-primary dark:bg-blue-600 text-on-primary flex items-center justify-center shadow-md cursor-pointer hover:bg-primary dark:bg-blue-600-container transition-colors" id="camera-badge">
                             <span class="material-symbols-outlined text-[15px]">photo_camera</span>
                         </div>
                     </div>
 
-                    <h2 class="text-sm font-bold text-primary">{{ $usuario->nombre_completo }}</h2>
+                    <h2 class="text-sm font-bold text-primary dark:text-blue-400">{{ $usuario->nombre_completo }}</h2>
                 </div>
 
                 <nav class="md:mt-4 md:pt-4 md:border-t border-outline-variant/30 space-y-1">
                     <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate wire:current.exact="sidebar-nav-active"
-                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
+                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary dark:text-blue-400">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">package_2</span>
                         <div class="text-left min-w-0">
                             <p class="text-sm font-medium">Historial de Pedidos</p>
@@ -76,28 +76,28 @@
                     </a>
 
                     <a href="{{ route('cliente.perfil.direcciones') }}" wire:navigate wire:current.exact="sidebar-nav-active"
-                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
+                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary dark:text-blue-400">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">local_shipping</span>
                         <div class="text-left min-w-0">
-                            <p class="text-sm font-medium">Direcciones de Envío</p>
-                            <p class="text-[11px] text-outline leading-tight">Gestiona tus envíos</p>
+                            <p class="text-sm font-medium">Direcciones de EnvÃ­o</p>
+                            <p class="text-[11px] text-outline leading-tight">Gestiona tus envÃ­os</p>
                         </div>
                     </a>
 
                     <a href="{{ route('cliente.perfil.password') }}" wire:navigate wire:current.exact="sidebar-nav-active"
-                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
+                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary dark:text-blue-400">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">lock</span>
                         <div class="text-left min-w-0">
                             <p class="text-sm font-medium">Seguridad</p>
-                            <p class="text-[11px] text-outline leading-tight">Contraseña y 2FA</p>
+                            <p class="text-[11px] text-outline leading-tight">ContraseÃ±a y 2FA</p>
                         </div>
                     </a>
 
                     <a href="{{ route('cliente.perfil.datos') }}" wire:navigate wire:current.exact="sidebar-nav-active"
-                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary">
+                        class="flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-on-surface-variant hover:bg-surface-container-low hover:text-primary dark:text-blue-400">
                         <span class="material-symbols-outlined text-lg mt-0.5 shrink-0">settings</span>
                         <div class="text-left min-w-0">
-                            <p class="text-sm font-medium">Configuración</p>
+                            <p class="text-sm font-medium">ConfiguraciÃ³n</p>
                             <p class="text-[11px] text-outline leading-tight">Datos personales</p>
                         </div>
                     </a>
@@ -216,7 +216,7 @@
                                     setCargando(false);
                                     if (failCallback) failCallback();
                                     if (window.mostrarToast) {
-                                        window.mostrarToast('error', 'Error de conexión al guardar la foto.');
+                                        window.mostrarToast('error', 'Error de conexiÃ³n al guardar la foto.');
                                     }
                                 });
                         }
@@ -229,7 +229,7 @@
 
                             if (!file.type || file.type.indexOf('image/') !== 0) {
                                 input.value = '';
-                                if (window.mostrarToast) window.mostrarToast('error', 'Selecciona un archivo de imagen válido.');
+                                if (window.mostrarToast) window.mostrarToast('error', 'Selecciona un archivo de imagen vÃ¡lido.');
                                 return;
                             }
 
@@ -334,3 +334,4 @@
         </div>
     </div>
 </div>
+

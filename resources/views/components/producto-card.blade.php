@@ -1,25 +1,25 @@
-<!-- Tarjeta individual de producto -->
+﻿<!-- Tarjeta individual de producto -->
 @props(['prod'])
 
 @php
     $img = $prod->imagenPrincipal();
 @endphp
 <div
-    class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group relative">
+    class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col group relative">
 
-    <!-- Indicador de stock (verde si hay, rojo si está agotado) -->
+    <!-- Indicador de stock (verde si hay, rojo si estÃ¡ agotado) -->
     @if($prod->stock > 0)
-        <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-xs">
+        <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white dark:bg-[#181a1b] shadow-xs">
             <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
         </div>
     @else
-        <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white shadow-xs">
+        <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white dark:bg-[#181a1b] shadow-xs">
             <div class="w-2 h-2 rounded-full bg-rose-500"></div>
         </div>
     @endif
 
     <!-- Zona de la imagen y etiqueta de descuento -->
-    <div class="relative h-48 bg-white p-4 flex items-center justify-center">
+    <div class="relative h-48 bg-white dark:bg-[#181a1b] p-4 flex items-center justify-center">
         @if($prod->tienePromocionOPrecioOferta())
             <div class="absolute top-4 left-4 z-10">
                 <span class="px-2 py-1 rounded bg-rose-500 text-white text-[10px] font-bold">
@@ -40,45 +40,45 @@
             </div>
         @elseif($img && !empty($img->ruta))
             <span
-                class="material-symbols-outlined text-[64px] text-slate-600 group-hover:scale-105 transition-transform duration-300">{{ $img->ruta }}</span>
+                class="material-symbols-outlined text-[64px] text-slate-600 dark:text-slate-400 group-hover:scale-105 transition-transform duration-300">{{ $img->ruta }}</span>
         @else
             <span class="material-symbols-outlined text-[64px] text-slate-300">image</span>
         @endif
     </div>
 
-    <!-- Botones ocultos que aparecen al pasar el ratón (Carrito, Deseos, Compartir, Ver) -->
+    <!-- Botones ocultos que aparecen al pasar el ratÃ³n (Carrito, Deseos, Compartir, Ver) -->
     <div
         class="flex items-center justify-center gap-3 -mt-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <!-- Botón Carrito -->
+        <!-- BotÃ³n Carrito -->
         <button type="button" onclick="agregarAlCarritoListado({{ $prod->id }})"
-            class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-emerald-600 transition-colors tooltip-trigger"
-            title="Añadir al carrito">
+            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-emerald-600 transition-colors tooltip-trigger"
+            title="AÃ±adir al carrito">
             <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
         </button>
-        <!-- Botón Deseos -->
+        <!-- BotÃ³n Deseos -->
         <button type="button" onclick="agregarDeseoListado({{ $prod->id }})"
-            class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
-            title="Añadir a deseos">
+            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
+            title="AÃ±adir a deseos">
             <span class="material-symbols-outlined text-[18px]">favorite</span>
         </button>
-        <!-- Botón Compartir -->
+        <!-- BotÃ³n Compartir -->
         <button type="button" onclick="copiarLink('{{ route('cliente.producto.detalle', $prod->slug) }}')"
-            class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
+            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
             title="Copiar enlace">
             <span class="material-symbols-outlined text-[18px]">share</span>
         </button>
-        <!-- Botón Ver Detalle -->
+        <!-- BotÃ³n Ver Detalle -->
         <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" wire:navigate
-            class="w-10 h-10 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-slate-600 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
-            title="Vista rápida">
+            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
+            title="Vista rÃ¡pida">
             <span class="material-symbols-outlined text-[18px]">visibility</span>
         </a>
     </div>
 
-    <!-- Información del producto (Nombre, SKU y precio) -->
+    <!-- InformaciÃ³n del producto (Nombre, SKU y precio) -->
     <div class="p-5 flex-1 flex flex-col justify-end space-y-2 text-center mt-2">
         <h3
-            class="text-[13px] font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">
+            class="text-[13px] font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">
             <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" wire:navigate>
                 {{ $prod->nombre }}
             </a>

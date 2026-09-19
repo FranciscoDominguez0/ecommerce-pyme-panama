@@ -41,14 +41,14 @@
 <div class="space-y-6">
     
     <!-- Page Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80 dark:border-slate-700/80">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-gray-700/80 dark:border-slate-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Resumen del Dashboard</h2>
             <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Métricas de rendimiento en tiempo real.</p>
         </div>
         <div class="flex items-center gap-3">
             <div class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 shadow-xs">
-                <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500">calendar_today</span>
+                <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500 dark:text-slate-400">calendar_today</span>
                 <span>Últimos 7 días</span>
             </div>
             <a href="{{ url('/') }}" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 dark:bg-gray-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 dark:hover:bg-gray-600 transition-colors shadow-xs">
@@ -62,7 +62,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         
         <!-- Card 1: Ventas Totales -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
                     <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ventas Totales</span>
@@ -76,7 +76,7 @@
         </div>
 
         <!-- Card 2: Total Pedidos -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
                     <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total de Pedidos</span>
@@ -90,7 +90,7 @@
         </div>
 
         <!-- Card 3: Clientes Registrados -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
                     <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nuevos Clientes</span>
@@ -104,7 +104,7 @@
         </div>
 
         <!-- Card 4: Ticket Promedio -->
-        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:hover:border-gray-600 transition-all">
+        <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
                     <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Ticket Promedio</span>
@@ -128,7 +128,7 @@
         <div class="lg:col-span-2 card-saas p-5 flex flex-col justify-between">
             <div class="flex justify-between items-center mb-2">
                 <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Resumen de Ventas</h3>
-                <div class="flex items-center gap-2 px-2.5 py-1 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-600 rounded text-xs font-semibold text-slate-600 dark:text-slate-300">
+                <div class="flex items-center gap-2 px-2.5 py-1 bg-slate-50 dark:bg-gray-700/50 border border-slate-200 dark:border-gray-700 dark:border-gray-600 rounded text-xs font-semibold text-slate-600 dark:text-slate-400 dark:text-slate-300">
                     <span class="material-symbols-outlined text-[14px]">calendar_today</span>
                     <span>Últimos 6 Meses</span>
                 </div>
@@ -144,7 +144,7 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-0.5">
-                        <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-500"></span> Pedidos
+                        <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-50 dark:bg-transparent0"></span> Pedidos
                     </div>
                     <div class="font-bold text-slate-900 dark:text-white text-lg">{{ number_format(array_sum($ordenesMeses)/1000, 1) }}k</div>
                 </div>
@@ -215,11 +215,11 @@
                 </thead>
                 <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/80">
                     @forelse($transaccionesRecientes as $pedido)
-                        <tr class="hover:bg-slate-50/70 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3 pl-1 font-bold text-slate-900 dark:text-white">
                                 {{ $pedido->numero_pedido }}
                             </td>
-                            <td class="py-3 text-slate-600 dark:text-slate-300 font-medium">
+                            <td class="py-3 text-slate-600 dark:text-slate-400 dark:text-slate-300 font-medium">
                                 {{ $pedido->usuario ? $pedido->usuario->nombre_completo : 'Cliente' }}
                             </td>
                             <td class="py-3 text-slate-500 dark:text-slate-400">
@@ -240,7 +240,7 @@
                                 </span>
                             </td>
                             <td class="py-3 text-right font-medium text-slate-500 dark:text-slate-400">
-                                <span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-gray-700 text-[10px] font-semibold">
+                                <span class="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-slate-400 dark:text-slate-300 border border-slate-200 dark:border-gray-700 text-[10px] font-semibold">
                                     {{ $pedido->metodo_pago ?? 'Tarjeta' }}
                                 </span>
                             </td>
@@ -255,7 +255,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-8 text-center text-slate-500 text-xs">
+                            <td colspan="7" class="py-8 text-center text-slate-500 dark:text-slate-400 text-xs">
                                 No hay pedidos registrados todavía.
                             </td>
                         </tr>
@@ -292,7 +292,7 @@
                         @php
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
-                        <tr class="hover:bg-slate-50/70 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/70 dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3">
                                 <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
@@ -300,7 +300,7 @@
                                     @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
                                         <div class="w-6 h-6 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
                                     @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
-                                        <span class="material-symbols-outlined text-[20px] text-slate-700">{{ $imgPrincipal->ruta }}</span>
+                                        <span class="material-symbols-outlined text-[20px] text-slate-700 dark:text-slate-300">{{ $imgPrincipal->ruta }}</span>
                                     @else
                                         <img src="{{ asset('images/placeholder-product.png') }}" class="w-full h-full object-cover" alt="{{ $prod->nombre }}">
                                     @endif
@@ -505,3 +505,4 @@
 })();
 </script>
 @endpush
+

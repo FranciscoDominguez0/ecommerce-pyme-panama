@@ -40,24 +40,24 @@
     
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Gestión de Devoluciones</h1>
-            <p class="text-sm text-slate-500 mt-1">Administra y procesa las solicitudes de devolución de clientes.</p>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Gestión de Devoluciones</h1>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Administra y procesa las solicitudes de devolución de clientes.</p>
         </div>
     </div>
 
     <!-- Filters & Actions -->
     <div class="card-elevated rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div class="flex flex-wrap gap-2 w-full md:w-auto">
-            <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="px-4 py-2 {{ request('estado') ? 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' : 'bg-slate-100 text-slate-900 font-bold' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'pendiente']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'pendiente' ? 'bg-slate-100 text-slate-900 font-bold' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Pendientes</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'aprobada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'aprobada' ? 'bg-slate-100 text-slate-900 font-bold' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Aprobadas</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-100 text-slate-900 font-bold' : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
+            <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="px-4 py-2 {{ request('estado') ? 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700' : 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'pendiente']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'pendiente' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Pendientes</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'aprobada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'aprobada' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Aprobadas</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
         </div>
         
         <form action="{{ route('admin.devoluciones.index') }}" method="GET" class="w-full md:w-auto">
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar por pedido o cliente..." class="w-full md:w-64 pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-all">
+                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar por pedido o cliente..." class="w-full md:w-64 pl-10 pr-4 py-2 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-slate-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-slate-400 transition-all">
                 @if(request('estado'))
                     <input type="hidden" name="estado" value="{{ request('estado') }}">
                 @endif
@@ -67,12 +67,12 @@
 
     @if($devoluciones->isEmpty())
         <!-- Empty State (Screen 4) -->
-        <div class="bg-white rounded-xl border border-slate-200 p-12 flex flex-col items-center justify-center text-center">
-            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+        <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 p-12 flex flex-col items-center justify-center text-center">
+            <div class="w-20 h-20 bg-slate-50 dark:bg-transparent rounded-full flex items-center justify-center mb-6">
                 <span class="material-symbols-outlined text-4xl text-slate-300">assignment_return</span>
             </div>
-            <h3 class="text-xl font-bold text-slate-900 mb-2">No hay devoluciones</h3>
-            <p class="text-slate-500 max-w-md mx-auto">No se encontraron solicitudes de devolución con los filtros actuales. Todas las solicitudes de clientes aparecerán aquí.</p>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">No hay devoluciones</h3>
+            <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto">No se encontraron solicitudes de devolución con los filtros actuales. Todas las solicitudes de clientes aparecerán aquí.</p>
             @if(request('buscar') || request('estado'))
                 <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">
                     Limpiar Filtros
@@ -84,23 +84,23 @@
         <div class="card-elevated rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
-                    <thead class="bg-slate-50 border-b border-slate-100">
+                    <thead class="bg-slate-50 dark:bg-transparent border-b border-slate-100 dark:border-gray-700">
                         <tr>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">ID Devolución</th>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pedido</th>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Cliente</th>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Motivo</th>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Fecha</th>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Estado</th>
-                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Acciones</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">ID Devolución</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pedido</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cliente</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Motivo</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Estado</th>
+                            <th class="px-6 py-3 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50">
                         @foreach($devoluciones as $dev)
                         @php
                             $esNuevaDevolucion = $dev->estado === 'pendiente';
                         @endphp
-                        <tr class="hover:bg-slate-50/50 transition-colors cursor-pointer group {{ $esNuevaDevolucion ? 'bg-emerald-50/40 border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}" 
+                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:bg-transparent/50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer group {{ $esNuevaDevolucion ? 'bg-emerald-50/40 dark:bg-transparent border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}" 
                             @click="abrirModal({
                                 id: '{{ $dev->id }}',
                                 pedido_id: '{{ $dev->pedido->id }}',
@@ -125,16 +125,16 @@
                                     @endforeach
                                 ]
                             })">
-                            <td class="px-6 py-4 font-mono text-sm font-bold text-slate-900">
+                            <td class="px-6 py-4 font-mono text-sm font-bold text-slate-900 dark:text-white">
                                 <div class="flex items-center gap-2.5">
                                     DEV-{{ str_pad($dev->id, 4, '0', STR_PAD_LEFT) }}
                                     <x-badge-nuevo :condicion="$esNuevaDevolucion" />
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-slate-500">{{ $dev->pedido->numero_pedido }}</td>
-                            <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ $dev->usuario->nombre }} {{ $dev->usuario->apellido }}</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">{{ ucfirst($dev->motivo) }}</td>
-                            <td class="px-6 py-4 text-sm text-slate-500">{{ $dev->creado_en->format('d/m/Y') }}</td>
+                            <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{{ $dev->pedido->numero_pedido }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{{ $dev->usuario->nombre }} {{ $dev->usuario->apellido }}</td>
+                            <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{{ ucfirst($dev->motivo) }}</td>
+                            <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{{ $dev->creado_en->format('d/m/Y') }}</td>
                             <td class="px-6 py-4">
                                 @if($dev->estado === 'pendiente')
                                     <span class="inline-block px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Pendiente</span>
@@ -145,7 +145,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <button class="text-slate-500 hover:text-slate-900 transition-colors text-[11px] font-bold uppercase tracking-wider group-hover:text-emerald-600">Ver Detalles</button>
+                                <button class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white transition-colors text-[11px] font-bold uppercase tracking-wider group-hover:text-emerald-600">Ver Detalles</button>
                             </td>
                         </tr>
                         @endforeach
@@ -153,7 +153,7 @@
                 </table>
             </div>
             @if($devoluciones->hasPages())
-                <div class="px-6 py-4 border-t border-slate-100">
+                <div class="px-6 py-4 border-t border-slate-100 dark:border-gray-700">
                     {{ $devoluciones->links() }}
                 </div>
             @endif
@@ -182,43 +182,43 @@
              x-transition:leave="transform transition ease-in-out duration-300 sm:duration-500" 
              x-transition:leave-start="translate-x-0" 
              x-transition:leave-end="translate-x-full" 
-             class="pointer-events-auto w-full md:max-w-lg flex flex-col bg-white h-full shadow-2xl relative">
+             class="pointer-events-auto w-full md:max-w-lg flex flex-col bg-white dark:bg-[#181a1b] h-full shadow-2xl relative">
             
             <template x-if="devolucionActiva">
                 <div class="flex flex-col h-full">
                     <!-- Header -->
-                    <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-transparent">
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900" x-text="'Devolución #DEV-' + String(devolucionActiva.id).padStart(4, '0')"></h3>
-                            <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white" x-text="'Devolución #DEV-' + String(devolucionActiva.id).padStart(4, '0')"></h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mt-1">
                                 Pedido asociado: <a :href="'{{ url('admin/pedidos') }}/' + devolucionActiva.pedido_id" class="text-emerald-600 hover:underline" x-text="devolucionActiva.numero_pedido"></a>
                             </p>
                         </div>
-                        <button @click="cerrarModal()" class="text-slate-400 hover:text-slate-700 transition-colors p-2 rounded-full hover:bg-slate-200 focus:outline-none">
+                        <button @click="cerrarModal()" class="text-slate-400 dark:text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-300 transition-colors p-2 rounded-full hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-700 focus:outline-none">
                             <span class="material-symbols-outlined">close</span>
                         </button>
                     </div>
 
                     <!-- Body -->
-                    <div class="p-6 overflow-y-auto flex-1 bg-white">
+                    <div class="p-6 overflow-y-auto flex-1 bg-white dark:bg-[#181a1b]">
                         
                         <!-- Info Cliente -->
                         <div class="mb-6">
-                            <h4 class="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Información del Cliente</h4>
-                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                                <p class="font-bold text-sm text-slate-900" x-text="devolucionActiva.cliente_nombre"></p>
-                                <p class="text-xs text-slate-500 mt-1" x-text="devolucionActiva.cliente_email"></p>
-                                <p class="text-xs text-slate-500 mt-1" x-text="devolucionActiva.cliente_tel"></p>
+                            <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Información del Cliente</h4>
+                            <div class="bg-slate-50 dark:bg-transparent p-4 rounded-lg border border-slate-100 dark:border-gray-700">
+                                <p class="font-bold text-sm text-slate-900 dark:text-white" x-text="devolucionActiva.cliente_nombre"></p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" x-text="devolucionActiva.cliente_email"></p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" x-text="devolucionActiva.cliente_tel"></p>
                             </div>
                         </div>
 
                         <!-- Productos Involucrados (Asumimos pedido completo por limitación actual) -->
                         <div class="mb-6">
-                            <h4 class="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Productos del Pedido (Afectados)</h4>
+                            <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Productos del Pedido (Afectados)</h4>
                             <div class="flex flex-col gap-3">
                                 <template x-for="item in devolucionActiva.items">
-                                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                        <div class="w-12 h-12 rounded bg-white border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
+                                    <div class="flex items-center gap-4 bg-slate-50 dark:bg-transparent p-3 rounded-lg border border-slate-100 dark:border-gray-700">
+                                        <div class="w-12 h-12 rounded bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 overflow-hidden flex items-center justify-center shrink-0">
                                             <template x-if="item.imagen">
                                                 <img :src="item.imagen" class="w-full h-full object-cover">
                                             </template>
@@ -227,9 +227,9 @@
                                             </template>
                                         </div>
                                         <div class="flex-1 min-w-0">
-                                            <p class="font-bold text-sm text-slate-900 truncate" x-text="item.nombre"></p>
-                                            <p class="text-[11px] text-slate-500 font-mono" x-text="'SKU: ' + item.sku"></p>
-                                            <p class="font-mono text-sm font-bold text-slate-900 mt-0.5" x-text="'$' + item.precio + ' (x' + item.cantidad + ')'"></p>
+                                            <p class="font-bold text-sm text-slate-900 dark:text-white truncate" x-text="item.nombre"></p>
+                                            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-mono" x-text="'SKU: ' + item.sku"></p>
+                                            <p class="font-mono text-sm font-bold text-slate-900 dark:text-white mt-0.5" x-text="'$' + item.precio + ' (x' + item.cantidad + ')'"></p>
                                         </div>
                                     </div>
                                 </template>
@@ -238,38 +238,38 @@
 
                         <!-- Motivo y Descripción -->
                         <div class="mb-6">
-                            <h4 class="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Motivo y Descripción</h4>
-                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                                <span class="inline-block px-2.5 py-1 bg-slate-200 text-slate-700 rounded-md text-[10px] font-bold uppercase tracking-wider mb-3" x-text="devolucionActiva.motivo"></span>
-                                <p class="text-sm text-slate-700 italic border-l-2 border-slate-300 pl-3" x-text="'&quot;' + devolucionActiva.descripcion + '&quot;'"></p>
+                            <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Motivo y Descripción</h4>
+                            <div class="bg-slate-50 dark:bg-transparent p-4 rounded-lg border border-slate-100 dark:border-gray-700">
+                                <span class="inline-block px-2.5 py-1 bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 rounded-md text-[10px] font-bold uppercase tracking-wider mb-3" x-text="devolucionActiva.motivo"></span>
+                                <p class="text-sm text-slate-700 dark:text-slate-300 italic border-l-2 border-slate-300 dark:border-gray-700 pl-3" x-text="'&quot;' + devolucionActiva.descripcion + '&quot;'"></p>
                             </div>
                         </div>
 
                         <!-- Evidencia -->
                         <template x-if="devolucionActiva.foto_url">
                             <div class="mb-6">
-                                <h4 class="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Evidencia Fotográfica</h4>
-                                <a :href="devolucionActiva.foto_url" target="_blank" class="block w-full h-48 rounded-lg border border-slate-200 overflow-hidden hover:opacity-90 transition-opacity">
-                                    <img :src="devolucionActiva.foto_url" class="w-full h-full object-contain bg-slate-50">
+                                <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Evidencia Fotográfica</h4>
+                                <a :href="devolucionActiva.foto_url" target="_blank" class="block w-full h-48 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden hover:opacity-90 transition-opacity">
+                                    <img :src="devolucionActiva.foto_url" class="w-full h-full object-contain bg-slate-50 dark:bg-transparent">
                                 </a>
                             </div>
                         </template>
 
                         <!-- Resolución Admin -->
                         <div class="mb-6">
-                            <h4 class="text-[11px] font-bold text-slate-500 mb-2 uppercase tracking-wider">Resolución Administrativa</h4>
+                            <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Resolución Administrativa</h4>
                             
                             <template x-if="devolucionActiva.estado === 'pendiente'">
                                 <div>
-                                    <label class="block text-xs text-slate-500 mb-2">Comentario del administrador (Obligatorio para rechazar)</label>
-                                    <textarea id="admin-comment-input" :class="errorComentario ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-300 focus:ring-slate-900 focus:border-slate-900'" class="w-full p-3 bg-white border rounded-lg focus:ring-1 text-sm text-slate-900 resize-none transition-colors" placeholder="Ingrese detalles de la resolución..." rows="3"></textarea>
+                                    <label class="block text-xs text-slate-500 dark:text-slate-400 mb-2">Comentario del administrador (Obligatorio para rechazar)</label>
+                                    <textarea id="admin-comment-input" :class="errorComentario ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-slate-300 dark:border-gray-700 focus:ring-slate-900 dark:focus:ring-gray-500 focus:border-slate-900 dark:focus:border-gray-500'" class="w-full p-3 bg-white dark:bg-[#121415] border rounded-lg focus:ring-1 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 resize-none transition-colors" placeholder="Ingrese detalles de la resolución..." rows="3"></textarea>
                                     <p x-show="errorComentario" x-text="errorComentario" class="text-red-500 text-xs font-bold mt-1.5"></p>
                                 </div>
                             </template>
 
                             <template x-if="devolucionActiva.estado !== 'pendiente'">
-                                <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                                    <p class="text-sm text-slate-700" x-text="devolucionActiva.admin_comentario || 'Sin comentarios.'"></p>
+                                <div class="bg-slate-50 dark:bg-transparent p-4 rounded-lg border border-slate-100 dark:border-gray-700">
+                                    <p class="text-sm text-slate-700 dark:text-slate-300" x-text="devolucionActiva.admin_comentario || 'Sin comentarios.'"></p>
                                 </div>
                             </template>
                         </div>
@@ -277,7 +277,7 @@
 
                     <!-- Footer Actions -->
                     <template x-if="devolucionActiva.estado === 'pendiente'">
-                        <div class="p-4 border-t border-slate-100 bg-slate-50 flex gap-3">
+                        <div class="p-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex gap-3">
                             <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/rechazar'" method="POST" class="flex-1" @submit="validarRechazo">
                                 @csrf
                                 <input type="hidden" name="comentario_admin" value="">
@@ -302,3 +302,6 @@
 
 </div>
 @endsection
+
+
+

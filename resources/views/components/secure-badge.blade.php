@@ -1,4 +1,4 @@
-@props([
+﻿@props([
     'icon' => 'verified_user',
     'text' => 'Pyme Panama',
 ])
@@ -8,3 +8,4 @@
     <span class="material-symbols-outlined text-sm">{{ $icon }}</span>
     <span class="text-[11px]">{{ $text }}</span>
 </div>
+
