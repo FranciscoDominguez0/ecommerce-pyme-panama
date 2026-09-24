@@ -26,6 +26,9 @@ class Usuario extends Authenticatable
         'fecha_nacimiento',
         'two_fa_habilitado',
         'google_id',
+        'bloqueado',
+        'motivo_bloqueo',
+        'bloqueado_en',
     ];
 
     protected $casts = [
