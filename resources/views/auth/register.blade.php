@@ -185,7 +185,7 @@
                                required
                                {{ old('terms') ? 'checked' : '' }}>
                         <span class="ml-2 text-xs text-gray-600 leading-tight">
-                            He leído y acepto los <a href="#" class="text-secondary hover:underline font-medium">Términos del Servicio</a> y la <a href="#" class="text-secondary hover:underline font-medium">Política de Privacidad</a>.
+                            He leído y acepto los <a href="{{ route('terminos') }}" target="_blank" class="text-secondary hover:underline font-medium">Términos del Servicio</a> y la <a href="{{ route('privacidad') }}" target="_blank" class="text-secondary hover:underline font-medium">Política de Privacidad</a>.
                         </span>
                     </label>
                     @error('terms')

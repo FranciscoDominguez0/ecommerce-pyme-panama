@@ -170,6 +170,8 @@
     </main>
 
     <script>
+        let errorTimeoutId = null;
+
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const visibilityIcon = document.getElementById('visibility-icon');
@@ -216,6 +218,16 @@
                     if (errorAlert) {
                         errorAlert.classList.remove('hidden');
                         errorAlert.querySelector('p.opacity-95').textContent = data.message || 'Las credenciales proporcionadas no son válidas.';
+                        document.getElementById('password').value = '';
+                        
+                        if (errorTimeoutId) {
+                            clearTimeout(errorTimeoutId);
+                        }
+                        
+                        errorTimeoutId = setTimeout(() => {
+                            errorAlert.classList.add('hidden');
+                        }, 5000);
+                        
                     } else {
                         window.location.reload();
                     }
@@ -227,6 +239,16 @@
                 window.location.reload();
             }
         }
+
+        // Si el error está visible al cargar la página (por una recarga o redirección normal), ocultarlo después de 5 seg
+        document.addEventListener('DOMContentLoaded', () => {
+            const errorAlert = document.getElementById('error-alert');
+            if (errorAlert && !errorAlert.classList.contains('hidden')) {
+                errorTimeoutId = setTimeout(() => {
+                    errorAlert.classList.add('hidden');
+                }, 5000);
+            }
+        });
 
     </script>
 </x-guest-layout>

@@ -34,6 +34,7 @@
                     <li><a href="#" class="hover:text-white transition-colors">Políticas de Envío</a></li>
                     <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Términos y
                                 Condiciones</a></li>
+                    <li><a href="{{ route('privacidad') }}" wire:navigate class="hover:text-white transition-colors">Políticas de Privacidad</a></li>
                 </ul>
             </div>
 

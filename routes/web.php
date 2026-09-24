@@ -45,6 +45,9 @@ Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarN
 Route::get('/terminos-y-condiciones', function () {
     return view('paginas.terminos'); })->name('terminos');
 
+Route::get('/politicas-de-privacidad', function () {
+    return view('paginas.privacidad'); })->name('privacidad');
+
 // Carrito de Compras
 Route::get('/carrito', [CarritoController::class, 'index'])->name('cliente.carrito');
 Route::post('/carrito/agregar', [CarritoController::class, 'agregar'])->name('cliente.carrito.agregar');

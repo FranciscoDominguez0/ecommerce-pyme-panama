@@ -45,18 +45,58 @@ class LoginController extends Controller
             'password.required' => 'La contraseña es requerida.',
         ]);
 
+        $ip = $request->ip();
+        $throttleKey = strtolower($request->email).'|'.$ip;
+        $lockKey = $throttleKey . ':lockout';
+        $attemptsKey = $throttleKey . ':fail_count';
+
         $usuario = Usuario::where('email', $request->email)->first();
+
+        // 1. Revisar si el usuario está bloqueado permanentemente en la BD
+        if ($usuario && $usuario->bloqueado) {
+            return $this->loginFailedResponse($request, 'Su cuenta ha sido inhabilitada por seguridad tras múltiples intentos fallidos. Por favor, comuníquese con soporte.');
+        }
+
+        // 2. Revisar si hay un bloqueo temporal activo
+        if (Cache::has($lockKey)) {
+            $expiresAt = Cache::get($lockKey);
+            $seconds = max(0, $expiresAt - now()->timestamp);
+            return $this->loginFailedResponse($request, "Demasiados intentos de acceso. Por favor intente nuevamente en {$seconds} segundos.");
+        }
 
         // Validar credenciales contra la columna password_hash
         if (!$usuario || !Hash::check($request->password, $usuario->password_hash)) {
+            $attempts = (int) Cache::get($attemptsKey, 0) + 1;
+            Cache::put($attemptsKey, $attempts, now()->addHours(24));
+            
             $msg = 'Las credenciales proporcionadas no son válidas.';
-            if ($request->wantsJson()) {
-                return response()->json(['errors' => ['email' => [$msg]]], 422);
+
+            if ($attempts >= 9) {
+                if ($usuario) {
+                    $usuario->update([
+                        'bloqueado' => true,
+                        'motivo_bloqueo' => 'Demasiados intentos fallidos de inicio de sesión (9).',
+                        'bloqueado_en' => now()
+                    ]);
+                    $msg = 'Su cuenta ha sido inhabilitada por seguridad tras múltiples intentos fallidos. Por favor, comuníquese con soporte.';
+                } else {
+                    Cache::put($lockKey, now()->addYears(1)->timestamp, now()->addYears(1));
+                    $msg = 'Demasiados intentos. Bloqueado temporalmente.';
+                }
+            } elseif ($attempts == 6) {
+                Cache::put($lockKey, now()->addMinutes(5)->timestamp, now()->addMinutes(5));
+                $msg = 'Demasiados intentos de acceso. Por favor intente nuevamente en 5 minutos.';
+            } elseif ($attempts == 3) {
+                Cache::put($lockKey, now()->addMinutes(1)->timestamp, now()->addMinutes(1));
+                $msg = 'Demasiados intentos de acceso. Por favor intente nuevamente en 1 minuto.';
             }
-            return back()->withErrors([
-                'email' => $msg,
-            ])->onlyInput('email');
+
+            return $this->loginFailedResponse($request, $msg);
         }
+
+        // Login exitoso, limpiamos fallos
+        Cache::forget($attemptsKey);
+        Cache::forget($lockKey);
 
         // Si el usuario tiene 2FA habilitado, interceptamos el login
         if ($usuario->two_fa_habilitado) {
@@ -145,5 +185,21 @@ class LoginController extends Controller
     public function destroy(Request $request)
     {
         return $this->logout($request);
+    }
+
+    /**
+     * Helper para responder con error de login
+     */
+    protected function loginFailedResponse(Request $request, string $msg)
+    {
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => $msg,
+                'errors' => ['email' => [$msg]]
+            ], 422);
+        }
+        return back()->withErrors([
+            'email' => $msg,
+        ])->onlyInput('email');
     }
 }
