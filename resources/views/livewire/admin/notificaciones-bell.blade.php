@@ -2,19 +2,17 @@
      x-data="{ open: false }" 
      @click.outside="open = false"
      @nueva-notificacion-recibida.window="
-         console.log('🔔 Evento de notificación recibido en Livewire');
          let audio = document.getElementById('notification-sound');
          if (audio) {
-             audio.play().then(() => console.log('🔊 Sonido reproducido con éxito')).catch(e => console.warn('⚠️ Audio bloqueado por el navegador. Debes hacer clic en la página primero:', e));
+             audio.play().catch(e => {});
          }
      "
      x-init="
          const setupEcho = () => {
-             if (window.Echo) {
-                 console.log('🔌 Conectando Echo para notificaciones del usuario {{ auth()->id() }}...');
+             if (window.Echo && !window._reverbBound) {
+                 window._reverbBound = true;
                  window.Echo.private(`App.Models.Usuario.{{ auth()->id() }}`)
                      .notification((notification) => {
-                         console.log('📩 Nueva notificación recibida via Reverb:', notification);
                          $wire.cargarNotificaciones(true);
                      });
              }
