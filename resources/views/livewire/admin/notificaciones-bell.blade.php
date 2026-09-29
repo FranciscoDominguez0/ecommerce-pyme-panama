@@ -7,6 +7,20 @@
          if (audio) {
              audio.play().then(() => console.log('🔊 Sonido reproducido con éxito')).catch(e => console.warn('⚠️ Audio bloqueado por el navegador. Debes hacer clic en la página primero:', e));
          }
+     "
+     x-init="
+         const setupEcho = () => {
+             if (window.Echo) {
+                 console.log('🔌 Conectando Echo para notificaciones del usuario {{ auth()->id() }}...');
+                 window.Echo.private(`App.Models.Usuario.{{ auth()->id() }}`)
+                     .notification((notification) => {
+                         console.log('📩 Nueva notificación recibida via Reverb:', notification);
+                         $wire.cargarNotificaciones(true);
+                     });
+             }
+         };
+         if (window.Echo) { setupEcho(); } 
+         else { document.addEventListener('DOMContentLoaded', setupEcho); }
      ">
      
     <!-- Audio para notificaciones -->

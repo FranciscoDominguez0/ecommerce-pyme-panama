@@ -17,13 +17,7 @@ class NotificacionesBell extends Component
         $this->cargarNotificaciones(false);
     }
 
-    public function getListeners()
-    {
-        $userId = Auth::id();
-        return [
-            "echo-private:App.Models.Usuario.{$userId},.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated" => 'cargarNotificaciones',
-        ];
-    }
+
 
     public function cargarNotificaciones($playAudio = true)
     {
