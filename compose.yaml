@@ -35,6 +35,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    ports:
+      - "6001:6001"
     env_file:
       - .env
     volumes:
@@ -45,21 +47,6 @@ services:
     networks:
       - backend
       - npm_network   # red de NPM para que hable directo al contenedor
-
-  reverb:
-    image: ecommerce-app:latest
-    container_name: ecommerce_reverb
-    restart: unless-stopped
-    command: php artisan reverb:start --host="0.0.0.0" --port=6001
-    ports:
-      - "6001:6001"
-    env_file:
-      - .env
-    depends_on:
-      - app
-    networks:
-      - backend
-      - npm_network
 
 networks:
   backend:
