@@ -50,28 +50,34 @@
                 })->count();
                 $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
             @endphp
-            <div x-data="{ open: {{ $isVentasActive ? 'true' : 'false' }}, pinned: false }" @click.outside="pinned = false" @sidebar-hover.window="if ($event.detail !== $el) pinned = false" class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
+            <div x-data="{ 
+                    open: {{ $isVentasActive ? 'true' : 'false' }}, 
+                    pinned: false,
+                    pedidosCount: {{ $nuevosPedidosCount }},
+                    devolucionesCount: {{ $nuevasDevolucionesCount }},
+                    get totalCount() { return this.pedidosCount + this.devolucionesCount; }
+                 }" 
+                 @click.outside="pinned = false" 
+                 @sidebar-hover.window="if ($event.detail !== $el) pinned = false"
+                 @actualizar-badges-sidebar.window="pedidosCount = $event.detail.pedidos; devolucionesCount = $event.detail.devoluciones;"
+                 class="nav-group relative" :class="pinned ? 'is-pinned' : ''">
                 <button @click="open = !open; pinned = !pinned;"
                         class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isVentasActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         {{-- Ícono con indicador de notificaciones (solo visible cuando el sidebar está colapsado) --}}
                         <span class="relative">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ $isVentasActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isVentasActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">shopping_cart</span>
-                            @if(($nuevosPedidosCount + $nuevasDevolucionesCount) > 0)
-                                <span class="sidebar-collapsed-badge" style="position:absolute; top:-6px; right:-6px; min-width:16px; height:16px; padding:0 3px; border-radius:999px; background:#f43f5e; color:#fff; font-size:9px; font-weight:800; line-height:16px; text-align:center; box-shadow:0 0 0 2px #1F2937;">
-                                    {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
-                                </span>
-                            @endif
+                                <span x-show="totalCount > 0" class="sidebar-collapsed-badge" style="position:absolute; top:-6px; right:-6px; min-width:16px; height:16px; padding:0 3px; border-radius:999px; background:#f43f5e; color:#fff; font-size:9px; font-weight:800; line-height:16px; text-align:center; box-shadow:0 0 0 2px #1F2937; {{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" x-text="Math.min(totalCount, 99)">
+                                {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
+                            </span>
                         </span>
                         <span class="sidebar-text truncate transition-all duration-300">Ventas</span>
                     </div>
                     {{-- Cuando el sidebar está expandido mostramos también el total junto al chevron --}}
                     <div class="sidebar-text flex items-center gap-1.5">
-                        @if(($nuevosPedidosCount + $nuevasDevolucionesCount) > 0)
-                            <span style="background:#f43f5e; color:#fff; font-size:10px; font-weight:800; padding:1px 6px; border-radius:999px; line-height:16px;">
-                                {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
-                            </span>
-                        @endif
+                        <span x-show="totalCount > 0" style="background:#f43f5e; color:#fff; font-size:10px; font-weight:800; padding:1px 6px; border-radius:999px; line-height:16px; {{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" x-text="Math.min(totalCount, 99)">
+                            {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
+                        </span>
                         <span class="material-symbols-outlined text-[16px] transition-transform duration-300" :class="open ? 'rotate-180' : ''">expand_more</span>
                     </div>
                 </button>
@@ -85,7 +91,7 @@
                         <a href="{{ url('/admin/pedidos') }}" 
                            class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->is('admin/pedidos*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
                             <span>Pedidos</span>
-                            <x-sidebar-badge :count="$nuevosPedidosCount" />
+                            <span x-show="pedidosCount > 0" class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative" style="{{ $nuevosPedidosCount > 0 ? '' : 'display:none;' }}" x-text="pedidosCount"></span>
                         </a>
                     </div>
                     @endcan
@@ -94,7 +100,7 @@
                         <a href="{{ route('admin.devoluciones.index') }}" 
                            class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
                             <span>Devoluciones</span>
-                            <x-sidebar-badge :count="$nuevasDevolucionesCount" />
+                            <span x-show="devolucionesCount > 0" class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative" style="{{ $nuevasDevolucionesCount > 0 ? '' : 'display:none;' }}" x-text="devolucionesCount"></span>
                         </a>
                     </div>
                     @endcan

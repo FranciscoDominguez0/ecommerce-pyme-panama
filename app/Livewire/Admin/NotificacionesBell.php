@@ -17,6 +17,14 @@ class NotificacionesBell extends Component
         $this->cargarNotificaciones(false);
     }
 
+    public function getListeners()
+    {
+        $userId = Auth::id();
+        return [
+            "echo-private:App.Models.Usuario.{$userId},.Illuminate\\Notifications\\Events\\BroadcastNotificationCreated" => 'cargarNotificaciones',
+        ];
+    }
+
     public function cargarNotificaciones($playAudio = true)
     {
         $user = Auth::user();
@@ -29,6 +37,17 @@ class NotificacionesBell extends Component
             if ($playAudio && $this->unreadCount > $conteoAnterior) {
                 $this->dispatch('nueva-notificacion-recibida');
             }
+
+            $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
+                $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                      ->from('estados_pedido')
+                      ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
+                      ->whereNotIn('estados_pedido.estado', ['pendiente', 'pago_confirmado']);
+            })->count();
+            
+            $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
+
+            $this->dispatch('actualizar-badges-sidebar', pedidos: $nuevosPedidosCount, devoluciones: $nuevasDevolucionesCount);
         }
     }
 

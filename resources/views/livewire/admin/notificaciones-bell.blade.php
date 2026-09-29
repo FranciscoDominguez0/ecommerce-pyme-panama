@@ -1,7 +1,6 @@
 <div class="relative shrink-0" 
      x-data="{ open: false }" 
      @click.outside="open = false"
-     wire:poll.5s="cargarNotificaciones"
      @nueva-notificacion-recibida.window="
          console.log('🔔 Evento de notificación recibido en Livewire');
          let audio = document.getElementById('notification-sound');
