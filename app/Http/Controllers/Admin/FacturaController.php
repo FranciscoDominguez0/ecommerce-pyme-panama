@@ -72,6 +72,19 @@ class FacturaController extends Controller
         abort(404, 'PDF no encontrado');
     }
 
+    public function verPdf(Factura $factura)
+    {
+        if ($factura->pdf_ruta && Storage::disk('local')->exists($factura->pdf_ruta)) {
+            $path = Storage::disk('local')->path($factura->pdf_ruta);
+            return response()->file($path, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="Factura_' . $factura->numero . '.pdf"'
+            ]);
+        }
+
+        abort(404, 'PDF no encontrado');
+    }
+
     public function reenviar(Request $request, Factura $factura)
     {
         $request->validate([

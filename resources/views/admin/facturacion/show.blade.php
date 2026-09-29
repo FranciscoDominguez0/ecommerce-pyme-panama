@@ -29,6 +29,12 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
+            <button x-data x-on:click.prevent="$dispatch('open-modal', 'preview-factura')"
+               class="inline-flex items-center px-4 py-2 bg-slate-100 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-md font-semibold text-xs text-slate-800 dark:text-white uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-gray-600 transition w-[150px] justify-center cursor-pointer">
+                <span class="material-symbols-outlined text-[16px] mr-1.5">visibility</span>
+                <span>Ver Previa</span>
+            </button>
+
             <a href="{{ route('admin.facturas.pdf', $factura) }}" 
                x-data="{ downloading: false }" 
                @click="downloading = true; setTimeout(() => downloading = false, 4000)"
@@ -223,6 +229,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para Vista Previa -->
+    <x-modal name="preview-factura" maxWidth="6xl">
+        <div class="p-4 bg-white dark:bg-gray-800">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-gray-700 mb-4">
+                <h3 class="text-lg font-medium text-slate-900 dark:text-white">Vista Previa de Factura {{ $factura->numero }}</h3>
+                <button x-on:click="$dispatch('close-modal', 'preview-factura')" class="text-slate-400 hover:text-slate-500 transition">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="w-full" style="height: 80vh; min-height: 600px;">
+                <iframe src="{{ route('admin.facturas.verPdf', $factura) }}#zoom=90" class="w-full h-full border-0 rounded-md" style="height: 100%; width: 100%;" title="Vista Previa Factura"></iframe>
+            </div>
+        </div>
+    </x-modal>
 </div>
 @endsection
 

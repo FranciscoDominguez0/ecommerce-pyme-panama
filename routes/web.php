@@ -189,6 +189,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::get('/facturas', [AdminFacturaController::class, 'index'])->name('admin.facturas.index');
     Route::get('/facturas/{factura}', [AdminFacturaController::class, 'show'])->name('admin.facturas.show');
     Route::get('/facturas/{factura}/pdf', [AdminFacturaController::class, 'descargarPdf'])->name('admin.facturas.pdf');
+    Route::get('/facturas/{factura}/ver-pdf', [AdminFacturaController::class, 'verPdf'])->name('admin.facturas.verPdf');
     Route::post('/facturas/{factura}/reenviar', [AdminFacturaController::class, 'reenviar'])->name('admin.facturas.reenviar');
 
     // Módulo de Inventario
