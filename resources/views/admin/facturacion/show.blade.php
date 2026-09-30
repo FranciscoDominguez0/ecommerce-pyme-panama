@@ -25,7 +25,7 @@
                     </span>
                 @endif
             </h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Emitida el {{ $factura->emitida_en->format('d/m/Y H:i') }} para <span class="font-medium text-slate-700 dark:text-slate-300">{{ $factura->usuario->nombre ?? 'Desconocido' }} {{ $factura->usuario->apellido }}</span></p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Emitida el {{ $factura->emitida_en->format('d/m/Y h:i A') }} para <span class="font-medium text-slate-700 dark:text-slate-300">{{ $factura->usuario->nombre ?? 'Desconocido' }} {{ $factura->usuario->apellido }}</span></p>
         </div>
         
         <div class="flex flex-wrap gap-2">
@@ -35,15 +35,7 @@
                 <span>Ver Previa</span>
             </button>
 
-            <a href="{{ route('admin.facturas.pdf', $factura) }}" 
-               x-data="{ downloading: false }" 
-               @click="downloading = true; setTimeout(() => downloading = false, 4000)"
-               class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition w-[165px] justify-center">
-                <span x-show="!downloading" class="material-symbols-outlined text-[16px] mr-1.5">download</span>
-                <span x-show="downloading" style="display: none;" class="material-symbols-outlined text-[16px] mr-1.5 animate-spin">sync</span>
-                <span x-text="downloading ? 'Descargando...' : 'Descargar PDF'">Descargar PDF</span>
-            </a>
-            
+
             @if($factura->estado === 'emitida')
                 <form action="{{ route('admin.facturas.reenviar', $factura) }}" method="POST" x-data="{ sending: false }" @submit="sending = true">
                     @csrf
@@ -137,7 +129,7 @@
                                                 @endif
                                             </div>
                                             <div class="whitespace-nowrap text-right text-sm text-slate-500 dark:text-slate-400 flex flex-col">
-                                                <time datetime="{{ $reenvio->enviado_en }}">{{ $reenvio->enviado_en->format('d/m/Y H:i') }}</time>
+                                                <time datetime="{{ $reenvio->enviado_en }}">{{ $reenvio->enviado_en->format('d/m/Y h:i A') }}</time>
                                                 <span class="text-xs text-slate-400 mt-1">{{ $reenvio->usuario->nombre ?? 'Sistema' }}</span>
                                             </div>
                                         </div>

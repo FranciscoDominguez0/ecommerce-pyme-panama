@@ -207,7 +207,7 @@
     <!-- TÍTULO DEL REPORTE -->
     <div class="report-title">Reporte Ejecutivo de {{ $tipoReporte === 'completo' ? 'Inteligencia de Negocio' : ucfirst($tipoReporte) }}</div>
     <div class="report-date">
-        Periodo: {{ $fechaInicio->format('d/m/Y') }} al {{ $fechaFin->format('d/m/Y') }} | Generado el: {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}
+        Periodo: {{ $fechaInicio->format('d/m/Y') }} al {{ $fechaFin->format('d/m/Y') }} | Generado el: {{ \Carbon\Carbon::now()->format('d/m/Y h:i A') }}
     </div>
 
     <!-- RESUMEN EJECUTIVO (KPIs) -->

@@ -203,7 +203,7 @@
                                 {{-- Fecha --}}
                                 <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap font-mono text-[11px]">
                                     {{ $mov->creado_en->format('d/m/Y') }}<br>
-                                    <span class="text-slate-400">{{ $mov->creado_en->format('H:i') }}</span>
+                                    <span class="text-slate-400">{{ $mov->creado_en->format('h:i A') }}</span>
                                 </td>
                                 {{-- Producto --}}
                                 <td class="px-5 py-3.5">

@@ -108,7 +108,7 @@ class StockActualExport implements FromCollection, WithHeadings, WithMapping, Wi
                 $sheet->getStyle('A2')->getFont()->setBold(true)->setSize(12);
                 $sheet->getStyle('A2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-                $sheet->setCellValue('A3', 'Fecha de Generación: ' . now()->format('d/m/Y H:i'));
+                $sheet->setCellValue('A3', 'Fecha de Generación: ' . now()->format('d/m/Y h:i A'));
                 $sheet->mergeCells('A3:G3');
                 $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $sheet->getStyle('A3')->getFont()->getColor()->setARGB(self::COLOR_SUBTITULO);

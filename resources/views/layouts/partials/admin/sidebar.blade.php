@@ -91,7 +91,7 @@
                         <a href="{{ url('/admin/pedidos') }}" 
                            class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->is('admin/pedidos*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
                             <span>Pedidos</span>
-                            <span x-show="pedidosCount > 0" class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative" style="{{ $nuevosPedidosCount > 0 ? '' : 'display:none;' }}" x-text="pedidosCount"></span>
+                            <span x-show="pedidosCount > 0" class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative" style="{{ $nuevosPedidosCount > 0 ? '' : 'display:none;' }}" x-text="pedidosCount"></span>
                         </a>
                     </div>
                     @endcan
@@ -100,7 +100,7 @@
                         <a href="{{ route('admin.devoluciones.index') }}" 
                            class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->routeIs('admin.devoluciones*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
                             <span>Devoluciones</span>
-                            <span x-show="devolucionesCount > 0" class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative" style="{{ $nuevasDevolucionesCount > 0 ? '' : 'display:none;' }}" x-text="devolucionesCount"></span>
+                            <span x-show="devolucionesCount > 0" class="sidebar-text bg-emerald-500 text-white text-[10px] font-extrabold w-5 h-5 flex items-center justify-center rounded-full shadow-sm shadow-emerald-500/40 animate-pulse relative" style="{{ $nuevasDevolucionesCount > 0 ? '' : 'display:none;' }}" x-text="devolucionesCount"></span>
                         </a>
                     </div>
                     @endcan

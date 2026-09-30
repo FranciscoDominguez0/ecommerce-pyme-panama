@@ -222,7 +222,7 @@
     <!-- TÍTULO DEL REPORTE -->
     <div class="report-title">Reporte de Valorización de Inventario</div>
     <div class="report-date">
-        Fecha de Emisión: {{ \Carbon\Carbon::now()->format('d/m/Y \a \l\a\s H:i') }} | Generado por: Administrador
+        Fecha de Emisión: {{ \Carbon\Carbon::now()->format('d/m/Y \a \l\a\s h:i A') }} | Generado por: Administrador
     </div>
 
     <!-- RESUMEN EJECUTIVO (KPIs) -->

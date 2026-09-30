@@ -65,7 +65,7 @@ if ($uri !== '/' && file_exists($publicPath.$uri) && !is_dir($publicPath.$uri)) 
     return true;
 }
 
-$formattedDateTime = date('D M j H:i:s Y');
+$formattedDateTime = date('D M j h:i:s A Y');
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 $remoteAddress = $_SERVER['REMOTE_ADDR'].':'.$_SERVER['REMOTE_PORT'];

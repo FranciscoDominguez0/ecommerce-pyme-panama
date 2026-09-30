@@ -39,5 +39,20 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Permission::observe(\App\Observers\PermissionObserver::class);
         \App\Models\Brand::observe(\App\Observers\BrandObserver::class);
         \App\Models\Categoria::observe(\App\Observers\CategoriaObserver::class);
+
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Auth\Events\Login::class,
+            function ($event) {
+                if ($event->user instanceof \App\Models\Usuario) {
+                    // Actualizar silenciosamente sin disparar eventos extra que causen loops
+                    \Illuminate\Support\Facades\DB::table('usuarios')
+                        ->where('id', $event->user->id)
+                        ->update([
+                            'ultimo_login_en' => now(),
+                            'ultimo_login_ip' => request()->ip()
+                        ]);
+                }
+            }
+        );
     }
 }

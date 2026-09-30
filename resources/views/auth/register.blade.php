@@ -95,7 +95,8 @@
                                    value="{{ old('telefono') }}"
                                    placeholder="6621-8585"
                                    autocomplete="tel"
-                                   type="tel">
+                                   type="tel"
+                                   maxlength="9">
                         </div>
                         @error('telefono')
                             <p class="text-xs text-red-600 font-medium">{{ $message }}</p>
@@ -276,6 +277,15 @@
 
             confirm.addEventListener('input', checkPasswordsMatch);
             pwd.addEventListener('input', checkPasswordsMatch);
+
+            // Phone formatting (XXXX-XXXX)
+            const telefonoInput = document.getElementById('telefono');
+            if (telefonoInput) {
+                telefonoInput.addEventListener('input', function(e) {
+                    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,4})(\d{0,4})/);
+                    e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2];
+                });
+            }
 
             // Loading state on form submit
             const form = document.getElementById('register-form');

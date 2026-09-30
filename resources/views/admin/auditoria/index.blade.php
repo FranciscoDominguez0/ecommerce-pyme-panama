@@ -84,7 +84,7 @@
                     @foreach($logs as $log)
                     <tr class="hover:bg-slate-50 dark:hover:bg-gray-700/30 transition-colors">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 dark:text-white dark:text-white font-medium">
-                            {{ $log->creado_en->format('d M Y, H:i') }}
+                            {{ $log->creado_en->format('d M Y, h:i A') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">

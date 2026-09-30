@@ -96,7 +96,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-400">
-                            {{ $pedido->creado_en->format('d/m/Y H:i') }}
+                            {{ $pedido->creado_en->format('d/m/Y h:i A') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-white">
                             ${{ number_format($pedido->total, 2) }}

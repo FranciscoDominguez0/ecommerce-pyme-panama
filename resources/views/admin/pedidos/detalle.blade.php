@@ -40,7 +40,7 @@
                     </span>
                 @endif
             </h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y H:i') }} por <span class="font-medium text-slate-700 dark:text-slate-300">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span></p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y h:i A') }} por <span class="font-medium text-slate-700 dark:text-slate-300">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span></p>
         </div>
         
         <div class="flex flex-wrap gap-2">
@@ -241,7 +241,7 @@
                                                 @endif
                                             </div>
                                             <div class="whitespace-nowrap text-right text-sm text-slate-500 dark:text-slate-400 flex flex-col">
-                                                <time datetime="{{ $historial->creado_en }}">{{ $historial->creado_en->format('d/m/Y H:i') }}</time>
+                                                <time datetime="{{ $historial->creado_en }}">{{ $historial->creado_en->format('d/m/Y h:i A') }}</time>
                                                 <span class="text-xs text-slate-400 mt-1">{{ $historial->usuario->nombre ?? 'Sistema' }}</span>
                                             </div>
                                         </div>

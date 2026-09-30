@@ -191,7 +191,7 @@
                                         <td class="py-4 px-6">
                                             <div class="flex flex-col">
                                                 <span class="text-sm font-bold text-slate-900 dark:text-white">#{{ str_pad($pedido->numero_pedido ?? $pedido->id, 5, '0', STR_PAD_LEFT) }}</span>
-                                                <span class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ $pedido->creado_en->format('d/m/Y H:i') }}</span>
+                                                <span class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ $pedido->creado_en->format('d/m/Y h:i A') }}</span>
                                             </div>
                                         </td>
                                         <td class="py-4 px-6">
