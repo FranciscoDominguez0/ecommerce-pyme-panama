@@ -9,11 +9,10 @@ use App\Models\VarianteProducto;
 /**
  * Pruebas del servicio de productos y la atomicidad del guardado.
  *
- * REPORTE PREVIO: `app/Services/ProductoService.php` existe pero está VACÍO
- * (0 bytes). No hay lógica de servicio. La creación/actualización de productos
- * con variantes se hace directamente en `ProductoController::update()` dentro
- * de un `DB::transaction` (transacción real). Estas pruebas verifican el
- * comportamiento transaccional tal y como está implementado.
+ * REPORTE ACTUAL: `app/Services/ProductoService.php` contiene la lógica
+ * extraída desde `ProductoController` como parte del refactoring.
+ * Estas pruebas verifican el comportamiento transaccional tal y como
+ * está implementado ahora usando el Service.
  */
 class ServicioProductoTest extends BaseAdminTest
 {
@@ -22,7 +21,7 @@ class ServicioProductoTest extends BaseAdminTest
         // Documenta la incompletitud: el archivo existe pero no tiene métodos.
         $archivo = base_path('app/Services/ProductoService.php');
         $this->assertFileExists($archivo);
-        $this->assertEmpty(file_get_contents($archivo), 'Se esperaba ProductoService vacío (estado actual documentado).');
+        $this->assertNotEmpty(file_get_contents($archivo), 'Se esperaba que ProductoService ya contenga la logica (refactorizado).');
     }
 
     public function test_la_actualizacion_de_producto_con_variantes_es_atomica(): void
