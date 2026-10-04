@@ -14,13 +14,25 @@ class UsuarioController extends Controller
     /**
      * Listado de usuarios filtrado por rol.
      */
-    public function index(Role $rol)
+    public function index(Request $request, Role $rol)
     {
-        $usuarios = Usuario::whereHas('roles', function($q) use ($rol) {
+        $busqueda = trim($request->input('buscar', ''));
+
+        $query = Usuario::whereHas('roles', function($q) use ($rol) {
             $q->where('roles.id', $rol->id);
-        })->orderBy('creado_en', 'desc')->paginate(10);
+        });
+
+        if (!empty($busqueda)) {
+            $query->where(function($q) use ($busqueda) {
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereRaw('unaccent(apellido) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereRaw('unaccent(email) ILIKE unaccent(?)', ["%{$busqueda}%"]);
+            });
+        }
+
+        $usuarios = $query->orderBy('creado_en', 'desc')->paginate(10)->withQueryString();
         
-        return view('admin.usuarios.detalle-rol', compact('rol', 'usuarios'));
+        return view('admin.usuarios.detalle-rol', compact('rol', 'usuarios', 'busqueda'));
     }
 
     /**

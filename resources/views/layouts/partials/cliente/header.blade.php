@@ -23,15 +23,110 @@
             </div>
 
             <!-- Search Bar -->
-            <div class="hidden md:flex flex-1 max-w-md mx-4">
+            <div class="hidden md:flex flex-1 max-w-md mx-4 relative" x-data="predictiveSearch()">
                 <form action="{{ route('cliente.catalogo') }}" method="GET" class="w-full relative">
-                    <input type="text" name="buscar" id="global-search-input" value="{{ request('buscar') }}" placeholder="Buscar productos, categorías..."
+                    <input type="text" name="buscar" id="global-search-input" value="{{ request('buscar') }}" 
+                        placeholder="Buscar productos, categorías..."
+                        autocomplete="off"
+                        x-model="query"
+                        @input.debounce.300ms="fetchResults"
+                        @focus="open = true"
+                        @click.outside="open = false"
+                        @keydown.escape.window="open = false"
                         class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 focus:bg-white focus:ring-1 focus:ring-[#006148] focus:border-[#006148] transition-all" />
                     <button type="submit" class="absolute left-2.5 top-2 text-gray-400 hover:text-[#006148] transition-colors">
                         <span class="material-symbols-outlined text-[16px]">search</span>
                     </button>
                 </form>
+
+                <!-- Dropdown de resultados predictivos -->
+                <div x-show="open && (loading || results.length > 0 || (query.length >= 2 && results.length === 0))" 
+                     style="display: none;"
+                     x-transition.opacity.duration.200ms
+                     class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 shadow-xl rounded-xl overflow-hidden z-50 flex flex-col">
+                     
+                     <template x-if="loading">
+                         <div class="p-4 text-center text-xs text-gray-500 flex items-center justify-center gap-2">
+                             <span class="material-symbols-outlined animate-spin text-[16px]">progress_activity</span>
+                             <span>Buscando...</span>
+                         </div>
+                     </template>
+
+                     <template x-if="!loading && results.length > 0">
+                         <div>
+                             <div class="px-4 py-2 bg-gray-50/50 border-b border-gray-100 text-[10px] font-bold text-gray-500 uppercase tracking-wider flex justify-between items-center">
+                                 <span>Productos Sugeridos</span>
+                                 <span x-text="results.length"></span>
+                             </div>
+                             <ul class="max-h-80 overflow-y-auto">
+                                 <template x-for="producto in results" :key="producto.url">
+                                     <li>
+                                         <a :href="producto.url" class="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 group">
+                                             <div class="w-10 h-10 rounded-md border border-gray-100 bg-white shrink-0 overflow-hidden flex items-center justify-center">
+                                                 <template x-if="producto.imagen">
+                                                     <img :src="producto.imagen" :alt="producto.nombre" class="w-full h-full object-cover">
+                                                 </template>
+                                                 <template x-if="!producto.imagen">
+                                                     <span class="material-symbols-outlined text-gray-300 text-[18px]">image</span>
+                                                 </template>
+                                             </div>
+                                             <div class="flex-1 min-w-0">
+                                                 <div class="text-xs font-semibold text-[#002349] group-hover:text-[#006148] truncate transition-colors" x-text="producto.nombre"></div>
+                                                 <div class="text-[10px] text-gray-400 mt-0.5 truncate" x-text="producto.sku ? 'SKU: ' + producto.sku : ''"></div>
+                                             </div>
+                                             <div class="text-xs font-bold text-[#006148] shrink-0" x-text="'$' + producto.precio"></div>
+                                         </a>
+                                     </li>
+                                 </template>
+                             </ul>
+                             <div class="p-2 border-t border-gray-100 text-center bg-gray-50/50 hover:bg-gray-100 transition-colors cursor-pointer" @click="$el.closest('form').submit()">
+                                 <a :href="'{{ route('cliente.catalogo') }}?buscar=' + encodeURIComponent(query)" class="text-[11px] font-bold text-[#002349] inline-flex items-center gap-1">
+                                     Ver todos los resultados
+                                     <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                 </a>
+                             </div>
+                         </div>
+                     </template>
+
+                     <template x-if="!loading && !results.length && query.length >= 2">
+                         <div class="p-6 text-center">
+                             <span class="material-symbols-outlined text-gray-300 text-[32px] mb-2 block">search_off</span>
+                             <p class="text-xs text-gray-500 font-medium">No se encontraron productos para "<span x-text="query" class="text-gray-800 font-bold"></span>"</p>
+                         </div>
+                     </template>
+                </div>
             </div>
+
+            <!-- Script de Alpine.js para la búsqueda predictiva -->
+            <script>
+                function predictiveSearch() {
+                    return {
+                        open: false,
+                        query: '{{ request('buscar') }}',
+                        results: [],
+                        loading: false,
+                        fetchResults() {
+                            if (this.query.length < 2) {
+                                this.results = [];
+                                this.open = false;
+                                return;
+                            }
+                            this.loading = true;
+                            this.open = true;
+                            fetch('{{ route('cliente.buscar-predictivo') }}?buscar=' + encodeURIComponent(this.query))
+                                .then(res => res.json())
+                                .then(data => {
+                                    this.results = data;
+                                    this.loading = false;
+                                })
+                                .catch(() => {
+                                    this.results = [];
+                                    this.loading = false;
+                                });
+                        }
+                    }
+                }
+            </script>
 
             <!-- Navigation Links & User Menu -->
             <div class="flex items-center gap-3">

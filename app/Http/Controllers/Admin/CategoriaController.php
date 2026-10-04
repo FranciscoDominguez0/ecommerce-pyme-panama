@@ -41,9 +41,9 @@ class CategoriaController extends Controller
         // Filtro por búsqueda
         if (!empty($busqueda)) {
             $query->where(function ($q) use ($busqueda) {
-                $q->where('nombre', 'LIKE', "%{$busqueda}%")
-                  ->orWhere('slug', 'LIKE', "%{$busqueda}%")
-                  ->orWhere('descripcion', 'LIKE', "%{$busqueda}%");
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereRaw('unaccent(slug) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereRaw('unaccent(descripcion) ILIKE unaccent(?)', ["%{$busqueda}%"]);
             });
         }
 

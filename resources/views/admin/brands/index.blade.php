@@ -29,7 +29,7 @@
 
     <!-- Filtros y Búsqueda -->
     <div class="card-elevated rounded-xl p-4 sm:p-5">
-        <form method="GET" action="{{ route('admin.brands.index') }}" class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <form method="GET" action="{{ route('admin.brands.index') }}" class="flex flex-col sm:flex-row gap-3 items-center justify-between" x-data="adminAutoFilter">
             
             <!-- Barra de búsqueda -->
             <div class="flex-1 w-full sm:w-auto relative">
@@ -38,6 +38,7 @@
                     <input type="text" 
                            name="buscar" 
                            value="{{ $busqueda }}" 
+                           x-on:input="autoSubmit()"
                            placeholder="Buscar marca por nombre o slug..." 
                            class="bg-transparent border-none focus:ring-0 w-full text-xs text-slate-800 dark:text-gray-100 placeholder:text-slate-400 p-0 ml-2 outline-none"/>
                     @if(!empty($busqueda))
@@ -52,7 +53,7 @@
             <div class="w-full sm:w-auto flex items-center gap-2.5 flex-wrap">
                 <div class="relative w-full sm:w-44">
                     <select name="verificada" 
-                            onchange="this.form.submit()" 
+                            x-on:change="autoSubmit()" 
                             class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 dark:text-gray-100 font-medium focus:bg-white dark:bg-[#121415] focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
                         <option value="all" {{ $filtroVerificada === 'all' ? 'selected' : '' }}>Todas (Verificación)</option>
                         <option value="yes" {{ $filtroVerificada === 'yes' ? 'selected' : '' }}>Verificadas (Oficial)</option>
@@ -62,11 +63,6 @@
                         expand_more
                     </span>
                 </div>
-
-                <button type="submit" class="px-3.5 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1 shrink-0 cursor-pointer">
-                    <span class="material-symbols-outlined text-[15px]">filter_list</span>
-                    <span>Filtrar</span>
-                </button>
 
                 @if(!empty($busqueda) || $filtroVerificada !== 'all')
                     <a href="{{ route('admin.brands.index') }}" class="px-3 py-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-gray-100 font-semibold transition-colors flex items-center gap-1 shrink-0">

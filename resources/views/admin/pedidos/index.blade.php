@@ -12,10 +12,10 @@
 
     <!-- Filtros -->
     <div class="card-elevated rounded-xl p-4 sm:p-5">
-        <form action="{{ route('admin.pedidos.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4">
+        <form action="{{ route('admin.pedidos.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4" x-data="adminAutoFilter">
             <div class="w-full sm:w-64">
                 <label for="estado" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Filtrar por Estado</label>
-                <select name="estado" id="estado" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
+                <select name="estado" id="estado" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" x-on:change="autoSubmit()">
                     <option value="todos" {{ request('estado') === 'todos' ? 'selected' : '' }}>Todos los pedidos</option>
                     <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                     <option value="pago_confirmado" {{ request('estado') === 'pago_confirmado' ? 'selected' : '' }}>Pago Confirmado</option>
@@ -35,13 +35,8 @@
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
                     </span>
-                    <input type="text" name="q" id="q" value="{{ request('q') }}" placeholder="N° Pedido o Cliente" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                    <input type="text" name="q" id="q" value="{{ request('q') }}" x-on:input="autoSubmit()" placeholder="N° Pedido o Cliente" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
                 </div>
-            </div>
-            <div class="flex items-end">
-                <button type="submit" class="bg-slate-900 text-white rounded-md px-4 py-2 text-sm font-medium hover:bg-slate-800 transition-colors h-[38px]">
-                    Buscar
-                </button>
             </div>
             @if((request('estado') && request('estado') !== 'todos') || request('q'))
             <div class="flex items-end mb-1">

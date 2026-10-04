@@ -115,8 +115,8 @@ class Brand extends Model
         if (empty($term))
             return $query;
         return $query->where(function ($q) use ($term) {
-            $q->where('name', 'ILIKE', "%{$term}%")
-                ->orWhere('slug', 'ILIKE', "%{$term}%");
+            $q->whereRaw('unaccent(name) ILIKE unaccent(?)', ["%{$term}%"])
+                ->orWhereRaw('unaccent(slug) ILIKE unaccent(?)', ["%{$term}%"]);
         });
     }
 }

@@ -62,12 +62,23 @@
             </div>
         </div>
     @else
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Usuarios con este rol</h3>
-            <a href="{{ route('admin.usuarios.create', $rol->id) }}" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2 tracking-wide">
-                <span class="material-symbols-outlined text-[18px]">add</span>
-                Agregar usuario
-            </a>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white shrink-0">Usuarios con este rol</h3>
+            
+            <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-3 sm:items-center">
+                <form method="GET" action="{{ route('admin.usuarios.por-rol', $rol->id) }}" class="relative w-full sm:w-64" x-data="adminAutoFilter">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px] pointer-events-none">search</span>
+                    <input type="text" name="buscar" value="{{ $busqueda ?? '' }}" placeholder="Buscar por nombre, apellido, email..." 
+                        class="w-full pl-9 pr-3 py-2 text-xs bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none"
+                        x-ref="searchInput"
+                        x-on:input="autoSubmit()">
+                </form>
+
+                <a href="{{ route('admin.usuarios.create', $rol->id) }}" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 tracking-wide shrink-0">
+                    <span class="material-symbols-outlined text-[18px]">add</span>
+                    Agregar usuario
+                </a>
+            </div>
         </div>
         
         <!-- Data Table -->

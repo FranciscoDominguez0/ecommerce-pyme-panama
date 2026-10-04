@@ -48,14 +48,14 @@ class ProductoController extends Controller
 
         if (!empty($buscar)) {
             $query->where(function ($q) use ($buscar) {
-                $q->where('nombre', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion_corta', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion', 'like', "%{$buscar}%");
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"])
+                    ->orWhereRaw('unaccent(descripcion_corta) ILIKE unaccent(?)', ["%{$buscar}%"])
+                    ->orWhereRaw('unaccent(descripcion) ILIKE unaccent(?)', ["%{$buscar}%"]);
             });
         }
 
         if (!empty($buscarSku)) {
-            $query->where('sku', 'like', "%{$buscarSku}%");
+            $query->whereRaw('unaccent(sku) ILIKE unaccent(?)', ["%{$buscarSku}%"]);
         }
 
         if ($categoriaId !== 'all' && is_numeric($categoriaId)) {

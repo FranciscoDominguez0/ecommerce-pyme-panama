@@ -92,6 +92,38 @@ class CatalogoController extends Controller
     }
 
     /**
+     * Búsqueda predictiva AJAX
+     */
+    public function searchPredictivo(Request $request)
+    {
+        $buscar = $request->input('buscar', '');
+        if (empty($buscar) || strlen($buscar) < 2) {
+            return response()->json([]);
+        }
+
+        $productos = Producto::with('imagenes')
+            ->sinEliminar()
+            ->activos()
+            ->where(function ($q) use ($buscar) {
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(sku) ILIKE unaccent(?)', ["%{$buscar}%"]);
+            })
+            ->take(6)
+            ->get()
+            ->map(function ($producto) {
+                return [
+                    'nombre' => $producto->nombre,
+                    'sku' => $producto->sku,
+                    'url' => route('cliente.producto.detalle', $producto->slug),
+                    'imagen' => $producto->imagen_url,
+                    'precio' => number_format($producto->precio, 2)
+                ];
+            });
+
+        return response()->json($productos);
+    }
+
+    /**
      * Registra el email de un cliente para avisarle cuando el producto vuelva a tener stock.
      */
     public function solicitarNotificacionStock(Request $request)
@@ -167,9 +199,9 @@ class CatalogoController extends Controller
     {
         if (! empty($buscar)) {
             $query->where(function (Builder $q) use ($buscar) {
-                $q->where('nombre', 'like', "%{$buscar}%")
-                  ->orWhere('descripcion_corta', 'like', "%{$buscar}%")
-                  ->orWhere('sku', 'like', "%{$buscar}%");
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(descripcion_corta) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(sku) ILIKE unaccent(?)', ["%{$buscar}%"]);
             });
         }
 

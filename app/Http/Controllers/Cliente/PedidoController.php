@@ -30,6 +30,10 @@ class PedidoController extends Controller
             $query->whereHas('ultimoEstado', fn ($q) => $q->where('estado', 'entregado'));
         }
 
+        if ($request->filled('buscar')) {
+            $query->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', ['%' . $request->buscar . '%']);
+        }
+
         $pedidos = $query->paginate(9)->withQueryString();
 
         return view('cliente.pedidos.index', compact('pedidos'));

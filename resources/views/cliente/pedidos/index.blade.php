@@ -23,55 +23,133 @@
 
 @section('content')
 <x-cliente.perfil.layout active="pedidos">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
+    <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6">
         <div>
             <h3 class="text-base font-bold text-primary">Historial de Pedidos</h3>
             <p class="text-xs text-on-surface-variant mt-0.5">Consulta el estado y detalle de tus pedidos anteriores.</p>
         </div>
-        <div class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 hide-scrollbar shrink-0">
-            <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate class="whitespace-nowrap px-4 py-2 rounded-full {{ !request('estado') ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Todos</a>
-            <a href="{{ route('cliente.perfil.pedidos.index', ['estado' => 'pendiente']) }}" wire:navigate class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'pendiente' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Pendientes</a>
-            <a href="{{ route('cliente.perfil.pedidos.index', ['estado' => 'entregado']) }}" wire:navigate class="whitespace-nowrap px-4 py-2 rounded-full {{ request('estado') === 'entregado' ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface hover:bg-surface-dim border border-outline-variant' }} font-label-caps text-xs font-bold tracking-wider transition-colors uppercase">Completados</a>
-        </div>
+        
+        <form method="GET" action="{{ route('cliente.perfil.pedidos.index') }}" class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto shrink-0 items-start sm:items-center" x-data="{ submitTimeout: null, autoSubmit() { clearTimeout(this.submitTimeout); this.submitTimeout = setTimeout(() => this.$el.closest('form').submit(), 500); } }">
+            
+            <!-- Filtro Estado (Pills) -->
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto pb-1 sm:pb-0">
+                <a href="{{ route('cliente.perfil.pedidos.index', array_merge(request()->except('estado', 'page'), ['estado' => ''])) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {{ !request('estado') ? 'bg-primary text-on-primary shadow-sm' : 'bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-dim' }}">
+                    Todos
+                </a>
+                <a href="{{ route('cliente.perfil.pedidos.index', array_merge(request()->except('estado', 'page'), ['estado' => 'pendiente'])) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {{ request('estado') === 'pendiente' ? 'bg-tertiary text-on-tertiary shadow-sm' : 'bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-dim' }}">
+                    Pendientes
+                </a>
+                <a href="{{ route('cliente.perfil.pedidos.index', array_merge(request()->except('estado', 'page'), ['estado' => 'entregado'])) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all {{ request('estado') === 'entregado' ? 'bg-secondary text-on-secondary shadow-sm' : 'bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:bg-surface-dim' }}">
+                    Completados
+                </a>
+            </div>
+
+            <!-- Buscador -->
+            <div class="relative w-full sm:w-64">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-[20px]">search</span>
+                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar pedido #..." @input="autoSubmit()"
+                    class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-xl text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-on-surface-variant/50">
+            </div>
+            
+            @if(request('estado'))
+                <input type="hidden" name="estado" value="{{ request('estado') }}">
+            @endif
+            <button type="submit" class="hidden">Buscar</button>
+        </form>
     </div>
 
     @if($pedidos->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Desktop Table -->
+        <div class="hidden md:block bg-surface-container-lowest border border-outline-variant rounded-xl overflow-x-auto ambient-shadow">
+            <table class="w-full text-left min-w-[800px]">
+                <thead class="bg-surface-container-low border-b border-outline-variant">
+                    <tr>
+                        <th class="py-4 px-6 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Pedido / Producto</th>
+                        <th class="py-4 px-6 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Fecha</th>
+                        <th class="py-4 px-6 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Total</th>
+                        <th class="py-4 px-6 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Estado</th>
+                        <th class="py-4 px-6 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant/50">
+                    @foreach($pedidos as $pedido)
+                        @php
+                            $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
+                            $configEstado = match($ultimoEstado) {
+                                'entregado' => [ 'chip_bg' => 'bg-secondary/10', 'chip_text' => 'text-secondary', 'icon' => 'check_circle' ],
+                                'pendiente', 'pago_confirmado', 'en_preparacion' => [ 'chip_bg' => 'bg-tertiary-container/20', 'chip_text' => 'text-tertiary', 'icon' => 'schedule' ],
+                                'cancelado', 'devolucion_solicitada', 'pago_rechazado' => [ 'chip_bg' => 'bg-primary/10', 'chip_text' => 'text-primary', 'icon' => 'flag' ],
+                                'reembolsado' => [ 'chip_bg' => 'bg-slate-100', 'chip_text' => 'text-slate-800', 'icon' => 'currency_exchange' ],
+                                default => [ 'chip_bg' => 'bg-blue-100', 'chip_text' => 'text-blue-700', 'icon' => 'local_shipping' ]
+                            };
+                            $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
+                        @endphp
+                        <tr class="hover:bg-surface-dim/30 transition-colors">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-lg border border-outline-variant overflow-hidden bg-surface-container-low shrink-0 flex items-center justify-center">
+                                        @php
+                                            $primerItem = $pedido->items->first();
+                                            $imagenUrl = null;
+                                            if ($primerItem) {
+                                                if ($primerItem->variante && $primerItem->variante->imagen_ruta) {
+                                                    $imagenUrl = asset('storage/'.$primerItem->variante->imagen_ruta);
+                                                } elseif ($primerItem->producto && $primerItem->producto->imagenes->first()) {
+                                                    $imagenUrl = asset($primerItem->producto->imagenes->first()->ruta);
+                                                }
+                                            }
+                                        @endphp
+                                        @if($imagenUrl)
+                                            <img src="{{ $imagenUrl }}" alt="Producto" class="w-full h-full object-cover">
+                                        @else
+                                            <span class="material-symbols-outlined text-outline">image</span>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-primary">#{{ $pedido->numero_pedido }}</div>
+                                        <div class="text-[11px] text-on-surface-variant mt-0.5 max-w-[200px] lg:max-w-[300px] truncate">
+                                            {{ $primerItem?->producto?->nombre ?? 'Producto Desconocido' }} 
+                                            @if($pedido->items->count() > 1)
+                                                <span class="font-bold text-secondary">y {{ $pedido->items->count() - 1 }} más</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-sm text-on-surface-variant font-medium">{{ $pedido->creado_en->format('d/m/Y') }}</td>
+                            <td class="py-4 px-6 text-sm font-bold text-primary">${{ number_format($pedido->total, 2) }}</td>
+                            <td class="py-4 px-6">
+                                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full {{ $configEstado['chip_bg'] }} {{ $configEstado['chip_text'] }} font-label-caps text-[11px] font-bold tracking-wider uppercase">
+                                    <span class="material-symbols-outlined text-[14px]">{{ $configEstado['icon'] }}</span>
+                                    {{ $labelEstado }}
+                                </div>
+                            </td>
+                            <td class="py-4 px-6 text-right">
+                                <a href="{{ route('cliente.perfil.pedidos.detalle', $pedido->id) }}" wire:navigate class="inline-flex items-center gap-1.5 px-4 py-2 border border-outline-variant hover:border-primary text-on-surface-variant hover:text-primary rounded-lg text-[11px] font-bold tracking-wider uppercase transition-colors">
+                                    Ver Detalle
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="grid grid-cols-1 md:hidden gap-6">
             @foreach($pedidos as $pedido)
                 @php
                     $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
-
                     $configEstado = match($ultimoEstado) {
-                        'entregado' => [
-                            'bar' => 'bg-secondary/80',
-                            'chip_bg' => 'bg-secondary/10',
-                            'chip_text' => 'text-secondary',
-                            'icon' => 'check_circle',
-                        ],
-                        'pendiente', 'pago_confirmado', 'en_preparacion' => [
-                            'bar' => 'bg-tertiary-container',
-                            'chip_bg' => 'bg-tertiary-container/20',
-                            'chip_text' => 'text-tertiary',
-                            'icon' => 'schedule',
-                        ],
-                        'cancelado', 'devolucion_solicitada', 'pago_rechazado' => [
-                            'bar' => 'bg-primary',
-                            'chip_bg' => 'bg-primary/10',
-                            'chip_text' => 'text-primary',
-                            'icon' => 'flag',
-                        ],
-                        'reembolsado' => [
-                            'bar' => 'bg-slate-700',
-                            'chip_bg' => 'bg-slate-100',
-                            'chip_text' => 'text-slate-800',
-                            'icon' => 'currency_exchange',
-                        ],
-                        default => [
-                            'bar' => 'bg-blue-500',
-                            'chip_bg' => 'bg-blue-100',
-                            'chip_text' => 'text-blue-700',
-                            'icon' => 'local_shipping',
-                        ]
+                        'entregado' => [ 'bar' => 'bg-secondary/80', 'chip_bg' => 'bg-secondary/10', 'chip_text' => 'text-secondary', 'icon' => 'check_circle', ],
+                        'pendiente', 'pago_confirmado', 'en_preparacion' => [ 'bar' => 'bg-tertiary-container', 'chip_bg' => 'bg-tertiary-container/20', 'chip_text' => 'text-tertiary', 'icon' => 'schedule', ],
+                        'cancelado', 'devolucion_solicitada', 'pago_rechazado' => [ 'bar' => 'bg-primary', 'chip_bg' => 'bg-primary/10', 'chip_text' => 'text-primary', 'icon' => 'flag', ],
+                        'reembolsado' => [ 'bar' => 'bg-slate-700', 'chip_bg' => 'bg-slate-100', 'chip_text' => 'text-slate-800', 'icon' => 'currency_exchange', ],
+                        default => [ 'bar' => 'bg-blue-500', 'chip_bg' => 'bg-blue-100', 'chip_text' => 'text-blue-700', 'icon' => 'local_shipping', ]
                     };
                     $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
                 @endphp

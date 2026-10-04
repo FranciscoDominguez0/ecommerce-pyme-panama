@@ -100,7 +100,7 @@
     </div>
 
     <!-- Barra de Búsqueda y Filtros con Formularios Reales -->
-    <form id="form-filtro-productos" method="GET" action="{{ route('admin.productos.index') }}" class="card-elevated p-4 rounded-xl">
+    <form id="form-filtro-productos" method="GET" action="{{ route('admin.productos.index') }}" class="card-elevated p-4 rounded-xl" x-data="adminAutoFilter">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             
             <!-- Búsqueda por Nombre -->
@@ -113,6 +113,7 @@
                     <input type="text" 
                            name="buscar" 
                            value="{{ $buscar }}" 
+                           x-on:input="autoSubmit()"
                            placeholder="Ej. MacBook Air, Teclado, Impresora..." 
                            class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>
@@ -133,6 +134,7 @@
                     <input type="text" 
                            name="sku" 
                            value="{{ $buscarSku }}" 
+                           x-on:input="autoSubmit()"
                            placeholder="PROD-001..." 
                            class="w-full pl-10 pr-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 font-mono placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>
@@ -141,7 +143,7 @@
             <!-- Filtro por Categoría -->
             <div class="lg:col-span-2">
                 <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Categoría</label>
-                <select name="categoria_id" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                <select name="categoria_id" x-on:change="autoSubmit()" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     <option value="all">Todas las categorías</option>
                     @foreach($categorias as $cat)
                         <option value="{{ $cat->id }}" @selected($categoriaId == $cat->id)>{{ $cat->nombre }}</option>
@@ -152,7 +154,7 @@
             <!-- Filtro por Estado -->
             <div class="lg:col-span-2">
                 <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Estado</label>
-                <select name="estado" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                <select name="estado" x-on:change="autoSubmit()" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                     <option value="all" @selected($filtroEstado == 'all')>Todos los estados</option>
                     <option value="activo" @selected($filtroEstado == 'activo')>Activo (Visible)</option>
                     <option value="inactivo" @selected($filtroEstado == 'inactivo')>Inactivo (Borrador)</option>
@@ -160,19 +162,14 @@
             </div>
 
             <!-- Filtro por Stock -->
-            <div class="lg:col-span-2 flex items-end gap-2">
-                <div class="flex-1">
-                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Stock</label>
-                    <select name="stock" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
-                        <option value="all" @selected($filtroStock == 'all')>Todos</option>
-                        <option value="en_stock" @selected($filtroStock == 'en_stock')>En Stock (>5)</option>
-                        <option value="bajo_stock" @selected($filtroStock == 'bajo_stock')>Bajo Stock (1-5)</option>
-                        <option value="agotado" @selected($filtroStock == 'agotado')>Agotado (0)</option>
-                    </select>
-                </div>
-                <button type="submit" class="p-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-xs transition-colors" title="Aplicar filtros">
-                    <span class="material-symbols-outlined text-[20px]">filter_alt</span>
-                </button>
+            <div class="lg:col-span-2">
+                <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Stock</label>
+                <select name="stock" x-on:change="autoSubmit()" class="w-full px-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
+                    <option value="all" @selected($filtroStock == 'all')>Todos</option>
+                    <option value="en_stock" @selected($filtroStock == 'en_stock')>En Stock (>5)</option>
+                    <option value="bajo_stock" @selected($filtroStock == 'bajo_stock')>Bajo Stock (1-5)</option>
+                    <option value="agotado" @selected($filtroStock == 'agotado')>Agotado (0)</option>
+                </select>
             </div>
 
         </div>

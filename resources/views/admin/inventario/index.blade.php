@@ -151,16 +151,16 @@
             {{-- Filter bar --}}
             <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
                 <h3 class="text-sm font-extrabold text-slate-800 dark:text-gray-100">Historial de Movimientos</h3>
-                <form method="GET" action="{{ route('admin.inventario.index') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <form method="GET" action="{{ route('admin.inventario.index') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto" x-data="adminAutoFilter">
                     {{-- Search --}}
                     <div class="flex items-center bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 focus-within:border-slate-400 w-full sm:w-52">
                         <span class="material-symbols-outlined text-slate-400 text-[16px] mr-1.5">search</span>
-                        <input type="text" name="q" value="{{ request('q') }}"
+                        <input type="text" name="q" value="{{ request('q') }}" x-on:input="autoSubmit()"
                                placeholder="Buscar producto o motivo…"
                                class="bg-transparent border-none focus:ring-0 text-xs text-slate-700 dark:text-slate-300 w-full p-0 placeholder-slate-400 dark:placeholder-gray-500">
                     </div>
                     {{-- Tipo --}}
-                    <select name="tipo"
+                    <select name="tipo" x-on:change="autoSubmit()"
                             class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#121415] text-slate-700 dark:text-slate-300 focus:border-slate-400 focus:ring-0 outline-none cursor-pointer">
                         <option value="">Todos los tipos</option>
                         <option value="entrada" {{ request('tipo') === 'entrada' ? 'selected' : '' }}>Entradas</option>
@@ -168,15 +168,11 @@
                         <option value="ajuste"  {{ request('tipo') === 'ajuste'  ? 'selected' : '' }}>Ajustes</option>
                     </select>
                     {{-- Fecha desde --}}
-                    <input type="date" name="desde" value="{{ request('desde') }}"
+                    <input type="date" name="desde" value="{{ request('desde') }}" x-on:change="autoSubmit()"
                            class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#121415] text-slate-700 dark:text-slate-300 focus:border-slate-400 focus:ring-0 outline-none">
                     {{-- Fecha hasta --}}
-                    <input type="date" name="hasta" value="{{ request('hasta') }}"
+                    <input type="date" name="hasta" value="{{ request('hasta') }}" x-on:change="autoSubmit()"
                            class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#121415] text-slate-700 dark:text-slate-300 focus:border-slate-400 focus:ring-0 outline-none">
-                    <button type="submit"
-                            class="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">
-                        Filtrar
-                    </button>
                     @if(request()->hasAny(['q', 'tipo', 'desde', 'hasta']))
                         <a href="{{ route('admin.inventario.index') }}" class="px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 font-medium">Limpiar</a>
                     @endif
@@ -300,14 +296,14 @@
             {{-- Filter bar --}}
             <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
                 <h3 class="text-sm font-extrabold text-slate-800 dark:text-gray-100">Stock Actual</h3>
-                <form method="GET" action="{{ route('admin.inventario.stock') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <form method="GET" action="{{ route('admin.inventario.stock') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto" x-data="adminAutoFilter">
                     <div class="flex items-center bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 focus-within:border-slate-400 w-full sm:w-56">
                         <span class="material-symbols-outlined text-slate-400 text-[16px] mr-1.5">search</span>
-                        <input type="text" name="q" value="{{ request('q') }}"
+                        <input type="text" name="q" value="{{ request('q') }}" x-on:input="autoSubmit()"
                                placeholder="Buscar SKU o nombre…"
                                class="bg-transparent border-none focus:ring-0 text-xs text-slate-700 dark:text-slate-300 w-full p-0 placeholder-slate-400 dark:placeholder-gray-500">
                     </div>
-                    <select name="categoria"
+                    <select name="categoria" x-on:change="autoSubmit()"
                             class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#121415] text-slate-700 dark:text-slate-300 focus:border-slate-400 focus:ring-0 outline-none cursor-pointer">
                         <option value="">Todas las categorías</option>
                         @foreach($categorias as $cat)
@@ -315,14 +311,10 @@
                         @endforeach
                     </select>
                     <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 cursor-pointer px-2 py-1.5 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
-                        <input type="checkbox" name="stock_bajo" value="1" {{ request('stock_bajo') ? 'checked' : '' }}
+                        <input type="checkbox" name="stock_bajo" value="1" {{ request('stock_bajo') ? 'checked' : '' }} x-on:change="autoSubmit()"
                                class="rounded text-slate-900 dark:text-white focus:ring-slate-900 border-slate-300 dark:border-gray-700">
                         Solo stock bajo
                     </label>
-                    <button type="submit"
-                            class="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">
-                        Filtrar
-                    </button>
                     @if(request()->hasAny(['q', 'categoria', 'stock_bajo']))
                         <a href="{{ route('admin.inventario.stock') }}" class="px-3 py-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 font-medium">Limpiar</a>
                     @endif

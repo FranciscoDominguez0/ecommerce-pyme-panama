@@ -278,3 +278,44 @@
         }, { passive: true });
     }
 </script>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('adminAutoFilter', () => ({
+            debounceTimer: null,
+            autoSubmit() {
+                if(document.activeElement && document.activeElement.name) {
+                    sessionStorage.setItem('focusedElement', document.activeElement.name);
+                }
+                clearTimeout(this.debounceTimer);
+                this.debounceTimer = setTimeout(() => {
+                    this.$root.submit();
+                }, 800); // Increased debounce to prevent reloading while typing
+            },
+            init() {
+                let focusedName = sessionStorage.getItem('focusedElement');
+                if(focusedName) {
+                    // Esperar a que el DOM esté completamente listo y renderizado
+                    setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            let el = this.$root.querySelector('[name=\'' + focusedName + '\']');
+                            if(el) {
+                                el.focus();
+                                // Mover el cursor al final del texto
+                                if (el.setSelectionRange) {
+                                    let len = el.value.length;
+                                    el.setSelectionRange(len, len);
+                                } else {
+                                    let val = el.value;
+                                    el.value = '';
+                                    el.value = val;
+                                }
+                            }
+                            sessionStorage.removeItem('focusedElement');
+                        });
+                    }, 100);
+                }
+            }
+        }));
+    });
+</script>

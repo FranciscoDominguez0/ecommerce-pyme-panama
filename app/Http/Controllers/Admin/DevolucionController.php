@@ -23,11 +23,11 @@ class DevolucionController extends Controller
         if ($request->filled('buscar')) {
             $buscar = $request->buscar;
             $query->whereHas('pedido', function($q) use ($buscar) {
-                $q->where('numero_pedido', 'like', "%{$buscar}%");
+                $q->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', ["%{$buscar}%"]);
             })->orWhereHas('usuario', function($q) use ($buscar) {
-                $q->where('nombre', 'like', "%{$buscar}%")
-                  ->orWhere('apellido', 'like', "%{$buscar}%")
-                  ->orWhere('email', 'like', "%{$buscar}%");
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(apellido) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(email) ILIKE unaccent(?)', ["%{$buscar}%"]);
             });
         }
 

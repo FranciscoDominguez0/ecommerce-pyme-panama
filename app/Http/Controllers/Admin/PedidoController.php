@@ -37,10 +37,10 @@ class PedidoController extends Controller
         if ($request->filled('q')) {
             $busqueda = $request->q;
             $query->where(function ($q) use ($busqueda) {
-                $q->where('numero_pedido', 'ilike', "%{$busqueda}%")
+                $q->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', ["%{$busqueda}%"])
                   ->orWhereHas('usuario', function ($uq) use ($busqueda) {
-                      $uq->where('nombre', 'ilike', "%{$busqueda}%")
-                         ->orWhere('apellido', 'ilike', "%{$busqueda}%");
+                      $uq->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                         ->orWhereRaw('unaccent(apellido) ILIKE unaccent(?)', ["%{$busqueda}%"]);
                   });
             });
         }

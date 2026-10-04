@@ -38,8 +38,8 @@ class CuponController extends Controller
 
         if (!empty($busqueda)) {
             $query->where(function ($q) use ($busqueda) {
-                $q->where('codigo', 'LIKE', "%{$busqueda}%")
-                  ->orWhere('tipo', 'LIKE', "%{$busqueda}%");
+                $q->whereRaw('unaccent(codigo) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereRaw('unaccent(tipo) ILIKE unaccent(?)', ["%{$busqueda}%"]);
             });
         }
 

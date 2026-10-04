@@ -40,6 +40,7 @@ Route::get('/', function () {
 })->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
+Route::get('/buscar-predictivo', [CatalogoController::class, 'searchPredictivo'])->name('cliente.buscar-predictivo');
 Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
 Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
 Route::get('/terminos-y-condiciones', function () {

@@ -54,10 +54,10 @@
             <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
         </div>
         
-        <form action="{{ route('admin.devoluciones.index') }}" method="GET" class="w-full md:w-auto">
+        <form action="{{ route('admin.devoluciones.index') }}" method="GET" class="w-full md:w-auto" x-data="adminAutoFilter">
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar por pedido o cliente..." class="w-full md:w-64 pl-10 pr-4 py-2 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-slate-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-slate-400 transition-all">
+                <input type="text" name="buscar" value="{{ request('buscar') }}" x-on:input="autoSubmit()" placeholder="Buscar por pedido o cliente..." class="w-full md:w-64 pl-10 pr-4 py-2 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-slate-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-slate-400 transition-all">
                 @if(request('estado'))
                     <input type="hidden" name="estado" value="{{ request('estado') }}">
                 @endif
