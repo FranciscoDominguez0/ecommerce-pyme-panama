@@ -17,28 +17,19 @@ use Illuminate\View\View;
 
 class CategoriaController extends Controller
 {
-    /**
-     * Muestra el listado de categorías con métricas, búsqueda, filtros y estructura jerárquica.
-     */
-    public function index(Request $request): View
+        public function index(Request $request): View
     {
         $busqueda = trim($request->input('buscar', ''));
         $filtroEstado = $request->input('estado', 'all');
-
-        // Métricas KPI de cabecera
         $totalCategorias = Categoria::sinEliminar()->count();
         $categoriasPrincipalesCount = Categoria::principales()->count();
         $subcategoriasCount = Categoria::sinEliminar()->whereNotNull('padre_id')->count();
         $totalProductosAsignados = Producto::whereNotNull('categoria_id')->whereNull('eliminado_en')->count();
-
-        // Query principal
         $query = Categoria::sinEliminar()
             ->with(['padre', 'hijas'])
             ->withCount(['productos' => function ($q) {
                 $q->whereNull('eliminado_en');
             }]);
-
-        // Filtro por búsqueda
         if (!empty($busqueda)) {
             $query->where(function ($q) use ($busqueda) {
                 $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$busqueda}%"])
@@ -46,16 +37,11 @@ class CategoriaController extends Controller
                   ->orWhereRaw('unaccent(descripcion) ILIKE unaccent(?)', ["%{$busqueda}%"]);
             });
         }
-
-        // Filtro por estado
         if ($filtroEstado === 'active') {
             $query->where('activo', true);
         } elseif ($filtroEstado === 'inactive') {
             $query->where('activo', false);
         }
-
-        // Orden jerárquico inteligente:
-        // Las categorías padre primero, luego agrupadas por orden_visualizacion y nombre
         if (empty($busqueda)) {
             $query->orderByRaw('COALESCE(padre_id, id), padre_id IS NOT NULL, orden_visualizacion ASC, nombre ASC');
         } else {
@@ -75,10 +61,7 @@ class CategoriaController extends Controller
         ));
     }
 
-    /**
-     * Muestra el formulario para crear una nueva categoría.
-     */
-    public function create(): View
+        public function create(): View
     {
         $categoria = new Categoria([
             'activo' => true,
@@ -97,10 +80,7 @@ class CategoriaController extends Controller
         return view('admin.categorias.form', compact('categoria', 'padres', 'padresFormatted', 'esEdicion'));
     }
 
-    /**
-     * Almacena una nueva categoría en la base de datos.
-     */
-    public function store(Request $request): RedirectResponse
+        public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'nombre' => 'required|string|max:100',
@@ -119,30 +99,8 @@ class CategoriaController extends Controller
             'imagen.mimes' => 'El formato de imagen/ícono debe ser SVG, PNG, JPG o WEBP.',
             'imagen.max' => 'El archivo no debe pesar más de 2MB.',
         ]);
-
-        // Generar slug automático si no fue provisto
-        $slug = !empty($validated['slug']) ? Str::slug($validated['slug']) : Str::slug($validated['nombre']);
-        $slugOriginal = $slug;
-        $contador = 1;
-        while (Categoria::where('slug', $slug)->exists()) {
-            $slug = "{$slugOriginal}-{$contador}";
-            $contador++;
-        }
-
-        // Manejo de carga de imagen
-        $imagenRuta = null;
-        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
-            $file = $request->file('imagen');
-            $fileName = 'cat_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('uploads/categorias');
-
-            if (!File::isDirectory($destinationPath)) {
-                File::makeDirectory($destinationPath, 0755, true, true);
-            }
-
-            $file->move($destinationPath, $fileName);
-            $imagenRuta = 'uploads/categorias/' . $fileName;
-        }
+        $slug = $this->generarSlug($validated['nombre'], $validated['slug'] ?? null);
+        $imagenRuta = $this->procesarImagen($request);
 
         $categoria = Categoria::create([
             'nombre' => $validated['nombre'],
@@ -154,8 +112,6 @@ class CategoriaController extends Controller
             'exento_envio' => $request->boolean('exento_envio'),
             'orden_visualizacion' => isset($validated['orden_visualizacion']) ? (int) $validated['orden_visualizacion'] : 0,
         ]);
-
-        // Registro de Auditoría
         $this->registrarAuditoria(
             'crear',
             "Categoría '{$categoria->nombre}' creada con éxito.",
@@ -168,10 +124,7 @@ class CategoriaController extends Controller
             ->with('success', "Categoría creada exitosamente.");
     }
 
-    /**
-     * Muestra el formulario para editar una categoría existente.
-     */
-    public function edit(int $id): View|RedirectResponse
+        public function edit(int $id): View|RedirectResponse
     {
         $categoria = Categoria::sinEliminar()->find($id);
 
@@ -180,8 +133,6 @@ class CategoriaController extends Controller
                 ->route('admin.categorias.index')
                 ->with('error', 'La categoría solicitada no existe o fue eliminada.');
         }
-
-        // Excluir la categoría actual y todas sus descendientes para prevenir ciclos
         $descendientesIds = $this->obtenerIdsDescendientes($categoria);
         $excluirIds = array_merge([$categoria->id], $descendientesIds);
 
@@ -198,10 +149,7 @@ class CategoriaController extends Controller
         return view('admin.categorias.form', compact('categoria', 'padres', 'padresFormatted', 'esEdicion'));
     }
 
-    /**
-     * Actualiza una categoría existente.
-     */
-    public function update(Request $request, int $id): RedirectResponse
+        public function update(Request $request, int $id): RedirectResponse
     {
         $categoria = Categoria::sinEliminar()->find($id);
 
@@ -231,8 +179,6 @@ class CategoriaController extends Controller
         ]);
 
         $padreId = !empty($validated['padre_id']) ? (int) $validated['padre_id'] : null;
-
-        // Validar prevención de ciclos
         if ($padreId !== null) {
             if ($padreId === $categoria->id) {
                 return back()
@@ -247,19 +193,9 @@ class CategoriaController extends Controller
                     ->withErrors(['padre_id' => 'No puedes seleccionar una subcategoría hija como categoría padre.']);
             }
         }
-
-        // Slug
-        $slug = !empty($validated['slug']) ? Str::slug($validated['slug']) : Str::slug($validated['nombre']);
-        $slugOriginal = $slug;
-        $contador = 1;
-        while (Categoria::where('slug', $slug)->where('id', '!=', $categoria->id)->exists()) {
-            $slug = "{$slugOriginal}-{$contador}";
-            $contador++;
-        }
-
+        $slug = $this->generarSlug($validated['nombre'], $validated['slug'] ?? null, $categoria->id);
         $imagenRuta = $categoria->imagen_ruta;
 
-        // Eliminar imagen si se marcó la opción
         if ($request->boolean('eliminar_imagen')) {
             if ($imagenRuta && File::exists(public_path($imagenRuta))) {
                 File::delete(public_path($imagenRuta));
@@ -267,23 +203,8 @@ class CategoriaController extends Controller
             $imagenRuta = null;
         }
 
-        // Manejo de nueva imagen
-        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
-            // Eliminar imagen anterior
-            if ($imagenRuta && File::exists(public_path($imagenRuta))) {
-                File::delete(public_path($imagenRuta));
-            }
-
-            $file = $request->file('imagen');
-            $fileName = 'cat_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('uploads/categorias');
-
-            if (!File::isDirectory($destinationPath)) {
-                File::makeDirectory($destinationPath, 0755, true, true);
-            }
-
-            $file->move($destinationPath, $fileName);
-            $imagenRuta = 'uploads/categorias/' . $fileName;
+        if ($request->hasFile('imagen')) {
+            $imagenRuta = $this->procesarImagen($request, $imagenRuta);
         }
 
         $valorAnterior = $categoria->toArray();
@@ -298,8 +219,6 @@ class CategoriaController extends Controller
             'exento_envio' => $request->boolean('exento_envio'),
             'orden_visualizacion' => isset($validated['orden_visualizacion']) ? (int) $validated['orden_visualizacion'] : 0,
         ]);
-
-        // Auditoría
         $this->registrarAuditoria(
             'actualizar',
             "Categoría '{$categoria->nombre}' actualizada.",
@@ -312,10 +231,7 @@ class CategoriaController extends Controller
             ->with('success', "Categoría actualizada exitosamente.");
     }
 
-    /**
-     * Elimina (soft-delete) una categoría si no tiene productos ni subcategorías asociadas.
-     */
-    public function destroy(int $id): RedirectResponse
+        public function destroy(int $id): RedirectResponse
     {
         $categoria = Categoria::sinEliminar()->find($id);
 
@@ -324,16 +240,12 @@ class CategoriaController extends Controller
                 ->route('admin.categorias.index')
                 ->with('error', 'La categoría no fue encontrada.');
         }
-
-        // Validación 1: Verificar si tiene productos asociados
         $productosAsociados = $categoria->productos()->whereNull('eliminado_en')->count();
         if ($productosAsociados > 0) {
             return redirect()
                 ->route('admin.categorias.index')
                 ->with('error', "No se puede eliminar '{$categoria->nombre}' porque tiene {$productosAsociados} producto(s) asignado(s). Reasigna los productos primero.");
         }
-
-        // Validación 2: Verificar si tiene subcategorías hijas
         $subcategoriasAsociadas = $categoria->hijas()->count();
         if ($subcategoriasAsociadas > 0) {
             return redirect()
@@ -342,14 +254,10 @@ class CategoriaController extends Controller
         }
 
         $valorAnterior = $categoria->toArray();
-
-        // Soft delete manual consistente
         $categoria->update([
             'eliminado_en' => Carbon::now(),
             'activo' => false,
         ]);
-
-        // Auditoría
         $this->registrarAuditoria(
             'eliminar',
             "Categoría '{$categoria->nombre}' (ID #{$categoria->id}) eliminada.",
@@ -362,10 +270,7 @@ class CategoriaController extends Controller
             ->with('success', "Categoría eliminada exitosamente.");
     }
 
-    /**
-     * Alterna el estado activo/inactivo de una categoría mediante AJAX o formulario rápido.
-     */
-    public function toggleEstado(Request $request, int $id): JsonResponse|RedirectResponse
+        public function toggleEstado(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $categoria = Categoria::sinEliminar()->find($id);
 
@@ -446,9 +351,45 @@ class CategoriaController extends Controller
             ->with('success', $descripcion);
     }
 
-    /**
-     * Obtiene recursivamente todos los IDs de subcategorías dependientes de una categoría dada.
-     */
+        
+    private function procesarImagen(Request $request, ?string $rutaAnterior = null): ?string
+    {
+        if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
+            if ($rutaAnterior && File::exists(public_path($rutaAnterior))) {
+                File::delete(public_path($rutaAnterior));
+            }
+            $file = $request->file('imagen');
+            $fileName = 'cat_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/categorias');
+            if (!File::isDirectory($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true, true);
+            }
+            $file->move($destinationPath, $fileName);
+            return 'uploads/categorias/' . $fileName;
+        }
+        return $rutaAnterior;
+    }
+
+    private function generarSlug(string $nombre, ?string $slugBase, ?int $ignorarId = null): string
+    {
+        $slug = !empty($slugBase) ? Str::slug($slugBase) : Str::slug($nombre);
+        $slugOriginal = $slug;
+        $contador = 1;
+        $query = Categoria::where('slug', $slug);
+        if ($ignorarId) {
+            $query->where('id', '!=', $ignorarId);
+        }
+        while ($query->exists()) {
+            $slug = "{$slugOriginal}-{$contador}";
+            $contador++;
+            $query = Categoria::where('slug', $slug);
+            if ($ignorarId) {
+                $query->where('id', '!=', $ignorarId);
+            }
+        }
+        return $slug;
+    }
+
     private function obtenerIdsDescendientes(Categoria $categoria): array
     {
         $ids = [];
@@ -469,13 +410,9 @@ class CategoriaController extends Controller
     private function formatearPadresJerarquicos($padresCollection)
     {
         $mapaCategorias = Categoria::sinEliminar()->get()->keyBy('id');
-
-        // Agrupar categorías por su padre_id
         $porPadre = $padresCollection->groupBy(function ($cat) {
             return $cat->padre_id ?? 'root';
         });
-
-        // Ordenar cada grupo alfabéticamente por nombre
         $porPadre->transform(function ($grupo) {
             return $grupo->sortBy(function ($item) {
                 return strtolower($item->nombre);
@@ -483,8 +420,6 @@ class CategoriaController extends Controller
         });
 
         $ordenadoJerarquico = collect();
-
-        // Recorrido recursivo en profundidad (DFS)
         $agregarConHijos = function ($padreId) use (&$agregarConHijos, $porPadre, &$ordenadoJerarquico) {
             $key = $padreId ?? 'root';
             if ($porPadre->has($key)) {
@@ -494,11 +429,7 @@ class CategoriaController extends Controller
                 }
             }
         };
-
-        // Comenzar por las categorías raíz
         $agregarConHijos(null);
-
-        // Incluir categorías cuya categoría padre haya sido excluida (por ejemplo, al editar)
         $incluidosIds = $ordenadoJerarquico->pluck('id')->all();
         $huerfanas = $padresCollection->reject(function ($cat) use ($incluidosIds) {
             return in_array($cat->id, $incluidosIds);
@@ -533,10 +464,7 @@ class CategoriaController extends Controller
         });
     }
 
-    /**
-     * Helper para registrar auditoría de cambios en categorías.
-     */
-    private function registrarAuditoria(string $accion, string $descripcion, ?array $valorAnterior = null, ?array $valorNuevo = null): void
+        private function registrarAuditoria(string $accion, string $descripcion, ?array $valorAnterior = null, ?array $valorNuevo = null): void
     {
         try {
             LogAuditoria::create([
@@ -550,7 +478,6 @@ class CategoriaController extends Controller
                 'agente_usuario' => request()->userAgent(),
             ]);
         } catch (\Throwable $e) {
-            // No romper el flujo principal si el log de auditoría falla
         }
     }
 }

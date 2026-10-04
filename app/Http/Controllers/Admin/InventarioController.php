@@ -267,8 +267,8 @@ class InventarioController extends Controller
         if ($request->filled('q')) {
             $buscar = $request->q;
             $qProductos->where(function ($q) use ($buscar) {
-                $q->where('nombre', 'ilike', "%{$buscar}%")
-                  ->orWhere('sku', 'ilike', "%{$buscar}%");
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(sku) ILIKE unaccent(?)', ["%{$buscar}%"]);
             });
         }
         if ($request->filled('categoria')) {
@@ -289,8 +289,8 @@ class InventarioController extends Controller
         if ($request->filled('q')) {
             $buscar = $request->q;
             $qVariantes->where(function ($q) use ($buscar) {
-                $q->where('variantes_producto.sku', 'ilike', "%{$buscar}%")
-                  ->orWhereHas('producto', fn($p) => $p->where('nombre', 'ilike', "%{$buscar}%"));
+                $q->whereRaw('unaccent(variantes_producto.sku) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereHas('producto', fn($p) => $p->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"]));
             });
         }
         if ($request->filled('categoria')) {
