@@ -3,7 +3,7 @@
 @section('title', 'Dirección de Envío')
 
 @section('content')
-<div class="flex-grow pt-8 pb-12 px-4 md:px-16 max-w-7xl mx-auto w-full">
+<div class="flex-grow pt-8 pb-12 px-4 md:px-16 w-full max-w-[1600px] mx-auto">
     <!-- Progress Indicator -->
     <div class="mb-12 flex justify-center w-full max-w-3xl mx-auto">
         <div class="flex items-center w-full relative">

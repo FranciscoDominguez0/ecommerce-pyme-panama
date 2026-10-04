@@ -1,4 +1,4 @@
-﻿@props(['fullScreen' => false])
+@props(['fullScreen' => false])
 
 <div id="global-cliente-skeleton" class="{{ $fullScreen ? 'fixed inset-0 z-[100] bg-[#F8F9FF]' : 'w-full h-full' }} flex flex-col pointer-events-none transition-opacity duration-300">
     
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Skeleton Main Content -->
-    <div class="flex-1 px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto w-full">
+    <div class="flex-1 px-4 sm:px-6 lg:px-8 py-8 w-full max-w-[1600px] mx-auto">
         <!-- Hero/Header area -->
         <div class="w-full h-32 md:h-48 bg-gray-200 rounded-xl mb-8 animate-pulse"></div>
         

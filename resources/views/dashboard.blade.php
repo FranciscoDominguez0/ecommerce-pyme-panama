@@ -6,7 +6,7 @@
 <div class="min-h-screen bg-[#F4F6F8] pb-12 pt-6 sm:pt-8">
     
     <!-- 1. Hero Banner Compacto -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="relative w-full overflow-hidden text-white rounded-3xl shadow-xl border border-white/5" style="background: linear-gradient(135deg, #060d18 0%, #0b1628 40%, #091a10 100%);">
             
             <!-- Glow blobs estilo Welcome -->
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 relative z-20 space-y-8">
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 mt-8 relative z-20 space-y-8">
 
         <!-- 3. Categorías Rápidas -->
         @if(isset($categoriasPrincipales) && $categoriasPrincipales->count() > 0)

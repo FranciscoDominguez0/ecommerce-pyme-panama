@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-[calc(100vh-160px)] bg-surface/50 py-6 md:py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
     
     @if(session('pedido_creado_animacion'))
     <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-md" x-transition.opacity.duration.500ms>

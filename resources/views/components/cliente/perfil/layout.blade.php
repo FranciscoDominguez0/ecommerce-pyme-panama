@@ -6,7 +6,7 @@
     $usuario = Auth::user();
 @endphp
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+<div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
     <div class="bg-white dark:bg-[#181a1b] border border-outline-variant rounded-2xl shadow-sm overflow-clip md:h-[calc(100vh-140px)] flex flex-col md:flex-row" x-data="{ mobileMenuOpen: false }">
 
         {{-- LEFT: Profile + Navigation (persisted across routes) --}}
