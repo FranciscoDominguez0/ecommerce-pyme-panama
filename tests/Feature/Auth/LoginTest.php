@@ -337,6 +337,8 @@ class LoginTest extends TestCase
 
     public function test_el_login_con_token_valido_de_turnstile_inicia_sesion_correctamente(): void
     {
+        config(['services.turnstile.secret' => 'fake-secret-testing']);
+
         \Illuminate\Support\Facades\Http::fake([
             'https://challenges.cloudflare.com/turnstile/v0/siteverify' => \Illuminate\Support\Facades\Http::response([
                 'success' => true,
