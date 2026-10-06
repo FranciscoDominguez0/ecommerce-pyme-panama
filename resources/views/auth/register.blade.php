@@ -81,7 +81,7 @@
                                            id="nombre"
                                            name="nombre"
                                            value="{{ old('nombre') }}"
-                                           placeholder="Santiago"
+                                           placeholder="Santi"
                                            required
                                            autofocus
                                            autocomplete="given-name"
