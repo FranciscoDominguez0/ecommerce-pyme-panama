@@ -106,7 +106,6 @@
                                        value="{{ old('email') }}"
                                        placeholder="nombre@empresa.com"
                                        required
-                                       autofocus
                                        autocomplete="username"
                                        type="email">
                             </div>
@@ -277,6 +276,15 @@
         if (window.turnstile) {
             initTurnstile();
         }
+
+        document.addEventListener('livewire:navigating', () => {
+            if (window.turnstile && turnstileWidgetId !== null) {
+                try {
+                    window.turnstile.remove(turnstileWidgetId);
+                } catch (e) {}
+                turnstileWidgetId = null;
+            }
+        });
 
         document.addEventListener('livewire:navigated', () => {
             const container = document.getElementById('turnstile-container');

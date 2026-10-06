@@ -74,7 +74,6 @@
                            name="nombre" 
                            value="{{ old('nombre', $categoria->nombre) }}" 
                            required 
-                           autofocus
                            placeholder="Ej. Computadoras & Laptops" 
                            class="w-full bg-slate-50 dark:bg-transparent border @error('nombre') border-red-300 ring-2 ring-red-500/10 @else border-slate-200 dark:border-gray-700 @enderror rounded-lg px-3.5 py-2.5 text-xs text-slate-900 dark:text-white font-medium placeholder:text-slate-400 focus:bg-white dark:bg-[#181a1b] focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none" />
                     @error('nombre')

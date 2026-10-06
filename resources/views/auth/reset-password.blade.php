@@ -51,7 +51,6 @@
                                value="{{ old('email', $email ?? request()->email) }}"
                                placeholder="tu@correo.com"
                                required
-                               autofocus
                                autocomplete="email"
                                type="email">
                     </div>

@@ -107,7 +107,6 @@
                                        value="{{ old('email') }}"
                                        placeholder="tu@correo.com"
                                        required
-                                       autofocus
                                        autocomplete="email"
                                        type="email">
                             </div>

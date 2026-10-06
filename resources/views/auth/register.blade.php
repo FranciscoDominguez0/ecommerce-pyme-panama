@@ -83,7 +83,6 @@
                                            value="{{ old('nombre') }}"
                                            placeholder="Santi"
                                            required
-                                           autofocus
                                            autocomplete="given-name"
                                            type="text">
                                 </div>
