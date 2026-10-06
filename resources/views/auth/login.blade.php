@@ -32,7 +32,7 @@
                 <div class="flex-1">
                     <p class="font-semibold mb-0.5">Error de autenticación</p>
                     <p class="opacity-95 message-text">
-                        {{ $errors->first('email') ?? $errors->first('password') ?? 'Las credenciales proporcionadas no son válidas.' }}
+                        {{ $errors->first('cf-turnstile-response') ?? $errors->first('email') ?? $errors->first('password') ?? 'Las credenciales proporcionadas no son válidas.' }}
                     </p>
                 </div>
                 <button class="text-red-400 hover:text-red-600" onclick="document.getElementById('error-alert').classList.add('hidden')" type="button">
@@ -127,6 +127,14 @@
                         <span>Verificando...</span>
                     </span>
                 </button>
+
+                <!-- Desafío de Seguridad Cloudflare Turnstile -->
+                <div class="mt-2.5 flex flex-col items-center justify-center min-h-[65px]">
+                    <div id="turnstile-container" class="cf-turnstile flex justify-center" data-sitekey="{{ config('services.turnstile.key') }}" data-theme="light"></div>
+                    @error('cf-turnstile-response')
+                        <p class="text-xs text-red-600 font-medium mt-1 text-center">{{ $message }}</p>
+                    @enderror
+                </div>
             </form>
 
             <!-- Google Login -->
@@ -169,8 +177,12 @@
         <x-secure-badge />
     </main>
 
+    <!-- Cloudflare Turnstile API -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" async defer></script>
+
     <script>
         let errorTimeoutId = null;
+        let turnstileWidgetId = null;
 
         function togglePassword() {
             const passwordInput = document.getElementById('password');
@@ -185,11 +197,63 @@
             }
         }
 
+        // Renderizado e inicialización de Cloudflare Turnstile
+        function initTurnstile() {
+            const container = document.getElementById('turnstile-container');
+            if (!container || !window.turnstile) return;
+
+            if (container.dataset.inited === 'true') return;
+
+            try {
+                container.innerHTML = '';
+                turnstileWidgetId = window.turnstile.render(container, {
+                    sitekey: '{{ config('services.turnstile.key') }}',
+                    theme: 'light',
+                });
+                container.dataset.inited = 'true';
+            } catch (err) {
+                container.dataset.inited = 'true';
+            }
+        }
+
+        window.onloadTurnstileCallback = function() {
+            initTurnstile();
+        };
+
+        if (window.turnstile) {
+            initTurnstile();
+        }
+
+        document.addEventListener('livewire:navigated', () => {
+            const container = document.getElementById('turnstile-container');
+            if (container) {
+                container.dataset.inited = 'false';
+                initTurnstile();
+            }
+        });
+
         async function submitLogin(e, resetLoading) {
             const form = e.target;
             const errorAlert = document.getElementById('error-alert');
             
             const formData = new FormData(form);
+            const turnstileToken = formData.get('cf-turnstile-response');
+
+            // Validar que el desafío esté resuelto si está configurada la llave
+            if (!turnstileToken && '{{ config('services.turnstile.key') }}') {
+                resetLoading();
+                if (errorAlert) {
+                    errorAlert.classList.remove('hidden');
+                    errorAlert.querySelector('p.opacity-95').textContent = 'Por favor, complete el desafío de seguridad antes de continuar.';
+                    if (errorTimeoutId) {
+                        clearTimeout(errorTimeoutId);
+                    }
+                    errorTimeoutId = setTimeout(() => {
+                        errorAlert.classList.add('hidden');
+                    }, 5000);
+                }
+                return;
+            }
             
             try {
                 const response = await fetch(form.action, {
@@ -214,10 +278,25 @@
                 } else if (response.status === 422) {
                     const data = await response.json();
                     resetLoading();
+
+                    // Resetear el captcha de Cloudflare en caso de fallo para permitir un nuevo intento
+                    if (window.turnstile) {
+                        try {
+                            if (turnstileWidgetId !== null) {
+                                window.turnstile.reset(turnstileWidgetId);
+                            } else {
+                                window.turnstile.reset();
+                            }
+                        } catch (err) {}
+                    }
                     
                     if (errorAlert) {
                         errorAlert.classList.remove('hidden');
-                        errorAlert.querySelector('p.opacity-95').textContent = data.message || 'Las credenciales proporcionadas no son válidas.';
+                        const errorMsg = (data.errors && data.errors['cf-turnstile-response'] ? data.errors['cf-turnstile-response'][0] : null)
+                            || (data.errors && data.errors['email'] ? data.errors['email'][0] : null)
+                            || data.message
+                            || 'Las credenciales proporcionadas no son válidas.';
+                        errorAlert.querySelector('p.opacity-95').textContent = errorMsg;
                         document.getElementById('password').value = '';
                         
                         if (errorTimeoutId) {
@@ -235,20 +314,26 @@
                     throw new Error('Server error');
                 }
             } catch (error) {
+                if (window.turnstile) {
+                    try {
+                        if (turnstileWidgetId !== null) {
+                            window.turnstile.reset(turnstileWidgetId);
+                        } else {
+                            window.turnstile.reset();
+                        }
+                    } catch (err) {}
+                }
                 resetLoading();
                 window.location.reload();
             }
         }
 
-        // Si el error está visible al cargar la página (por una recarga o redirección normal), ocultarlo después de 5 seg
-        document.addEventListener('DOMContentLoaded', () => {
-            const errorAlert = document.getElementById('error-alert');
-            if (errorAlert && !errorAlert.classList.contains('hidden')) {
-                errorTimeoutId = setTimeout(() => {
-                    errorAlert.classList.add('hidden');
-                }, 5000);
-            }
-        });
-
+        // Si el error está visible al cargar la página (por recarga clásica), ocultarlo después de 5 seg
+        const initialErrorAlert = document.getElementById('error-alert');
+        if (initialErrorAlert && !initialErrorAlert.classList.contains('hidden')) {
+            errorTimeoutId = setTimeout(() => {
+                initialErrorAlert.classList.add('hidden');
+            }, 5000);
+        }
     </script>
 </x-guest-layout>

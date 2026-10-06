@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TwoFactorCodeMail;
+use App\Services\TurnstileService;
 use Illuminate\View\View;
 
 class LoginController extends Controller
@@ -36,14 +37,35 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
+        $reglas = [
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
-        ], [
+        ];
+
+        // Se exige el token de Cloudflare Turnstile salvo en entorno de pruebas automatizadas
+        if (!app()->environment('testing')) {
+            $reglas['cf-turnstile-response'] = ['required', 'string'];
+        }
+
+        $request->validate($reglas, [
             'email.required' => 'El correo electrónico es requerido.',
             'email.email' => 'Por favor, ingrese un correo electrónico válido.',
             'password.required' => 'La contraseña es requerida.',
+            'cf-turnstile-response.required' => 'Por favor, complete el desafío de seguridad.',
         ]);
+
+        // Verificamos el token de Cloudflare Turnstile directamente contra su servidor
+        $turnstileResponse = $request->input('cf-turnstile-response');
+        if (!app()->environment('testing') || $turnstileResponse !== null) {
+            $turnstileService = app(TurnstileService::class);
+            if (!$turnstileService->verificar($turnstileResponse, $request->ip())) {
+                return $this->loginFailedResponse(
+                    $request,
+                    'Error en la verificación de seguridad (Captcha). Por favor, inténtelo de nuevo.',
+                    'cf-turnstile-response'
+                );
+            }
+        }
 
         $ip = $request->ip();
         $throttleKey = strtolower($request->email).'|'.$ip;
@@ -190,16 +212,16 @@ class LoginController extends Controller
     /**
      * Helper para responder con error de login
      */
-    protected function loginFailedResponse(Request $request, string $msg)
+    protected function loginFailedResponse(Request $request, string $msg, string $field = 'email')
     {
         if ($request->wantsJson()) {
             return response()->json([
                 'message' => $msg,
-                'errors' => ['email' => [$msg]]
+                'errors' => [$field => [$msg]]
             ], 422);
         }
         return back()->withErrors([
-            'email' => $msg,
+            $field => $msg,
         ])->onlyInput('email');
     }
 }

@@ -123,6 +123,14 @@ class LoginTest extends TestCase
             ->assertSee('Entrar a mi cuenta');
     }
 
+    public function test_la_vista_de_login_tiene_desafio_de_cloudflare_turnstile(): void
+    {
+        $this->get('/login')
+            ->assertOk()
+            ->assertSee('turnstile-container', false)
+            ->assertSee('challenges.cloudflare.com/turnstile', false);
+    }
+
     public function test_la_vista_de_login_tiene_enlace_de_registro(): void
     {
         $this->get('/login')
@@ -308,6 +316,43 @@ class LoginTest extends TestCase
             'email' => 'Por favor, ingrese un correo electrónico válido.',
         ]);
         $this->assertGuest();
+    }
+
+    public function test_el_login_rechaza_un_token_invalido_de_turnstile(): void
+    {
+        $usuario = $this->crearUsuario([], 'cliente');
+
+        $respuesta = $this->from('/login')->post('/login', [
+            'email' => $usuario->email,
+            'password' => 'secret123',
+            'cf-turnstile-response' => 'invalid-token',
+        ]);
+
+        $respuesta->assertRedirect('/login');
+        $respuesta->assertSessionHasErrors([
+            'cf-turnstile-response' => 'Error en la verificación de seguridad (Captcha). Por favor, inténtelo de nuevo.',
+        ]);
+        $this->assertGuest();
+    }
+
+    public function test_el_login_con_token_valido_de_turnstile_inicia_sesion_correctamente(): void
+    {
+        \Illuminate\Support\Facades\Http::fake([
+            'https://challenges.cloudflare.com/turnstile/v0/siteverify' => \Illuminate\Support\Facades\Http::response([
+                'success' => true,
+            ], 200),
+        ]);
+
+        $usuario = $this->crearUsuario([], 'cliente');
+
+        $respuesta = $this->post('/login', [
+            'email' => $usuario->email,
+            'password' => 'secret123',
+            'cf-turnstile-response' => 'token-valido-turnstile',
+        ]);
+
+        $respuesta->assertRedirect(route('dashboard'));
+        $this->assertAuthenticatedAs($usuario);
     }
 
     public function test_el_login_con_recordarme_guarda_token_y_cookie(): void

@@ -23,6 +23,7 @@ Especializada en tecnologia, equipos informaticos, perifericos y servicios IT.
 | [Stack tecnologico](#stack-tecnologico) | Tecnologias y versiones utilizadas |
 | [Requisitos del sistema](#requisitos-del-sistema) | Software necesario antes de instalar |
 | [Instalacion paso a paso](#instalacion-paso-a-paso) | Guia detallada de instalacion |
+| [Servidor WebSocket (Laravel Reverb)](#servidor-websocket-laravel-reverb) | Servidor en tiempo real y notificaciones |
 | [Verificacion de la instalacion](#verificacion-de-la-instalacion) | URLs para confirmar que todo funciona |
 | [Seeders y datos de catalogo](#seeders-y-datos-de-catalogo) | Carga de datos iniciales |
 | [Pruebas automatizadas](#pruebas-automatizadas) | Ejecucion del suite de tests |
@@ -39,6 +40,7 @@ Especializada en tecnologia, equipos informaticos, perifericos y servicios IT.
 |---|---|---|---|
 | **Backend** | Laravel (PHP) | 12.x | Requiere PHP ^8.3 |
 | **Frontend reactivo** | Livewire | 4.x | SPA-like con `wire:navigate` |
+| **WebSockets** | Laravel Reverb | 1.x | Notificaciones y eventos en tiempo real |
 | **Estilos** | Tailwind CSS | 3.x | Compilado con Vite, sin CDN en runtime |
 | **Compilador de assets** | Vite | 8.x | Pipeline de build (JS + CSS) |
 | **Base de datos** | PostgreSQL | 14+ | Imagen Docker: `postgres:16-alpine` |
@@ -215,6 +217,79 @@ El proyecto incluye un `server.php` personalizado que aplica cabeceras de cache 
 
 ---
 
+### Paso 12 — Iniciar el servidor WebSocket (Laravel Reverb)
+
+Para habilitar las notificaciones y eventos en tiempo real (por ejemplo, la campana de alertas de pedidos en vivo en el panel administrativo):
+
+```bash
+php artisan reverb:start
+```
+
+> **Consejo:** Ejecuta `php artisan reverb:start --debug` en una terminal dedicada para observar la conexion y los eventos emitidos.
+
+---
+
+## Servidor WebSocket (Laravel Reverb)
+
+La plataforma utiliza **Laravel Reverb** como servidor WebSocket de alto rendimiento y **Laravel Echo** en el cliente para la transmision de eventos reactivos (por ejemplo, notificaciones de nuevos pedidos en la campana del panel administrativo).
+
+### Variables de entorno necesarias (`.env`)
+
+Asegurate de contar con la siguiente configuracion en tu `.env`:
+
+```env
+BROADCAST_CONNECTION=reverb
+
+REVERB_APP_ID=911736
+REVERB_APP_KEY=j7imdmh09w86rrv8tqtl
+REVERB_APP_SECRET=f3usahbqkzgzixazrxl8
+REVERB_HOST="127.0.0.1"
+REVERB_PORT=8080
+REVERB_SCHEME=http
+
+VITE_REVERB_APP_KEY="${REVERB_APP_KEY}"
+VITE_REVERB_HOST="${REVERB_HOST}"
+VITE_REVERB_PORT="${REVERB_PORT}"
+VITE_REVERB_SCHEME="${REVERB_SCHEME}"
+```
+
+> **Nota:** Las variables `VITE_REVERB_*` son inyectadas en tiempo de compilacion por Vite (`resources/js/echo.js`). Si cambias el host o puerto, recompila con `npm run build` o reinicia `npm run dev`.
+
+### Como levantar el servidor
+
+#### 1. En entorno de desarrollo local
+
+En una terminal independiente dentro de la carpeta del proyecto, ejecuta:
+
+```bash
+php artisan reverb:start
+```
+
+Para monitorear el trafico de WebSockets, conexiones activas y canales suscritos en tiempo real:
+
+```bash
+php artisan reverb:start --debug
+```
+
+#### 2. En produccion o Docker
+
+En produccion, Reverb debe mantenerse en ejecucion continua mediante un gestor de procesos:
+
+- **Docker:** El proyecto ya incluye el proceso configurado dentro de `docker/supervisord.conf` (`[program:reverb]`).
+- **Supervisor (Servidor Linux tradicional):**
+  ```ini
+  [program:reverb]
+  process_name=%(program_name)s_%(process_num)02d
+  command=php /var/www/ecommerce-pyme-panama/artisan reverb:start --host="0.0.0.0" --port=8080
+  autostart=true
+  autorestart=true
+  user=www-data
+  redirect_stderr=true
+  stdout_logfile=/var/www/ecommerce-pyme-panama/storage/logs/reverb.log
+  ```
+
+---
+
 ## Verificacion de la instalacion
 
 Una vez iniciado el servidor, verifica que las siguientes URLs respondan correctamente:
@@ -304,6 +379,8 @@ php artisan test --env=testing
 | `php artisan tinker` | Consola interactiva de Laravel |
 | `php artisan test --env=testing` | Suite de pruebas automatizadas |
 | `php artisan queue:listen` | Procesa trabajos en cola (`QUEUE_CONNECTION=database`) |
+| `php artisan reverb:start` | Inicia el servidor WebSocket de Laravel Reverb |
+| `php artisan reverb:start --debug` | Inicia Reverb con registro detallado de eventos y conexiones |
 | `php artisan about` | Muestra la configuracion activa (verifica `DB_DATABASE`) |
 
 ### npm (frontend)
