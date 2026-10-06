@@ -1,3 +1,97 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    /* Guest Layout & Auth Cards */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 10px 25px -5px rgba(0, 35, 73, 0.06), 0 8px 10px -6px rgba(0, 35, 73, 0.04);
+    }
+
+    .input-focus-ring:focus-within {
+        border-color: #006c47;
+        box-shadow: 0 0 0 1px #006c47;
+    }
+
+    .input-error-ring {
+        border-color: #dc2626 !important;
+        box-shadow: 0 0 0 1px #dc2626 !important;
+    }
+
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+}
+
+@layer utilities {
+    /* Shared Animations for Auth Layouts */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .fade-in-up {
+        animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    @keyframes authSlideUp {
+        0% {
+            transform: translateY(20px);
+            opacity: 0.75;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    .auth-card-slide-up {
+        animation: authSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* Horizontal Swap Animations */
+    @keyframes swapFromLeft {
+        0% {
+            transform: translateX(-60px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    @keyframes swapFromRight {
+        0% {
+            transform: translateX(60px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .animate-swap-card {
+        animation: swapFromLeft 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .animate-swap-card-reverse {
+        animation: swapFromRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .animate-swap-text {
+        animation: swapFromRight 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: 0.05s;
+    }
+    .animate-swap-text-reverse {
+        animation: swapFromLeft 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: 0.05s;
+    }
+}
