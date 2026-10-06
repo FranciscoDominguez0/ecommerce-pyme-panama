@@ -25,7 +25,10 @@
 </head>
 
 <body
-    class="bg-background text-on-surface min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden selection:bg-secondary selection:text-on-secondary antialiased font-sans text-sm">
+    class="bg-slate-50 text-slate-900 min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden selection:bg-emerald-500 selection:text-white antialiased font-sans text-sm">
+    
+    <!-- Abstract Background Pattern (Global) -->
+    <div class="absolute inset-0 z-0 pointer-events-none" style="background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 32px 32px;"></div>
     <!-- Botón Regresar -->
     @php
         $backUrl = route('inicio');

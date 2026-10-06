@@ -2,16 +2,16 @@
     <x-slot name="title">Recuperar Contraseña - PayMe Panamá</x-slot>
 
     <!-- Main Content Canvas: Mismo estilo que Login/Registro -->
-    <main class="w-full max-w-4xl lg:max-w-5xl fade-in-up my-auto px-2 sm:px-4">
+    <main class="w-full max-w-4xl lg:max-w-5xl my-auto px-2 sm:px-4">
         <div class="glass-card relative rounded-3xl sm:rounded-[36px] shadow-xl border border-slate-200/90 overflow-hidden flex flex-col lg:flex-row items-center justify-between p-4 sm:p-6 lg:p-10 min-h-[580px]" style="background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #ecfdf5 100%) !important;">
             
             <!-- Ambient Fluid Organic Waves -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden">
-                <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl"></div>
-                <div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full bg-teal-200/35 blur-3xl"></div>
-                <div class="absolute top-1/2 left-1/4 w-72 h-72 rounded-full bg-emerald-100/50 blur-2xl"></div>
+                <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl animate-blob"></div>
+                <div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full bg-teal-200/35 blur-3xl animate-blob animation-delay-2000"></div>
+                <div class="absolute top-1/2 left-1/4 w-72 h-72 rounded-full bg-emerald-100/50 blur-2xl animate-blob animation-delay-4000"></div>
                 <!-- Formas fluidas orgánicas en SVG -->
-                <svg class="absolute inset-0 w-full h-full opacity-70 hidden lg:block" viewBox="0 0 900 650" fill="none" preserveAspectRatio="none">
+                <svg class="absolute inset-0 w-full h-full opacity-70 hidden lg:block animate-swap-text" viewBox="0 0 900 650" fill="none" preserveAspectRatio="none">
                     <path d="M-80,-20 C240,60 190,380 -60,650 L-100,650 L-100,-20 Z" fill="url(#waveGrad1)" />
                     <path d="M-40,140 C340,240 310,480 80,650 L-80,650 Z" fill="url(#waveGrad2)" opacity="0.75"/>
                     <path d="M-20,320 C260,400 220,560 180,650 L-40,650 Z" fill="url(#waveGrad3)" opacity="0.6"/>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Left Side: Clean Bold Statement con logo -->
-            <div class="w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 text-slate-800 z-10 flex flex-col justify-between self-stretch">
+            <div class="hidden lg:flex w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 text-slate-800 z-10 flex-col justify-between self-stretch">
                 <!-- Logo en la esquina izquierda superior -->
                 <div class="flex items-center gap-2.5 mb-6">
                     <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -53,6 +53,7 @@
                     
                     <!-- Header inside card -->
                     <div class="flex flex-col items-start mb-5 text-left">
+                        <x-application-logo :boxed="false" size="default" class="w-10 h-10 mb-4 block lg:hidden" />
                         <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                             Recuperar Contraseña
                         </h1>

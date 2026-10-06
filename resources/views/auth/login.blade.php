@@ -33,7 +33,7 @@
             </div>
 
             <!-- Left Side: Clean Bold Statement con logo en la esquina izquierda -->
-            <div class="w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 text-slate-800 z-10 flex flex-col justify-between self-stretch animate-swap-text">
+            <div class="hidden lg:flex w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 text-slate-800 z-10 flex-col justify-between self-stretch animate-swap-text">
                 <!-- Logo en la esquina izquierda superior -->
                 <div class="flex items-center gap-2.5 mb-6">
                     <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -53,6 +53,7 @@
                     
                     <!-- Header inside card (sin logo duplicado) -->
                     <div class="flex flex-col items-start mb-5 text-left">
+                        <x-application-logo :boxed="false" size="default" class="w-10 h-10 mb-4 block lg:hidden" />
                         <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                             Bienvenido de nuevo
                         </h1>
@@ -176,7 +177,7 @@
 
                         <!-- Desafío Cloudflare Turnstile -->
                         <div class="mt-1 flex flex-col items-center justify-center min-h-[65px]">
-                            <div id="turnstile-container" class="cf-turnstile flex justify-center" data-sitekey="{{ config('services.turnstile.key') }}" data-theme="light"></div>
+                            <div id="turnstile-container" class="cf-turnstile flex justify-center w-full scale-[0.85] sm:scale-100 origin-center -mx-4 sm:mx-0" data-sitekey="{{ config('services.turnstile.key') }}" data-theme="light" data-size="flexible"></div>
                             @error('cf-turnstile-response')
                                 <p class="text-xs text-red-600 font-medium mt-1 text-center">{{ $message }}</p>
                             @enderror

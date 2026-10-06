@@ -20,36 +20,17 @@ class CuponController extends Controller
     /**
      * Muestra el listado de cupones con métricas KPI, buscador y filtros.
      */
-    public function index(Request $request): View
+    public function index(Request $request, \App\Services\CuponService $cuponService): View
     {
         $busqueda = trim($request->input('buscar', ''));
         $filtroTipo = $request->input('tipo', 'all');
 
-        // Métricas KPI
-        $totalCupones = Cupon::count();
-        $cuponesActivosCount = Cupon::where('activo', true)
-            ->where(function ($q) {
-                $q->whereNull('fin_en')->orWhere('fin_en', '>=', Carbon::now());
-            })->count();
-        $totalDescuentosMonto = (float) UsoCupon::sum('descuento_aplicado');
+        $metricas = $cuponService->obtenerMetricasAdmin($busqueda, $filtroTipo);
 
-        // Query principal
-        $query = Cupon::with(['categoria', 'producto']);
-
-        if (!empty($busqueda)) {
-            $query->where(function ($q) use ($busqueda) {
-                $q->whereRaw('unaccent(codigo) ILIKE unaccent(?)', ["%{$busqueda}%"])
-                  ->orWhereRaw('unaccent(tipo) ILIKE unaccent(?)', ["%{$busqueda}%"]);
-            });
-        }
-
-        if (in_array($filtroTipo, ['porcentaje', 'monto_fijo', 'envio_gratis'])) {
-            $query->where('tipo', $filtroTipo);
-        }
-
-        $cupones = $query->orderBy('creado_en', 'desc')
-            ->paginate(15)
-            ->withQueryString();
+        $cupones = $metricas['cupones'];
+        $totalCupones = $metricas['totalCupones'];
+        $cuponesActivosCount = $metricas['cuponesActivosCount'];
+        $totalDescuentosMonto = $metricas['totalDescuentosMonto'];
 
         return view('admin.promociones.cupones', compact(
             'cupones',

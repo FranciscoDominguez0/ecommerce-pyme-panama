@@ -94,4 +94,21 @@
         animation: swapFromLeft 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
         animation-delay: 0.05s;
     }
+
+    /* Aurora Blob Animations */
+    @keyframes blobBounce {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.05); }
+        66% { transform: translate(-20px, 20px) scale(0.95); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob {
+        animation: blobBounce 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
 }

@@ -12,6 +12,39 @@ use Illuminate\Support\Facades\DB;
 class CuponService
 {
     /**
+     * Obtiene métricas y cupones paginados para el panel de administración.
+     */
+    public function obtenerMetricasAdmin(string $busqueda, string $filtroTipo): array
+    {
+        // Métricas KPI
+        $totalCupones = Cupon::count();
+        $cuponesActivosCount = Cupon::where('activo', true)
+            ->where(function ($q) {
+                $q->whereNull('fin_en')->orWhere('fin_en', '>=', Carbon::now());
+            })->count();
+        $totalDescuentosMonto = (float) UsoCupon::sum('descuento_aplicado');
+
+        // Query principal
+        $query = Cupon::with(['categoria', 'producto']);
+
+        if (!empty($busqueda)) {
+            $query->where(function ($q) use ($busqueda) {
+                $q->whereRaw('unaccent(codigo) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereRaw('unaccent(tipo) ILIKE unaccent(?)', ["%{$busqueda}%"]);
+            });
+        }
+
+        if (in_array($filtroTipo, ['porcentaje', 'monto_fijo', 'envio_gratis'])) {
+            $query->where('tipo', $filtroTipo);
+        }
+
+        $cupones = $query->orderBy('creado_en', 'desc')
+            ->paginate(15)
+            ->withQueryString();
+
+        return compact('cupones', 'totalCupones', 'cuponesActivosCount', 'totalDescuentosMonto');
+    }
+    /**
      * Valida un código de cupón contra el carrito y el usuario actual.
      *
      * @param string $codigo Código del cupón
@@ -199,14 +232,23 @@ class CuponService
             return false;
         }
 
-        $promocion = PromocionEnvioGratis::where('zona_envio_id', $zonaEnvioId)
-            ->where('activo', true)
-            ->get()
-            ->first(function ($promo) use ($subtotal) {
-                return $promo->aplicaParaMonto($subtotal);
-            });
+        $ahora = Carbon::now();
 
-        return $promocion !== null;
+        return PromocionEnvioGratis::where('zona_envio_id', $zonaEnvioId)
+            ->where('activo', true)
+            ->where(function ($q) use ($ahora) {
+                $q->whereNull('inicio_en')
+                  ->orWhere('inicio_en', '<=', $ahora);
+            })
+            ->where(function ($q) use ($ahora) {
+                $q->whereNull('fin_en')
+                  ->orWhere('fin_en', '>=', $ahora);
+            })
+            ->where(function ($q) use ($subtotal) {
+                $q->whereNull('monto_minimo')
+                  ->orWhere('monto_minimo', '<=', $subtotal);
+            })
+            ->exists();
     }
 
     /**
@@ -214,12 +256,18 @@ class CuponService
      */
     public function obtenerProductoDelMesActivo(): ?ProductoDelMes
     {
-        $promociones = ProductoDelMes::with('producto')
-            ->where('activo', true)
-            ->get();
+        $ahora = Carbon::now();
 
-        return $promociones->first(function ($promo) {
-            return $promo->esVigente();
-        });
+        return ProductoDelMes::with('producto')
+            ->where('activo', true)
+            ->where(function ($q) use ($ahora) {
+                $q->whereNull('inicio_en')
+                  ->orWhere('inicio_en', '<=', $ahora);
+            })
+            ->where(function ($q) use ($ahora) {
+                $q->whereNull('fin_en')
+                  ->orWhere('fin_en', '>=', $ahora);
+            })
+            ->first();
     }
 }

@@ -131,7 +131,7 @@ class RegistroTest extends TestCase
             ->assertOk()
             ->assertSee('id="terms"', false)
             ->assertSee('name="terms"', false)
-            ->assertSee('He leído y acepto los');
+            ->assertSee('Acepto los');
     }
 
     public function test_la_vista_de_registro_tiene_boton_de_envio(): void

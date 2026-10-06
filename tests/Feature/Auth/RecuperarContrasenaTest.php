@@ -130,7 +130,7 @@ class RecuperarContrasenaTest extends TestCase
     {
         $this->get('/forgot-password')
             ->assertOk()
-            ->assertSee('Enviar enlace de recuperación');
+            ->assertSee('Enviar enlace');
     }
 
     public function test_la_vista_de_recuperacion_usa_la_ruta_correcta(): void

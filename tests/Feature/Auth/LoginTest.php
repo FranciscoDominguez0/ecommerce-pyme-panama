@@ -72,7 +72,7 @@ class LoginTest extends TestCase
         $this->get('/login')
             ->assertOk()
             ->assertSee('PayMe Panamá')
-            ->assertSee('Iniciar sesión');
+            ->assertSee('Bienvenido de nuevo');
     }
 
     public function test_la_vista_de_login_tiene_campo_de_correo_con_icono(): void

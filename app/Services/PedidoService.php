@@ -29,6 +29,34 @@ class PedidoService
         $this->carritoService = $carritoService;
     }
 
+    public function obtenerPedidosPaginadosAdmin(string $estado, string $busqueda)
+    {
+        $query = Pedido::with(['usuario', 'ultimoEstado']);
+
+        if ($estado !== 'todos') {
+            $query->whereHas('estados', function ($q) use ($estado) {
+                $q->where('estado', $estado)
+                  ->whereIn('id', function ($sub) {
+                      $sub->selectRaw('MAX(id)')
+                          ->from('estados_pedido')
+                          ->groupBy('pedido_id');
+                  });
+            });
+        }
+
+        if (!empty($busqueda)) {
+            $query->where(function ($q) use ($busqueda) {
+                $q->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                  ->orWhereHas('usuario', function ($uq) use ($busqueda) {
+                      $uq->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$busqueda}%"])
+                         ->orWhereRaw('unaccent(apellido) ILIKE unaccent(?)', ["%{$busqueda}%"]);
+                  });
+            });
+        }
+
+        return $query->orderByDesc('creado_en')->paginate(15)->withQueryString();
+    }
+
     /**
      * Calcula los totales del pedido antes de procesarlo.
      */
@@ -223,10 +251,59 @@ class PedidoService
     }
 
     /**
-     * Registra un nuevo estado para el pedido.
+     * Registra un nuevo estado para el pedido aplicando las reglas de negocio.
+     *
+     * @throws Exception Si el cambio de estado no es permitido.
      */
     public function cambiarEstado(Pedido $pedido, string $nuevoEstado, ?int $usuarioId = null, ?string $comentario = null): EstadoPedido
     {
+        // Un pedido reembolsado tiene su ciclo financiero y logístico cerrado permanentemente
+        if ($pedido->ultimoEstado?->estado === 'reembolsado' && $nuevoEstado !== 'reembolsado') {
+            throw new Exception('Este pedido ya se encuentra reembolsado y su ciclo está cerrado. No se permiten más cambios de estado.');
+        }
+
+        // Bloquear reembolsos directos desde el selector genérico de logística, a menos que provenga del flujo de reembolso (Stripe)
+        // Nota: en este caso asumimos que si el comentario incluye "Stripe" es válido, 
+        // pero idealmente esto se maneja con un método dedicado `reembolsarPedido`
+        // Para no romper compatibilidad, si viene de cambiarEstado y es reembolsado sin ser Stripe, lanzamos error.
+        if ($nuevoEstado === 'reembolsado' && !str_contains($comentario ?? '', 'Stripe') && !str_contains($comentario ?? '', 'reembolso')) {
+            throw new Exception('Los reembolsos financieros deben ejecutarse formalmente mediante el botón de Reembolso.');
+        }
+
+        // Validar que exista información de envío antes de avanzar a estados exclusivos de logística
+        if (in_array($nuevoEstado, ['en_transito', 'problema_entrega']) && !$pedido->envio) {
+            throw new Exception('Debe configurar la Gestión de Envío (Método de Envío) antes de pasar a este estado.');
+        }
+
+        if (!$comentario) {
+            // Auto-generar comentarios para estados de envío si no se provee uno
+            $empresa = $pedido->envio?->empresa_mensajeria ?? 'nuestra logística';
+            $guia = ($pedido->envio && $pedido->envio->numero_guia) ? " (Referencia: {$pedido->envio->numero_guia})" : "";
+            
+            switch ($nuevoEstado) {
+                case 'en_preparacion':
+                    $comentario = 'El pedido ha comenzado a prepararse en bodega.';
+                    break;
+                case 'listo_para_envio':
+                    $comentario = 'El pedido está empacado y listo para ser enviado.';
+                    break;
+                case 'enviado':
+                    $comentario = "El pedido ha sido despachado a través de {$empresa}{$guia}.";
+                    break;
+                case 'en_transito':
+                    $comentario = "El pedido se encuentra en ruta hacia su destino mediante {$empresa}.";
+                    break;
+                case 'entregado':
+                    $comentario = "El pedido ha sido entregado exitosamente al destinatario.";
+                    break;
+                case 'problema_entrega':
+                    $comentario = "Se ha reportado un inconveniente durante el proceso de entrega. Estamos revisando el caso.";
+                    break;
+                default:
+                    $comentario = 'Estado actualizado a ' . str_replace('_', ' ', $nuevoEstado);
+            }
+        }
+
         $estado = EstadoPedido::create([
             'pedido_id' => $pedido->id,
             'usuario_id' => $usuarioId,
@@ -242,6 +319,11 @@ class PedidoService
         // Regla de negocio: Anular factura cuando el pedido se cancela o reembolsa
         if (in_array($nuevoEstado, ['cancelado', 'reembolsado'])) {
             app(FacturaService::class)->anularFactura($pedido);
+        }
+
+        // Regla de negocio: Registrar fecha de entrega real
+        if ($nuevoEstado === 'entregado' && $pedido->envio) {
+            $pedido->envio->update(['fecha_entrega_real' => now()]);
         }
 
         // Regla de negocio: Enviar email cuando el pedido es entregado

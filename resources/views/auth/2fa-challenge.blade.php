@@ -7,9 +7,9 @@
             
             <!-- Ambient Fluid Organic Waves -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden">
-                <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl"></div>
-                <div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full bg-teal-200/35 blur-3xl"></div>
-                <div class="absolute top-1/2 left-1/4 w-72 h-72 rounded-full bg-emerald-100/50 blur-2xl"></div>
+                <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl animate-blob"></div>
+                <div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full bg-teal-200/35 blur-3xl animate-blob animation-delay-2000"></div>
+                <div class="absolute top-1/2 left-1/4 w-72 h-72 rounded-full bg-emerald-100/50 blur-2xl animate-blob animation-delay-4000"></div>
                 <!-- Formas fluidas orgánicas en SVG -->
                 <svg class="absolute inset-0 w-full h-full opacity-70 hidden lg:block animate-swap-text" viewBox="0 0 900 650" fill="none" preserveAspectRatio="none">
                     <path d="M-80,-20 C240,60 190,380 -60,650 L-100,650 L-100,-20 Z" fill="url(#waveGrad1)" />
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Left Side: Clean Bold Statement con logo -->
-            <div class="w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 text-slate-800 z-10 flex flex-col justify-between self-stretch animate-swap-text">
+            <div class="hidden lg:flex w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 text-slate-800 z-10 flex-col justify-between self-stretch animate-swap-text">
                 <!-- Logo en la esquina izquierda superior -->
                 <div class="flex items-center gap-2.5 mb-6">
                     <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -53,6 +53,7 @@
                     
                     <!-- Header inside card -->
                     <div class="flex flex-col items-start mb-5 text-left">
+                        <x-application-logo :boxed="false" size="default" class="w-10 h-10 mb-4 block lg:hidden" />
                         <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                             Verificación en dos pasos
                         </h1>

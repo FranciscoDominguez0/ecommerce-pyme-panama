@@ -20,32 +20,10 @@ class PedidoController extends Controller
 
     public function index(Request $request)
     {
-        $query = Pedido::with(['usuario', 'ultimoEstado']);
-
-        if ($request->has('estado') && $request->estado !== 'todos') {
-            $estado = $request->estado;
-            $query->whereHas('estados', function ($q) use ($estado) {
-                $q->where('estado', $estado)
-                  ->whereIn('id', function ($sub) {
-                      $sub->selectRaw('MAX(id)')
-                          ->from('estados_pedido')
-                          ->groupBy('pedido_id');
-                  });
-            });
-        }
-
-        if ($request->filled('q')) {
-            $busqueda = $request->q;
-            $query->where(function ($q) use ($busqueda) {
-                $q->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', ["%{$busqueda}%"])
-                  ->orWhereHas('usuario', function ($uq) use ($busqueda) {
-                      $uq->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$busqueda}%"])
-                         ->orWhereRaw('unaccent(apellido) ILIKE unaccent(?)', ["%{$busqueda}%"]);
-                  });
-            });
-        }
-
-        $pedidos = $query->orderByDesc('creado_en')->paginate(15)->withQueryString();
+        $pedidos = $this->pedidoService->obtenerPedidosPaginadosAdmin(
+            $request->input('estado', 'todos'),
+            $request->input('q', '')
+        );
 
         return view('admin.pedidos.index', compact('pedidos'));
     }
@@ -67,58 +45,13 @@ class PedidoController extends Controller
         ]);
 
         $pedido = Pedido::with(['envio', 'ultimoEstado'])->findOrFail($id);
-        
-        // Un pedido reembolsado tiene su ciclo financiero y logístico cerrado permanentemente
-        if ($pedido->ultimoEstado?->estado === 'reembolsado') {
-            return back()->with('toast_error', 'Este pedido ya se encuentra reembolsado y su ciclo está cerrado. No se permiten más cambios de estado.');
-        }
 
-        $nuevoEstado = $request->estado;
-        
-        // Bloquear reembolsos directos desde el selector genérico de logística
-        if ($nuevoEstado === 'reembolsado') {
-            return back()->with('toast_error', 'Los reembolsos financieros no pueden procesarse desde el selector de estado. Deben ejecutarse formalmente mediante el botón de Reembolso con Stripe con su debida justificación.');
+        try {
+            $this->pedidoService->cambiarEstado($pedido, $request->estado, Auth::id(), $request->comentario);
+            return back()->with('toast_success', 'Estado del pedido actualizado correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('toast_error', $e->getMessage());
         }
-        
-        // Validar que exista información de envío antes de avanzar a estados exclusivos de logística
-        if (in_array($nuevoEstado, ['en_transito', 'problema_entrega']) && !$pedido->envio) {
-            return back()->with('toast_error', 'Debe configurar la Gestión de Envío (Método de Envío) antes de pasar a este estado.');
-        }
-
-        if ($request->comentario) {
-            $comentario = $request->comentario;
-        } else {
-            // Auto-generar comentarios para estados de envío si no se provee uno
-            $empresa = $pedido->envio?->empresa_mensajeria ?? 'nuestra logística';
-            $guia = ($pedido->envio && $pedido->envio->numero_guia) ? " (Referencia: {$pedido->envio->numero_guia})" : "";
-            
-            switch ($nuevoEstado) {
-                case 'enviado':
-                    $comentario = "El pedido ha sido despachado a través de {$empresa}{$guia}.";
-                    break;
-                case 'en_transito':
-                    $comentario = "El pedido se encuentra en ruta hacia su destino mediante {$empresa}.";
-                    break;
-                case 'entregado':
-                    $comentario = "El pedido ha sido entregado exitosamente al destinatario.";
-                    break;
-                case 'problema_entrega':
-                    $comentario = "Se ha reportado un inconveniente durante el proceso de entrega. Estamos revisando el caso.";
-                    break;
-                default:
-                    $comentario = 'Estado actualizado a ' . str_replace('_', ' ', $nuevoEstado);
-            }
-        }
-
-        $this->pedidoService->cambiarEstado($pedido, $nuevoEstado, Auth::id(), $comentario);
-
-        if ($nuevoEstado === 'entregado' && $pedido->envio) {
-            $pedido->envio->update([
-                'fecha_entrega_real' => now()
-            ]);
-        }
-
-        return back()->with('toast_success', 'Estado del pedido actualizado correctamente.');
     }
 
     public function avanzarEstado(Request $request, $id)
@@ -129,42 +62,19 @@ class PedidoController extends Controller
 
         $pedido = Pedido::with(['envio', 'ultimoEstado'])->findOrFail($id);
         
-        if ($pedido->ultimoEstado?->estado === 'reembolsado') {
-            return back()->with('toast_error', 'Este pedido ya se encuentra reembolsado y su ciclo está cerrado.');
+        $nuevoEstado = match ($request->accion) {
+            'iniciar_preparacion' => 'en_preparacion',
+            'marcar_listo'        => 'listo_para_envio',
+            'marcar_transito'     => 'en_transito',
+            'marcar_entregado'    => 'entregado',
+        };
+
+        try {
+            $this->pedidoService->cambiarEstado($pedido, $nuevoEstado, Auth::id());
+            return back()->with('toast_success', 'Estado avanzado correctamente a: ' . str_replace('_', ' ', strtoupper($nuevoEstado)));
+        } catch (\Exception $e) {
+            return back()->with('toast_error', $e->getMessage());
         }
-        
-        $nuevoEstado = '';
-        $comentario = '';
-
-        switch ($request->accion) {
-            case 'iniciar_preparacion':
-                $nuevoEstado = 'en_preparacion';
-                $comentario = 'El pedido ha comenzado a prepararse en bodega.';
-                break;
-            case 'marcar_listo':
-                $nuevoEstado = 'listo_para_envio';
-                $comentario = 'El pedido está empacado y listo para ser enviado.';
-                break;
-            case 'marcar_transito':
-                $nuevoEstado = 'en_transito';
-                $empresa = $pedido->envio->empresa_mensajeria ?? 'nuestra logística';
-                $comentario = "El pedido se encuentra en ruta hacia su destino mediante {$empresa}.";
-                break;
-            case 'marcar_entregado':
-                $nuevoEstado = 'entregado';
-                $comentario = 'El pedido ha sido entregado exitosamente al destinatario.';
-                break;
-        }
-
-        $this->pedidoService->cambiarEstado($pedido, $nuevoEstado, Auth::id(), $comentario);
-
-        if ($nuevoEstado === 'entregado' && $pedido->envio) {
-            $pedido->envio->update([
-                'fecha_entrega_real' => now()
-            ]);
-        }
-
-        return back()->with('toast_success', 'Estado del pedido actualizado a: ' . str_replace('_', ' ', strtoupper($nuevoEstado)));
     }
 
     public function aprobarPago(Request $request, $id)
