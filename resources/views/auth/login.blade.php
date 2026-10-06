@@ -179,7 +179,7 @@
 
                         <!-- Desafío Cloudflare Turnstile -->
                         <div class="mt-1 flex flex-col items-center justify-center min-h-[65px]">
-                            <div id="turnstile-container" class="cf-turnstile flex justify-center w-full scale-[0.85] sm:scale-100 origin-center -mx-4 sm:mx-0" data-sitekey="{{ config('services.turnstile.key') }}" data-theme="light" data-size="flexible"></div>
+                            <div id="turnstile-container" class="cf-turnstile flex justify-center w-full scale-[0.85] sm:scale-100 origin-center -mx-4 sm:mx-0" data-sitekey="{{ config('services.turnstile.key') }}" data-theme="light" data-size="flexible" data-language="es"></div>
                             @error('cf-turnstile-response')
                                 <p class="text-xs text-red-600 font-medium mt-1 text-center">{{ $message }}</p>
                             @enderror
@@ -262,6 +262,7 @@
                 turnstileWidgetId = window.turnstile.render(container, {
                     sitekey: '{{ config('services.turnstile.key') }}',
                     theme: 'light',
+                    language: 'es',
                 });
                 container.dataset.inited = 'true';
             } catch (err) {
