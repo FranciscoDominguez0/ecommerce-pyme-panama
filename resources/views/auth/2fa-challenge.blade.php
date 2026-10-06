@@ -3,7 +3,7 @@
 
     <!-- Main Content Canvas: Mismo estilo que Login/Registro -->
     <main class="w-full max-w-4xl lg:max-w-5xl my-auto px-2 sm:px-4">
-        <div class="glass-card relative rounded-3xl sm:rounded-[36px] shadow-xl border border-slate-200/90 overflow-hidden flex flex-col lg:flex-row items-center justify-between p-4 sm:p-6 lg:p-10 min-h-[580px]" style="background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #ecfdf5 100%) !important;">
+        <div class="relative overflow-hidden flex flex-col lg:flex-row items-center justify-between lg:glass-card lg:rounded-3xl lg:sm:rounded-[36px] lg:shadow-xl lg:border lg:border-slate-200/90 lg:p-4 lg:sm:p-6 lg:p-10 lg:min-h-[580px] lg:bg-[linear-gradient(135deg,#f0fdf4_0%,#f8fafc_50%,#ecfdf5_100%)]">
             
             <!-- Ambient Fluid Organic Waves -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden">
@@ -53,7 +53,10 @@
                     
                     <!-- Header inside card -->
                     <div class="flex flex-col items-start mb-5 text-left">
-                        <x-application-logo :boxed="false" size="default" class="w-10 h-10 mb-4 block lg:hidden" />
+                        <div class="flex items-center gap-2.5 mb-4 lg:hidden">
+                            <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
+                            <span class="text-xl font-black text-slate-900 tracking-tight">PayMe <span class="text-emerald-700">Panamá</span></span>
+                        </div>
                         <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                             Verificación en dos pasos
                         </h1>
