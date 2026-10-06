@@ -265,8 +265,7 @@ class PedidoService
         // Bloquear reembolsos directos desde el selector genérico de logística, a menos que provenga del flujo de reembolso (Stripe)
         // Nota: en este caso asumimos que si el comentario incluye "Stripe" es válido, 
         // pero idealmente esto se maneja con un método dedicado `reembolsarPedido`
-        // Para no romper compatibilidad, si viene de cambiarEstado y es reembolsado sin ser Stripe, lanzamos error.
-        if ($nuevoEstado === 'reembolsado' && !str_contains($comentario ?? '', 'Stripe') && !str_contains($comentario ?? '', 'reembolso')) {
+        if ($nuevoEstado === 'reembolsado' && !str_contains($comentario ?? '', 'Stripe')) {
             throw new Exception('Los reembolsos financieros deben ejecutarse formalmente mediante el botón de Reembolso.');
         }
 

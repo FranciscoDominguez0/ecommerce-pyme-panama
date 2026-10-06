@@ -37,7 +37,7 @@ class FacturaServiceTest extends BaseAdminTest
             'numero' => 'F-' . date('Y') . '-0001',
         ]);
         $this->assertSame(1, Factura::where('pedido_id', $pedido->id)->count(), 'Debe existir una sola factura por pedido.');
-        $this->assertSame('pago_confirmado', $pedido->ultimoEstado->estado);
+        $this->assertSame('pago_confirmado', $pedido->fresh()->ultimoEstado->estado);
     }
 
     // Numeración secuencial y correlativa
