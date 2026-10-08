@@ -9,107 +9,108 @@ use Illuminate\Http\Request;
 class ZonaEnvioController extends Controller
 {
     /**
-     * Muestra la lista de zonas de envío.
+     * Muestra la lista de zonas de envío (Couriers).
      */
     public function index()
     {
-        $zonas = ZonaEnvio::orderBy('nombre', 'asc')->get();
+        $zonas = \App\Models\CourierSucursal::orderBy('zona', 'asc')->orderBy('courier', 'asc')->get();
 
         return view('admin.configuracion.zonas-envio', compact('zonas'));
     }
 
     /**
-     * Almacena una nueva zona de envío en la base de datos.
+     * Almacena una nueva sucursal de courier en la base de datos.
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'costo' => 'required|numeric|min:0|max:99999999.99',
+            'zona' => 'required|string|max:255',
+            'courier' => 'required|string|max:255',
+            'sucursal' => 'required|string|max:255',
+            'direccion' => 'nullable|string',
+            'tarifa_uno_hasta_7lb' => 'required|numeric|min:0|max:99999999.99',
+            'telefono' => 'nullable|string|max:255',
             'activo' => 'nullable|boolean',
         ]);
 
         try {
             $validated['activo'] = $request->has('activo') ? (bool)$request->input('activo') : true;
 
-            ZonaEnvio::create($validated);
+            \App\Models\CourierSucursal::create($validated);
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', 'Zona de envío creada exitosamente.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()
-                ->with('error', 'Error al guardar: El monto ingresado excede la precisión de la base de datos (máx. 99,999,999.99).')
-                ->withInput();
+                ->with('success', 'Sucursal de Courier creada exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Ocurrió un error al intentar crear la zona de envío.')
+                ->with('error', 'Ocurrió un error al intentar crear la sucursal de Courier.')
                 ->withInput();
         }
     }
 
     /**
-     * Actualiza una zona de envío existente.
+     * Actualiza una sucursal de courier existente.
      */
-    public function update(Request $request, ZonaEnvio $zonaEnvio)
+    public function update(Request $request, $id)
     {
+        $courierSucursal = \App\Models\CourierSucursal::findOrFail($id);
+
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'costo' => 'required|numeric|min:0|max:99999999.99',
+            'zona' => 'required|string|max:255',
+            'courier' => 'required|string|max:255',
+            'sucursal' => 'required|string|max:255',
+            'direccion' => 'nullable|string',
+            'tarifa_uno_hasta_7lb' => 'required|numeric|min:0|max:99999999.99',
+            'telefono' => 'nullable|string|max:255',
             'activo' => 'nullable|boolean',
         ]);
 
         try {
             $validated['activo'] = $request->has('activo') ? (bool)$request->input('activo') : false;
 
-            $zonaEnvio->update($validated);
+            $courierSucursal->update($validated);
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', 'Zona de envío actualizada exitosamente.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()
-                ->with('error', 'Error al actualizar: El monto ingresado excede la precisión de la base de datos (máx. 99,999,999.99).')
-                ->withInput();
+                ->with('success', 'Sucursal de Courier actualizada exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Ocurrió un error al intentar actualizar la zona de envío.')
+                ->with('error', 'Ocurrió un error al intentar actualizar la sucursal de Courier.')
                 ->withInput();
         }
     }
 
     /**
-     * Alterna el estado activo / inactivo de una zona de envío.
+     * Alterna el estado activo / inactivo de una sucursal.
      */
-    public function toggle(ZonaEnvio $zonaEnvio)
+    public function toggle($id)
     {
+        $courierSucursal = \App\Models\CourierSucursal::findOrFail($id);
         try {
-            $zonaEnvio->update([
-                'activo' => !$zonaEnvio->activo,
+            $courierSucursal->update([
+                'activo' => !$courierSucursal->activo,
             ]);
 
-            $estadoTexto = $zonaEnvio->activo ? 'activada' : 'desactivada';
-
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', 'Estado de zona de envío actualizado exitosamente.');
+                ->with('success', 'Estado actualizado exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Ocurrió un error al cambiar el estado de la zona de envío.');
+                ->with('error', 'Ocurrió un error al cambiar el estado.');
         }
     }
 
     /**
-     * Elimina una zona de envío de la base de datos.
+     * Elimina una sucursal de courier de la base de datos.
      */
-    public function destroy(ZonaEnvio $zonaEnvio)
+    public function destroy($id)
     {
+        $courierSucursal = \App\Models\CourierSucursal::findOrFail($id);
         try {
-            $nombre = $zonaEnvio->nombre;
-            $zonaEnvio->delete();
+            $courierSucursal->delete();
 
             return redirect()->route('admin.zonas-envio.index')
-                ->with('success', 'Zona de envío eliminada exitosamente.');
+                ->with('success', 'Sucursal eliminada exitosamente.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'No se pudo eliminar la zona de envío.');
+                ->with('error', 'No se pudo eliminar la sucursal.');
         }
     }
 }

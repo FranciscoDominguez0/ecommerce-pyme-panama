@@ -53,8 +53,14 @@ class CheckoutController extends Controller
      */
     public function pago(Request $request)
     {
-        if (!session()->has('checkout_direccion_id')) {
-            return redirect()->route('cliente.checkout.direccion')->with('warning', 'Selecciona una dirección de envío primero.');
+        $metodoEntrega = session('checkout_metodo_entrega');
+        $tieneDireccion = session()->has('checkout_direccion_id');
+        $tieneCourier = session()->has('checkout_courier_sucursal');
+
+        $tieneContacto = session()->has('checkout_contacto_nombre') && session()->has('checkout_contacto_email');
+
+        if (!$tieneContacto || !$metodoEntrega || ($metodoEntrega === 'delivery' && !$tieneDireccion) || ($metodoEntrega === 'retiro_courier' && !$tieneCourier)) {
+            return redirect()->route('cliente.checkout.direccion')->with('warning', 'Completa tus datos de contacto y selecciona una opción de entrega primero.');
         }
 
         return view('cliente.checkout.pago');
@@ -97,10 +103,22 @@ class CheckoutController extends Controller
         $direccion = Direccion::find(session('checkout_direccion_id'));
         $zonaEnvio = ZonaEnvio::find(session('checkout_zona_envio_id'));
         $metodoPago = session('checkout_metodo_pago');
-        
-        $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon);
+        $metodoEntrega = session('checkout_metodo_entrega', 'delivery');
+        $courierSucursal = null;
+        $costoEnvioEspecial = null;
 
-        return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales'));
+        if ($metodoEntrega === 'retiro_courier' && session()->has('checkout_courier_sucursal')) {
+            $courierSucursal = \App\Models\CourierSucursal::find(session('checkout_courier_sucursal'));
+            if ($courierSucursal) {
+                $costoEnvioEspecial = $courierSucursal->tarifa_uno_hasta_7lb;
+            }
+        } elseif ($metodoEntrega === 'retiro_local') {
+            $costoEnvioEspecial = 0.00;
+        }
+        
+        $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
+
+        return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales', 'metodoEntrega', 'courierSucursal'));
     }
 
     /**
@@ -124,11 +142,25 @@ class CheckoutController extends Controller
         $metodoPago = session('checkout_metodo_pago');
         $comprobanteRuta = session('checkout_comprobante_ruta');
         
-        if (!$direccionId || !$metodoPago) {
+        $metodoEntrega = session('checkout_metodo_entrega', 'delivery');
+        $courierSucursalId = session('checkout_courier_sucursal');
+        
+        $tieneContacto = session()->has('checkout_contacto_nombre') && session()->has('checkout_contacto_email');
+        if (!$tieneContacto || !$metodoPago || ($metodoEntrega === 'delivery' && !$direccionId) || ($metodoEntrega === 'retiro_courier' && !$courierSucursalId)) {
             return redirect()->route('cliente.checkout.direccion')->with('error', 'Faltan datos para procesar tu pedido.');
         }
 
-        $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon);
+        $costoEnvioEspecial = null;
+        if ($metodoEntrega === 'retiro_courier' && $courierSucursalId) {
+            $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
+            if ($sucursal) {
+                $costoEnvioEspecial = $sucursal->tarifa_uno_hasta_7lb;
+            }
+        } elseif ($metodoEntrega === 'retiro_local') {
+            $costoEnvioEspecial = 0.00;
+        }
+
+        $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
         $pagoExitoso = false;
 
         // Intentar procesar el pago antes de crear el pedido
@@ -156,13 +188,31 @@ class CheckoutController extends Controller
                 $stripeBrand = session('checkout_stripe_brand');
                 $stripeLast4 = session('checkout_stripe_last4');
                 $stripePm = session('checkout_stripe_pm');
-                $notasInternas = json_encode([
+                $notasInternasData = [
                     'tarjeta_marca' => $stripeBrand,
                     'tarjeta_last4' => $stripeLast4,
                     'stripe_pm' => is_string($stripePm) ? $stripePm : ($stripePm['id'] ?? 'simulacion'),
                     'stripe_payment_intent_id' => $stripePiId,
-                ]);
+                ];
+            } else {
+                $notasInternasData = [];
             }
+            
+            $notasInternasData['metodo_entrega'] = $metodoEntrega;
+            if ($metodoEntrega === 'retiro_courier') {
+                $notasInternasData['courier_sucursal_id'] = $courierSucursalId;
+            }
+            
+            // Guardar detalles de contacto
+            $notasInternasData['contacto'] = [
+                'nombre' => session('checkout_contacto_nombre'),
+                'apellido' => session('checkout_contacto_apellido'),
+                'email' => session('checkout_contacto_email'),
+                'telefono1' => session('checkout_contacto_telefono1'),
+                'telefono2' => session('checkout_contacto_telefono2'),
+            ];
+            
+            $notasInternas = json_encode($notasInternasData);
 
             $pedido = $this->pedidoService->crearDesdeCarrito(
                 $carrito, 
@@ -171,7 +221,8 @@ class CheckoutController extends Controller
                 $request->notas_cliente,
                 $zonaEnvio,
                 $comprobanteRuta,
-                $notasInternas
+                $notasInternas,
+                $costoEnvioEspecial
             );
 
             if ($stripePiId) {
@@ -198,6 +249,11 @@ class CheckoutController extends Controller
                 'checkout_stripe_last4',
                 'checkout_stripe_brand',
                 'checkout_stripe_pi',
+                'checkout_contacto_nombre',
+                'checkout_contacto_apellido',
+                'checkout_contacto_email',
+                'checkout_contacto_telefono1',
+                'checkout_contacto_telefono2',
             ]);
 
             return redirect()->route('cliente.perfil.pedidos.detalle', $pedido->id)

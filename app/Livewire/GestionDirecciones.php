@@ -71,7 +71,11 @@ class GestionDirecciones extends Component
 
         $this->zonasEnvio = (array) $zonasEnvio;
 
-        $this->provincias = GeolocalizacionPanama::provincias();
+        // Restringir provincias a solo las cercanas a Panamá para Delivery
+        $this->provincias = [
+            'Panamá' => 'Panamá',
+            'Panamá Oeste' => 'Panamá Oeste',
+        ];
 
         if ($this->compact) {
             $this->seleccion = $this->direcciones->isEmpty()
@@ -116,7 +120,18 @@ class GestionDirecciones extends Component
     {
         $this->distrito = '';
         $this->corregimiento = '';
-        $this->distritos = $value ? GeolocalizacionPanama::distritosPorProvincia($value) : [];
+        
+        $todosLosDistritos = $value ? GeolocalizacionPanama::distritosPorProvincia($value) : [];
+        
+        // Restringir distritos a solo los cercanos a Panamá
+        if ($value === 'Panamá') {
+            $this->distritos = array_intersect($todosLosDistritos, ['Panamá', 'San Miguelito']);
+        } elseif ($value === 'Panamá Oeste') {
+            $this->distritos = array_intersect($todosLosDistritos, ['Arraiján', 'La Chorrera']);
+        } else {
+            $this->distritos = [];
+        }
+        
         $this->corregimientos = [];
         unset($this->zonaAuto);
     }
@@ -156,7 +171,15 @@ class GestionDirecciones extends Component
         $this->esPredeterminada = $direccion->es_predeterminada;
         $this->editandoId = $direccion->id;
 
-        $this->distritos = GeolocalizacionPanama::distritosPorProvincia($direccion->provincia);
+        $todosLosDistritos = GeolocalizacionPanama::distritosPorProvincia($direccion->provincia);
+        if ($direccion->provincia === 'Panamá') {
+            $this->distritos = array_intersect($todosLosDistritos, ['Panamá', 'San Miguelito']);
+        } elseif ($direccion->provincia === 'Panamá Oeste') {
+            $this->distritos = array_intersect($todosLosDistritos, ['Arraiján', 'La Chorrera']);
+        } else {
+            $this->distritos = [];
+        }
+        
         $this->corregimientos = GeolocalizacionPanama::corregimientosPorDistrito($direccion->distrito);
 
         $this->mostrarFormulario = true;
@@ -310,7 +333,7 @@ class GestionDirecciones extends Component
             'checkout_zona_envio_id' => $zona ? (int) $zona->id : null,
         ]);
 
-        $this->redirect(route('cliente.checkout.pago'));
+        $this->dispatch('close-modal', 'modal-checkout-envio');
     }
 
     public function render()

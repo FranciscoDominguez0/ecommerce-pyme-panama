@@ -38,6 +38,6 @@
         </p>
     </div>
 
-    <livewire:gestion-direcciones :compact="true" :mostrarPredeterminada="false" :zonasEnvio="$zonasEnvio" :requiereEnvio="$requiereEnvio ?? true" />
+    <livewire:checkout-envio :zonasEnvio="$zonasEnvio" :requiereEnvio="$requiereEnvio ?? true" />
 </div>
 @endsection

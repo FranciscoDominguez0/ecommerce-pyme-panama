@@ -57,7 +57,7 @@ class PedidoController extends Controller
     public function avanzarEstado(Request $request, $id)
     {
         $request->validate([
-            'accion' => 'required|string|in:iniciar_preparacion,marcar_listo,marcar_transito,marcar_entregado'
+            'accion' => 'required|string|in:iniciar_preparacion,marcar_listo,marcar_transito,marcar_entregado,marcar_enviado'
         ]);
 
         $pedido = Pedido::with(['envio', 'ultimoEstado'])->findOrFail($id);
@@ -65,6 +65,7 @@ class PedidoController extends Controller
         $nuevoEstado = match ($request->accion) {
             'iniciar_preparacion' => 'en_preparacion',
             'marcar_listo'        => 'listo_para_envio',
+            'marcar_enviado'      => 'enviado',
             'marcar_transito'     => 'en_transito',
             'marcar_entregado'    => 'entregado',
         };

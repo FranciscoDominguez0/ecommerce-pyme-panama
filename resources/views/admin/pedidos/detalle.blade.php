@@ -78,9 +78,13 @@
             @endif
 
             @if($ultimoEstado === 'listo_para_envio')
-                <a href="#form-envio" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition">
-                    <span class="material-symbols-outlined text-[16px] mr-1.5">local_shipping</span> Configurar Envío
-                </a>
+                <form action="{{ route('admin.pedidos.avanzar-estado', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
+                    @csrf <input type="hidden" name="accion" value="marcar_enviado">
+                    <button type="submit" :disabled="sub" class="inline-flex items-center px-4 py-2 bg-slate-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 transition disabled:opacity-75 disabled:cursor-wait">
+                        <span class="material-symbols-outlined text-[16px] mr-1.5" :class="sub ? 'animate-spin' : ''" x-text="sub ? 'progress_activity' : 'local_shipping'">local_shipping</span>
+                        <span x-text="sub ? 'Procesando...' : 'Marcar Enviado'">Marcar Enviado</span>
+                    </button>
+                </form>
             @endif
 
             @if($ultimoEstado === 'enviado')
@@ -321,34 +325,92 @@
                 </div>
             </div>
 
-            <!-- Datos del Cliente & Envío -->
+            <!-- Datos del Cliente & Entrega -->
             <div class="card-elevated rounded-xl p-6">
+                @php
+                    $notasInternas = json_decode($pedido->notas_internas, true) ?? [];
+                    $metodoEntrega = $notasInternas['metodo_entrega'] ?? 'desconocido';
+                    $contacto = $notasInternas['contacto'] ?? null;
+                    $courierSucursalId = $notasInternas['courier_sucursal_id'] ?? null;
+                    $sucursal = null;
+                    if ($courierSucursalId) {
+                        $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
+                    }
+                @endphp
+
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-gray-700 pb-2">Datos del Cliente</h2>
                 <div class="mb-4">
-                    <p class="font-medium text-slate-900 dark:text-white text-sm">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $pedido->usuario->email ?? '' }}</p>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $pedido->usuario->telefono ?? '' }}</p>
+                    <p class="font-medium text-slate-900 dark:text-white text-sm">{{ $contacto['nombre'] ?? $pedido->usuario->nombre ?? 'Desconocido' }} {{ $contacto['apellido'] ?? '' }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $contacto['email'] ?? $pedido->usuario->email ?? '' }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ $contacto['telefono1'] ?? $pedido->usuario->telefono ?? '' }} {{ isset($contacto['telefono2']) && $contacto['telefono2'] ? ' / '.$contacto['telefono2'] : '' }}</p>
                 </div>
                 
-                @if($pedido->direccion)
-                <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-2 mt-4">Dirección de Entrega</h3>
-                <address class="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300 not-italic space-y-1">
-                    <p>{{ $pedido->direccion->nombre_receptor }}</p>
-                    <p>{{ $pedido->direccion->direccion_exacta }}</p>
-                    <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
-                    <p>{{ $pedido->direccion->provincia }}</p>
-                    @if($pedido->direccion->referencia)
-                        <p class="text-slate-500 dark:text-slate-400 italic mt-1">Ref: {{ $pedido->direccion->referencia }}</p>
-                    @endif
-                </address>
-                @endif
-                
-                @if($pedido->zonaEnvio)
-                    <div class="mt-3">
-                        <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 dark:bg-transparent text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700">
-                            Zona: {{ $pedido->zonaEnvio->nombre }}
-                        </span>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3 mt-6 border-t border-slate-100 dark:border-gray-700 pt-4">Modalidad de Entrega</h3>
+                @if($metodoEntrega === 'retiro_local')
+                    <div class="p-3 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-100 flex items-start gap-3">
+                        <span class="material-symbols-outlined mt-0.5">storefront</span>
+                        <div>
+                            <p class="font-bold text-sm">Retiro en Sucursal (PYME PANAMA)</p>
+                            <p class="text-xs mt-0.5">El cliente pasará a retirar su pedido presencialmente.</p>
+                        </div>
                     </div>
+                @elseif($metodoEntrega === 'retiro_courier')
+                    <div class="p-3 bg-orange-50 text-orange-800 rounded-lg border border-orange-100 flex items-start gap-3">
+                        <span class="material-symbols-outlined mt-0.5">local_shipping</span>
+                        <div>
+                            <p class="font-bold text-sm">Envío por Courier</p>
+                            @if($sucursal)
+                                <p class="text-xs mt-1 font-semibold">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
+                                <p class="text-xs mt-0.5">{{ $sucursal->zona }}</p>
+                                <p class="text-xs text-orange-600/80 mt-1">{{ $sucursal->direccion }}</p>
+                            @else
+                                <p class="text-xs">Sucursal de Courier no especificada.</p>
+                            @endif
+                        </div>
+                    </div>
+                @elseif($metodoEntrega === 'delivery')
+                    <div class="p-3 bg-blue-50 text-blue-800 rounded-lg border border-blue-100 flex items-start gap-3 mb-4">
+                        <span class="material-symbols-outlined mt-0.5">moped</span>
+                        <div>
+                            <p class="font-bold text-sm">Delivery (Casa u Oficina)</p>
+                            <p class="text-xs mt-0.5">Despacho a la dirección física indicada.</p>
+                        </div>
+                    </div>
+                    @if($pedido->direccion)
+                        <div class="pl-2 border-l-2 border-slate-200 ml-2">
+                            <address class="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300 not-italic space-y-1">
+                                <p class="font-semibold text-slate-800">{{ $pedido->direccion->nombre_receptor }}</p>
+                                <p>{{ $pedido->direccion->direccion_exacta }}</p>
+                                <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
+                                <p>{{ $pedido->direccion->provincia }}</p>
+                                @if($pedido->direccion->referencia)
+                                    <p class="text-slate-500 dark:text-slate-400 italic mt-1 text-xs">Ref: {{ $pedido->direccion->referencia }}</p>
+                                @endif
+                            </address>
+                        </div>
+                    @endif
+                    @if($pedido->zonaEnvio)
+                        <div class="mt-4">
+                            <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 dark:bg-transparent text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700">
+                                Zona tarifaria: {{ $pedido->zonaEnvio->nombre }}
+                            </span>
+                        </div>
+                    @endif
+                @else
+                    <div class="p-3 bg-slate-50 text-slate-600 rounded-lg border border-slate-200 flex items-center gap-2">
+                        <span class="material-symbols-outlined">help</span>
+                        <p class="font-bold text-sm">Método de entrega no definido (Antiguo)</p>
+                    </div>
+                    @if($pedido->direccion)
+                        <div class="mt-3 pl-2 border-l-2 border-slate-200 ml-2">
+                            <address class="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300 not-italic space-y-1">
+                                <p class="font-semibold text-slate-800">{{ $pedido->direccion->nombre_receptor }}</p>
+                                <p>{{ $pedido->direccion->direccion_exacta }}</p>
+                                <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
+                                <p>{{ $pedido->direccion->provincia }}</p>
+                            </address>
+                        </div>
+                    @endif
                 @endif
             </div>
 
@@ -358,90 +420,6 @@
                 <p class="text-sm text-yellow-700 italic">"{{ $pedido->notas_cliente }}"</p>
             </div>
             @endif
-
-            <!-- Formulario de Envío -->
-            <div id="form-envio" class="card-elevated rounded-xl shadow-sm">
-                <div class="p-6 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent rounded-t-xl">
-                    <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-outlined text-slate-700 dark:text-slate-300">local_shipping</span>
-                        Gestión de Envío
-                    </h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Configure los detalles logísticos para despachar el pedido.</p>
-                </div>
-                
-                @php
-                    $empresaDB = $pedido->envio->empresa_mensajeria ?? '';
-                    $metodoEnvioDefault = old('metodo_envio', '');
-                    $empresaMensajeriaDefault = old('empresa_mensajeria', '');
-                    
-                    if (!$metodoEnvioDefault && $empresaDB) {
-                        $partes = explode(' - ', $empresaDB, 2);
-                        $metodoEnvioDefault = $partes[0];
-                        $empresaMensajeriaDefault = $partes[1] ?? '';
-                    }
-                    if (!$metodoEnvioDefault) {
-                        $metodoEnvioDefault = 'Company Delivery';
-                    }
-                @endphp
-                <form action="{{ route('admin.pedidos.envio.update', $pedido->id) }}" method="POST" class="p-6 flex flex-col gap-5" x-data="{ metodoEnvio: '{{ $metodoEnvioDefault }}' }">
-                    @csrf
-                    @method('PUT')
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="metodo_envio">Método de Envío <span class="text-red-500">*</span></label>
-                        <div class="relative">
-                            <select class="w-full bg-white dark:bg-[#121415] border {{ $errors->has('metodo_envio') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 pr-10 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 appearance-none transition-all" 
-                                    id="metodo_envio" name="metodo_envio" x-model="metodoEnvio" required>
-                                <option value="Company Delivery">Entrega Propia (Driver)</option>
-                                <option value="Courier Service">Mensajería Local (Courier)</option>
-                                <option value="External Delivery">Servicio Externo (Fletes, etc.)</option>
-                                <option value="Store Pickup">Retiro en Tienda</option>
-                            </select>
-                            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">expand_more</span>
-                        </div>
-                        @error('metodo_envio')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div x-show="metodoEnvio !== 'Store Pickup' && metodoEnvio !== 'Company Delivery'">
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="empresa_mensajeria">Empresa de Mensajería / Courier</label>
-                        <input class="w-full bg-white dark:bg-[#121415] border {{ $errors->has('empresa_mensajeria') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
-                               id="empresa_mensajeria" name="empresa_mensajeria" type="text" placeholder="Ej: Fletes Chavale, UnoExpress..."
-                               value="{{ $empresaMensajeriaDefault }}">
-                        @error('empresa_mensajeria')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div x-show="metodoEnvio !== 'Store Pickup'">
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="numero_guia">Número de Guía / Referencia</label>
-                        <input class="w-full bg-white dark:bg-[#121415] border {{ $errors->has('numero_guia') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all font-mono" 
-                               id="numero_guia" name="numero_guia" placeholder="Opcional" type="text"
-                               value="{{ old('numero_guia', $pedido->envio->numero_guia ?? '') }}">
-                        @error('numero_guia')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="fecha_estimada_entrega">Fecha Estimada de Entrega</label>
-                        <div class="relative flex items-center">
-                            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px]">calendar_today</span>
-                            <input class="w-full pl-9 bg-white dark:bg-[#121415] border {{ $errors->has('fecha_estimada_entrega') ? 'border-red-400' : 'border-slate-200 dark:border-gray-700' }} rounded-lg py-2 px-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition-all" 
-                                   id="fecha_estimada_entrega" name="fecha_estimada_entrega" type="date"
-                                   value="{{ old('fecha_estimada_entrega', $pedido->envio?->fecha_estimada_entrega?->format('Y-m-d') ?? '') }}">
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-700 flex flex-col gap-2">
-                        <button type="submit" class="w-full bg-slate-900 text-white py-2.5 px-4 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined text-[18px]">save</span>
-                            Guardar Info. de Envío
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 

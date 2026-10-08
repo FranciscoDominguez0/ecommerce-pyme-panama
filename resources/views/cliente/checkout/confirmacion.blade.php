@@ -88,12 +88,25 @@
                         <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
                     </div>
                     <address class="text-xs text-on-surface-variant not-italic flex-1">
-                        <p class="font-semibold text-on-background mb-1">{{ $direccion->nombre_receptor }}</p>
-                        <p>{{ $direccion->direccion_exacta }}</p>
-                        <p>{{ $direccion->corregimiento }}, {{ $direccion->distrito }}</p>
-                        <p>{{ $direccion->provincia }}</p>
-                        @if(($totales['requiere_envio'] ?? true) && $zonaEnvio)
-                            <p class="mt-3 text-xs font-semibold text-secondary bg-secondary/10 inline-block px-2 py-1 rounded">Zona: {{ $zonaEnvio->nombre }}</p>
+                        @if($metodoEntrega === 'retiro_local')
+                            <p class="font-semibold text-on-background mb-1">Retiro en sucursal PYME PANAMA</p>
+                            <p>San Francisco (Ciudad de Panamá)</p>
+                        @elseif($metodoEntrega === 'retiro_courier' && isset($courierSucursal))
+                            <p class="font-semibold text-on-background mb-1">Retiro por Courier - {{ $courierSucursal->courier }}</p>
+                            <p class="font-bold">{{ $courierSucursal->sucursal }}</p>
+                            <p>{{ $courierSucursal->zona }}</p>
+                            <p>{{ $courierSucursal->direccion }}</p>
+                            @if($courierSucursal->telefono)
+                                <p>Tel: {{ $courierSucursal->telefono }}</p>
+                            @endif
+                        @elseif(isset($direccion))
+                            <p class="font-semibold text-on-background mb-1">{{ $direccion->nombre_receptor }}</p>
+                            <p>{{ $direccion->direccion_exacta }}</p>
+                            <p>{{ $direccion->corregimiento }}, {{ $direccion->distrito }}</p>
+                            <p>{{ $direccion->provincia }}</p>
+                            @if(($totales['requiere_envio'] ?? true) && isset($zonaEnvio))
+                                <p class="mt-3 text-xs font-semibold text-secondary bg-secondary/10 inline-block px-2 py-1 rounded">Zona: {{ $zonaEnvio->nombre }}</p>
+                            @endif
                         @endif
                     </address>
                 </div>

@@ -60,7 +60,7 @@ class PedidoService
     /**
      * Calcula los totales del pedido antes de procesarlo.
      */
-    public function calcularTotales(Carrito $carrito, ?ZonaEnvio $zonaEnvio, ?Cupon $cupon): array
+    public function calcularTotales(Carrito $carrito, ?ZonaEnvio $zonaEnvio, ?Cupon $cupon, ?float $costoEnvioPersonalizado = null): array
     {
         // Subtotal e ITBMS compartidos con el carrito (respeta aplica_itbms por producto).
         $desglose = $this->carritoService->calcularSubtotalEItbms($carrito);
@@ -88,9 +88,13 @@ class PedidoService
         if (!$requiereEnvioFisico) {
             $costoEnvio = 0.00;
         } else {
-            $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
+            if ($costoEnvioPersonalizado !== null) {
+                $costoEnvio = $costoEnvioPersonalizado;
+            } else {
+                $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
+            }
 
-            if ($zonaEnvio && $this->cuponService->evaluarEnvioGratis($zonaEnvio->id, $subtotal)) {
+            if (($zonaEnvio || $costoEnvioPersonalizado !== null) && $this->cuponService->evaluarEnvioGratis($zonaEnvio?->id, $subtotal)) {
                 $descuentoEnvio = $costoEnvio;
                 $costoEnvio = 0.00;
             }
@@ -130,14 +134,15 @@ class PedidoService
      */
     public function crearDesdeCarrito(
         Carrito $carrito,
-        int $direccionId,
+        ?int $direccionId,
         string $metodoPago,
         ?string $notasCliente,
         ?ZonaEnvio $zonaEnvio = null,
         ?string $comprobantePagoRuta = null,
-        ?string $notasInternas = null
+        ?string $notasInternas = null,
+        ?float $costoEnvioPersonalizado = null
     ): Pedido {
-        return DB::transaction(function () use ($carrito, $direccionId, $metodoPago, $notasCliente, $zonaEnvio, $comprobantePagoRuta, $notasInternas) {
+        return DB::transaction(function () use ($carrito, $direccionId, $metodoPago, $notasCliente, $zonaEnvio, $comprobantePagoRuta, $notasInternas, $costoEnvioPersonalizado) {
             // 1. Validar stock
             foreach ($carrito->items as $item) {
                 $stockDisponible = $item->variante ? $item->variante->stock : $item->producto->stock;
@@ -148,7 +153,7 @@ class PedidoService
 
             // 2. Calcular totales
             $cupon = $carrito->cupon;
-            $totales = $this->calcularTotales($carrito, $zonaEnvio, $cupon);
+            $totales = $this->calcularTotales($carrito, $zonaEnvio, $cupon, $costoEnvioPersonalizado);
 
             // 3. Crear registro de Pedido con número generado de forma atómica
             //    (ver generarNumeroPedido). Ya NO existe el trigger DB que lo llenaba.
