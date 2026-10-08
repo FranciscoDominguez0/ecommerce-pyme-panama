@@ -86,9 +86,9 @@ class CatalogoFijoSeeder extends Seeder
                 $precio = $esServicio ? rand(25, 150) : rand(50, 1500) + 0.99;
 
                 Producto::updateOrCreate(
-                    ["sku" => strtoupper(substr(Str::slug($categoria->nombre), 0, 3)) . '-' . ($index + 1) . '00' . rand(1,9)],
+                    ["sku" => strtoupper(substr(Str::slug($categoria->nombre), 0, 3)) . '-' . $categoria->id . '-' . ($index + 1)],
                     [
-                        "slug" => Str::slug($nombre . ' ' . rand(10,99)), // Sufijo para asegurar unicidad
+                        "slug" => Str::slug($nombre . '-' . $categoria->slug . '-' . ($index + 1)), // Sufijo determinista para unicidad
                         "categoria_id" => $categoria->id,
                         "brand_id" => $brand->id ?? 1,
                         "nombre" => $nombre,
