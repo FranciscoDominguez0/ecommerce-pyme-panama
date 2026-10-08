@@ -257,6 +257,20 @@ class CatalogoDemoSeeder extends Seeder
                         'destacado' => $destacado,
                         'activo' => $activo,
                         'aplica_itbms' => $aplicaItbms,
+                        'especificaciones' => [
+                            ['grupo' => 'General', 'clave' => 'Color', 'valor' => 'Negro/Gris'],
+                            ['grupo' => 'General', 'clave' => 'Material', 'valor' => 'Premium'],
+                            ['grupo' => 'Rendimiento', 'clave' => 'Calidad', 'valor' => 'Alta'],
+                        ],
+                        'peso' => mt_rand(10, 500) / 100, // 0.1 - 5.0 kg
+                        'dimension_largo' => mt_rand(10, 60),
+                        'dimension_ancho' => mt_rand(10, 40),
+                        'dimension_alto' => mt_rand(5, 30),
+                        'garantia_info' => [
+                            'nombre' => 'Garantía Oficial ' . $marca->name,
+                            'duracion' => '1 Año',
+                            'contacto' => 'Soporte Técnico al 6948-1051',
+                        ],
                     ]
                 );
 
@@ -331,6 +345,12 @@ class CatalogoDemoSeeder extends Seeder
                         'destacado' => false,
                         'activo' => true,
                         'aplica_itbms' => true,
+                        'especificaciones' => [],
+                        'peso' => 0,
+                        'dimension_largo' => 0,
+                        'dimension_ancho' => 0,
+                        'dimension_alto' => 0,
+                        'garantia_info' => [],
                     ]
                 );
 

@@ -24,6 +24,12 @@ class Producto extends Model
         'slug',
         'descripcion',
         'descripcion_corta',
+        'especificaciones',
+        'peso',
+        'dimension_largo',
+        'dimension_ancho',
+        'dimension_alto',
+        'garantia_info',
         'sku',
         'marca',
         'marca_logo',
@@ -43,6 +49,12 @@ class Producto extends Model
     ];
 
     protected $casts = [
+        'especificaciones' => 'array',
+        'garantia_info' => 'array',
+        'peso' => 'decimal:3',
+        'dimension_largo' => 'decimal:2',
+        'dimension_ancho' => 'decimal:2',
+        'dimension_alto' => 'decimal:2',
         'precio' => 'decimal:2',
         'precio_oferta' => 'decimal:2',
         'oferta_activa' => 'boolean',

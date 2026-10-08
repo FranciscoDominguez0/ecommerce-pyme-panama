@@ -397,6 +397,126 @@
             </div>
         @endif
 
+        <!-- Especificaciones Dinámicas -->
+        @if(!empty($producto->especificaciones))
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600">list</span>
+                    <span>Especificaciones</span>
+                </h2>
+                
+                @php
+                    $specs = $producto->especificaciones ?? [];
+                    $normalizedSpecs = [];
+                    if (!empty($specs)) {
+                        if (isset($specs[0]['clave']) && !isset($specs[0]['atributos'])) {
+                            // Formato antiguo (plano)
+                            $grouped = collect($specs)->groupBy('grupo');
+                            foreach($grouped as $g => $items) {
+                                $normalizedSpecs[] = [
+                                    'grupo' => $g,
+                                    'atributos' => $items->map(fn($item) => ['clave' => $item['clave'] ?? '', 'valor' => $item['valor'] ?? ''])->toArray()
+                                ];
+                            }
+                        } else {
+                            // Formato nuevo (anidado)
+                            $normalizedSpecs = $specs;
+                        }
+                    }
+                @endphp
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border-collapse">
+                        <tbody>
+                            @foreach($normalizedSpecs as $grupoData)
+                                @php
+                                    $grupoNombre = $grupoData['grupo'] ?? 'General';
+                                    $atributos = $grupoData['atributos'] ?? [];
+                                @endphp
+                                
+                                @if(!empty($grupoNombre) && count($atributos) > 0)
+                                    <tr class="border-b border-slate-200">
+                                        <td colspan="2" class="py-3 px-4 text-base font-bold text-slate-900 bg-white">
+                                            {{ $grupoNombre }}
+                                        </td>
+                                    </tr>
+                                @endif
+                                
+                                @foreach($atributos as $attr)
+                                    @if(!empty($attr['clave']) || !empty($attr['valor']))
+                                        <tr class="border-b border-slate-200 last:border-0">
+                                            <td class="py-2.5 px-4 w-1/3 md:w-1/4 font-medium text-slate-700 bg-slate-50 border-r border-slate-100">
+                                                {{ $attr['clave'] ?? '' }}
+                                            </td>
+                                            <td class="py-2.5 px-4 text-slate-600 bg-white">
+                                                {{ $attr['valor'] ?? '' }}
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
+        <!-- Especificaciones Físicas (Fletes) -->
+        @if($producto->peso || $producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600">straighten</span>
+                    <span>Especificaciones Físicas</span>
+                </h2>
+                <table class="w-full text-sm text-left text-slate-600">
+                    <tbody>
+                        @if($producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
+                            <tr class="border-b border-slate-100">
+                                <td class="py-2 pr-4 w-1/3 md:w-1/4 font-medium">Dimensiones(cm)</td>
+                                <td class="py-2">{{ $producto->dimension_largo ?? 0 }}x{{ $producto->dimension_ancho ?? 0 }}x{{ $producto->dimension_alto ?? 0 }}cm</td>
+                            </tr>
+                        @endif
+                        @if($producto->peso)
+                            <tr class="border-b border-slate-100 last:border-0">
+                                <td class="py-2 pr-4 w-1/3 md:w-1/4 font-medium">Peso</td>
+                                <td class="py-2">{{ $producto->peso }}kg</td>
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
+        <!-- Garantía -->
+        @if(!empty($producto->garantia_info) && (!empty($producto->garantia_info['nombre']) || !empty($producto->garantia_info['duracion'])))
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600">verified_user</span>
+                    <span>Garantía</span>
+                </h2>
+                <div class="text-sm text-slate-600 space-y-4">
+                    @if(!empty($producto->garantia_info['nombre']))
+                        <div>
+                            <span class="font-bold block text-slate-800">Nombre de la Garantía:</span>
+                            {{ $producto->garantia_info['nombre'] }}
+                        </div>
+                    @endif
+                    @if(!empty($producto->garantia_info['duracion']))
+                        <div>
+                            <span class="font-bold block text-slate-800">Duración:</span>
+                            {{ $producto->garantia_info['duracion'] }}
+                        </div>
+                    @endif
+                    @if(!empty($producto->garantia_info['contacto']))
+                        <div>
+                            <span class="font-bold block text-slate-800">¿Con quién me comunico si tengo problemas con el producto?</span>
+                            {{ $producto->garantia_info['contacto'] }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endif
+
         <!-- Productos Relacionados -->
         @if($relacionados->isNotEmpty())
             <div class="space-y-4 pt-4">

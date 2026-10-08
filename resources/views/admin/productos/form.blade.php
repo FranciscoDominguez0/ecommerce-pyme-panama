@@ -428,6 +428,9 @@
                         </div>
                     </div>
 
+                <!-- ── SECCIÓN: ESPECIFICACIONES DINÁMICAS Y LOGÍSTICA ── -->
+                    @include('admin.productos.especificaciones-dinamicas')
+
                 <!-- ── SECCIÓN: IMÁGENES ── -->
                     @include('admin.productos.imagenes', ['imagenes' => $producto->imagenes ?? collect()])
 

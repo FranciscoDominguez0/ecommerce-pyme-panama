@@ -236,6 +236,16 @@ class ProductosDemoSeeder extends Seeder
                         'destacado' => $destacado,
                         'activo' => $activo,
                         'aplica_itbms' => $aplicaItbms,
+                        'especificaciones' => $this->generarEspecificacionesPorCategoria($catSlug, $marca->name, $lineaUsada),
+                        'peso' => mt_rand(10, 500) / 100, // 0.1 - 5.0 kg
+                        'dimension_largo' => mt_rand(10, 60),
+                        'dimension_ancho' => mt_rand(10, 40),
+                        'dimension_alto' => mt_rand(5, 30),
+                        'garantia_info' => [
+                            'nombre' => 'Garantía Estándar ' . $marca->name,
+                            'duracion' => 'Garantía de 1 Año',
+                            'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con ' . $marca->name . ' por ti. También puedes comunicarte con ' . $marca->name . ' directamente usando tu factura de PayMe Panamá para recibir tu garantía. ' . $marca->name . ' toma todas las decisiones de la garantía y sus decisiones son definitivas.',
+                        ],
                     ]
                 );
 
@@ -310,6 +320,12 @@ class ProductosDemoSeeder extends Seeder
                         'destacado' => false,
                         'activo' => true,
                         'aplica_itbms' => true,
+                        'especificaciones' => [],
+                        'peso' => 0,
+                        'dimension_largo' => 0,
+                        'dimension_ancho' => 0,
+                        'dimension_alto' => 0,
+                        'garantia_info' => [],
                     ]
                 );
 
@@ -1307,4 +1323,103 @@ class ProductosDemoSeeder extends Seeder
             ['nombre' => 'Visita Técnica con Configuración de Dispositivos', 'precio' => 30.00, 'detalle' => 'Configuración de impresoras, routers, cámaras y otros dispositivos en sitio.'],
         ],
     ];
+
+    /**
+     * Genera especificaciones realistas (en formato anidado) dependiendo de la categoría
+     */
+    protected function generarEspecificacionesPorCategoria(string $catSlug, string $marca, string $modelo): array
+    {
+        $specs = [
+            [
+                'grupo' => 'Modelo',
+                'atributos' => [
+                    ['clave' => 'Marca', 'valor' => $marca],
+                    ['clave' => 'Modelo', 'valor' => $modelo],
+                    ['clave' => 'Número de Parte', 'valor' => strtoupper(Str::random(3)) . '-' . mt_rand(1000, 9999)],
+                ]
+            ]
+        ];
+
+        if (in_array($catSlug, ['laptops', 'laptops-gamer', 'computadoras-de-escritorio'])) {
+            $cpus = ['Intel Core i5', 'Intel Core i7', 'Intel Core i9', 'AMD Ryzen 5', 'AMD Ryzen 7', 'AMD Ryzen 9', 'Apple M1', 'Apple M2'];
+            $rams = ['8GB DDR4', '16GB DDR4', '16GB DDR5', '32GB DDR5'];
+            $almacenamientos = ['256GB SSD NVMe', '512GB SSD NVMe', '1TB SSD NVMe', '2TB SSD NVMe'];
+            $gpus = ['Gráficos Integrados', 'NVIDIA GTX 1650', 'NVIDIA RTX 3060', 'NVIDIA RTX 4070', 'AMD Radeon RX 6700'];
+            
+            $specs[] = [
+                'grupo' => 'Hardware',
+                'atributos' => [
+                    ['clave' => 'Procesador', 'valor' => $cpus[array_rand($cpus)]],
+                    ['clave' => 'Memoria RAM', 'valor' => $rams[array_rand($rams)]],
+                    ['clave' => 'Almacenamiento', 'valor' => $almacenamientos[array_rand($almacenamientos)]],
+                    ['clave' => 'Tarjeta Gráfica', 'valor' => $catSlug == 'laptops-gamer' ? $gpus[mt_rand(1, 4)] : $gpus[array_rand($gpus)]],
+                ]
+            ];
+            $specs[] = [
+                'grupo' => 'Pantalla',
+                'atributos' => [
+                    ['clave' => 'Tamaño', 'valor' => in_array($catSlug, ['laptops', 'laptops-gamer']) ? (mt_rand(13, 17) . '.3 Pulgadas') : 'N/A'],
+                    ['clave' => 'Resolución', 'valor' => '1920x1080 (FHD)'],
+                ]
+            ];
+        } elseif (in_array($catSlug, ['smartphones', 'tablets'])) {
+            $specs[] = [
+                'grupo' => 'Especificaciones Técnicas',
+                'atributos' => [
+                    ['clave' => 'Pantalla', 'valor' => (mt_rand(60, 110) / 10) . ' Pulgadas OLED'],
+                    ['clave' => 'Cámara Principal', 'valor' => mt_rand(12, 108) . ' MP'],
+                    ['clave' => 'Batería', 'valor' => mt_rand(3000, 6000) . ' mAh'],
+                    ['clave' => 'Sistema Operativo', 'valor' => mt_rand(0, 1) ? 'Android' : 'iOS / iPadOS'],
+                ]
+            ];
+        } elseif (in_array($catSlug, ['monitores'])) {
+            $resoluciones = ['1920x1080 (FHD)', '2560x1440 (QHD)', '3840x2160 (4K)'];
+            $tasas = ['60Hz', '75Hz', '144Hz', '165Hz', '240Hz'];
+            $paneles = ['IPS', 'VA', 'TN', 'OLED'];
+            
+            $specs[] = [
+                'grupo' => 'Pantalla',
+                'atributos' => [
+                    ['clave' => 'Tamaño', 'valor' => mt_rand(22, 34) . ' Pulgadas'],
+                    ['clave' => 'Resolución', 'valor' => $resoluciones[array_rand($resoluciones)]],
+                    ['clave' => 'Tasa de Refresco', 'valor' => $tasas[array_rand($tasas)]],
+                    ['clave' => 'Tipo de Panel', 'valor' => $paneles[array_rand($paneles)]],
+                    ['clave' => 'Tiempo de Respuesta', 'valor' => mt_rand(1, 5) . ' ms'],
+                ]
+            ];
+        } elseif ($catSlug == 'mouse') {
+            $specs[] = [
+                'grupo' => 'Especificaciones Técnicas',
+                'atributos' => [
+                    ['clave' => 'Tipo de Sensor', 'valor' => mt_rand(0, 1) ? 'Óptico' : 'Láser'],
+                    ['clave' => 'DPI Máximo', 'valor' => mt_rand(10, 256) * 100],
+                    ['clave' => 'Botones Programables', 'valor' => mt_rand(3, 11)],
+                    ['clave' => 'Conectividad', 'valor' => mt_rand(0, 1) ? 'Inalámbrico (USB/Bluetooth)' : 'Alámbrico (USB)'],
+                ]
+            ];
+        } elseif ($catSlug == 'teclados') {
+            $switches = ['Membrana', 'Mecánico (Blue)', 'Mecánico (Red)', 'Mecánico (Brown)'];
+            $specs[] = [
+                'grupo' => 'Especificaciones Técnicas',
+                'atributos' => [
+                    ['clave' => 'Tipo de Teclado', 'valor' => $switches[array_rand($switches)]],
+                    ['clave' => 'Iluminación', 'valor' => mt_rand(0, 1) ? 'RGB Personalizable' : 'Color Estático'],
+                    ['clave' => 'Distribución', 'valor' => mt_rand(0, 1) ? 'Español (Latinoamérica)' : 'Inglés (US)'],
+                    ['clave' => 'Conectividad', 'valor' => mt_rand(0, 1) ? 'Inalámbrico' : 'Alámbrico (USB-A)'],
+                ]
+            ];
+        } else {
+            // General para otros productos
+            $specs[] = [
+                'grupo' => 'Características Generales',
+                'atributos' => [
+                    ['clave' => 'Color', 'valor' => ['Negro', 'Blanco', 'Plata', 'Gris Espacial', 'Azul'][mt_rand(0, 4)]],
+                    ['clave' => 'Condición', 'valor' => 'Nuevo en caja sellada'],
+                    ['clave' => 'Certificaciones', 'valor' => 'RoHS, CE, FCC'],
+                ]
+            ];
+        }
+
+        return $specs;
+    }
 }
