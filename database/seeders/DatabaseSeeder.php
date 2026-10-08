@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             CategoriaSeeder::class,       // 4. Categorías principales y subcategorías
             AtributosVarianteSeeder::class, // 5. Atributos y opciones para variantes
             CourierSucursalesSeeder::class, // 6. Sucursales de Courier (Fletes Chavale, etc.)
-            //CatalogoDemoSeeder::class,    // 7. Productos de demostración con garantías y especificaciones físicas
+            CatalogoFijoSeeder::class,    // 7. Productos fijos (25 productos reales con especificaciones y garantías)
         ]);
     }
 }

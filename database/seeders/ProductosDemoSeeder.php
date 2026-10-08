@@ -237,10 +237,10 @@ class ProductosDemoSeeder extends Seeder
                         'activo' => $activo,
                         'aplica_itbms' => $aplicaItbms,
                         'especificaciones' => $this->generarEspecificacionesPorCategoria($catSlug, $marca->name, $lineaUsada),
-                        'peso' => $this->generarDimensionesPorCategoria($catSlug)['peso'],
-                        'dimension_largo' => $this->generarDimensionesPorCategoria($catSlug)['largo'],
-                        'dimension_ancho' => $this->generarDimensionesPorCategoria($catSlug)['ancho'],
-                        'dimension_alto' => $this->generarDimensionesPorCategoria($catSlug)['alto'],
+                        'peso' => mt_rand(10, 500) / 100, // 0.1 - 5.0 kg
+                        'dimension_largo' => mt_rand(10, 60),
+                        'dimension_ancho' => mt_rand(10, 40),
+                        'dimension_alto' => mt_rand(5, 30),
                         'garantia_info' => [
                             'nombre' => 'Garantía Estándar ' . $marca->name,
                             'duracion' => 'Garantía de 1 Año',
@@ -1421,31 +1421,5 @@ class ProductosDemoSeeder extends Seeder
         }
 
         return $specs;
-    }
-
-    /**
-     * Genera dimensiones y pesos realistas por categoría.
-     * peso en kg, largo/ancho/alto en cm.
-     */
-    protected function generarDimensionesPorCategoria(string $catSlug): array
-    {
-        if (in_array($catSlug, ['laptops', 'laptops-gamer'])) {
-            return ['peso' => mt_rand(150, 250) / 100, 'largo' => mt_rand(30, 40), 'ancho' => mt_rand(20, 28), 'alto' => mt_rand(1, 3)];
-        } elseif ($catSlug == 'computadoras-de-escritorio') {
-            return ['peso' => mt_rand(600, 1500) / 100, 'largo' => mt_rand(40, 50), 'ancho' => mt_rand(20, 25), 'alto' => mt_rand(45, 55)];
-        } elseif (in_array($catSlug, ['smartphones', 'tablets'])) {
-            return ['peso' => mt_rand(15, 50) / 100, 'largo' => mt_rand(14, 25), 'ancho' => mt_rand(7, 18), 'alto' => 1];
-        } elseif ($catSlug == 'monitores') {
-            return ['peso' => mt_rand(300, 700) / 100, 'largo' => mt_rand(50, 80), 'ancho' => mt_rand(15, 25), 'alto' => mt_rand(40, 60)];
-        } elseif (in_array($catSlug, ['teclados', 'mouse', 'audifonos'])) {
-            return ['peso' => mt_rand(10, 100) / 100, 'largo' => mt_rand(15, 45), 'ancho' => mt_rand(10, 20), 'alto' => mt_rand(5, 10)];
-        } elseif ($catSlug == 'televisores') {
-            return ['peso' => mt_rand(1000, 3000) / 100, 'largo' => mt_rand(90, 150), 'ancho' => mt_rand(15, 30), 'alto' => mt_rand(60, 90)];
-        } elseif (in_array($catSlug, ['procesadores', 'memorias-ram', 'almacenamiento-interno'])) {
-            return ['peso' => mt_rand(1, 10) / 100, 'largo' => mt_rand(10, 15), 'ancho' => mt_rand(5, 10), 'alto' => mt_rand(1, 5)];
-        } else {
-            // Dimensiones estándar para accesorios y otros.
-            return ['peso' => mt_rand(20, 200) / 100, 'largo' => mt_rand(15, 30), 'ancho' => mt_rand(10, 20), 'alto' => mt_rand(5, 15)];
-        }
     }
 }
