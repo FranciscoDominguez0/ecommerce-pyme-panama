@@ -70,7 +70,16 @@ class CatalogoFijoSeeder extends Seeder
         $count = 0;
         foreach ($categoriasHojas as $categoria) {
             $nombres = $productosNombres[$categoria->slug] ?? $fallback;
-            $esServicio = in_array($categoria->padre_id, [15]) || str_contains($categoria->slug, 'servicio');
+            $esServicio = in_array($categoria->slug, [
+                'software-y-licencias',
+                'servicios-informaticos',
+                'armado-de-pc',
+                'formateo-e-instalacion-de-software',
+                'soporte-tecnico-a-domicilio',
+                'recuperacion-de-datos',
+                'instalacion-de-redes',
+                'mantenimiento-y-limpieza-de-equipos',
+            ]);
 
             foreach ($nombres as $index => $nombre) {
                 // Generar specs ultra detalladas dependiendo del tipo
@@ -101,6 +110,7 @@ class CatalogoFijoSeeder extends Seeder
                         "stock_minimo" => 2,
                         "destacado" => rand(1, 100) > 80,
                         "activo" => true,
+                        "es_digital" => $esServicio,
                         "aplica_itbms" => true,
                         "especificaciones" => $specs,
                         "peso" => $esServicio ? 0 : (rand(1, 50) / 10),
