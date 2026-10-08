@@ -298,9 +298,13 @@
                     @endif
                 </dl>
                 <div class="mt-4 pt-4 border-t border-slate-200 dark:border-gray-700">
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                        <span class="font-medium text-slate-900 dark:text-white">Método de pago:</span> 
-                        <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $pedido->metodo_pago) }}</span>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2 flex items-center">
+                        <span class="font-medium text-slate-900 dark:text-white mr-1.5">Método de pago:</span> 
+                        @if($pedido->metodo_pago === 'yappy')
+                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs">
+                        @else
+                            <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $pedido->metodo_pago) }}</span>
+                        @endif
                     </p>
                     @if($pedido->metodo_pago === 'stripe')
                         @php
@@ -347,64 +351,64 @@
                 
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3 mt-6 border-t border-slate-100 dark:border-gray-700 pt-4">Modalidad de Entrega</h3>
                 @if($metodoEntrega === 'retiro_local')
-                    <div class="p-3 bg-emerald-50 text-emerald-800 rounded-lg border border-emerald-100 flex items-start gap-3">
+                    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3">
                         <span class="material-symbols-outlined mt-0.5">storefront</span>
                         <div>
                             <p class="font-bold text-sm">Retiro en Sucursal (PYME PANAMA)</p>
-                            <p class="text-xs mt-0.5">El cliente pasará a retirar su pedido presencialmente.</p>
+                            <p class="text-xs mt-0.5 text-emerald-700 dark:text-emerald-500">El cliente pasará a retirar su pedido presencialmente.</p>
                         </div>
                     </div>
                 @elseif($metodoEntrega === 'retiro_courier')
-                    <div class="p-3 bg-orange-50 text-orange-800 rounded-lg border border-orange-100 flex items-start gap-3">
+                    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3">
                         <span class="material-symbols-outlined mt-0.5">local_shipping</span>
                         <div>
                             <p class="font-bold text-sm">Envío por Courier</p>
                             @if($sucursal)
-                                <p class="text-xs mt-1 font-semibold">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
-                                <p class="text-xs mt-0.5">{{ $sucursal->zona }}</p>
-                                <p class="text-xs text-orange-600/80 mt-1">{{ $sucursal->direccion }}</p>
+                                <p class="text-xs mt-1 font-semibold text-emerald-900 dark:text-emerald-200">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
+                                <p class="text-xs mt-0.5 text-emerald-800 dark:text-emerald-300">{{ $sucursal->zona }}</p>
+                                <p class="text-xs text-emerald-600 dark:text-emerald-300 mt-1">{{ $sucursal->direccion }}</p>
                             @else
                                 <p class="text-xs">Sucursal de Courier no especificada.</p>
                             @endif
                         </div>
                     </div>
                 @elseif($metodoEntrega === 'delivery')
-                    <div class="p-3 bg-blue-50 text-blue-800 rounded-lg border border-blue-100 flex items-start gap-3 mb-4">
+                    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3 mb-4">
                         <span class="material-symbols-outlined mt-0.5">moped</span>
                         <div>
                             <p class="font-bold text-sm">Delivery (Casa u Oficina)</p>
-                            <p class="text-xs mt-0.5">Despacho a la dirección física indicada.</p>
+                            <p class="text-xs mt-0.5 text-emerald-700 dark:text-emerald-500">Despacho a la dirección física indicada.</p>
                         </div>
                     </div>
                     @if($pedido->direccion)
-                        <div class="pl-2 border-l-2 border-slate-200 ml-2">
-                            <address class="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300 not-italic space-y-1">
-                                <p class="font-semibold text-slate-800">{{ $pedido->direccion->nombre_receptor }}</p>
+                        <div class="pl-2 border-l-2 border-slate-200 dark:border-slate-700 ml-2">
+                            <address class="text-sm text-slate-600 dark:text-slate-400 not-italic space-y-1">
+                                <p class="font-semibold text-slate-800 dark:text-slate-200">{{ $pedido->direccion->nombre_receptor }}</p>
                                 <p>{{ $pedido->direccion->direccion_exacta }}</p>
                                 <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
                                 <p>{{ $pedido->direccion->provincia }}</p>
                                 @if($pedido->direccion->referencia)
-                                    <p class="text-slate-500 dark:text-slate-400 italic mt-1 text-xs">Ref: {{ $pedido->direccion->referencia }}</p>
+                                    <p class="text-slate-500 dark:text-slate-500 italic mt-1 text-xs">Ref: {{ $pedido->direccion->referencia }}</p>
                                 @endif
                             </address>
                         </div>
                     @endif
                     @if($pedido->zonaEnvio)
                         <div class="mt-4">
-                            <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 dark:bg-transparent text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700">
+                            <span class="inline-flex items-center px-2 py-1 rounded bg-slate-100 dark:bg-slate-800/50 text-xs font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                                 Zona tarifaria: {{ $pedido->zonaEnvio->nombre }}
                             </span>
                         </div>
                     @endif
                 @else
-                    <div class="p-3 bg-slate-50 text-slate-600 rounded-lg border border-slate-200 flex items-center gap-2">
+                    <div class="p-3 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-2">
                         <span class="material-symbols-outlined">help</span>
                         <p class="font-bold text-sm">Método de entrega no definido (Antiguo)</p>
                     </div>
                     @if($pedido->direccion)
-                        <div class="mt-3 pl-2 border-l-2 border-slate-200 ml-2">
-                            <address class="text-sm text-slate-600 dark:text-slate-400 dark:text-slate-300 not-italic space-y-1">
-                                <p class="font-semibold text-slate-800">{{ $pedido->direccion->nombre_receptor }}</p>
+                        <div class="mt-3 pl-2 border-l-2 border-slate-200 dark:border-slate-700 ml-2">
+                            <address class="text-sm text-slate-600 dark:text-slate-400 not-italic space-y-1">
+                                <p class="font-semibold text-slate-800 dark:text-slate-200">{{ $pedido->direccion->nombre_receptor }}</p>
                                 <p>{{ $pedido->direccion->direccion_exacta }}</p>
                                 <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
                                 <p>{{ $pedido->direccion->provincia }}</p>

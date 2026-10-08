@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\CourierSucursal;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,6 +17,7 @@ class CheckoutEnvio extends Component
     public $contacto_telefono2 = '';
 
     public $metodo_entrega = 'delivery'; // 'delivery', 'retiro_local', 'retiro_courier'
+    public $metodo_entrega_modal = 'delivery';
     
     // Para Retiro Courier
     public $zonaSeleccionada = '';
@@ -47,9 +49,23 @@ class CheckoutEnvio extends Component
         }
 
         $this->metodo_entrega = session('checkout_metodo_entrega', 'delivery');
+        $this->metodo_entrega_modal = $this->metodo_entrega ?: 'delivery';
         $this->zonaSeleccionada = session('checkout_courier_zona', '');
         $this->courierSeleccionado = session('checkout_courier_courier', '');
         $this->sucursalSeleccionada = session('checkout_courier_sucursal', '');
+    }
+
+    public function abrirModalMetodo($metodo)
+    {
+        $this->metodo_entrega_modal = $metodo;
+        $this->dispatch('open-modal', 'modal-checkout-envio');
+    }
+
+    #[On('direccionSeleccionadaParaCheckout')]
+    public function confirmarDelivery()
+    {
+        $this->metodo_entrega = 'delivery';
+        session(['checkout_metodo_entrega' => 'delivery']);
     }
 
     public function updatedMetodoEntrega($value)
@@ -110,6 +126,7 @@ class CheckoutEnvio extends Component
             'checkout_direccion_id' => null,
             'checkout_zona_envio_id' => null,
         ]);
+        $this->metodo_entrega = 'retiro_courier';
         
         $this->dispatch('close-modal', 'modal-checkout-envio');
     }
@@ -122,6 +139,8 @@ class CheckoutEnvio extends Component
             'checkout_zona_envio_id' => null,
             'checkout_courier_sucursal' => null,
         ]);
+
+        $this->metodo_entrega = 'retiro_local';
 
         $this->dispatch('close-modal', 'modal-checkout-envio');
     }

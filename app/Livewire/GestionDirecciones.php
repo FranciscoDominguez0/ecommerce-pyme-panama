@@ -333,6 +333,7 @@ class GestionDirecciones extends Component
             'checkout_zona_envio_id' => $zona ? (int) $zona->id : null,
         ]);
 
+        $this->dispatch('direccionSeleccionadaParaCheckout');
         $this->dispatch('close-modal', 'modal-checkout-envio');
     }
 

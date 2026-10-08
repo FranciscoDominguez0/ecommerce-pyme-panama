@@ -175,51 +175,51 @@
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Zona <span class="text-rose-500">*</span></label>
-                    <input type="text" id="input-zona" name="zona" required class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Zona <span class="text-rose-500">*</span></label>
+                    <input type="text" id="input-zona" name="zona" required class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Courier <span class="text-rose-500">*</span></label>
-                    <input type="text" id="input-courier" name="courier" required placeholder="Ej: Fletes Chavale" class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Courier <span class="text-rose-500">*</span></label>
+                    <input type="text" id="input-courier" name="courier" required placeholder="Ej: Fletes Chavale" class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Sucursal <span class="text-rose-500">*</span></label>
-                    <input type="text" id="input-sucursal" name="sucursal" required class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Sucursal <span class="text-rose-500">*</span></label>
+                    <input type="text" id="input-sucursal" name="sucursal" required class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Tarifa (hasta 7lb) <span class="text-rose-500">*</span></label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Tarifa (hasta 7lb) <span class="text-rose-500">*</span></label>
                     <div class="relative flex items-center">
                         <span class="absolute left-3 text-xs text-slate-400 font-bold">$</span>
-                        <input type="number" id="input-costo" name="tarifa_uno_hasta_7lb" step="0.01" min="0" required class="input-panama w-full pl-7 py-2.5 text-xs font-mono rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20">
+                        <input type="number" id="input-costo" name="tarifa_uno_hasta_7lb" step="0.01" min="0" required class="input-panama w-full pl-7 py-2.5 text-xs font-mono rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20">
                     </div>
                 </div>
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Dirección Exacta</label>
-                <input type="text" id="input-direccion" name="direccion" class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Dirección Exacta</label>
+                <input type="text" id="input-direccion" name="direccion" class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
             </div>
 
             <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Teléfono</label>
-                <input type="text" id="input-telefono" name="telefono" class="input-panama w-full text-xs rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Teléfono</label>
+                <input type="text" id="input-telefono" name="telefono" class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
             </div>
 
             <div class="pt-1">
-                <label class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
-                    <input type="checkbox" id="input-zona-activo" name="activo" value="1" checked class="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4">
+                <label class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                    <input type="checkbox" id="input-zona-activo" name="activo" value="1" checked class="rounded text-emerald-600 focus:ring-emerald-500 h-4 w-4 bg-white dark:bg-[#121415] border-gray-300 dark:border-gray-600">
                     <div>
-                        <span class="text-xs font-bold text-slate-900 block">Sucursal Activa</span>
-                        <span class="text-[11px] text-slate-500 block">Estará visible en el selector de sucursales durante el checkout.</span>
+                        <span class="text-xs font-bold text-slate-900 dark:text-white block">Sucursal Activa</span>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400 block">Estará visible en el selector de sucursales durante el checkout.</span>
                     </div>
                 </label>
             </div>
 
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                <button type="button" onclick="cerrarModalZona()" class="px-4 py-2.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 dark:border-gray-700">
+                <button type="button" onclick="cerrarModalZona()" class="px-4 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors">Cancelar</button>
                 <button type="submit" class="px-5 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-all">Guardar</button>
             </div>
         </form>

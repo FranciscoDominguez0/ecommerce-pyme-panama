@@ -118,6 +118,15 @@ class CheckoutController extends Controller
         
         $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
 
+        \Illuminate\Support\Facades\Log::info("Checkout confirmacion debug:", [
+            'metodoEntrega' => $metodoEntrega,
+            'sucursal_id' => $courierSucursal ? $courierSucursal->id : null,
+            'tarifa' => $courierSucursal ? $courierSucursal->tarifa_uno_hasta_7lb : null,
+            'costoEnvioEspecial' => $costoEnvioEspecial,
+            'totales_costo_envio' => $totales['costo_envio'],
+            'zona_envio_id' => session('checkout_zona_envio_id'),
+        ]);
+
         return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales', 'metodoEntrega', 'courierSucursal'));
     }
 

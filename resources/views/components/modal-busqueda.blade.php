@@ -237,7 +237,7 @@
                 const esGrid = contenedor && contenedor.classList.contains('grid');
 
                 if (esGrid) {
-                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs`;
+                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 dark:hover:bg-emerald-900/20 hover:shadow-2xs`;
                     let logoHtml = `<span class="font-bold text-xs text-slate-700 dark:text-slate-300">${nombre.substring(0, 2).toUpperCase()}</span>`;
                     if (window.getLogoHtmlForBrand && (item.slug || item.url || item.nombre)) {
                         logoHtml = window.getLogoHtmlForBrand(item);
@@ -248,10 +248,10 @@
                         <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700/80 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
                             ${logoHtml}
                         </div>
-                        <span class="text-xs font-bold text-slate-800 dark:text-gray-100 group-hover:text-emerald-950 truncate max-w-full leading-tight">${nombre}</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-gray-100 group-hover:text-emerald-950 dark:group-hover:text-emerald-400 truncate max-w-full leading-tight">${nombre}</span>
                     `;
                 } else {
-                    card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs`;
+                    card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 dark:hover:bg-emerald-900/20 hover:shadow-2xs`;
                     
                     if (item.nivel && item.nivel > 0) {
                         card.style.marginLeft = `${Math.min(item.nivel * 16, 48)}px`;
@@ -267,11 +267,11 @@
 
                     card.innerHTML = `
                         <div class="flex items-center gap-2.5 min-w-0">
-                            <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors shadow-2xs overflow-hidden p-0.5">
+                            <div class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-300 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center shrink-0 transition-colors shadow-2xs overflow-hidden p-0.5">
                                 ${iconHtml}
                             </div>
                             <div class="min-w-0">
-                                <div class="text-xs font-bold text-slate-800 dark:text-gray-100 group-hover:text-emerald-950 truncate">${nombre}</div>
+                                <div class="text-xs font-bold text-slate-800 dark:text-gray-100 group-hover:text-emerald-950 dark:group-hover:text-emerald-400 truncate">${nombre}</div>
                                 ${sub ? `<div class="text-[10px] text-slate-400 font-medium truncate">${sub}</div>` : ''}
                             </div>
                         </div>

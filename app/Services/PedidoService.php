@@ -85,20 +85,34 @@ class PedidoService
         // Evaluar si el carrito requiere flete físico o si todos los productos son digitales/licencias
         $requiereEnvioFisico = $this->carritoRequiereEnvioFisico($carrito);
 
+        \Illuminate\Support\Facades\Log::info("DEBUG calcularTotales START:", [
+            'requiereEnvioFisico' => $requiereEnvioFisico,
+            'costoEnvioPersonalizado' => $costoEnvioPersonalizado,
+            'zonaEnvioId' => $zonaEnvio?->id
+        ]);
+
         if (!$requiereEnvioFisico) {
             $costoEnvio = 0.00;
         } else {
             if ($costoEnvioPersonalizado !== null) {
                 $costoEnvio = $costoEnvioPersonalizado;
+                \Illuminate\Support\Facades\Log::info("DEBUG: Set costoEnvio to personalizado = " . $costoEnvio);
+            } elseif ($zonaEnvio) {
+                $costoEnvio = $zonaEnvio->costo;
+                \Illuminate\Support\Facades\Log::info("DEBUG: Set costoEnvio to zona = " . $costoEnvio);
             } else {
-                $costoEnvio = $zonaEnvio ? $zonaEnvio->costo : 0.00;
+                $costoEnvio = 0.00;
+                \Illuminate\Support\Facades\Log::info("DEBUG: Set costoEnvio to 0.00 because no zona and no personalizado");
             }
 
             if (($zonaEnvio || $costoEnvioPersonalizado !== null) && $this->cuponService->evaluarEnvioGratis($zonaEnvio?->id, $subtotal)) {
                 $descuentoEnvio = $costoEnvio;
                 $costoEnvio = 0.00;
+                \Illuminate\Support\Facades\Log::info("DEBUG: Set costoEnvio to 0.00 because envio gratis");
             }
         }
+        
+        \Illuminate\Support\Facades\Log::info("DEBUG calcularTotales END:", ['costoEnvio' => $costoEnvio]);
 
         $itbmsMonto = $desglose['itbms'];
         $total = max(0.00, ($subtotal - $descuento) + $costoEnvio + $itbmsMonto);
@@ -272,11 +286,6 @@ class PedidoService
         // pero idealmente esto se maneja con un método dedicado `reembolsarPedido`
         if ($nuevoEstado === 'reembolsado' && !str_contains($comentario ?? '', 'Stripe')) {
             throw new Exception('Los reembolsos financieros deben ejecutarse formalmente mediante el botón de Reembolso.');
-        }
-
-        // Validar que exista información de envío antes de avanzar a estados exclusivos de logística
-        if (in_array($nuevoEstado, ['en_transito', 'problema_entrega']) && !$pedido->envio) {
-            throw new Exception('Debe configurar la Gestión de Envío (Método de Envío) antes de pasar a este estado.');
         }
 
         if (!$comentario) {

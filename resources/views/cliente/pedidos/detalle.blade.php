@@ -384,7 +384,12 @@
                 </div>
             </div>
 
-            <!-- Dirección de envío -->
+            <!-- Dirección o Courier de envío -->
+            @php
+                $notas = json_decode($pedido->notas_internas, true);
+                $metodoEntrega = $notas['metodo_entrega'] ?? ($pedido->direccion ? 'delivery' : 'retiro_local');
+            @endphp
+
             @if($pedido->direccion)
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
                 <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
@@ -398,6 +403,55 @@
                     <p>{{ $pedido->direccion->provincia }}</p>
                     @if($pedido->direccion->referencia)
                         <p class="text-on-surface-variant mt-2 text-sm">Ref: {{ $pedido->direccion->referencia }}</p>
+                    @endif
+                </div>
+            </div>
+            @elseif($metodoEntrega === 'retiro_courier' && isset($notas['courier_sucursal_id']))
+                @php
+                    $sucursal = \App\Models\CourierSucursal::find($notas['courier_sucursal_id']);
+                @endphp
+                @if($sucursal)
+                    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                        <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2 text-orange-600">
+                            <span class="material-symbols-outlined text-sm">store</span>
+                            Retiro en Sucursal Courier
+                        </h3>
+                        <div class="text-sm text-on-surface space-y-1">
+                            <p class="font-semibold">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
+                            <p>{{ $sucursal->direccion }}</p>
+                            <p>{{ $sucursal->zona }}</p>
+                            @if($sucursal->telefono)
+                                <p class="text-on-surface-variant mt-2 text-sm">Tel: {{ $sucursal->telefono }}</p>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            @elseif($metodoEntrega === 'retiro_local')
+                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                    <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2 text-emerald-600">
+                        <span class="material-symbols-outlined text-sm">storefront</span>
+                        Retiro en Local PYME PANAMÁ
+                    </h3>
+                    <div class="text-sm text-on-surface space-y-1">
+                        <p class="font-semibold">Sucursal Principal</p>
+                        <p class="text-on-surface-variant">Retiro gratuito en nuestras instalaciones.</p>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Datos de Contacto del Pedido -->
+            @if(isset($notas['contacto']))
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
+                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">contact_mail</span>
+                    Datos de Contacto
+                </h3>
+                <div class="text-sm text-on-surface space-y-1">
+                    <p class="font-semibold">{{ current(explode(' ', $notas['contacto']['nombre'] ?? '')) }} {{ current(explode(' ', $notas['contacto']['apellido'] ?? '')) }}</p>
+                    <p>{{ $notas['contacto']['email'] ?? '' }}</p>
+                    <p>{{ $notas['contacto']['telefono1'] ?? '' }}</p>
+                    @if(!empty($notas['contacto']['telefono2']))
+                        <p>{{ $notas['contacto']['telefono2'] }}</p>
                     @endif
                 </div>
             </div>

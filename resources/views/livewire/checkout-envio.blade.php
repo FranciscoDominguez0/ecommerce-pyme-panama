@@ -47,25 +47,26 @@
             </div>
         </div>
     </div>
-    {{-- Vista Principal (Resumen) --}}
+    {{-- Vista Principal (Resumen y Selección) --}}
     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm mb-6">
-        <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-xl">local_shipping</span>
-                <h2 class="text-lg font-bold text-primary">Método de Entrega</h2>
-            </div>
-            <button x-data x-on:click="$dispatch('open-modal', 'modal-checkout-envio')" class="font-label-caps text-xs uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">
-                {{ $metodo_entrega ? 'Cambiar' : 'Seleccionar' }}
-            </button>
+        <div class="mb-6 border-b border-slate-100 pb-4">
+            <h2 class="text-xl font-bold text-slate-800">Retiro / Delivery / Courier</h2>
+        </div>
+
+        <div class="flex justify-center gap-3 mb-6">
+            <button wire:click="abrirModalMetodo('retiro_local')" class="px-6 py-2 text-sm font-semibold border rounded transition-colors {{ $metodo_entrega === 'retiro_local' ? 'border-orange-400 bg-orange-50/50 text-orange-600' : 'border-slate-300 text-slate-600 hover:bg-slate-50' }}">Retiro</button>
+            <button wire:click="abrirModalMetodo('delivery')" class="px-6 py-2 text-sm font-semibold border rounded transition-colors {{ $metodo_entrega === 'delivery' ? 'border-orange-400 bg-orange-50/50 text-orange-600' : 'border-slate-300 text-slate-600 hover:bg-slate-50' }}">Delivery</button>
+            <button wire:click="abrirModalMetodo('retiro_courier')" class="px-6 py-2 text-sm font-semibold border rounded transition-colors {{ $metodo_entrega === 'retiro_courier' ? 'border-orange-400 bg-orange-50/50 text-orange-600' : 'border-slate-300 text-slate-600 hover:bg-slate-50' }}">Courier</button>
         </div>
 
         @if(!$metodo_entrega)
-            <p class="text-sm text-slate-500">Aún no has seleccionado un método de entrega.</p>
-            <button x-data x-on:click="$dispatch('open-modal', 'modal-checkout-envio')" class="mt-4 bg-emerald-600 text-white font-bold px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm">
-                Seleccionar método
-            </button>
+            <div class="text-center">
+                <p class="text-sm text-slate-500">Aún no has configurado tu método de entrega.</p>
+            </div>
         @else
-            <div class="text-sm text-on-surface-variant">
+            <div class="text-sm text-on-surface-variant bg-slate-50 p-4 rounded-lg border border-slate-100 flex items-start justify-between">
+                <div>
+
                 @if($metodo_entrega === 'retiro_local')
                     <p class="font-semibold text-on-background mb-1">Retiro en sucursal PYME PANAMA</p>
                     <p>San Francisco (Ciudad de Panamá)</p>
@@ -98,6 +99,7 @@
                         <p class="text-orange-600 font-bold mt-2">Falta seleccionar la sucursal. Haz clic en "Cambiar".</p>
                     @endif
                 @endif
+                </div>
             </div>
             
             @if(
@@ -126,7 +128,7 @@
             <div class="grid grid-cols-1 gap-4 mb-6">
                 {{-- Opción 1: Retiro Local --}}
                 <label class="relative block cursor-pointer group">
-                    <input type="radio" wire:model.live="metodo_entrega" value="retiro_local" class="peer sr-only" />
+                    <input type="radio" wire:model.live="metodo_entrega_modal" value="retiro_local" class="peer sr-only" />
                     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 transition-all duration-200 peer-checked:border-orange-500 peer-checked:shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-md flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
@@ -139,7 +141,7 @@
 
                 {{-- Opción 2: Delivery --}}
                 <label class="relative block cursor-pointer group">
-                    <input type="radio" wire:model.live="metodo_entrega" value="delivery" class="peer sr-only" />
+                    <input type="radio" wire:model.live="metodo_entrega_modal" value="delivery" class="peer sr-only" />
                     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 transition-all duration-200 peer-checked:border-orange-500 peer-checked:bg-orange-50/30 peer-checked:shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-md flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
@@ -152,7 +154,7 @@
 
                 {{-- Opción 3: Courier --}}
                 <label class="relative block cursor-pointer group">
-                    <input type="radio" wire:model.live="metodo_entrega" value="retiro_courier" class="peer sr-only" />
+                    <input type="radio" wire:model.live="metodo_entrega_modal" value="retiro_courier" class="peer sr-only" />
                     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 transition-all duration-200 peer-checked:border-orange-500 peer-checked:bg-orange-50/30 peer-checked:shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-md flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2 mb-1">
@@ -165,17 +167,17 @@
             </div>
 
             {{-- Secciones Dinámicas --}}
-            @if($metodo_entrega === 'retiro_local')
+            @if($metodo_entrega_modal === 'retiro_local')
                 <div class="flex justify-center mt-6">
-                    <button wire:click="continuarRetiroLocal" x-on:click="$dispatch('close-modal', 'modal-checkout-envio')" class="bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-lg hover:bg-emerald-700 transition-colors">
+                    <button wire:click="continuarRetiroLocal" class="bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-lg hover:bg-emerald-700 transition-colors">
                         Guardar cambios
                     </button>
                 </div>
-            @elseif($metodo_entrega === 'delivery')
+            @elseif($metodo_entrega_modal === 'delivery')
                 <div class="mt-6 border-t border-slate-200 pt-6">
                     <livewire:gestion-direcciones :compact="true" :mostrarPredeterminada="false" :zonasEnvio="$zonasEnvio" :requiereEnvio="$requiereEnvio" />
                 </div>
-            @elseif($metodo_entrega === 'retiro_courier')
+            @elseif($metodo_entrega_modal === 'retiro_courier')
                 <div class="mt-6 border-t border-slate-200 pt-6">
                     <h3 class="text-lg font-bold text-orange-600 mb-4">¿En cuál zona?</h3>
                     <div class="flex items-center gap-4 mb-6">
