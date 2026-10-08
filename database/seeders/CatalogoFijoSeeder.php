@@ -102,16 +102,16 @@ class CatalogoFijoSeeder extends Seeder
                         "destacado" => rand(1, 100) > 80,
                         "activo" => true,
                         "aplica_itbms" => true,
-                        "especificaciones" => json_encode($specs, JSON_UNESCAPED_UNICODE),
+                        "especificaciones" => $specs,
                         "peso" => $esServicio ? 0 : (rand(1, 50) / 10),
                         "dimension_largo" => $esServicio ? 0 : rand(10, 40),
                         "dimension_ancho" => $esServicio ? 0 : rand(5, 30),
                         "dimension_alto" => $esServicio ? 0 : rand(1, 20),
-                        "garantia_info" => json_encode([
+                        "garantia_info" => [
                             "nombre" => $esServicio ? "Garantía de Servicio PayMe" : "Garantía Extendida del Fabricante", 
                             "duracion" => $esServicio ? "30 Días" : "1 Año", 
                             "contacto" => $gtiaPanama
-                        ], JSON_UNESCAPED_UNICODE),
+                        ],
                     ]
                 );
                 $count++;

@@ -469,7 +469,7 @@
 
                 <!-- Especificaciones Físicas (Fletes) -->
                 @if($producto->peso || $producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
-                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm">
+                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm" open>
                         <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
                             <span class="text-lg">Especificaciones Físicas</span>
                             <span class="transition group-open:rotate-180 text-slate-400 group-open:text-emerald-600">
@@ -499,7 +499,7 @@
 
                 <!-- Garantía -->
                 @if(!empty($producto->garantia_info) && (!empty($producto->garantia_info['nombre']) || !empty($producto->garantia_info['duracion'])))
-                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm">
+                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm" open>
                         <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
                             <span class="text-lg">Garantía</span>
                             <span class="transition group-open:rotate-180 text-slate-400 group-open:text-emerald-600">
