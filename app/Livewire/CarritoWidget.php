@@ -228,7 +228,8 @@ class CarritoWidget extends Component
         } else {
             // delivery
             if (session()->has('checkout_direccion_id')) {
-                $direccion = \App\Models\Direccion::with('zonaEnvio')->find(session('checkout_direccion_id'));
+                /** @var Direccion|null $direccion */
+                $direccion = Direccion::with('zonaEnvio')->find(session('checkout_direccion_id'));
                 if ($direccion && $direccion->zonaEnvio) {
                     $zona = $direccion->zonaEnvio;
                     $nombreUbicacion = $direccion->provincia;

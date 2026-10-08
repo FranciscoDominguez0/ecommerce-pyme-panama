@@ -59,7 +59,7 @@ Route::post('/carrito/remover-cupon', [CarritoController::class, 'removerCupon']
 
 // Checkout
 Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->group(function () {
-    Route::get('/checkout/direccion', [CheckoutController::class, 'direccion'])->name('cliente.checkout.direccion');
+    Route::get('/checkout', [CheckoutController::class, 'direccion'])->name('cliente.checkout.direccion');
     Route::get('/checkout/pago', [CheckoutController::class, 'pago'])->name('cliente.checkout.pago');
     Route::post('/checkout/pago', [CheckoutController::class, 'guardarPago'])->name('cliente.checkout.guardar-pago');
     Route::get('/checkout/confirmacion', [CheckoutController::class, 'confirmacion'])->name('cliente.checkout.confirmacion');

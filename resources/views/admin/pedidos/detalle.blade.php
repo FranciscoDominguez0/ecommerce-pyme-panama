@@ -362,11 +362,14 @@
                     <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3">
                         <span class="material-symbols-outlined mt-0.5">local_shipping</span>
                         <div>
-                            <p class="font-bold text-sm">Envío por Courier</p>
+                            <p class="font-bold text-sm mb-1.5">Envío por Courier</p>
                             @if($sucursal)
-                                <p class="text-xs mt-1 font-semibold text-emerald-900 dark:text-emerald-100">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
-                                <p class="text-xs mt-0.5 text-emerald-800 dark:text-emerald-200">{{ $sucursal->zona }}</p>
-                                <p class="text-xs text-emerald-600 dark:text-emerald-300 mt-1">{{ $sucursal->direccion }}</p>
+                                <div class="text-xs space-y-1 text-emerald-800 dark:text-emerald-200">
+                                    <p><strong class="font-semibold">Zona del Courier:</strong> {{ $sucursal->zona }}</p>
+                                    <p><strong class="font-semibold">Lugar del Courier:</strong> {{ $sucursal->courier }} {{ $sucursal->sucursal }}</p>
+                                    <p><strong class="font-semibold">Servicio de Courier:</strong> Recoger en Tienda de Courier</p>
+                                    <p><strong class="font-semibold">Costo de Servicio:</strong> ${{ number_format($pedido->costo_envio, 2) }} USD</p>
+                                </div>
                             @else
                                 <p class="text-xs text-emerald-700 dark:text-emerald-300">Sucursal de Courier no especificada.</p>
                             @endif

@@ -10,8 +10,8 @@
                 @php
                     $zonaDir = $dir->zonaEnvioCalculada;
                 @endphp
-                <label class="relative block cursor-pointer group">
-                    <input type="radio" name="seleccion" value="{{ $dir->id }}" wire:model.live="seleccion" class="peer sr-only" />
+                <label for="dir_{{ $dir->id }}" class="relative block cursor-pointer group">
+                    <input type="radio" id="dir_{{ $dir->id }}" name="seleccion" value="{{ $dir->id }}" wire:model.live="seleccion" class="peer sr-only" />
                     <div class="h-full bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)] flex flex-col justify-between">
                         <div>
                             <div class="flex justify-between items-start mb-4">
@@ -60,7 +60,7 @@
                 </label>
                 @endforeach
 
-                <label class="relative block cursor-pointer group">
+                <label for="radio_nueva_direccion" class="relative block cursor-pointer group">
                     <input type="radio" name="seleccion" value="nueva" wire:model.live="seleccion" class="peer sr-only" id="radio_nueva_direccion" />
                     <div class="h-full bg-surface-container border border-dashed border-outline-variant rounded-xl p-6 transition-all duration-200 hover:bg-surface-variant/50 flex flex-col items-center justify-center min-h-[200px]">
                         <span class="material-symbols-outlined text-outline text-4xl mb-2">add_circle</span>

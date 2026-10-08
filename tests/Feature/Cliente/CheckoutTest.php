@@ -15,7 +15,7 @@ use Tests\Feature\Admin\BaseAdminTest;
  * Pruebas del flujo HTTP de CHECKOUT (FASE 12).
  *
  * Rutas cubiertas:
- *   GET  /checkout/direccion, /checkout/pago, /checkout/confirmacion
+ *   GET  /checkout, /checkout/pago, /checkout/confirmacion
  *   POST /checkout/pago (guardar-pago), /checkout/confirmacion (procesar)
  *   GET  /mi-cuenta/mis-pedidos, /mi-cuenta/mis-pedidos/{id}
  *
@@ -31,7 +31,7 @@ class CheckoutTest extends BaseAdminTest
 
     public function test_un_invitado_es_redirigido_al_login_en_el_checkout(): void
     {
-        $this->get('/checkout/direccion')->assertRedirect(route('login'));
+        $this->get('/checkout')->assertRedirect(route('login'));
         $this->get('/checkout/pago')->assertRedirect(route('login'));
         $this->get('/checkout/confirmacion')->assertRedirect(route('login'));
         $this->post('/checkout/confirmacion', [])->assertRedirect(route('login'));
@@ -49,7 +49,7 @@ class CheckoutTest extends BaseAdminTest
         Direccion::factory()->create(['usuario_id' => $usuario->id, 'alias' => 'Casa']);
 
         $this->actingAs($usuario)
-            ->get('/checkout/direccion')
+            ->get('/checkout')
             ->assertOk()
             ->assertSee('Seleccione su dirección de envío')
             ->assertSee('Casa')

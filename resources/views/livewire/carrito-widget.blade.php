@@ -12,7 +12,11 @@
         <div class="flex flex-col lg:flex-row gap-8 items-start">
             
             <!-- Left Column: Lista de Productos -->
-            <div class="flex-1 w-full space-y-4">
+            <div class="flex-1 w-full bg-white border border-gray-200/90 rounded-xl p-6 shadow-sm">
+                
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Productos</h2>
+                <hr class="border-gray-200 mb-2">
+
                 @foreach($items as $item)
                     @php
                         $producto = $item->producto;
@@ -21,130 +25,90 @@
                         $imagenRuta = $item->imagen_url;
                     @endphp
 
-                    <div wire:key="cart-item-{{ $item->id }}" 
-                         class="bg-white border border-gray-200/90 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 items-start sm:items-center shadow-xs hover:border-gray-300 transition-all">
-                        
-                        <!-- Imagen del Producto -->
-                        <div class="w-24 h-24 sm:w-28 sm:h-28 aspect-square shrink-0 bg-gray-50 rounded-xl overflow-hidden border border-gray-100 relative">
-                            <img src="{{ $imagenRuta }}" 
-                                 alt="{{ $producto->nombre ?? 'Producto' }}" 
-                                 class="w-full h-full object-contain p-2"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Sin+Imagen';" />
-                            
-                            @if($producto && $producto->oferta_activa && $producto->precio_oferta)
-                                <span class="absolute top-1.5 left-1.5 bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-xs">
-                                    OFERTA
-                                </span>
+                    <div wire:key="cart-item-{{ $item->id }}" class="border-b border-gray-200 py-6 last:border-0">
+                        <!-- Product Title -->
+                        <h3 class="text-[17px] leading-snug mb-4">
+                            @if($producto)
+                                <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" wire:navigate class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                                    {{ $producto->nombre }}
+                                </a>
+                            @else
+                                <span class="text-gray-500">Producto no disponible</span>
                             @endif
-                        </div>
+                        </h3>
 
-                        <!-- Detalles del Producto -->
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-start justify-between gap-2">
-                                <div>
-                                    @if($producto && $producto->brand)
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-[#006148] block mb-0.5">
-                                            {{ $producto->brand->name }}
-                                        </span>
+                        <div class="flex gap-6 items-start">
+                            <!-- Image -->
+                            <div class="w-32 h-32 shrink-0 flex items-center justify-center">
+                                <img src="{{ $imagenRuta }}" 
+                                     alt="{{ $producto->nombre ?? 'Producto' }}" 
+                                     class="max-w-full max-h-full object-contain"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Sin+Imagen';" />
+                            </div>
+
+                            <!-- Details -->
+                            <div class="flex-1 flex justify-between items-start">
+                                <div class="text-[15px] text-gray-800 space-y-1.5">
+                                    
+                                    <!-- Stock / Disponible -->
+                                    <div class="flex items-center gap-1.5 text-emerald-600 mb-3">
+                                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        <span class="font-medium">Disponible</span>
+                                    </div>
+
+                                    <!-- Alertas de stock adicionales -->
+                                    @if(isset($stockAdvertencias[$item->id]))
+                                        <div class="text-red-600 text-sm font-semibold flex items-center gap-1 mb-2">
+                                            <span class="material-symbols-outlined text-[16px]">error</span>
+                                            {{ $stockAdvertencias[$item->id] }}
+                                        </div>
                                     @endif
 
-                                    <h3 class="text-base font-bold text-gray-900 leading-snug hover:text-[#006148] transition-colors">
-                                        @if($producto)
-                                            <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" wire:navigate>
-                                                {{ $producto->nombre }}
-                                            </a>
-                                        @else
-                                            <span>Producto no disponible</span>
-                                        @endif
-                                    </h3>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-bold text-gray-900">Precio Unitario:</span> 
+                                        <span>${{ number_format((float)$item->precio_unitario, 2) }} USD</span>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-1.5" x-data="{ editando: false }">
+                                        <span class="font-bold text-gray-900">Cantidad:</span> 
+                                        
+                                        <div x-show="!editando" class="flex items-center gap-1">
+                                            <span>{{ $item->cantidad }}</span>
+                                            <button type="button" @click="editando = true" class="text-blue-600 hover:text-blue-800 hover:underline ml-1 cursor-pointer">(Cambiar)</button>
+                                        </div>
+                                        
+                                        <div x-show="editando" x-cloak class="flex items-center gap-2 ml-1">
+                                            <div class="inline-flex items-center bg-gray-50 border border-gray-300 rounded shadow-xs">
+                                                <button type="button" wire:click="decrementar({{ $item->id }})" class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[16px]">remove</span></button>
+                                                <span class="w-8 text-center text-sm font-mono border-x border-gray-300 h-7 flex items-center justify-center bg-white">{{ $item->cantidad }}</span>
+                                                <button type="button" wire:click="incrementar({{ $item->id }})" class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[16px]">add</span></button>
+                                            </div>
+                                            <button type="button" @click="editando = false" class="text-xs text-blue-600 hover:underline cursor-pointer">Listo</button>
+                                        </div>
+                                    </div>
 
+                                    <div class="flex items-center gap-1.5 pt-0.5">
+                                        <span class="font-bold text-gray-900">Precio Total:</span> 
+                                        <span>${{ number_format($item->subtotal, 2) }} USD</span>
+                                    </div>
+                                    
                                     @if($item->variante_texto)
-                                        <p class="text-xs font-semibold text-gray-600 mt-1 flex items-center gap-1">
-                                            <span class="text-gray-400">Variante:</span>
-                                            <span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded-md text-[11px] font-mono">
-                                                {{ $item->variante_texto }}
-                                            </span>
-                                        </p>
-                                    @endif
-
-                                    @if($producto && $producto->sku)
-                                        <p class="text-[11px] font-mono text-gray-400 mt-1">
-                                            SKU: {{ $variante && $variante->sku ? $variante->sku : $producto->sku }}
-                                        </p>
+                                        <div class="mt-2 text-sm text-gray-500">
+                                            Variante: {{ $item->variante_texto }}
+                                        </div>
                                     @endif
                                 </div>
-                            </div>
 
-                            <!-- Alertas de Stock Reactivas -->
-                            @if(isset($stockAdvertencias[$item->id]))
-                                <div class="mt-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold animate-pulse">
-                                    <span class="material-symbols-outlined text-[15px]">error</span>
-                                    <span>{{ $stockAdvertencias[$item->id] }}</span>
+                                <!-- Eliminar Button -->
+                                <div>
+                                    <button type="button" 
+                                            wire:click="eliminar({{ $item->id }})" 
+                                            class="text-[#d93025] hover:text-[#b3261e] hover:underline text-[15px] cursor-pointer" 
+                                            title="Eliminar producto">
+                                        Eliminar
+                                    </button>
                                 </div>
-                            @elseif($stock > 0 && $stock <= 5)
-                                <div class="mt-2.5 inline-flex items-center gap-1.5 text-xs text-amber-600 font-semibold">
-                                    <span class="material-symbols-outlined text-[15px]">inventory_2</span>
-                                    <span>¡Solo quedan {{ $stock }} unidades en inventario!</span>
-                                </div>
-                            @elseif($stock <= 0)
-                                <div class="mt-2.5 inline-flex items-center gap-1.5 text-xs text-red-600 font-bold">
-                                    <span class="material-symbols-outlined text-[15px]">cancel</span>
-                                    <span>Agotado temporalmente</span>
-                                </div>
-                            @endif
-                        </div>
-
-                        <!-- Selector de Cantidad, Precio y Eliminación -->
-                        <div class="w-full sm:w-auto flex items-center justify-between sm:flex-col sm:items-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100">
-                            
-                            <!-- Control Cantidad -->
-                            <div class="inline-flex items-center bg-gray-50 border border-gray-200 rounded-xl p-0.5 shadow-2xs">
-                                <button type="button" 
-                                        wire:click="decrementar({{ $item->id }})" 
-                                        wire:loading.attr="disabled"
-                                        class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-white hover:text-gray-900 active:scale-95 transition-all cursor-pointer disabled:opacity-50" 
-                                        title="Disminuir cantidad">
-                                    <span class="material-symbols-outlined text-[16px]">remove</span>
-                                </button>
-                                
-                                <span class="w-10 text-center font-bold text-sm text-gray-900 font-mono">
-                                    {{ $item->cantidad }}
-                                </span>
-
-                                <button type="button" 
-                                        wire:click="incrementar({{ $item->id }})" 
-                                        wire:loading.attr="disabled"
-                                        class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-white hover:text-gray-900 active:scale-95 transition-all cursor-pointer disabled:opacity-50" 
-                                        title="Aumentar cantidad">
-                                    <span class="material-symbols-outlined text-[16px]">add</span>
-                                </button>
                             </div>
-
-                            <!-- Precio Unitario y Subtotal -->
-                            <div class="text-right">
-                                @if($producto && $producto->oferta_activa && $producto->precio_oferta && (float)$producto->precio > (float)$item->precio_unitario)
-                                    <p class="text-xs text-gray-400 line-through font-mono">
-                                        ${{ number_format((float)$producto->precio * $item->cantidad, 2) }}
-                                    </p>
-                                @endif
-                                <p class="text-base sm:text-lg font-extrabold text-[#002349] font-mono tracking-tight">
-                                    ${{ number_format($item->subtotal, 2) }}
-                                </p>
-                                @if($item->cantidad > 1)
-                                    <p class="text-[10px] text-gray-400 font-mono">
-                                        ${{ number_format((float)$item->precio_unitario, 2) }} c/u
-                                    </p>
-                                @endif
-                            </div>
-
-                            <!-- Botón Eliminar -->
-                            <button type="button" 
-                                    wire:click="eliminar({{ $item->id }})" 
-                                    wire:loading.attr="disabled"
-                                    class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer" 
-                                    title="Eliminar producto del carrito">
-                                <span class="material-symbols-outlined text-[18px]">delete</span>
-                            </button>
                         </div>
                     </div>
                 @endforeach

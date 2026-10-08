@@ -334,7 +334,7 @@ class GestionDirecciones extends Component
         ]);
 
         $this->dispatch('direccionSeleccionadaParaCheckout');
-        $this->dispatch('close-modal', 'modal-checkout-envio');
+        $this->dispatch('close-modal', 'modal-calculadora-envio');
     }
 
     public function render()
