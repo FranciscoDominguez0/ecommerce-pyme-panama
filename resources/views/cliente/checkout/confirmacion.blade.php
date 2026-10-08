@@ -221,14 +221,12 @@
                         <div class="flex justify-between items-center">
                             <dt>Envío</dt>
                             <dd class="font-semibold text-on-background">
-                                @if(!($totales['requiere_envio'] ?? true) || ($totales['costo_envio'] ?? 0) == 0)
-                                    @if($metodoEntrega === 'retiro_courier' && (!isset($courierSucursal) || !$courierSucursal->tarifa_uno_hasta_7lb))
-                                        <span class="text-orange-600 font-semibold text-xs">Pago en Destino</span>
-                                    @else
-                                        <span class="text-emerald-600 font-semibold">Gratis</span>
-                                    @endif
-                                @else
+                                @if(($totales['costo_envio'] ?? 0) > 0)
                                     ${{ number_format($totales['costo_envio'], 2) }}
+                                @elseif($metodoEntrega === 'retiro_courier' && (!isset($courierSucursal) || !$courierSucursal->tarifa_uno_hasta_7lb))
+                                    <span class="text-orange-600 font-semibold text-xs">Pago en Destino</span>
+                                @else
+                                    <span class="text-emerald-600 font-semibold">Gratis</span>
                                 @endif
                             </dd>
                         </div>
