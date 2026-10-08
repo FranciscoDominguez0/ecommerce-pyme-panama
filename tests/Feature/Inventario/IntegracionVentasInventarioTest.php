@@ -126,8 +126,13 @@ class IntegracionVentasInventarioTest extends BaseAdminTest
 
         $this->actingAs($usuario)
             ->withSession([
-                'checkout_direccion_id' => $direccion->id,
-                'checkout_metodo_pago'  => 'contra_entrega',
+                'checkout_direccion_id'     => $direccion->id,
+                'checkout_metodo_pago'      => 'contra_entrega',
+                'checkout_metodo_entrega'   => 'delivery',
+                'checkout_contacto_nombre'  => 'Test',
+                'checkout_contacto_apellido'=> 'User',
+                'checkout_contacto_email'   => $usuario->email,
+                'checkout_contacto_telefono1' => '60000000',
             ])
             ->post('/checkout/confirmacion', ['notas_cliente' => ''])
             ->assertRedirect()

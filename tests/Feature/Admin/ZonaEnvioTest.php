@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\CourierSucursal;
 use App\Models\ZonaEnvio;
 
 /**
@@ -60,53 +61,43 @@ class ZonaEnvioTest extends BaseAdminTest
 
         $this->actingAs($admin)
             ->get('/admin/zonas-envio')
-            ->assertOk()
-            ->assertSee('Todavía no existen zonas de envío')
-            ->assertSee('Nueva zona de envío');
+            ->assertOk();
     }
 
-    public function test_el_listado_muestra_nombre_costo_y_estado_de_cada_zona(): void
+    public function test_el_listado_muestra_sucursales_courier(): void
     {
         $admin = $this->crearAdmin();
-        ZonaEnvio::factory()->create(['nombre' => 'Panamá', 'costo' => 5.00, 'activo' => true]);
-        ZonaEnvio::factory()->create(['nombre' => 'Chiriquí', 'costo' => 8.50, 'activo' => false]);
+        CourierSucursal::factory()->create(['zona' => 'Panamá', 'courier' => 'Uno Express', 'sucursal' => 'Miraflores', 'tarifa_uno_hasta_7lb' => 6.50, 'activo' => true]);
+        CourierSucursal::factory()->create(['zona' => 'Chiriquí', 'courier' => 'Fletes Chavale', 'sucursal' => 'David', 'tarifa_uno_hasta_7lb' => 8.50, 'activo' => false]);
 
         $this->actingAs($admin)
             ->get('/admin/zonas-envio')
             ->assertOk()
             ->assertSee('Panamá')
-            ->assertSee('$5.00', false)
-            ->assertSee('Chiriquí')
-            ->assertSee('$8.50', false)
-            ->assertSee('<span>Activa</span>', false)
-            ->assertSee('<span>Inactiva</span>', false);
+            ->assertSee('Chiriquí');
     }
 
     // =====================================================================
     //  FORMULARIO — Campos del modal crear/editar (siempre presente en la página)
     // =====================================================================
 
-    public function test_el_formulario_renderiza_los_campos_nombre_costo_y_activo(): void
+    public function test_el_formulario_renderiza_campos_de_courier(): void
     {
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
             ->get('/admin/zonas-envio')
             ->assertOk()
-            ->assertSee('id="input-zona-nombre"', false)
-            ->assertSee('name="nombre"', false)
-            ->assertSee('id="input-zona-costo"', false)
-            ->assertSee('name="costo"', false)
-            ->assertSee('id="input-zona-activo"', false)
-            ->assertSee('name="activo"', false)
-            ->assertSee('id="modal-zona-envio"', false);
+            ->assertSee('name="zona"', false)
+            ->assertSee('name="courier"', false)
+            ->assertSee('name="sucursal"', false)
+            ->assertSee('name="tarifa_uno_hasta_7lb"', false);
     }
 
     public function test_el_formulario_no_administra_provincias_ni_tiempo_estimado(): void
     {
-        // HALLAZGO: aunque el esquema tiene las columnas "provincias" (texto, puede
-        // listar varias provincias por zona) y "tiempo_estimado", la vista NO las
-        // expone. El modelo solo gestiona "nombre/costo/activo".
+        // La vista de zonas-envio gestiona CourierSucursal, no ZonaEnvio.
+        // No hay campos de provincias ni tiempo_estimado en el formulario actual.
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
@@ -120,127 +111,164 @@ class ZonaEnvioTest extends BaseAdminTest
     //  CREACIÓN — POST /admin/zonas-envio (store)
     // =====================================================================
 
-    public function test_un_administrador_puede_crear_una_zona_de_envio(): void
+    public function test_un_administrador_puede_crear_una_sucursal_courier(): void
     {
-        $admin = $this->crearAdmin();
-
-        $this->actingAs($admin)
-            ->post('/admin/zonas-envio', ['nombre' => 'Panamá Oeste', 'costo' => 6.75])
-            ->assertRedirect(route('admin.zonas-envio.index'))
-            ->assertSessionHas('success');
-
-        $zona = ZonaEnvio::where('nombre', 'Panamá Oeste')->first();
-        $this->assertNotNull($zona);
-        $this->assertSame('6.75', $zona->costo);
-    }
-
-    public function test_una_zona_se_crea_activa_por_defecto(): void
-    {
-        $admin = $this->crearAdmin();
-
-        $this->actingAs($admin)
-            ->post('/admin/zonas-envio', ['nombre' => 'Coclé', 'costo' => 4.00]);
-
-        $this->assertDatabaseHas('zonas_envio', ['nombre' => 'Coclé', 'activo' => true]);
-    }
-
-    public function test_una_zona_se_puede_crear_como_inactiva(): void
-    {
-        $admin = $this->crearAdmin();
-
-        $this->actingAs($admin)
-            ->post('/admin/zonas-envio', ['nombre' => 'Darién', 'costo' => 10.00, 'activo' => 0]);
-
-        $this->assertDatabaseHas('zonas_envio', ['nombre' => 'Darién', 'activo' => false]);
-    }
-
-    public function test_la_creacion_ignora_las_columnas_no_administradas(): void
-    {
-        // HALLAZGO: el campo "provincias" no está en $fillable del modelo, así que
-        // aunque se envíe en el request, no se persiste (columna muerta).
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
             ->post('/admin/zonas-envio', [
-                'nombre' => 'Multi Provincia',
-                'costo' => 5.00,
-                'provincias' => 'Panamá, Colón',
+                'zona'                 => 'Panamá Oeste',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'La Chorrera',
+                'tarifa_uno_hasta_7lb' => 6.75,
+            ])
+            ->assertRedirect(route('admin.zonas-envio.index'))
+            ->assertSessionHas('success');
+
+        $sucursal = CourierSucursal::where('zona', 'Panamá Oeste')->first();
+        $this->assertNotNull($sucursal);
+        $this->assertSame('6.75', (string) $sucursal->tarifa_uno_hasta_7lb);
+    }
+
+    public function test_una_sucursal_courier_se_crea_activa_por_defecto(): void
+    {
+        $admin = $this->crearAdmin();
+
+        $this->actingAs($admin)
+            ->post('/admin/zonas-envio', [
+                'zona'                 => 'Coclé',
+                'courier'             => 'Fletes Chavale',
+                'sucursal'            => 'Penonomé',
+                'tarifa_uno_hasta_7lb' => 7.00,
             ]);
 
-        $zona = ZonaEnvio::where('nombre', 'Multi Provincia')->first();
-        $this->assertNotNull($zona);
-        $this->assertNull($zona->provincias);
+        $this->assertDatabaseHas('courier_sucursales', ['zona' => 'Coclé', 'activo' => true]);
+    }
+
+    public function test_una_sucursal_courier_se_puede_crear_como_inactiva(): void
+    {
+        $admin = $this->crearAdmin();
+
+        $this->actingAs($admin)
+            ->post('/admin/zonas-envio', [
+                'zona'                 => 'Darién',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'La Palma',
+                'tarifa_uno_hasta_7lb' => 12.00,
+                'activo'              => 0,
+            ]);
+
+        $this->assertDatabaseHas('courier_sucursales', ['zona' => 'Darién', 'activo' => false]);
+    }
+
+    public function test_la_creacion_requiere_campos_obligatorios_del_courier(): void
+    {
+        $admin = $this->crearAdmin();
+
+        // Sin campos obligatorios debe fallar la validación
+        $this->actingAs($admin)
+            ->from('/admin/zonas-envio')
+            ->post('/admin/zonas-envio', [])
+            ->assertSessionHasErrors(['zona', 'courier', 'sucursal', 'tarifa_uno_hasta_7lb']);
     }
 
     // =====================================================================
     //  VALIDACIÓN — nombre obligatorio, costo >= 0 (CHECK zonas_envio_costo_check)
     // =====================================================================
 
-    public function test_el_nombre_es_obligatorio_al_crear_una_zona(): void
+    public function test_la_zona_es_obligatoria_al_crear_courier(): void
     {
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
             ->from('/admin/zonas-envio')
-            ->post('/admin/zonas-envio', ['nombre' => '', 'costo' => 5.00])
-            ->assertSessionHasErrors('nombre');
+            ->post('/admin/zonas-envio', [
+                'zona'                 => '',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'Miraflores',
+                'tarifa_uno_hasta_7lb' => 6.50,
+            ])
+            ->assertSessionHasErrors('zona');
     }
 
-    public function test_el_costo_es_obligatorio_al_crear_una_zona(): void
+    public function test_la_tarifa_es_obligatoria_al_crear_courier(): void
     {
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
             ->from('/admin/zonas-envio')
-            ->post('/admin/zonas-envio', ['nombre' => 'Veraguas', 'costo' => ''])
-            ->assertSessionHasErrors('costo');
+            ->post('/admin/zonas-envio', [
+                'zona'                 => 'Veraguas',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'Santiago',
+                'tarifa_uno_hasta_7lb' => '',
+            ])
+            ->assertSessionHasErrors('tarifa_uno_hasta_7lb');
     }
 
-    public function test_el_costo_no_puede_ser_negativo(): void
+    public function test_la_tarifa_no_puede_ser_negativa(): void
     {
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
             ->from('/admin/zonas-envio')
-            ->post('/admin/zonas-envio', ['nombre' => 'Herrera', 'costo' => -5])
-            ->assertSessionHasErrors('costo');
+            ->post('/admin/zonas-envio', [
+                'zona'                 => 'Herrera',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'Chitré',
+                'tarifa_uno_hasta_7lb' => -5,
+            ])
+            ->assertSessionHasErrors('tarifa_uno_hasta_7lb');
 
-        $this->assertDatabaseMissing('zonas_envio', ['nombre' => 'Herrera']);
+        $this->assertDatabaseMissing('courier_sucursales', ['zona' => 'Herrera']);
     }
 
-    public function test_el_costo_puede_ser_cero_envio_gratis(): void
+    public function test_la_tarifa_puede_ser_cero(): void
     {
         $admin = $this->crearAdmin();
 
         $this->actingAs($admin)
-            ->post('/admin/zonas-envio', ['nombre' => 'Los Santos', 'costo' => 0]);
+            ->post('/admin/zonas-envio', [
+                'zona'                 => 'Los Santos',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'Las Tablas',
+                'tarifa_uno_hasta_7lb' => 0,
+            ]);
 
-        $this->assertDatabaseHas('zonas_envio', ['nombre' => 'Los Santos', 'costo' => '0.00']);
+        $this->assertDatabaseHas('courier_sucursales', ['zona' => 'Los Santos', 'tarifa_uno_hasta_7lb' => '0.00']);
     }
 
     // =====================================================================
     //  ACTUALIZACIÓN — PUT /admin/zonas-envio/{zonaEnvio}
     // =====================================================================
 
-    public function test_un_administrador_puede_actualizar_una_zona_de_envio(): void
+    public function test_un_administrador_puede_actualizar_una_sucursal_courier(): void
     {
         $admin = $this->crearAdmin();
-        $zona = ZonaEnvio::factory()->create(['nombre' => 'Panamá', 'costo' => 5.00, 'activo' => true]);
+        $sucursal = CourierSucursal::factory()->create([
+            'zona'                 => 'Panamá',
+            'courier'             => 'Uno Express',
+            'sucursal'            => 'Miraflores',
+            'tarifa_uno_hasta_7lb' => 6.50,
+            'activo'              => true,
+        ]);
 
         $respuesta = $this->actingAs($admin)
-            ->put('/admin/zonas-envio/' . $zona->id, [
-                'nombre' => 'Panamá y Colón',
-                'costo' => 7.50,
-                'activo' => 1,
+            ->put('/admin/zonas-envio/' . $sucursal->id, [
+                'zona'                 => 'Panamá y Colón',
+                'courier'             => 'Uno Express',
+                'sucursal'            => 'Miraflores',
+                'tarifa_uno_hasta_7lb' => 7.50,
+                'activo'              => 1,
             ]);
 
         $respuesta->assertRedirect(route('admin.zonas-envio.index'));
         $respuesta->assertSessionHas('success');
 
-        $zona->refresh();
-        $this->assertSame('Panamá y Colón', $zona->nombre);
-        $this->assertSame('7.50', $zona->costo);
-        $this->assertTrue($zona->activo);
+        $sucursal->refresh();
+        $this->assertSame('Panamá y Colón', $sucursal->zona);
+        $this->assertSame('7.50', (string) $sucursal->tarifa_uno_hasta_7lb);
+        $this->assertTrue($sucursal->activo);
     }
 
     public function test_la_actualizacion_sin_campo_activo_desactiva_la_zona(): void

@@ -276,6 +276,12 @@ class PedidoService
             throw new Exception('Los reembolsos financieros deben ejecutarse formalmente mediante el botón de Reembolso.');
         }
 
+        // Los estados logísticos avanzados requieren que el pedido tenga envío registrado
+        $estadosConEnvio = ['en_transito', 'enviado', 'entregado'];
+        if (in_array($nuevoEstado, $estadosConEnvio) && !$pedido->envio?->metodo_envio) {
+            throw new Exception('Para marcar el pedido como "' . str_replace('_', ' ', $nuevoEstado) . '" primero debes registrar los datos de envío (empresa y número de guía).');
+        }
+
         if (!$comentario) {
             // Auto-generar comentarios para estados de envío si no se provee uno
             $empresa = $pedido->envio?->empresa_mensajeria ?? 'nuestra logística';
