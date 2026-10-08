@@ -47,11 +47,13 @@ class EnvioPedidoController extends Controller
         );
 
         if ($esNuevoEnvio) {
+            $pedido->setRelation('envio', $envio);
+            $guiaStr = $request->numero_guia ? " (Guía: {$request->numero_guia})" : "";
             $this->pedidoService->cambiarEstado(
                 $pedido,
                 'enviado',
                 Auth::id(),
-                'Pedido preparado para envío: ' . $empresaFinal
+                'Pedido preparado para envío: ' . $empresaFinal . $guiaStr
             );
         }
 

@@ -364,11 +364,11 @@
                         <div>
                             <p class="font-bold text-sm">Envío por Courier</p>
                             @if($sucursal)
-                                <p class="text-xs mt-1 font-semibold text-emerald-900 dark:text-emerald-200">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
-                                <p class="text-xs mt-0.5 text-emerald-800 dark:text-emerald-300">{{ $sucursal->zona }}</p>
+                                <p class="text-xs mt-1 font-semibold text-emerald-900 dark:text-emerald-100">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
+                                <p class="text-xs mt-0.5 text-emerald-800 dark:text-emerald-200">{{ $sucursal->zona }}</p>
                                 <p class="text-xs text-emerald-600 dark:text-emerald-300 mt-1">{{ $sucursal->direccion }}</p>
                             @else
-                                <p class="text-xs">Sucursal de Courier no especificada.</p>
+                                <p class="text-xs text-emerald-700 dark:text-emerald-300">Sucursal de Courier no especificada.</p>
                             @endif
                         </div>
                     </div>

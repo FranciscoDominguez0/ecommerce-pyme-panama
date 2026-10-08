@@ -201,78 +201,61 @@ class CarritoWidget extends Component
      */
     public function resolverUbicacionEnvio(): array
     {
-        $usuarioId = Auth::id();
-        $direccion = null;
-
-        if ($usuarioId) {
-            // 1. Si ya se eligió una dirección en la sesión actual
-            if (session()->has('checkout_direccion_id')) {
-                $direccion = Direccion::where('id', session('checkout_direccion_id'))
-                    ->where('usuario_id', $usuarioId)
-                    ->sinEliminar()
-                    ->first();
-            }
-
-            // 2. Dirección predeterminada del usuario
-            if (!$direccion) {
-                $direccion = Direccion::where('usuario_id', $usuarioId)
-                    ->where('es_predeterminada', true)
-                    ->sinEliminar()
-                    ->first();
-            }
-
-            // 3. Primera dirección activa guardada del usuario
-            if (!$direccion) {
-                $direccion = Direccion::where('usuario_id', $usuarioId)
-                    ->sinEliminar()
-                    ->first();
-            }
-        }
-
-        if ($direccion) {
-            $zona = $direccion->zonaEnvioCalculada;
-            if ($zona && $zona->activo) {
-                session([
-                    'checkout_direccion_id' => (int) $direccion->id,
-                    'checkout_zona_envio_id' => (int) $zona->id,
-                ]);
-
-                $nombreUbicacion = $direccion->provincia;
-                if (!empty($direccion->distrito)) {
-                    $nombreUbicacion .= " ({$direccion->distrito})";
+        $metodo = session('checkout_metodo_entrega', 'delivery');
+        
+        if ($metodo === 'retiro_local') {
+            return [
+                'costo' => 0.00,
+                'ubicacion' => 'Retiro en Sucursal',
+                'zona_id' => null,
+            ];
+        } elseif ($metodo === 'retiro_courier') {
+            if (session('checkout_courier_sucursal')) {
+                $suc = \App\Models\CourierSucursal::find(session('checkout_courier_sucursal'));
+                if ($suc) {
+                    return [
+                        'costo' => (float)$suc->tarifa_uno_hasta_7lb,
+                        'ubicacion' => 'Courier: ' . $suc->sucursal,
+                        'zona_id' => null,
+                    ];
                 }
-
-                return [
-                    'costo' => (float) $zona->costo,
-                    'zona_id' => (int) $zona->id,
-                    'ubicacion' => $nombreUbicacion,
-                    'direccion_id' => (int) $direccion->id,
-                ];
             }
-        }
-
-        // Si hay una zona de envío previamente guardada en sesión
-        if (session()->has('checkout_zona_envio_id')) {
-            $zona = ZonaEnvio::find(session('checkout_zona_envio_id'));
-            if ($zona && $zona->activo) {
-                return [
-                    'costo' => (float) $zona->costo,
-                    'zona_id' => (int) $zona->id,
-                    'ubicacion' => $zona->nombre,
-                    'direccion_id' => null,
-                ];
+            return [
+                'costo' => 0.00,
+                'ubicacion' => 'Por calcular (Courier)',
+                'zona_id' => null,
+            ];
+        } else {
+            // delivery
+            if (session()->has('checkout_direccion_id')) {
+                $direccion = \App\Models\Direccion::with('zonaEnvio')->find(session('checkout_direccion_id'));
+                if ($direccion && $direccion->zonaEnvio) {
+                    $zona = $direccion->zonaEnvio;
+                    $nombreUbicacion = $direccion->provincia;
+                    if (!empty($direccion->distrito)) {
+                        $nombreUbicacion .= " ({$direccion->distrito})";
+                    }
+                    return [
+                        'costo' => (float) $zona->costo,
+                        'zona_id' => (int) $zona->id,
+                        'ubicacion' => 'Delivery: ' . $nombreUbicacion,
+                        'direccion_id' => (int) $direccion->id,
+                    ];
+                }
             }
+            
+            // Fallback: Si no ha elegido nada, se pone costo en 0 para no asustar con "Tarifa Estimada" 
+            // ya que ahora el usuario elige antes del checkout
+            return [
+                'costo' => 0.00,
+                'ubicacion' => 'No seleccionado',
+                'zona_id' => null,
+                'direccion_id' => null,
+            ];
         }
-
-        // Fallback por defecto: tarifa estimada Panamá Centro ($5.00)
-        return [
-            'costo' => 5.00,
-            'zona_id' => null,
-            'ubicacion' => 'Panamá Centro',
-            'direccion_id' => null,
-        ];
     }
 
+    #[\Livewire\Attributes\On('envioActualizado')]
     public function render(CarritoService $carritoService)
     {
         $usuarioId = Auth::id();
@@ -309,6 +292,41 @@ class CarritoWidget extends Component
                 ->get();
         }
 
-        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'ubicacion'));
+        // Obtener productos relacionados (de la misma categoría de los que están en el carrito)
+        $productosRelacionados = collect();
+        if ($items->count() > 0) {
+            $categoriasIds = $items->pluck('producto.categoria_id')->unique()->filter();
+            $productosIds = $items->pluck('producto.id');
+            
+            $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
+                ->sinEliminar()
+                ->where('activo', true)
+                ->whereIn('categoria_id', $categoriasIds)
+                ->whereNotIn('id', $productosIds)
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+                
+            // Fallback si no hay suficientes
+            if ($productosRelacionados->count() < 3) {
+                $mas = Producto::with(['imagenes', 'categoria', 'brand'])
+                    ->sinEliminar()
+                    ->where('activo', true)
+                    ->whereNotIn('id', $productosIds->concat($productosRelacionados->pluck('id')))
+                    ->inRandomOrder()
+                    ->take(3 - $productosRelacionados->count())
+                    ->get();
+                $productosRelacionados = $productosRelacionados->concat($mas);
+            }
+        } else {
+            $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
+                ->sinEliminar()
+                ->where('activo', true)
+                ->inRandomOrder()
+                ->take(3)
+                ->get();
+        }
+
+        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'productosRelacionados', 'ubicacion'));
     }
 }

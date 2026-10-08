@@ -157,10 +157,26 @@
                         <span>Continuar comprando en el catálogo</span>
                     </a>
                 </div>
+
+                <!-- Productos Relacionados -->
+                @if($productosRelacionados->isNotEmpty())
+                    <div class="mt-10 pt-8 border-t border-gray-200">
+                        <h3 class="text-xl font-bold text-[#002349] mb-6">Productos Relacionados</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                            @foreach($productosRelacionados as $prod)
+                                <x-producto-card :prod="$prod" />
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
 
-            <!-- Right Column: Resumen de Orden Sticky -->
-            <div class="w-full lg:w-96 shrink-0">
+            <!-- Right Column: Resumen y Opciones de Envío -->
+            <div class="w-full lg:w-96 shrink-0 space-y-6">
+                <!-- Opciones de Entrega -->
+                <livewire:calculadora-envio />
+
+                <!-- Resumen de Orden Sticky -->
                 <div class="bg-white border border-gray-200/90 rounded-2xl p-6 shadow-xs sticky top-24 space-y-5">
                     
                     <h2 class="text-lg font-bold text-[#002349] pb-3 border-b border-gray-100 flex items-center justify-between">
@@ -216,15 +232,10 @@
                         <!-- Envío Estimado -->
                         <div class="flex justify-between items-center text-gray-600">
                             <div class="flex items-center gap-1">
-                                <span>Envío Estimado</span>
-                                @if($resumen['requiere_envio'] ?? true)
-                                    <span class="text-[10px] text-gray-400">({{ $this->nombreUbicacion }})</span>
-                                @endif
+                                <span>Envío / Retiro</span>
                             </div>
                             <span class="font-bold font-mono {{ $resumen['envio'] == 0 ? 'text-emerald-600' : 'text-gray-900' }}">
-                                @if(!($resumen['requiere_envio'] ?? true))
-                                    GRATIS
-                                @elseif($resumen['envio'] == 0)
+                                @if(!($resumen['requiere_envio'] ?? true) || $resumen['envio'] == 0)
                                     GRATIS
                                 @else
                                     ${{ number_format($resumen['envio'], 2) }}
@@ -233,13 +244,13 @@
                         </div>
 
                         <!-- Indicador de Ubicación si requiere envío -->
+                        <!-- Indicador de Ubicación si requiere envío -->
                         @if($resumen['requiere_envio'] ?? true)
                             <div class="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/70 text-xs text-slate-600 mt-2">
                                 <div class="flex items-center gap-1.5 min-w-0">
-                                    <span class="material-symbols-outlined text-[15px] text-emerald-600 shrink-0">location_on</span>
-                                    <span class="truncate text-[11px]">Ubicación: <strong class="text-slate-800 font-semibold">{{ $this->nombreUbicacion }}</strong></span>
+                                    <span class="material-symbols-outlined text-[15px] text-emerald-600 shrink-0">local_shipping</span>
+                                    <span class="truncate text-[11px]">Método: <strong class="text-slate-800 font-semibold">{{ $this->nombreUbicacion }}</strong></span>
                                 </div>
-                                <a href="{{ route('cliente.checkout.direccion') }}" class="text-[10px] font-bold text-emerald-700 hover:text-emerald-800 hover:underline shrink-0 ml-1">Cambiar</a>
                             </div>
                         @endif
                     </div>

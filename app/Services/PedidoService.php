@@ -278,7 +278,7 @@ class PedidoService
 
         // Los estados logísticos avanzados requieren que el pedido tenga envío registrado
         $estadosConEnvio = ['en_transito', 'enviado', 'entregado'];
-        if (in_array($nuevoEstado, $estadosConEnvio) && !$pedido->envio?->metodo_envio) {
+        if (in_array($nuevoEstado, $estadosConEnvio) && !$pedido->envio?->empresa_mensajeria) {
             throw new Exception('Para marcar el pedido como "' . str_replace('_', ' ', $nuevoEstado) . '" primero debes registrar los datos de envío (empresa y número de guía).');
         }
 

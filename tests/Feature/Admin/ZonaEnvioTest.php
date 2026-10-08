@@ -133,6 +133,7 @@ class ZonaEnvioTest extends BaseAdminTest
     public function test_una_sucursal_courier_se_crea_activa_por_defecto(): void
     {
         $admin = $this->crearAdmin();
+        $this->withoutExceptionHandling();
 
         $this->actingAs($admin)
             ->post('/admin/zonas-envio', [
@@ -142,7 +143,9 @@ class ZonaEnvioTest extends BaseAdminTest
                 'tarifa_uno_hasta_7lb' => 7.00,
             ]);
 
-        $this->assertDatabaseHas('courier_sucursales', ['zona' => 'Coclé', 'activo' => true]);
+        $sucursal = CourierSucursal::where('zona', 'Coclé')->first();
+        $this->assertNotNull($sucursal);
+        $this->assertTrue($sucursal->activo);
     }
 
     public function test_una_sucursal_courier_se_puede_crear_como_inactiva(): void
@@ -158,7 +161,9 @@ class ZonaEnvioTest extends BaseAdminTest
                 'activo'              => 0,
             ]);
 
-        $this->assertDatabaseHas('courier_sucursales', ['zona' => 'Darién', 'activo' => false]);
+        $sucursal = CourierSucursal::where('zona', 'Darién')->first();
+        $this->assertNotNull($sucursal);
+        $this->assertFalse($sucursal->activo);
     }
 
     public function test_la_creacion_requiere_campos_obligatorios_del_courier(): void
@@ -276,15 +281,17 @@ class ZonaEnvioTest extends BaseAdminTest
         // OJO (hallazgo): el checkbox desmarcado no envía el campo "activo" y en
         // "update" el fallback es `false`, por lo que guardar sin el campo la desactiva.
         $admin = $this->crearAdmin();
-        $zona = ZonaEnvio::factory()->create(['activo' => true]);
+        $sucursal = CourierSucursal::factory()->create(['activo' => true]);
 
         $this->actingAs($admin)
-            ->put('/admin/zonas-envio/' . $zona->id, [
-                'nombre' => $zona->nombre,
-                'costo' => $zona->costo,
+            ->put('/admin/zonas-envio/' . $sucursal->id, [
+                'zona' => $sucursal->zona,
+                'courier' => $sucursal->courier,
+                'sucursal' => $sucursal->sucursal,
+                'tarifa_uno_hasta_7lb' => $sucursal->tarifa_uno_hasta_7lb,
             ]);
 
-        $this->assertFalse($zona->fresh()->activo);
+        $this->assertFalse($sucursal->fresh()->activo);
     }
 
     // =====================================================================
@@ -294,21 +301,21 @@ class ZonaEnvioTest extends BaseAdminTest
     public function test_un_administrador_puede_activar_y_desactivar_una_zona(): void
     {
         $admin = $this->crearAdmin();
-        $zona = ZonaEnvio::factory()->create(['activo' => true]);
+        $sucursal = CourierSucursal::factory()->create(['activo' => true]);
 
         $this->actingAs($admin)
-            ->post('/admin/zonas-envio/' . $zona->id . '/toggle')
+            ->post('/admin/zonas-envio/' . $sucursal->id . '/toggle')
             ->assertRedirect(route('admin.zonas-envio.index'))
             ->assertSessionHas('success');
 
-        $this->assertFalse($zona->fresh()->activo);
+        $this->assertFalse($sucursal->fresh()->activo);
 
         $this->actingAs($admin)
-            ->post('/admin/zonas-envio/' . $zona->id . '/toggle')
+            ->post('/admin/zonas-envio/' . $sucursal->id . '/toggle')
             ->assertRedirect(route('admin.zonas-envio.index'))
             ->assertSessionHas('success');
 
-        $this->assertTrue($zona->fresh()->activo);
+        $this->assertTrue($sucursal->fresh()->activo);
     }
 
     // =====================================================================
@@ -318,14 +325,14 @@ class ZonaEnvioTest extends BaseAdminTest
     public function test_un_administrador_puede_eliminar_una_zona_de_envio(): void
     {
         $admin = $this->crearAdmin();
-        $zona = ZonaEnvio::factory()->create(['nombre' => 'Veraguas']);
+        $sucursal = CourierSucursal::factory()->create(['zona' => 'Veraguas']);
 
         $respuesta = $this->actingAs($admin)
-            ->delete('/admin/zonas-envio/' . $zona->id);
+            ->delete('/admin/zonas-envio/' . $sucursal->id);
 
         $respuesta->assertRedirect(route('admin.zonas-envio.index'));
         $respuesta->assertSessionHas('success');
 
-        $this->assertDatabaseMissing('zonas_envio', ['id' => $zona->id]);
+        $this->assertDatabaseMissing('courier_sucursales', ['id' => $sucursal->id]);
     }
 }

@@ -35,12 +35,15 @@ class ZonaEnvioController extends Controller
 
         try {
             $validated['activo'] = $request->has('activo') ? (bool)$request->input('activo') : true;
+            $validated['direccion'] = $validated['direccion'] ?? '';
 
             \App\Models\CourierSucursal::create($validated);
 
             return redirect()->route('admin.zonas-envio.index')
                 ->with('success', 'Sucursal de Courier creada exitosamente.');
         } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            dd($e->getMessage());
             return redirect()->back()
                 ->with('error', 'Ocurrió un error al intentar crear la sucursal de Courier.')
                 ->withInput();
@@ -66,6 +69,7 @@ class ZonaEnvioController extends Controller
 
         try {
             $validated['activo'] = $request->has('activo') ? (bool)$request->input('activo') : false;
+            $validated['direccion'] = $validated['direccion'] ?? '';
 
             $courierSucursal->update($validated);
 

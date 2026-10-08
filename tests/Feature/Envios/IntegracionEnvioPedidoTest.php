@@ -90,6 +90,7 @@ class IntegracionEnvioPedidoTest extends BaseAdminTest
         $producto = Producto::factory()->create(['precio' => 50.00, 'stock' => 10]);
         $pedido = $this->crearPedidoReal($cliente, $direccion, $producto);
 
+        $this->withoutExceptionHandling();
         $this->actingAs($admin)
             ->put(route('admin.pedidos.envio.update', $pedido->id), [
                 'metodo_envio'       => 'Company Delivery',

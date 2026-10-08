@@ -5,6 +5,9 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\CourierSucursal;
+use App\Models\Direccion;
+use App\Services\CarritoService;
+use App\Services\PedidoService;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutEnvio extends Component
@@ -17,12 +20,6 @@ class CheckoutEnvio extends Component
     public $contacto_telefono2 = '';
 
     public $metodo_entrega = 'delivery'; // 'delivery', 'retiro_local', 'retiro_courier'
-    public $metodo_entrega_modal = 'delivery';
-    
-    // Para Retiro Courier
-    public $zonaSeleccionada = '';
-    public $courierSeleccionado = '';
-    public $sucursalSeleccionada = '';
     
     // Zonas de Envio para Delivery
     public $zonasEnvio = [];
@@ -49,100 +46,12 @@ class CheckoutEnvio extends Component
         }
 
         $this->metodo_entrega = session('checkout_metodo_entrega', 'delivery');
-        $this->metodo_entrega_modal = $this->metodo_entrega ?: 'delivery';
-        $this->zonaSeleccionada = session('checkout_courier_zona', '');
-        $this->courierSeleccionado = session('checkout_courier_courier', '');
-        $this->sucursalSeleccionada = session('checkout_courier_sucursal', '');
     }
 
-    public function abrirModalMetodo($metodo)
+    #[On('envioActualizado')]
+    public function actualizarTotalesDesdeCalculadora()
     {
-        $this->metodo_entrega_modal = $metodo;
-        $this->dispatch('open-modal', 'modal-checkout-envio');
-    }
-
-    #[On('direccionSeleccionadaParaCheckout')]
-    public function confirmarDelivery()
-    {
-        $this->metodo_entrega = 'delivery';
-        session(['checkout_metodo_entrega' => 'delivery']);
-    }
-
-    public function updatedMetodoEntrega($value)
-    {
-        session(['checkout_metodo_entrega' => $value]);
-    }
-    
-    public function updatedZonaSeleccionada()
-    {
-        $this->courierSeleccionado = '';
-        $this->sucursalSeleccionada = '';
-    }
-
-    public function updatedCourierSeleccionado()
-    {
-        $this->sucursalSeleccionada = '';
-    }
-
-    public function getZonasCourierProperty()
-    {
-        return CourierSucursal::where('activo', true)->distinct()->pluck('zona')->sort();
-    }
-
-    public function getCouriersProperty()
-    {
-        if (!$this->zonaSeleccionada) return collect();
-        return CourierSucursal::where('activo', true)->where('zona', $this->zonaSeleccionada)->distinct()->pluck('courier')->sort();
-    }
-
-    public function getSucursalesCourierProperty()
-    {
-        if (!$this->zonaSeleccionada || !$this->courierSeleccionado) return collect();
-        return CourierSucursal::where('activo', true)
-            ->where('zona', $this->zonaSeleccionada)
-            ->where('courier', $this->courierSeleccionado)
-            ->get();
-    }
-
-    public function continuarCourier()
-    {
-        $this->validate([
-            'zonaSeleccionada' => 'required',
-            'courierSeleccionado' => 'required',
-            'sucursalSeleccionada' => 'required',
-        ]);
-
-        $sucursal = CourierSucursal::find($this->sucursalSeleccionada);
-        if (!$sucursal) {
-            $this->addError('sucursalSeleccionada', 'Sucursal inválida');
-            return;
-        }
-
-        session([
-            'checkout_metodo_entrega' => 'retiro_courier',
-            'checkout_courier_zona' => $this->zonaSeleccionada,
-            'checkout_courier_courier' => $this->courierSeleccionado,
-            'checkout_courier_sucursal' => $this->sucursalSeleccionada,
-            'checkout_direccion_id' => null,
-            'checkout_zona_envio_id' => null,
-        ]);
-        $this->metodo_entrega = 'retiro_courier';
-        
-        $this->dispatch('close-modal', 'modal-checkout-envio');
-    }
-
-    public function continuarRetiroLocal()
-    {
-        session([
-            'checkout_metodo_entrega' => 'retiro_local',
-            'checkout_direccion_id' => null,
-            'checkout_zona_envio_id' => null,
-            'checkout_courier_sucursal' => null,
-        ]);
-
-        $this->metodo_entrega = 'retiro_local';
-
-        $this->dispatch('close-modal', 'modal-checkout-envio');
+        $this->metodo_entrega = session('checkout_metodo_entrega', 'delivery');
     }
 
     public function continuarCheckout()
@@ -177,8 +86,68 @@ class CheckoutEnvio extends Component
         return redirect()->route('cliente.checkout.pago');
     }
 
-    public function render()
+    public function resolverUbicacionEnvio(): array
     {
-        return view('livewire.checkout-envio');
+        $metodo = session('checkout_metodo_entrega', 'delivery');
+        
+        if ($metodo === 'retiro_local') {
+            return [
+                'costo' => 0.00,
+                'ubicacion' => 'Retiro en Sucursal',
+                'zona_id' => null,
+            ];
+        } elseif ($metodo === 'retiro_courier') {
+            if (session('checkout_courier_sucursal')) {
+                $suc = CourierSucursal::find(session('checkout_courier_sucursal'));
+                if ($suc) {
+                    return [
+                        'costo' => (float)$suc->tarifa_uno_hasta_7lb,
+                        'ubicacion' => 'Courier: ' . $suc->sucursal,
+                        'zona_id' => null,
+                    ];
+                }
+            }
+            return [
+                'costo' => 0.00,
+                'ubicacion' => 'Por calcular (Courier)',
+                'zona_id' => null,
+            ];
+        } else {
+            // delivery
+            if (session()->has('checkout_direccion_id')) {
+                $direccion = Direccion::with('zonaEnvio')->find(session('checkout_direccion_id'));
+                if ($direccion && $direccion->zonaEnvio) {
+                    $zona = $direccion->zonaEnvio;
+                    $nombreUbicacion = $direccion->provincia;
+                    if (!empty($direccion->distrito)) {
+                        $nombreUbicacion .= " ({$direccion->distrito})";
+                    }
+                    return [
+                        'costo' => (float) $zona->costo,
+                        'zona_id' => (int) $zona->id,
+                        'ubicacion' => 'Delivery: ' . $nombreUbicacion,
+                        'direccion_id' => (int) $direccion->id,
+                    ];
+                }
+            }
+            return [
+                'costo' => 0.00,
+                'ubicacion' => 'No seleccionado',
+                'zona_id' => null,
+                'direccion_id' => null,
+            ];
+        }
+    }
+
+    public function render(CarritoService $carritoService)
+    {
+        $usuarioId = Auth::id();
+        $sesionId = session()->getId();
+        $carrito = $carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
+
+        $ubicacion = $this->resolverUbicacionEnvio();
+        $resumen = $carritoService->calcularTotal($carrito, $ubicacion['costo'], $ubicacion['zona_id']);
+
+        return view('livewire.checkout-envio', compact('carrito', 'resumen', 'ubicacion'));
     }
 }

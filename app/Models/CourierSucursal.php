@@ -4,8 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class CourierSucursal extends Model
 {
+    use HasFactory;
+
     protected $table = 'courier_sucursales';
 
     protected $fillable = [
