@@ -110,7 +110,16 @@ class CheckoutController extends Controller
         if ($metodoEntrega === 'retiro_courier' && session()->has('checkout_courier_sucursal')) {
             $courierSucursal = \App\Models\CourierSucursal::find(session('checkout_courier_sucursal'));
             if ($courierSucursal) {
-                $costoEnvioEspecial = $courierSucursal->tarifa_uno_hasta_7lb;
+                $baseCosto = (float)$courierSucursal->tarifa_uno_hasta_7lb;
+                $pesoTotalLbs = app(\App\Services\EnvioService::class)->calcularPesoTotalLibras($carrito);
+                
+                if ($pesoTotalLbs > 7) {
+                    $librasExtras = $pesoTotalLbs - 7;
+                    $recargo = $librasExtras * 0.50;
+                    $costoEnvioEspecial = $baseCosto + $recargo;
+                } else {
+                    $costoEnvioEspecial = $baseCosto;
+                }
             }
         } elseif ($metodoEntrega === 'retiro_local') {
             $costoEnvioEspecial = 0.00;
@@ -163,7 +172,16 @@ class CheckoutController extends Controller
         if ($metodoEntrega === 'retiro_courier' && $courierSucursalId) {
             $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
             if ($sucursal) {
-                $costoEnvioEspecial = $sucursal->tarifa_uno_hasta_7lb;
+                $baseCosto = (float)$sucursal->tarifa_uno_hasta_7lb;
+                $pesoTotalLbs = app(\App\Services\EnvioService::class)->calcularPesoTotalLibras($carrito);
+                
+                if ($pesoTotalLbs > 7) {
+                    $librasExtras = $pesoTotalLbs - 7;
+                    $recargo = $librasExtras * 0.50;
+                    $costoEnvioEspecial = $baseCosto + $recargo;
+                } else {
+                    $costoEnvioEspecial = $baseCosto;
+                }
             }
         } elseif ($metodoEntrega === 'retiro_local') {
             $costoEnvioEspecial = 0.00;

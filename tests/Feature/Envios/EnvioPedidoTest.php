@@ -130,7 +130,7 @@ class EnvioPedidoTest extends BaseAdminTest
             'pedido_id' => $pedido->id,
             'usuario_id' => $admin->id,
             'estado' => 'enviado',
-            'comentario' => 'Pedido preparado para envío: Company Delivery - UnoExpress',
+            'comentario' => 'Pedido preparado para envío: Company Delivery - UnoExpress (Guía: 1Z999AA10123456784)',
         ]);
     }
 

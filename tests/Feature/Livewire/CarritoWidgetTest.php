@@ -110,6 +110,7 @@ class CarritoWidgetTest extends BaseAdminTest
     public function test_aplicar_un_cupon_valido_actualiza_el_descuento_y_el_total(): void
     {
         $usuario = $this->crearCliente();
+        \App\Models\ZonaEnvio::factory()->create(['nombre' => 'Panamá', 'costo' => 5.00, 'activo' => true]);
         $producto = Producto::factory()->create(['precio' => 10.00, 'stock' => 10]);
         $this->crearCarritoConItem($usuario, $producto, 2, 10.00); // subtotal $20
         $cupon = Cupon::factory()->create(['codigo' => 'BIENVENIDO', 'tipo' => 'porcentaje', 'valor' => 10]);

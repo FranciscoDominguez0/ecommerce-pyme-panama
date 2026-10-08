@@ -60,9 +60,16 @@ class CheckoutTest extends BaseAdminTest
     {
         $usuario = $this->crearCliente();
         $direccion = Direccion::factory()->create(['usuario_id' => $usuario->id]);
+        $producto = Producto::factory()->create(['stock' => 10]);
+        $this->crearCarritoConItem($usuario, $producto, 1, 50.00);
 
         $this->actingAs($usuario)
-            ->withSession(['checkout_direccion_id' => $direccion->id])
+            ->withSession([
+                'checkout_direccion_id' => $direccion->id,
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com',
+                'checkout_metodo_entrega' => 'delivery'
+            ])
             ->get('/checkout/pago')
             ->assertOk()
             ->assertSee('name="metodo_pago"', false)
@@ -95,6 +102,8 @@ class CheckoutTest extends BaseAdminTest
             ->withSession([
                 'checkout_direccion_id' => $direccion->id,
                 'checkout_metodo_pago' => 'contra_entrega',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
             ])
             ->get('/checkout/confirmacion')
             ->assertOk()
@@ -129,6 +138,8 @@ class CheckoutTest extends BaseAdminTest
             ->withSession([
                 'checkout_direccion_id' => $direccion->id,
                 'checkout_metodo_pago' => 'contra_entrega',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
             ])
             ->post('/checkout/confirmacion', ['notas_cliente' => 'Entregar en portería'])
             ->assertRedirect()
@@ -159,6 +170,8 @@ class CheckoutTest extends BaseAdminTest
             ->withSession([
                 'checkout_direccion_id' => $direccion->id,
                 'checkout_metodo_pago' => 'contra_entrega',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
             ])
             ->post('/checkout/confirmacion', [])
             ->assertRedirect(route('cliente.carrito'))
@@ -174,7 +187,11 @@ class CheckoutTest extends BaseAdminTest
         $this->crearCarritoConItem($usuario, $producto, 1, 50.00);
 
         $this->actingAs($usuario)
-            ->withSession(['checkout_metodo_pago' => 'contra_entrega'])
+            ->withSession([
+                'checkout_metodo_pago' => 'contra_entrega',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
+            ])
             ->post('/checkout/confirmacion', [])
             ->assertRedirect(route('cliente.checkout.direccion'))
             ->assertSessionHas('error');
@@ -188,7 +205,11 @@ class CheckoutTest extends BaseAdminTest
         $direccion = Direccion::factory()->create(['usuario_id' => $usuario->id]);
 
         $this->actingAs($usuario)
-            ->withSession(['checkout_direccion_id' => $direccion->id])
+            ->withSession([
+                'checkout_direccion_id' => $direccion->id,
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
+            ])
             ->post('/checkout/pago', ['metodo_pago' => 'bitcoin'])
             ->assertSessionHasErrors('metodo_pago');
 
@@ -214,6 +235,8 @@ class CheckoutTest extends BaseAdminTest
             ->withSession([
                 'checkout_direccion_id' => $direccion->id,
                 'checkout_metodo_pago' => 'stripe',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
             ])
             ->post('/checkout/confirmacion', [])
             ->assertRedirect(route('cliente.checkout.pago'))
@@ -239,6 +262,8 @@ class CheckoutTest extends BaseAdminTest
             ->withSession([
                 'checkout_direccion_id' => $direccion->id,
                 'checkout_metodo_pago' => 'yappy',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
             ])
             ->post('/checkout/confirmacion', [])
             ->assertRedirect(route('cliente.checkout.pago'))
@@ -262,6 +287,8 @@ class CheckoutTest extends BaseAdminTest
             ->withSession([
                 'checkout_direccion_id' => $direccion->id,
                 'checkout_metodo_pago' => 'transferencia',
+                'checkout_contacto_nombre' => 'Juan',
+                'checkout_contacto_email' => 'juan@test.com'
             ])
             ->post('/checkout/confirmacion', [])
             ->assertRedirect(route('cliente.checkout.pago'))

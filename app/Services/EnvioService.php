@@ -66,4 +66,42 @@ class EnvioService
 
         return 0.00;
     }
+    /**
+     * Calcula el peso total del carrito en libras.
+     */
+    public function calcularPesoTotalLibras(\App\Models\Carrito $carrito): int
+    {
+        $pesoTotalKg = 0;
+        foreach ($carrito->items as $item) {
+            $peso = $item->producto?->peso ?? 0;
+            $pesoTotalKg += ($peso * $item->cantidad);
+        }
+
+        return (int) ceil($pesoTotalKg * 2.20462);
+    }
+
+    /**
+     * Calcula el costo final de envío dependiendo de la zona y el peso del carrito.
+     */
+    public function calcularCostoEnvio(?ZonaEnvio $zona, \App\Models\Carrito $carrito): float
+    {
+        if (!$zona || !$zona->activo) {
+            return 0.00;
+        }
+
+        $baseCosto = (float) $zona->costo;
+        $pesoTotalLbs = $this->calcularPesoTotalLibras($carrito);
+
+        // Aplicar tarifa base hasta 10 libras, luego cobrar recargo por libra extra.
+        // Se aplicará a todas las zonas de envío para que el cálculo sea global.
+        if ($pesoTotalLbs > 10) {
+            $librasExtras = $pesoTotalLbs - 10;
+            // Recargo de $0.50 por cada libra adicional
+            $recargo = $librasExtras * 0.50;
+            return $baseCosto + $recargo;
+        }
+
+        // Si pesa menos de 10 libras, se cobra solo la tarifa base.
+        return $baseCosto;
+    }
 }

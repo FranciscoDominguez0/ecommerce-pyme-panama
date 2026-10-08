@@ -199,7 +199,7 @@ class CarritoWidget extends Component
     /**
      * Resuelve la ubicación y tarifa de envío a partir de la dirección configurada del usuario o sesión.
      */
-    public function resolverUbicacionEnvio(): array
+    public function resolverUbicacionEnvio(\App\Models\Carrito $carrito, \App\Services\EnvioService $envioService): array
     {
         $metodo = session('checkout_metodo_entrega', 'delivery');
         
@@ -213,8 +213,19 @@ class CarritoWidget extends Component
             if (session('checkout_courier_sucursal')) {
                 $suc = \App\Models\CourierSucursal::find(session('checkout_courier_sucursal'));
                 if ($suc) {
+                    $baseCosto = (float)$suc->tarifa_uno_hasta_7lb;
+                    $pesoTotalLbs = $envioService->calcularPesoTotalLibras($carrito);
+                    
+                    if ($pesoTotalLbs > 7) {
+                        $librasExtras = $pesoTotalLbs - 7;
+                        $recargo = $librasExtras * 0.50; // Tarifa estándar por libra adicional
+                        $costoFinal = $baseCosto + $recargo;
+                    } else {
+                        $costoFinal = $baseCosto;
+                    }
+
                     return [
-                        'costo' => (float)$suc->tarifa_uno_hasta_7lb,
+                        'costo' => $costoFinal,
                         'ubicacion' => 'Courier: ' . $suc->sucursal,
                         'zona_id' => null,
                     ];
@@ -237,7 +248,7 @@ class CarritoWidget extends Component
                         $nombreUbicacion .= " ({$direccion->distrito})";
                     }
                     return [
-                        'costo' => (float) $zona->costo,
+                        'costo' => (float) $envioService->calcularCostoEnvio($zona, $carrito),
                         'zona_id' => (int) $zona->id,
                         'ubicacion' => 'Delivery: ' . $nombreUbicacion,
                         'direccion_id' => (int) $direccion->id,
@@ -245,19 +256,20 @@ class CarritoWidget extends Component
                 }
             }
             
-            // Fallback: Si no ha elegido nada, se pone costo en 0 para no asustar con "Tarifa Estimada" 
-            // ya que ahora el usuario elige antes del checkout
+            // Fallback: Si no ha elegido nada, estimamos usando la tarifa de Panamá o la primera zona disponible
+            $zonaFallback = ZonaEnvio::where('nombre', 'like', '%Panamá%')->first() ?? ZonaEnvio::first();
+            
             return [
-                'costo' => 0.00,
-                'ubicacion' => 'No seleccionado',
-                'zona_id' => null,
+                'costo' => $zonaFallback ? (float) $envioService->calcularCostoEnvio($zonaFallback, $carrito) : 0.00,
+                'ubicacion' => 'Estimado (' . ($zonaFallback ? $zonaFallback->nombre : 'Panamá') . ')',
+                'zona_id' => $zonaFallback ? (int) $zonaFallback->id : null,
                 'direccion_id' => null,
             ];
         }
     }
 
     #[\Livewire\Attributes\On('envioActualizado')]
-    public function render(CarritoService $carritoService)
+    public function render(CarritoService $carritoService, \App\Services\EnvioService $envioService)
     {
         $usuarioId = Auth::id();
         $sesionId = session()->getId();
@@ -272,7 +284,7 @@ class CarritoWidget extends Component
         // Asegurar que el carrito tenga asignados los items con sus relaciones cargadas
         $carrito->setRelation('items', $items);
 
-        $ubicacion = $this->resolverUbicacionEnvio();
+        $ubicacion = $this->resolverUbicacionEnvio($carrito, $envioService);
         $this->costoEnvio = $ubicacion['costo'];
         $this->nombreUbicacion = $ubicacion['ubicacion'];
 

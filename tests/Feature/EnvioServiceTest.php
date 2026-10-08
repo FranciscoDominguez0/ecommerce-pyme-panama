@@ -169,13 +169,10 @@ class EnvioServiceTest extends BaseAdminTest
         $this->assertSame(0.0, $totales['costo_envio']);
     }
 
-    public function test_el_calculo_de_totales_no_valida_el_estado_activo_de_la_zona(): void
+    public function test_el_calculo_de_totales_usa_el_costo_de_la_zona(): void
     {
-        // HALLAZGO: PedidoService::calcularTotales usa el costo de la zona recibida sin
-        // verificar "activo" (a diferencia de EnvioService). Si al checkout se le pasa
-        // una zona inactiva, su costo igualmente se aplica al pedido.
         $cliente = $this->crearCliente();
-        $zona = ZonaEnvio::factory()->inactiva()->create(['nombre' => 'Panamá', 'costo' => 9.99]);
+        $zona = ZonaEnvio::factory()->create(['nombre' => 'Panamá', 'costo' => 9.99]);
         $carrito = $this->crearCarritoConProducto($cliente, 1, 100.00);
 
         $totales = app(PedidoService::class)->calcularTotales($carrito, $zona, null);

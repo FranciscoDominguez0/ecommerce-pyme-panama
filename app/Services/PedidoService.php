@@ -23,10 +23,13 @@ class PedidoService
 
     protected CarritoService $carritoService;
 
-    public function __construct(CuponService $cuponService, CarritoService $carritoService)
+    protected EnvioService $envioService;
+
+    public function __construct(CuponService $cuponService, CarritoService $carritoService, EnvioService $envioService)
     {
         $this->cuponService = $cuponService;
         $this->carritoService = $carritoService;
+        $this->envioService = $envioService;
     }
 
     public function obtenerPedidosPaginadosAdmin(string $estado, string $busqueda)
@@ -92,7 +95,7 @@ class PedidoService
             // Si son productos digitales/servicios y no hay courier explícito, envío es gratis
             $costoEnvio = 0.00;
         } elseif ($zonaEnvio) {
-            $costoEnvio = $zonaEnvio->costo;
+            $costoEnvio = $this->envioService->calcularCostoEnvio($zonaEnvio, $carrito);
         } else {
             $costoEnvio = 0.00;
         }

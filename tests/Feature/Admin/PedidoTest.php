@@ -163,6 +163,12 @@ class PedidoTest extends BaseAdminTest
         $admin = $this->crearAdmin();
         $cliente = $this->crearCliente();
         $pedido = Pedido::factory()->create(['usuario_id' => $cliente->id]);
+        
+        \App\Models\EnvioPedido::create([
+            'pedido_id' => $pedido->id,
+            'empresa_mensajeria' => 'UnoExpress',
+            'numero_guia' => '12345'
+        ]);
 
         $this->actingAs($admin)
             ->post('/admin/pedidos/' . $pedido->id . '/estado', [
@@ -184,6 +190,12 @@ class PedidoTest extends BaseAdminTest
         $admin = $this->crearAdmin();
         $cliente = $this->crearCliente();
         $pedido = Pedido::factory()->create(['usuario_id' => $cliente->id]);
+        
+        \App\Models\EnvioPedido::create([
+            'pedido_id' => $pedido->id,
+            'empresa_mensajeria' => 'UnoExpress',
+            'numero_guia' => '12345'
+        ]);
 
         $this->actingAs($admin)->post('/admin/pedidos/' . $pedido->id . '/estado', ['estado' => 'enviado']);
         $this->actingAs($admin)->post('/admin/pedidos/' . $pedido->id . '/estado', ['estado' => 'entregado']);

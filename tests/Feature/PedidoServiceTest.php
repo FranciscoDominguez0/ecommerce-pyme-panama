@@ -338,7 +338,18 @@ class PedidoServiceTest extends BaseAdminTest
         $pedido = Pedido::factory()->create();
         $servicio = app(PedidoService::class);
 
-        foreach (['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'entregado'] as $estado) {
+        foreach (['pago_confirmado', 'en_preparacion', 'listo_para_envio'] as $estado) {
+            $servicio->cambiarEstado($pedido, $estado, null, null);
+        }
+
+        \App\Models\EnvioPedido::create([
+            'pedido_id' => $pedido->id,
+            'empresa_mensajeria' => 'UnoExpress',
+            'numero_guia' => '12345'
+        ]);
+        $pedido->refresh();
+
+        foreach (['enviado', 'entregado'] as $estado) {
             $servicio->cambiarEstado($pedido, $estado, null, null);
         }
 

@@ -86,7 +86,7 @@ class CheckoutEnvio extends Component
         return redirect()->route('cliente.checkout.pago');
     }
 
-    public function resolverUbicacionEnvio(): array
+    public function resolverUbicacionEnvio(\App\Models\Carrito $carrito, \App\Services\EnvioService $envioService): array
     {
         $metodo = session('checkout_metodo_entrega', 'delivery');
         
@@ -100,8 +100,19 @@ class CheckoutEnvio extends Component
             if (session('checkout_courier_sucursal')) {
                 $suc = CourierSucursal::find(session('checkout_courier_sucursal'));
                 if ($suc) {
+                    $baseCosto = (float)$suc->tarifa_uno_hasta_7lb;
+                    $pesoTotalLbs = $envioService->calcularPesoTotalLibras($carrito);
+                    
+                    if ($pesoTotalLbs > 7) {
+                        $librasExtras = $pesoTotalLbs - 7;
+                        $recargo = $librasExtras * 0.50;
+                        $costoFinal = $baseCosto + $recargo;
+                    } else {
+                        $costoFinal = $baseCosto;
+                    }
+
                     return [
-                        'costo' => (float)$suc->tarifa_uno_hasta_7lb,
+                        'costo' => $costoFinal,
                         'ubicacion' => 'Courier: ' . $suc->sucursal,
                         'zona_id' => null,
                     ];
@@ -123,7 +134,7 @@ class CheckoutEnvio extends Component
                         $nombreUbicacion .= " ({$direccion->distrito})";
                     }
                     return [
-                        'costo' => (float) $zona->costo,
+                        'costo' => (float) $envioService->calcularCostoEnvio($zona, $carrito),
                         'zona_id' => (int) $zona->id,
                         'ubicacion' => 'Delivery: ' . $nombreUbicacion,
                         'direccion_id' => (int) $direccion->id,
@@ -139,13 +150,21 @@ class CheckoutEnvio extends Component
         }
     }
 
-    public function render(CarritoService $carritoService)
+    public function render(CarritoService $carritoService, \App\Services\EnvioService $envioService)
     {
         $usuarioId = Auth::id();
         $sesionId = session()->getId();
         $carrito = $carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
 
-        $ubicacion = $this->resolverUbicacionEnvio();
+        // Asegurar que el carrito tenga asignados los items con sus relaciones cargadas para el peso
+        $items = $carrito->items()->with([
+            'producto.imagenes',
+            'producto.categoria.padre',
+            'variante.opciones',
+        ])->get();
+        $carrito->setRelation('items', $items);
+
+        $ubicacion = $this->resolverUbicacionEnvio($carrito, $envioService);
         $resumen = $carritoService->calcularTotal($carrito, $ubicacion['costo'], $ubicacion['zona_id']);
 
         return view('livewire.checkout-envio', compact('carrito', 'resumen', 'ubicacion'));

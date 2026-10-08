@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-screen bg-slate-50 py-6 sm:py-10">
-    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         <!-- Breadcrumbs Navegables en Una Sola Línea -->
         <nav class="flex items-center gap-1.5 text-xs text-slate-500 font-medium min-w-0 flex-nowrap overflow-hidden py-0.5" aria-label="Breadcrumb">
@@ -382,175 +382,198 @@
 
             </div>
 
-        </div>
+        </div> <!-- Cierra grid superior -->
 
-        <!-- Descripción Completa y Especificaciones -->
-        @if($producto->descripcion)
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
-                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-emerald-600">description</span>
-                    <span>Descripción y Especificaciones Técnicas</span>
-                </h2>
-                <div class="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
-                    {{ $producto->descripcion }}
-                </div>
-            </div>
-        @endif
-
-        <!-- Especificaciones Dinámicas -->
-        @if(!empty($producto->especificaciones))
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
-                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-emerald-600">list</span>
-                    <span>Especificaciones</span>
-                </h2>
+        <!-- CONTENIDO INFERIOR: Specs a la izquierda, Relacionados a la derecha -->
+        <div class="grid lg:grid-cols-12 gap-8 md:gap-12 mt-8 md:mt-12">
+            
+            <!-- Columna Izquierda: Descripción, Specs y Garantía -->
+            <div class="lg:col-span-8 space-y-8">
                 
-                @php
-                    $specs = $producto->especificaciones ?? [];
-                    $normalizedSpecs = [];
-                    if (!empty($specs)) {
-                        if (isset($specs[0]['clave']) && !isset($specs[0]['atributos'])) {
-                            // Formato antiguo (plano)
-                            $grouped = collect($specs)->groupBy('grupo');
-                            foreach($grouped as $g => $items) {
-                                $normalizedSpecs[] = [
-                                    'grupo' => $g,
-                                    'atributos' => $items->map(fn($item) => ['clave' => $item['clave'] ?? '', 'valor' => $item['valor'] ?? ''])->toArray()
-                                ];
+                <!-- Descripción Completa -->
+                @if($producto->descripcion)
+                    <div class="bg-white rounded-md border border-slate-200 shadow-sm p-4 sm:p-6 space-y-4">
+                        <h2 class="text-lg font-bold text-slate-900 pb-2">
+                            Descripción y Especificaciones Técnicas
+                        </h2>
+                        <div class="text-sm text-slate-700 leading-relaxed whitespace-pre-line px-2">
+                            {{ $producto->descripcion }}
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Especificaciones Dinámicas -->
+                @if(!empty($producto->especificaciones))
+                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm" open>
+                        <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
+                            <span class="text-lg">Especificaciones</span>
+                            <span class="transition group-open:rotate-180 text-slate-400 group-open:text-emerald-600">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        
+                        <div class="p-4 sm:p-6 pt-0 border-t border-slate-100">
+                        @php
+                            $specs = $producto->especificaciones ?? [];
+                            $normalizedSpecs = [];
+                            if (!empty($specs)) {
+                                if (isset($specs[0]['clave']) && !isset($specs[0]['atributos'])) {
+                                    $grouped = collect($specs)->groupBy('grupo');
+                                    foreach($grouped as $g => $items) {
+                                        $normalizedSpecs[] = [
+                                            'grupo' => $g,
+                                            'atributos' => $items->map(fn($item) => ['clave' => $item['clave'] ?? '', 'valor' => $item['valor'] ?? ''])->toArray()
+                                        ];
+                                    }
+                                } else {
+                                    $normalizedSpecs = $specs;
+                                }
                             }
-                        } else {
-                            // Formato nuevo (anidado)
-                            $normalizedSpecs = $specs;
-                        }
-                    }
-                @endphp
-                
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left border-collapse">
-                        <tbody>
-                            @foreach($normalizedSpecs as $grupoData)
-                                @php
-                                    $grupoNombre = $grupoData['grupo'] ?? 'General';
-                                    $atributos = $grupoData['atributos'] ?? [];
-                                @endphp
-                                
-                                @if(!empty($grupoNombre) && count($atributos) > 0)
-                                    <tr class="border-b border-slate-200">
-                                        <td colspan="2" class="py-3 px-4 text-base font-bold text-slate-900 bg-white">
-                                            {{ $grupoNombre }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                
-                                @foreach($atributos as $attr)
-                                    @if(!empty($attr['clave']) || !empty($attr['valor']))
-                                        <tr class="border-b border-slate-200 last:border-0">
-                                            <td class="py-2.5 px-4 w-1/3 md:w-1/4 font-medium text-slate-700 bg-slate-50 border-r border-slate-100">
-                                                {{ $attr['clave'] ?? '' }}
-                                            </td>
-                                            <td class="py-2.5 px-4 text-slate-600 bg-white">
-                                                {{ $attr['valor'] ?? '' }}
-                                            </td>
+                        @endphp
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left border-collapse">
+                                <tbody>
+                                    @foreach($normalizedSpecs as $grupoData)
+                                        @php
+                                            $grupoNombre = $grupoData['grupo'] ?? 'General';
+                                            $atributos = $grupoData['atributos'] ?? [];
+                                        @endphp
+                                        
+                                        @if(!empty($grupoNombre) && count($atributos) > 0)
+                                            <tr>
+                                                <td colspan="2" class="py-3 px-2 text-base font-bold text-slate-800 bg-white">
+                                                    {{ $grupoNombre }}
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        
+                                        @foreach($atributos as $attr)
+                                            @if(!empty($attr['clave']) || !empty($attr['valor']))
+                                                <tr class="border-b border-slate-200">
+                                                    <td class="py-2.5 px-2 w-1/3 md:w-1/4 font-medium text-slate-700 bg-white">
+                                                        {{ $attr['clave'] ?? '' }}
+                                                    </td>
+                                                    <td class="py-2.5 px-2 text-slate-700 bg-white">
+                                                        {{ $attr['valor'] ?? '' }}
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                @endif
+
+                <!-- Especificaciones Físicas (Fletes) -->
+                @if($producto->peso || $producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
+                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm">
+                        <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
+                            <span class="text-lg">Especificaciones Físicas</span>
+                            <span class="transition group-open:rotate-180 text-slate-400 group-open:text-emerald-600">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-4 sm:p-6 pt-0 border-t border-slate-100 overflow-x-auto">
+                            <table class="w-full text-sm text-left border-collapse">
+                                <tbody>
+                                    @if($producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
+                                        <tr class="border-b border-slate-200">
+                                            <td class="py-2.5 px-2 w-1/3 md:w-1/4 font-medium text-slate-700 bg-white">Dimensiones (cm)</td>
+                                            <td class="py-2.5 px-2 text-slate-700 bg-white">{{ $producto->dimension_largo ?? 0 }} x {{ $producto->dimension_ancho ?? 0 }} x {{ $producto->dimension_alto ?? 0 }} cm</td>
                                         </tr>
                                     @endif
-                                @endforeach
+                                    @if($producto->peso)
+                                        <tr class="border-b border-slate-200">
+                                            <td class="py-2.5 px-2 w-1/3 md:w-1/4 font-medium text-slate-700 bg-white">Peso</td>
+                                            <td class="py-2.5 px-2 text-slate-700 bg-white">{{ $producto->peso }} kg</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                @endif
+
+                <!-- Garantía -->
+                @if(!empty($producto->garantia_info) && (!empty($producto->garantia_info['nombre']) || !empty($producto->garantia_info['duracion'])))
+                    <details class="group bg-white rounded-md border border-slate-200 shadow-sm">
+                        <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
+                            <span class="text-lg">Garantía</span>
+                            <span class="transition group-open:rotate-180 text-slate-400 group-open:text-emerald-600">
+                                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
+                            </span>
+                        </summary>
+                        <div class="p-4 sm:p-6 pt-0 border-t border-slate-100 text-sm text-slate-700 space-y-4">
+                            @if(!empty($producto->garantia_info['nombre']))
+                                <div>
+                                    <span class="font-bold block text-slate-800">Nombre de la Garantía:</span>
+                                    {{ $producto->garantia_info['nombre'] }}
+                                </div>
+                            @endif
+                            @if(!empty($producto->garantia_info['duracion']))
+                                <div>
+                                    <span class="font-bold block text-slate-800">Duración:</span>
+                                    {{ $producto->garantia_info['duracion'] }}
+                                </div>
+                            @endif
+                            @if(!empty($producto->garantia_info['contacto']))
+                                <div>
+                                    <span class="font-bold block text-slate-800">¿Con quién me comunico si tengo problemas con el producto?</span>
+                                    {{ $producto->garantia_info['contacto'] }}
+                                </div>
+                            @endif
+                        </div>
+                    </details>
+                @endif
+            </div>
+
+            <!-- Columna Derecha: Productos Relacionados -->
+            <div class="lg:col-span-4 space-y-6">
+                @if($relacionados && $relacionados->isNotEmpty())
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 mb-4 border-b border-slate-200 pb-2">
+                            Productos Relacionados
+                        </h2>
+                        <div class="flex flex-col gap-4">
+                            @foreach($relacionados as $rel)
+                                @php
+                                    $relImg = $rel->imagenPrincipal();
+                                @endphp
+                                <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 hover:border-emerald-500 transition-colors">
+                                    <div class="h-32 bg-white flex items-center justify-center overflow-hidden">
+                                        @if($relImg && (str_starts_with($relImg->ruta, 'http') || str_starts_with($relImg->ruta, 'storage/') || str_starts_with($relImg->ruta, '/storage')))
+                                            <img src="{{ str_starts_with($relImg->ruta, 'storage/') ? asset($relImg->ruta) : $relImg->ruta }}" alt="{{ $rel->nombre }}" class="h-full object-contain mix-blend-multiply">
+                                        @elseif($relImg && (str_starts_with($relImg->ruta, '<svg') || str_contains($relImg->ruta, '</svg>')))
+                                            <div class="h-full flex items-center justify-center svg-container">{!! $relImg->ruta !!}</div>
+                                        @elseif($relImg && !empty($relImg->ruta))
+                                            <span class="material-symbols-outlined text-[40px] text-slate-600">{{ $relImg->ruta }}</span>
+                                        @else
+                                            <span class="material-symbols-outlined text-[40px] text-slate-300">image</span>
+                                        @endif
+                                    </div>
+                                    <div class="space-y-1">
+                                        <h3 class="text-sm font-medium text-slate-900 line-clamp-2 leading-snug">
+                                            <a href="{{ route('cliente.producto.detalle', $rel->slug) }}" wire:navigate class="hover:text-emerald-700">
+                                                {{ $rel->nombre }}
+                                            </a>
+                                        </h3>
+                                        <div class="text-sm font-extrabold text-slate-900">${{ number_format($rel->precio, 2) }} USD</div>
+                                        <div class="text-[10px] text-slate-500 italic">* Impuestos no incluidos</div>
+                                        <div class="flex items-center gap-1 text-xs text-emerald-600 font-bold mt-1">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span> Disponible
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        @endif
-
-        <!-- Especificaciones Físicas (Fletes) -->
-        @if($producto->peso || $producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
-                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-emerald-600">straighten</span>
-                    <span>Especificaciones Físicas</span>
-                </h2>
-                <table class="w-full text-sm text-left text-slate-600">
-                    <tbody>
-                        @if($producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
-                            <tr class="border-b border-slate-100">
-                                <td class="py-2 pr-4 w-1/3 md:w-1/4 font-medium">Dimensiones(cm)</td>
-                                <td class="py-2">{{ $producto->dimension_largo ?? 0 }}x{{ $producto->dimension_ancho ?? 0 }}x{{ $producto->dimension_alto ?? 0 }}cm</td>
-                            </tr>
-                        @endif
-                        @if($producto->peso)
-                            <tr class="border-b border-slate-100 last:border-0">
-                                <td class="py-2 pr-4 w-1/3 md:w-1/4 font-medium">Peso</td>
-                                <td class="py-2">{{ $producto->peso }}kg</td>
-                            </tr>
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        @endif
-
-        <!-- Garantía -->
-        @if(!empty($producto->garantia_info) && (!empty($producto->garantia_info['nombre']) || !empty($producto->garantia_info['duracion'])))
-            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
-                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-emerald-600">verified_user</span>
-                    <span>Garantía</span>
-                </h2>
-                <div class="text-sm text-slate-600 space-y-4">
-                    @if(!empty($producto->garantia_info['nombre']))
-                        <div>
-                            <span class="font-bold block text-slate-800">Nombre de la Garantía:</span>
-                            {{ $producto->garantia_info['nombre'] }}
                         </div>
-                    @endif
-                    @if(!empty($producto->garantia_info['duracion']))
-                        <div>
-                            <span class="font-bold block text-slate-800">Duración:</span>
-                            {{ $producto->garantia_info['duracion'] }}
-                        </div>
-                    @endif
-                    @if(!empty($producto->garantia_info['contacto']))
-                        <div>
-                            <span class="font-bold block text-slate-800">¿Con quién me comunico si tengo problemas con el producto?</span>
-                            {{ $producto->garantia_info['contacto'] }}
-                        </div>
-                    @endif
-                </div>
+                    </div>
+                @endif
             </div>
-        @endif
-
-        <!-- Productos Relacionados -->
-        @if($relacionados->isNotEmpty())
-            <div class="space-y-4 pt-4">
-                <h2 class="text-lg font-bold text-slate-900">Productos Relacionados</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    @foreach($relacionados as $rel)
-                        @php
-                            $relImg = $rel->imagenPrincipal();
-                        @endphp
-                        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-3 hover:shadow-md transition-shadow">
-                            <div class="h-36 bg-white rounded-xl flex items-center justify-center p-2 border border-slate-100 overflow-hidden">
-                                @if($relImg && (str_starts_with($relImg->ruta, 'http') || str_starts_with($relImg->ruta, 'storage/') || str_starts_with($relImg->ruta, '/storage')))
-                                    <img src="{{ str_starts_with($relImg->ruta, 'storage/') ? asset($relImg->ruta) : $relImg->ruta }}" alt="{{ $rel->nombre }}" class="h-full object-contain mix-blend-multiply">
-                                @elseif($relImg && (str_starts_with($relImg->ruta, '<svg') || str_contains($relImg->ruta, '</svg>')))
-                                    <div class="h-full flex items-center justify-center svg-container">{!! $relImg->ruta !!}</div>
-                                @elseif($relImg && !empty($relImg->ruta))
-                                    <span class="material-symbols-outlined text-[48px] text-slate-600">{{ $relImg->ruta }}</span>
-                                @else
-                                    <span class="material-symbols-outlined text-[48px] text-slate-300">image</span>
-                                @endif
-                            </div>
-                            <div class="space-y-1">
-                                <h3 class="text-xs font-bold text-slate-900 line-clamp-1">
-                                    <a href="{{ route('cliente.producto.detalle', $rel->slug) }}" wire:navigate class="hover:text-emerald-700">
-                                        {{ $rel->nombre }}
-                                    </a>
-                                </h3>
-                                <div class="text-sm font-extrabold text-slate-900">${{ number_format($rel->precio, 2) }}</div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
+            
+        </div>
 
     </div>
 </div>

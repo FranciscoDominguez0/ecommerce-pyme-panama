@@ -32,8 +32,6 @@ class CarritoController extends Controller
         $sesionId = $request->session()->getId();
 
         $carrito = $this->carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
-        $costoEnvioEstimado = 5.00; // Tarifa base estimada Panamá Centro
-        $resumen = $this->carritoService->calcularTotal($carrito, $costoEnvioEstimado, null);
 
         // Obtener productos de la lista de deseos si el usuario está autenticado
         $productosDeseos = collect();
@@ -50,7 +48,7 @@ class CarritoController extends Controller
                 ->get();
         }
 
-        return view('cliente.carrito', compact('carrito', 'resumen', 'costoEnvioEstimado', 'productosDeseos'));
+        return view('cliente.carrito', compact('carrito', 'productosDeseos'));
     }
 
     /**
