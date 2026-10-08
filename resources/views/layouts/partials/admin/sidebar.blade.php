@@ -194,7 +194,7 @@
                     <div class="submenu-item relative {{ request()->routeIs('admin.zonas-envio*') ? 'is-active' : '' }}">
                         <a href="{{ route('admin.zonas-envio.index') }}" 
                            class="flex items-center justify-between py-2 px-3 ml-[36px] mr-3 rounded-xl text-[12.5px] font-medium transition-colors {{ request()->routeIs('admin.zonas-envio*') ? 'sidebar-active-item' : 'text-slate-400 hover:text-white hover:bg-[#2B3648]/40' }}">
-                            <span>Zonas de Envío</span>
+                            <span>Sucursales Courier</span>
                         </a>
                     </div>
                     @endcan

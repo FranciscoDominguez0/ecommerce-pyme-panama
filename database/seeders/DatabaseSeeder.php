@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,           // 3. Marcas de productos
             CategoriaSeeder::class,       // 4. Categorías principales y subcategorías
             AtributosVarianteSeeder::class, // 5. Atributos y opciones para variantes
-            ZonaEnvioSeeder::class,       // 6. Zonas de envío (Panamá)
+            CourierSucursalesSeeder::class, // 6. Sucursales de Courier (Fletes Chavale, etc.)
             // ProductosDemoSeeder::class,   // 7. Productos de demostración (NO ejecutar en producción/reinicio)
         ]);
     }

@@ -22,6 +22,7 @@ class Usuario extends Authenticatable
         'email',
         'password_hash',
         'telefono',
+        'telefono2',
         'foto_perfil_ruta',
         'fecha_nacimiento',
         'two_fa_habilitado',

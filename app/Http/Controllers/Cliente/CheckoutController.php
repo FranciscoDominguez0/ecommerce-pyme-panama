@@ -211,8 +211,17 @@ class CheckoutController extends Controller
                 'telefono1' => session('checkout_contacto_telefono1'),
                 'telefono2' => session('checkout_contacto_telefono2'),
             ];
-            
             $notasInternas = json_encode($notasInternasData);
+
+            // Actualizar el perfil del usuario para que se auto-complete en la próxima compra
+            if ($usuario) {
+                $usuario->update([
+                    'nombre' => session('checkout_contacto_nombre') ?: $usuario->nombre,
+                    'apellido' => session('checkout_contacto_apellido') ?: $usuario->apellido,
+                    'telefono' => session('checkout_contacto_telefono1') ?: $usuario->telefono,
+                    'telefono2' => session('checkout_contacto_telefono2') ?: $usuario->telefono2,
+                ]);
+            }
 
             $pedido = $this->pedidoService->crearDesdeCarrito(
                 $carrito, 

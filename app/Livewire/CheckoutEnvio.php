@@ -37,7 +37,7 @@ class CheckoutEnvio extends Component
             $this->contacto_apellido = session('checkout_contacto_apellido', $usuario->apellido);
             $this->contacto_email = session('checkout_contacto_email', $usuario->email);
             $this->contacto_telefono1 = session('checkout_contacto_telefono1', $usuario->telefono);
-            $this->contacto_telefono2 = session('checkout_contacto_telefono2', '');
+            $this->contacto_telefono2 = session('checkout_contacto_telefono2', $usuario->telefono2);
         } else {
             $this->contacto_nombre = session('checkout_contacto_nombre', '');
             $this->contacto_apellido = session('checkout_contacto_apellido', '');
@@ -142,6 +142,7 @@ class CheckoutEnvio extends Component
             'checkout_contacto_email' => $this->contacto_email,
             'checkout_contacto_telefono1' => $this->contacto_telefono1,
             'checkout_contacto_telefono2' => $this->contacto_telefono2,
+            'checkout_metodo_entrega' => $this->metodo_entrega,
         ]);
 
         // Asegurar que tengan un método de entrega válido

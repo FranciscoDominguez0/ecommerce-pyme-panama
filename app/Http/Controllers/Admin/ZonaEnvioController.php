@@ -13,7 +13,7 @@ class ZonaEnvioController extends Controller
      */
     public function index()
     {
-        $zonas = \App\Models\CourierSucursal::orderBy('zona', 'asc')->orderBy('courier', 'asc')->get();
+        $zonas = \App\Models\CourierSucursal::orderBy('zona', 'asc')->orderBy('courier', 'asc')->paginate(15);
 
         return view('admin.configuracion.zonas-envio', compact('zonas'));
     }
