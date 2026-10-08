@@ -63,9 +63,21 @@ class GoogleAuthController extends Controller
                 return $this->closePopupAndRedirect(route('2fa.challenge'));
             }
 
+            // Obtener el ID de la sesión antes de regenerarla para fusionar el carrito
+            $sesionPreviaId = session()->getId();
+
             // Iniciar sesión (flujo normal sin 2FA)
             Auth::login($usuario, true);
             
+            session()->regenerate();
+            
+            // Fusionar carritos de la sesión de visitante y el usuario autenticado
+            try {
+                app(\App\Services\CarritoService::class)->fusionarCarritos($sesionPreviaId, $usuario->id);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('Error al fusionar carrito en Google Auth: ' . $e->getMessage());
+            }
+
             session()->put('is_from_login', true);
 
             // Redirigir al home o donde corresponda
