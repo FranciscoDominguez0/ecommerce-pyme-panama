@@ -119,14 +119,6 @@
                                             <span class="hidden sm:inline">Editar</span>
                                         </button>
 
-                                        <form action="{{ route('admin.zonas-envio.toggle', $zona->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" 
-                                                    class="px-2.5 py-1.5 text-xs font-semibold {{ $zona->activo ? 'text-amber-700 bg-amber-50 border-amber-200 hover:bg-amber-100' : 'text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100' }} border rounded-lg transition-all shadow-2xs flex items-center gap-1 cursor-pointer">
-                                                <span class="material-symbols-outlined text-[15px]">{{ $zona->activo ? 'pause_circle' : 'play_circle' }}</span>
-                                                <span class="hidden sm:inline">{{ $zona->activo ? 'Desactivar' : 'Activar' }}</span>
-                                            </button>
-                                        </form>
 
                                         <button type="button" 
                                                 onclick="window.ModalEliminar.abrir('/admin/zonas-envio/{{ $zona->id }}', '{{ addslashes($zona->sucursal) }}')" 
@@ -141,11 +133,15 @@
                 </table>
             </div>
             <!-- Paginación -->
-            @if($zonas->hasPages())
-                <div class="px-5 py-4 border-t border-slate-100 dark:border-gray-700/80 bg-white dark:bg-transparent">
+            <div class="px-5 py-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50">
+                @if($zonas->hasPages())
                     {{ $zonas->links('vendor.pagination.admin-tailwind') }}
-                </div>
-            @endif
+                @else
+                    <p class="text-xs text-center text-slate-500 dark:text-slate-400">
+                        Mostrando <strong>{{ $zonas->total() }}</strong> zona(s) de envío
+                    </p>
+                @endif
+            </div>
         </div>
     @endif
 </div>

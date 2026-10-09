@@ -111,17 +111,27 @@
                     <span class="material-symbols-outlined text-slate-300 text-3xl">lock</span>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Contraseña {{ $isEdit ? '(Dejar en blanco para no cambiar)' : '*' }}</label>
-                        <input name="password" {{ !$isEdit ? 'required' : '' }} class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm text-slate-900 dark:text-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-shadow" placeholder="••••••••" type="password"/>
-                        @error('password') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                @if($isEdit)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Contraseña (Dejar en blanco para no cambiar)</label>
+                            <input name="password" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm text-slate-900 dark:text-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-shadow" placeholder="••••••••" type="password"/>
+                            @error('password') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Confirmar Contraseña</label>
+                            <input name="password_confirmation" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm text-slate-900 dark:text-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-shadow" placeholder="••••••••" type="password"/>
+                        </div>
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Confirmar Contraseña {{ !$isEdit ? '*' : '' }}</label>
-                        <input name="password_confirmation" {{ !$isEdit ? 'required' : '' }} class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm text-slate-900 dark:text-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-shadow" placeholder="••••••••" type="password"/>
+                @else
+                    <div class="bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 p-4 rounded-lg flex items-start gap-3 border border-blue-200 dark:border-blue-800/30">
+                        <span class="material-symbols-outlined mt-0.5">mark_email_read</span>
+                        <div class="text-sm">
+                            <p class="font-bold mb-1">Configuración de Contraseña</p>
+                            <p>El usuario recibirá un correo electrónico con un enlace seguro para establecer su propia contraseña una vez creada la cuenta.</p>
+                        </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
 

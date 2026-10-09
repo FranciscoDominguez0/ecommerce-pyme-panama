@@ -42,8 +42,8 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ];
 
-        // Se exige el token de Cloudflare Turnstile salvo en entorno de pruebas automatizadas
-        if (!app()->environment('testing')) {
+        // Se exige el token de Cloudflare Turnstile salvo en entorno de pruebas automatizadas o local
+        if (!app()->environment(['local', 'testing'])) {
             $reglas['cf-turnstile-response'] = ['required', 'string'];
         }
 
@@ -56,7 +56,7 @@ class LoginController extends Controller
 
         // Verificamos el token de Cloudflare Turnstile directamente contra su servidor
         $turnstileResponse = $request->input('cf-turnstile-response');
-        if (!app()->environment('testing') || $turnstileResponse !== null) {
+        if (!app()->environment(['local', 'testing']) || $turnstileResponse !== null) {
             $turnstileService = app(TurnstileService::class);
             if (!$turnstileService->verificar($turnstileResponse, $request->ip())) {
                 return $this->loginFailedResponse(

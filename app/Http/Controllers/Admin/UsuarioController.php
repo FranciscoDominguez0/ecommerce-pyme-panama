@@ -79,7 +79,6 @@ class UsuarioController extends Controller
             'nombre' => 'required|string|max:255',
             'apellido' => 'nullable|string|max:255',
             'email' => 'required|email|unique:usuarios,email',
-            'password' => 'required|string|min:8',
             'telefono' => 'nullable|string|max:20',
             'rol_id' => 'required|exists:roles,id',
             'estado' => 'nullable|boolean'
@@ -89,7 +88,7 @@ class UsuarioController extends Controller
         $usuario->nombre = $validated['nombre'];
         $usuario->apellido = $validated['apellido'] ?? null;
         $usuario->email = $validated['email'];
-        $usuario->password_hash = Hash::make($validated['password']);
+        $usuario->password_hash = Hash::make(\Illuminate\Support\Str::random(32));
         $usuario->telefono = $validated['telefono'] ?? null;
         
         $usuario->activo = $request->has('estado');
@@ -99,8 +98,11 @@ class UsuarioController extends Controller
         $rolAsignar = Role::findOrFail($validated['rol_id']);
         $usuario->assignRole($rolAsignar->name);
 
+        // Enviar enlace de restablecimiento de contraseña
+        \Illuminate\Support\Facades\Password::sendResetLink(['email' => $usuario->email]);
+
         return redirect()->route('admin.usuarios.por-rol', $rolAsignar->id)
-                         ->with('toast_success', 'Usuario creado correctamente.');
+                         ->with('toast_success', 'Usuario creado correctamente y se le ha enviado un correo para establecer su contraseña.');
     }
 
     /**
