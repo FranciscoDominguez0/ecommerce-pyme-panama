@@ -65,65 +65,54 @@
         </div>
 
         <!-- Tarjeta: 2FA -->
-        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden ambient-shadow h-fit flex flex-col">
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 text-white relative">
-                <!-- Abstract Glow -->
-                <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl"></div>
-                </div>
-
-                <div class="relative z-10">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/20 shadow-inner">
-                            <span class="material-symbols-outlined text-[20px] text-emerald-400">shield_lock</span>
-                        </div>
-                        <h4 class="text-base font-bold tracking-tight">Autenticación de 2 Factores</h4>
-                    </div>
-                    <p class="text-xs text-slate-300 opacity-90 leading-relaxed max-w-sm">
-                        Añade una capa extra de seguridad a tu cuenta requiriendo un código PIN de 4 dígitos enviado a tu correo al iniciar sesión.
-                    </p>
-                </div>
-            </div>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 ambient-shadow h-fit flex flex-col">
+            <h4 class="text-base font-bold text-primary flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-[20px]">shield_lock</span>
+                Verificación en dos pasos
+            </h4>
+            <p class="text-xs text-on-surface-variant mb-6">
+                Te enviaremos un código a tu correo cada vez que inicies sesión.
+            </p>
             
-            <div class="p-6 bg-white dark:bg-[#181a1b] flex-1">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div class="flex-1 flex flex-col">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 bg-surface-container/50 rounded-xl p-4 border border-outline-variant/50">
                     <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-sm font-bold text-slate-900 dark:text-white">Estado actual:</span>
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span class="text-xs font-semibold text-on-surface-variant">Estado:</span>
                             @if(auth()->user()->two_fa_habilitado)
-                                <span class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border border-emerald-200 dark:border-emerald-500/20">
+                                <span class="inline-flex items-center gap-1.5 bg-emerald-100/80 text-emerald-700 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border border-emerald-200">
                                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    Activado
+                                    Activada
                                 </span>
                             @else
-                                <span class="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+                                <span class="inline-flex items-center gap-1.5 bg-surface-variant text-on-surface-variant px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border border-outline-variant">
                                     <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                    Desactivado
+                                    Desactivada
                                 </span>
                             @endif
                         </div>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
+                        <p class="text-[11px] text-on-surface-variant leading-relaxed max-w-xs">
                             @if(auth()->user()->two_fa_habilitado)
-                                Tu cuenta está protegida. Se requerirá un PIN cada vez que inicies sesión de forma segura.
+                                ¡Excelente! Tu cuenta está protegida.
                             @else
-                                Protege tu cuenta de accesos no autorizados. Altamente recomendado para mantener tus datos seguros.
+                                Actívala para mayor seguridad.
                             @endif
                         </p>
                     </div>
                     
-                    <form action="{{ route('cliente.perfil.2fa.update') }}" method="POST" class="shrink-0 w-full sm:w-auto">
+                    <form action="{{ route('cliente.perfil.2fa.update') }}" method="POST" class="shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="two_fa_habilitado" value="{{ auth()->user()->two_fa_habilitado ? '0' : '1' }}">
                         @if(auth()->user()->two_fa_habilitado)
-                            <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-5 py-2.5 rounded-xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 text-[11px] font-bold uppercase tracking-wider transition-all">
+                            <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-5 py-2.5 rounded-xl border border-error/50 bg-error/10 text-error hover:bg-error/20 text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:shadow-md">
                                 <span class="material-symbols-outlined text-[16px]">gpp_bad</span>
-                                Desactivar 2FA
+                                Desactivar
                             </button>
                         @else
-                            <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 text-[11px] font-bold uppercase tracking-wider transition-all">
+                            <button type="submit" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary hover:bg-primary/90 text-xs font-bold uppercase tracking-wider transition-all shadow-sm hover:shadow-md">
                                 <span class="material-symbols-outlined text-[16px]">security</span>
-                                Activar 2FA
+                                Activar
                             </button>
                         @endif
                     </form>

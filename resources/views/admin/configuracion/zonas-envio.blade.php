@@ -143,7 +143,7 @@
             <!-- Paginación -->
             @if($zonas->hasPages())
                 <div class="px-5 py-4 border-t border-slate-100 dark:border-gray-700/80 bg-white dark:bg-transparent">
-                    {{ $zonas->links() }}
+                    {{ $zonas->links('vendor.pagination.admin-tailwind') }}
                 </div>
             @endif
         </div>
