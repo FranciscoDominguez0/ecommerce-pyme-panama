@@ -73,7 +73,7 @@ class ProductoController extends Controller
             elseif ($filtroStock === 'agotado') $query->where('stock', '<=', 0);
         }
 
-        $productos = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+        $productos = $query->orderBy('es_digital', 'asc')->orderBy('id', 'desc')->paginate(10)->withQueryString();
 
         return view('admin.productos.index', compact(
             'productos', 'kpiTotal', 'kpiEnStock', 'kpiStockBajo', 'kpiVariantes',

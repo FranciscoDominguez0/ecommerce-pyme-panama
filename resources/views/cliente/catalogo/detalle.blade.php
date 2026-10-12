@@ -468,7 +468,12 @@
                 @endif
 
                 <!-- Especificaciones Físicas (Fletes) -->
-                @if($producto->peso || $producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
+                @php
+                    $tieneDimensiones = (float)($producto->dimension_largo ?? 0) > 0 || (float)($producto->dimension_ancho ?? 0) > 0 || (float)($producto->dimension_alto ?? 0) > 0;
+                    $tienePeso = (float)($producto->peso ?? 0) > 0;
+                    $mostrarFisicas = ($tieneDimensiones || $tienePeso) && !$producto->es_digital;
+                @endphp
+                @if($mostrarFisicas)
                     <details class="group bg-white rounded-md border border-slate-200 shadow-sm" open>
                         <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
                             <span class="text-lg">Especificaciones Físicas</span>
@@ -479,16 +484,16 @@
                         <div class="p-4 sm:p-6 pt-0 border-t border-slate-100 overflow-x-auto">
                             <table class="w-full text-sm text-left border-collapse">
                                 <tbody>
-                                    @if($producto->dimension_largo || $producto->dimension_ancho || $producto->dimension_alto)
+                                    @if($tieneDimensiones)
                                         <tr class="border-b border-slate-200">
                                             <td class="py-2.5 px-2 w-1/3 md:w-1/4 font-medium text-slate-700 bg-white">Dimensiones (cm)</td>
-                                            <td class="py-2.5 px-2 text-slate-700 bg-white">{{ $producto->dimension_largo ?? 0 }} x {{ $producto->dimension_ancho ?? 0 }} x {{ $producto->dimension_alto ?? 0 }} cm</td>
+                                            <td class="py-2.5 px-2 text-slate-700 bg-white">{{ (float)($producto->dimension_largo ?? 0) }} x {{ (float)($producto->dimension_ancho ?? 0) }} x {{ (float)($producto->dimension_alto ?? 0) }} cm</td>
                                         </tr>
                                     @endif
-                                    @if($producto->peso)
+                                    @if($tienePeso)
                                         <tr class="border-b border-slate-200">
                                             <td class="py-2.5 px-2 w-1/3 md:w-1/4 font-medium text-slate-700 bg-white">Peso</td>
-                                            <td class="py-2.5 px-2 text-slate-700 bg-white">{{ $producto->peso }} kg</td>
+                                            <td class="py-2.5 px-2 text-slate-700 bg-white">{{ (float)$producto->peso }} kg</td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -498,7 +503,7 @@
                 @endif
 
                 <!-- Garantía -->
-                @if(!empty($producto->garantia_info) && (!empty($producto->garantia_info['nombre']) || !empty($producto->garantia_info['duracion'])))
+                @if(!empty($producto->garantia_info) && !empty($producto->garantia_info['nombre']))
                     <details class="group bg-white rounded-md border border-slate-200 shadow-sm" open>
                         <summary class="flex justify-between items-center font-bold cursor-pointer list-none p-4 sm:p-6 text-slate-800 hover:bg-slate-50 transition-colors border-b-2 border-transparent group-open:border-emerald-600 group-open:text-emerald-600">
                             <span class="text-lg">Garantía</span>
@@ -507,12 +512,10 @@
                             </span>
                         </summary>
                         <div class="p-4 sm:p-6 pt-0 border-t border-slate-100 text-sm text-slate-700 space-y-4">
-                            @if(!empty($producto->garantia_info['nombre']))
-                                <div>
-                                    <span class="font-bold block text-slate-800">Nombre de la Garantía:</span>
-                                    {{ $producto->garantia_info['nombre'] }}
-                                </div>
-                            @endif
+                            <div>
+                                <span class="font-bold block text-slate-800">Nombre de la Garantía:</span>
+                                {{ $producto->garantia_info['nombre'] }}
+                            </div>
                             @if(!empty($producto->garantia_info['duracion']))
                                 <div>
                                     <span class="font-bold block text-slate-800">Duración:</span>

@@ -106,13 +106,17 @@ class CatalogoFijoSeeder extends Seeder
                         "activo" => true,
                         "aplica_itbms" => true,
                         "especificaciones" => json_encode($specs, JSON_UNESCAPED_UNICODE),
-                        "peso" => $esServicio ? 0 : (rand(1, 50) / 10),
-                        "dimension_largo" => $esServicio ? 0 : rand(10, 40),
-                        "dimension_ancho" => $esServicio ? 0 : rand(5, 30),
-                        "dimension_alto" => $esServicio ? 0 : rand(1, 20),
-                        "garantia_info" => json_encode([
-                            "nombre" => $esServicio ? "Garantía de Servicio PayMe" : "Garantía Extendida del Fabricante", 
-                            "duracion" => $esServicio ? "30 Días" : "1 Año", 
+                        "peso" => $esServicio ? null : (rand(1, 50) / 10),
+                        "dimension_largo" => $esServicio ? null : rand(10, 40),
+                        "dimension_ancho" => $esServicio ? null : rand(5, 30),
+                        "dimension_alto" => $esServicio ? null : rand(1, 20),
+                        "garantia_info" => $esServicio ? json_encode([
+                            "nombre" => "Garantía de Servicio PayMe",
+                            "duracion" => "30 Días",
+                            "contacto" => "Atención y soporte técnico directo a través de los canales de atención de PayMe Panamá."
+                        ], JSON_UNESCAPED_UNICODE) : json_encode([
+                            "nombre" => "Garantía Extendida del Fabricante", 
+                            "duracion" => "1 Año", 
                             "contacto" => $gtiaPanama
                         ], JSON_UNESCAPED_UNICODE),
                     ]

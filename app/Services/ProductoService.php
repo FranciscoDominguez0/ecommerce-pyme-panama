@@ -34,6 +34,7 @@ class ProductoService
             'nombre' => $c->nombre,
             'slug' => $c->slug ?? '',
             'imagen_ruta' => $c->imagen_ruta ?? '',
+            'exento_envio' => (bool) $c->exento_envio,
         ])->values()->toArray();
 
         $catalogoAtributos = [];
@@ -79,9 +80,15 @@ class ProductoService
             }
         }
 
+        if ($esEdicion && $producto->categoria_id && !$producto->relationLoaded('categoria')) {
+            $producto->load('categoria');
+        }
+        $esServicio = (bool) ($producto->categoria?->exento_envio ?? false);
+
         return compact(
             'esEdicion',
             'producto',
+            'esServicio',
             'categorias',
             'marcas',
             'marcasData',
@@ -141,6 +148,27 @@ class ProductoService
 
     public function prepararDatosProducto(Request $request, ?int $brandId, ?string $nombreMarca): array
     {
+        // Limpiamos los campos físicos si están vacíos o no fueron habilitados
+        $habilitarFisicas = $request->input('habilitar_fisicas', '1') === '1';
+        $peso = $habilitarFisicas && $request->filled('peso') && is_numeric($request->peso) && (float)$request->peso > 0 ? (float)$request->peso : null;
+        $dimLargo = $habilitarFisicas && $request->filled('dimension_largo') && is_numeric($request->dimension_largo) && (float)$request->dimension_largo > 0 ? (float)$request->dimension_largo : null;
+        $dimAncho = $habilitarFisicas && $request->filled('dimension_ancho') && is_numeric($request->dimension_ancho) && (float)$request->dimension_ancho > 0 ? (float)$request->dimension_ancho : null;
+        $dimAlto = $habilitarFisicas && $request->filled('dimension_alto') && is_numeric($request->dimension_alto) && (float)$request->dimension_alto > 0 ? (float)$request->dimension_alto : null;
+
+        // Limpiamos la garantía si fue eliminada o viene vacía
+        $garantiaRaw = $request->garantia_info;
+        if (is_string($garantiaRaw)) {
+            $garantiaRaw = json_decode($garantiaRaw, true);
+        }
+        $garantiaInfo = null;
+        if (is_array($garantiaRaw) && !empty($garantiaRaw['nombre'])) {
+            $garantiaInfo = [
+                'nombre' => trim($garantiaRaw['nombre']),
+                'duracion' => trim($garantiaRaw['duracion'] ?? ''),
+                'contacto' => trim($garantiaRaw['contacto'] ?? ''),
+            ];
+        }
+
         return [
             'categoria_id' => $request->categoria_id,
             'brand_id' => $brandId,
@@ -152,11 +180,11 @@ class ProductoService
             'marca' => $nombreMarca,
             'modelo' => $request->modelo ? trim($request->modelo) : null,
             'especificaciones' => is_string($request->especificaciones) ? json_decode($request->especificaciones, true) : $request->especificaciones,
-            'peso' => $request->peso,
-            'dimension_largo' => $request->dimension_largo,
-            'dimension_ancho' => $request->dimension_ancho,
-            'dimension_alto' => $request->dimension_alto,
-            'garantia_info' => is_string($request->garantia_info) ? json_decode($request->garantia_info, true) : $request->garantia_info,
+            'peso' => $peso,
+            'dimension_largo' => $dimLargo,
+            'dimension_ancho' => $dimAncho,
+            'dimension_alto' => $dimAlto,
+            'garantia_info' => $garantiaInfo,
             'precio' => $request->precio,
             'precio_oferta' => $request->precio_oferta ?: null,
             'oferta_activa' => $request->boolean('oferta_activa'),
@@ -167,6 +195,7 @@ class ProductoService
             'destacado' => $request->boolean('destacado'),
             'activo' => $request->boolean('activo'),
             'aplica_itbms' => $request->boolean('aplica_itbms'),
+            'es_digital' => (bool) (Categoria::find($request->categoria_id)?->exento_envio ?? false),
         ];
     }
 

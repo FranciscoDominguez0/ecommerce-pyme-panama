@@ -219,6 +219,10 @@ class CategoriaController extends Controller
             'exento_envio' => $request->boolean('exento_envio'),
             'orden_visualizacion' => isset($validated['orden_visualizacion']) ? (int) $validated['orden_visualizacion'] : 0,
         ]);
+
+        // Sincronizamos es_digital en los productos de esta categoría y sus subcategorías
+        $catIds = $categoria->hijas()->pluck('id')->push($categoria->id);
+        \App\Models\Producto::whereIn('categoria_id', $catIds)->update(['es_digital' => (bool)$categoria->exento_envio]);
         $this->registrarAuditoria(
             'actualizar',
             "Categoría '{$categoria->nombre}' actualizada.",
@@ -322,6 +326,10 @@ class CategoriaController extends Controller
         $nuevoEstado = !$categoria->exento_envio_directo;
         $categoria->exento_envio = $nuevoEstado;
         $categoria->save();
+
+        // Sincronizamos es_digital en los productos de esta categoría y sus subcategorías
+        $catIds = $categoria->hijas()->pluck('id')->push($categoria->id);
+        \App\Models\Producto::whereIn('categoria_id', $catIds)->update(['es_digital' => (bool)$categoria->exento_envio]);
 
         $descripcion = $nuevoEstado
             ? ($categoria->esPrincipal()

@@ -229,6 +229,9 @@ class CatalogoController extends Controller
      */
     private function aplicarOrden(Builder $query, string $orden): void
     {
+        // Los productos físicos siempre tienen prioridad y los servicios salen de último
+        $query->orderBy('es_digital', 'asc');
+
         match ($orden) {
             'precio_asc'              => $query->orderBy('precio', 'asc'),
             'precio_desc'             => $query->orderBy('precio', 'desc'),

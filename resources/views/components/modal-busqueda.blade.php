@@ -237,7 +237,7 @@
                 const esGrid = contenedor && contenedor.classList.contains('grid');
 
                 if (esGrid) {
-                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 dark:hover:bg-emerald-900/20 hover:shadow-2xs`;
+                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-[#121f1a] hover:shadow-2xs`;
                     let logoHtml = `<span class="font-bold text-xs text-slate-700 dark:text-slate-300">${nombre.substring(0, 2).toUpperCase()}</span>`;
                     if (window.getLogoHtmlForBrand && (item.slug || item.url || item.nombre)) {
                         logoHtml = window.getLogoHtmlForBrand(item);
@@ -245,13 +245,13 @@
                         logoHtml = `<img src="${item.url}" alt="${nombre}" class="h-6 object-contain">`;
                     }
                     card.innerHTML = `
-                        <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700/80 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
+                        <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
                             ${logoHtml}
                         </div>
-                        <span class="text-xs font-bold text-slate-800 dark:text-gray-100 group-hover:text-emerald-950 dark:group-hover:text-emerald-400 truncate max-w-full leading-tight">${nombre}</span>
+                        <span class="text-xs font-bold text-slate-800 dark:text-gray-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 truncate max-w-full leading-tight">${nombre}</span>
                     `;
                 } else {
-                    card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 dark:hover:bg-emerald-900/20 hover:shadow-2xs`;
+                    card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-[#121f1a] hover:shadow-2xs`;
                     
                     if (item.nivel && item.nivel > 0) {
                         card.style.marginLeft = `${Math.min(item.nivel * 16, 48)}px`;
@@ -271,7 +271,7 @@
                                 ${iconHtml}
                             </div>
                             <div class="min-w-0">
-                                <div class="text-xs font-bold text-slate-800 dark:text-gray-100 group-hover:text-emerald-950 dark:group-hover:text-emerald-400 truncate">${nombre}</div>
+                                <div class="text-xs font-bold text-slate-800 dark:text-gray-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 truncate">${nombre}</div>
                                 ${sub ? `<div class="text-[10px] text-slate-400 font-medium truncate">${sub}</div>` : ''}
                             </div>
                         </div>

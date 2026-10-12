@@ -101,7 +101,8 @@ class CategoriaSeeder extends Seeder
             // ── Categoría raíz (padre_id = null) ───────────────────────────
             $slugPadre = Str::slug($padre['nombre']);
             $orden++;
-            $categoriaPadre = Categoria::firstOrCreate(
+            $esExentoPadre = in_array($slugPadre, ['software-y-licencias', 'servicios-informaticos']);
+            $categoriaPadre = Categoria::updateOrCreate(
                 ['slug' => $slugPadre],
                 [
                     'padre_id' => null,
@@ -109,6 +110,7 @@ class CategoriaSeeder extends Seeder
                     'descripcion' => "Categoría de {$padre['nombre']} para el catálogo de tecnología.",
                     'imagen_ruta' => null,
                     'activo' => true,
+                    'exento_envio' => $esExentoPadre,
                     'orden_visualizacion' => $orden,
                 ]
             );
@@ -118,7 +120,7 @@ class CategoriaSeeder extends Seeder
             foreach ($padre['subcategorias'] as $nombreHija) {
                 $slugHija = Str::slug($nombreHija);
                 $orden++;
-                Categoria::firstOrCreate(
+                $categoriaHija = Categoria::updateOrCreate(
                     ['slug' => $slugHija],
                     [
                         'padre_id' => $categoriaPadre->id,
@@ -126,6 +128,7 @@ class CategoriaSeeder extends Seeder
                         'descripcion' => "Subcategoría {$nombreHija} dentro de {$padre['nombre']}.",
                         'imagen_ruta' => null,
                         'activo' => true,
+                        'exento_envio' => $esExentoPadre,
                         'orden_visualizacion' => $orden,
                     ]
                 );
