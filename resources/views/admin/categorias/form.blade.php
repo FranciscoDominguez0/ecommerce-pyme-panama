@@ -232,25 +232,23 @@
                     </label>
                 </div>
 
-                <!-- Toggle Exento de Cobro de Envío (Con Regla de Herencia) -->
-                <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700/80 flex flex-col gap-2.5">
-                    <div class="flex items-center justify-between gap-3">
-                        <div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="material-symbols-outlined text-[16px] text-emerald-600">local_shipping</span>
-                                <span class="text-xs font-bold text-slate-900 dark:text-white">Exento de Envío</span>
-                            </div>
-                            <span class="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">No cobra flete (servicios, licencias o armados)</span>
+                <!-- Toggle Es Servicio / Exento de Flete -->
+                <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700/80 flex items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[16px] text-emerald-600">home_repair_service</span>
+                            <span class="text-xs font-bold text-slate-900 dark:text-white">Es Servicio</span>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" 
-                                   name="exento_envio" 
-                                   value="1" 
-                                   class="sr-only peer" 
-                                   {{ old('exento_envio', $categoria->exento_envio_directo ?? false) ? 'checked' : '' }}>
-                            <div class="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
-                        </label>
+                        <span class="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">Exento de flete físico</span>
                     </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" 
+                               name="exento_envio" 
+                               value="1" 
+                               class="sr-only peer" 
+                               {{ old('exento_envio', $categoria->exento_envio_directo ?? false) ? 'checked' : '' }}>
+                        <div class="w-10 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                    </label>
                 </div>
 
                 <!-- Orden de Visualización -->

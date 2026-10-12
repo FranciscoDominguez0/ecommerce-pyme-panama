@@ -515,35 +515,6 @@
                                             </label>
                                         </div>
 
-                                        <!-- Logística y Tipo de Entrega (Determinado por la Categoría) -->
-                                        <div id="card-tipo-logistica"
-                                            class="p-3 rounded-xl border {{ ($esServicio ?? false) ? 'border-blue-200 dark:border-blue-800/60 bg-blue-50/50 dark:bg-blue-950/20' : 'border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent' }} transition-all">
-                                            <div class="flex items-start gap-2.5">
-                                                <div id="tipo-logistica-icono-wrap"
-                                                    class="w-7 h-7 rounded-lg {{ ($esServicio ?? false) ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300' : 'bg-slate-200/70 dark:bg-gray-700 text-slate-600 dark:text-slate-300' }} flex items-center justify-center shrink-0 mt-0.5">
-                                                    <span id="tipo-logistica-icono"
-                                                        class="material-symbols-outlined text-[16px]">{{ ($esServicio ?? false) ? 'local_shipping' : 'inventory_2' }}</span>
-                                                </div>
-                                                <div class="min-w-0 flex-1">
-                                                    <div class="flex items-center justify-between gap-1">
-                                                        <span id="tipo-logistica-titulo"
-                                                            class="text-xs font-bold text-slate-900 dark:text-white">
-                                                            {{ ($esServicio ?? false) ? 'Servicio / Intangible' : 'Producto Físico' }}
-                                                        </span>
-                                                        <span id="tipo-logistica-badge"
-                                                            class="px-2 py-0.5 rounded-full text-[9px] font-bold {{ ($esServicio ?? false) ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-slate-200 text-slate-700 dark:bg-gray-700 dark:text-slate-300' }}">
-                                                            {{ ($esServicio ?? false) ? 'Exento de Envío' : 'Con Flete' }}
-                                                        </span>
-                                                    </div>
-                                                    <p id="tipo-logistica-desc"
-                                                        class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
-                                                        {{ ($esServicio ?? false)
-                                                            ? 'Exento de cobro de flete físico (heredado de su categoría).'
-                                                            : 'Aplica cobro de flete y despacho logístico según su categoría.' }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -692,7 +663,6 @@
                                             <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-950'} truncate">${cat.nombre}</div>
                                             ${esServicio ? '<span class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 shrink-0">Servicio</span>' : ''}
                                         </div>
-                                        ${esServicio ? '<div class="text-[10px] text-blue-600 dark:text-blue-400 flex items-center gap-0.5 mt-0.5"><span class="material-symbols-outlined text-[12px]">local_shipping</span> Exento de flete físico</div>' : ''}
                                     </div>
                                 </div>
                                 ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
@@ -761,13 +731,6 @@
             const displayBadgeServicio = document.getElementById('display-categoria-badge-servicio');
             const headerBadgeServicio = document.getElementById('header-badge-servicio');
 
-            const cardTipoLogistica = document.getElementById('card-tipo-logistica');
-            const tipoLogisticaIconoWrap = document.getElementById('tipo-logistica-icono-wrap');
-            const tipoLogisticaIcono = document.getElementById('tipo-logistica-icono');
-            const tipoLogisticaTitulo = document.getElementById('tipo-logistica-titulo');
-            const tipoLogisticaBadge = document.getElementById('tipo-logistica-badge');
-            const tipoLogisticaDesc = document.getElementById('tipo-logistica-desc');
-
             const idStr = (id || '').toString().trim();
 
             if (!idStr) {
@@ -775,12 +738,6 @@
                 if (btnAbrir) btnAbrir.classList.remove('hidden');
                 if (displayBadgeServicio) displayBadgeServicio.classList.add('hidden'), displayBadgeServicio.classList.remove('inline-flex');
                 if (headerBadgeServicio) headerBadgeServicio.classList.add('hidden'), headerBadgeServicio.classList.remove('inline-flex');
-                if (tipoLogisticaTitulo) tipoLogisticaTitulo.textContent = 'Sin Categoría';
-                if (tipoLogisticaBadge) {
-                    tipoLogisticaBadge.textContent = 'Pendiente';
-                    tipoLogisticaBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-200 text-slate-700 dark:bg-gray-700 dark:text-slate-300';
-                }
-                if (tipoLogisticaDesc) tipoLogisticaDesc.textContent = 'Selecciona una categoría para definir la logística de flete.';
                 return;
             }
 
@@ -815,49 +772,6 @@
                 } else {
                     headerBadgeServicio.classList.add('hidden');
                     headerBadgeServicio.classList.remove('inline-flex');
-                }
-            }
-
-            // Tarjeta de estado de logística en la columna lateral
-            if (cardTipoLogistica) {
-                if (esServicio) {
-                    cardTipoLogistica.className = 'p-3 rounded-xl border border-blue-200 dark:border-blue-800/60 bg-blue-50/50 dark:bg-blue-950/20 transition-all';
-                } else {
-                    cardTipoLogistica.className = 'p-3 rounded-xl border border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent transition-all';
-                }
-            }
-
-            if (tipoLogisticaTitulo) {
-                if (esServicio) {
-                    tipoLogisticaTitulo.textContent = 'Servicio / Intangible';
-                    if (tipoLogisticaDesc) {
-                        tipoLogisticaDesc.textContent = 'Exento de cobro de flete físico (heredado de su categoría).';
-                    }
-                    if (tipoLogisticaBadge) {
-                        tipoLogisticaBadge.textContent = 'Exento de Envío';
-                        tipoLogisticaBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300';
-                    }
-                    if (tipoLogisticaIconoWrap) {
-                        tipoLogisticaIconoWrap.className = 'w-7 h-7 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 flex items-center justify-center shrink-0 mt-0.5';
-                    }
-                    if (tipoLogisticaIcono) {
-                        tipoLogisticaIcono.textContent = 'local_shipping';
-                    }
-                } else {
-                    tipoLogisticaTitulo.textContent = 'Producto Físico';
-                    if (tipoLogisticaDesc) {
-                        tipoLogisticaDesc.textContent = 'Aplica cobro de flete y despacho logístico según su categoría.';
-                    }
-                    if (tipoLogisticaBadge) {
-                        tipoLogisticaBadge.textContent = 'Con Flete';
-                        tipoLogisticaBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-200 text-slate-700 dark:bg-gray-700 dark:text-slate-300';
-                    }
-                    if (tipoLogisticaIconoWrap) {
-                        tipoLogisticaIconoWrap.className = 'w-7 h-7 rounded-lg bg-slate-200/70 dark:bg-gray-700 text-slate-600 dark:text-slate-300 flex items-center justify-center shrink-0 mt-0.5';
-                    }
-                    if (tipoLogisticaIcono) {
-                        tipoLogisticaIcono.textContent = 'inventory_2';
-                    }
                 }
             }
 
