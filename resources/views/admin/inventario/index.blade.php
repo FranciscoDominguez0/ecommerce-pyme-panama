@@ -161,7 +161,7 @@
                     </div>
                     {{-- Tipo --}}
                     <select name="tipo" x-on:change="autoSubmit()"
-                            class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#121415] text-slate-700 dark:text-slate-300 focus:border-slate-400 focus:ring-0 outline-none cursor-pointer">
+                            class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#181a1b] text-slate-700 dark:text-slate-200 focus:border-slate-400 focus:ring-0 outline-none cursor-pointer">
                         <option value="">Todos los tipos</option>
                         <option value="entrada" {{ request('tipo') === 'entrada' ? 'selected' : '' }}>Entradas</option>
                         <option value="salida"  {{ request('tipo') === 'salida'  ? 'selected' : '' }}>Salidas</option>
@@ -304,7 +304,7 @@
                                class="bg-transparent border-none focus:ring-0 text-xs text-slate-700 dark:text-slate-300 w-full p-0 placeholder-slate-400 dark:placeholder-gray-500">
                     </div>
                     <select name="categoria" x-on:change="autoSubmit()"
-                            class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#121415] text-slate-700 dark:text-slate-300 focus:border-slate-400 focus:ring-0 outline-none cursor-pointer">
+                            class="text-xs border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 bg-white dark:bg-[#181a1b] text-slate-700 dark:text-slate-200 focus:border-slate-400 focus:ring-0 outline-none cursor-pointer">
                         <option value="">Todas las categorías</option>
                         @foreach($categorias as $cat)
                             <option value="{{ $cat->id }}" {{ request('categoria') == $cat->id ? 'selected' : '' }}>{{ $cat->nombre }}</option>

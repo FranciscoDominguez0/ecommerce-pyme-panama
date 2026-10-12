@@ -26,6 +26,22 @@
     }
     html.dark {
         --admin-bg: var(--admin-bg-dark);
+        color-scheme: dark;
+    }
+    html.light {
+        color-scheme: light;
+    }
+
+    /* Soporte universal para elementos select y option en Modo Oscuro con fondo negro del tema */
+    html.dark select {
+        color-scheme: dark !important;
+        background-color: #181a1b !important;
+        color: #f8fafc !important;
+    }
+    html.dark select option,
+    html.dark select optgroup {
+        background-color: #181a1b !important;
+        color: #f8fafc !important;
     }
 
     ::-webkit-scrollbar { width: 4px; height: 4px; }

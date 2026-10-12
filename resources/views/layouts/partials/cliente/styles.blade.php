@@ -2,6 +2,22 @@
     html {
         scroll-behavior: smooth;
     }
+    html.dark {
+        color-scheme: dark;
+    }
+    html.light {
+        color-scheme: light;
+    }
+    html.dark select {
+        color-scheme: dark !important;
+        background-color: #181a1b !important;
+        color: #f8fafc !important;
+    }
+    html.dark select option,
+    html.dark select optgroup {
+        background-color: #181a1b !important;
+        color: #f8fafc !important;
+    }
 
     body {
         font-family: 'Figtree', sans-serif;

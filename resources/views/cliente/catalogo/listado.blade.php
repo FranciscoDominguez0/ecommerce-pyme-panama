@@ -314,7 +314,7 @@
 
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-slate-400">Ordenar por:</span>
-                        <select onchange="window.location.href = this.value" class="text-xs rounded-xl border-slate-200 py-1.5 px-3 bg-slate-50 font-medium text-slate-700">
+                        <select onchange="window.location.href = this.value" class="text-xs rounded-xl border border-slate-200 dark:border-gray-700 py-1.5 px-3 bg-slate-50 dark:bg-[#181a1b] font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'relevancia'])) }}" @selected($orden === 'relevancia')>Relevancia / Destacados</option>
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'precio_asc'])) }}" @selected($orden === 'precio_asc')>Menor Precio</option>
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'precio_desc'])) }}" @selected($orden === 'precio_desc')>Mayor Precio</option>

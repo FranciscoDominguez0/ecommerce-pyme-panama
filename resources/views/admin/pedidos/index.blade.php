@@ -15,7 +15,7 @@
         <form action="{{ route('admin.pedidos.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4" x-data="adminAutoFilter">
             <div class="w-full sm:w-64">
                 <label for="estado" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Filtrar por Estado</label>
-                <select name="estado" id="estado" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" x-on:change="autoSubmit()">
+                <select name="estado" id="estado" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:bg-[#181a1b] dark:text-white py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 cursor-pointer" x-on:change="autoSubmit()">
                     <option value="todos" {{ request('estado') === 'todos' ? 'selected' : '' }}>Todos los pedidos</option>
                     <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
                     <option value="pago_confirmado" {{ request('estado') === 'pago_confirmado' ? 'selected' : '' }}>Pago Confirmado</option>

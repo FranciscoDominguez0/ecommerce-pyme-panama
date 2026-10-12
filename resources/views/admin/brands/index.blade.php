@@ -54,7 +54,7 @@
                 <div class="relative w-full sm:w-44">
                     <select name="verificada" 
                             x-on:change="autoSubmit()" 
-                            class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 dark:text-gray-100 font-medium focus:bg-white dark:bg-[#121415] focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
+                            class="w-full bg-slate-50 dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg pl-3 pr-8 py-2 text-xs text-slate-800 dark:text-slate-100 font-medium focus:border-slate-400 focus:ring-2 focus:ring-slate-900/5 transition-all outline-none appearance-none cursor-pointer">
                         <option value="all" {{ $filtroVerificada === 'all' ? 'selected' : '' }}>Todas (Verificación)</option>
                         <option value="yes" {{ $filtroVerificada === 'yes' ? 'selected' : '' }}>Verificadas (Oficial)</option>
                         <option value="no" {{ $filtroVerificada === 'no' ? 'selected' : '' }}>Sin verificar (Estándar)</option>
