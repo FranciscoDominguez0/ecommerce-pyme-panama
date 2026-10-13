@@ -68,8 +68,8 @@
                         <span class="relative inline-flex items-center justify-center">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ $isVentasActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isVentasActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">shopping_cart</span>
                             <span x-show="totalCount > 0" 
-                                  class="sidebar-collapsed-badge absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 rounded-full bg-[#f43f5e] text-white text-[9px] font-extrabold flex items-center justify-center text-center shadow-[0_0_0_2px_#1F2937]"
-                                  style="{{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" 
+                                  class="sidebar-collapsed-badge absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center text-center shadow-[0_0_0_2px_#1F2937]"
+                                  style="background: #f43f5e !important; color: #ffffff !important; {{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" 
                                   x-text="Math.min(totalCount, 99)">
                                 {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
                             </span>
@@ -79,8 +79,8 @@
                     {{-- Cuando el sidebar está expandido mostramos también el total junto al chevron --}}
                     <div class="sidebar-text flex items-center gap-1.5">
                         <span x-show="totalCount > 0" 
-                              class="w-5 h-5 min-w-[20px] rounded-full bg-[#f43f5e] text-white text-[10px] font-extrabold flex items-center justify-center text-center leading-none"
-                              style="{{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" 
+                              class="w-5 h-5 min-w-[20px] rounded-full bg-rose-500 text-white text-[10px] font-extrabold flex items-center justify-center text-center leading-none shrink-0"
+                              style="background: #f43f5e !important; color: #ffffff !important; {{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" 
                               x-text="Math.min(totalCount, 99)">
                             {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
                         </span>

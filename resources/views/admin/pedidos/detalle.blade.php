@@ -367,36 +367,36 @@
                 
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3 mt-6 border-t border-slate-100 dark:border-gray-700 pt-4">Modalidad de Entrega</h3>
                 @if($metodoEntrega === 'retiro_local')
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3">
-                        <span class="material-symbols-outlined mt-0.5">storefront</span>
+                    <div class="p-3.5 bg-slate-50 dark:bg-gray-800/60 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-gray-700 flex items-start gap-3">
+                        <span class="material-symbols-outlined mt-0.5 text-slate-600 dark:text-slate-400">storefront</span>
                         <div>
-                            <p class="font-bold text-sm">Retiro en Sucursal (PYME PANAMA)</p>
-                            <p class="text-xs mt-0.5 text-emerald-700 dark:text-emerald-500">El cliente pasará a retirar su pedido presencialmente.</p>
+                            <p class="font-bold text-sm text-slate-900 dark:text-white">Retiro en Sucursal (PYME PANAMA)</p>
+                            <p class="text-xs mt-0.5 text-slate-500 dark:text-slate-400">El cliente pasará a retirar su pedido presencialmente.</p>
                         </div>
                     </div>
                 @elseif($metodoEntrega === 'retiro_courier')
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3">
-                        <span class="material-symbols-outlined mt-0.5">local_shipping</span>
+                    <div class="p-3.5 bg-slate-50 dark:bg-gray-800/60 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-gray-700 flex items-start gap-3">
+                        <span class="material-symbols-outlined mt-0.5 text-slate-600 dark:text-slate-400">local_shipping</span>
                         <div>
-                            <p class="font-bold text-sm mb-1.5">Envío por Courier</p>
+                            <p class="font-bold text-sm mb-1.5 text-slate-900 dark:text-white">Envío por Courier</p>
                             @if($sucursal)
-                                <div class="text-xs space-y-1 text-emerald-800 dark:text-emerald-200">
-                                    <p><strong class="font-semibold">Zona del Courier:</strong> {{ $sucursal->zona }}</p>
-                                    <p><strong class="font-semibold">Lugar del Courier:</strong> {{ $sucursal->courier }} {{ $sucursal->sucursal }}</p>
-                                    <p><strong class="font-semibold">Servicio de Courier:</strong> Recoger en Tienda de Courier</p>
-                                    <p><strong class="font-semibold">Costo de Servicio:</strong> ${{ number_format($pedido->costo_envio, 2) }} USD</p>
+                                <div class="text-xs space-y-1.5 text-slate-600 dark:text-slate-300">
+                                    <p><strong class="font-semibold text-slate-800 dark:text-slate-200">Zona del Courier:</strong> {{ $sucursal->zona }}</p>
+                                    <p><strong class="font-semibold text-slate-800 dark:text-slate-200">Lugar del Courier:</strong> {{ $sucursal->courier }} {{ $sucursal->sucursal }}</p>
+                                    <p><strong class="font-semibold text-slate-800 dark:text-slate-200">Servicio de Courier:</strong> Recoger en Tienda de Courier</p>
+                                    <p><strong class="font-semibold text-slate-800 dark:text-slate-200">Costo de Servicio:</strong> ${{ number_format($pedido->costo_envio, 2) }} USD</p>
                                 </div>
                             @else
-                                <p class="text-xs text-emerald-700 dark:text-emerald-300">Sucursal de Courier no especificada.</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Sucursal de Courier no especificada.</p>
                             @endif
                         </div>
                     </div>
                 @elseif($metodoEntrega === 'delivery')
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 rounded-lg border border-emerald-100 dark:border-emerald-500/20 flex items-start gap-3 mb-4">
-                        <span class="material-symbols-outlined mt-0.5">moped</span>
+                    <div class="p-3.5 bg-slate-50 dark:bg-gray-800/60 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-gray-700 flex items-start gap-3 mb-4">
+                        <span class="material-symbols-outlined mt-0.5 text-slate-600 dark:text-slate-400">moped</span>
                         <div>
-                            <p class="font-bold text-sm">Delivery (Casa u Oficina)</p>
-                            <p class="text-xs mt-0.5 text-emerald-700 dark:text-emerald-500">Despacho a la dirección física indicada.</p>
+                            <p class="font-bold text-sm text-slate-900 dark:text-white">Delivery (Casa u Oficina)</p>
+                            <p class="text-xs mt-0.5 text-slate-500 dark:text-slate-400">Despacho a la dirección física indicada.</p>
                         </div>
                     </div>
                     @if($pedido->direccion)
