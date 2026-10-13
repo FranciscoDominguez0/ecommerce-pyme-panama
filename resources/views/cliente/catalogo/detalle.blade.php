@@ -425,8 +425,22 @@
                                             'atributos' => $items->map(fn($item) => ['clave' => $item['clave'] ?? '', 'valor' => $item['valor'] ?? ''])->toArray()
                                         ];
                                     }
-                                } else {
+                                } elseif (isset($specs[0]['grupo']) && isset($specs[0]['atributos'])) {
                                     $normalizedSpecs = $specs;
+                                } else {
+                                    // Formato asociativo plano clave => valor
+                                    $attrs = [];
+                                    foreach ($specs as $k => $v) {
+                                        if (is_string($v) || is_numeric($v)) {
+                                            $attrs[] = ['clave' => (string) $k, 'valor' => (string) $v];
+                                        }
+                                    }
+                                    if (!empty($attrs)) {
+                                        $normalizedSpecs[] = [
+                                            'grupo' => $producto->es_digital ? 'Detalles del Servicio' : 'Especificaciones Técnicas',
+                                            'atributos' => $attrs
+                                        ];
+                                    }
                                 }
                             }
                         @endphp

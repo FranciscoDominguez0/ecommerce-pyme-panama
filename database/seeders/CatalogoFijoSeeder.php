@@ -232,13 +232,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio profesional de armado de computadoras de oficina. Incluye montaje de placa madre, procesador con disipador, memoria RAM, unidad de almacenamiento y fuente de poder en chasis estándar. Se realiza ordenamiento básico de cableado, actualización a la última versión estable de BIOS y prueba de encendido durante 30 minutos.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 computadora',
-      'Alcance propuesto' => 'Montaje de componentes compatibles para oficina',
-      'Incluye propuesto' => 'Instalación física, conexión de cables y prueba de encendido',
-      'Entrega propuesta' => 'Equipo ensamblado y comprobación básica',
-      'No incluido' => 'Componentes, licencias y instalación de software',
-      'Requisitos' => 'Componentes suministrados o cotizados por separado',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 computadora',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Montaje de componentes compatibles para oficina',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Instalación física, conexión de cables y prueba de encendido',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Equipo ensamblado y comprobación básica',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Componentes, licencias y instalación de software',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Componentes suministrados o cotizados por separado',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -263,13 +298,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Montaje exhaustivo para equipos gamer de alta gama. Incluye instalación de tarjetas gráficas pesadas con soporte anti-sag, configuración de ventiladores ARGB/PWM, optimización de curvas térmicas en BIOS, habilitación de perfiles XMP/EXPO y pruebas de estrés térmico con Cinebench y 3DMark durante 45 minutos.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 PC gamer',
-      'Alcance propuesto' => 'Montaje de CPU, RAM, almacenamiento, GPU y fuente',
-      'Incluye propuesto' => 'Organización de cables y comprobación de temperaturas',
-      'Entrega propuesta' => 'Equipo montado y resultado de pruebas',
-      'No incluido' => 'Componentes, licencias y overclock',
-      'Requisitos' => 'Compatibilidad de gabinete, fuente y refrigeración',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 PC gamer',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Montaje de CPU, RAM, almacenamiento, GPU y fuente',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Organización de cables y comprobación de temperaturas',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Equipo montado y resultado de pruebas',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Componentes, licencias y overclock',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Compatibilidad de gabinete, fuente y refrigeración',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -318,13 +388,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio de ensamblaje artesanal para sistemas con refrigeración líquida custom. Incluye curvado de tubos rígidos o flexibles, purgado del circuito con líquido dieléctrico refrigerante, prueba de presión de aire y prueba de hermeticidad continua de 24 horas para garantizar cero fugas.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 equipo',
-      'Alcance propuesto' => 'Instalación de circuito de refrigeración líquida personalizado',
-      'Incluye propuesto' => 'Montaje y prueba de estanqueidad antes del encendido',
-      'Entrega propuesta' => 'Equipo con circuito verificado',
-      'No incluido' => 'Bloques, tubos, bomba, radiadores y refrigerante',
-      'Requisitos' => 'Inspección y cotización previa',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación de circuito de refrigeración líquida personalizado',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Montaje y prueba de estanqueidad antes del encendido',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Equipo con circuito verificado',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Bloques, tubos, bomba, radiadores y refrigerante',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Inspección y cotización previa',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -349,13 +454,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Traspaso integral de tus componentes existentes a un nuevo chasis o gabinete. Desmontamos pieza por pieza con protección antiestática, limpiamos el polvo acumulado y reconstruimos el sistema en el nuevo case asegurando un flujo de aire óptimo y cableado limpio.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 equipo',
-      'Alcance propuesto' => 'Traslado de componentes a otro gabinete',
-      'Incluye propuesto' => 'Desmontaje, montaje y conexión',
-      'Entrega propuesta' => 'Encendido y comprobación funcional',
-      'No incluido' => 'Gabinete, repuestos y reparación de componentes',
-      'Requisitos' => 'Gabinete compatible',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Traslado de componentes a otro gabinete',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Desmontaje, montaje y conexión',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Encendido y comprobación funcional',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Gabinete, repuestos y reparación de componentes',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Gabinete compatible',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -380,13 +520,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Upgrade técnico de componentes para potenciar tu computadora. Instalamos la pieza seleccionada (tarjeta gráfica, fuente modular, kit de RAM, SSD M.2 o CPU), actualizamos la BIOS si la nueva generación lo requiere e instalamos los últimos controladores oficiales verificados.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 equipo',
-      'Alcance propuesto' => 'Instalación de componentes de actualización',
-      'Incluye propuesto' => 'Revisión de compatibilidad y comprobación de detección',
-      'Entrega propuesta' => 'Equipo con hardware instalado',
-      'No incluido' => 'Componentes, migración de datos y licencias',
-      'Requisitos' => 'Diagnóstico de compatibilidad previo',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación de componentes de actualización',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Revisión de compatibilidad y comprobación de detección',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Equipo con hardware instalado',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Componentes, migración de datos y licencias',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Diagnóstico de compatibilidad previo',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -411,13 +586,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Limpieza interna profunda para laptops de uso personal o empresarial. Desarmamos el módulo térmico, retiramos pelusas y polvo del extractor, aplicamos pasta térmica de alta conductividad y lubricamos los ventiladores para restaurar un funcionamiento silencioso.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 laptop',
-      'Alcance propuesto' => 'Limpieza interna accesible y revisión de ventilación',
-      'Incluye propuesto' => 'Inspección y prueba básica',
-      'Entrega propuesta' => 'Registro de estado y recomendaciones',
-      'No incluido' => 'Repuestos y cambio de pasta/pads salvo cotización',
-      'Requisitos' => 'Evaluar posibilidad de desmontaje',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 laptop',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Limpieza interna accesible y revisión de ventilación',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Inspección y prueba básica',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Registro de estado y recomendaciones',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Repuestos y cambio de pasta/pads salvo cotización',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Evaluar posibilidad de desmontaje',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -442,13 +652,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Mantenimiento exhaustivo diseñado para computadoras de alto consumo térmico. Retiramos tarjeta gráfica y radiadores, limpiamos filtros magnéticos, aplicamos solvente dieléctrico en ventiladores y renovamos los compuestos térmicos en CPU y GPU.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 PC gamer',
-      'Alcance propuesto' => 'Limpieza de gabinete, filtros y ventiladores',
-      'Incluye propuesto' => 'Inspección de cableado y temperatura',
-      'Entrega propuesta' => 'Equipo limpio y comprobación funcional',
-      'No incluido' => 'Reparación, repuestos y circuito líquido personalizado',
-      'Requisitos' => 'Inspección previa',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 PC gamer',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Limpieza de gabinete, filtros y ventiladores',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Inspección de cableado y temperatura',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Equipo limpio y comprobación funcional',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Reparación, repuestos y circuito líquido personalizado',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Inspección previa',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -473,13 +718,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Reemplazo de pads térmicos de memoria VRAM y VRM con almohadillas de alta conductividad, además de aplicación fresca de pasta térmica en el procesador. Ideal para tarjetas gráficas y consolas con más de 2 años de uso intensivo.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 equipo o componente por cotizar',
-      'Alcance propuesto' => 'Sustitución de pasta térmica y pads cuando corresponda',
-      'Incluye propuesto' => 'Limpieza de superficies y comprobación de temperaturas',
-      'Entrega propuesta' => 'Registro de material instalado',
-      'No incluido' => 'Repuestos y pads especiales salvo acuerdo',
-      'Requisitos' => 'Espesor de pads y método adecuados para el equipo',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo o componente por cotizar',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Sustitución de pasta térmica y pads cuando corresponda',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Limpieza de superficies y comprobación de temperaturas',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Registro de material instalado',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Repuestos y pads especiales salvo acuerdo',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Espesor de pads y método adecuados para el equipo',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -504,13 +784,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio para infraestructura empresarial. Limpieza técnica en seco de chasis de servidor tipo rack o torre, revisión de sensores térmicos, verificación del estado de salud de discos en RAID y limpieza de bahías hot-swap.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial programado',
-      'Unidad' => '1 servidor/rack por definir',
-      'Alcance propuesto' => 'Limpieza y revisión preventiva de ventilación',
-      'Incluye propuesto' => 'Inspección de cables y registro de hallazgos',
-      'Entrega propuesta' => 'Informe de mantenimiento',
-      'No incluido' => 'Repuestos, migración y recuperación de datos',
-      'Requisitos' => 'Ventana de mantenimiento y alcance por servidor',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial programado',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 servidor/rack por definir',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Limpieza y revisión preventiva de ventilación',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Inspección de cables y registro de hallazgos',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Informe de mantenimiento',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Repuestos, migración y recuperación de datos',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Ventana de mantenimiento y alcance por servidor',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -535,13 +850,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Tratamiento de estética y desinfección para tus herramientas diarias de trabajo o juego. Limpiamos a fondo el teclado mecánico desmontando teclas, lavamos mousepads con productos que preservan el deslizamiento y limpiamos monitores sin rayar el tratamiento antirreflejo.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 conjunto de periféricos definido en orden',
-      'Alcance propuesto' => 'Limpieza superficial de teclado, mouse y superficies',
-      'Incluye propuesto' => 'Métodos compatibles con materiales',
-      'Entrega propuesta' => 'Periféricos limpios y comprobación básica',
-      'No incluido' => 'Reparación ni garantía de esterilización',
-      'Requisitos' => 'Identificación de materiales y estado previo',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 conjunto de periféricos definido en orden',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Limpieza superficial de teclado, mouse y superficies',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Métodos compatibles con materiales',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Periféricos limpios y comprobación básica',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Reparación ni garantía de esterilización',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Identificación de materiales y estado previo',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -566,13 +916,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Configuración profesional de tu router doméstico o de oficina. Ajustamos los canales de radiofrecuencia menos congestionados de tu zona, activamos seguridad WPA3, configuramos red de invitados aislada y optimizamos las reglas de QoS para streaming y videojuegos.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial o remoto según equipo',
-      'Unidad' => '1 router',
-      'Alcance propuesto' => 'Configuración WAN y red Wi-Fi',
-      'Incluye propuesto' => 'SSID, contraseña y pruebas de conectividad',
-      'Entrega propuesta' => 'Configuración y credenciales al propietario',
-      'No incluido' => 'Router, cableado y contratación de Internet',
-      'Requisitos' => 'Acceso autorizado al equipo y servicio activo',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial o remoto según equipo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 router',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Configuración WAN y red Wi-Fi',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'SSID, contraseña y pruebas de conectividad',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Configuración y credenciales al propietario',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Router, cableado y contratación de Internet',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Acceso autorizado al equipo y servicio activo',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -597,13 +982,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Instalación de punto de red ethernet cableado para oficinas o casas. Incluye cable de categoría 6 100% cobre certificado, jacks modulares hembra tipo keystone, faceplate de pared y certificación de continuidad.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial',
-      'Unidad' => '1 punto de red',
-      'Alcance propuesto' => 'Tendido y terminación de cable Ethernet',
-      'Incluye propuesto' => 'Prueba básica de continuidad y enlace',
-      'Entrega propuesta' => 'Punto identificado',
-      'No incluido' => 'Cable, canalización, obra civil y certificación con equipo especializado salvo cotización',
-      'Requisitos' => 'Definir metros, categoría y recorrido por punto',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 punto de red',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Tendido y terminación de cable Ethernet',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Prueba básica de continuidad y enlace',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Punto identificado',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Cable, canalización, obra civil y certificación con equipo especializado salvo cotización',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Definir metros, categoría y recorrido por punto',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -652,13 +1072,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Despliegue de sistemas Wi-Fi en malla (Mesh). Realizamos mapa de calor previo para definir la ubicación de cada nodo, configuramos backhaul cableado o inalámbrico dedicado y probamos roaming transparente en todo el perímetro.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial',
-      'Unidad' => '1 sistema mesh, número de nodos por definir',
-      'Alcance propuesto' => 'Instalación y ubicación de nodos',
-      'Incluye propuesto' => 'Configuración de SSID y prueba de cobertura',
-      'Entrega propuesta' => 'Red configurada',
-      'No incluido' => 'Nodos, cableado y garantía de velocidad de Internet',
-      'Requisitos' => 'Plano o inspección y acceso al router principal',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 sistema mesh, número de nodos por definir',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación y ubicación de nodos',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Configuración de SSID y prueba de cobertura',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Red configurada',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Nodos, cableado y garantía de velocidad de Internet',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Plano o inspección y acceso al router principal',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -683,13 +1138,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio de ingeniería de red para empresas y locales comerciales. Configuramos switches L2/L3 con segmentación de VLAN para separar terminales de venta (POS), computadoras de oficina, cámaras IP de seguridad y Wi-Fi público de clientes.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial o remota',
-      'Unidad' => '1 switch',
-      'Alcance propuesto' => 'Configuración de VLAN y puertos',
-      'Incluye propuesto' => 'Acceso de gestión y comprobación de segmentación',
-      'Entrega propuesta' => 'Respaldo de configuración y mapa de puertos',
-      'No incluido' => 'Switch, licencias y cambios de red fuera del alcance',
-      'Requisitos' => 'Plan de VLAN y acceso administrativo autorizado',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial o remota',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 switch',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Configuración de VLAN y puertos',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Acceso de gestión y comprobación de segmentación',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Respaldo de configuración y mapa de puertos',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Switch, licencias y cambios de red fuera del alcance',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Plan de VLAN y acceso administrativo autorizado',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -714,13 +1204,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Evaluación de vulnerabilidades en la red corporativa. Escaneamos dispositivos conectados, verificamos puertos expuestos hacia Internet sin cifrar, cerramos accesos Telnet o HTTP y entregamos un informe con recomendaciones de blindaje de seguridad.',
     'specs' => 
     array (
-      'Modalidad' => 'Evaluación autorizada',
-      'Unidad' => '1 red local con alcance definido',
-      'Alcance propuesto' => 'Revisión de configuración de red y firewall',
-      'Incluye propuesto' => 'Inventario básico y recomendaciones',
-      'Entrega propuesta' => 'Informe de hallazgos',
-      'No incluido' => 'Pruebas intrusivas, certificación ni correcciones extensas salvo contrato',
-      'Requisitos' => 'Definir equipos, permisos y ventana de revisión',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Evaluación autorizada',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 red local con alcance definido',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Revisión de configuración de red y firewall',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Inventario básico y recomendaciones',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Informe de hallazgos',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Pruebas intrusivas, certificación ni correcciones extensas salvo contrato',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Definir equipos, permisos y ventana de revisión',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -745,13 +1270,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Rescate de documentos, fotos y carpetas en discos HDD con fallos lógicos o sectores dañados. Empleamos herramientas forenses de clonado bit a bit para no fatigar el disco y recomponer la estructura de archivos en un medio de almacenamiento seguro.',
     'specs' => 
     array (
-      'Modalidad' => 'Diagnóstico en taller',
-      'Unidad' => '1 HDD',
-      'Alcance propuesto' => 'Recuperación de nivel lógico o accesible sin apertura del disco',
-      'Incluye propuesto' => 'Evaluación y copia de datos recuperables',
-      'Entrega propuesta' => 'Listado de archivos recuperados',
-      'No incluido' => 'Laboratorio especializado, apertura en sala limpia y medio destino',
-      'Requisitos' => 'No seguir usando el disco y evaluación previa',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Diagnóstico en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 HDD',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Recuperación de nivel lógico o accesible sin apertura del disco',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Evaluación y copia de datos recuperables',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Listado de archivos recuperados',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Laboratorio especializado, apertura en sala limpia y medio destino',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'No seguir usando el disco y evaluación previa',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -776,13 +1336,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Diagnóstico y extracción de información en discos SSD M.2 y SATA con tabla de partición GPT perdida, formato involuntario o corrupción del sistema de archivos NTFS/APFS/EXT4.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 SSD NVMe',
-      'Alcance propuesto' => 'Intento de recuperación ante fallo lógico',
-      'Incluye propuesto' => 'Diagnóstico y extracción de datos recuperables',
-      'Entrega propuesta' => 'Archivos recuperados al medio acordado',
-      'No incluido' => 'Reparación electrónica, medio destino y recuperación de datos borrados por TRIM',
-      'Requisitos' => 'Acceso autorizado y diagnóstico del SSD',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 SSD NVMe',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Intento de recuperación ante fallo lógico',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Diagnóstico y extracción de datos recuperables',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Archivos recuperados al medio acordado',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Reparación electrónica, medio destino y recuperación de datos borrados por TRIM',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Acceso autorizado y diagnóstico del SSD',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -807,13 +1402,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Solución rápida para memorias flash extraíbles utilizadas en cámaras, celulares o llaves USB que muestran error de lectura o archivos con accesos directos maliciosos.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 memoria USB o tarjeta SD',
-      'Alcance propuesto' => 'Diagnóstico e intento de recuperación lógica',
-      'Incluye propuesto' => 'Copia de archivos recuperables',
-      'Entrega propuesta' => 'Inventario de recuperación',
-      'No incluido' => 'Reparación de chips, medio destino ni laboratorio',
-      'Requisitos' => 'Conservar dispositivo sin nuevas escrituras',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 memoria USB o tarjeta SD',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Diagnóstico e intento de recuperación lógica',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Copia de archivos recuperables',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Inventario de recuperación',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Reparación de chips, medio destino ni laboratorio',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Conservar dispositivo sin nuevas escrituras',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -838,13 +1468,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Copia de seguridad profesional sin perder carpetas personales, perfiles de correo Outlook, favoritos del navegador ni licencias instaladas. Verificamos la integridad de los datos mediante suma de comprobación.',
     'specs' => 
     array (
-      'Modalidad' => 'Configuración de respaldo',
-      'Unidad' => 'Hasta 500 GB de datos',
-      'Alcance propuesto' => 'Organización y copia preventiva',
-      'Incluye propuesto' => 'Configuración de tarea y verificación de restauración de muestra',
-      'Entrega propuesta' => 'Procedimiento de respaldo',
-      'No incluido' => 'Disco, suscripción cloud y seguimiento continuo',
-      'Requisitos' => 'Medio destino y alcance de carpetas acordado',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Configuración de respaldo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => 'Hasta 500 GB de datos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Organización y copia preventiva',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Configuración de tarea y verificación de restauración de muestra',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Procedimiento de respaldo',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Disco, suscripción cloud y seguimiento continuo',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Medio destino y alcance de carpetas acordado',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -869,13 +1534,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Duplicación exacta de tu disco viejo a un nuevo SSD de mayor velocidad o capacidad. Mantiene intactos todos tus programas instalados, configuraciones, contraseñas y archivos sin necesidad de reinstalar desde cero.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 sistema a 1 SSD',
-      'Alcance propuesto' => 'Clonación de disco con sistema operativo',
-      'Incluye propuesto' => 'Prueba de arranque cuando el hardware lo permita',
-      'Entrega propuesta' => 'SSD con clonación verificada',
-      'No incluido' => 'SSD, licencia y recuperación de disco dañado',
-      'Requisitos' => 'Origen legible, capacidad suficiente y compatibilidad',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 sistema a 1 SSD',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Clonación de disco con sistema operativo',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Prueba de arranque cuando el hardware lo permita',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'SSD con clonación verificada',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'SSD, licencia y recuperación de disco dañado',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Origen legible, capacidad suficiente y compatibilidad',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -900,13 +1600,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Reinstalación desde cero de Windows 11 con medios oficiales de Microsoft. Incluye particionado seguro, instalación de controladores oficiales validados por el fabricante del equipo, utilitarios de lectura PDF, descompresores y optimización de arranque.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 equipo',
-      'Alcance propuesto' => 'Instalación limpia de Windows 11',
-      'Incluye propuesto' => 'Controladores y actualizaciones iniciales',
-      'Entrega propuesta' => 'Sistema instalado y prueba básica',
-      'No incluido' => 'Licencia, respaldo y recuperación',
-      'Requisitos' => 'Hardware compatible y autorización para borrar datos',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación limpia de Windows 11',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Controladores y actualizaciones iniciales',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Sistema instalado y prueba básica',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Licencia, respaldo y recuperación',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Hardware compatible y autorización para borrar datos',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -931,13 +1666,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Restauración de fábrica para computadoras MacBook, iMac o Mac mini. Instalamos la última versión oficial compatible de macOS, desvinculamos cuentas anteriores de forma segura y dejamos el equipo listo para su nuevo usuario.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 Mac compatible',
-      'Alcance propuesto' => 'Instalación limpia de macOS compatible',
-      'Incluye propuesto' => 'Configuración inicial y actualizaciones',
-      'Entrega propuesta' => 'Mac con sistema operativo operativo',
-      'No incluido' => 'Respaldo, recuperación y eliminación de bloqueo de activación',
-      'Requisitos' => 'Acceso del propietario y autorización de borrado',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 Mac compatible',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación limpia de macOS compatible',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Configuración inicial y actualizaciones',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Mac con sistema operativo operativo',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Respaldo, recuperación y eliminación de bloqueo de activación',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Acceso del propietario y autorización de borrado',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -962,13 +1732,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Tranquilidad total: respaldamos tus carpetas de Documentos, Escritorio, Descargas y Fotos antes de borrar el disco. Reinstalamos el sistema operativo completamente limpio y regresamos tus archivos a sus ubicaciones originales.',
     'specs' => 
     array (
-      'Modalidad' => 'Servicio en taller',
-      'Unidad' => '1 equipo y hasta 100 GB',
-      'Alcance propuesto' => 'Respaldo de carpetas acordadas e instalación limpia',
-      'Incluye propuesto' => 'Restauración del respaldo y controladores',
-      'Entrega propuesta' => 'Sistema instalado y archivos restaurados',
-      'No incluido' => 'Licencias, recuperación de datos y más de 100 GB',
-      'Requisitos' => 'Inventario del respaldo y autorización de borrado',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Servicio en taller',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo y hasta 100 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Respaldo de carpetas acordadas e instalación limpia',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Restauración del respaldo y controladores',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Sistema instalado y archivos restaurados',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Licencias, recuperación de datos y más de 100 GB',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Inventario del respaldo y autorización de borrado',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -993,13 +1798,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Puesta a punto de programas de ofimática. Instalamos la suite oficial, sincronizamos tus cuentas corporativas de correo con protocolo IMAP o Exchange y configuramos firmas automáticas y plantillas.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial o remoto',
-      'Unidad' => '1 equipo',
-      'Alcance propuesto' => 'Instalación y activación de suite de oficina',
-      'Incluye propuesto' => 'Configuración inicial y prueba de apertura',
-      'Entrega propuesta' => 'Software instalado con licencia del cliente',
-      'No incluido' => 'Compra de licencia o cuenta',
-      'Requisitos' => 'Licencia válida y sistema compatible',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial o remoto',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación y activación de suite de oficina',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Configuración inicial y prueba de apertura',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Software instalado con licencia del cliente',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Compra de licencia o cuenta',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Licencia válida y sistema compatible',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1024,13 +1864,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Limpieza de amenazas informáticas sin formatear. Detectamos y eliminamos troyanos, cryptominers que consumen tu procesador al 100%, adware que abre publicidad no deseada y reparamos el registro de Windows afectado.',
     'specs' => 
     array (
-      'Modalidad' => 'Presencial o remoto',
-      'Unidad' => '1 equipo',
-      'Alcance propuesto' => 'Análisis y eliminación de malware detectable',
-      'Incluye propuesto' => 'Actualización y recomendaciones',
-      'Entrega propuesta' => 'Informe de detecciones y resultado',
-      'No incluido' => 'Recuperación de archivos cifrados, licencias ni reparación de hardware',
-      'Requisitos' => 'Acceso autorizado y evaluar reinstalación si es necesaria',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Presencial o remoto',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 equipo',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Análisis y eliminación de malware detectable',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Actualización y recomendaciones',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Informe de detecciones y resultado',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Recuperación de archivos cifrados, licencias ni reparación de hardware',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Acceso autorizado y evaluar reinstalación si es necesaria',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1055,13 +1930,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Un especialista de PayMe Panamá visita tu residencia para atender fallas de conectividad, configuración de impresoras en red, lentitud en computadoras y asesoría técnica directa con atención personalizada.',
     'specs' => 
     array (
-      'Modalidad' => 'A domicilio',
-      'Duración' => '1 hora',
-      'Alcance propuesto' => 'Diagnóstico y asistencia informática residencial',
-      'Incluye propuesto' => 'Soluciones básicas dentro del tiempo contratado',
-      'Entrega propuesta' => 'Registro del trabajo y recomendaciones',
-      'No incluido' => 'Repuestos y tiempo adicional',
-      'Requisitos' => 'Definir zona, traslado y disponibilidad',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'A domicilio',
+          ),
+          1 => 
+          array (
+            'clave' => 'Duración',
+            'valor' => '1 hora',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Diagnóstico y asistencia informática residencial',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Soluciones básicas dentro del tiempo contratado',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Registro del trabajo y recomendaciones',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Repuestos y tiempo adicional',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Definir zona, traslado y disponibilidad',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1086,13 +1996,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Diagnóstico profesional para oficinas y comercios de hasta 15 equipos. Evaluamos el estado operativo del parque informático, la velocidad de la red local, el estado de respaldos y elaboramos un plan de mejoras prioritarias.',
     'specs' => 
     array (
-      'Modalidad' => 'Visita empresarial',
-      'Unidad' => '1 visita de diagnóstico',
-      'Alcance propuesto' => 'Inspección de equipos y necesidades de la PyME',
-      'Incluye propuesto' => 'Diagnóstico inicial',
-      'Entrega propuesta' => 'Informe y cotización de solución',
-      'No incluido' => 'Repuestos, reparaciones y implementación',
-      'Requisitos' => 'Definir cantidad de equipos, duración y ubicación',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Visita empresarial',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 visita de diagnóstico',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Inspección de equipos y necesidades de la PyME',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Diagnóstico inicial',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Informe y cotización de solución',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Repuestos, reparaciones y implementación',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Definir cantidad de equipos, duración y ubicación',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1117,13 +2062,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Automatiza tu hogar sin complicaciones. Configuramos asistentes inteligentes, asociamos luces inteligentes, enchufes y programamos rutinas de encendido y apagado para tu comodidad.',
     'specs' => 
     array (
-      'Modalidad' => 'A domicilio',
-      'Unidad' => 'Dispositivos por definir',
-      'Alcance propuesto' => 'Instalación y conexión de equipos de hogar inteligente',
-      'Incluye propuesto' => 'Configuración en aplicaciones compatibles',
-      'Entrega propuesta' => 'Prueba funcional y explicación de uso',
-      'No incluido' => 'Dispositivos, instalación eléctrica y suscripciones',
-      'Requisitos' => 'Red Wi-Fi compatible y cuentas del propietario',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'A domicilio',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => 'Dispositivos por definir',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Instalación y conexión de equipos de hogar inteligente',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Configuración en aplicaciones compatibles',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Prueba funcional y explicación de uso',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Dispositivos, instalación eléctrica y suscripciones',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Red Wi-Fi compatible y cuentas del propietario',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1148,14 +2128,53 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Atención ágil sin esperas. Conexión cifrada directa a tu pantalla con tu autorización para corregir problemas de drivers, instalación de programas, errores de certificados o configuración de impresoras USB.',
     'specs' => 
     array (
-      'Modalidad' => 'Remota',
-      'Duración' => '45 minutos',
-      'Alcance propuesto' => 'Diagnóstico y asistencia mediante sesión autorizada',
-      'Incluye propuesto' => 'Configuraciones y soluciones dentro del tiempo contratado',
-      'Entrega propuesta' => 'Registro de acciones',
-      'No incluido' => 'Reparación física, licencias y tiempo adicional',
-      'Requisitos' => 'Internet estable y acceso remoto autorizado',
-      'Disponibilidad' => 'Según agenda, no prometer atención inmediata sin horario definido',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Remota',
+          ),
+          1 => 
+          array (
+            'clave' => 'Duración',
+            'valor' => '45 minutos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Diagnóstico y asistencia mediante sesión autorizada',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Configuraciones y soluciones dentro del tiempo contratado',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Registro de acciones',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Reparación física, licencias y tiempo adicional',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Internet estable y acceso remoto autorizado',
+          ),
+          7 => 
+          array (
+            'clave' => 'Disponibilidad',
+            'valor' => 'Según agenda, no prometer atención inmediata sin horario definido',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1180,13 +2199,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Sesión de consultoría 1 a 1 de 45 minutos. Analizamos tus necesidades reales de trabajo, estudio o gaming, comparamos opciones de mercado y te entregamos una lista de compras con los mejores precios y compatibilidad garantizada.',
     'specs' => 
     array (
-      'Modalidad' => 'Asesoría presencial o remota',
-      'Unidad' => '1 sesión, duración por definir',
-      'Alcance propuesto' => 'Evaluación de necesidades, presupuesto y compatibilidad',
-      'Incluye propuesto' => 'Comparación de opciones',
-      'Entrega propuesta' => 'Recomendación o propuesta de compra',
-      'No incluido' => 'Productos y descuentos de terceros',
-      'Requisitos' => 'Definir uso y presupuesto',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Modalidad',
+            'valor' => 'Asesoría presencial o remota',
+          ),
+          1 => 
+          array (
+            'clave' => 'Unidad',
+            'valor' => '1 sesión, duración por definir',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alcance propuesto',
+            'valor' => 'Evaluación de necesidades, presupuesto y compatibilidad',
+          ),
+          3 => 
+          array (
+            'clave' => 'Incluye propuesto',
+            'valor' => 'Comparación de opciones',
+          ),
+          4 => 
+          array (
+            'clave' => 'Entrega propuesta',
+            'valor' => 'Recomendación o propuesta de compra',
+          ),
+          5 => 
+          array (
+            'clave' => 'No incluido',
+            'valor' => 'Productos y descuentos de terceros',
+          ),
+          6 => 
+          array (
+            'clave' => 'Requisitos',
+            'valor' => 'Definir uso y presupuesto',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1211,13 +2265,48 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Licencia genuina de Microsoft 365 para un usuario. Utilizable en hasta 5 dispositivos simultáneamente (PC, Mac, iPhone, Android). Incluye las versiones premium de las apps de Office siempre actualizadas y 1.000 GB de almacenamiento seguro en OneDrive.',
     'specs' => 
     array (
-      'Tipo' => 'Suscripción digital',
-      'Usuarios' => '1',
-      'Dispositivos' => 'Inicio de sesión en hasta 5 simultáneamente',
-      'Nube' => '1 TB OneDrive',
-      'Aplicaciones' => 'Word, Excel, PowerPoint y otras según plataforma',
-      'Compatibilidad' => 'PC, Mac, teléfonos y tabletas',
-      'Características' => 'Productividad y seguridad según plan vigente',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Suscripción digital',
+          ),
+          1 => 
+          array (
+            'clave' => 'Usuarios',
+            'valor' => '1',
+          ),
+          2 => 
+          array (
+            'clave' => 'Dispositivos',
+            'valor' => 'Inicio de sesión en hasta 5 simultáneamente',
+          ),
+          3 => 
+          array (
+            'clave' => 'Nube',
+            'valor' => '1 TB OneDrive',
+          ),
+          4 => 
+          array (
+            'clave' => 'Aplicaciones',
+            'valor' => 'Word, Excel, PowerPoint y otras según plataforma',
+          ),
+          5 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'PC, Mac, teléfonos y tabletas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Productividad y seguridad según plan vigente',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1266,12 +2355,43 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Clave original de producto para Windows 11 Profesional. Se vincula permanentemente a la placa madre de tu equipo. Habilita cifrado de disco BitLocker, virtualización Hyper-V y conexión por Escritorio Remoto.',
     'specs' => 
     array (
-      'Tipo' => 'Licencia OEM, no Retail',
-      'Edición' => 'Windows 11 Pro',
-      'Equipos' => '1 equipo conforme a términos OEM',
-      'Entrega' => 'Clave/licencia digital según canal autorizado',
-      'Activación' => 'Conexión a Internet y hardware compatible',
-      'Características' => 'Funciones Pro como BitLocker, unión a dominio y host de Escritorio remoto',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Licencia OEM, no Retail',
+          ),
+          1 => 
+          array (
+            'clave' => 'Edición',
+            'valor' => 'Windows 11 Pro',
+          ),
+          2 => 
+          array (
+            'clave' => 'Equipos',
+            'valor' => '1 equipo conforme a términos OEM',
+          ),
+          3 => 
+          array (
+            'clave' => 'Entrega',
+            'valor' => 'Clave/licencia digital según canal autorizado',
+          ),
+          4 => 
+          array (
+            'clave' => 'Activación',
+            'valor' => 'Conexión a Internet y hardware compatible',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Funciones Pro como BitLocker, unión a dominio y host de Escritorio remoto',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1296,12 +2416,43 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Plan completo con más de 20 herramientas de creación digital de Adobe. Incluye Photoshop, Illustrator, InDesign, Premiere Pro, After Effects, Lightroom, tipografías de Adobe Fonts y 100GB de almacenamiento en la nube.',
     'specs' => 
     array (
-      'Tipo' => 'Suscripción digital',
-      'Usuario' => 'Individual de referencia',
-      'Aplicaciones' => 'Suite Creative Cloud según plan',
-      'Compatibilidad' => 'Windows/macOS, requisitos distintos por aplicación',
-      'Activación' => 'Cuenta Adobe y conexión a Internet',
-      'Características' => 'Herramientas de diseño, fotografía, video y documentos',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Suscripción digital',
+          ),
+          1 => 
+          array (
+            'clave' => 'Usuario',
+            'valor' => 'Individual de referencia',
+          ),
+          2 => 
+          array (
+            'clave' => 'Aplicaciones',
+            'valor' => 'Suite Creative Cloud según plan',
+          ),
+          3 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'Windows/macOS, requisitos distintos por aplicación',
+          ),
+          4 => 
+          array (
+            'clave' => 'Activación',
+            'valor' => 'Cuenta Adobe y conexión a Internet',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Herramientas de diseño, fotografía, video y documentos',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1326,12 +2477,43 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Solución integral de ciberseguridad para tu equipo personal o laboral. Protege tus transacciones bancarias en un navegador aislado, bloquea páginas de phishing, administra tus contraseñas y frena ataques de ransomware en tiempo real.',
     'specs' => 
     array (
-      'Tipo' => 'Licencia de seguridad digital',
-      'Producto' => 'Kaspersky Total Security',
-      'Funciones de la edición' => 'Antimalware y herramientas de seguridad según versión',
-      'Activación' => 'Cuenta y clave válida para la región',
-      'Dispositivos' => 'No indicados en la lista',
-      'Duración' => 'No indicada en la lista',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Licencia de seguridad digital',
+          ),
+          1 => 
+          array (
+            'clave' => 'Producto',
+            'valor' => 'Kaspersky Total Security',
+          ),
+          2 => 
+          array (
+            'clave' => 'Funciones de la edición',
+            'valor' => 'Antimalware y herramientas de seguridad según versión',
+          ),
+          3 => 
+          array (
+            'clave' => 'Activación',
+            'valor' => 'Cuenta y clave válida para la región',
+          ),
+          4 => 
+          array (
+            'clave' => 'Dispositivos',
+            'valor' => 'No indicados en la lista',
+          ),
+          5 => 
+          array (
+            'clave' => 'Duración',
+            'valor' => 'No indicada en la lista',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1380,12 +2562,43 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Protección multicapa para toda tu familia. Defiende contra virus y malware en 5 equipos simultáneos, incluye VPN ilimitada para conectarte con seguridad en redes Wi-Fi públicas y monitoreo de la Dark Web para alertarte de filtraciones de datos.',
     'specs' => 
     array (
-      'Tipo' => 'Suscripción digital',
-      'Dispositivos' => 'Hasta 5',
-      'Compatibilidad' => 'PC, Mac, teléfonos y tabletas compatibles',
-      'Funciones' => 'Antimalware, VPN y herramientas de privacidad',
-      'Respaldo' => '50 GB de copia de seguridad en la nube para PC en plan consultado',
-      'Características' => 'Control parental y monitorización según región',
+      0 => 
+      array (
+        'grupo' => 'Detalles del Servicio',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Suscripción digital',
+          ),
+          1 => 
+          array (
+            'clave' => 'Dispositivos',
+            'valor' => 'Hasta 5',
+          ),
+          2 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'PC, Mac, teléfonos y tabletas compatibles',
+          ),
+          3 => 
+          array (
+            'clave' => 'Funciones',
+            'valor' => 'Antimalware, VPN y herramientas de privacidad',
+          ),
+          4 => 
+          array (
+            'clave' => 'Respaldo',
+            'valor' => '50 GB de copia de seguridad en la nube para PC en plan consultado',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Control parental y monitorización según región',
+          ),
+        ),
+      ),
     ),
     'garantia' => 
     array (
@@ -1423,15 +2636,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.13,
     'specs' => 
     array (
-      'Procesador' => 'Apple M2, CPU de 8 núcleos',
-      'Gráficos' => 'GPU integrada de 8 núcleos',
-      'Memoria' => '8 GB unificada',
-      'Almacenamiento' => 'SSD de 256 GB',
-      'Pantalla' => '13.6 pulgadas Liquid Retina IPS, 2560 × 1664',
-      'Conectividad' => 'Wi-Fi 6, Bluetooth 5.3',
-      'Puertos' => '2 Thunderbolt/USB 4, MagSafe 3, audio de 3.5 mm',
-      'Batería' => '52.6 Wh, hasta 18 horas de video',
-      'Características' => 'Diseño sin ventilador, Touch ID y cámara FaceTime HD de 1080p',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Apple M2, CPU de 8 núcleos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'GPU integrada de 8 núcleos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 GB unificada',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD de 256 GB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '13.6 pulgadas Liquid Retina IPS, 2560 × 1664',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6, Bluetooth 5.3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 Thunderbolt/USB 4, MagSafe 3, audio de 3.5 mm',
+          ),
+          7 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '52.6 Wh, hasta 18 horas de video',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Diseño sin ventilador, Touch ID y cámara FaceTime HD de 1080p',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -1484,14 +2740,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.528,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i7-1260P, 12 núcleos y 16 hilos',
-      'Memoria' => '16 GB LPDDR5-5200 integrada',
-      'Almacenamiento' => 'SSD NVMe de 512 GB',
-      'Gráficos' => 'Intel Iris Xe integrados',
-      'Pantalla' => '13.4 pulgadas OLED táctil 3456 × 2160, 60 Hz',
-      'Puertos' => '2 Thunderbolt 4 USB-C',
-      'Batería' => '55 Wh',
-      'Características' => 'Teclado de borde a borde y panel táctil háptico',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i7-1260P, 12 núcleos y 16 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5-5200 integrada',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 512 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel Iris Xe integrados',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '13.4 pulgadas OLED táctil 3456 × 2160, 60 Hz',
+          ),
+          5 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 Thunderbolt 4 USB-C',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '55 Wh',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Teclado de borde a borde y panel táctil háptico',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1520,15 +2815,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.536,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i7-1355U, 10 núcleos y 12 hilos',
-      'Memoria' => '16 GB LPDDR5/x-6400 soldada',
-      'Almacenamiento' => 'SSD de 512 GB PCIe 4.0 NVMe Opal 2.0',
-      'Pantalla' => '14 pulgadas IPS, 1920 × 1200, 400 nits, sin función táctil',
-      'Gráficos' => 'Intel Iris Xe',
-      'Conectividad' => 'Wi-Fi 6E AX211 y Bluetooth 5.3',
-      'Puertos' => '2 Thunderbolt 4, 2 USB-A, HDMI 2.1 y audio',
-      'Batería' => '57 Wh',
-      'Sistema operativo' => 'Sin sistema operativo de fábrica',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i7-1355U, 10 núcleos y 12 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5/x-6400 soldada',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD de 512 GB PCIe 4.0 NVMe Opal 2.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '14 pulgadas IPS, 1920 × 1200, 400 nits, sin función táctil',
+          ),
+          4 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel Iris Xe',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E AX211 y Bluetooth 5.3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 Thunderbolt 4, 2 USB-A, HDMI 2.1 y audio',
+          ),
+          7 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '57 Wh',
+          ),
+          8 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'Sin sistema operativo de fábrica',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1557,16 +2895,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.7,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core Ultra 7 155H, 16 núcleos y 22 hilos',
-      'Memoria' => '16 GB LPDDR5x-7467 soldada',
-      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 1 TB',
-      'Pantalla' => '14 pulgadas OLED táctil 3K',
-      'Gráficos' => 'Intel Arc integrados',
-      'Puertos' => '2 Thunderbolt 4, USB-A de 10 Gb/s y audio',
-      'Conectividad' => 'Wi-Fi 6E AX211 y Bluetooth 5.3',
-      'Batería' => '68 Wh',
-      'Características' => 'Bisagra convertible, cámara IR de 9 MP, panel táctil háptico',
-      'Sistema operativo' => 'Windows 11 Home',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core Ultra 7 155H, 16 núcleos y 22 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5x-7467 soldada',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe PCIe 4.0 de 1 TB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '14 pulgadas OLED táctil 3K',
+          ),
+          4 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel Arc integrados',
+          ),
+          5 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 Thunderbolt 4, USB-A de 10 Gb/s y audio',
+          ),
+          6 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E AX211 y Bluetooth 5.3',
+          ),
+          7 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '68 Wh',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Bisagra convertible, cámara IR de 9 MP, panel táctil háptico',
+          ),
+          9 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'Windows 11 Home',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1595,14 +2980,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.49,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i5-1335U, 10 núcleos, turbo hasta 4.6 GHz',
-      'Memoria' => '16 GB LPDDR5',
-      'Almacenamiento' => 'SSD NVMe de 512 GB',
-      'Pantalla' => '14 pulgadas OLED, 2880 × 1800, relación 16:10',
-      'Gráficos' => 'Intel Iris Xe',
-      'Lector de tarjetas' => 'microSD',
-      'Sistema operativo' => 'Windows 11 Home',
-      'Características' => 'Equipo ultraportátil con panel OLED no táctil',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i5-1335U, 10 núcleos, turbo hasta 4.6 GHz',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 512 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '14 pulgadas OLED, 2880 × 1800, relación 16:10',
+          ),
+          4 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel Iris Xe',
+          ),
+          5 => 
+          array (
+            'clave' => 'Lector de tarjetas',
+            'valor' => 'microSD',
+          ),
+          6 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'Windows 11 Home',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Equipo ultraportátil con panel OLED no táctil',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1631,15 +3055,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.63,
     'specs' => 
     array (
-      'Procesador' => 'AMD Ryzen 9 8945HS, 8 núcleos y 16 hilos',
-      'Gráficos' => 'NVIDIA GeForce RTX 4060 Laptop, 8 GB GDDR6, hasta 90 W',
-      'Memoria' => '16 GB LPDDR5X integrada',
-      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 1 TB',
-      'Pantalla' => '14 pulgadas OLED 2880 × 1800, 120 Hz',
-      'Conectividad' => 'Wi-Fi 6E y Bluetooth 5.3',
-      'Batería' => '73 Wh',
-      'Sistema operativo' => 'Windows 11 Home',
-      'Características' => 'Chasis de aluminio y pantalla ROG Nebula OLED',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'AMD Ryzen 9 8945HS, 8 núcleos y 16 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'NVIDIA GeForce RTX 4060 Laptop, 8 GB GDDR6, hasta 90 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5X integrada',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe PCIe 4.0 de 1 TB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '14 pulgadas OLED 2880 × 1800, 120 Hz',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E y Bluetooth 5.3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '73 Wh',
+          ),
+          7 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'Windows 11 Home',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Chasis de aluminio y pantalla ROG Nebula OLED',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -1692,14 +3159,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.69,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i7-13700HX, 16 núcleos',
-      'Gráficos' => 'GeForce RTX 4070 Laptop, 8 GB GDDR6, hasta 140 W',
-      'Memoria' => '32 GB DDR5',
-      'Almacenamiento' => 'SSD NVMe de 1 TB',
-      'Pantalla' => '16 pulgadas IPS 2560 × 1600, 240 Hz',
-      'Conectividad' => 'Wi-Fi 6 y Ethernet Gigabit',
-      'Sistema operativo' => 'EShell',
-      'Características' => 'Teclado RGB y formato de pantalla 16:10',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i7-13700HX, 16 núcleos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'GeForce RTX 4070 Laptop, 8 GB GDDR6, hasta 140 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '32 GB DDR5',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 1 TB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '16 pulgadas IPS 2560 × 1600, 240 Hz',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6 y Ethernet Gigabit',
+          ),
+          6 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'EShell',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Teclado RGB y formato de pantalla 16:10',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1728,16 +3234,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.49,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i7-13620H, 10 núcleos',
-      'Gráficos' => 'RTX 4060 Laptop de 8 GB GDDR6, hasta 105 W',
-      'Memoria' => '16 GB (2 × 8 GB) DDR5',
-      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 512 GB',
-      'Pantalla' => '15.6 pulgadas IPS-Level FHD, 144 Hz',
-      'Conectividad' => 'Wi-Fi 6E AX211, Bluetooth 5.3 y Ethernet Gigabit',
-      'Batería' => '53.5 Wh',
-      'Adaptador' => '200 W',
-      'Sistema operativo' => 'Windows 11 Home',
-      'Características' => 'Teclado RGB de 4 zonas y dos ranuras M.2',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i7-13620H, 10 núcleos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'RTX 4060 Laptop de 8 GB GDDR6, hasta 105 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB (2 × 8 GB) DDR5',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe PCIe 4.0 de 512 GB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '15.6 pulgadas IPS-Level FHD, 144 Hz',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E AX211, Bluetooth 5.3 y Ethernet Gigabit',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '53.5 Wh',
+          ),
+          7 => 
+          array (
+            'clave' => 'Adaptador',
+            'valor' => '200 W',
+          ),
+          8 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'Windows 11 Home',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Teclado RGB de 4 zonas y dos ranuras M.2',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1766,14 +3319,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.675,
     'specs' => 
     array (
-      'Procesador' => 'AMD Ryzen 7 7745HX, 8 núcleos y 16 hilos',
-      'Gráficos' => 'RTX 4060 Laptop de 8 GB GDDR6',
-      'Memoria' => '32 GB, 2 × 16 GB DDR5-5200',
-      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 1 TB',
-      'Pantalla' => '16 pulgadas IPS 2560 × 1600; frecuencia del panel por confirmar en esta variante',
-      'Conectividad' => 'Wi-Fi 6E, Bluetooth y Ethernet',
-      'Batería' => '80 Wh',
-      'Características' => 'Refrigeración Legion ColdFront y teclado retroiluminado',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'AMD Ryzen 7 7745HX, 8 núcleos y 16 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'RTX 4060 Laptop de 8 GB GDDR6',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '32 GB, 2 × 16 GB DDR5-5200',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe PCIe 4.0 de 1 TB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '16 pulgadas IPS 2560 × 1600; frecuencia del panel por confirmar en esta variante',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E, Bluetooth y Ethernet',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '80 Wh',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Refrigeración Legion ColdFront y teclado retroiluminado',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1802,11 +3394,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.35,
     'specs' => 
     array (
-      'Tipo' => 'Laptop gamer de la serie OMEN 16-wf0000',
-      'Código del fabricante' => 'A7QR7UA',
-      'Pantalla nominal' => '16.1 pulgadas',
-      'Configuración' => 'Ficha de hardware exacta no recuperada de la fuente oficial',
-      'Características' => 'No publicar CPU, RAM, GPU o SSD hasta confirmar la ficha de A7QR7UA',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Laptop gamer de la serie OMEN 16-wf0000',
+          ),
+          1 => 
+          array (
+            'clave' => 'Código del fabricante',
+            'valor' => 'A7QR7UA',
+          ),
+          2 => 
+          array (
+            'clave' => 'Pantalla nominal',
+            'valor' => '16.1 pulgadas',
+          ),
+          3 => 
+          array (
+            'clave' => 'Configuración',
+            'valor' => 'Ficha de hardware exacta no recuperada de la fuente oficial',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'No publicar CPU, RAM, GPU o SSD hasta confirmar la ficha de A7QR7UA',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1835,13 +3454,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.58,
     'specs' => 
     array (
-      'Procesador' => 'Apple M2, CPU de 8 núcleos',
-      'Gráficos' => 'GPU de 10 núcleos',
-      'Memoria' => '8 GB unificada',
-      'Almacenamiento' => 'SSD de 256 GB',
-      'Puertos' => '2 Thunderbolt 4, 2 USB-A, HDMI, Ethernet Gigabit y audio de 3.5 mm',
-      'Conectividad' => 'Wi-Fi 6E y Bluetooth 5.3',
-      'Características' => 'Equipo compacto',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Apple M2, CPU de 8 núcleos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'GPU de 10 núcleos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 GB unificada',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD de 256 GB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 Thunderbolt 4, 2 USB-A, HDMI, Ethernet Gigabit y audio de 3.5 mm',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E y Bluetooth 5.3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Equipo compacto',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -1894,12 +3548,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 32.43,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i5-13400, 10 núcleos y 16 hilos',
-      'Memoria' => '16 GB DDR4-3200',
-      'Almacenamiento' => 'SSD NVMe de 1 TB',
-      'Gráficos' => 'Intel UHD 730',
-      'Sistema operativo' => 'Windows 11 Home',
-      'Características' => 'Torre de escritorio para productividad',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i5-13400, 10 núcleos y 16 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB DDR4-3200',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 1 TB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel UHD 730',
+          ),
+          4 => 
+          array (
+            'clave' => 'Sistema operativo',
+            'valor' => 'Windows 11 Home',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Torre de escritorio para productividad',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1928,14 +3613,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 44.8,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i9-12900, 16 núcleos y 24 hilos',
-      'Memoria' => '32 GB DDR4-3200, 2 × 16 GB',
-      'Almacenamiento' => '2 SSD NVMe de 1 TB cada uno',
-      'Gráficos' => 'GeForce RTX 3060 Ti de 8 GB',
-      'Red' => 'Ethernet Gigabit, Wi-Fi 6 y Bluetooth 5.2',
-      'Puertos' => 'Thunderbolt 4, USB-C, USB-A y RJ45',
-      'Fuente de poder' => '500 W, 80 PLUS Bronze',
-      'Características' => 'Torre con lector de tarjetas y almacenamiento dual',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i9-12900, 16 núcleos y 24 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '32 GB DDR4-3200, 2 × 16 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '2 SSD NVMe de 1 TB cada uno',
+          ),
+          3 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'GeForce RTX 3060 Ti de 8 GB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Red',
+            'valor' => 'Ethernet Gigabit, Wi-Fi 6 y Bluetooth 5.2',
+          ),
+          5 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => 'Thunderbolt 4, USB-C, USB-A y RJ45',
+          ),
+          6 => 
+          array (
+            'clave' => 'Fuente de poder',
+            'valor' => '500 W, 80 PLUS Bronze',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Torre con lector de tarjetas y almacenamiento dual',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1964,13 +3688,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 27.48,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i3-12100, 4 núcleos y 8 hilos',
-      'Gráficos' => 'Intel UHD 730',
-      'Memoria' => '8 GB DDR4',
-      'Almacenamiento' => 'SSD NVMe de 256 GB',
-      'Formato' => 'Small Form Factor, 7.4 litros',
-      'Expansión' => 'Ranuras M.2 para SSD y WLAN',
-      'Características' => 'Equipo compacto para oficina',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i3-12100, 4 núcleos y 8 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel UHD 730',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 GB DDR4',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 256 GB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'Small Form Factor, 7.4 litros',
+          ),
+          5 => 
+          array (
+            'clave' => 'Expansión',
+            'valor' => 'Ranuras M.2 para SSD y WLAN',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Equipo compacto para oficina',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -1999,13 +3758,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 33.96,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i5-12400, 6 núcleos y 12 hilos',
-      'Gráficos' => 'Intel UHD 730',
-      'Memoria' => '8 GB DDR4',
-      'Almacenamiento' => 'SSD NVMe de 256 GB',
-      'Formato' => 'Small Form Factor',
-      'Seguridad' => 'TPM 2.0 y ranura Kensington',
-      'Características' => 'Escritorio compacto para entornos empresariales',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Intel Core i5-12400, 6 núcleos y 12 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel UHD 730',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 GB DDR4',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 256 GB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'Small Form Factor',
+          ),
+          5 => 
+          array (
+            'clave' => 'Seguridad',
+            'valor' => 'TPM 2.0 y ranura Kensington',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Escritorio compacto para entornos empresariales',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2034,16 +3828,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Socket' => 'LGA1700',
-      'Arquitectura' => 'Intel Core de 14.ª generación',
-      'Núcleos e hilos' => '24 núcleos (8 P + 16 E), 32 hilos',
-      'Frecuencia turbo' => 'Hasta 6.0 GHz',
-      'Caché L3' => '36 MB',
-      'Potencia base/turbo' => '125 W/253 W',
-      'Memoria compatible' => 'DDR5-5600 o DDR4-3200',
-      'Gráficos' => 'Intel UHD 770',
-      'Disipador' => 'No incluido',
-      'Características' => 'Multiplicador desbloqueado',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Socket',
+            'valor' => 'LGA1700',
+          ),
+          1 => 
+          array (
+            'clave' => 'Arquitectura',
+            'valor' => 'Intel Core de 14.ª generación',
+          ),
+          2 => 
+          array (
+            'clave' => 'Núcleos e hilos',
+            'valor' => '24 núcleos (8 P + 16 E), 32 hilos',
+          ),
+          3 => 
+          array (
+            'clave' => 'Frecuencia turbo',
+            'valor' => 'Hasta 6.0 GHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Caché L3',
+            'valor' => '36 MB',
+          ),
+          5 => 
+          array (
+            'clave' => 'Potencia base/turbo',
+            'valor' => '125 W/253 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Memoria compatible',
+            'valor' => 'DDR5-5600 o DDR4-3200',
+          ),
+          7 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel UHD 770',
+          ),
+          8 => 
+          array (
+            'clave' => 'Disipador',
+            'valor' => 'No incluido',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Multiplicador desbloqueado',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2072,16 +3913,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.6,
     'specs' => 
     array (
-      'Socket' => 'AM5',
-      'Arquitectura' => 'Zen 4',
-      'Núcleos e hilos' => '16 núcleos y 32 hilos',
-      'Frecuencia base/turbo' => '4.2 GHz/hasta 5.7 GHz',
-      'Caché L3' => '128 MB',
-      'TDP' => '120 W',
-      'Memoria compatible' => 'DDR5',
-      'Gráficos' => 'AMD Radeon integrados',
-      'Disipador' => 'No incluido',
-      'Características' => 'AMD 3D V-Cache para cargas de juego y creación',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Socket',
+            'valor' => 'AM5',
+          ),
+          1 => 
+          array (
+            'clave' => 'Arquitectura',
+            'valor' => 'Zen 4',
+          ),
+          2 => 
+          array (
+            'clave' => 'Núcleos e hilos',
+            'valor' => '16 núcleos y 32 hilos',
+          ),
+          3 => 
+          array (
+            'clave' => 'Frecuencia base/turbo',
+            'valor' => '4.2 GHz/hasta 5.7 GHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Caché L3',
+            'valor' => '128 MB',
+          ),
+          5 => 
+          array (
+            'clave' => 'TDP',
+            'valor' => '120 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Memoria compatible',
+            'valor' => 'DDR5',
+          ),
+          7 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'AMD Radeon integrados',
+          ),
+          8 => 
+          array (
+            'clave' => 'Disipador',
+            'valor' => 'No incluido',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'AMD 3D V-Cache para cargas de juego y creación',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2110,15 +3998,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Socket' => 'LGA1700',
-      'Núcleos e hilos' => '20 núcleos (8 P + 12 E), 28 hilos',
-      'Frecuencia turbo' => 'Hasta 5.6 GHz',
-      'Caché L3' => '33 MB',
-      'Potencia base/turbo' => '125 W/253 W',
-      'Memoria compatible' => 'DDR5-5600 o DDR4-3200',
-      'Gráficos' => 'Intel UHD 770',
-      'Disipador' => 'No incluido',
-      'Características' => 'Multiplicador desbloqueado',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Socket',
+            'valor' => 'LGA1700',
+          ),
+          1 => 
+          array (
+            'clave' => 'Núcleos e hilos',
+            'valor' => '20 núcleos (8 P + 12 E), 28 hilos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia turbo',
+            'valor' => 'Hasta 5.6 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Caché L3',
+            'valor' => '33 MB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Potencia base/turbo',
+            'valor' => '125 W/253 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Memoria compatible',
+            'valor' => 'DDR5-5600 o DDR4-3200',
+          ),
+          6 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel UHD 770',
+          ),
+          7 => 
+          array (
+            'clave' => 'Disipador',
+            'valor' => 'No incluido',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Multiplicador desbloqueado',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2147,16 +4078,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.6,
     'specs' => 
     array (
-      'Socket' => 'AM5',
-      'Arquitectura' => 'Zen 4',
-      'Núcleos e hilos' => '8 núcleos y 16 hilos',
-      'Frecuencia base/turbo' => '4.2 GHz/hasta 5.0 GHz',
-      'Caché L3' => '96 MB',
-      'TDP' => '120 W',
-      'Memoria compatible' => 'DDR5',
-      'Gráficos' => 'AMD Radeon integrados',
-      'Disipador' => 'No incluido',
-      'Características' => 'AMD 3D V-Cache',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Socket',
+            'valor' => 'AM5',
+          ),
+          1 => 
+          array (
+            'clave' => 'Arquitectura',
+            'valor' => 'Zen 4',
+          ),
+          2 => 
+          array (
+            'clave' => 'Núcleos e hilos',
+            'valor' => '8 núcleos y 16 hilos',
+          ),
+          3 => 
+          array (
+            'clave' => 'Frecuencia base/turbo',
+            'valor' => '4.2 GHz/hasta 5.0 GHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Caché L3',
+            'valor' => '96 MB',
+          ),
+          5 => 
+          array (
+            'clave' => 'TDP',
+            'valor' => '120 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Memoria compatible',
+            'valor' => 'DDR5',
+          ),
+          7 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'AMD Radeon integrados',
+          ),
+          8 => 
+          array (
+            'clave' => 'Disipador',
+            'valor' => 'No incluido',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'AMD 3D V-Cache',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2185,15 +4163,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Socket' => 'LGA1700',
-      'Núcleos e hilos' => '14 núcleos (6 P + 8 E), 20 hilos',
-      'Frecuencia turbo' => 'Hasta 5.3 GHz',
-      'Caché L3' => '24 MB',
-      'Potencia base/turbo' => '125 W/181 W',
-      'Memoria compatible' => 'DDR5-5600 o DDR4-3200',
-      'Gráficos' => 'Intel UHD 770',
-      'Disipador' => 'No incluido',
-      'Características' => 'Multiplicador desbloqueado',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Socket',
+            'valor' => 'LGA1700',
+          ),
+          1 => 
+          array (
+            'clave' => 'Núcleos e hilos',
+            'valor' => '14 núcleos (6 P + 8 E), 20 hilos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia turbo',
+            'valor' => 'Hasta 5.3 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Caché L3',
+            'valor' => '24 MB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Potencia base/turbo',
+            'valor' => '125 W/181 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Memoria compatible',
+            'valor' => 'DDR5-5600 o DDR4-3200',
+          ),
+          6 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'Intel UHD 770',
+          ),
+          7 => 
+          array (
+            'clave' => 'Disipador',
+            'valor' => 'No incluido',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Multiplicador desbloqueado',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2222,15 +4243,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 7.01,
     'specs' => 
     array (
-      'GPU' => 'NVIDIA GeForce RTX 4090',
-      'Memoria' => '24 GB GDDR6X, bus de 384 bits',
-      'Núcleos CUDA' => '16384',
-      'Interfaz' => 'PCIe 4.0',
-      'Salidas' => '2 HDMI 2.1a y 3 DisplayPort 1.4a',
-      'Alimentación' => '1 conector de 16 pines',
-      'Fuente recomendada' => '1000 W',
-      'Ocupación' => '3.5 ranuras',
-      'Características' => 'Tres ventiladores Axial-tech y modo OC',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'GPU',
+            'valor' => 'NVIDIA GeForce RTX 4090',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '24 GB GDDR6X, bus de 384 bits',
+          ),
+          2 => 
+          array (
+            'clave' => 'Núcleos CUDA',
+            'valor' => '16384',
+          ),
+          3 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0',
+          ),
+          4 => 
+          array (
+            'clave' => 'Salidas',
+            'valor' => '2 HDMI 2.1a y 3 DisplayPort 1.4a',
+          ),
+          5 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => '1 conector de 16 pines',
+          ),
+          6 => 
+          array (
+            'clave' => 'Fuente recomendada',
+            'valor' => '1000 W',
+          ),
+          7 => 
+          array (
+            'clave' => 'Ocupación',
+            'valor' => '3.5 ranuras',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Tres ventiladores Axial-tech y modo OC',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2259,15 +4323,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 7.5,
     'specs' => 
     array (
-      'GPU' => 'GeForce RTX 4080 SUPER',
-      'Memoria' => '16 GB GDDR6X, bus de 256 bits',
-      'Núcleos CUDA' => '10240',
-      'Frecuencia' => '2595 MHz',
-      'Interfaz' => 'PCIe 4.0',
-      'Salidas' => '3 DisplayPort 1.4a y 1 HDMI 2.1a',
-      'Fuente recomendada' => '850 W',
-      'Alimentación' => '1 conector de 16 pines',
-      'Características' => 'Refrigeración WINDFORCE de tres ventiladores',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'GPU',
+            'valor' => 'GeForce RTX 4080 SUPER',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB GDDR6X, bus de 256 bits',
+          ),
+          2 => 
+          array (
+            'clave' => 'Núcleos CUDA',
+            'valor' => '10240',
+          ),
+          3 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '2595 MHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0',
+          ),
+          5 => 
+          array (
+            'clave' => 'Salidas',
+            'valor' => '3 DisplayPort 1.4a y 1 HDMI 2.1a',
+          ),
+          6 => 
+          array (
+            'clave' => 'Fuente recomendada',
+            'valor' => '850 W',
+          ),
+          7 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => '1 conector de 16 pines',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Refrigeración WINDFORCE de tres ventiladores',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2296,14 +4403,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 5.2,
     'specs' => 
     array (
-      'GPU' => 'GeForce RTX 4070 Ti SUPER',
-      'Memoria' => '16 GB GDDR6X, bus de 256 bits',
-      'Interfaz' => 'PCIe 4.0',
-      'Salidas' => '3 DisplayPort 1.4a y 1 HDMI 2.1a',
-      'Consumo' => '285 W',
-      'Fuente recomendada' => '700 W',
-      'Alimentación' => '1 conector de 16 pines',
-      'Características' => 'Triple ventilador y refrigeración TORX Fan 4.0',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'GPU',
+            'valor' => 'GeForce RTX 4070 Ti SUPER',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB GDDR6X, bus de 256 bits',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Salidas',
+            'valor' => '3 DisplayPort 1.4a y 1 HDMI 2.1a',
+          ),
+          4 => 
+          array (
+            'clave' => 'Consumo',
+            'valor' => '285 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Fuente recomendada',
+            'valor' => '700 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => '1 conector de 16 pines',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Triple ventilador y refrigeración TORX Fan 4.0',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2332,15 +4478,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 5.1,
     'specs' => 
     array (
-      'Arquitectura' => 'RDNA 3',
-      'Memoria' => '24 GB GDDR6, bus de 384 bits',
-      'Procesadores de flujo' => '6144',
-      'Frecuencia de juego/boost' => '2300 MHz/hasta 2500 MHz',
-      'Potencia típica' => '355 W',
-      'Fuente recomendada' => '800 W',
-      'Alimentación' => '2 conectores PCIe de 8 pines',
-      'Ocupación' => '2.5 ranuras',
-      'Características' => 'DisplayPort 2.1 y HDMI 2.1',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Arquitectura',
+            'valor' => 'RDNA 3',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '24 GB GDDR6, bus de 384 bits',
+          ),
+          2 => 
+          array (
+            'clave' => 'Procesadores de flujo',
+            'valor' => '6144',
+          ),
+          3 => 
+          array (
+            'clave' => 'Frecuencia de juego/boost',
+            'valor' => '2300 MHz/hasta 2500 MHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Potencia típica',
+            'valor' => '355 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Fuente recomendada',
+            'valor' => '800 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => '2 conectores PCIe de 8 pines',
+          ),
+          7 => 
+          array (
+            'clave' => 'Ocupación',
+            'valor' => '2.5 ranuras',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'DisplayPort 2.1 y HDMI 2.1',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2369,14 +4558,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 5.78,
     'specs' => 
     array (
-      'GPU' => 'Radeon RX 7800 XT',
-      'Memoria' => '16 GB GDDR6, bus de 256 bits',
-      'Procesadores de flujo' => '3840',
-      'Frecuencia boost' => 'Hasta 2565 MHz en modo OC',
-      'Interfaz' => 'PCIe 4.0',
-      'Salidas' => '1 HDMI 2.1 y 3 DisplayPort 2.1',
-      'Alimentación' => '2 conectores de 8 pines',
-      'Características' => 'Versión OG OC con triple ventilador',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'GPU',
+            'valor' => 'Radeon RX 7800 XT',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB GDDR6, bus de 256 bits',
+          ),
+          2 => 
+          array (
+            'clave' => 'Procesadores de flujo',
+            'valor' => '3840',
+          ),
+          3 => 
+          array (
+            'clave' => 'Frecuencia boost',
+            'valor' => 'Hasta 2565 MHz en modo OC',
+          ),
+          4 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0',
+          ),
+          5 => 
+          array (
+            'clave' => 'Salidas',
+            'valor' => '1 HDMI 2.1 y 3 DisplayPort 2.1',
+          ),
+          6 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => '2 conectores de 8 pines',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Versión OG OC con triple ventilador',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2405,13 +4633,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.4,
     'specs' => 
     array (
-      'Capacidad' => '32 GB, kit de 2 × 16 GB',
-      'Tipo' => 'DDR5 UDIMM para escritorio',
-      'Velocidad de perfil' => '6000 MT/s',
-      'Latencia CAS' => 'CL30',
-      'Perfil' => 'Intel XMP 3.0',
-      'Iluminación' => 'RGB direccionable de 10 zonas',
-      'Características' => 'Disipadores e integración con CORSAIR iCUE',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '32 GB, kit de 2 × 16 GB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'DDR5 UDIMM para escritorio',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidad de perfil',
+            'valor' => '6000 MT/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Latencia CAS',
+            'valor' => 'CL30',
+          ),
+          4 => 
+          array (
+            'clave' => 'Perfil',
+            'valor' => 'Intel XMP 3.0',
+          ),
+          5 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB direccionable de 10 zonas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Disipadores e integración con CORSAIR iCUE',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -2464,13 +4727,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.49,
     'specs' => 
     array (
-      'Capacidad' => '32 GB, 2 × 16 GB',
-      'Tipo' => 'DDR5, DIMM de 288 pines',
-      'Velocidad' => '5600 MT/s',
-      'Latencia' => 'CL36',
-      'Perfil' => 'AMD EXPO',
-      'Iluminación' => 'Sin RGB',
-      'Características' => 'Disipador negro de bajo perfil',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '32 GB, 2 × 16 GB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'DDR5, DIMM de 288 pines',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => '5600 MT/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Latencia',
+            'valor' => 'CL36',
+          ),
+          4 => 
+          array (
+            'clave' => 'Perfil',
+            'valor' => 'AMD EXPO',
+          ),
+          5 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'Sin RGB',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Disipador negro de bajo perfil',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2499,13 +4797,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.7,
     'specs' => 
     array (
-      'Capacidad' => '32 GB, 2 × 16 GB',
-      'Tipo' => 'DDR5 UDIMM de escritorio',
-      'Velocidad' => '5600 MT/s',
-      'Latencia' => 'CL46',
-      'Voltaje' => '1.1 V',
-      'Iluminación' => 'Sin RGB',
-      'Características' => 'Disipador de bajo perfil y soporte para perfiles de memoria',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '32 GB, 2 × 16 GB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'DDR5 UDIMM de escritorio',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => '5600 MT/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Latencia',
+            'valor' => 'CL46',
+          ),
+          4 => 
+          array (
+            'clave' => 'Voltaje',
+            'valor' => '1.1 V',
+          ),
+          5 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'Sin RGB',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Disipador de bajo perfil y soporte para perfiles de memoria',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2534,13 +4867,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.0,
     'specs' => 
     array (
-      'Capacidad' => '32 GB, 2 × 16 GB',
-      'Tipo' => 'DDR5 UDIMM',
-      'Velocidad' => '6000 MT/s',
-      'Latencia seleccionada' => 'CL30',
-      'Perfiles' => 'Intel XMP 3.0 y AMD EXPO',
-      'Iluminación' => 'RGB',
-      'Características' => 'Disipador de 40 mm de altura',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '32 GB, 2 × 16 GB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'DDR5 UDIMM',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => '6000 MT/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Latencia seleccionada',
+            'valor' => 'CL30',
+          ),
+          4 => 
+          array (
+            'clave' => 'Perfiles',
+            'valor' => 'Intel XMP 3.0 y AMD EXPO',
+          ),
+          5 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Disipador de 40 mm de altura',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2569,13 +4937,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.38,
     'specs' => 
     array (
-      'Capacidad' => '16 GB, 1 módulo',
-      'Tipo' => 'DDR4 SO-DIMM de 260 pines para laptop',
-      'Velocidad' => '3200 MT/s',
-      'Latencia' => 'CL20',
-      'Voltaje' => '1.2 V',
-      'Organización' => '1Rx8',
-      'Características' => 'Memoria compacta para equipos compatibles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '16 GB, 1 módulo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'DDR4 SO-DIMM de 260 pines para laptop',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => '3200 MT/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Latencia',
+            'valor' => 'CL20',
+          ),
+          4 => 
+          array (
+            'clave' => 'Voltaje',
+            'valor' => '1.2 V',
+          ),
+          5 => 
+          array (
+            'clave' => 'Organización',
+            'valor' => '1Rx8',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Memoria compacta para equipos compatibles',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2604,13 +5007,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.6,
     'specs' => 
     array (
-      'Potencia' => '850 W continuos',
-      'Certificación' => '80 PLUS Gold',
-      'Formato' => 'ATX',
-      'Cableado' => 'Totalmente modular',
-      'Ventilador' => '135 mm',
-      'Entrada' => '100–240 V CA',
-      'Características' => 'Modo Zero RPM y conectores EPS para procesador',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '850 W continuos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Certificación',
+            'valor' => '80 PLUS Gold',
+          ),
+          2 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'ATX',
+          ),
+          3 => 
+          array (
+            'clave' => 'Cableado',
+            'valor' => 'Totalmente modular',
+          ),
+          4 => 
+          array (
+            'clave' => 'Ventilador',
+            'valor' => '135 mm',
+          ),
+          5 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => '100–240 V CA',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Modo Zero RPM y conectores EPS para procesador',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2639,11 +5077,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.5,
     'specs' => 
     array (
-      'Potencia' => '750 W',
-      'Certificación' => '80 PLUS Gold',
-      'Formato' => 'ATX',
-      'Cableado' => 'Totalmente modular',
-      'Características' => 'Auto ECO y ventilador con rodamiento FDB',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '750 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Certificación',
+            'valor' => '80 PLUS Gold',
+          ),
+          2 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'ATX',
+          ),
+          3 => 
+          array (
+            'clave' => 'Cableado',
+            'valor' => 'Totalmente modular',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Auto ECO y ventilador con rodamiento FDB',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2672,13 +5137,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.6,
     'specs' => 
     array (
-      'Potencia' => '850 W',
-      'Certificación' => '80 PLUS Gold',
-      'Formato' => 'ATX',
-      'Estándar' => 'ATX 3.0',
-      'Cableado' => 'Totalmente modular',
-      'Color' => 'Blanco',
-      'Características' => 'Conector de alimentación para GPU de nueva generación',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '850 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Certificación',
+            'valor' => '80 PLUS Gold',
+          ),
+          2 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'ATX',
+          ),
+          3 => 
+          array (
+            'clave' => 'Estándar',
+            'valor' => 'ATX 3.0',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cableado',
+            'valor' => 'Totalmente modular',
+          ),
+          5 => 
+          array (
+            'clave' => 'Color',
+            'valor' => 'Blanco',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Conector de alimentación para GPU de nueva generación',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2707,13 +5207,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.6,
     'specs' => 
     array (
-      'Potencia' => '750 W',
-      'Certificación' => '80 PLUS Gold',
-      'Formato' => 'ATX',
-      'Cableado' => 'Totalmente modular',
-      'Ventilador' => '140 mm hidráulico',
-      'Entrada' => '100–240 V CA',
-      'Características' => 'Smart Zero Fan',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '750 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Certificación',
+            'valor' => '80 PLUS Gold',
+          ),
+          2 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'ATX',
+          ),
+          3 => 
+          array (
+            'clave' => 'Cableado',
+            'valor' => 'Totalmente modular',
+          ),
+          4 => 
+          array (
+            'clave' => 'Ventilador',
+            'valor' => '140 mm hidráulico',
+          ),
+          5 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => '100–240 V CA',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Smart Zero Fan',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2742,12 +5277,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.3,
     'specs' => 
     array (
-      'Potencia' => '750 W',
-      'Certificación' => '80 PLUS Platinum',
-      'Formato' => 'SFX',
-      'Cableado' => 'Totalmente modular',
-      'Ventilador' => '92 mm',
-      'Características' => 'Modo Zero RPM y cables enfundados',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '750 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Certificación',
+            'valor' => '80 PLUS Platinum',
+          ),
+          2 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'SFX',
+          ),
+          3 => 
+          array (
+            'clave' => 'Cableado',
+            'valor' => 'Totalmente modular',
+          ),
+          4 => 
+          array (
+            'clave' => 'Ventilador',
+            'valor' => '92 mm',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Modo Zero RPM y cables enfundados',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2776,13 +5342,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.23,
     'specs' => 
     array (
-      'Capacidad' => '2 TB',
-      'Formato' => 'M.2 2280',
-      'Interfaz' => 'PCIe 4.0 ×4 NVMe 2.0',
-      'Lectura secuencial' => 'Hasta 7450 MB/s',
-      'Escritura secuencial' => 'Hasta 6900 MB/s',
-      'Resistencia' => '1200 TBW',
-      'Características' => 'Samsung Magician y cifrado AES de 256 bits',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '2 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'M.2 2280',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0 ×4 NVMe 2.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura secuencial',
+            'valor' => 'Hasta 7450 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura secuencial',
+            'valor' => 'Hasta 6900 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '1200 TBW',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Samsung Magician y cifrado AES de 256 bits',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -2835,13 +5436,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.238,
     'specs' => 
     array (
-      'Capacidad' => '1 TB',
-      'Formato' => 'M.2 2280',
-      'Interfaz' => 'PCIe 4.0 ×4 NVMe',
-      'Lectura secuencial' => 'Hasta 7300 MB/s',
-      'Escritura secuencial' => 'Hasta 6300 MB/s',
-      'Resistencia' => '600 TBW',
-      'Características' => 'Game Mode 2.0',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '1 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'M.2 2280',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0 ×4 NVMe',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura secuencial',
+            'valor' => 'Hasta 7300 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura secuencial',
+            'valor' => 'Hasta 6300 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '600 TBW',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Game Mode 2.0',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2870,13 +5506,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.23,
     'specs' => 
     array (
-      'Capacidad' => '2 TB',
-      'Formato' => 'M.2 2280',
-      'Interfaz' => 'PCIe 4.0 ×4 NVMe',
-      'Lectura secuencial' => 'Hasta 7400 MB/s',
-      'Escritura secuencial' => 'Hasta 7000 MB/s',
-      'Resistencia' => '1200 TBW',
-      'Características' => 'NAND TLC de Micron',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '2 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'M.2 2280',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0 ×4 NVMe',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura secuencial',
+            'valor' => 'Hasta 7400 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura secuencial',
+            'valor' => 'Hasta 7000 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '1200 TBW',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'NAND TLC de Micron',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2905,13 +5576,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.221,
     'specs' => 
     array (
-      'Capacidad' => '1024 GB',
-      'Formato' => 'M.2 2280',
-      'Interfaz' => 'PCIe 4.0 ×4 NVMe',
-      'Lectura secuencial' => 'Hasta 7000 MB/s',
-      'Escritura secuencial' => 'Hasta 6000 MB/s',
-      'Resistencia' => '800 TBW',
-      'Características' => 'NAND 3D TLC y disipador de grafeno/aluminio',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '1024 GB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'M.2 2280',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0 ×4 NVMe',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura secuencial',
+            'valor' => 'Hasta 7000 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura secuencial',
+            'valor' => 'Hasta 6000 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '800 TBW',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'NAND 3D TLC y disipador de grafeno/aluminio',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2940,13 +5646,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.358,
     'specs' => 
     array (
-      'Capacidad' => '2 TB',
-      'Formato' => 'M.2 2280',
-      'Interfaz' => 'PCIe 4.0 ×4 NVMe 1.4',
-      'Lectura secuencial' => 'Hasta 7300 MB/s',
-      'Escritura secuencial' => 'Hasta 6900 MB/s',
-      'Resistencia' => '2550 TBW',
-      'Características' => 'NAND 3D TLC',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '2 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'M.2 2280',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'PCIe 4.0 ×4 NVMe 1.4',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura secuencial',
+            'valor' => 'Hasta 7300 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura secuencial',
+            'valor' => 'Hasta 6900 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '2550 TBW',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'NAND 3D TLC',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -2975,13 +5716,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.8,
     'specs' => 
     array (
-      'Formato' => 'Tenkeyless, sin bloque numérico',
-      'Tipo' => 'Mecánico',
-      'Conexión' => 'LIGHTSPEED, Bluetooth y USB',
-      'Interruptores' => 'GX Brown táctiles',
-      'Iluminación' => 'LIGHTSYNC RGB',
-      'Características' => 'Controles multimedia, rueda de volumen y funda de transporte',
-      'Autonomía' => 'Hasta 50 horas',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'Tenkeyless, sin bloque numérico',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Mecánico',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'LIGHTSPEED, Bluetooth y USB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Interruptores',
+            'valor' => 'GX Brown táctiles',
+          ),
+          4 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'LIGHTSYNC RGB',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Controles multimedia, rueda de volumen y funda de transporte',
+          ),
+          6 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 50 horas',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -3034,12 +5810,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.9,
     'specs' => 
     array (
-      'Formato' => 'TKL',
-      'Conexión' => 'USB con cable',
-      'Interruptores' => 'Ópticos analógicos Razer de 2.ª generación',
-      'Actuación' => 'Rango ajustable de 0.1 a 4.0 mm',
-      'Iluminación' => 'Razer Chroma RGB',
-      'Características' => 'Rapid Trigger, dial multifunción y reposamuñecas magnético',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'TKL',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'USB con cable',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interruptores',
+            'valor' => 'Ópticos analógicos Razer de 2.ª generación',
+          ),
+          3 => 
+          array (
+            'clave' => 'Actuación',
+            'valor' => 'Rango ajustable de 0.1 a 4.0 mm',
+          ),
+          4 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'Razer Chroma RGB',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Rapid Trigger, dial multifunción y reposamuñecas magnético',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3068,13 +5875,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.0,
     'specs' => 
     array (
-      'Formato' => 'Completo con bloque numérico',
-      'Conexión' => 'USB por cable desmontable',
-      'Interruptores' => 'CHERRY MX Red',
-      'Iluminación' => 'RGB por tecla',
-      'Sondeo' => 'Hasta 8000 Hz mediante AXON',
-      'Memoria' => '8 MB integrada',
-      'Características' => 'Teclas PBT, rueda de volumen y modo torneo',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'Completo con bloque numérico',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'USB por cable desmontable',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interruptores',
+            'valor' => 'CHERRY MX Red',
+          ),
+          3 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB por tecla',
+          ),
+          4 => 
+          array (
+            'clave' => 'Sondeo',
+            'valor' => 'Hasta 8000 Hz mediante AXON',
+          ),
+          5 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 MB integrada',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Teclas PBT, rueda de volumen y modo torneo',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3103,11 +5945,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.2,
     'specs' => 
     array (
-      'Formato' => 'TKL',
-      'Conexión' => 'USB-C por cable desmontable',
-      'Interruptores' => 'OmniPoint 2.0 ajustables',
-      'Iluminación' => 'RGB por tecla',
-      'Características' => 'Rapid Trigger, pantalla OLED y reposamuñecas magnético',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'TKL',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'USB-C por cable desmontable',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interruptores',
+            'valor' => 'OmniPoint 2.0 ajustables',
+          ),
+          3 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB por tecla',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Rapid Trigger, pantalla OLED y reposamuñecas magnético',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3136,11 +6005,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.7,
     'specs' => 
     array (
-      'Formato' => 'TKL de 87 teclas',
-      'Tipo' => 'Mecánico',
-      'Conexión' => 'USB por cable',
-      'Iluminación' => 'RGB',
-      'Características' => 'Teclas de doble inyección, anti-ghosting completo y bloqueo de tecla Windows',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Formato',
+            'valor' => 'TKL de 87 teclas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Mecánico',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'USB por cable',
+          ),
+          3 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Teclas de doble inyección, anti-ghosting completo y bloqueo de tecla Windows',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3169,16 +6065,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.0,
     'specs' => 
     array (
-      'Diseño' => 'Simétrico, botones laterales a la izquierda',
-      'Orientación' => 'Uso con mano derecha',
-      'Conexión' => 'LIGHTSPEED de 2.4 GHz y USB por cable',
-      'Sensor' => 'Óptico HERO 2',
-      'Resolución' => 'Hasta 44000 dpi con firmware compatible',
-      'Botones' => '5',
-      'Sondeo' => 'Hasta 8000 Hz con firmware compatible',
-      'Batería' => 'Hasta 95 horas',
-      'Iluminación' => 'Sin RGB',
-      'Características' => 'Interruptores LIGHTFORCE y pies PTFE',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Diseño',
+            'valor' => 'Simétrico, botones laterales a la izquierda',
+          ),
+          1 => 
+          array (
+            'clave' => 'Orientación',
+            'valor' => 'Uso con mano derecha',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'LIGHTSPEED de 2.4 GHz y USB por cable',
+          ),
+          3 => 
+          array (
+            'clave' => 'Sensor',
+            'valor' => 'Óptico HERO 2',
+          ),
+          4 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => 'Hasta 44000 dpi con firmware compatible',
+          ),
+          5 => 
+          array (
+            'clave' => 'Botones',
+            'valor' => '5',
+          ),
+          6 => 
+          array (
+            'clave' => 'Sondeo',
+            'valor' => 'Hasta 8000 Hz con firmware compatible',
+          ),
+          7 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => 'Hasta 95 horas',
+          ),
+          8 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'Sin RGB',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Interruptores LIGHTFORCE y pies PTFE',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -3231,15 +6174,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.4,
     'specs' => 
     array (
-      'Diseño' => 'Ergonómico para mano derecha',
-      'Conexión' => 'HyperSpeed 2.4 GHz y cable USB-C',
-      'Sensor' => 'Focus Pro 30K óptico',
-      'Resolución' => 'Hasta 30000 dpi',
-      'Controles' => '5 botones programables',
-      'Sondeo' => '1000 Hz con receptor estándar',
-      'Batería' => 'Hasta 90 horas a 1000 Hz',
-      'Iluminación' => 'Sin RGB',
-      'Características' => 'Interruptores ópticos Razer de 3.ª generación',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Diseño',
+            'valor' => 'Ergonómico para mano derecha',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'HyperSpeed 2.4 GHz y cable USB-C',
+          ),
+          2 => 
+          array (
+            'clave' => 'Sensor',
+            'valor' => 'Focus Pro 30K óptico',
+          ),
+          3 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => 'Hasta 30000 dpi',
+          ),
+          4 => 
+          array (
+            'clave' => 'Controles',
+            'valor' => '5 botones programables',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sondeo',
+            'valor' => '1000 Hz con receptor estándar',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => 'Hasta 90 horas a 1000 Hz',
+          ),
+          7 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'Sin RGB',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Interruptores ópticos Razer de 3.ª generación',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3268,15 +6254,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.798,
     'specs' => 
     array (
-      'Diseño' => 'Simétrico con carcasa perforada',
-      'Conexión' => '2.4 GHz, Bluetooth y USB-C',
-      'Sensor' => 'TrueMove Air óptico',
-      'Resolución' => 'Hasta 18000 CPI',
-      'Botones' => '6',
-      'Protección' => 'IP54 AquaBarrier',
-      'Iluminación' => 'RGB de 3 zonas',
-      'Batería' => 'Hasta 200 horas, según modo',
-      'Características' => 'Pies PTFE',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Diseño',
+            'valor' => 'Simétrico con carcasa perforada',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => '2.4 GHz, Bluetooth y USB-C',
+          ),
+          2 => 
+          array (
+            'clave' => 'Sensor',
+            'valor' => 'TrueMove Air óptico',
+          ),
+          3 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => 'Hasta 18000 CPI',
+          ),
+          4 => 
+          array (
+            'clave' => 'Botones',
+            'valor' => '6',
+          ),
+          5 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP54 AquaBarrier',
+          ),
+          6 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB de 3 zonas',
+          ),
+          7 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => 'Hasta 200 horas, según modo',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Pies PTFE',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3305,14 +6334,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.24,
     'specs' => 
     array (
-      'Diseño' => 'Ergonómico para mano derecha',
-      'Conexión' => 'USB por cable',
-      'Sensor' => 'Óptico PixArt PMW3391',
-      'Resolución' => 'Hasta 18000 dpi',
-      'Botones' => '17 programables',
-      'Iluminación' => 'RGB de 4 zonas',
-      'Cable' => 'Trenzado, 1.8 m',
-      'Características' => 'Panel lateral de 12 botones ajustable y 3 perfiles integrados',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Diseño',
+            'valor' => 'Ergonómico para mano derecha',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'USB por cable',
+          ),
+          2 => 
+          array (
+            'clave' => 'Sensor',
+            'valor' => 'Óptico PixArt PMW3391',
+          ),
+          3 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => 'Hasta 18000 dpi',
+          ),
+          4 => 
+          array (
+            'clave' => 'Botones',
+            'valor' => '17 programables',
+          ),
+          5 => 
+          array (
+            'clave' => 'Iluminación',
+            'valor' => 'RGB de 4 zonas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Cable',
+            'valor' => 'Trenzado, 1.8 m',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Panel lateral de 12 botones ajustable y 3 perfiles integrados',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3341,13 +6409,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.82,
     'specs' => 
     array (
-      'Diseño' => 'Simétrico con carcasa cerrada',
-      'Conexión' => '2.4 GHz, Bluetooth y USB',
-      'Sensor' => 'HyperX 26K óptico',
-      'Resolución' => 'Hasta 26000 dpi',
-      'Botones' => '6',
-      'Batería' => 'Hasta 100 horas',
-      'Características' => 'Pies PTFE y personalización mediante NGENUITY',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Diseño',
+            'valor' => 'Simétrico con carcasa cerrada',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => '2.4 GHz, Bluetooth y USB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Sensor',
+            'valor' => 'HyperX 26K óptico',
+          ),
+          3 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => 'Hasta 26000 dpi',
+          ),
+          4 => 
+          array (
+            'clave' => 'Botones',
+            'valor' => '6',
+          ),
+          5 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => 'Hasta 100 horas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Pies PTFE y personalización mediante NGENUITY',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3376,14 +6479,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 7.5,
     'specs' => 
     array (
-      'Tipo' => 'Circumaural cerrado',
-      'Conexión' => 'Bluetooth 5.2 y audio de 3.5 mm',
-      'Cancelación' => 'ANC y modo sonido ambiente',
-      'Transductores' => '30 mm',
-      'Códecs' => 'SBC, AAC y LDAC',
-      'Autonomía' => 'Hasta 30 horas con ANC y hasta 40 sin ANC',
-      'Carga' => 'USB-C',
-      'Características' => 'Conexión multipunto y controles táctiles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Circumaural cerrado',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Bluetooth 5.2 y audio de 3.5 mm',
+          ),
+          2 => 
+          array (
+            'clave' => 'Cancelación',
+            'valor' => 'ANC y modo sonido ambiente',
+          ),
+          3 => 
+          array (
+            'clave' => 'Transductores',
+            'valor' => '30 mm',
+          ),
+          4 => 
+          array (
+            'clave' => 'Códecs',
+            'valor' => 'SBC, AAC y LDAC',
+          ),
+          5 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 30 horas con ANC y hasta 40 sin ANC',
+          ),
+          6 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Conexión multipunto y controles táctiles',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -3436,13 +6578,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 19.558,
     'specs' => 
     array (
-      'Tipo' => 'Circumaural inalámbrico',
-      'Conexión' => 'Bluetooth y entrada de audio',
-      'Cancelación' => 'ANC con CustomTune',
-      'Audio' => 'Bose Immersive Audio',
-      'Autonomía' => 'Hasta 24 horas, hasta 18 con audio inmersivo',
-      'Carga' => 'USB-C, carga completa aproximada de 3 horas',
-      'Características' => 'Modo Quiet y Aware',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Circumaural inalámbrico',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Bluetooth y entrada de audio',
+          ),
+          2 => 
+          array (
+            'clave' => 'Cancelación',
+            'valor' => 'ANC con CustomTune',
+          ),
+          3 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Bose Immersive Audio',
+          ),
+          4 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 24 horas, hasta 18 con audio inmersivo',
+          ),
+          5 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C, carga completa aproximada de 3 horas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Modo Quiet y Aware',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3471,14 +6648,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.6,
     'specs' => 
     array (
-      'Tipo' => 'Circumaural cerrado',
-      'Conexión' => 'Bluetooth 5.2, USB y audio analógico',
-      'Transductores' => '42 mm',
-      'Respuesta de frecuencia' => '6 Hz–22 kHz',
-      'Códecs' => 'SBC, AAC, aptX y aptX Adaptive',
-      'Cancelación' => 'ANC adaptativa y modo transparencia',
-      'Autonomía' => 'Hasta 60 horas',
-      'Características' => 'Controles táctiles y multipunto',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Circumaural cerrado',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Bluetooth 5.2, USB y audio analógico',
+          ),
+          2 => 
+          array (
+            'clave' => 'Transductores',
+            'valor' => '42 mm',
+          ),
+          3 => 
+          array (
+            'clave' => 'Respuesta de frecuencia',
+            'valor' => '6 Hz–22 kHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Códecs',
+            'valor' => 'SBC, AAC, aptX y aptX Adaptive',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cancelación',
+            'valor' => 'ANC adaptativa y modo transparencia',
+          ),
+          6 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 60 horas',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Controles táctiles y multipunto',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3507,14 +6723,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 18.73,
     'specs' => 
     array (
-      'Tipo' => 'Circumaural',
-      'Conexión' => 'Bluetooth 5.0',
-      'Cancelación' => 'ANC y modo ambiente',
-      'Audio' => 'Audio espacial personalizado con seguimiento de cabeza',
-      'Chip' => 'Apple H1 en cada auricular',
-      'Autonomía' => 'Hasta 20 horas',
-      'Carga' => 'USB-C',
-      'Características' => 'Digital Crown y Smart Case',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Circumaural',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Bluetooth 5.0',
+          ),
+          2 => 
+          array (
+            'clave' => 'Cancelación',
+            'valor' => 'ANC y modo ambiente',
+          ),
+          3 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Audio espacial personalizado con seguimiento de cabeza',
+          ),
+          4 => 
+          array (
+            'clave' => 'Chip',
+            'valor' => 'Apple H1 en cada auricular',
+          ),
+          5 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 20 horas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Digital Crown y Smart Case',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3543,14 +6798,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 9,
     'specs' => 
     array (
-      'Tipo' => 'Headset gamer circumaural',
-      'Conexión' => 'Inalámbrica de 2.4 GHz',
-      'Transductores' => '53 mm angulados',
-      'Respuesta de frecuencia' => '10 Hz–21 kHz',
-      'Autonomía' => 'Hasta 120 horas',
-      'Micrófono' => 'Desmontable de 10 mm con indicador LED',
-      'Compatibilidad' => 'PC, PS5, PS4 y Nintendo Switch',
-      'Características' => 'DTS Headphone:X en plataformas compatibles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Headset gamer circumaural',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Inalámbrica de 2.4 GHz',
+          ),
+          2 => 
+          array (
+            'clave' => 'Transductores',
+            'valor' => '53 mm angulados',
+          ),
+          3 => 
+          array (
+            'clave' => 'Respuesta de frecuencia',
+            'valor' => '10 Hz–21 kHz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 120 horas',
+          ),
+          5 => 
+          array (
+            'clave' => 'Micrófono',
+            'valor' => 'Desmontable de 10 mm con indicador LED',
+          ),
+          6 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'PC, PS5, PS4 y Nintendo Switch',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'DTS Headphone:X en plataformas compatibles',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3579,14 +6873,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 57.44,
     'specs' => 
     array (
-      'Pantalla' => '26.5 pulgadas OLED, clase 27',
-      'Resolución' => '2560 × 1440 QHD',
-      'Frecuencia' => '240 Hz',
-      'Respuesta' => '0.03 ms GtG',
-      'HDR' => 'HDR10',
-      'Sincronización' => 'FreeSync Premium y compatible con G-SYNC',
-      'Conectores' => 'HDMI 2.1, DisplayPort 1.4 y hub USB',
-      'Características' => 'Soporte con altura, giro, inclinación y pivote',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '26.5 pulgadas OLED, clase 27',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '2560 × 1440 QHD',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '240 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Respuesta',
+            'valor' => '0.03 ms GtG',
+          ),
+          4 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'HDR10',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sincronización',
+            'valor' => 'FreeSync Premium y compatible con G-SYNC',
+          ),
+          6 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'HDMI 2.1, DisplayPort 1.4 y hub USB',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Soporte con altura, giro, inclinación y pivote',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3615,14 +6948,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 59.45,
     'specs' => 
     array (
-      'Pantalla' => '32 pulgadas VA curva 1000R',
-      'Resolución' => '2560 × 1440 QHD',
-      'Frecuencia' => '240 Hz',
-      'Respuesta' => '1 ms GtG',
-      'HDR' => 'DisplayHDR 600',
-      'Sincronización' => 'FreeSync Premium Pro y compatible con G-SYNC',
-      'Conectores' => 'HDMI y DisplayPort',
-      'Características' => 'Panel QLED y soporte regulable',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '32 pulgadas VA curva 1000R',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '2560 × 1440 QHD',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '240 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Respuesta',
+            'valor' => '1 ms GtG',
+          ),
+          4 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'DisplayHDR 600',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sincronización',
+            'valor' => 'FreeSync Premium Pro y compatible con G-SYNC',
+          ),
+          6 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'HDMI y DisplayPort',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Panel QLED y soporte regulable',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3651,14 +7023,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 38.518,
     'specs' => 
     array (
-      'Pantalla' => '27 pulgadas IPS Black',
-      'Resolución' => '3840 × 2160 4K',
-      'Frecuencia' => '60 Hz',
-      'Contraste' => '2000:1',
-      'Color' => '98% DCI-P3',
-      'USB-C' => 'Video y alimentación hasta 90 W',
-      'Conectores' => 'HDMI, DisplayPort, USB-C, hub USB y Ethernet RJ45',
-      'Características' => 'KVM y conexión de monitores en cadena',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '27 pulgadas IPS Black',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160 4K',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '60 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Contraste',
+            'valor' => '2000:1',
+          ),
+          4 => 
+          array (
+            'clave' => 'Color',
+            'valor' => '98% DCI-P3',
+          ),
+          5 => 
+          array (
+            'clave' => 'USB-C',
+            'valor' => 'Video y alimentación hasta 90 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'HDMI, DisplayPort, USB-C, hub USB y Ethernet RJ45',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'KVM y conexión de monitores en cadena',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3687,13 +7098,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 56.09,
     'specs' => 
     array (
-      'Pantalla' => '27 pulgadas IPS',
-      'Resolución' => '3840 × 2160 4K',
-      'Frecuencia' => '60 Hz',
-      'Color' => '99% sRGB y 99% Rec.709',
-      'USB-C' => 'Alimentación hasta 65 W',
-      'Audio' => '2 altavoces de 2.5 W',
-      'Características' => 'KVM, modos CAD/CAM, Darkroom y M-Book',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '27 pulgadas IPS',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160 4K',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '60 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Color',
+            'valor' => '99% sRGB y 99% Rec.709',
+          ),
+          4 => 
+          array (
+            'clave' => 'USB-C',
+            'valor' => 'Alimentación hasta 65 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => '2 altavoces de 2.5 W',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'KVM, modos CAD/CAM, Darkroom y M-Book',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3722,14 +7168,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 57.16,
     'specs' => 
     array (
-      'Pantalla' => '27 pulgadas Nano IPS',
-      'Resolución' => '2560 × 1440',
-      'Frecuencia' => '144 Hz nativos, hasta 165 Hz con overclock',
-      'Respuesta' => '1 ms GtG',
-      'Color' => '98% DCI-P3',
-      'Sincronización' => 'NVIDIA G-SYNC',
-      'Conectores' => 'DisplayPort, HDMI y hub USB',
-      'Características' => 'Soporte ajustable e iluminación ELITE RGB',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '27 pulgadas Nano IPS',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '2560 × 1440',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '144 Hz nativos, hasta 165 Hz con overclock',
+          ),
+          3 => 
+          array (
+            'clave' => 'Respuesta',
+            'valor' => '1 ms GtG',
+          ),
+          4 => 
+          array (
+            'clave' => 'Color',
+            'valor' => '98% DCI-P3',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sincronización',
+            'valor' => 'NVIDIA G-SYNC',
+          ),
+          6 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'DisplayPort, HDMI y hub USB',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Soporte ajustable e iluminación ELITE RGB',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -3782,14 +7267,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 9.0424,
     'specs' => 
     array (
-      'Tipo' => 'Altavoz Bluetooth portátil',
-      'Bluetooth' => '4.2',
-      'Protección' => 'IP67',
-      'Autonomía' => 'Hasta 12 horas',
-      'Carga' => 'USB-C',
-      'Micrófono' => 'Integrado para llamadas',
-      'Características' => 'PositionIQ y Bose Connect',
-      'Potencia RMS' => 'No publicada por el fabricante',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Altavoz Bluetooth portátil',
+          ),
+          1 => 
+          array (
+            'clave' => 'Bluetooth',
+            'valor' => '4.2',
+          ),
+          2 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP67',
+          ),
+          3 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 12 horas',
+          ),
+          4 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C',
+          ),
+          5 => 
+          array (
+            'clave' => 'Micrófono',
+            'valor' => 'Integrado para llamadas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'PositionIQ y Bose Connect',
+          ),
+          7 => 
+          array (
+            'clave' => 'Potencia RMS',
+            'valor' => 'No publicada por el fabricante',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3818,14 +7342,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 9.65,
     'specs' => 
     array (
-      'Potencia' => '40 W RMS: 30 W woofer y 10 W tweeter',
-      'Bluetooth' => '5.1',
-      'Respuesta de frecuencia' => '60 Hz–20 kHz',
-      'Protección' => 'IP67',
-      'Autonomía' => 'Hasta 20 horas',
-      'Batería' => '27 Wh',
-      'Carga' => 'USB-C',
-      'Características' => 'JBL PartyBoost y salida USB para cargar dispositivos',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '40 W RMS: 30 W woofer y 10 W tweeter',
+          ),
+          1 => 
+          array (
+            'clave' => 'Bluetooth',
+            'valor' => '5.1',
+          ),
+          2 => 
+          array (
+            'clave' => 'Respuesta de frecuencia',
+            'valor' => '60 Hz–20 kHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP67',
+          ),
+          4 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 20 horas',
+          ),
+          5 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '27 Wh',
+          ),
+          6 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'JBL PartyBoost y salida USB para cargar dispositivos',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -3878,13 +7441,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.8,
     'specs' => 
     array (
-      'Potencia' => '2 amplificadores clase D de 10 W',
-      'Bluetooth' => '5.1',
-      'Respuesta de frecuencia' => '60 Hz–20 kHz',
-      'Protección' => 'IP67',
-      'Autonomía' => 'Más de 30 horas',
-      'Carga' => 'USB-C',
-      'Características' => 'Sonido estéreo multidireccional y Stack Mode',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '2 amplificadores clase D de 10 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Bluetooth',
+            'valor' => '5.1',
+          ),
+          2 => 
+          array (
+            'clave' => 'Respuesta de frecuencia',
+            'valor' => '60 Hz–20 kHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP67',
+          ),
+          4 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Más de 30 horas',
+          ),
+          5 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Sonido estéreo multidireccional y Stack Mode',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3913,12 +7511,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 23.4,
     'specs' => 
     array (
-      'Tipo' => 'Altavoces de estantería activos de 2 vías',
-      'Potencia total' => '42 W RMS, 21 W por canal',
-      'Entradas' => 'Bluetooth, 2 RCA, óptica y coaxial',
-      'Woofer' => '4 pulgadas',
-      'Tweeter' => '13 mm',
-      'Características' => 'Control remoto y controles laterales de graves, agudos y volumen',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Altavoces de estantería activos de 2 vías',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia total',
+            'valor' => '42 W RMS, 21 W por canal',
+          ),
+          2 => 
+          array (
+            'clave' => 'Entradas',
+            'valor' => 'Bluetooth, 2 RCA, óptica y coaxial',
+          ),
+          3 => 
+          array (
+            'clave' => 'Woofer',
+            'valor' => '4 pulgadas',
+          ),
+          4 => 
+          array (
+            'clave' => 'Tweeter',
+            'valor' => '13 mm',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Control remoto y controles laterales de graves, agudos y volumen',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3947,13 +7576,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 9.1,
     'specs' => 
     array (
-      'Tipo' => 'Altavoz Bluetooth compacto',
-      'Bluetooth' => '5.3',
-      'Protección' => 'IP67',
-      'Autonomía' => 'Hasta 16 horas',
-      'Carga' => 'USB-C',
-      'Micrófono' => 'Integrado',
-      'Características' => 'Sound Diffusion Processor y emparejamiento estéreo entre dos XB100',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Altavoz Bluetooth compacto',
+          ),
+          1 => 
+          array (
+            'clave' => 'Bluetooth',
+            'valor' => '5.3',
+          ),
+          2 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP67',
+          ),
+          3 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 16 horas',
+          ),
+          4 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'USB-C',
+          ),
+          5 => 
+          array (
+            'clave' => 'Micrófono',
+            'valor' => 'Integrado',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Sound Diffusion Processor y emparejamiento estéreo entre dos XB100',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -3982,13 +7646,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.92,
     'specs' => 
     array (
-      'Estándar' => 'Wi-Fi 6, doble banda',
-      'Clase' => 'AX5400',
-      'Velocidades de enlace' => 'Hasta 4804 Mb/s en 5 GHz y 574 Mb/s en 2.4 GHz',
-      'Puertos' => '1 WAN Gigabit y 4 LAN Gigabit',
-      'USB' => '1 USB 3.0',
-      'Antenas' => '6 externas fijas',
-      'Características' => 'OFDMA, MU-MIMO y canal de 160 MHz',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Estándar',
+            'valor' => 'Wi-Fi 6, doble banda',
+          ),
+          1 => 
+          array (
+            'clave' => 'Clase',
+            'valor' => 'AX5400',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidades de enlace',
+            'valor' => 'Hasta 4804 Mb/s en 5 GHz y 574 Mb/s en 2.4 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '1 WAN Gigabit y 4 LAN Gigabit',
+          ),
+          4 => 
+          array (
+            'clave' => 'USB',
+            'valor' => '1 USB 3.0',
+          ),
+          5 => 
+          array (
+            'clave' => 'Antenas',
+            'valor' => '6 externas fijas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'OFDMA, MU-MIMO y canal de 160 MHz',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4017,12 +7716,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.05,
     'specs' => 
     array (
-      'Estándar' => 'Wi-Fi 6, doble banda',
-      'Clase' => 'AX6000',
-      'Velocidades' => 'Hasta 4804 Mb/s en 5 GHz y 1148 Mb/s en 2.4 GHz',
-      'Puertos' => '1 WAN de 2.5 GbE, 1 LAN de 2.5 GbE y 4 LAN Gigabit',
-      'USB' => '1 USB 3.2 Gen 1',
-      'Características' => 'AiMesh, AiProtection Pro y soporte de VPN',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Estándar',
+            'valor' => 'Wi-Fi 6, doble banda',
+          ),
+          1 => 
+          array (
+            'clave' => 'Clase',
+            'valor' => 'AX6000',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidades',
+            'valor' => 'Hasta 4804 Mb/s en 5 GHz y 1148 Mb/s en 2.4 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '1 WAN de 2.5 GbE, 1 LAN de 2.5 GbE y 4 LAN Gigabit',
+          ),
+          4 => 
+          array (
+            'clave' => 'USB',
+            'valor' => '1 USB 3.2 Gen 1',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'AiMesh, AiProtection Pro y soporte de VPN',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4051,13 +7781,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 16.95,
     'specs' => 
     array (
-      'Estándar' => 'Wi-Fi 6E tribanda',
-      'Clase' => 'AXE11000',
-      'Bandas' => '2.4 GHz, 5 GHz y 6 GHz',
-      'Velocidades' => 'Hasta 1.2 + 4.8 + 4.8 Gb/s',
-      'Puertos' => '1 WAN Gigabit, 4 LAN Gigabit y 1 puerto 2.5G',
-      'USB' => '2 USB 3.0',
-      'Características' => 'Canales de 160 MHz y antenas integradas',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Estándar',
+            'valor' => 'Wi-Fi 6E tribanda',
+          ),
+          1 => 
+          array (
+            'clave' => 'Clase',
+            'valor' => 'AXE11000',
+          ),
+          2 => 
+          array (
+            'clave' => 'Bandas',
+            'valor' => '2.4 GHz, 5 GHz y 6 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Velocidades',
+            'valor' => 'Hasta 1.2 + 4.8 + 4.8 Gb/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '1 WAN Gigabit, 4 LAN Gigabit y 1 puerto 2.5G',
+          ),
+          5 => 
+          array (
+            'clave' => 'USB',
+            'valor' => '2 USB 3.0',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Canales de 160 MHz y antenas integradas',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4086,13 +7851,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.19,
     'specs' => 
     array (
-      'Estándar' => 'Wi-Fi 6, doble banda',
-      'Clase' => 'AX3200',
-      'Velocidades' => 'Hasta 2402 Mb/s en 5 GHz y 800 Mb/s en 2.4 GHz',
-      'Puertos' => '1 WAN Gigabit y 4 LAN Gigabit',
-      'Antenas' => '4 externas',
-      'Seguridad' => 'WPA3',
-      'Características' => 'AI Wi-Fi Optimizer y control parental',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Estándar',
+            'valor' => 'Wi-Fi 6, doble banda',
+          ),
+          1 => 
+          array (
+            'clave' => 'Clase',
+            'valor' => 'AX3200',
+          ),
+          2 => 
+          array (
+            'clave' => 'Velocidades',
+            'valor' => 'Hasta 2402 Mb/s en 5 GHz y 800 Mb/s en 2.4 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '1 WAN Gigabit y 4 LAN Gigabit',
+          ),
+          4 => 
+          array (
+            'clave' => 'Antenas',
+            'valor' => '4 externas',
+          ),
+          5 => 
+          array (
+            'clave' => 'Seguridad',
+            'valor' => 'WPA3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'AI Wi-Fi Optimizer y control parental',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4121,12 +7921,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 18.41,
     'specs' => 
     array (
-      'Estándar' => 'Wi-Fi 6',
-      'Puertos' => '1 WAN Gigabit y 4 LAN Gigabit',
-      'PoE' => '2 puertos LAN con salida PoE',
-      'Gestión' => 'UniFi Network y aplicaciones compatibles',
-      'Almacenamiento' => '128 GB integrado y ranura microSD',
-      'Características' => 'Router, punto de acceso y controlador UniFi en un equipo',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Estándar',
+            'valor' => 'Wi-Fi 6',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '1 WAN Gigabit y 4 LAN Gigabit',
+          ),
+          2 => 
+          array (
+            'clave' => 'PoE',
+            'valor' => '2 puertos LAN con salida PoE',
+          ),
+          3 => 
+          array (
+            'clave' => 'Gestión',
+            'valor' => 'UniFi Network y aplicaciones compatibles',
+          ),
+          4 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '128 GB integrado y ranura microSD',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Router, punto de acceso y controlador UniFi en un equipo',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4155,12 +7986,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.5,
     'specs' => 
     array (
-      'Tipo' => 'Switch Easy Smart',
-      'Puertos' => '8 RJ45 10/100/1000 Mb/s',
-      'Capacidad de conmutación' => '16 Gb/s',
-      'Gestión' => 'VLAN 802.1Q, QoS, IGMP Snooping y port mirroring',
-      'PoE' => 'No',
-      'Características' => 'Carcasa metálica y diseño sin ventilador',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Switch Easy Smart',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '8 RJ45 10/100/1000 Mb/s',
+          ),
+          2 => 
+          array (
+            'clave' => 'Capacidad de conmutación',
+            'valor' => '16 Gb/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Gestión',
+            'valor' => 'VLAN 802.1Q, QoS, IGMP Snooping y port mirroring',
+          ),
+          4 => 
+          array (
+            'clave' => 'PoE',
+            'valor' => 'No',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carcasa metálica y diseño sin ventilador',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4189,11 +8051,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.7,
     'specs' => 
     array (
-      'Tipo' => 'Switch Gigabit Plus/Easy Smart',
-      'Puertos' => '5 RJ45 10/100/1000 Mb/s',
-      'Gestión' => 'VLAN, QoS e IGMP Snooping',
-      'PoE' => 'No',
-      'Características' => 'Carcasa metálica y refrigeración pasiva',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Switch Gigabit Plus/Easy Smart',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '5 RJ45 10/100/1000 Mb/s',
+          ),
+          2 => 
+          array (
+            'clave' => 'Gestión',
+            'valor' => 'VLAN, QoS e IGMP Snooping',
+          ),
+          3 => 
+          array (
+            'clave' => 'PoE',
+            'valor' => 'No',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carcasa metálica y refrigeración pasiva',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4222,12 +8111,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.4,
     'specs' => 
     array (
-      'Tipo' => 'Switch no administrable',
-      'Puertos' => '8 Gigabit Ethernet RJ45',
-      'Capacidad de conmutación' => '16 Gb/s',
-      'PoE' => 'No',
-      'Alimentación' => 'Adaptador de 5 V/1 A',
-      'Características' => 'Auto MDI/MDIX y funcionamiento sin ventilador',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Switch no administrable',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '8 Gigabit Ethernet RJ45',
+          ),
+          2 => 
+          array (
+            'clave' => 'Capacidad de conmutación',
+            'valor' => '16 Gb/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'PoE',
+            'valor' => 'No',
+          ),
+          4 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'Adaptador de 5 V/1 A',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Auto MDI/MDIX y funcionamiento sin ventilador',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4256,12 +8176,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.117,
     'specs' => 
     array (
-      'Tipo' => 'Switch gestionado por UniFi Network',
-      'Puertos' => '5 Gigabit RJ45',
-      'Alimentación' => 'USB-C de 5 V o entrada PoE 802.3af/at',
-      'Salida PoE' => 'No',
-      'Conmutación' => '10 Gb/s',
-      'Características' => 'Equipo compacto para redes UniFi',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Switch gestionado por UniFi Network',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '5 Gigabit RJ45',
+          ),
+          2 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'USB-C de 5 V o entrada PoE 802.3af/at',
+          ),
+          3 => 
+          array (
+            'clave' => 'Salida PoE',
+            'valor' => 'No',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conmutación',
+            'valor' => '10 Gb/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Equipo compacto para redes UniFi',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4290,12 +8241,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.4,
     'specs' => 
     array (
-      'Tipo' => 'Adaptador de red',
-      'Conexión al equipo' => 'USB-C',
-      'Puerto de red' => '1 RJ45',
-      'Velocidad' => 'Hasta 1 Gb/s',
-      'Alimentación' => 'Mediante USB',
-      'Características' => 'Adaptador compacto para conexión Ethernet por cable',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Adaptador de red',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión al equipo',
+            'valor' => 'USB-C',
+          ),
+          2 => 
+          array (
+            'clave' => 'Puerto de red',
+            'valor' => '1 RJ45',
+          ),
+          3 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => 'Hasta 1 Gb/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'Mediante USB',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Adaptador compacto para conexión Ethernet por cable',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4324,12 +8306,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.6,
     'specs' => 
     array (
-      'Conectores' => 'USB-C macho en ambos extremos',
-      'Potencia' => 'Hasta 140 W con equipos y cargador compatibles',
-      'Longitud' => '0.9144 m (3 pies)',
-      'Datos' => 'USB 2.0, hasta 480 Mb/s',
-      'Recubrimiento' => 'Nylon trenzado',
-      'Características' => 'Cable orientado a carga de alta potencia',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'USB-C macho en ambos extremos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => 'Hasta 140 W con equipos y cargador compatibles',
+          ),
+          2 => 
+          array (
+            'clave' => 'Longitud',
+            'valor' => '0.9144 m (3 pies)',
+          ),
+          3 => 
+          array (
+            'clave' => 'Datos',
+            'valor' => 'USB 2.0, hasta 480 Mb/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Recubrimiento',
+            'valor' => 'Nylon trenzado',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cable orientado a carga de alta potencia',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -4382,11 +8395,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.9,
     'specs' => 
     array (
-      'Conectores' => 'HDMI macho a HDMI macho',
-      'Longitud' => '2 m',
-      'Ancho de banda' => 'Hasta 48 Gb/s',
-      'Video' => 'Hasta 4K a 120 Hz u 8K a 60 Hz con equipos compatibles',
-      'Características' => 'HDR y canal de retorno de audio',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'HDMI macho a HDMI macho',
+          ),
+          1 => 
+          array (
+            'clave' => 'Longitud',
+            'valor' => '2 m',
+          ),
+          2 => 
+          array (
+            'clave' => 'Ancho de banda',
+            'valor' => 'Hasta 48 Gb/s',
+          ),
+          3 => 
+          array (
+            'clave' => 'Video',
+            'valor' => 'Hasta 4K a 120 Hz u 8K a 60 Hz con equipos compatibles',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'HDR y canal de retorno de audio',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -4439,13 +8479,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Conectores' => 'USB-C en ambos extremos',
-      'Longitud' => '3 m',
-      'Datos' => 'Hasta 40 Gb/s por Thunderbolt 3/4 y USB4',
-      'USB 3' => 'Hasta 10 Gb/s',
-      'Carga' => 'Hasta 100 W',
-      'Video' => 'DisplayPort HBR3',
-      'Características' => 'Cable activo negro de diseño trenzado',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'USB-C en ambos extremos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Longitud',
+            'valor' => '3 m',
+          ),
+          2 => 
+          array (
+            'clave' => 'Datos',
+            'valor' => 'Hasta 40 Gb/s por Thunderbolt 3/4 y USB4',
+          ),
+          3 => 
+          array (
+            'clave' => 'USB 3',
+            'valor' => 'Hasta 10 Gb/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'Hasta 100 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Video',
+            'valor' => 'DisplayPort HBR3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cable activo negro de diseño trenzado',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4474,11 +8549,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.6,
     'specs' => 
     array (
-      'Tipo declarado' => 'Patch cord Cat6 RJ45',
-      'Código del fabricante' => 'No proporcionado',
-      'Longitud' => 'No proporcionada',
-      'Estado de verificación' => 'No se confirmó un modelo oficial que corresponda al nombre',
-      'Acción' => 'Solicitar foto del empaque y código del producto antes de publicar',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo declarado',
+            'valor' => 'Patch cord Cat6 RJ45',
+          ),
+          1 => 
+          array (
+            'clave' => 'Código del fabricante',
+            'valor' => 'No proporcionado',
+          ),
+          2 => 
+          array (
+            'clave' => 'Longitud',
+            'valor' => 'No proporcionada',
+          ),
+          3 => 
+          array (
+            'clave' => 'Estado de verificación',
+            'valor' => 'No se confirmó un modelo oficial que corresponda al nombre',
+          ),
+          4 => 
+          array (
+            'clave' => 'Acción',
+            'valor' => 'Solicitar foto del empaque y código del producto antes de publicar',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -4531,12 +8633,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.6,
     'specs' => 
     array (
-      'Categoría' => 'Cat6',
-      'Conectores' => 'RJ45 macho a RJ45 macho',
-      'Longitud' => '3 m',
-      'Blindaje' => 'UTP, sin blindaje',
-      'Uso' => 'Conexión Ethernet entre equipos y puertos de red',
-      'Características' => 'Patch cord para redes Gigabit',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Categoría',
+            'valor' => 'Cat6',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conectores',
+            'valor' => 'RJ45 macho a RJ45 macho',
+          ),
+          2 => 
+          array (
+            'clave' => 'Longitud',
+            'valor' => '3 m',
+          ),
+          3 => 
+          array (
+            'clave' => 'Blindaje',
+            'valor' => 'UTP, sin blindaje',
+          ),
+          4 => 
+          array (
+            'clave' => 'Uso',
+            'valor' => 'Conexión Ethernet entre equipos y puertos de red',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Patch cord para redes Gigabit',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4565,13 +8698,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.96,
     'specs' => 
     array (
-      'Capacidad' => '1 TB',
-      'Interfaz' => 'USB 3.2 Gen 2, 10 Gb/s',
-      'Conector' => 'USB-C',
-      'Lectura' => 'Hasta 1050 MB/s',
-      'Escritura' => 'Hasta 1000 MB/s',
-      'Protección' => 'IP65 en la revisión seleccionada',
-      'Características' => 'Carcasa de silicona y protección contra caídas de hasta 3 m',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '1 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'USB 3.2 Gen 2, 10 Gb/s',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conector',
+            'valor' => 'USB-C',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura',
+            'valor' => 'Hasta 1050 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura',
+            'valor' => 'Hasta 1000 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP65 en la revisión seleccionada',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carcasa de silicona y protección contra caídas de hasta 3 m',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -4624,13 +8792,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.3,
     'specs' => 
     array (
-      'Capacidad' => '2 TB',
-      'Interfaz' => 'USB 3.2 Gen 2, 10 Gb/s',
-      'Conector' => 'USB-C',
-      'Lectura' => 'Hasta 1050 MB/s',
-      'Escritura' => 'Hasta 1000 MB/s',
-      'Protección' => 'IP65',
-      'Características' => 'Protección contra caídas de hasta 3 m y cifrado AES de 256 bits',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '2 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'USB 3.2 Gen 2, 10 Gb/s',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conector',
+            'valor' => 'USB-C',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura',
+            'valor' => 'Hasta 1050 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Escritura',
+            'valor' => 'Hasta 1000 MB/s',
+          ),
+          5 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP65',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Protección contra caídas de hasta 3 m y cifrado AES de 256 bits',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4659,12 +8862,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.35,
     'specs' => 
     array (
-      'Capacidad' => '2 TB',
-      'Tipo' => 'Disco duro portátil',
-      'Interfaz' => 'USB 3.2 Gen 1/USB 3.0',
-      'Conector del cable al PC' => 'USB-A',
-      'Alimentación' => 'Mediante USB',
-      'Características' => 'Software de respaldo y protección mediante contraseña',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '2 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Disco duro portátil',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'USB 3.2 Gen 1/USB 3.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Conector del cable al PC',
+            'valor' => 'USB-A',
+          ),
+          4 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'Mediante USB',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Software de respaldo y protección mediante contraseña',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4693,12 +8927,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.09,
     'specs' => 
     array (
-      'Capacidad' => '4 TB',
-      'Tipo' => 'HDD portátil',
-      'Interfaz' => 'USB 3.0',
-      'Alimentación' => 'Mediante USB',
-      'Compatibilidad' => 'Reformateo según sistema operativo y uso',
-      'Características' => 'Almacenamiento externo portátil sin adaptador de CA',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '4 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'HDD portátil',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'USB 3.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'Mediante USB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'Reformateo según sistema operativo y uso',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Almacenamiento externo portátil sin adaptador de CA',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4727,13 +8992,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.0,
     'specs' => 
     array (
-      'Capacidad' => '1 TB',
-      'Interfaz' => 'USB 3.2 Gen 2',
-      'Conector' => 'USB-C',
-      'Lectura y escritura' => 'Hasta 1050 MB/s',
-      'Protección' => 'IP55',
-      'Cifrado' => 'AES de 256 bits',
-      'Características' => 'Carcasa compacta con resistencia a caídas de hasta 2 m',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '1 TB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Interfaz',
+            'valor' => 'USB 3.2 Gen 2',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conector',
+            'valor' => 'USB-C',
+          ),
+          3 => 
+          array (
+            'clave' => 'Lectura y escritura',
+            'valor' => 'Hasta 1050 MB/s',
+          ),
+          4 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP55',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cifrado',
+            'valor' => 'AES de 256 bits',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carcasa compacta con resistencia a caídas de hasta 2 m',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4762,13 +9062,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.6,
     'specs' => 
     array (
-      'Puertos' => '2 USB-C y 1 USB-A',
-      'Potencia total' => '65 W',
-      'USB-C individual' => 'Hasta 65 W',
-      'USB-A individual' => 'Hasta 22.5 W',
-      'Tecnología' => 'GaNPrime, PowerIQ 4.0 y PPS',
-      'Entrada' => '100–240 V CA',
-      'Características' => 'Distribución inteligente de potencia',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 USB-C y 1 USB-A',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia total',
+            'valor' => '65 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'USB-C individual',
+            'valor' => 'Hasta 65 W',
+          ),
+          3 => 
+          array (
+            'clave' => 'USB-A individual',
+            'valor' => 'Hasta 22.5 W',
+          ),
+          4 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'GaNPrime, PowerIQ 4.0 y PPS',
+          ),
+          5 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => '100–240 V CA',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Distribución inteligente de potencia',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4797,11 +9132,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 14.364,
     'specs' => 
     array (
-      'Tipo' => 'Base inalámbrica de 3 dispositivos',
-      'Carga de iPhone' => 'MagSafe hasta 15 W',
-      'Carga adicional' => 'Apple Watch y AirPods compatibles',
-      'Alimentación' => 'Adaptador externo incluido según presentación',
-      'Características' => 'Soporte vertical y carga simultánea',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Base inalámbrica de 3 dispositivos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Carga de iPhone',
+            'valor' => 'MagSafe hasta 15 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Carga adicional',
+            'valor' => 'Apple Watch y AirPods compatibles',
+          ),
+          3 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'Adaptador externo incluido según presentación',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Soporte vertical y carga simultánea',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4830,12 +9192,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.8,
     'specs' => 
     array (
-      'Potencia' => '20 W',
-      'Puerto' => '1 USB-C',
-      'Tecnología' => 'USB Power Delivery',
-      'Carga rápida' => 'Disponible en iPhone compatibles',
-      'Contenido' => 'Adaptador, cable no incluido',
-      'Características' => 'Fuente de alimentación compacta para dispositivos USB-C',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => '20 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puerto',
+            'valor' => '1 USB-C',
+          ),
+          2 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'USB Power Delivery',
+          ),
+          3 => 
+          array (
+            'clave' => 'Carga rápida',
+            'valor' => 'Disponible en iPhone compatibles',
+          ),
+          4 => 
+          array (
+            'clave' => 'Contenido',
+            'valor' => 'Adaptador, cable no incluido',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Fuente de alimentación compacta para dispositivos USB-C',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4864,12 +9257,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.37,
     'specs' => 
     array (
-      'Potencia' => 'Hasta 45 W',
-      'Puerto' => 'USB-C',
-      'Protocolos' => 'USB PD 3.0 PDO/PPS y Super Fast Charging 2.0',
-      'Entrada' => '100–240 V',
-      'Cable' => 'USB-C a USB-C de 5 A, 1.8 m incluido',
-      'Características' => 'Carga rápida para equipos Samsung compatibles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => 'Hasta 45 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puerto',
+            'valor' => 'USB-C',
+          ),
+          2 => 
+          array (
+            'clave' => 'Protocolos',
+            'valor' => 'USB PD 3.0 PDO/PPS y Super Fast Charging 2.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => '100–240 V',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cable',
+            'valor' => 'USB-C a USB-C de 5 A, 1.8 m incluido',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carga rápida para equipos Samsung compatibles',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4898,12 +9322,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.8,
     'specs' => 
     array (
-      'Potencia' => 'Hasta 67 W',
-      'Puerto' => 'USB-A',
-      'Entrada' => '100–240 V CA',
-      'Carga normal' => '5 V/3 A',
-      'Salida rápida' => '5–20 V, hasta 67 W',
-      'Características' => 'Identificación inteligente de dispositivo y compatibilidad de carga rápida',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => 'Hasta 67 W',
+          ),
+          1 => 
+          array (
+            'clave' => 'Puerto',
+            'valor' => 'USB-A',
+          ),
+          2 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => '100–240 V CA',
+          ),
+          3 => 
+          array (
+            'clave' => 'Carga normal',
+            'valor' => '5 V/3 A',
+          ),
+          4 => 
+          array (
+            'clave' => 'Salida rápida',
+            'valor' => '5–20 V, hasta 67 W',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Identificación inteligente de dispositivo y compatibilidad de carga rápida',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4932,11 +9387,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.95,
     'specs' => 
     array (
-      'Capacidad nominal' => '24000 mAh',
-      'Potencia' => 'Hasta 140 W',
-      'Puertos' => '2 USB-C y 1 USB-A',
-      'Tecnología' => 'USB PD 3.1',
-      'Características' => 'Carga bidireccional y pantalla digital',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad nominal',
+            'valor' => '24000 mAh',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => 'Hasta 140 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 USB-C y 1 USB-A',
+          ),
+          3 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'USB PD 3.1',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carga bidireccional y pantalla digital',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4965,12 +9447,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.75,
     'specs' => 
     array (
-      'Capacidad de celdas' => '20000 mAh, 74 Wh',
-      'Capacidad nominal a la salida' => '12000 mAh a 5 V/4 A',
-      'Potencia de salida' => 'Hasta 50 W',
-      'Entrada' => 'USB-C, hasta 45 W',
-      'Puertos' => 'USB-C y USB-A',
-      'Características' => 'Carga de múltiples dispositivos y modo de baja corriente',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad de celdas',
+            'valor' => '20000 mAh, 74 Wh',
+          ),
+          1 => 
+          array (
+            'clave' => 'Capacidad nominal a la salida',
+            'valor' => '12000 mAh a 5 V/4 A',
+          ),
+          2 => 
+          array (
+            'clave' => 'Potencia de salida',
+            'valor' => 'Hasta 50 W',
+          ),
+          3 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => 'USB-C, hasta 45 W',
+          ),
+          4 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => 'USB-C y USB-A',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carga de múltiples dispositivos y modo de baja corriente',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -4999,10 +9512,33 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.4892,
     'specs' => 
     array (
-      'Capacidad' => '5000 mAh',
-      'Potencia' => 'Hasta 22.5 W',
-      'Conexión' => 'Conector USB-C integrado plegable y puerto USB-C',
-      'Características' => 'Formato compacto para carga de teléfonos compatibles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '5000 mAh',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => 'Hasta 22.5 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Conector USB-C integrado plegable y puerto USB-C',
+          ),
+          3 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Formato compacto para carga de teléfonos compatibles',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -5055,11 +9591,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.57,
     'specs' => 
     array (
-      'Capacidad' => '10000 mAh',
-      'Potencia total' => 'Hasta 15 W',
-      'Puertos' => '1 USB-C y 2 USB-A',
-      'Carga simultánea' => 'Hasta 3 dispositivos',
-      'Características' => 'Indicadores LED de batería',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '10000 mAh',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia total',
+            'valor' => 'Hasta 15 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '1 USB-C y 2 USB-A',
+          ),
+          3 => 
+          array (
+            'clave' => 'Carga simultánea',
+            'valor' => 'Hasta 3 dispositivos',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Indicadores LED de batería',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5088,12 +9651,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.56,
     'specs' => 
     array (
-      'Capacidad' => '10000 mAh',
-      'Potencia' => 'Hasta 25 W',
-      'Puertos' => '2 USB-C',
-      'Protocolos' => 'USB PD 3.0 PDO/PPS y Samsung SFC',
-      'Carga inalámbrica' => 'No',
-      'Características' => 'Carga de dos dispositivos y diseño portátil',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Capacidad',
+            'valor' => '10000 mAh',
+          ),
+          1 => 
+          array (
+            'clave' => 'Potencia',
+            'valor' => 'Hasta 25 W',
+          ),
+          2 => 
+          array (
+            'clave' => 'Puertos',
+            'valor' => '2 USB-C',
+          ),
+          3 => 
+          array (
+            'clave' => 'Protocolos',
+            'valor' => 'USB PD 3.0 PDO/PPS y Samsung SFC',
+          ),
+          4 => 
+          array (
+            'clave' => 'Carga inalámbrica',
+            'valor' => 'No',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Carga de dos dispositivos y diseño portátil',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5122,11 +9716,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.2,
     'specs' => 
     array (
-      'Compatibilidad' => 'iPhone 15 de 6.1 pulgadas',
-      'Material exterior' => 'Silicona',
-      'Interior' => 'Microfibra',
-      'MagSafe' => 'Imanes integrados',
-      'Características' => 'Protección del cuerpo y compatibilidad con carga inalámbrica',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'iPhone 15 de 6.1 pulgadas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Material exterior',
+            'valor' => 'Silicona',
+          ),
+          2 => 
+          array (
+            'clave' => 'Interior',
+            'valor' => 'Microfibra',
+          ),
+          3 => 
+          array (
+            'clave' => 'MagSafe',
+            'valor' => 'Imanes integrados',
+          ),
+          4 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Protección del cuerpo y compatibilidad con carga inalámbrica',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -5179,10 +9800,33 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 16.61,
     'specs' => 
     array (
-      'Compatibilidad' => 'Galaxy S24 Ultra',
-      'Tipo' => 'Funda con correa de agarre y soporte',
-      'Material' => 'Acabado de silicona',
-      'Características' => 'Soporte para visualización horizontal y agarre posterior',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'Galaxy S24 Ultra',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Funda con correa de agarre y soporte',
+          ),
+          2 => 
+          array (
+            'clave' => 'Material',
+            'valor' => 'Acabado de silicona',
+          ),
+          3 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Soporte para visualización horizontal y agarre posterior',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5211,10 +9855,33 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.03,
     'specs' => 
     array (
-      'Compatibilidad' => 'iPhone 15 Pro Max',
-      'Tipo' => 'Protector de pantalla',
-      'Material' => 'Vidrio UltraGlass 2',
-      'Características' => 'Protección de pantalla y conservación de sensibilidad táctil',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'iPhone 15 Pro Max',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Protector de pantalla',
+          ),
+          2 => 
+          array (
+            'clave' => 'Material',
+            'valor' => 'Vidrio UltraGlass 2',
+          ),
+          3 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Protección de pantalla y conservación de sensibilidad táctil',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5243,11 +9910,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.2,
     'specs' => 
     array (
-      'Tipo declarado' => 'Protector de lentes de cámara',
-      'Marca declarada' => 'Anker',
-      'Modelo' => 'No identificado',
-      'Compatibilidad' => 'Teléfono no indicado',
-      'Estado' => 'Sin ficha oficial verificable',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo declarado',
+            'valor' => 'Protector de lentes de cámara',
+          ),
+          1 => 
+          array (
+            'clave' => 'Marca declarada',
+            'valor' => 'Anker',
+          ),
+          2 => 
+          array (
+            'clave' => 'Modelo',
+            'valor' => 'No identificado',
+          ),
+          3 => 
+          array (
+            'clave' => 'Compatibilidad',
+            'valor' => 'Teléfono no indicado',
+          ),
+          4 => 
+          array (
+            'clave' => 'Estado',
+            'valor' => 'Sin ficha oficial verificable',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5276,11 +9970,38 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.1,
     'specs' => 
     array (
-      'Compatibilidad seleccionada' => 'iPad Air de 11 pulgadas M2',
-      'Tipo' => 'Funda magnética frontal y posterior',
-      'Función' => 'Activación al abrir y reposo al cerrar',
-      'Características' => 'Soporte plegable con varios ángulos',
-      'Contenido' => 'Smart Folio, iPad no incluido',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Compatibilidad seleccionada',
+            'valor' => 'iPad Air de 11 pulgadas M2',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Funda magnética frontal y posterior',
+          ),
+          2 => 
+          array (
+            'clave' => 'Función',
+            'valor' => 'Activación al abrir y reposo al cerrar',
+          ),
+          3 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Soporte plegable con varios ángulos',
+          ),
+          4 => 
+          array (
+            'clave' => 'Contenido',
+            'valor' => 'Smart Folio, iPad no incluido',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5309,15 +10030,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.825,
     'specs' => 
     array (
-      'Procesador' => 'Apple A17 Pro',
-      'Almacenamiento' => '256 GB',
-      'Pantalla' => '6.7 pulgadas OLED Super Retina XDR, 2796 × 1290, ProMotion hasta 120 Hz',
-      'Cámara trasera' => 'Principal 48 MP, ultra gran angular 12 MP y teleobjetivo 12 MP de 5×',
-      'Cámara frontal' => '12 MP TrueDepth',
-      'Conexión' => '5G, Wi-Fi 6E, Bluetooth 5.3 y USB-C USB 3',
-      'Protección' => 'IP68, condiciones de laboratorio',
-      'Seguridad' => 'Face ID',
-      'Características' => 'Botón de acción y estructura de titanio',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Apple A17 Pro',
+          ),
+          1 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '256 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '6.7 pulgadas OLED Super Retina XDR, 2796 × 1290, ProMotion hasta 120 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Cámara trasera',
+            'valor' => 'Principal 48 MP, ultra gran angular 12 MP y teleobjetivo 12 MP de 5×',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámara frontal',
+            'valor' => '12 MP TrueDepth',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => '5G, Wi-Fi 6E, Bluetooth 5.3 y USB-C USB 3',
+          ),
+          6 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP68, condiciones de laboratorio',
+          ),
+          7 => 
+          array (
+            'clave' => 'Seguridad',
+            'valor' => 'Face ID',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Botón de acción y estructura de titanio',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -5370,16 +10134,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.86,
     'specs' => 
     array (
-      'Procesador' => 'Snapdragon 8 Gen 3 for Galaxy',
-      'Memoria' => '12 GB',
-      'Almacenamiento' => '256 GB',
-      'Pantalla' => '6.8 pulgadas Dynamic AMOLED 2X, 3120 × 1440, hasta 120 Hz',
-      'Cámaras posteriores' => '200 MP + 50 MP + 12 MP + 10 MP',
-      'Cámara frontal' => '12 MP',
-      'Batería' => '5000 mAh típica',
-      'Carga por cable' => 'Hasta 45 W',
-      'Protección' => 'IP68',
-      'Características' => 'S Pen, Galaxy AI y Samsung DeX',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Snapdragon 8 Gen 3 for Galaxy',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '12 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '256 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '6.8 pulgadas Dynamic AMOLED 2X, 3120 × 1440, hasta 120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámaras posteriores',
+            'valor' => '200 MP + 50 MP + 12 MP + 10 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cámara frontal',
+            'valor' => '12 MP',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '5000 mAh típica',
+          ),
+          7 => 
+          array (
+            'clave' => 'Carga por cable',
+            'valor' => 'Hasta 45 W',
+          ),
+          8 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP68',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'S Pen, Galaxy AI y Samsung DeX',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5408,16 +10219,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.88,
     'specs' => 
     array (
-      'Procesador' => 'Google Tensor G3',
-      'Memoria' => '12 GB LPDDR5X',
-      'Almacenamiento' => '128 GB UFS 3.1',
-      'Pantalla' => '6.7 pulgadas LTPO OLED, 2992 × 1344, 1–120 Hz',
-      'Cámaras posteriores' => '50 MP + 48 MP ultra gran angular + 48 MP teleobjetivo',
-      'Cámara frontal' => '10.5 MP',
-      'Batería' => '5050 mAh típica',
-      'Conectividad' => '5G, Wi-Fi 7 y Bluetooth 5.3',
-      'Protección' => 'IP68',
-      'Características' => 'Actualizaciones durante 7 años desde lanzamiento',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Google Tensor G3',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '12 GB LPDDR5X',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '128 GB UFS 3.1',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '6.7 pulgadas LTPO OLED, 2992 × 1344, 1–120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámaras posteriores',
+            'valor' => '50 MP + 48 MP ultra gran angular + 48 MP teleobjetivo',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cámara frontal',
+            'valor' => '10.5 MP',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '5050 mAh típica',
+          ),
+          7 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => '5G, Wi-Fi 7 y Bluetooth 5.3',
+          ),
+          8 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP68',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Actualizaciones durante 7 años desde lanzamiento',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5446,16 +10304,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.92,
     'specs' => 
     array (
-      'Procesador' => 'Snapdragon 8 Gen 3',
-      'Memoria' => '16 GB LPDDR5X',
-      'Almacenamiento' => '512 GB UFS 4.0',
-      'Pantalla' => '6.73 pulgadas LTPO AMOLED 3200 × 1440, 1–120 Hz',
-      'Cámaras' => 'Cuatro cámaras Leica de 50 MP',
-      'Cámara principal' => 'Sensor LYT-900 de 1 pulgada, apertura variable f/1.63–f/4.0',
-      'Batería' => '5000 mAh típica, versión global',
-      'Carga' => '90 W por cable y 80 W inalámbrica',
-      'Protección' => 'IP68',
-      'Características' => 'Óptica Leica y teleobjetivos de 75 y 120 mm',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Snapdragon 8 Gen 3',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5X',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '512 GB UFS 4.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '6.73 pulgadas LTPO AMOLED 3200 × 1440, 1–120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámaras',
+            'valor' => 'Cuatro cámaras Leica de 50 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cámara principal',
+            'valor' => 'Sensor LYT-900 de 1 pulgada, apertura variable f/1.63–f/4.0',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '5000 mAh típica, versión global',
+          ),
+          7 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => '90 W por cable y 80 W inalámbrica',
+          ),
+          8 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP68',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Óptica Leica y teleobjetivos de 75 y 120 mm',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5484,16 +10389,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.915,
     'specs' => 
     array (
-      'Procesador' => 'Snapdragon 8 Gen 3',
-      'Memoria' => '16 GB LPDDR5X',
-      'Almacenamiento' => '512 GB UFS 4.0',
-      'Pantalla' => '6.82 pulgadas LTPO, 3168 × 1440, 1–120 Hz',
-      'Cámaras posteriores' => '50 MP + 48 MP + 64 MP',
-      'Cámara frontal' => '32 MP',
-      'Batería' => '5400 mAh',
-      'Carga' => 'Hasta 100 W SUPERVOOC y 50 W AIRVOOC en referencia europea',
-      'Protección' => 'IP65',
-      'Características' => 'Sistema de cámara Hasselblad',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Snapdragon 8 Gen 3',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5X',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '512 GB UFS 4.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '6.82 pulgadas LTPO, 3168 × 1440, 1–120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámaras posteriores',
+            'valor' => '50 MP + 48 MP + 64 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cámara frontal',
+            'valor' => '32 MP',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '5400 mAh',
+          ),
+          7 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'Hasta 100 W SUPERVOOC y 50 W AIRVOOC en referencia europea',
+          ),
+          8 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP65',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Sistema de cámara Hasselblad',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5522,15 +10474,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.53,
     'specs' => 
     array (
-      'Procesador' => 'Apple M4, CPU de 9 núcleos y GPU de 10 núcleos en 256 GB',
-      'Memoria' => '8 GB',
-      'Almacenamiento' => '256 GB',
-      'Pantalla' => 'Ultra Retina XDR Tandem OLED, 2420 × 1668, ProMotion 10–120 Hz',
-      'Cámara' => 'Trasera 12 MP y frontal ultra gran angular 12 MP',
-      'Puerto' => 'Thunderbolt/USB 4 USB-C',
-      'Conectividad' => 'Wi-Fi 6E y Bluetooth 5.3',
-      'Seguridad' => 'Face ID',
-      'Características' => 'Compatible con Apple Pencil Pro y Apple Pencil USB-C',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Apple M4, CPU de 9 núcleos y GPU de 10 núcleos en 256 GB',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '256 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'Ultra Retina XDR Tandem OLED, 2420 × 1668, ProMotion 10–120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámara',
+            'valor' => 'Trasera 12 MP y frontal ultra gran angular 12 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Puerto',
+            'valor' => 'Thunderbolt/USB 4 USB-C',
+          ),
+          6 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi 6E y Bluetooth 5.3',
+          ),
+          7 => 
+          array (
+            'clave' => 'Seguridad',
+            'valor' => 'Face ID',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Compatible con Apple Pencil Pro y Apple Pencil USB-C',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -5583,16 +10578,63 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.55,
     'specs' => 
     array (
-      'Procesador' => 'Snapdragon 8 Gen 2 for Galaxy',
-      'Memoria' => '12 GB',
-      'Almacenamiento' => '256 GB y expansión microSD',
-      'Pantalla' => '14.6 pulgadas Dynamic AMOLED 2X, 2960 × 1848, 120 Hz',
-      'Cámaras traseras' => '13 MP + 8 MP',
-      'Cámaras frontales' => '12 MP + 12 MP',
-      'Batería' => '11200 mAh típica',
-      'Carga' => 'Hasta 45 W',
-      'Protección' => 'IP68',
-      'Características' => 'S Pen incluido y Samsung DeX',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Snapdragon 8 Gen 2 for Galaxy',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '12 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '256 GB y expansión microSD',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '14.6 pulgadas Dynamic AMOLED 2X, 2960 × 1848, 120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámaras traseras',
+            'valor' => '13 MP + 8 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Cámaras frontales',
+            'valor' => '12 MP + 12 MP',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '11200 mAh típica',
+          ),
+          7 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => 'Hasta 45 W',
+          ),
+          8 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP68',
+          ),
+          9 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'S Pen incluido y Samsung DeX',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5621,15 +10663,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.651,
     'specs' => 
     array (
-      'Procesador' => 'Snapdragon 870',
-      'Memoria' => '6 GB LPDDR5',
-      'Almacenamiento' => '128 GB UFS 3.1',
-      'Pantalla' => '11 pulgadas LCD 2880 × 1800, hasta 144 Hz',
-      'Cámara trasera/frontal' => '13 MP/8 MP',
-      'Batería' => '8840 mAh típica',
-      'Carga' => '33 W',
-      'Audio' => 'Cuatro altavoces Dolby Atmos',
-      'Características' => 'Wi-Fi, sin conexión celular',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Snapdragon 870',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '6 GB LPDDR5',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '128 GB UFS 3.1',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '11 pulgadas LCD 2880 × 1800, hasta 144 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámara trasera/frontal',
+            'valor' => '13 MP/8 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '8840 mAh típica',
+          ),
+          6 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => '33 W',
+          ),
+          7 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Cuatro altavoces Dolby Atmos',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Wi-Fi, sin conexión celular',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5658,14 +10743,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.68,
     'specs' => 
     array (
-      'Procesador' => 'MediaTek Kompanio 1300T',
-      'Memoria' => '6 GB',
-      'Almacenamiento' => '128 GB con expansión microSD',
-      'Pantalla' => '11.2 pulgadas OLED, 2560 × 1536, 120 Hz',
-      'Cámara trasera/frontal' => '13 MP/8 MP',
-      'Batería' => '8200 mAh típica',
-      'Audio' => 'Cuatro altavoces JBL con Dolby Atmos',
-      'Características' => 'Dolby Vision y HDR10+',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'MediaTek Kompanio 1300T',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '6 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '128 GB con expansión microSD',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '11.2 pulgadas OLED, 2560 × 1536, 120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámara trasera/frontal',
+            'valor' => '13 MP/8 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '8200 mAh típica',
+          ),
+          6 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Cuatro altavoces JBL con Dolby Atmos',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Dolby Vision y HDR10+',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5694,14 +10818,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.685,
     'specs' => 
     array (
-      'Procesador' => 'Qualcomm Snapdragon 7 Gen 1',
-      'Memoria' => '8 GB',
-      'Almacenamiento' => '256 GB',
-      'Pantalla' => '11.5 pulgadas PaperMatte 2200 × 1440, hasta 120 Hz',
-      'Cámara trasera/frontal' => '13 MP/8 MP',
-      'Batería' => '7700 mAh típica',
-      'Carga' => '22.5 W',
-      'Características' => 'Pantalla antirreflejos y HarmonyOS',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Qualcomm Snapdragon 7 Gen 1',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '8 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '256 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '11.5 pulgadas PaperMatte 2200 × 1440, hasta 120 Hz',
+          ),
+          4 => 
+          array (
+            'clave' => 'Cámara trasera/frontal',
+            'valor' => '13 MP/8 MP',
+          ),
+          5 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '7700 mAh típica',
+          ),
+          6 => 
+          array (
+            'clave' => 'Carga',
+            'valor' => '22.5 W',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Pantalla antirreflejos y HarmonyOS',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5730,13 +10893,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.07,
     'specs' => 
     array (
-      'Chip' => 'Apple S9 SiP',
-      'Pantalla' => 'Retina LTPO OLED siempre activa, hasta 2000 nits',
-      'Almacenamiento' => '64 GB',
-      'Conexión' => 'GPS, Wi-Fi y Bluetooth 5.3',
-      'Resistencia' => 'Agua hasta 50 m e IP6X',
-      'Autonomía' => 'Hasta 18 horas, hasta 36 en bajo consumo',
-      'Características' => 'Digital Crown y gesto de doble toque',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Chip',
+            'valor' => 'Apple S9 SiP',
+          ),
+          1 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'Retina LTPO OLED siempre activa, hasta 2000 nits',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '64 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'GPS, Wi-Fi y Bluetooth 5.3',
+          ),
+          4 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => 'Agua hasta 50 m e IP6X',
+          ),
+          5 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 18 horas, hasta 36 en bajo consumo',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Digital Crown y gesto de doble toque',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -5789,13 +10987,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.09,
     'specs' => 
     array (
-      'Procesador' => 'Exynos W930',
-      'Memoria' => '2 GB RAM y 16 GB almacenamiento',
-      'Pantalla' => '1.5 pulgadas Super AMOLED, 480 × 480',
-      'Batería' => '425 mAh típica',
-      'Conectividad' => 'LTE/eSIM, Bluetooth 5.3, Wi-Fi y NFC',
-      'Protección' => '5 ATM e IP68',
-      'Características' => 'Bisel giratorio y Wear OS',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Exynos W930',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '2 GB RAM y 16 GB almacenamiento',
+          ),
+          2 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '1.5 pulgadas Super AMOLED, 480 × 480',
+          ),
+          3 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '425 mAh típica',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'LTE/eSIM, Bluetooth 5.3, Wi-Fi y NFC',
+          ),
+          5 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => '5 ATM e IP68',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Bisel giratorio y Wear OS',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5824,13 +11057,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.45,
     'specs' => 
     array (
-      'Pantalla' => '1.3 pulgadas MIP, 260 × 260',
-      'Cristal' => 'Power Sapphire con carga solar',
-      'Caja' => '47 mm, bisel de titanio',
-      'Posicionamiento' => 'GNSS multibanda y SatIQ',
-      'Resistencia' => '10 ATM',
-      'Autonomía' => 'Hasta 18 días en modo smartwatch, hasta 22 con condiciones solares oficiales',
-      'Características' => 'Linterna LED, mapas y métricas deportivas',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '1.3 pulgadas MIP, 260 × 260',
+          ),
+          1 => 
+          array (
+            'clave' => 'Cristal',
+            'valor' => 'Power Sapphire con carga solar',
+          ),
+          2 => 
+          array (
+            'clave' => 'Caja',
+            'valor' => '47 mm, bisel de titanio',
+          ),
+          3 => 
+          array (
+            'clave' => 'Posicionamiento',
+            'valor' => 'GNSS multibanda y SatIQ',
+          ),
+          4 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '10 ATM',
+          ),
+          5 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 18 días en modo smartwatch, hasta 22 con condiciones solares oficiales',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Linterna LED, mapas y métricas deportivas',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5859,13 +11127,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.06,
     'specs' => 
     array (
-      'Pantalla' => '1.43 pulgadas AMOLED, 466 × 466',
-      'GPS' => 'Doble banda',
-      'Resistencia' => '5 ATM',
-      'Batería' => '475 mAh',
-      'Autonomía' => 'Hasta 14 días con uso típico',
-      'Sistema' => 'Zepp OS',
-      'Características' => 'Llamadas Bluetooth y seguimiento de salud',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '1.43 pulgadas AMOLED, 466 × 466',
+          ),
+          1 => 
+          array (
+            'clave' => 'GPS',
+            'valor' => 'Doble banda',
+          ),
+          2 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '5 ATM',
+          ),
+          3 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '475 mAh',
+          ),
+          4 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 14 días con uso típico',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Zepp OS',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Llamadas Bluetooth y seguimiento de salud',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5894,14 +11197,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.18,
     'specs' => 
     array (
-      'Procesador' => 'Snapdragon W5+ Gen 1',
-      'Memoria' => '2 GB RAM y 32 GB almacenamiento',
-      'Pantalla' => '1.43 pulgadas AMOLED, 466 × 466',
-      'Batería' => '495 mAh',
-      'Autonomía' => 'Hasta 65 horas para Bluetooth',
-      'Sistema' => 'Wear OS',
-      'Resistencia' => '5 ATM',
-      'Características' => 'GNSS y aplicaciones de Google',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Snapdragon W5+ Gen 1',
+          ),
+          1 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '2 GB RAM y 32 GB almacenamiento',
+          ),
+          2 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '1.43 pulgadas AMOLED, 466 × 466',
+          ),
+          3 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '495 mAh',
+          ),
+          4 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => 'Hasta 65 horas para Bluetooth',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Wear OS',
+          ),
+          6 => 
+          array (
+            'clave' => 'Resistencia',
+            'valor' => '5 ATM',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'GNSS y aplicaciones de Google',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5930,14 +11272,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 75.7,
     'specs' => 
     array (
-      'Pantalla' => 'OLED evo de 55 pulgadas',
-      'Resolución' => '3840 × 2160 4K',
-      'Frecuencia' => '120 Hz',
-      'Procesador' => 'α9 AI 4K Gen6',
-      'Sistema' => 'webOS 23',
-      'HDR' => 'Dolby Vision, HDR10 y HLG',
-      'HDMI' => '4 puertos con funciones HDMI 2.1',
-      'Características' => 'VRR, ALLM, G-SYNC Compatible y FreeSync',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'OLED evo de 55 pulgadas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160 4K',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '120 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'α9 AI 4K Gen6',
+          ),
+          4 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'webOS 23',
+          ),
+          5 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'Dolby Vision, HDR10 y HLG',
+          ),
+          6 => 
+          array (
+            'clave' => 'HDMI',
+            'valor' => '4 puertos con funciones HDMI 2.1',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'VRR, ALLM, G-SYNC Compatible y FreeSync',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -5966,13 +11347,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 89.13,
     'specs' => 
     array (
-      'Pantalla' => 'Neo QLED Mini LED de 65 pulgadas',
-      'Resolución' => '3840 × 2160',
-      'Frecuencia' => '120 Hz',
-      'Sistema' => 'Tizen Smart TV',
-      'HDR' => 'Neo Quantum HDR+',
-      'HDMI' => '4 puertos',
-      'Características' => 'Quantum Matrix, VRR, ALLM y eARC',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'Neo QLED Mini LED de 65 pulgadas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '120 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Tizen Smart TV',
+          ),
+          4 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'Neo Quantum HDR+',
+          ),
+          5 => 
+          array (
+            'clave' => 'HDMI',
+            'valor' => '4 puertos',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Quantum Matrix, VRR, ALLM y eARC',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6001,14 +11417,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 73.8,
     'specs' => 
     array (
-      'Pantalla' => 'OLED de 55 pulgadas',
-      'Resolución' => '3840 × 2160',
-      'Frecuencia' => '120 Hz',
-      'Procesador' => 'Cognitive Processor XR',
-      'Sistema' => 'Google TV',
-      'HDR' => 'Dolby Vision, HDR10 y HLG',
-      'HDMI' => '4 puertos, dos con funciones HDMI 2.1 avanzadas',
-      'Características' => 'Acoustic Surface Audio+, VRR y ALLM',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'OLED de 55 pulgadas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia',
+            'valor' => '120 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'Cognitive Processor XR',
+          ),
+          4 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Google TV',
+          ),
+          5 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'Dolby Vision, HDR10 y HLG',
+          ),
+          6 => 
+          array (
+            'clave' => 'HDMI',
+            'valor' => '4 puertos, dos con funciones HDMI 2.1 avanzadas',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Acoustic Surface Audio+, VRR y ALLM',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6037,12 +11492,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 77.47,
     'specs' => 
     array (
-      'Pantalla' => 'LCD Mini LED ULED de 55 pulgadas',
-      'Resolución' => '3840 × 2160',
-      'Frecuencia nativa' => '144 Hz',
-      'Sistema' => 'Google TV',
-      'HDR' => 'Dolby Vision y HDR10+',
-      'Características' => 'Atenuación local y funciones de juego VRR',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'LCD Mini LED ULED de 55 pulgadas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160',
+          ),
+          2 => 
+          array (
+            'clave' => 'Frecuencia nativa',
+            'valor' => '144 Hz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Google TV',
+          ),
+          4 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'Dolby Vision y HDR10+',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Atenuación local y funciones de juego VRR',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6071,13 +11557,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 74.2,
     'specs' => 
     array (
-      'Pantalla' => 'LED de 55 pulgadas',
-      'Resolución' => '3840 × 2160 4K',
-      'Sistema' => 'Android TV',
-      'Procesador' => 'P5 Perfect Picture Engine',
-      'Ambilight' => '3 lados',
-      'HDR' => 'HDR10+',
-      'Características' => 'Televisor con iluminación ambiental Ambilight',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'LED de 55 pulgadas',
+          ),
+          1 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3840 × 2160 4K',
+          ),
+          2 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Android TV',
+          ),
+          3 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'P5 Perfect Picture Engine',
+          ),
+          4 => 
+          array (
+            'clave' => 'Ambilight',
+            'valor' => '3 lados',
+          ),
+          5 => 
+          array (
+            'clave' => 'HDR',
+            'valor' => 'HDR10+',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Televisor con iluminación ambiental Ambilight',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6106,14 +11627,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 17.9,
     'specs' => 
     array (
-      'Funciones' => 'Impresión, copia y escaneo',
-      'Tecnología' => 'Inyección de tinta con depósitos',
-      'Color' => '4 colores',
-      'Resolución de impresión' => 'Hasta 5760 × 1440 dpi',
-      'Velocidad ISO' => 'Hasta 10 ppm en negro y 5 ppm en color',
-      'Conectividad' => 'USB, Wi-Fi y Wi-Fi Direct',
-      'Dúplex' => 'Manual',
-      'Características' => 'Impresión desde dispositivos móviles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Funciones',
+            'valor' => 'Impresión, copia y escaneo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'Inyección de tinta con depósitos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Color',
+            'valor' => '4 colores',
+          ),
+          3 => 
+          array (
+            'clave' => 'Resolución de impresión',
+            'valor' => 'Hasta 5760 × 1440 dpi',
+          ),
+          4 => 
+          array (
+            'clave' => 'Velocidad ISO',
+            'valor' => 'Hasta 10 ppm en negro y 5 ppm en color',
+          ),
+          5 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'USB, Wi-Fi y Wi-Fi Direct',
+          ),
+          6 => 
+          array (
+            'clave' => 'Dúplex',
+            'valor' => 'Manual',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Impresión desde dispositivos móviles',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6142,13 +11702,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 15.726,
     'specs' => 
     array (
-      'Funciones' => 'Impresión, copia y escaneo',
-      'Tecnología' => 'Inyección de tinta con depósitos',
-      'Color' => '4 colores',
-      'Velocidad ISO' => 'Hasta 12 ppm en negro y 5 ppm en color',
-      'Conectividad' => 'USB, Wi-Fi y Wi-Fi Direct',
-      'Dúplex' => 'Manual',
-      'Características' => 'Impresión móvil mediante servicios compatibles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Funciones',
+            'valor' => 'Impresión, copia y escaneo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'Inyección de tinta con depósitos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Color',
+            'valor' => '4 colores',
+          ),
+          3 => 
+          array (
+            'clave' => 'Velocidad ISO',
+            'valor' => 'Hasta 12 ppm en negro y 5 ppm en color',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'USB, Wi-Fi y Wi-Fi Direct',
+          ),
+          5 => 
+          array (
+            'clave' => 'Dúplex',
+            'valor' => 'Manual',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Impresión móvil mediante servicios compatibles',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6177,13 +11772,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 16.3,
     'specs' => 
     array (
-      'Funciones' => 'Impresión, copia y escaneo',
-      'Tecnología' => 'Inyección de tinta de tanque integrado',
-      'Resolución de impresión' => 'Hasta 4800 × 1200 dpi',
-      'Velocidad' => 'Hasta 8.8 ipm negro y 5 ipm color',
-      'Conectividad' => 'USB y Wi-Fi',
-      'Dúplex' => 'Manual',
-      'Características' => 'Canon PRINT y escaneo de documentos A4/carta',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Funciones',
+            'valor' => 'Impresión, copia y escaneo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'Inyección de tinta de tanque integrado',
+          ),
+          2 => 
+          array (
+            'clave' => 'Resolución de impresión',
+            'valor' => 'Hasta 4800 × 1200 dpi',
+          ),
+          3 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => 'Hasta 8.8 ipm negro y 5 ipm color',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'USB y Wi-Fi',
+          ),
+          5 => 
+          array (
+            'clave' => 'Dúplex',
+            'valor' => 'Manual',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Canon PRINT y escaneo de documentos A4/carta',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6212,13 +11842,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 18.3,
     'specs' => 
     array (
-      'Tipo' => 'Impresora láser monocromática, sin escáner',
-      'Velocidad' => 'Hasta 30 ppm A4',
-      'Dúplex' => 'Automático',
-      'Bandeja' => '250 hojas',
-      'Conectividad' => 'USB, Wi-Fi y Wi-Fi Direct',
-      'Memoria' => '64 MB',
-      'Características' => 'Impresión móvil y pantalla LCD de una línea',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Impresora láser monocromática, sin escáner',
+          ),
+          1 => 
+          array (
+            'clave' => 'Velocidad',
+            'valor' => 'Hasta 30 ppm A4',
+          ),
+          2 => 
+          array (
+            'clave' => 'Dúplex',
+            'valor' => 'Automático',
+          ),
+          3 => 
+          array (
+            'clave' => 'Bandeja',
+            'valor' => '250 hojas',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'USB, Wi-Fi y Wi-Fi Direct',
+          ),
+          5 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '64 MB',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Impresión móvil y pantalla LCD de una línea',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6247,12 +11912,43 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 16.9,
     'specs' => 
     array (
-      'Funciones' => 'Impresión, copia y escaneo',
-      'Tecnología' => 'Tanques de tinta de 6 colores',
-      'Impresión máxima' => 'A3+',
-      'Resolución de impresión' => 'Hasta 5760 × 1440 dpi',
-      'Conectividad' => 'USB, Ethernet, Wi-Fi y Wi-Fi Direct',
-      'Características' => 'Impresión fotográfica y dúplex en tamaños compatibles',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Funciones',
+            'valor' => 'Impresión, copia y escaneo',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tecnología',
+            'valor' => 'Tanques de tinta de 6 colores',
+          ),
+          2 => 
+          array (
+            'clave' => 'Impresión máxima',
+            'valor' => 'A3+',
+          ),
+          3 => 
+          array (
+            'clave' => 'Resolución de impresión',
+            'valor' => 'Hasta 5760 × 1440 dpi',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'USB, Ethernet, Wi-Fi y Wi-Fi Direct',
+          ),
+          5 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Impresión fotográfica y dúplex en tamaños compatibles',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6281,13 +11977,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 9.6,
     'specs' => 
     array (
-      'Procesador' => 'AMD Zen 2 de 8 núcleos y 16 hilos',
-      'Gráficos' => 'AMD RDNA 2 personalizada',
-      'Memoria' => '16 GB GDDR6',
-      'Almacenamiento' => 'SSD de 1 TB',
-      'Unidad óptica' => 'Ultra HD Blu-ray',
-      'Video' => 'HDMI con salida hasta 4K/120 Hz en juegos compatibles',
-      'Características' => 'Mando DualSense y lector de discos desmontable',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'AMD Zen 2 de 8 núcleos y 16 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'AMD RDNA 2 personalizada',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB GDDR6',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD de 1 TB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Unidad óptica',
+            'valor' => 'Ultra HD Blu-ray',
+          ),
+          5 => 
+          array (
+            'clave' => 'Video',
+            'valor' => 'HDMI con salida hasta 4K/120 Hz en juegos compatibles',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Mando DualSense y lector de discos desmontable',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6316,13 +12047,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 30.1,
     'specs' => 
     array (
-      'Procesador' => 'AMD Zen 2 de 8 núcleos',
-      'Gráficos' => 'AMD RDNA 2, 12 TFLOPS',
-      'Memoria' => '16 GB GDDR6',
-      'Almacenamiento' => 'SSD NVMe de 1 TB',
-      'Unidad óptica' => '4K UHD Blu-ray',
-      'Video' => '4K y hasta 120 fps en contenido compatible',
-      'Características' => 'Quick Resume y ranura de expansión de almacenamiento',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'AMD Zen 2 de 8 núcleos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'AMD RDNA 2, 12 TFLOPS',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB GDDR6',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 1 TB',
+          ),
+          4 => 
+          array (
+            'clave' => 'Unidad óptica',
+            'valor' => '4K UHD Blu-ray',
+          ),
+          5 => 
+          array (
+            'clave' => 'Video',
+            'valor' => '4K y hasta 120 fps en contenido compatible',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Quick Resume y ranura de expansión de almacenamiento',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6351,13 +12117,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 10.2,
     'specs' => 
     array (
-      'Pantalla' => 'OLED táctil de 7 pulgadas, 1280 × 720',
-      'Almacenamiento' => '64 GB',
-      'Expansión' => 'microSD',
-      'Salida en TV' => 'Hasta 1920 × 1080 a 60 fps',
-      'Conectividad' => 'Wi-Fi y Bluetooth 4.1',
-      'Autonomía' => '4.5–9 horas',
-      'Características' => 'Joy-Con, base con LAN y soporte ajustable',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'OLED táctil de 7 pulgadas, 1280 × 720',
+          ),
+          1 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => '64 GB',
+          ),
+          2 => 
+          array (
+            'clave' => 'Expansión',
+            'valor' => 'microSD',
+          ),
+          3 => 
+          array (
+            'clave' => 'Salida en TV',
+            'valor' => 'Hasta 1920 × 1080 a 60 fps',
+          ),
+          4 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi y Bluetooth 4.1',
+          ),
+          5 => 
+          array (
+            'clave' => 'Autonomía',
+            'valor' => '4.5–9 horas',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Joy-Con, base con LAN y soporte ajustable',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -6410,14 +12211,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.24,
     'specs' => 
     array (
-      'Procesador' => 'AMD Ryzen Z1 Extreme, 8 núcleos y 16 hilos',
-      'Gráficos' => 'AMD Radeon RDNA 3 de 12 CU',
-      'Memoria' => '16 GB LPDDR5',
-      'Almacenamiento' => 'SSD NVMe de 512 GB, M.2 2230',
-      'Pantalla' => '7 pulgadas IPS 1920 × 1080, 120 Hz',
-      'Sistema' => 'Windows 11 Home',
-      'Batería' => '40 Wh',
-      'Características' => 'Controles integrados y lector microSD',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'AMD Ryzen Z1 Extreme, 8 núcleos y 16 hilos',
+          ),
+          1 => 
+          array (
+            'clave' => 'Gráficos',
+            'valor' => 'AMD Radeon RDNA 3 de 12 CU',
+          ),
+          2 => 
+          array (
+            'clave' => 'Memoria',
+            'valor' => '16 GB LPDDR5',
+          ),
+          3 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'SSD NVMe de 512 GB, M.2 2230',
+          ),
+          4 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => '7 pulgadas IPS 1920 × 1080, 120 Hz',
+          ),
+          5 => 
+          array (
+            'clave' => 'Sistema',
+            'valor' => 'Windows 11 Home',
+          ),
+          6 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => '40 Wh',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Controles integrados y lector microSD',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6446,13 +12286,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 6.5,
     'specs' => 
     array (
-      'Tipo' => 'Dispositivo de juego remoto',
-      'Pantalla' => 'LCD táctil de 8 pulgadas, 1920 × 1080',
-      'Video' => 'Hasta 60 fps',
-      'Conectividad' => 'Wi-Fi y PlayStation Link',
-      'Controles' => 'Gatillos adaptativos y respuesta háptica',
-      'Audio' => 'Altavoces y conector de 3.5 mm',
-      'Características' => 'Remote Play desde PS5 y funciones en línea según disponibilidad',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Dispositivo de juego remoto',
+          ),
+          1 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'LCD táctil de 8 pulgadas, 1920 × 1080',
+          ),
+          2 => 
+          array (
+            'clave' => 'Video',
+            'valor' => 'Hasta 60 fps',
+          ),
+          3 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi y PlayStation Link',
+          ),
+          4 => 
+          array (
+            'clave' => 'Controles',
+            'valor' => 'Gatillos adaptativos y respuesta háptica',
+          ),
+          5 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Altavoces y conector de 3.5 mm',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Remote Play desde PS5 y funciones en línea según disponibilidad',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6481,14 +12356,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 37.5,
     'specs' => 
     array (
-      'Tapizado' => 'Tejido transpirable',
-      'Estructura' => 'Acero',
-      'Carga máxima' => '120 kg',
-      'Reposabrazos' => '4D',
-      'Asiento' => '49 cm de profundidad × 54 cm de ancho',
-      'Respaldo' => '85 cm de alto',
-      'Altura del asiento' => 'Desde 48 cm',
-      'Características' => 'Cojines cervical y lumbar',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tapizado',
+            'valor' => 'Tejido transpirable',
+          ),
+          1 => 
+          array (
+            'clave' => 'Estructura',
+            'valor' => 'Acero',
+          ),
+          2 => 
+          array (
+            'clave' => 'Carga máxima',
+            'valor' => '120 kg',
+          ),
+          3 => 
+          array (
+            'clave' => 'Reposabrazos',
+            'valor' => '4D',
+          ),
+          4 => 
+          array (
+            'clave' => 'Asiento',
+            'valor' => '49 cm de profundidad × 54 cm de ancho',
+          ),
+          5 => 
+          array (
+            'clave' => 'Respaldo',
+            'valor' => '85 cm de alto',
+          ),
+          6 => 
+          array (
+            'clave' => 'Altura del asiento',
+            'valor' => 'Desde 48 cm',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cojines cervical y lumbar',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -6541,13 +12455,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 137.0,
     'specs' => 
     array (
-      'Tipo' => 'Silla gamer ergonómica',
-      'Tapizado' => 'Cuero sintético multicapa',
-      'Soporte lumbar' => 'Sistema ajustable integrado',
-      'Reposabrazos' => '4D',
-      'Elevación' => 'Pistón de gas clase 4',
-      'Carga recomendada' => 'Menos de 130 kg, según ficha de soporte',
-      'Características' => 'Cojín de espuma viscoelástica y soporte lumbar mecánico',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Silla gamer ergonómica',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tapizado',
+            'valor' => 'Cuero sintético multicapa',
+          ),
+          2 => 
+          array (
+            'clave' => 'Soporte lumbar',
+            'valor' => 'Sistema ajustable integrado',
+          ),
+          3 => 
+          array (
+            'clave' => 'Reposabrazos',
+            'valor' => '4D',
+          ),
+          4 => 
+          array (
+            'clave' => 'Elevación',
+            'valor' => 'Pistón de gas clase 4',
+          ),
+          5 => 
+          array (
+            'clave' => 'Carga recomendada',
+            'valor' => 'Menos de 130 kg, según ficha de soporte',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cojín de espuma viscoelástica y soporte lumbar mecánico',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6576,15 +12525,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 34,
     'specs' => 
     array (
-      'Tapizado' => 'Cuero PU',
-      'Estructura' => 'Acero',
-      'Carga máxima' => '150 kg',
-      'Reposabrazos' => '2D',
-      'Reclinación' => '90°–180°',
-      'Altura total' => '125.5–133.5 cm',
-      'Altura del asiento' => '48–56 cm',
-      'Asiento' => '54 cm profundidad, 58 cm ancho con laterales',
-      'Características' => 'Cojines cervical y lumbar y pistón clase 4',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tapizado',
+            'valor' => 'Cuero PU',
+          ),
+          1 => 
+          array (
+            'clave' => 'Estructura',
+            'valor' => 'Acero',
+          ),
+          2 => 
+          array (
+            'clave' => 'Carga máxima',
+            'valor' => '150 kg',
+          ),
+          3 => 
+          array (
+            'clave' => 'Reposabrazos',
+            'valor' => '2D',
+          ),
+          4 => 
+          array (
+            'clave' => 'Reclinación',
+            'valor' => '90°–180°',
+          ),
+          5 => 
+          array (
+            'clave' => 'Altura total',
+            'valor' => '125.5–133.5 cm',
+          ),
+          6 => 
+          array (
+            'clave' => 'Altura del asiento',
+            'valor' => '48–56 cm',
+          ),
+          7 => 
+          array (
+            'clave' => 'Asiento',
+            'valor' => '54 cm profundidad, 58 cm ancho con laterales',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cojines cervical y lumbar y pistón clase 4',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6613,14 +12605,53 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 38,
     'specs' => 
     array (
-      'Tipo' => 'Silla gamer',
-      'Tapizado' => 'PVC',
-      'Reposabrazos' => '2D',
-      'Altura del asiento' => '45–53 cm',
-      'Profundidad del asiento' => '55 cm total',
-      'Altura del respaldo' => '84 cm',
-      'Elevación' => 'Pistón clase 4',
-      'Características' => 'Cojines cervical y lumbar y ajuste de inclinación',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Silla gamer',
+          ),
+          1 => 
+          array (
+            'clave' => 'Tapizado',
+            'valor' => 'PVC',
+          ),
+          2 => 
+          array (
+            'clave' => 'Reposabrazos',
+            'valor' => '2D',
+          ),
+          3 => 
+          array (
+            'clave' => 'Altura del asiento',
+            'valor' => '45–53 cm',
+          ),
+          4 => 
+          array (
+            'clave' => 'Profundidad del asiento',
+            'valor' => '55 cm total',
+          ),
+          5 => 
+          array (
+            'clave' => 'Altura del respaldo',
+            'valor' => '84 cm',
+          ),
+          6 => 
+          array (
+            'clave' => 'Elevación',
+            'valor' => 'Pistón clase 4',
+          ),
+          7 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cojines cervical y lumbar y ajuste de inclinación',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6649,13 +12680,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 140.0,
     'specs' => 
     array (
-      'Tipo' => 'Silla gamer ergonómica',
-      'Estructura' => 'Acero',
-      'Tapizado' => 'Cuero sintético PVC',
-      'Carga máxima' => '150 kg',
-      'Elevación' => 'Pistón clase 4',
-      'Reclinación' => 'Hasta 150°',
-      'Características' => 'Cojines de cabeza y lumbar y reposabrazos ajustables',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Silla gamer ergonómica',
+          ),
+          1 => 
+          array (
+            'clave' => 'Estructura',
+            'valor' => 'Acero',
+          ),
+          2 => 
+          array (
+            'clave' => 'Tapizado',
+            'valor' => 'Cuero sintético PVC',
+          ),
+          3 => 
+          array (
+            'clave' => 'Carga máxima',
+            'valor' => '150 kg',
+          ),
+          4 => 
+          array (
+            'clave' => 'Elevación',
+            'valor' => 'Pistón clase 4',
+          ),
+          5 => 
+          array (
+            'clave' => 'Reclinación',
+            'valor' => 'Hasta 150°',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Cojines de cabeza y lumbar y reposabrazos ajustables',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6684,15 +12750,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 11.77,
     'specs' => 
     array (
-      'Resolución' => '3 MP, 2304 × 1296',
-      'Video' => 'H.264, hasta 15 fps en referencia consultada',
-      'Conexión' => 'Wi-Fi de 2.4 GHz',
-      'Movimiento' => 'Cobertura horizontal de 360°',
-      'Visión nocturna' => 'Infrarroja, hasta unos 9 m',
-      'Audio' => 'Bidireccional',
-      'Almacenamiento' => 'microSD y nube opcional',
-      'Uso' => 'Interiores',
-      'Características' => 'Detección de movimiento y control desde Tapo',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '3 MP, 2304 × 1296',
+          ),
+          1 => 
+          array (
+            'clave' => 'Video',
+            'valor' => 'H.264, hasta 15 fps en referencia consultada',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Wi-Fi de 2.4 GHz',
+          ),
+          3 => 
+          array (
+            'clave' => 'Movimiento',
+            'valor' => 'Cobertura horizontal de 360°',
+          ),
+          4 => 
+          array (
+            'clave' => 'Visión nocturna',
+            'valor' => 'Infrarroja, hasta unos 9 m',
+          ),
+          5 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Bidireccional',
+          ),
+          6 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'microSD y nube opcional',
+          ),
+          7 => 
+          array (
+            'clave' => 'Uso',
+            'valor' => 'Interiores',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Detección de movimiento y control desde Tapo',
+          ),
+        ),
+      ),
     ),
     'variantes' => 
     array (
@@ -6745,13 +12854,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.3,
     'specs' => 
     array (
-      'Video' => '1080p HDR, hasta 30 fps',
-      'Campo de visión' => '130° diagonal',
-      'Conectividad' => 'Wi-Fi',
-      'Alimentación' => 'Batería recargable',
-      'Audio' => 'Bidireccional',
-      'Protección' => 'IP54',
-      'Características' => 'Detección de personas, animales y vehículos y visión nocturna',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Video',
+            'valor' => '1080p HDR, hasta 30 fps',
+          ),
+          1 => 
+          array (
+            'clave' => 'Campo de visión',
+            'valor' => '130° diagonal',
+          ),
+          2 => 
+          array (
+            'clave' => 'Conectividad',
+            'valor' => 'Wi-Fi',
+          ),
+          3 => 
+          array (
+            'clave' => 'Alimentación',
+            'valor' => 'Batería recargable',
+          ),
+          4 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Bidireccional',
+          ),
+          5 => 
+          array (
+            'clave' => 'Protección',
+            'valor' => 'IP54',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Detección de personas, animales y vehículos y visión nocturna',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6780,13 +12924,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 11.9,
     'specs' => 
     array (
-      'Resolución' => '2560 × 1440, 4 MP',
-      'Conexión' => 'Wi-Fi 2.4/5 GHz',
-      'Almacenamiento' => 'microSD de hasta 256 GB',
-      'Entrada' => '5 V/2 A',
-      'Movimiento' => 'Visión panorámica motorizada',
-      'Audio' => 'Bidireccional',
-      'Características' => 'Visión nocturna y control desde Xiaomi Home',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Resolución',
+            'valor' => '2560 × 1440, 4 MP',
+          ),
+          1 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Wi-Fi 2.4/5 GHz',
+          ),
+          2 => 
+          array (
+            'clave' => 'Almacenamiento',
+            'valor' => 'microSD de hasta 256 GB',
+          ),
+          3 => 
+          array (
+            'clave' => 'Entrada',
+            'valor' => '5 V/2 A',
+          ),
+          4 => 
+          array (
+            'clave' => 'Movimiento',
+            'valor' => 'Visión panorámica motorizada',
+          ),
+          5 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Bidireccional',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Visión nocturna y control desde Xiaomi Home',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6815,15 +12994,58 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.55,
     'specs' => 
     array (
-      'Tipo' => 'Cámara mirrorless',
-      'Sensor' => 'APS-C CMOS de 24.2 MP efectivos',
-      'Montura' => 'Canon RF',
-      'Procesador' => 'DIGIC X',
-      'Video' => '4K hasta 30p sobremuestreado de 6K y Full HD hasta 120p',
-      'Enfoque' => 'Dual Pixel CMOS AF II',
-      'Pantalla' => 'LCD táctil de ángulo variable',
-      'Conexión' => 'Wi-Fi y Bluetooth',
-      'Características' => 'Grabación para creación de contenido y visor electrónico',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Tipo',
+            'valor' => 'Cámara mirrorless',
+          ),
+          1 => 
+          array (
+            'clave' => 'Sensor',
+            'valor' => 'APS-C CMOS de 24.2 MP efectivos',
+          ),
+          2 => 
+          array (
+            'clave' => 'Montura',
+            'valor' => 'Canon RF',
+          ),
+          3 => 
+          array (
+            'clave' => 'Procesador',
+            'valor' => 'DIGIC X',
+          ),
+          4 => 
+          array (
+            'clave' => 'Video',
+            'valor' => '4K hasta 30p sobremuestreado de 6K y Full HD hasta 120p',
+          ),
+          5 => 
+          array (
+            'clave' => 'Enfoque',
+            'valor' => 'Dual Pixel CMOS AF II',
+          ),
+          6 => 
+          array (
+            'clave' => 'Pantalla',
+            'valor' => 'LCD táctil de ángulo variable',
+          ),
+          7 => 
+          array (
+            'clave' => 'Conexión',
+            'valor' => 'Wi-Fi y Bluetooth',
+          ),
+          8 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Grabación para creación de contenido y visor electrónico',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 
@@ -6852,13 +13074,48 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 5.08,
     'specs' => 
     array (
-      'Video' => 'Hasta 5.3K60, 4K120 y 2.7K240',
-      'Fotografía' => '27 MP',
-      'Estabilización' => 'HyperSmooth 6.0',
-      'Batería' => 'Enduro de 1720 mAh',
-      'Resistencia al agua' => 'Hasta 10 m sin carcasa, según condiciones del fabricante',
-      'Audio' => 'Compatibilidad Bluetooth para accesorios',
-      'Características' => 'Video HDR, formato 8:7 y montaje integrado',
+      0 => 
+      array (
+        'grupo' => 'Especificaciones Técnicas',
+        'atributos' => 
+        array (
+          0 => 
+          array (
+            'clave' => 'Video',
+            'valor' => 'Hasta 5.3K60, 4K120 y 2.7K240',
+          ),
+          1 => 
+          array (
+            'clave' => 'Fotografía',
+            'valor' => '27 MP',
+          ),
+          2 => 
+          array (
+            'clave' => 'Estabilización',
+            'valor' => 'HyperSmooth 6.0',
+          ),
+          3 => 
+          array (
+            'clave' => 'Batería',
+            'valor' => 'Enduro de 1720 mAh',
+          ),
+          4 => 
+          array (
+            'clave' => 'Resistencia al agua',
+            'valor' => 'Hasta 10 m sin carcasa, según condiciones del fabricante',
+          ),
+          5 => 
+          array (
+            'clave' => 'Audio',
+            'valor' => 'Compatibilidad Bluetooth para accesorios',
+          ),
+          6 => 
+          array (
+            'clave' => 'Características',
+            'valor' => 'Video HDR, formato 8:7 y montaje integrado',
+          ),
+        ),
+      ),
     ),
     'variantes' => NULL,
     'garantia' => 

@@ -328,7 +328,7 @@
             init() {
                 let specsInit = @json(old('especificaciones', $producto->especificaciones ?? []));
                 
-                // Normalizar especificaciones si vienen en formato plano antiguo
+                // Normalizar especificaciones según el formato recibido
                 if (Array.isArray(specsInit) && specsInit.length > 0) {
                     if (specsInit[0].hasOwnProperty('clave') && !specsInit[0].hasOwnProperty('atributos')) {
                         let groups = {};
@@ -342,9 +342,18 @@
                             grupo: g,
                             atributos: groups[g]
                         }));
-                    } else {
+                    } else if (specsInit[0].hasOwnProperty('grupo') && specsInit[0].hasOwnProperty('atributos')) {
                         this.especificaciones = specsInit;
                     }
+                } else if (specsInit && typeof specsInit === 'object' && Object.keys(specsInit).length > 0) {
+                    let attrs = Object.entries(specsInit).map(([k, v]) => ({
+                        clave: k,
+                        valor: typeof v === 'object' ? JSON.stringify(v) : String(v)
+                    }));
+                    this.especificaciones = [{
+                        grupo: 'Especificaciones Técnicas',
+                        atributos: attrs
+                    }];
                 }
 
                 if (!this.garantia_info || typeof this.garantia_info !== 'object') {
