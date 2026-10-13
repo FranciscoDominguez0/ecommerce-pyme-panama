@@ -166,7 +166,7 @@ class CatalogoFijoSeeder extends Seeder
                 'dimension_largo' => (float) $item['largo'],
                 'dimension_ancho' => (float) $item['ancho'],
                 'dimension_alto' => (float) $item['alto'],
-                'garantia_info' => [
+                'garantia_info' => $item['garantia'] ?? [
                     'nombre' => 'Garantía Oficial del Fabricante',
                     'duracion' => '1 Año',
                     'contacto' => $gtiaPanama,
@@ -223,8 +223,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-ARM-1',
     'nombre' => 'Armado Básico de PC de Oficina',
     'marca' => 'ASUS',
-    'modelo' => 'ASUS-BUILD-BASIC',
-    'precio' => 45,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 45.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -232,15 +232,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio profesional de armado de computadoras de oficina. Incluye montaje de placa madre, procesador con disipador, memoria RAM, unidad de almacenamiento y fuente de poder en chasis estándar. Se realiza ordenamiento básico de cableado, actualización a la última versión estable de BIOS y prueba de encendido durante 30 minutos.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 a 48 Horas hábiles',
-      'Pruebas' => 'POST y estabilidad de BIOS',
-      'Compatibilidad' => 'Plataformas Intel y AMD estándar',
-      'Modalidad' => 'Taller técnico especializado',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 computadora',
+      'Alcance propuesto' => 'Montaje de componentes compatibles para oficina',
+      'Incluye propuesto' => 'Instalación física, conexión de cables y prueba de encendido',
+      'Entrega propuesta' => 'Equipo ensamblado y comprobación básica',
+      'No incluido' => 'Componentes, licencias y instalación de software',
+      'Requisitos' => 'Componentes suministrados o cotizados por separado',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -250,8 +254,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-ARM-2',
     'nombre' => 'Armado de PC Gamer Profesional',
     'marca' => 'Corsair',
-    'modelo' => 'CORSAIR-BUILD-PRO',
-    'precio' => 85,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 85.0,
     'precio_oferta' => 75,
     'destacado' => true,
     'stock' => 999,
@@ -259,15 +263,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Montaje exhaustivo para equipos gamer de alta gama. Incluye instalación de tarjetas gráficas pesadas con soporte anti-sag, configuración de ventiladores ARGB/PWM, optimización de curvas térmicas en BIOS, habilitación de perfiles XMP/EXPO y pruebas de estrés térmico con Cinebench y 3DMark durante 45 minutos.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Pruebas' => 'Estrés térmico y estabilidad de memorias',
-      'Compatibilidad' => 'Chasis ATX / E-ATX / Micro-ATX',
-      'Modalidad' => 'Taller técnico especializado',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 PC gamer',
+      'Alcance propuesto' => 'Montaje de CPU, RAM, almacenamiento, GPU y fuente',
+      'Incluye propuesto' => 'Organización de cables y comprobación de temperaturas',
+      'Entrega propuesta' => 'Equipo montado y resultado de pruebas',
+      'No incluido' => 'Componentes, licencias y overclock',
+      'Requisitos' => 'Compatibilidad de gabinete, fuente y refrigeración',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '60 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => 
     array (
@@ -301,8 +309,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-ARM-3',
     'nombre' => 'Armado Custom Liquid Cooling',
     'marca' => 'Cooler Master',
-    'modelo' => 'CM-HYDRO-CUSTOM',
-    'precio' => 160,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 160.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -310,15 +318,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio de ensamblaje artesanal para sistemas con refrigeración líquida custom. Incluye curvado de tubos rígidos o flexibles, purgado del circuito con líquido dieléctrico refrigerante, prueba de presión de aire y prueba de hermeticidad continua de 24 horas para garantizar cero fugas.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '48 a 72 Horas hábiles',
-      'Pruebas' => 'Prueba de estanqueidad 24h',
-      'Compatibilidad' => 'Sistemas Hard Tube y Soft Tube',
-      'Modalidad' => 'Taller técnico especializado',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 equipo',
+      'Alcance propuesto' => 'Instalación de circuito de refrigeración líquida personalizado',
+      'Incluye propuesto' => 'Montaje y prueba de estanqueidad antes del encendido',
+      'Entrega propuesta' => 'Equipo con circuito verificado',
+      'No incluido' => 'Bloques, tubos, bomba, radiadores y refrigerante',
+      'Requisitos' => 'Inspección y cotización previa',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '90 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -328,8 +340,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-ARM-4',
     'nombre' => 'Migración de Componentes a Nuevo Chasis',
     'marca' => 'NZXT',
-    'modelo' => 'NZXT-CASE-MIGRATE',
-    'precio' => 60,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 60.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -337,14 +349,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Traspaso integral de tus componentes existentes a un nuevo chasis o gabinete. Desmontamos pieza por pieza con protección antiestática, limpiamos el polvo acumulado y reconstruimos el sistema en el nuevo case asegurando un flujo de aire óptimo y cableado limpio.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Incluye' => 'Desensamble + Limpieza + Ensamble',
-      'Modalidad' => 'Taller técnico especializado',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 equipo',
+      'Alcance propuesto' => 'Traslado de componentes a otro gabinete',
+      'Incluye propuesto' => 'Desmontaje, montaje y conexión',
+      'Entrega propuesta' => 'Encendido y comprobación funcional',
+      'No incluido' => 'Gabinete, repuestos y reparación de componentes',
+      'Requisitos' => 'Gabinete compatible',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -354,8 +371,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-ARM-5',
     'nombre' => 'Actualización General de Hardware',
     'marca' => 'MSI',
-    'modelo' => 'MSI-HW-UPGRADE',
-    'precio' => 40,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 40.0,
     'precio_oferta' => 35,
     'destacado' => false,
     'stock' => 999,
@@ -363,14 +380,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Upgrade técnico de componentes para potenciar tu computadora. Instalamos la pieza seleccionada (tarjeta gráfica, fuente modular, kit de RAM, SSD M.2 o CPU), actualizamos la BIOS si la nueva generación lo requiere e instalamos los últimos controladores oficiales verificados.',
     'specs' => 
     array (
-      'Tiempo Estimado' => 'Mismo día (4 a 6 horas)',
-      'Incluye' => 'Montaje + Drivers + Verificación',
-      'Modalidad' => 'Taller técnico especializado',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 equipo',
+      'Alcance propuesto' => 'Instalación de componentes de actualización',
+      'Incluye propuesto' => 'Revisión de compatibilidad y comprobación de detección',
+      'Entrega propuesta' => 'Equipo con hardware instalado',
+      'No incluido' => 'Componentes, migración de datos y licencias',
+      'Requisitos' => 'Diagnóstico de compatibilidad previo',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -380,8 +402,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-MNT-1',
     'nombre' => 'Mantenimiento Preventivo de Laptop',
     'marca' => 'Dell',
-    'modelo' => 'DELL-CARE-LAPTOP',
-    'precio' => 35,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 35.0,
     'precio_oferta' => NULL,
     'destacado' => true,
     'stock' => 999,
@@ -389,14 +411,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Limpieza interna profunda para laptops de uso personal o empresarial. Desarmamos el módulo térmico, retiramos pelusas y polvo del extractor, aplicamos pasta térmica de alta conductividad y lubricamos los ventiladores para restaurar un funcionamiento silencioso.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Pasta Térmica' => 'Compuesto cerámico de alto rendimiento',
-      'Beneficio' => 'Reducción de 8°C a 15°C en CPU/GPU',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 laptop',
+      'Alcance propuesto' => 'Limpieza interna accesible y revisión de ventilación',
+      'Incluye propuesto' => 'Inspección y prueba básica',
+      'Entrega propuesta' => 'Registro de estado y recomendaciones',
+      'No incluido' => 'Repuestos y cambio de pasta/pads salvo cotización',
+      'Requisitos' => 'Evaluar posibilidad de desmontaje',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -406,8 +433,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-MNT-2',
     'nombre' => 'Limpieza Profunda de PC Gamer',
     'marca' => 'Corsair',
-    'modelo' => 'CORSAIR-DEEP-CLEAN',
-    'precio' => 55,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 55.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -415,13 +442,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Mantenimiento exhaustivo diseñado para computadoras de alto consumo térmico. Retiramos tarjeta gráfica y radiadores, limpiamos filtros magnéticos, aplicamos solvente dieléctrico en ventiladores y renovamos los compuestos térmicos en CPU y GPU.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 a 48 Horas hábiles',
-      'Modalidad' => 'Taller técnico especializado',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 PC gamer',
+      'Alcance propuesto' => 'Limpieza de gabinete, filtros y ventiladores',
+      'Incluye propuesto' => 'Inspección de cableado y temperatura',
+      'Entrega propuesta' => 'Equipo limpio y comprobación funcional',
+      'No incluido' => 'Reparación, repuestos y circuito líquido personalizado',
+      'Requisitos' => 'Inspección previa',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -431,8 +464,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-MNT-3',
     'nombre' => 'Cambio de Pasta Térmica y Thermal Pads',
     'marca' => 'Cooler Master',
-    'modelo' => 'CM-THERMAL-REFRESH',
-    'precio' => 30,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 30.0,
     'precio_oferta' => 25,
     'destacado' => false,
     'stock' => 999,
@@ -440,13 +473,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Reemplazo de pads térmicos de memoria VRAM y VRM con almohadillas de alta conductividad, además de aplicación fresca de pasta térmica en el procesador. Ideal para tarjetas gráficas y consolas con más de 2 años de uso intensivo.',
     'specs' => 
     array (
-      'Tiempo Estimado' => 'Mismo día (4 horas)',
-      'Materiales' => 'Thermal pads de 1.0mm a 2.5mm según fabricante',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 equipo o componente por cotizar',
+      'Alcance propuesto' => 'Sustitución de pasta térmica y pads cuando corresponda',
+      'Incluye propuesto' => 'Limpieza de superficies y comprobación de temperaturas',
+      'Entrega propuesta' => 'Registro de material instalado',
+      'No incluido' => 'Repuestos y pads especiales salvo acuerdo',
+      'Requisitos' => 'Espesor de pads y método adecuados para el equipo',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -456,8 +495,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-MNT-4',
     'nombre' => 'Mantenimiento Preventivo de Servidor / Rack',
     'marca' => 'HP',
-    'modelo' => 'HP-PROLIANT-SERVICE',
-    'precio' => 130,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 130.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -465,13 +504,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio para infraestructura empresarial. Limpieza técnica en seco de chasis de servidor tipo rack o torre, revisión de sensores térmicos, verificación del estado de salud de discos en RAID y limpieza de bahías hot-swap.',
     'specs' => 
     array (
-      'Tiempo Estimado' => 'Coordinación en horario programado',
-      'Modalidad' => 'In situ / Taller técnico',
+      'Modalidad' => 'Presencial programado',
+      'Unidad' => '1 servidor/rack por definir',
+      'Alcance propuesto' => 'Limpieza y revisión preventiva de ventilación',
+      'Incluye propuesto' => 'Inspección de cables y registro de hallazgos',
+      'Entrega propuesta' => 'Informe de mantenimiento',
+      'No incluido' => 'Repuestos, migración y recuperación de datos',
+      'Requisitos' => 'Ventana de mantenimiento y alcance por servidor',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '60 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -481,8 +526,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-MNT-5',
     'nombre' => 'Limpieza y Desinfección de Periféricos y Setup',
     'marca' => 'Razer',
-    'modelo' => 'RAZER-PERIPHERAL-SPA',
-    'precio' => 25,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 25.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -490,13 +535,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Tratamiento de estética y desinfección para tus herramientas diarias de trabajo o juego. Limpiamos a fondo el teclado mecánico desmontando teclas, lavamos mousepads con productos que preservan el deslizamiento y limpiamos monitores sin rayar el tratamiento antirreflejo.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Productos' => 'Espumas antiestáticas e isopropílico al 99%',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 conjunto de periféricos definido en orden',
+      'Alcance propuesto' => 'Limpieza superficial de teclado, mouse y superficies',
+      'Incluye propuesto' => 'Métodos compatibles con materiales',
+      'Entrega propuesta' => 'Periféricos limpios y comprobación básica',
+      'No incluido' => 'Reparación ni garantía de esterilización',
+      'Requisitos' => 'Identificación de materiales y estado previo',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '15 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -506,8 +557,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-RED-1',
     'nombre' => 'Instalación y Configuración de Router Wi-Fi',
     'marca' => 'TP-Link',
-    'modelo' => 'TPLINK-ROUTER-SETUP',
-    'precio' => 40,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 40.0,
     'precio_oferta' => NULL,
     'destacado' => true,
     'stock' => 999,
@@ -515,14 +566,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Configuración profesional de tu router doméstico o de oficina. Ajustamos los canales de radiofrecuencia menos congestionados de tu zona, activamos seguridad WPA3, configuramos red de invitados aislada y optimizamos las reglas de QoS para streaming y videojuegos.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '1 a 2 Horas',
-      'Seguridad' => 'WPA2/WPA3 Personal / DNS seguro',
-      'Modalidad' => 'Domicilio o Remoto asistido',
+      'Modalidad' => 'Presencial o remoto según equipo',
+      'Unidad' => '1 router',
+      'Alcance propuesto' => 'Configuración WAN y red Wi-Fi',
+      'Incluye propuesto' => 'SSID, contraseña y pruebas de conectividad',
+      'Entrega propuesta' => 'Configuración y credenciales al propietario',
+      'No incluido' => 'Router, cableado y contratación de Internet',
+      'Requisitos' => 'Acceso autorizado al equipo y servicio activo',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -532,8 +588,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-RED-2',
     'nombre' => 'Cableado de Red Estructurado (Por punto)',
     'marca' => 'Ubiquiti',
-    'modelo' => 'UBIQUITI-POINT-CAT6',
-    'precio' => 35,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 35.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -541,14 +597,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Instalación de punto de red ethernet cableado para oficinas o casas. Incluye cable de categoría 6 100% cobre certificado, jacks modulares hembra tipo keystone, faceplate de pared y certificación de continuidad.',
     'specs' => 
     array (
-      'Cable' => 'UTP Cat6 100% Cobre',
-      'Velocidad Soportada' => 'Hasta 10 Gbps (a 55m)',
-      'Certificación' => 'Test de continuidad y pérdida de retorno',
+      'Modalidad' => 'Presencial',
+      'Unidad' => '1 punto de red',
+      'Alcance propuesto' => 'Tendido y terminación de cable Ethernet',
+      'Incluye propuesto' => 'Prueba básica de continuidad y enlace',
+      'Entrega propuesta' => 'Punto identificado',
+      'No incluido' => 'Cable, canalización, obra civil y certificación con equipo especializado salvo cotización',
+      'Requisitos' => 'Definir metros, categoría y recorrido por punto',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '90 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => 
     array (
@@ -582,8 +643,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-RED-3',
     'nombre' => 'Instalación y Calibración de Sistema Mesh',
     'marca' => 'Netgear',
-    'modelo' => 'NETGEAR-MESH-DEPLOY',
-    'precio' => 65,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 65.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -591,14 +652,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Despliegue de sistemas Wi-Fi en malla (Mesh). Realizamos mapa de calor previo para definir la ubicación de cada nodo, configuramos backhaul cableado o inalámbrico dedicado y probamos roaming transparente en todo el perímetro.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '2 a 3 Horas',
-      'Cobertura Objetivo' => 'Hasta 400 m²',
-      'Modalidad' => 'Visita técnica in situ',
+      'Modalidad' => 'Presencial',
+      'Unidad' => '1 sistema mesh, número de nodos por definir',
+      'Alcance propuesto' => 'Instalación y ubicación de nodos',
+      'Incluye propuesto' => 'Configuración de SSID y prueba de cobertura',
+      'Entrega propuesta' => 'Red configurada',
+      'No incluido' => 'Nodos, cableado y garantía de velocidad de Internet',
+      'Requisitos' => 'Plano o inspección y acceso al router principal',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -608,8 +674,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-RED-4',
     'nombre' => 'Configuración de Switch Administrable y VLANs',
     'marca' => 'D-Link',
-    'modelo' => 'DLINK-VLAN-ADMIN',
-    'precio' => 80,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 80.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -617,14 +683,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Servicio de ingeniería de red para empresas y locales comerciales. Configuramos switches L2/L3 con segmentación de VLAN para separar terminales de venta (POS), computadoras de oficina, cámaras IP de seguridad y Wi-Fi público de clientes.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '2 a 4 Horas',
-      'Protocolos' => '802.1Q, LACP, Spanning Tree (RSTP)',
-      'Modalidad' => 'In situ / Remoto',
+      'Modalidad' => 'Presencial o remota',
+      'Unidad' => '1 switch',
+      'Alcance propuesto' => 'Configuración de VLAN y puertos',
+      'Incluye propuesto' => 'Acceso de gestión y comprobación de segmentación',
+      'Entrega propuesta' => 'Respaldo de configuración y mapa de puertos',
+      'No incluido' => 'Switch, licencias y cambios de red fuera del alcance',
+      'Requisitos' => 'Plan de VLAN y acceso administrativo autorizado',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '45 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -634,8 +705,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-RED-5',
     'nombre' => 'Auditoría de Seguridad de Red Local y Firewall',
     'marca' => 'Zyxel',
-    'modelo' => 'ZYXEL-SEC-AUDIT',
-    'precio' => 95,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 95.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -643,14 +714,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Evaluación de vulnerabilidades en la red corporativa. Escaneamos dispositivos conectados, verificamos puertos expuestos hacia Internet sin cifrar, cerramos accesos Telnet o HTTP y entregamos un informe con recomendaciones de blindaje de seguridad.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '1 Día hábil',
-      'Entregable' => 'Reporte PDF con matriz de riesgos y solución',
-      'Modalidad' => 'Remoto / In situ',
+      'Modalidad' => 'Evaluación autorizada',
+      'Unidad' => '1 red local con alcance definido',
+      'Alcance propuesto' => 'Revisión de configuración de red y firewall',
+      'Incluye propuesto' => 'Inventario básico y recomendaciones',
+      'Entrega propuesta' => 'Informe de hallazgos',
+      'No incluido' => 'Pruebas intrusivas, certificación ni correcciones extensas salvo contrato',
+      'Requisitos' => 'Definir equipos, permisos y ventana de revisión',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -660,8 +736,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-REC-1',
     'nombre' => 'Recuperación de Disco Duro Dañado Nivel 1',
     'marca' => 'Seagate',
-    'modelo' => 'SEAGATE-RESCUE-L1',
-    'precio' => 90,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 90.0,
     'precio_oferta' => NULL,
     'destacado' => true,
     'stock' => 999,
@@ -669,14 +745,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Rescate de documentos, fotos y carpetas en discos HDD con fallos lógicos o sectores dañados. Empleamos herramientas forenses de clonado bit a bit para no fatigar el disco y recomponer la estructura de archivos en un medio de almacenamiento seguro.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '48 a 72 Horas',
-      'Condición' => 'Fallo lógico / Sectores reasignados',
-      'Política' => 'Si no hay archivos recuperables, no se cobra el rescate',
+      'Modalidad' => 'Diagnóstico en taller',
+      'Unidad' => '1 HDD',
+      'Alcance propuesto' => 'Recuperación de nivel lógico o accesible sin apertura del disco',
+      'Incluye propuesto' => 'Evaluación y copia de datos recuperables',
+      'Entrega propuesta' => 'Listado de archivos recuperados',
+      'No incluido' => 'Laboratorio especializado, apertura en sala limpia y medio destino',
+      'Requisitos' => 'No seguir usando el disco y evaluación previa',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '15 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -686,8 +767,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-REC-2',
     'nombre' => 'Rescate de SSD NVMe con Fallo Lógico',
     'marca' => 'Western Digital',
-    'modelo' => 'WD-SSD-RESCUE',
-    'precio' => 110,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 110.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -695,13 +776,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Diagnóstico y extracción de información en discos SSD M.2 y SATA con tabla de partición GPT perdida, formato involuntario o corrupción del sistema de archivos NTFS/APFS/EXT4.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 a 48 Horas',
-      'Tecnología' => 'Soporte PCIe Gen3 / Gen4 / Gen5',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 SSD NVMe',
+      'Alcance propuesto' => 'Intento de recuperación ante fallo lógico',
+      'Incluye propuesto' => 'Diagnóstico y extracción de datos recuperables',
+      'Entrega propuesta' => 'Archivos recuperados al medio acordado',
+      'No incluido' => 'Reparación electrónica, medio destino y recuperación de datos borrados por TRIM',
+      'Requisitos' => 'Acceso autorizado y diagnóstico del SSD',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '15 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -711,8 +798,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-REC-3',
     'nombre' => 'Recuperación de Memoria USB / Tarjeta SD',
     'marca' => 'SanDisk',
-    'modelo' => 'SANDISK-FLASH-RESCUE',
-    'precio' => 45,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 45.0,
     'precio_oferta' => 39,
     'destacado' => false,
     'stock' => 999,
@@ -720,13 +807,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Solución rápida para memorias flash extraíbles utilizadas en cámaras, celulares o llaves USB que muestran error de lectura o archivos con accesos directos maliciosos.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Formatos' => 'SD, microSD, CF, USB 2.0/3.0',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 memoria USB o tarjeta SD',
+      'Alcance propuesto' => 'Diagnóstico e intento de recuperación lógica',
+      'Incluye propuesto' => 'Copia de archivos recuperables',
+      'Entrega propuesta' => 'Inventario de recuperación',
+      'No incluido' => 'Reparación de chips, medio destino ni laboratorio',
+      'Requisitos' => 'Conservar dispositivo sin nuevas escrituras',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '15 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -736,8 +829,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-REC-4',
     'nombre' => 'Plan de Respaldo Preventivo de Información (500GB)',
     'marca' => 'Crucial',
-    'modelo' => 'CRUCIAL-BACKUP-PLAN',
-    'precio' => 40,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 40.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -745,13 +838,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Copia de seguridad profesional sin perder carpetas personales, perfiles de correo Outlook, favoritos del navegador ni licencias instaladas. Verificamos la integridad de los datos mediante suma de comprobación.',
     'specs' => 
     array (
-      'Capacidad Incluida' => 'Hasta 500 GB',
-      'Integridad' => 'Verificación de checksum archivo por archivo',
+      'Modalidad' => 'Configuración de respaldo',
+      'Unidad' => 'Hasta 500 GB de datos',
+      'Alcance propuesto' => 'Organización y copia preventiva',
+      'Incluye propuesto' => 'Configuración de tarea y verificación de restauración de muestra',
+      'Entrega propuesta' => 'Procedimiento de respaldo',
+      'No incluido' => 'Disco, suscripción cloud y seguimiento continuo',
+      'Requisitos' => 'Medio destino y alcance de carpetas acordado',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -761,8 +860,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-REC-5',
     'nombre' => 'Clonación de Sistema Operativo a SSD',
     'marca' => 'Kingston',
-    'modelo' => 'KINGSTON-CLONE-EXP',
-    'precio' => 35,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 35.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -770,13 +869,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Duplicación exacta de tu disco viejo a un nuevo SSD de mayor velocidad o capacidad. Mantiene intactos todos tus programas instalados, configuraciones, contraseñas y archivos sin necesidad de reinstalar desde cero.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '2 a 4 Horas',
-      'Compatibilidad' => 'Windows 10/11 y macOS',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 sistema a 1 SSD',
+      'Alcance propuesto' => 'Clonación de disco con sistema operativo',
+      'Incluye propuesto' => 'Prueba de arranque cuando el hardware lo permita',
+      'Entrega propuesta' => 'SSD con clonación verificada',
+      'No incluido' => 'SSD, licencia y recuperación de disco dañado',
+      'Requisitos' => 'Origen legible, capacidad suficiente y compatibilidad',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -786,8 +891,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-FMT-1',
     'nombre' => 'Formateo e Instalación Limpia de Windows 11',
     'marca' => 'Microsoft',
-    'modelo' => 'MS-WIN11-CLEAN-INSTALL',
-    'precio' => 35,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 35.0,
     'precio_oferta' => NULL,
     'destacado' => true,
     'stock' => 999,
@@ -795,14 +900,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Reinstalación desde cero de Windows 11 con medios oficiales de Microsoft. Incluye particionado seguro, instalación de controladores oficiales validados por el fabricante del equipo, utilitarios de lectura PDF, descompresores y optimización de arranque.',
     'specs' => 
     array (
-      'Tiempo Estimado' => 'Mismo día (3 a 5 horas)',
-      'Sistema' => 'Windows 11 Home / Pro 64-bit',
-      'Incluye' => 'Drivers + Actualizaciones + Apps base',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 equipo',
+      'Alcance propuesto' => 'Instalación limpia de Windows 11',
+      'Incluye propuesto' => 'Controladores y actualizaciones iniciales',
+      'Entrega propuesta' => 'Sistema instalado y prueba básica',
+      'No incluido' => 'Licencia, respaldo y recuperación',
+      'Requisitos' => 'Hardware compatible y autorización para borrar datos',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -812,8 +922,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-FMT-2',
     'nombre' => 'Instalación Limpia y Configuración de macOS',
     'marca' => 'Apple',
-    'modelo' => 'APPLE-MACOS-RESTORE',
-    'precio' => 45,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 45.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -821,13 +931,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Restauración de fábrica para computadoras MacBook, iMac o Mac mini. Instalamos la última versión oficial compatible de macOS, desvinculamos cuentas anteriores de forma segura y dejamos el equipo listo para su nuevo usuario.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '4 a 6 Horas',
-      'Compatibilidad' => 'Macs con Apple Silicon e Intel',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 Mac compatible',
+      'Alcance propuesto' => 'Instalación limpia de macOS compatible',
+      'Incluye propuesto' => 'Configuración inicial y actualizaciones',
+      'Entrega propuesta' => 'Mac con sistema operativo operativo',
+      'No incluido' => 'Respaldo, recuperación y eliminación de bloqueo de activación',
+      'Requisitos' => 'Acceso del propietario y autorización de borrado',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -837,8 +953,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-FMT-3',
     'nombre' => 'Formateo con Respaldo de Datos (Hasta 100GB)',
     'marca' => 'Lenovo',
-    'modelo' => 'LENOVO-FORMAT-BACKUP',
-    'precio' => 50,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 50.0,
     'precio_oferta' => 45,
     'destacado' => false,
     'stock' => 999,
@@ -846,13 +962,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Tranquilidad total: respaldamos tus carpetas de Documentos, Escritorio, Descargas y Fotos antes de borrar el disco. Reinstalamos el sistema operativo completamente limpio y regresamos tus archivos a sus ubicaciones originales.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Capacidad Respaldo' => 'Hasta 100 GB incluidos',
+      'Modalidad' => 'Servicio en taller',
+      'Unidad' => '1 equipo y hasta 100 GB',
+      'Alcance propuesto' => 'Respaldo de carpetas acordadas e instalación limpia',
+      'Incluye propuesto' => 'Restauración del respaldo y controladores',
+      'Entrega propuesta' => 'Sistema instalado y archivos restaurados',
+      'No incluido' => 'Licencias, recuperación de datos y más de 100 GB',
+      'Requisitos' => 'Inventario del respaldo y autorización de borrado',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -862,8 +984,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-FMT-4',
     'nombre' => 'Instalación y Activación de Software de Oficina',
     'marca' => 'Microsoft',
-    'modelo' => 'MS-OFFICE-CONFIG',
-    'precio' => 25,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 25.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -871,13 +993,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Puesta a punto de programas de ofimática. Instalamos la suite oficial, sincronizamos tus cuentas corporativas de correo con protocolo IMAP o Exchange y configuramos firmas automáticas y plantillas.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '1 a 2 Horas',
-      'Modalidad' => 'Remoto o Taller',
+      'Modalidad' => 'Presencial o remoto',
+      'Unidad' => '1 equipo',
+      'Alcance propuesto' => 'Instalación y activación de suite de oficina',
+      'Incluye propuesto' => 'Configuración inicial y prueba de apertura',
+      'Entrega propuesta' => 'Software instalado con licencia del cliente',
+      'No incluido' => 'Compra de licencia o cuenta',
+      'Requisitos' => 'Licencia válida y sistema compatible',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -887,8 +1015,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-FMT-5',
     'nombre' => 'Desinfección Profunda de Virus y Spyware',
     'marca' => 'Kaspersky',
-    'modelo' => 'KASP-MALWARE-CLEAN',
-    'precio' => 40,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 40.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -896,13 +1024,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Limpieza de amenazas informáticas sin formatear. Detectamos y eliminamos troyanos, cryptominers que consumen tu procesador al 100%, adware que abre publicidad no deseada y reparamos el registro de Windows afectado.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '24 Horas hábiles',
-      'Herramientas' => 'Scanners con base de firmas actualizada',
+      'Modalidad' => 'Presencial o remoto',
+      'Unidad' => '1 equipo',
+      'Alcance propuesto' => 'Análisis y eliminación de malware detectable',
+      'Incluye propuesto' => 'Actualización y recomendaciones',
+      'Entrega propuesta' => 'Informe de detecciones y resultado',
+      'No incluido' => 'Recuperación de archivos cifrados, licencias ni reparación de hardware',
+      'Requisitos' => 'Acceso autorizado y evaluar reinstalación si es necesaria',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -912,8 +1046,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SPT-1',
     'nombre' => 'Soporte Técnico Residencial (1 Hora)',
     'marca' => 'HP',
-    'modelo' => 'HP-HOME-SUPPORT-1H',
-    'precio' => 45,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 45.0,
     'precio_oferta' => NULL,
     'destacado' => true,
     'stock' => 999,
@@ -921,13 +1055,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Un especialista de PayMe Panamá visita tu residencia para atender fallas de conectividad, configuración de impresoras en red, lentitud en computadoras y asesoría técnica directa con atención personalizada.',
     'specs' => 
     array (
-      'Duración' => '60 Minutos in situ',
-      'Cobertura' => 'Ciudad de Panamá y áreas metropolitanas',
+      'Modalidad' => 'A domicilio',
+      'Duración' => '1 hora',
+      'Alcance propuesto' => 'Diagnóstico y asistencia informática residencial',
+      'Incluye propuesto' => 'Soluciones básicas dentro del tiempo contratado',
+      'Entrega propuesta' => 'Registro del trabajo y recomendaciones',
+      'No incluido' => 'Repuestos y tiempo adicional',
+      'Requisitos' => 'Definir zona, traslado y disponibilidad',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '15 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -937,8 +1077,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SPT-2',
     'nombre' => 'Visita Técnica Empresarial (Diagnóstico PyME)',
     'marca' => 'Dell',
-    'modelo' => 'DELL-CORP-DIAGNOSTIC',
-    'precio' => 80,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 80.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -946,13 +1086,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Diagnóstico profesional para oficinas y comercios de hasta 15 equipos. Evaluamos el estado operativo del parque informático, la velocidad de la red local, el estado de respaldos y elaboramos un plan de mejoras prioritarias.',
     'specs' => 
     array (
-      'Duración' => 'Hasta 2 Horas in situ',
-      'Entregable' => 'Diagnóstico detallado con cotización de soluciones',
+      'Modalidad' => 'Visita empresarial',
+      'Unidad' => '1 visita de diagnóstico',
+      'Alcance propuesto' => 'Inspección de equipos y necesidades de la PyME',
+      'Incluye propuesto' => 'Diagnóstico inicial',
+      'Entrega propuesta' => 'Informe y cotización de solución',
+      'No incluido' => 'Repuestos, reparaciones y implementación',
+      'Requisitos' => 'Definir cantidad de equipos, duración y ubicación',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -962,8 +1108,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SPT-3',
     'nombre' => 'Instalación y Conexión de Dispositivos Smart Home',
     'marca' => 'Google',
-    'modelo' => 'GOOGLE-SMART-SETUP',
-    'precio' => 50,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 50.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -971,13 +1117,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Automatiza tu hogar sin complicaciones. Configuramos asistentes inteligentes, asociamos luces inteligentes, enchufes y programamos rutinas de encendido y apagado para tu comodidad.',
     'specs' => 
     array (
-      'Tiempo Estimado' => '1.5 a 2 Horas',
-      'Dispositivos' => 'Hasta 5 dispositivos inteligentes incluidos',
+      'Modalidad' => 'A domicilio',
+      'Unidad' => 'Dispositivos por definir',
+      'Alcance propuesto' => 'Instalación y conexión de equipos de hogar inteligente',
+      'Incluye propuesto' => 'Configuración en aplicaciones compatibles',
+      'Entrega propuesta' => 'Prueba funcional y explicación de uso',
+      'No incluido' => 'Dispositivos, instalación eléctrica y suscripciones',
+      'Requisitos' => 'Red Wi-Fi compatible y cuentas del propietario',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -987,8 +1139,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SPT-4',
     'nombre' => 'Soporte Técnico Remoto Inmediato (45 Min)',
     'marca' => 'Lenovo',
-    'modelo' => 'LENOVO-QUICK-REMOTE',
-    'precio' => 30,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 30.0,
     'precio_oferta' => 25,
     'destacado' => false,
     'stock' => 999,
@@ -996,13 +1148,20 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Atención ágil sin esperas. Conexión cifrada directa a tu pantalla con tu autorización para corregir problemas de drivers, instalación de programas, errores de certificados o configuración de impresoras USB.',
     'specs' => 
     array (
-      'Tiempo Estimado' => 'Atención en menos de 30 minutos',
-      'Requisito' => 'Conexión a internet activa en el equipo',
+      'Modalidad' => 'Remota',
+      'Duración' => '45 minutos',
+      'Alcance propuesto' => 'Diagnóstico y asistencia mediante sesión autorizada',
+      'Incluye propuesto' => 'Configuraciones y soluciones dentro del tiempo contratado',
+      'Entrega propuesta' => 'Registro de acciones',
+      'No incluido' => 'Reparación física, licencias y tiempo adicional',
+      'Requisitos' => 'Internet estable y acceso remoto autorizado',
+      'Disponibilidad' => 'Según agenda, no prometer atención inmediata sin horario definido',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '15 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -1012,8 +1171,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SPT-5',
     'nombre' => 'Asesoría Personalizada de Compra Tecnológica',
     'marca' => 'ASUS',
-    'modelo' => 'ASUS-TECH-ADVISORY',
-    'precio' => 35,
+    'modelo' => 'Servicio propio de la PyME',
+    'precio' => 35.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -1021,13 +1180,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Sesión de consultoría 1 a 1 de 45 minutos. Analizamos tus necesidades reales de trabajo, estudio o gaming, comparamos opciones de mercado y te entregamos una lista de compras con los mejores precios y compatibilidad garantizada.',
     'specs' => 
     array (
-      'Duración' => '45 Minutos vía videollamada / llamada',
-      'Beneficio' => 'Ahorro promedio del 20% en compras de hardware',
+      'Modalidad' => 'Asesoría presencial o remota',
+      'Unidad' => '1 sesión, duración por definir',
+      'Alcance propuesto' => 'Evaluación de necesidades, presupuesto y compatibilidad',
+      'Incluye propuesto' => 'Comparación de opciones',
+      'Entrega propuesta' => 'Recomendación o propuesta de compra',
+      'No incluido' => 'Productos y descuentos de terceros',
+      'Requisitos' => 'Definir uso y presupuesto',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía de Servicio PayMe',
-      'duracion' => '30 Días',
+      'nombre' => 'Garantía del servicio',
+      'duracion' => 'Definir y documentar por el negocio',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -1037,7 +1202,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SFT-1',
     'nombre' => 'Microsoft 365 Personal (Licencia Digital)',
     'marca' => 'Microsoft',
-    'modelo' => 'MS-365-PERSONAL',
+    'modelo' => 'Microsoft 365 Personal, suscripción de referencia de 1 año',
     'precio' => 69.99,
     'precio_oferta' => NULL,
     'destacado' => true,
@@ -1046,14 +1211,19 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Licencia genuina de Microsoft 365 para un usuario. Utilizable en hasta 5 dispositivos simultáneamente (PC, Mac, iPhone, Android). Incluye las versiones premium de las apps de Office siempre actualizadas y 1.000 GB de almacenamiento seguro en OneDrive.',
     'specs' => 
     array (
-      'Entrega' => 'Inmediata vía correo electrónico',
-      'Compatibilidad' => 'Windows 10/11, macOS, iOS, Android',
-      'Nube' => '1 TB en OneDrive incluido',
+      'Tipo' => 'Suscripción digital',
+      'Usuarios' => '1',
+      'Dispositivos' => 'Inicio de sesión en hasta 5 simultáneamente',
+      'Nube' => '1 TB OneDrive',
+      'Aplicaciones' => 'Word, Excel, PowerPoint y otras según plataforma',
+      'Compatibilidad' => 'PC, Mac, teléfonos y tabletas',
+      'Características' => 'Productividad y seguridad según plan vigente',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía Oficial del Fabricante',
-      'duracion' => '1 Año',
+      'nombre' => 'Garantía de activación según contrato',
+      'duracion' => 'Confirmar condiciones de la licencia y del proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => 
     array (
@@ -1087,8 +1257,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SFT-2',
     'nombre' => 'Windows 11 Pro OEM Clave de Activación',
     'marca' => 'Microsoft',
-    'modelo' => 'MS-WIN11-PRO-OEM',
-    'precio' => 149,
+    'modelo' => 'Windows 11 Pro OEM, 1 equipo',
+    'precio' => 149.0,
     'precio_oferta' => 129,
     'destacado' => true,
     'stock' => 999,
@@ -1096,14 +1266,18 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Clave original de producto para Windows 11 Profesional. Se vincula permanentemente a la placa madre de tu equipo. Habilita cifrado de disco BitLocker, virtualización Hyper-V y conexión por Escritorio Remoto.',
     'specs' => 
     array (
-      'Tipo de Licencia' => 'OEM Digital Permanente',
-      'Arquitectura' => '64-bit',
-      'Idioma' => 'Multilenguaje (Español incluido)',
+      'Tipo' => 'Licencia OEM, no Retail',
+      'Edición' => 'Windows 11 Pro',
+      'Equipos' => '1 equipo conforme a términos OEM',
+      'Entrega' => 'Clave/licencia digital según canal autorizado',
+      'Activación' => 'Conexión a Internet y hardware compatible',
+      'Características' => 'Funciones Pro como BitLocker, unión a dominio y host de Escritorio remoto',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía Oficial del Fabricante',
-      'duracion' => 'Vitalicia (1 PC)',
+      'nombre' => 'Garantía de activación según contrato',
+      'duracion' => 'Confirmar condiciones de la licencia y del proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -1113,8 +1287,8 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SFT-3',
     'nombre' => 'Adobe Creative Cloud Todas las Aplicaciones',
     'marca' => 'Adobe',
-    'modelo' => 'ADOBE-CC-ALL-APPS',
-    'precio' => 299,
+    'modelo' => 'Creative Cloud, plan individual completo: contrato por confirmar',
+    'precio' => 299.0,
     'precio_oferta' => NULL,
     'destacado' => false,
     'stock' => 999,
@@ -1122,13 +1296,18 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Plan completo con más de 20 herramientas de creación digital de Adobe. Incluye Photoshop, Illustrator, InDesign, Premiere Pro, After Effects, Lightroom, tipografías de Adobe Fonts y 100GB de almacenamiento en la nube.',
     'specs' => 
     array (
-      'Entrega' => 'Activación en cuenta personal de Adobe',
-      'Compatibilidad' => 'Windows y macOS',
+      'Tipo' => 'Suscripción digital',
+      'Usuario' => 'Individual de referencia',
+      'Aplicaciones' => 'Suite Creative Cloud según plan',
+      'Compatibilidad' => 'Windows/macOS, requisitos distintos por aplicación',
+      'Activación' => 'Cuenta Adobe y conexión a Internet',
+      'Características' => 'Herramientas de diseño, fotografía, video y documentos',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía Oficial del Fabricante',
-      'duracion' => '1 Año',
+      'nombre' => 'Garantía de activación según contrato',
+      'duracion' => 'Confirmar condiciones de la licencia y del proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -1138,7 +1317,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SFT-4',
     'nombre' => 'Kaspersky Total Security Antivirus',
     'marca' => 'Kaspersky',
-    'modelo' => 'KASP-TOTAL-SEC-1Y',
+    'modelo' => 'Kaspersky Total Security, licencia existente por confirmar',
     'precio' => 39.99,
     'precio_oferta' => 34.99,
     'destacado' => false,
@@ -1147,13 +1326,18 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Solución integral de ciberseguridad para tu equipo personal o laboral. Protege tus transacciones bancarias en un navegador aislado, bloquea páginas de phishing, administra tus contraseñas y frena ataques de ransomware en tiempo real.',
     'specs' => 
     array (
-      'Entrega' => 'Código alfanumérico instantáneo',
-      'Compatibilidad' => 'Windows, Mac, Android, iOS',
+      'Tipo' => 'Licencia de seguridad digital',
+      'Producto' => 'Kaspersky Total Security',
+      'Funciones de la edición' => 'Antimalware y herramientas de seguridad según versión',
+      'Activación' => 'Cuenta y clave válida para la región',
+      'Dispositivos' => 'No indicados en la lista',
+      'Duración' => 'No indicada en la lista',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía Oficial del Fabricante',
-      'duracion' => '1 Año',
+      'nombre' => 'Garantía de activación según contrato',
+      'duracion' => 'Confirmar condiciones de la licencia y del proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => 
     array (
@@ -1187,7 +1371,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SRV-SFT-5',
     'nombre' => 'Norton 360 Deluxe 5 Dispositivos',
     'marca' => 'Norton',
-    'modelo' => 'NORTON-360-DELUXE',
+    'modelo' => 'Norton 360 Deluxe, 5 dispositivos, referencia de 1 año',
     'precio' => 49.99,
     'precio_oferta' => NULL,
     'destacado' => false,
@@ -1196,13 +1380,18 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Protección multicapa para toda tu familia. Defiende contra virus y malware en 5 equipos simultáneos, incluye VPN ilimitada para conectarte con seguridad en redes Wi-Fi públicas y monitoreo de la Dark Web para alertarte de filtraciones de datos.',
     'specs' => 
     array (
-      'Entrega' => 'Licencia digital oficial',
-      'Capacidad' => 'Hasta 5 dispositivos',
+      'Tipo' => 'Suscripción digital',
+      'Dispositivos' => 'Hasta 5',
+      'Compatibilidad' => 'PC, Mac, teléfonos y tabletas compatibles',
+      'Funciones' => 'Antimalware, VPN y herramientas de privacidad',
+      'Respaldo' => '50 GB de copia de seguridad en la nube para PC en plan consultado',
+      'Características' => 'Control parental y monitorización según región',
     ),
     'garantia' => 
     array (
-      'nombre' => 'Garantía Oficial del Fabricante',
-      'duracion' => '1 Año',
+      'nombre' => 'Garantía de activación según contrato',
+      'duracion' => 'Confirmar condiciones de la licencia y del proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
     ),
     'variantes' => NULL,
   ),
@@ -1221,30 +1410,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-2-1',
     'nombre' => 'Apple MacBook Air 13.6" M2',
     'marca' => 'Apple',
-    'modelo' => 'MLY33LL/A',
+    'modelo' => 'MacBook Air M2 (2022), GPU de 8 núcleos, 8 GB/256 GB',
     'precio' => 1099.0,
-    'precio_oferta' => 999.0,
+    'precio_oferta' => 999,
     'stock' => 13,
     'destacado' => true,
     'desc_corta' => 'Chip M2 ultraeficiente, pantalla Liquid Retina de 13.6 pulgadas y hasta 18 horas de batería.',
     'desc' => 'La laptop más delgada y portátil de Apple. Diseñada en aluminio unibody ultraligero con chip M2 de 8 núcleos de CPU y 8 núcleos de GPU. Su pantalla Liquid Retina ofrece 500 nits de brillo y compatibilidad con 1.000 millones de colores.',
     'peso' => 1.24,
-    'largo' => 30.41,
-    'ancho' => 21.5,
+    'largo' => 21.5,
+    'ancho' => 30.41,
     'alto' => 1.13,
     'specs' => 
     array (
-      'Pantalla' => '13.6" Liquid Retina',
-      'Procesador' => 'Apple M2 (8 núcleos)',
-      'Batería' => 'Hasta 18 horas',
-      'Puertos' => '2x Thunderbolt / MagSafe 3',
+      'Procesador' => 'Apple M2, CPU de 8 núcleos',
+      'Gráficos' => 'GPU integrada de 8 núcleos',
+      'Memoria' => '8 GB unificada',
+      'Almacenamiento' => 'SSD de 256 GB',
+      'Pantalla' => '13.6 pulgadas Liquid Retina IPS, 2560 × 1664',
+      'Conectividad' => 'Wi-Fi 6, Bluetooth 5.3',
+      'Puertos' => '2 Thunderbolt/USB 4, MagSafe 3, audio de 3.5 mm',
+      'Batería' => '52.6 Wh, hasta 18 horas de video',
+      'Características' => 'Diseño sin ventilador, Touch ID y cámara FaceTime HD de 1080p',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'LAP-2-1-V1',
-        'precio' => 1099.0,
+        'precio' => 1099,
         'stock' => 8,
         'opcion' => 
         array (
@@ -1255,7 +1449,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'LAP-2-1-V2',
-        'precio' => 1399.0,
+        'precio' => 1399,
         'stock' => 5,
         'opcion' => 
         array (
@@ -1264,6 +1458,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   1 => 
   array (
@@ -1271,7 +1471,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-2-2',
     'nombre' => 'Dell XPS 13 Plus 9320',
     'marca' => 'Dell',
-    'modelo' => 'XPS-9320-i7',
+    'modelo' => 'XPS 13 Plus 9320, nxps139320_s3e, i7-1260P/16 GB/512 GB/OLED',
     'precio' => 1299.0,
     'precio_oferta' => NULL,
     'stock' => 8,
@@ -1279,17 +1479,27 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Diseño minimalista con barra táctil capacitiva, pantalla InfinityEdge FHD+ e Intel Core i7.',
     'desc' => 'Portátil de alta gama empresarial construido en aluminio mecanizado CNC. Integra touchpad háptico de vidrio sin bordes visibles, procesador Intel Core i7 de 13.ª generación y teclado de borde a borde.',
     'peso' => 1.26,
-    'largo' => 29.53,
-    'ancho' => 19.91,
-    'alto' => 1.52,
+    'largo' => 19.904,
+    'ancho' => 29.53,
+    'alto' => 1.528,
     'specs' => 
     array (
-      'Pantalla' => '13.4" FHD+ InfinityEdge',
-      'Procesador' => 'Intel Core i7-1360P',
-      'RAM' => '16 GB LPDDR5',
-      'Almacenamiento' => '512 GB SSD NVMe',
+      'Procesador' => 'Intel Core i7-1260P, 12 núcleos y 16 hilos',
+      'Memoria' => '16 GB LPDDR5-5200 integrada',
+      'Almacenamiento' => 'SSD NVMe de 512 GB',
+      'Gráficos' => 'Intel Iris Xe integrados',
+      'Pantalla' => '13.4 pulgadas OLED táctil 3456 × 2160, 60 Hz',
+      'Puertos' => '2 Thunderbolt 4 USB-C',
+      'Batería' => '55 Wh',
+      'Características' => 'Teclado de borde a borde y panel táctil háptico',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   2 => 
   array (
@@ -1297,7 +1507,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-2-3',
     'nombre' => 'Lenovo ThinkPad X1 Carbon Gen 11',
     'marca' => 'Lenovo',
-    'modelo' => '21HM002DUS',
+    'modelo' => 'ThinkPad X1 Carbon Gen 11, 21HM00AKVA',
     'precio' => 1499.0,
     'precio_oferta' => NULL,
     'stock' => 6,
@@ -1305,17 +1515,28 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Chasis de fibra de carbono probado bajo estándares militares con teclado legendario ThinkPad.',
     'desc' => 'El estándar de oro para ejecutivos y programadores. Certificado bajo 12 pruebas de grado militar MIL-STD-810H. Cuenta con lector de huellas biométrico, obturador de privacidad en cámara y procesador Intel Core i7.',
     'peso' => 1.12,
-    'largo' => 31.56,
-    'ancho' => 22.25,
-    'alto' => 1.53,
+    'largo' => 22.25,
+    'ancho' => 31.56,
+    'alto' => 1.536,
     'specs' => 
     array (
-      'Pantalla' => '14.0" WUXGA Antirreflejo',
-      'Procesador' => 'Intel Core i7-1365U',
-      'RAM' => '16 GB',
-      'Seguridad' => 'dTPM 2.0 / Lector Huellas',
+      'Procesador' => 'Intel Core i7-1355U, 10 núcleos y 12 hilos',
+      'Memoria' => '16 GB LPDDR5/x-6400 soldada',
+      'Almacenamiento' => 'SSD de 512 GB PCIe 4.0 NVMe Opal 2.0',
+      'Pantalla' => '14 pulgadas IPS, 1920 × 1200, 400 nits, sin función táctil',
+      'Gráficos' => 'Intel Iris Xe',
+      'Conectividad' => 'Wi-Fi 6E AX211 y Bluetooth 5.3',
+      'Puertos' => '2 Thunderbolt 4, 2 USB-A, HDMI 2.1 y audio',
+      'Batería' => '57 Wh',
+      'Sistema operativo' => 'Sin sistema operativo de fábrica',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   3 => 
   array (
@@ -1323,24 +1544,37 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-2-4',
     'nombre' => 'HP Spectre x360 14 2-in-1',
     'marca' => 'HP',
-    'modelo' => '14-ef2013dx',
+    'modelo' => 'Spectre x360 14-eu0013dx, 979L2UA',
     'precio' => 1199.0,
     'precio_oferta' => NULL,
     'stock' => 7,
     'destacado' => false,
     'desc_corta' => 'Convertible premium con bisagra de 360°, pantalla táctil OLED 3K2K y lápiz digital recargable.',
     'desc' => 'Laptop y tablet en un solo equipo de corte biselado de lujo. Su pantalla OLED ofrece negros perfectos con certificación VESA DisplayHDR True Black 400. Incluye cámara web inteligente de 5MP.',
-    'peso' => 1.36,
-    'largo' => 29.8,
-    'ancho' => 22.04,
-    'alto' => 1.69,
+    'peso' => 1.45,
+    'largo' => 22.04,
+    'ancho' => 31.37,
+    'alto' => 1.7,
     'specs' => 
     array (
-      'Pantalla' => '13.5" OLED 3K2K Táctil',
-      'Procesador' => 'Intel Core i7-1355U',
-      'Audio' => 'Bang & Olufsen Quad Speakers',
+      'Procesador' => 'Intel Core Ultra 7 155H, 16 núcleos y 22 hilos',
+      'Memoria' => '16 GB LPDDR5x-7467 soldada',
+      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 1 TB',
+      'Pantalla' => '14 pulgadas OLED táctil 3K',
+      'Gráficos' => 'Intel Arc integrados',
+      'Puertos' => '2 Thunderbolt 4, USB-A de 10 Gb/s y audio',
+      'Conectividad' => 'Wi-Fi 6E AX211 y Bluetooth 5.3',
+      'Batería' => '68 Wh',
+      'Características' => 'Bisagra convertible, cámara IR de 9 MP, panel táctil háptico',
+      'Sistema operativo' => 'Windows 11 Home',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   4 => 
   array (
@@ -1348,24 +1582,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-2-5',
     'nombre' => 'Acer Swift Go 14 OLED',
     'marca' => 'Acer',
-    'modelo' => 'SFG14-71-78LN',
+    'modelo' => 'Swift Go 14 SFG14-71 OLED, NX.KMZEB.008',
     'precio' => 799.0,
-    'precio_oferta' => 749.0,
+    'precio_oferta' => 749,
     'stock' => 10,
     'destacado' => false,
     'desc_corta' => 'Increíble pantalla OLED 2.8K de 90Hz, procesador Intel de 13.ª gen y peso pluma de 1.25 kg.',
     'desc' => 'Rendimiento y pantalla asombrosa al mejor precio. Cuenta con panel OLED calibrado al 100% DCI-P3, doble ventilador TwinAir para bajas temperaturas y conectividad Wi-Fi 6E.',
     'peso' => 1.25,
-    'largo' => 31.29,
-    'ancho' => 21.79,
+    'largo' => 21.79,
+    'ancho' => 31.29,
     'alto' => 1.49,
     'specs' => 
     array (
-      'Pantalla' => '14.0" 2.8K OLED 90Hz',
-      'Procesador' => 'Intel Core i7-13700H',
-      'Almacenamiento' => '512 GB PCIe 4.0',
+      'Procesador' => 'Intel Core i5-1335U, 10 núcleos, turbo hasta 4.6 GHz',
+      'Memoria' => '16 GB LPDDR5',
+      'Almacenamiento' => 'SSD NVMe de 512 GB',
+      'Pantalla' => '14 pulgadas OLED, 2880 × 1800, relación 16:10',
+      'Gráficos' => 'Intel Iris Xe',
+      'Lector de tarjetas' => 'microSD',
+      'Sistema operativo' => 'Windows 11 Home',
+      'Características' => 'Equipo ultraportátil con panel OLED no táctil',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   5 => 
   array (
@@ -1373,30 +1618,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-3-1',
     'nombre' => 'ASUS ROG Zephyrus G14 Gaming',
     'marca' => 'ASUS',
-    'modelo' => 'GA402XY-G14',
+    'modelo' => 'ROG Zephyrus G14 (2024), GA403UV-G14.R94060',
     'precio' => 1599.0,
     'precio_oferta' => NULL,
     'stock' => 10,
     'destacado' => true,
     'desc_corta' => 'Potencia pura en 14 pulgadas: AMD Ryzen 9, GeForce RTX 4080 y pantalla Nebula Display 165Hz.',
     'desc' => 'La laptop gaming compacta más premiada del mundo. Equipada con cámara de vapor, metal líquido sobre CPU y GPU, pantalla ROG Nebula QHD+ de 165Hz con tiempo de respuesta de 3ms y switch MUX.',
-    'peso' => 1.72,
-    'largo' => 31.2,
-    'ancho' => 22.7,
-    'alto' => 1.95,
+    'peso' => 1.5,
+    'largo' => 22.0,
+    'ancho' => 31.1,
+    'alto' => 1.63,
     'specs' => 
     array (
-      'Pantalla' => '14" QHD+ 165Hz Nebula',
-      'Procesador' => 'AMD Ryzen 9 7940HS',
-      'Gráfica' => 'NVIDIA RTX 4080 12GB',
-      'RAM' => '32 GB DDR5',
+      'Procesador' => 'AMD Ryzen 9 8945HS, 8 núcleos y 16 hilos',
+      'Gráficos' => 'NVIDIA GeForce RTX 4060 Laptop, 8 GB GDDR6, hasta 90 W',
+      'Memoria' => '16 GB LPDDR5X integrada',
+      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 1 TB',
+      'Pantalla' => '14 pulgadas OLED 2880 × 1800, 120 Hz',
+      'Conectividad' => 'Wi-Fi 6E y Bluetooth 5.3',
+      'Batería' => '73 Wh',
+      'Sistema operativo' => 'Windows 11 Home',
+      'Características' => 'Chasis de aluminio y pantalla ROG Nebula OLED',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'LAP-3-1-V1',
-        'precio' => 1599.0,
+        'precio' => 1599,
         'stock' => 6,
         'opcion' => 
         array (
@@ -1407,7 +1657,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'LAP-3-1-V2',
-        'precio' => 1629.0,
+        'precio' => 1629,
         'stock' => 4,
         'opcion' => 
         array (
@@ -1416,6 +1666,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   6 => 
   array (
@@ -1423,7 +1679,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-3-2',
     'nombre' => 'Acer Predator Helios 16',
     'marca' => 'Acer',
-    'modelo' => 'PH16-71-72YG',
+    'modelo' => 'Predator Helios 16 PH16-71-74JC, NH.QJREX.004',
     'precio' => 1399.0,
     'precio_oferta' => NULL,
     'stock' => 6,
@@ -1431,16 +1687,27 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Refrigeración con ventiladores metálicos AeroBlade 3D y tarjeta gráfica RTX 4070 a 140W.',
     'desc' => 'Máquina de combate para eSports. Su pantalla de 16 pulgadas WQXGA a 240Hz elimina el desenfoque en shooters competitivos. Cuenta con teclado retroiluminado RGB por tecla.',
     'peso' => 2.6,
-    'largo' => 35.77,
-    'ancho' => 27.87,
+    'largo' => 27.874,
+    'ancho' => 35.778,
     'alto' => 2.69,
     'specs' => 
     array (
-      'Pantalla' => '16" WQXGA 240Hz 3ms',
-      'Procesador' => 'Intel Core i7-13700HX',
-      'Gráfica' => 'RTX 4070 8GB GDDR6',
+      'Procesador' => 'Intel Core i7-13700HX, 16 núcleos',
+      'Gráficos' => 'GeForce RTX 4070 Laptop, 8 GB GDDR6, hasta 140 W',
+      'Memoria' => '32 GB DDR5',
+      'Almacenamiento' => 'SSD NVMe de 1 TB',
+      'Pantalla' => '16 pulgadas IPS 2560 × 1600, 240 Hz',
+      'Conectividad' => 'Wi-Fi 6 y Ethernet Gigabit',
+      'Sistema operativo' => 'EShell',
+      'Características' => 'Teclado RGB y formato de pantalla 16:10',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   7 => 
   array (
@@ -1448,24 +1715,37 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-3-3',
     'nombre' => 'MSI Katana 15 B13V',
     'marca' => 'MSI',
-    'modelo' => 'KATANA-15-B13VGK',
+    'modelo' => 'Katana 15 B13VFK-1057CL',
     'precio' => 1099.0,
-    'precio_oferta' => 999.0,
+    'precio_oferta' => 999,
     'stock' => 8,
     'destacado' => false,
     'desc_corta' => 'Excelente relación precio-rendimiento con Intel Core i7 de 13.ª gen y gráficos RTX 4060.',
     'desc' => 'Inspirada en el filo de una espada samurái. Integra sistema Cooler Boost 5 con 2 ventiladores y 6 heatpipes de cobre compartidos para mantener temperaturas bajo control.',
     'peso' => 2.25,
-    'largo' => 35.9,
-    'ancho' => 25.9,
+    'largo' => 25.9,
+    'ancho' => 35.9,
     'alto' => 2.49,
     'specs' => 
     array (
-      'Pantalla' => '15.6" FHD 144Hz IPS',
-      'Procesador' => 'Intel Core i7-13620H',
-      'Gráfica' => 'RTX 4060 8GB',
+      'Procesador' => 'Intel Core i7-13620H, 10 núcleos',
+      'Gráficos' => 'RTX 4060 Laptop de 8 GB GDDR6, hasta 105 W',
+      'Memoria' => '16 GB (2 × 8 GB) DDR5',
+      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 512 GB',
+      'Pantalla' => '15.6 pulgadas IPS-Level FHD, 144 Hz',
+      'Conectividad' => 'Wi-Fi 6E AX211, Bluetooth 5.3 y Ethernet Gigabit',
+      'Batería' => '53.5 Wh',
+      'Adaptador' => '200 W',
+      'Sistema operativo' => 'Windows 11 Home',
+      'Características' => 'Teclado RGB de 4 zonas y dos ranuras M.2',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   8 => 
   array (
@@ -1473,24 +1753,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-3-4',
     'nombre' => 'Lenovo Legion Pro 5 Gen 8',
     'marca' => 'Lenovo',
-    'modelo' => '16IRX8-82WK',
+    'modelo' => 'Legion Pro 5 16ARX8, 82WM005PRK',
     'precio' => 1449.0,
     'precio_oferta' => NULL,
     'stock' => 7,
     'destacado' => false,
     'desc_corta' => 'Potenciado por el chip de IA Lenovo LA1 y pantalla PureSight Gaming de 16 pulgadas 240Hz.',
     'desc' => 'Construida para rendir sin piedad. El chip de Inteligencia Artificial Legion Coldfront 5.0 ajusta los voltajes y ventilación en tiempo real para exprimir hasta el último FPS.',
-    'peso' => 2.55,
-    'largo' => 36.34,
-    'ancho' => 26.03,
-    'alto' => 2.68,
+    'peso' => 2.5,
+    'largo' => 26.035,
+    'ancho' => 36.34,
+    'alto' => 2.675,
     'specs' => 
     array (
-      'Pantalla' => '16" WQXGA 240Hz 500 nits',
-      'Procesador' => 'AMD Ryzen 7 7745HX',
-      'Gráfica' => 'RTX 4070 8GB',
+      'Procesador' => 'AMD Ryzen 7 7745HX, 8 núcleos y 16 hilos',
+      'Gráficos' => 'RTX 4060 Laptop de 8 GB GDDR6',
+      'Memoria' => '32 GB, 2 × 16 GB DDR5-5200',
+      'Almacenamiento' => 'SSD NVMe PCIe 4.0 de 1 TB',
+      'Pantalla' => '16 pulgadas IPS 2560 × 1600; frecuencia del panel por confirmar en esta variante',
+      'Conectividad' => 'Wi-Fi 6E, Bluetooth y Ethernet',
+      'Batería' => '80 Wh',
+      'Características' => 'Refrigeración Legion ColdFront y teclado retroiluminado',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   9 => 
   array (
@@ -1498,7 +1789,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'LAP-3-5',
     'nombre' => 'HP Omen 16 Gaming Laptop',
     'marca' => 'HP',
-    'modelo' => '16-wf0019nr',
+    'modelo' => 'OMEN Gaming Laptop 16-wf0083dx, A7QR7UA',
     'precio' => 1299.0,
     'precio_oferta' => NULL,
     'stock' => 9,
@@ -1511,11 +1802,19 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.35,
     'specs' => 
     array (
-      'Pantalla' => '16.1" QHD 165Hz IPS',
-      'Procesador' => 'Intel Core i7-13700HX',
-      'RAM' => '16 GB DDR5 4800MHz',
+      'Tipo' => 'Laptop gamer de la serie OMEN 16-wf0000',
+      'Código del fabricante' => 'A7QR7UA',
+      'Pantalla nominal' => '16.1 pulgadas',
+      'Configuración' => 'Ficha de hardware exacta no recuperada de la fuente oficial',
+      'Características' => 'No publicar CPU, RAM, GPU o SSD hasta confirmar la ficha de A7QR7UA',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   10 => 
   array (
@@ -1523,7 +1822,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'DESK-4-1',
     'nombre' => 'Apple Mac mini M2',
     'marca' => 'Apple',
-    'modelo' => 'MMFJ3LL/A',
+    'modelo' => 'Mac mini M2 (2023), 8 GB/256 GB',
     'precio' => 599.0,
     'precio_oferta' => NULL,
     'stock' => 17,
@@ -1536,16 +1835,20 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.58,
     'specs' => 
     array (
-      'Procesador' => 'Apple M2 (8 CPU / 10 GPU)',
-      'RAM' => '8 GB Unificada',
-      'Puertos' => '2x Thunderbolt 4 / 2x USB-A / HDMI',
+      'Procesador' => 'Apple M2, CPU de 8 núcleos',
+      'Gráficos' => 'GPU de 10 núcleos',
+      'Memoria' => '8 GB unificada',
+      'Almacenamiento' => 'SSD de 256 GB',
+      'Puertos' => '2 Thunderbolt 4, 2 USB-A, HDMI, Ethernet Gigabit y audio de 3.5 mm',
+      'Conectividad' => 'Wi-Fi 6E y Bluetooth 5.3',
+      'Características' => 'Equipo compacto',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'DESK-4-1-V1',
-        'precio' => 599.0,
+        'precio' => 599,
         'stock' => 10,
         'opcion' => 
         array (
@@ -1556,7 +1859,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'DESK-4-1-V2',
-        'precio' => 799.0,
+        'precio' => 799,
         'stock' => 7,
         'opcion' => 
         array (
@@ -1565,6 +1868,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   11 => 
   array (
@@ -1572,24 +1881,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'DESK-4-2',
     'nombre' => 'Dell Inspiron 3020 Desktop',
     'marca' => 'Dell',
-    'modelo' => 'I3020-7212BLK',
+    'modelo' => 'Inspiron 3020 Desktop, cd302014',
     'precio' => 649.0,
     'precio_oferta' => NULL,
     'stock' => 8,
     'destacado' => false,
     'desc_corta' => 'PC de torre para oficina y hogar con procesador Intel Core i7 de 13.ª generación.',
     'desc' => 'Confiabilidad probada para productividad multitarea continua. Incluye teclado y mouse óptico Dell originales, unidad SSD PCIe rápida y múltiples puertos frontales.',
-    'peso' => 4.9,
-    'largo' => 32.43,
+    'peso' => 7.3,
+    'largo' => 29.28,
     'ancho' => 15.4,
-    'alto' => 29.2,
+    'alto' => 32.43,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i7-13700',
-      'RAM' => '16 GB DDR4',
-      'Almacenamiento' => '512 GB NVMe SSD',
+      'Procesador' => 'Intel Core i5-13400, 10 núcleos y 16 hilos',
+      'Memoria' => '16 GB DDR4-3200',
+      'Almacenamiento' => 'SSD NVMe de 1 TB',
+      'Gráficos' => 'Intel UHD 730',
+      'Sistema operativo' => 'Windows 11 Home',
+      'Características' => 'Torre de escritorio para productividad',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   12 => 
   array (
@@ -1597,24 +1915,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'DESK-4-3',
     'nombre' => 'HP Envy Desktop TE02',
     'marca' => 'HP',
-    'modelo' => 'TE02-1054',
+    'modelo' => 'ENVY TE02-0240nd, 670L7EA',
     'precio' => 899.0,
     'precio_oferta' => NULL,
     'stock' => 6,
     'destacado' => false,
     'desc_corta' => 'Chasis con acceso sin herramientas, refrigeración optimizada y expansión para tarjetas gráficas.',
     'desc' => 'Computadora de alto rendimiento para creadores de contenido, edición de fotos y video. Fácilmente ampliable sin tornillos en bahías de discos y slots de memoria RAM.',
-    'peso' => 6.2,
-    'largo' => 39.6,
+    'peso' => 13.75,
+    'largo' => 39.61,
     'ancho' => 16.5,
-    'alto' => 38.3,
+    'alto' => 44.8,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i7-13700',
-      'RAM' => '32 GB DDR5',
-      'Almacenamiento' => '1 TB NVMe SSD',
+      'Procesador' => 'Intel Core i9-12900, 16 núcleos y 24 hilos',
+      'Memoria' => '32 GB DDR4-3200, 2 × 16 GB',
+      'Almacenamiento' => '2 SSD NVMe de 1 TB cada uno',
+      'Gráficos' => 'GeForce RTX 3060 Ti de 8 GB',
+      'Red' => 'Ethernet Gigabit, Wi-Fi 6 y Bluetooth 5.2',
+      'Puertos' => 'Thunderbolt 4, USB-C, USB-A y RJ45',
+      'Fuente de poder' => '500 W, 80 PLUS Bronze',
+      'Características' => 'Torre con lector de tarjetas y almacenamiento dual',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   13 => 
   array (
@@ -1622,7 +1951,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'DESK-4-4',
     'nombre' => 'Lenovo IdeaCentre 3 07IAB7',
     'marca' => 'Lenovo',
-    'modelo' => '90SM0084US',
+    'modelo' => 'IdeaCentre 3 07IAB7, referencia Core i3-12100/8 GB/256 GB',
     'precio' => 479.0,
     'precio_oferta' => NULL,
     'stock' => 11,
@@ -1635,11 +1964,21 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 27.48,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i5-12400',
-      'RAM' => '8 GB DDR4',
-      'Almacenamiento' => '256 GB SSD',
+      'Procesador' => 'Intel Core i3-12100, 4 núcleos y 8 hilos',
+      'Gráficos' => 'Intel UHD 730',
+      'Memoria' => '8 GB DDR4',
+      'Almacenamiento' => 'SSD NVMe de 256 GB',
+      'Formato' => 'Small Form Factor, 7.4 litros',
+      'Expansión' => 'Ranuras M.2 para SSD y WLAN',
+      'Características' => 'Equipo compacto para oficina',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   14 => 
   array (
@@ -1647,7 +1986,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'DESK-4-5',
     'nombre' => 'ASUS ExpertCenter D5 SFF',
     'marca' => 'ASUS',
-    'modelo' => 'D500SD-I58512B0X',
+    'modelo' => 'ExpertCenter D5 SFF D500SD, referencia i5-12400/8 GB/256 GB',
     'precio' => 549.0,
     'precio_oferta' => NULL,
     'stock' => 9,
@@ -1655,16 +1994,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Formato compacto Small Form Factor (SFF) con grado de durabilidad militar para empresas.',
     'desc' => 'Diseñado para durar en entornos de oficina y puntos de venta con uso continuo las 24 horas del día. Placa madre de grado industrial con condensadores sólidos japoneses al 100%.',
     'peso' => 5.0,
-    'largo' => 30.8,
+    'largo' => 29.27,
     'ancho' => 9.46,
     'alto' => 33.96,
     'specs' => 
     array (
-      'Procesador' => 'Intel Core i5-12500',
+      'Procesador' => 'Intel Core i5-12400, 6 núcleos y 12 hilos',
+      'Gráficos' => 'Intel UHD 730',
+      'Memoria' => '8 GB DDR4',
+      'Almacenamiento' => 'SSD NVMe de 256 GB',
       'Formato' => 'Small Form Factor',
-      'Seguridad' => 'Chip TPM 2.0',
+      'Seguridad' => 'TPM 2.0 y ranura Kensington',
+      'Características' => 'Escritorio compacto para entornos empresariales',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   15 => 
   array (
@@ -1672,7 +2021,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CPU-6-1',
     'nombre' => 'Intel Core i9-14900K 24 Núcleos',
     'marca' => 'Intel',
-    'modelo' => 'BX8071514900K',
+    'modelo' => 'Core i9-14900K, BX8071514900K',
     'precio' => 549.0,
     'precio_oferta' => NULL,
     'stock' => 7,
@@ -1685,12 +2034,24 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Núcleos' => '24 (8 Rendimiento / 16 Eficiencia)',
-      'Frecuencia Máxima' => '6.0 GHz',
       'Socket' => 'LGA1700',
-      'Caché' => '36 MB Intel Smart Cache',
+      'Arquitectura' => 'Intel Core de 14.ª generación',
+      'Núcleos e hilos' => '24 núcleos (8 P + 16 E), 32 hilos',
+      'Frecuencia turbo' => 'Hasta 6.0 GHz',
+      'Caché L3' => '36 MB',
+      'Potencia base/turbo' => '125 W/253 W',
+      'Memoria compatible' => 'DDR5-5600 o DDR4-3200',
+      'Gráficos' => 'Intel UHD 770',
+      'Disipador' => 'No incluido',
+      'Características' => 'Multiplicador desbloqueado',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   16 => 
   array (
@@ -1698,7 +2059,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CPU-6-2',
     'nombre' => 'AMD Ryzen 9 7950X3D 16 Núcleos',
     'marca' => 'AMD',
-    'modelo' => '100-100000908WOF',
+    'modelo' => 'Ryzen 9 7950X3D, 100-100000908WOF',
     'precio' => 589.0,
     'precio_oferta' => NULL,
     'stock' => 5,
@@ -1706,17 +2067,29 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Tecnología 3D V-Cache masiva con 144MB de caché total: el procesador definitivo para videojuegos.',
     'desc' => 'Arquitectura Zen 4 en 5nm con tecnología AMD 3D V-Cache apilada en vertical. Ofrece un rendimiento imbatible en tasas de cuadros por segundo en títulos AAA y simulación pesada.',
     'peso' => 0.12,
-    'largo' => 4.0,
-    'ancho' => 4.0,
+    'largo' => 4,
+    'ancho' => 4,
     'alto' => 0.6,
     'specs' => 
     array (
-      'Núcleos' => '16 Núcleos / 32 Hilos',
-      'Caché L3' => '128 MB 3D V-Cache',
       'Socket' => 'AM5',
-      'TDP' => '120W',
+      'Arquitectura' => 'Zen 4',
+      'Núcleos e hilos' => '16 núcleos y 32 hilos',
+      'Frecuencia base/turbo' => '4.2 GHz/hasta 5.7 GHz',
+      'Caché L3' => '128 MB',
+      'TDP' => '120 W',
+      'Memoria compatible' => 'DDR5',
+      'Gráficos' => 'AMD Radeon integrados',
+      'Disipador' => 'No incluido',
+      'Características' => 'AMD 3D V-Cache para cargas de juego y creación',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   17 => 
   array (
@@ -1724,9 +2097,9 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CPU-6-3',
     'nombre' => 'Intel Core i7-14700K 20 Núcleos',
     'marca' => 'Intel',
-    'modelo' => 'BX8071514700K',
+    'modelo' => 'Core i7-14700K, BX8071514700K',
     'precio' => 399.0,
-    'precio_oferta' => 379.0,
+    'precio_oferta' => 379,
     'stock' => 12,
     'destacado' => false,
     'desc_corta' => '20 núcleos y hasta 5.6 GHz: equilibrio magistral para gaming competitivo y edición de video 4K.',
@@ -1737,11 +2110,23 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Núcleos' => '20 (8P + 12E) / 28 Hilos',
-      'Frecuencia' => 'Hasta 5.6 GHz',
       'Socket' => 'LGA1700',
+      'Núcleos e hilos' => '20 núcleos (8 P + 12 E), 28 hilos',
+      'Frecuencia turbo' => 'Hasta 5.6 GHz',
+      'Caché L3' => '33 MB',
+      'Potencia base/turbo' => '125 W/253 W',
+      'Memoria compatible' => 'DDR5-5600 o DDR4-3200',
+      'Gráficos' => 'Intel UHD 770',
+      'Disipador' => 'No incluido',
+      'Características' => 'Multiplicador desbloqueado',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   18 => 
   array (
@@ -1749,7 +2134,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CPU-6-4',
     'nombre' => 'AMD Ryzen 7 7800X3D 8 Núcleos',
     'marca' => 'AMD',
-    'modelo' => '100-100000910WOF',
+    'modelo' => 'Ryzen 7 7800X3D, 100-100000910WOF',
     'precio' => 449.0,
     'precio_oferta' => NULL,
     'stock' => 9,
@@ -1757,16 +2142,29 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'El rey indiscutible del gaming puro: 8 núcleos Zen 4 con 96MB de caché L3 y bajo consumo.',
     'desc' => 'La CPU más recomendada por analistas y jugadores de eSports. Su diseño de un solo chiplet CCD elimina latencias entre núcleos y exprime el potencial de cualquier tarjeta gráfica de alta gama.',
     'peso' => 0.11,
-    'largo' => 4.0,
-    'ancho' => 4.0,
+    'largo' => 4,
+    'ancho' => 4,
     'alto' => 0.6,
     'specs' => 
     array (
-      'Núcleos' => '8 Núcleos / 16 Hilos',
-      'Caché' => '96 MB L3 3D V-Cache',
       'Socket' => 'AM5',
+      'Arquitectura' => 'Zen 4',
+      'Núcleos e hilos' => '8 núcleos y 16 hilos',
+      'Frecuencia base/turbo' => '4.2 GHz/hasta 5.0 GHz',
+      'Caché L3' => '96 MB',
+      'TDP' => '120 W',
+      'Memoria compatible' => 'DDR5',
+      'Gráficos' => 'AMD Radeon integrados',
+      'Disipador' => 'No incluido',
+      'Características' => 'AMD 3D V-Cache',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   19 => 
   array (
@@ -1774,7 +2172,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CPU-6-5',
     'nombre' => 'Intel Core i5-14600K 14 Núcleos',
     'marca' => 'Intel',
-    'modelo' => 'BX8071514600K',
+    'modelo' => 'Core i5-14600K, BX8071514600K',
     'precio' => 299.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -1787,11 +2185,23 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.5,
     'specs' => 
     array (
-      'Núcleos' => '14 (6P + 8E) / 20 Hilos',
-      'Frecuencia' => 'Hasta 5.3 GHz',
       'Socket' => 'LGA1700',
+      'Núcleos e hilos' => '14 núcleos (6 P + 8 E), 20 hilos',
+      'Frecuencia turbo' => 'Hasta 5.3 GHz',
+      'Caché L3' => '24 MB',
+      'Potencia base/turbo' => '125 W/181 W',
+      'Memoria compatible' => 'DDR5-5600 o DDR4-3200',
+      'Gráficos' => 'Intel UHD 770',
+      'Disipador' => 'No incluido',
+      'Características' => 'Multiplicador desbloqueado',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   20 => 
   array (
@@ -1799,7 +2209,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'GPU-7-1',
     'nombre' => 'ASUS ROG Strix GeForce RTX 4090 24GB',
     'marca' => 'ASUS',
-    'modelo' => 'ROG-STRIX-RTX4090-O24G',
+    'modelo' => 'ROG-STRIX-RTX4090-O24G-GAMING',
     'precio' => 1899.0,
     'precio_oferta' => NULL,
     'stock' => 4,
@@ -1812,11 +2222,23 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 7.01,
     'specs' => 
     array (
-      'Memoria' => '24 GB GDDR6X 384-bit',
-      'Ray Tracing' => '4.ª Gen Tensor / 3.ª Gen RT',
-      'Puertos' => '2x HDMI 2.1a / 3x DisplayPort 1.4a',
+      'GPU' => 'NVIDIA GeForce RTX 4090',
+      'Memoria' => '24 GB GDDR6X, bus de 384 bits',
+      'Núcleos CUDA' => '16384',
+      'Interfaz' => 'PCIe 4.0',
+      'Salidas' => '2 HDMI 2.1a y 3 DisplayPort 1.4a',
+      'Alimentación' => '1 conector de 16 pines',
+      'Fuente recomendada' => '1000 W',
+      'Ocupación' => '3.5 ranuras',
+      'Características' => 'Tres ventiladores Axial-tech y modo OC',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   21 => 
   array (
@@ -1824,7 +2246,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'GPU-7-2',
     'nombre' => 'Gigabyte GeForce RTX 4080 Super Gaming OC',
     'marca' => 'Gigabyte',
-    'modelo' => 'GV-N408SGAMING-OC-16GD',
+    'modelo' => 'GV-N408SGAMING OC-16GD',
     'precio' => 1049.0,
     'precio_oferta' => NULL,
     'stock' => 5,
@@ -1837,11 +2259,23 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 7.5,
     'specs' => 
     array (
-      'Memoria' => '16 GB GDDR6X 256-bit',
+      'GPU' => 'GeForce RTX 4080 SUPER',
+      'Memoria' => '16 GB GDDR6X, bus de 256 bits',
       'Núcleos CUDA' => '10240',
-      'Interfaz' => 'PCIe 4.0 x16',
+      'Frecuencia' => '2595 MHz',
+      'Interfaz' => 'PCIe 4.0',
+      'Salidas' => '3 DisplayPort 1.4a y 1 HDMI 2.1a',
+      'Fuente recomendada' => '850 W',
+      'Alimentación' => '1 conector de 16 pines',
+      'Características' => 'Refrigeración WINDFORCE de tres ventiladores',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   22 => 
   array (
@@ -1849,24 +2283,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'GPU-7-3',
     'nombre' => 'MSI GeForce RTX 4070 Ti Super Ventus 3X',
     'marca' => 'MSI',
-    'modelo' => 'RTX-4070TIS-VENTUS-3X',
+    'modelo' => 'GeForce RTX 4070 Ti SUPER 16G VENTUS 3X OC',
     'precio' => 829.0,
-    'precio_oferta' => 799.0,
+    'precio_oferta' => 799,
     'stock' => 7,
     'destacado' => false,
     'desc_corta' => 'Actualizada a 16GB VRAM y bus de 256 bits para dominar resolución 1440p y 4K con soltura.',
     'desc' => 'Diseño sobrio en tonos plata y negro sin luces distractivas. Ventiladores TORX Fan 4.0 con aspas unidas por pares para concentrar la presión estática hacia el radiador.',
-    'peso' => 1.45,
+    'peso' => 1.107,
     'largo' => 30.8,
     'ancho' => 12.0,
     'alto' => 5.2,
     'specs' => 
     array (
-      'Memoria' => '16 GB GDDR6X',
-      'Consumo' => '285W',
-      'Recomendación Fuente' => '700W',
+      'GPU' => 'GeForce RTX 4070 Ti SUPER',
+      'Memoria' => '16 GB GDDR6X, bus de 256 bits',
+      'Interfaz' => 'PCIe 4.0',
+      'Salidas' => '3 DisplayPort 1.4a y 1 HDMI 2.1a',
+      'Consumo' => '285 W',
+      'Fuente recomendada' => '700 W',
+      'Alimentación' => '1 conector de 16 pines',
+      'Características' => 'Triple ventilador y refrigeración TORX Fan 4.0',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   23 => 
   array (
@@ -1874,7 +2319,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'GPU-7-4',
     'nombre' => 'AMD Radeon RX 7900 XTX 24GB',
     'marca' => 'AMD',
-    'modelo' => 'RX-7900XTX-24G',
+    'modelo' => 'Radeon RX 7900 XTX, diseño de referencia AMD',
     'precio' => 949.0,
     'precio_oferta' => NULL,
     'stock' => 5,
@@ -1887,11 +2332,23 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 5.1,
     'specs' => 
     array (
-      'Memoria' => '24 GB GDDR6 384-bit',
-      'Infinity Cache' => '96 MB',
-      'Salidas' => 'DisplayPort 2.1 / HDMI 2.1',
+      'Arquitectura' => 'RDNA 3',
+      'Memoria' => '24 GB GDDR6, bus de 384 bits',
+      'Procesadores de flujo' => '6144',
+      'Frecuencia de juego/boost' => '2300 MHz/hasta 2500 MHz',
+      'Potencia típica' => '355 W',
+      'Fuente recomendada' => '800 W',
+      'Alimentación' => '2 conectores PCIe de 8 pines',
+      'Ocupación' => '2.5 ranuras',
+      'Características' => 'DisplayPort 2.1 y HDMI 2.1',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   24 => 
   array (
@@ -1899,7 +2356,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'GPU-7-5',
     'nombre' => 'ASUS TUF Gaming Radeon RX 7800 XT',
     'marca' => 'ASUS',
-    'modelo' => 'TUF-RX7800XT-O16G',
+    'modelo' => 'TUF-RX7800XT-O16G-OG-GAMING',
     'precio' => 529.0,
     'precio_oferta' => NULL,
     'stock' => 8,
@@ -1907,16 +2364,27 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Durabilidad legendaria TUF: condensadores de grado militar y 16GB de memoria para 1440p.',
     'desc' => 'Tarjeta gráfica construida para resistir años de uso ininterrumpido. Doble rodamiento de bolas en ventiladores que duplica su vida útil y switch Dual BIOS para alternar entre perfil silencioso y rendimiento.',
     'peso' => 1.35,
-    'largo' => 31.98,
-    'ancho' => 15.09,
-    'alto' => 5.92,
+    'largo' => 32.0,
+    'ancho' => 14.02,
+    'alto' => 5.78,
     'specs' => 
     array (
-      'Memoria' => '16 GB GDDR6 256-bit',
-      'Refrigeración' => 'Triple ventilador Axial-tech',
-      'Conectores' => '2x PCIe 8-pin',
+      'GPU' => 'Radeon RX 7800 XT',
+      'Memoria' => '16 GB GDDR6, bus de 256 bits',
+      'Procesadores de flujo' => '3840',
+      'Frecuencia boost' => 'Hasta 2565 MHz en modo OC',
+      'Interfaz' => 'PCIe 4.0',
+      'Salidas' => '1 HDMI 2.1 y 3 DisplayPort 2.1',
+      'Alimentación' => '2 conectores de 8 pines',
+      'Características' => 'Versión OG OC con triple ventilador',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   25 => 
   array (
@@ -1924,7 +2392,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RAM-8-1',
     'nombre' => 'Corsair Vengeance RGB 32GB (2x16GB) DDR5 6000MHz',
     'marca' => 'Corsair',
-    'modelo' => 'CMH32GX5M2B6000C30',
+    'modelo' => 'Vengeance RGB CMH32GX5M2B6000C30, negro',
     'precio' => 119.0,
     'precio_oferta' => NULL,
     'stock' => 25,
@@ -1932,22 +2400,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Latencia ultra baja CL30, iluminación dinámica de diez zonas RGB y perfiles XMP 3.0 / EXPO.',
     'desc' => 'Optimizado para las plataformas más recientes de Intel y AMD. Su disipador de aluminio sólido mantiene los módulos fríos mientras que el software iCUE permite crear efectos luminosos sincronizados con tus juegos.',
     'peso' => 0.15,
-    'largo' => 13.8,
-    'ancho' => 4.4,
-    'alto' => 0.7,
+    'largo' => 13.5,
+    'ancho' => 0.8,
+    'alto' => 4.4,
     'specs' => 
     array (
-      'Capacidad' => '32 GB (2x 16 GB)',
-      'Velocidad' => 'DDR5-6000 MHz',
-      'Latencia' => 'CL30-36-36-76',
-      'Voltaje' => '1.40V',
+      'Capacidad' => '32 GB, kit de 2 × 16 GB',
+      'Tipo' => 'DDR5 UDIMM para escritorio',
+      'Velocidad de perfil' => '6000 MT/s',
+      'Latencia CAS' => 'CL30',
+      'Perfil' => 'Intel XMP 3.0',
+      'Iluminación' => 'RGB direccionable de 10 zonas',
+      'Características' => 'Disipadores e integración con CORSAIR iCUE',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'RAM-8-1-V1',
-        'precio' => 119.0,
+        'precio' => 119,
         'stock' => 14,
         'opcion' => 
         array (
@@ -1958,7 +2429,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'RAM-8-1-V2',
-        'precio' => 124.0,
+        'precio' => 124,
         'stock' => 11,
         'opcion' => 
         array (
@@ -1967,6 +2438,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   26 => 
   array (
@@ -1974,24 +2451,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RAM-8-2',
     'nombre' => 'Kingston Fury Beast 32GB (2x16GB) DDR5 5600MHz',
     'marca' => 'Kingston',
-    'modelo' => 'KF556C40BBK2-32',
+    'modelo' => 'FURY Beast KF556C36BBEK2-32',
     'precio' => 99.0,
-    'precio_oferta' => 89.0,
+    'precio_oferta' => 89,
     'stock' => 18,
     'destacado' => false,
     'desc_corta' => 'Disipador de calor de perfil bajo ideal para gabinetes compactos o disipadores de aire grandes.',
     'desc' => 'Overclocking automático Plug N Play a 4800MT/s o perfil XMP 3.0 a 5600MT/s con certificación Intel y AMD. Estabilidad probada al 100% en fábrica a velocidad nominal.',
     'peso' => 0.12,
-    'largo' => 13.33,
-    'ancho' => 3.49,
-    'alto' => 0.66,
+    'largo' => 13.335,
+    'ancho' => 0.662,
+    'alto' => 3.49,
     'specs' => 
     array (
-      'Capacidad' => '32 GB Kit',
-      'Velocidad' => 'DDR5 5600 MT/s',
-      'Perfil' => 'Intel XMP 3.0',
+      'Capacidad' => '32 GB, 2 × 16 GB',
+      'Tipo' => 'DDR5, DIMM de 288 pines',
+      'Velocidad' => '5600 MT/s',
+      'Latencia' => 'CL36',
+      'Perfil' => 'AMD EXPO',
+      'Iluminación' => 'Sin RGB',
+      'Características' => 'Disipador negro de bajo perfil',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   27 => 
   array (
@@ -1999,7 +2486,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RAM-8-3',
     'nombre' => 'Crucial Pro 32GB (2x16GB) DDR5 5600MHz',
     'marca' => 'Crucial',
-    'modelo' => 'CP2K16G56C46U5',
+    'modelo' => 'Crucial Pro CP2K16G56C46U5',
     'precio' => 89.0,
     'precio_oferta' => NULL,
     'stock' => 15,
@@ -2012,11 +2499,21 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.7,
     'specs' => 
     array (
-      'Capacidad' => '32 GB (2x16GB)',
-      'Velocidad' => '5600 MHz',
-      'Voltaje' => '1.1V estándar',
+      'Capacidad' => '32 GB, 2 × 16 GB',
+      'Tipo' => 'DDR5 UDIMM de escritorio',
+      'Velocidad' => '5600 MT/s',
+      'Latencia' => 'CL46',
+      'Voltaje' => '1.1 V',
+      'Iluminación' => 'Sin RGB',
+      'Características' => 'Disipador de bajo perfil y soporte para perfiles de memoria',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   28 => 
   array (
@@ -2024,7 +2521,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RAM-8-4',
     'nombre' => 'Adata XPG Lancer Blade RGB 32GB DDR5 6000MHz',
     'marca' => 'Adata',
-    'modelo' => 'AX5U6000C3016G-SLAB',
+    'modelo' => 'LANCER BLADE RGB, kit negro 2 × 16 GB DDR5-6000 CL30',
     'precio' => 109.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -2032,16 +2529,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Diseño compacto de solo 33mm de altura con difusor de luz geométrico y ECC integrado.',
     'desc' => 'Perfecta para ensambles en chasis pequeños (SFF) donde el espacio sobre el socket es crítico. Incluye circuito integrado de administración de energía (PMIC) para voltajes estables.',
     'peso' => 0.13,
-    'largo' => 13.33,
-    'ancho' => 3.3,
-    'alto' => 0.75,
+    'largo' => 13.335,
+    'ancho' => 0.786,
+    'alto' => 4.0,
     'specs' => 
     array (
-      'Capacidad' => '32 GB Kit',
+      'Capacidad' => '32 GB, 2 × 16 GB',
+      'Tipo' => 'DDR5 UDIMM',
       'Velocidad' => '6000 MT/s',
-      'Latencia' => 'CL30',
+      'Latencia seleccionada' => 'CL30',
+      'Perfiles' => 'Intel XMP 3.0 y AMD EXPO',
+      'Iluminación' => 'RGB',
+      'Características' => 'Disipador de 40 mm de altura',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   29 => 
   array (
@@ -2049,7 +2556,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RAM-8-5',
     'nombre' => 'Kingston Fury Impact 16GB DDR4 3200MHz SO-DIMM',
     'marca' => 'Kingston',
-    'modelo' => 'KF432S20IB/16',
+    'modelo' => 'FURY Impact KF432S20IB/16',
     'precio' => 45.0,
     'precio_oferta' => NULL,
     'stock' => 22,
@@ -2058,16 +2565,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Módulo de memoria SO-DIMM para portátiles de gaming y trabajo. Se ajusta automáticamente a la velocidad más alta permitida por la BIOS del sistema sin requerir configuración manual.',
     'peso' => 0.03,
     'largo' => 6.96,
-    'ancho' => 3.0,
+    'ancho' => 3,
     'alto' => 0.38,
     'specs' => 
     array (
-      'Formato' => 'SO-DIMM 260 pines',
-      'Capacidad' => '16 GB',
-      'Frecuencia' => '3200 MHz DDR4',
-      'Voltaje' => '1.2V',
+      'Capacidad' => '16 GB, 1 módulo',
+      'Tipo' => 'DDR4 SO-DIMM de 260 pines para laptop',
+      'Velocidad' => '3200 MT/s',
+      'Latencia' => 'CL20',
+      'Voltaje' => '1.2 V',
+      'Organización' => '1Rx8',
+      'Características' => 'Memoria compacta para equipos compatibles',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   30 => 
   array (
@@ -2075,7 +2591,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PSU-9-1',
     'nombre' => 'Corsair RM850x 850W 80 Plus Gold Modular',
     'marca' => 'Corsair',
-    'modelo' => 'CP-9020200-NA',
+    'modelo' => 'RM850x (2021), CP-9020200-NA',
     'precio' => 139.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -2088,12 +2604,21 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.6,
     'specs' => 
     array (
-      'Potencia' => '850 Watts',
+      'Potencia' => '850 W continuos',
       'Certificación' => '80 PLUS Gold',
-      'Modular' => '100% Modular',
-      'Garantía' => '10 Años',
+      'Formato' => 'ATX',
+      'Cableado' => 'Totalmente modular',
+      'Ventilador' => '135 mm',
+      'Entrada' => '100–240 V CA',
+      'Características' => 'Modo Zero RPM y conectores EPS para procesador',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   31 => 
   array (
@@ -2101,24 +2626,32 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PSU-9-2',
     'nombre' => 'EVGA SuperNOVA 750 GT 80 Plus Gold',
     'marca' => 'EVGA',
-    'modelo' => '220-GT-0750-Y1',
+    'modelo' => 'SuperNOVA 750 GT, 220-GT-0750-Y1',
     'precio' => 109.0,
-    'precio_oferta' => 99.0,
+    'precio_oferta' => 99,
     'stock' => 10,
     'destacado' => false,
     'desc_corta' => 'Excelente relación calidad-precio con modo Auto ECO para operación completamente silenciosa.',
     'desc' => 'Construcción robusta con protecciones eléctricas completas (OVP, UVP, OCP, OPP, SCP, OTP). Cableado plano totalmente modular para un ensamblaje limpio y ordenado.',
     'peso' => 1.6,
-    'largo' => 15.0,
-    'ancho' => 15.0,
+    'largo' => 15,
+    'ancho' => 15,
     'alto' => 8.5,
     'specs' => 
     array (
-      'Potencia' => '750 Watts',
-      'Ventilador' => '135mm Fluid Dynamic Bearing',
-      'Modular' => 'Totalmente modular',
+      'Potencia' => '750 W',
+      'Certificación' => '80 PLUS Gold',
+      'Formato' => 'ATX',
+      'Cableado' => 'Totalmente modular',
+      'Características' => 'Auto ECO y ventilador con rodamiento FDB',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   32 => 
   array (
@@ -2126,7 +2659,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PSU-9-3',
     'nombre' => 'Cooler Master MWE Gold 850 V2 ATX 3.0',
     'marca' => 'Cooler Master',
-    'modelo' => 'MPE-8501-AFAAG-3US',
+    'modelo' => 'MWE Gold 850 V2 ATX 3.0 White Edition',
     'precio' => 129.0,
     'precio_oferta' => NULL,
     'stock' => 9,
@@ -2139,11 +2672,21 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.6,
     'specs' => 
     array (
-      'Potencia' => '850W',
-      'Estándar' => 'ATX 3.0 / PCIe 5.0 Nativo',
-      'Certificación' => '80 Plus Gold',
+      'Potencia' => '850 W',
+      'Certificación' => '80 PLUS Gold',
+      'Formato' => 'ATX',
+      'Estándar' => 'ATX 3.0',
+      'Cableado' => 'Totalmente modular',
+      'Color' => 'Blanco',
+      'Características' => 'Conector de alimentación para GPU de nueva generación',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   33 => 
   array (
@@ -2151,7 +2694,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PSU-9-4',
     'nombre' => 'Thermaltake Toughpower GF1 750W Gold',
     'marca' => 'Thermaltake',
-    'modelo' => 'PS-TPD-0750FNFAGU-1',
+    'modelo' => 'Toughpower GF1 750W, PS-TPD-0750FNFAGU-1',
     'precio' => 99.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -2164,11 +2707,21 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 8.6,
     'specs' => 
     array (
-      'Potencia' => '750W',
-      'Eficiencia' => '80 Plus Gold',
-      'Topología' => 'LLC + DC to DC',
+      'Potencia' => '750 W',
+      'Certificación' => '80 PLUS Gold',
+      'Formato' => 'ATX',
+      'Cableado' => 'Totalmente modular',
+      'Ventilador' => '140 mm hidráulico',
+      'Entrada' => '100–240 V CA',
+      'Características' => 'Smart Zero Fan',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   34 => 
   array (
@@ -2176,7 +2729,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PSU-9-5',
     'nombre' => 'Corsair SF750 750W Platinum Formato SFX',
     'marca' => 'Corsair',
-    'modelo' => 'CP-9020186-NA',
+    'modelo' => 'SF750 Platinum, CP-9020186-NA',
     'precio' => 169.0,
     'precio_oferta' => NULL,
     'stock' => 6,
@@ -2186,15 +2739,23 @@ class CatalogoFijoSeeder extends Seeder
     'peso' => 0.9,
     'largo' => 10.0,
     'ancho' => 12.5,
-    'alto' => 6.35,
+    'alto' => 6.3,
     'specs' => 
     array (
-      'Formato' => 'SFX Compacto',
-      'Potencia' => '750W',
+      'Potencia' => '750 W',
       'Certificación' => '80 PLUS Platinum',
-      'Cables' => 'Enmallado individual',
+      'Formato' => 'SFX',
+      'Cableado' => 'Totalmente modular',
+      'Ventilador' => '92 mm',
+      'Características' => 'Modo Zero RPM y cables enfundados',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   35 => 
   array (
@@ -2202,30 +2763,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SSD-10-1',
     'nombre' => 'Samsung 990 PRO NVMe M.2 SSD PCIe 4.0',
     'marca' => 'Samsung',
-    'modelo' => 'MZ-V9P2T0B/AM',
+    'modelo' => '990 PRO 2 TB sin disipador, MZ-V9P2T0BW',
     'precio' => 179.0,
     'precio_oferta' => NULL,
     'stock' => 35,
     'destacado' => true,
     'desc_corta' => 'Velocidades de vértigo de hasta 7450 MB/s de lectura: el SSD PCIe 4.0 definitivo.',
     'desc' => 'Rendimiento supremo para gaming y cargas pesadas de datos. Equipado con controlador Pascal en 8nm con revestimiento de níquel para disipación térmica y software Samsung Magician.',
-    'peso' => 0.05,
+    'peso' => 0.009,
     'largo' => 8.0,
     'ancho' => 2.2,
     'alto' => 0.23,
     'specs' => 
     array (
-      'Lectura' => 'Hasta 7450 MB/s',
-      'Escritura' => 'Hasta 6900 MB/s',
-      'Formato' => 'M.2 2280 NVMe 2.0',
-      'DRAM' => 'Cache LPDDR4 dedicada',
+      'Capacidad' => '2 TB',
+      'Formato' => 'M.2 2280',
+      'Interfaz' => 'PCIe 4.0 ×4 NVMe 2.0',
+      'Lectura secuencial' => 'Hasta 7450 MB/s',
+      'Escritura secuencial' => 'Hasta 6900 MB/s',
+      'Resistencia' => '1200 TBW',
+      'Características' => 'Samsung Magician y cifrado AES de 256 bits',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'SSD-10-1-V1',
-        'precio' => 109.0,
+        'precio' => 109,
         'stock' => 20,
         'opcion' => 
         array (
@@ -2236,7 +2800,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'SSD-10-1-V2',
-        'precio' => 179.0,
+        'precio' => 179,
         'stock' => 15,
         'opcion' => 
         array (
@@ -2245,6 +2809,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   36 => 
   array (
@@ -2252,24 +2822,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SSD-10-2',
     'nombre' => 'Western Digital WD_BLACK SN850X 1TB M.2',
     'marca' => 'Western Digital',
-    'modelo' => 'WDS100T2X0E',
+    'modelo' => 'WD_BLACK SN850X 1 TB sin disipador, WDS100T2X0E',
     'precio' => 94.0,
-    'precio_oferta' => 84.0,
+    'precio_oferta' => 84,
     'stock' => 18,
     'destacado' => false,
     'desc_corta' => 'Velocidades de hasta 7300 MB/s con modo Game Mode 2.0 para carga instantánea de videojuegos.',
     'desc' => 'Totalmente compatible con PC y PlayStation 5. Minimiza las pantallas de carga y elimina los tirones en juegos de mundo abierto de nueva generación.',
-    'peso' => 0.04,
+    'peso' => 0.0075,
     'largo' => 8.0,
     'ancho' => 2.2,
-    'alto' => 0.24,
+    'alto' => 0.238,
     'specs' => 
     array (
-      'Lectura' => '7300 MB/s',
-      'Interfaz' => 'PCIe Gen4 x4',
+      'Capacidad' => '1 TB',
+      'Formato' => 'M.2 2280',
+      'Interfaz' => 'PCIe 4.0 ×4 NVMe',
+      'Lectura secuencial' => 'Hasta 7300 MB/s',
+      'Escritura secuencial' => 'Hasta 6300 MB/s',
       'Resistencia' => '600 TBW',
+      'Características' => 'Game Mode 2.0',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   37 => 
   array (
@@ -2277,7 +2857,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SSD-10-3',
     'nombre' => 'Crucial T500 2TB Gen4 NVMe SSD',
     'marca' => 'Crucial',
-    'modelo' => 'CT2000T500SSD8',
+    'modelo' => 'T500 2 TB sin disipador, CT2000T500SSD8',
     'precio' => 159.0,
     'precio_oferta' => NULL,
     'stock' => 11,
@@ -2285,16 +2865,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Tecnología Micron TLC de 232 capas con hasta 7400 MB/s y excelente eficiencia energética.',
     'desc' => 'Ideal para creadores de video en resoluciones 4K/8K y estaciones de renderizado. Acelera la edición en Premiere Pro y tiempos de arranque del sistema.',
     'peso' => 0.05,
-    'largo' => 8.0,
+    'largo' => 8,
     'ancho' => 2.2,
     'alto' => 0.23,
     'specs' => 
     array (
       'Capacidad' => '2 TB',
-      'Lectura' => '7400 MB/s',
-      'Escritura' => '7000 MB/s',
+      'Formato' => 'M.2 2280',
+      'Interfaz' => 'PCIe 4.0 ×4 NVMe',
+      'Lectura secuencial' => 'Hasta 7400 MB/s',
+      'Escritura secuencial' => 'Hasta 7000 MB/s',
+      'Resistencia' => '1200 TBW',
+      'Características' => 'NAND TLC de Micron',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   38 => 
   array (
@@ -2302,23 +2892,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SSD-10-4',
     'nombre' => 'Kingston KC3000 PCIe 4.0 NVMe 1TB',
     'marca' => 'Kingston',
-    'modelo' => 'SKC3000S/1024G',
+    'modelo' => 'KC3000 1 TB, SKC3000S/1024G',
     'precio' => 89.0,
     'precio_oferta' => NULL,
     'stock' => 16,
     'destacado' => false,
     'desc_corta' => 'Disipador térmico delgado de grafeno y aluminio para máxima estabilidad en laptops y placas base.',
     'desc' => 'Potenciado por el controlador Phison E18 de 8 canales. Gran resistencia a escrituras continuas y durabilidad excepcional comprobada.',
-    'peso' => 0.04,
+    'peso' => 0.007,
     'largo' => 8.0,
     'ancho' => 2.2,
-    'alto' => 0.22,
+    'alto' => 0.221,
     'specs' => 
     array (
-      'Velocidad' => '7000 MB/s lectura / 6000 MB/s escritura',
-      'Disipador' => 'Lámina de grafeno y aluminio',
+      'Capacidad' => '1024 GB',
+      'Formato' => 'M.2 2280',
+      'Interfaz' => 'PCIe 4.0 ×4 NVMe',
+      'Lectura secuencial' => 'Hasta 7000 MB/s',
+      'Escritura secuencial' => 'Hasta 6000 MB/s',
+      'Resistencia' => '800 TBW',
+      'Características' => 'NAND 3D TLC y disipador de grafeno/aluminio',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   39 => 
   array (
@@ -2326,24 +2927,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SSD-10-5',
     'nombre' => 'Seagate FireCuda 530 2TB NVMe SSD',
     'marca' => 'Seagate',
-    'modelo' => 'ZP2000GM3A013',
+    'modelo' => 'FireCuda 530 2 TB sin disipador, ZP2000GM30013',
     'precio' => 169.0,
     'precio_oferta' => NULL,
     'stock' => 9,
     'destacado' => false,
     'desc_corta' => 'Resistencia legendaria de 2550 TBW con 3 años de servicio de recuperación de datos Rescue incluidos.',
     'desc' => 'Construido para soportar escritura intensa sin degradarse. Permite reescribir el 70% de la capacidad del disco todos los días durante 5 años continuos.',
-    'peso' => 0.05,
-    'largo' => 8.0,
-    'ancho' => 2.2,
-    'alto' => 0.35,
+    'peso' => 0.01,
+    'largo' => 8.015,
+    'ancho' => 2.215,
+    'alto' => 0.358,
     'specs' => 
     array (
       'Capacidad' => '2 TB',
+      'Formato' => 'M.2 2280',
+      'Interfaz' => 'PCIe 4.0 ×4 NVMe 1.4',
+      'Lectura secuencial' => 'Hasta 7300 MB/s',
+      'Escritura secuencial' => 'Hasta 6900 MB/s',
       'Resistencia' => '2550 TBW',
-      'Servicio' => 'Rescue Data Recovery 3 años',
+      'Características' => 'NAND 3D TLC',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   40 => 
   array (
@@ -2351,7 +2962,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'KB-12-1',
     'nombre' => 'Logitech G PRO X TKL Teclado Mecánico',
     'marca' => 'Logitech G',
-    'modelo' => '920-012128',
+    'modelo' => 'PRO X TKL LIGHTSPEED, GX Brown, negro inglés, 920-012127',
     'precio' => 179.0,
     'precio_oferta' => NULL,
     'stock' => 16,
@@ -2359,21 +2970,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Diseñado junto a profesionales de eSports: conectividad inalámbrica LIGHTSPEED y switches de precisión.',
     'desc' => 'Teclado para torneos sin teclado numérico (Tenkeyless). Cuenta con teclas PBT de doble inyección resistentes al desgaste, rueda de volumen metálica dedicada y estuche rígido de viaje incluido.',
     'peso' => 0.96,
-    'largo' => 35.2,
-    'ancho' => 15.0,
-    'alto' => 3.4,
+    'largo' => 15.0,
+    'ancho' => 35.2,
+    'alto' => 3.8,
     'specs' => 
     array (
-      'Formato' => 'TKL (Tenkeyless)',
-      'Conexión' => 'LIGHTSPEED 1ms / Bluetooth / USB-C',
-      'Batería' => 'Hasta 50 horas con RGB',
+      'Formato' => 'Tenkeyless, sin bloque numérico',
+      'Tipo' => 'Mecánico',
+      'Conexión' => 'LIGHTSPEED, Bluetooth y USB',
+      'Interruptores' => 'GX Brown táctiles',
+      'Iluminación' => 'LIGHTSYNC RGB',
+      'Características' => 'Controles multimedia, rueda de volumen y funda de transporte',
+      'Autonomía' => 'Hasta 50 horas',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'KB-12-1-V1',
-        'precio' => 179.0,
+        'precio' => 179,
         'stock' => 9,
         'opcion' => 
         array (
@@ -2384,7 +2999,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'KB-12-1-V2',
-        'precio' => 179.0,
+        'precio' => 179,
         'stock' => 7,
         'opcion' => 
         array (
@@ -2393,6 +3008,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   41 => 
   array (
@@ -2400,24 +3021,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'KB-12-2',
     'nombre' => 'Razer Huntsman V3 Pro TKL',
     'marca' => 'Razer',
-    'modelo' => 'RZ03-04980100-R3U1',
+    'modelo' => 'Huntsman V3 Pro Tenkeyless, RZ03-0498',
     'precio' => 219.0,
     'precio_oferta' => NULL,
     'stock' => 6,
     'destacado' => false,
     'desc_corta' => 'Switches analógicos ópticos Gen-2 con punto de actuación ajustable de 0.1mm a 4.0mm y Rapid Trigger.',
     'desc' => 'La máxima ventaja competitiva en Counter-Strike y Valorant. El modo Rapid Trigger permite pulsar y soltar teclas instantáneamente sin esperar el recorrido de reinicio.',
-    'peso' => 0.88,
-    'largo' => 36.3,
-    'ancho' => 13.9,
+    'peso' => 0.7195,
+    'largo' => 13.9,
+    'ancho' => 36.3,
     'alto' => 3.9,
     'specs' => 
     array (
-      'Actuación' => 'Ajustable 0.1 a 4.0 mm',
-      'Tecnología' => 'Rapid Trigger / 1000Hz polling',
-      'Material' => 'Aluminio cepillado 5052',
+      'Formato' => 'TKL',
+      'Conexión' => 'USB con cable',
+      'Interruptores' => 'Ópticos analógicos Razer de 2.ª generación',
+      'Actuación' => 'Rango ajustable de 0.1 a 4.0 mm',
+      'Iluminación' => 'Razer Chroma RGB',
+      'Características' => 'Rapid Trigger, dial multifunción y reposamuñecas magnético',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   42 => 
   array (
@@ -2425,24 +3055,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'KB-12-3',
     'nombre' => 'Corsair K70 RGB PRO Mecánico',
     'marca' => 'Corsair',
-    'modelo' => 'CH-9109410-NA',
+    'modelo' => 'K70 RGB PRO CHERRY MX Red, CH-9109410-NA',
     'precio' => 149.0,
-    'precio_oferta' => 129.0,
+    'precio_oferta' => 129,
     'stock' => 11,
     'destacado' => false,
     'desc_corta' => 'Tecnología de hiperprocesamiento AXON a 8000Hz y switches CHERRY MX Red originales.',
     'desc' => 'Estructura icónica de aluminio anodizado negro con reposamuñecas magnético suave. Su interruptor trasero Tournament Switch desactiva macros y fija iluminación estática para juego limpio.',
-    'peso' => 1.15,
-    'largo' => 44.4,
-    'ancho' => 16.6,
+    'peso' => 1.13,
+    'largo' => 16.6,
+    'ancho' => 44.4,
     'alto' => 4.0,
     'specs' => 
     array (
-      'Switches' => 'CHERRY MX Red mecánicos',
-      'Polling Rate' => '8000 Hz AXON',
-      'Formato' => 'Completo 100%',
+      'Formato' => 'Completo con bloque numérico',
+      'Conexión' => 'USB por cable desmontable',
+      'Interruptores' => 'CHERRY MX Red',
+      'Iluminación' => 'RGB por tecla',
+      'Sondeo' => 'Hasta 8000 Hz mediante AXON',
+      'Memoria' => '8 MB integrada',
+      'Características' => 'Teclas PBT, rueda de volumen y modo torneo',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   43 => 
   array (
@@ -2450,7 +3090,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'KB-12-4',
     'nombre' => 'SteelSeries Apex Pro TKL (2023)',
     'marca' => 'SteelSeries',
-    'modelo' => '64856',
+    'modelo' => 'Apex Pro TKL (2023), versión con cable',
     'precio' => 189.0,
     'precio_oferta' => NULL,
     'stock' => 8,
@@ -2463,11 +3103,19 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.2,
     'specs' => 
     array (
-      'Pantalla' => 'OLED Smart Display',
-      'Switches' => 'OmniPoint 2.0 Hall Effect',
-      'Teclas' => 'PBT Double Shot',
+      'Formato' => 'TKL',
+      'Conexión' => 'USB-C por cable desmontable',
+      'Interruptores' => 'OmniPoint 2.0 ajustables',
+      'Iluminación' => 'RGB por tecla',
+      'Características' => 'Rapid Trigger, pantalla OLED y reposamuñecas magnético',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   44 => 
   array (
@@ -2475,7 +3123,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'KB-12-5',
     'nombre' => 'Redragon K552 Kumara RGB Mecánico',
     'marca' => 'Redragon',
-    'modelo' => 'K552-RGB',
+    'modelo' => 'KUMARA K552-RGB, 87 teclas',
     'precio' => 42.0,
     'precio_oferta' => NULL,
     'stock' => 24,
@@ -2488,11 +3136,19 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 3.7,
     'specs' => 
     array (
-      'Switches' => 'Outemu Red / Blue Hot-Swap',
-      'Conexión' => 'USB chapado en oro',
-      'Formato' => 'TKL 87 teclas',
+      'Formato' => 'TKL de 87 teclas',
+      'Tipo' => 'Mecánico',
+      'Conexión' => 'USB por cable',
+      'Iluminación' => 'RGB',
+      'Características' => 'Teclas de doble inyección, anti-ghosting completo y bloqueo de tecla Windows',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   45 => 
   array (
@@ -2500,7 +3156,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MOU-13-1',
     'nombre' => 'Logitech G Pro X Superlight 2',
     'marca' => 'Logitech G',
-    'modelo' => '910-006628',
+    'modelo' => 'PRO X SUPERLIGHT 2, negro',
     'precio' => 149.0,
     'precio_oferta' => NULL,
     'stock' => 22,
@@ -2513,17 +3169,23 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 4.0,
     'specs' => 
     array (
-      'Peso' => '60 g',
-      'Sensor' => 'HERO 2 (32.000 DPI / 500 IPS)',
-      'Switches' => 'LIGHTFORCE híbridos',
-      'Conexión' => 'LIGHTSPEED 4K',
+      'Diseño' => 'Simétrico, botones laterales a la izquierda',
+      'Orientación' => 'Uso con mano derecha',
+      'Conexión' => 'LIGHTSPEED de 2.4 GHz y USB por cable',
+      'Sensor' => 'Óptico HERO 2',
+      'Resolución' => 'Hasta 44000 dpi con firmware compatible',
+      'Botones' => '5',
+      'Sondeo' => 'Hasta 8000 Hz con firmware compatible',
+      'Batería' => 'Hasta 95 horas',
+      'Iluminación' => 'Sin RGB',
+      'Características' => 'Interruptores LIGHTFORCE y pies PTFE',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'MOU-13-1-V1',
-        'precio' => 149.0,
+        'precio' => 149,
         'stock' => 12,
         'opcion' => 
         array (
@@ -2534,7 +3196,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'MOU-13-1-V2',
-        'precio' => 149.0,
+        'precio' => 149,
         'stock' => 10,
         'opcion' => 
         array (
@@ -2543,6 +3205,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   46 => 
   array (
@@ -2550,24 +3218,36 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MOU-13-2',
     'nombre' => 'Razer DeathAdder V3 Pro Wireless',
     'marca' => 'Razer',
-    'modelo' => 'RZ01-04630100-R3U1',
+    'modelo' => 'DeathAdder V3 Pro negro, RZ01-04630100-R3U1',
     'precio' => 139.0,
-    'precio_oferta' => 124.0,
+    'precio_oferta' => 124,
     'stock' => 10,
     'destacado' => false,
     'desc_corta' => 'Forma ergonómica legendaria refinada: 63g de peso y sensor óptico Focus Pro de 30.000 DPI.',
     'desc' => 'La forma ergonómica que ha ganado más campeonatos de esports en la historia, ahora en un chasis ultraligero sin perforaciones. Desliza suavemente sobre cualquier superficie con sus patas 100% de PTFE.',
-    'peso' => 0.06,
+    'peso' => 0.063,
     'largo' => 12.8,
     'ancho' => 6.8,
     'alto' => 4.4,
     'specs' => 
     array (
-      'Sensor' => 'Focus Pro 30K Optical',
-      'Batería' => 'Hasta 90 horas',
-      'Switches' => 'Gen-3 Ópticos (90 millones de clics)',
+      'Diseño' => 'Ergonómico para mano derecha',
+      'Conexión' => 'HyperSpeed 2.4 GHz y cable USB-C',
+      'Sensor' => 'Focus Pro 30K óptico',
+      'Resolución' => 'Hasta 30000 dpi',
+      'Controles' => '5 botones programables',
+      'Sondeo' => '1000 Hz con receptor estándar',
+      'Batería' => 'Hasta 90 horas a 1000 Hz',
+      'Iluminación' => 'Sin RGB',
+      'Características' => 'Interruptores ópticos Razer de 3.ª generación',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   47 => 
   array (
@@ -2575,24 +3255,36 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MOU-13-3',
     'nombre' => 'SteelSeries Aerox 3 Wireless (2022)',
     'marca' => 'SteelSeries',
-    'modelo' => '62612',
+    'modelo' => 'Aerox 3 Wireless (2022), Onyx',
     'precio' => 79.0,
     'precio_oferta' => NULL,
     'stock' => 14,
     'destacado' => false,
     'desc_corta' => 'Diseño ultra liviano de 68 gramos con perforaciones de panal y protección IP54 AquaBarrier.',
     'desc' => 'Protegido contra salpicaduras de líquidos, polvo y grasa gracias a su recubrimiento interior certificado IP54. Doble conectividad inalámbrica Quantum 2.0 (2.4GHz y Bluetooth 5.0).',
-    'peso' => 0.07,
-    'largo' => 12.05,
-    'ancho' => 6.7,
-    'alto' => 3.79,
+    'peso' => 0.068,
+    'largo' => 12.055,
+    'ancho' => 6.703,
+    'alto' => 3.798,
     'specs' => 
     array (
-      'Protección' => 'IP54 resistente al agua y polvo',
-      'Peso' => '68 g',
-      'Sensor' => 'TrueMove Air 18000 DPI',
+      'Diseño' => 'Simétrico con carcasa perforada',
+      'Conexión' => '2.4 GHz, Bluetooth y USB-C',
+      'Sensor' => 'TrueMove Air óptico',
+      'Resolución' => 'Hasta 18000 CPI',
+      'Botones' => '6',
+      'Protección' => 'IP54 AquaBarrier',
+      'Iluminación' => 'RGB de 3 zonas',
+      'Batería' => 'Hasta 200 horas, según modo',
+      'Características' => 'Pies PTFE',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   48 => 
   array (
@@ -2600,24 +3292,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MOU-13-4',
     'nombre' => 'Corsair Scimitar RGB Elite MMO',
     'marca' => 'Corsair',
-    'modelo' => 'CH-9304211-NA',
+    'modelo' => 'SCIMITAR RGB ELITE, CH-9304211-NA',
     'precio' => 74.0,
     'precio_oferta' => NULL,
     'stock' => 11,
     'destacado' => false,
     'desc_corta' => '12 botones laterales ajustables mediante sistema Key Slider para dominar juegos MMO y MOBA.',
     'desc' => 'Personaliza tu botonera lateral deslizando el bloque numérico para que calce exactamente con el pulgar de tu mano. Sensor óptico nativo de 18000 DPI de PixArt.',
-    'peso' => 0.12,
+    'peso' => 0.122,
     'largo' => 11.94,
     'ancho' => 7.7,
     'alto' => 4.24,
     'specs' => 
     array (
-      'Botones' => '17 botones totalmente programables',
-      'Sensor' => '18.000 DPI óptico',
-      'Sistema' => 'Key Slider patentado',
+      'Diseño' => 'Ergonómico para mano derecha',
+      'Conexión' => 'USB por cable',
+      'Sensor' => 'Óptico PixArt PMW3391',
+      'Resolución' => 'Hasta 18000 dpi',
+      'Botones' => '17 programables',
+      'Iluminación' => 'RGB de 4 zonas',
+      'Cable' => 'Trenzado, 1.8 m',
+      'Características' => 'Panel lateral de 12 botones ajustable y 3 perfiles integrados',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   49 => 
   array (
@@ -2625,24 +3328,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MOU-13-5',
     'nombre' => 'HyperX Pulsefire Haste 2 Wireless',
     'marca' => 'HyperX',
-    'modelo' => '6N0A7AA',
+    'modelo' => 'Pulsefire Haste 2 Wireless, negro',
     'precio' => 59.0,
     'precio_oferta' => NULL,
     'stock' => 15,
     'destacado' => false,
     'desc_corta' => 'Estructura sólida de 61g sin orificios, sensor HyperX 26K y hasta 100 horas de juego continuo.',
     'desc' => 'Respuesta ultrarrápida sin necesidad de agujeros en la carcasa. Incluye cinta de agarre antideslizante (grip tape) troquelada a medida para ambos laterales y botones principales.',
-    'peso' => 0.06,
+    'peso' => 0.061,
     'largo' => 12.43,
     'ancho' => 6.68,
     'alto' => 3.82,
     'specs' => 
     array (
-      'Peso' => '61 g',
-      'Batería' => '100 Horas',
-      'Sensor' => 'HyperX 26K (26.000 DPI / 650 IPS)',
+      'Diseño' => 'Simétrico con carcasa cerrada',
+      'Conexión' => '2.4 GHz, Bluetooth y USB',
+      'Sensor' => 'HyperX 26K óptico',
+      'Resolución' => 'Hasta 26000 dpi',
+      'Botones' => '6',
+      'Batería' => 'Hasta 100 horas',
+      'Características' => 'Pies PTFE y personalización mediante NGENUITY',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   50 => 
   array (
@@ -2650,29 +3363,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'AUD-14-1',
     'nombre' => 'Sony WH-1000XM5 Cancelación de Ruido',
     'marca' => 'Sony',
-    'modelo' => 'WH1000XM5/B',
+    'modelo' => 'WH-1000XM5, negro',
     'precio' => 349.0,
-    'precio_oferta' => 329.0,
+    'precio_oferta' => 329,
     'stock' => 14,
     'destacado' => true,
     'desc_corta' => 'Los mejores audífonos con cancelación de ruido del mercado: procesador V1 y 8 micrófonos dedicados.',
     'desc' => 'Sumérgete en silencio absoluto. Su tecnología de cancelación de ruido líder en la industria adapta el filtrado acústico a la presión atmosférica y a tu entorno en tiempo real. Soporta códec LDAC de alta resolución y llamadas cristalinas.',
     'peso' => 0.25,
     'largo' => 22.5,
-    'ancho' => 18.0,
+    'ancho' => 18,
     'alto' => 7.5,
     'specs' => 
     array (
-      'Autonomía' => 'Hasta 30 horas con ANC',
-      'Carga Rápida' => '3 min = 3 horas de música',
-      'Códecs' => 'LDAC, AAC, SBC',
+      'Tipo' => 'Circumaural cerrado',
+      'Conexión' => 'Bluetooth 5.2 y audio de 3.5 mm',
+      'Cancelación' => 'ANC y modo sonido ambiente',
+      'Transductores' => '30 mm',
+      'Códecs' => 'SBC, AAC y LDAC',
+      'Autonomía' => 'Hasta 30 horas con ANC y hasta 40 sin ANC',
+      'Carga' => 'USB-C',
+      'Características' => 'Conexión multipunto y controles táctiles',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'AUD-14-1-V1',
-        'precio' => 349.0,
+        'precio' => 349,
         'stock' => 8,
         'opcion' => 
         array (
@@ -2683,7 +3401,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'AUD-14-1-V2',
-        'precio' => 349.0,
+        'precio' => 349,
         'stock' => 6,
         'opcion' => 
         array (
@@ -2692,6 +3410,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   51 => 
   array (
@@ -2699,24 +3423,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'AUD-14-2',
     'nombre' => 'Bose QuietComfort Ultra Headphones',
     'marca' => 'Bose',
-    'modelo' => '880066-0100',
+    'modelo' => 'QuietComfort Ultra Headphones, 1.ª generación (2023)',
     'precio' => 379.0,
     'precio_oferta' => NULL,
     'stock' => 8,
     'destacado' => false,
     'desc_corta' => 'Comodidad inigualable con Audio Espacial Inmersivo de Bose y modo Aware de transparencia natural.',
     'desc' => 'Audio espacial que hace que el sonido parezca venir del entorno frente a ti en lugar de estar atrapado en tu cabeza. Almohadillas de piel de proteína ultra suaves diseñadas para viajes transoceánicos.',
-    'peso' => 0.25,
-    'largo' => 19.5,
-    'ancho' => 14.0,
-    'alto' => 5.0,
+    'peso' => 0.254,
+    'largo' => 5.08,
+    'ancho' => 13.97,
+    'alto' => 19.558,
     'specs' => 
     array (
-      'Tecnología' => 'Bose Immersive Audio',
-      'Cancelación' => 'CustomTune calibración personalizada',
-      'Batería' => '24 Horas',
+      'Tipo' => 'Circumaural inalámbrico',
+      'Conexión' => 'Bluetooth y entrada de audio',
+      'Cancelación' => 'ANC con CustomTune',
+      'Audio' => 'Bose Immersive Audio',
+      'Autonomía' => 'Hasta 24 horas, hasta 18 con audio inmersivo',
+      'Carga' => 'USB-C, carga completa aproximada de 3 horas',
+      'Características' => 'Modo Quiet y Aware',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   52 => 
   array (
@@ -2724,24 +3458,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'AUD-14-3',
     'nombre' => 'Sennheiser Momentum 4 Wireless',
     'marca' => 'Sennheiser',
-    'modelo' => '509266',
+    'modelo' => 'MOMENTUM 4 Wireless, M4AEBT',
     'precio' => 299.0,
     'precio_oferta' => NULL,
     'stock' => 9,
     'destacado' => false,
     'desc_corta' => 'Firma de sonido audiófilo Sennheiser con una increíble batería de 60 horas por carga.',
     'desc' => 'Disfruta de sonido de alta fidelidad con transductores de 42mm desarrollados en Alemania. Su descomunal batería de 60 horas te permite viajar durante semanas sin buscar un cargador.',
-    'peso' => 0.29,
-    'largo' => 18.0,
+    'peso' => 0.293,
+    'largo' => 18,
     'ancho' => 19.5,
     'alto' => 4.6,
     'specs' => 
     array (
-      'Batería' => '60 Horas récord',
-      'Drivers' => '42 mm audiófilos',
-      'Códec' => 'aptX Adaptive / AAC',
+      'Tipo' => 'Circumaural cerrado',
+      'Conexión' => 'Bluetooth 5.2, USB y audio analógico',
+      'Transductores' => '42 mm',
+      'Respuesta de frecuencia' => '6 Hz–22 kHz',
+      'Códecs' => 'SBC, AAC, aptX y aptX Adaptive',
+      'Cancelación' => 'ANC adaptativa y modo transparencia',
+      'Autonomía' => 'Hasta 60 horas',
+      'Características' => 'Controles táctiles y multipunto',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   53 => 
   array (
@@ -2749,24 +3494,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'AUD-14-4',
     'nombre' => 'Apple AirPods Max con Audio Espacial',
     'marca' => 'Apple',
-    'modelo' => 'MGYH3AM/A',
+    'modelo' => 'AirPods Max (2024), USB-C',
     'precio' => 499.0,
     'precio_oferta' => NULL,
     'stock' => 5,
     'destacado' => false,
     'desc_corta' => 'Diadema de malla transpirable, copas de aluminio anodizado y audio computacional con chip H1.',
     'desc' => 'Unión perfecta entre audio de alta fidelidad y la magia de Apple. Audio espacial con seguimiento dinámico de la cabeza para sentirte en una sala de cine o concierto.',
-    'peso' => 0.38,
-    'largo' => 18.7,
-    'ancho' => 16.8,
-    'alto' => 8.3,
+    'peso' => 0.3862,
+    'largo' => 8.34,
+    'ancho' => 16.86,
+    'alto' => 18.73,
     'specs' => 
     array (
+      'Tipo' => 'Circumaural',
+      'Conexión' => 'Bluetooth 5.0',
+      'Cancelación' => 'ANC y modo ambiente',
+      'Audio' => 'Audio espacial personalizado con seguimiento de cabeza',
       'Chip' => 'Apple H1 en cada auricular',
-      'Cancelación' => 'Cancelación Activa de Ruido Pro',
-      'Material' => 'Aluminio y acero inoxidable',
+      'Autonomía' => 'Hasta 20 horas',
+      'Carga' => 'USB-C',
+      'Características' => 'Digital Crown y Smart Case',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   54 => 
   array (
@@ -2774,24 +3530,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'AUD-14-5',
     'nombre' => 'HyperX Cloud III Wireless Gaming',
     'marca' => 'HyperX',
-    'modelo' => '77Z45AA',
+    'modelo' => 'Cloud III Wireless',
     'precio' => 149.0,
-    'precio_oferta' => 134.0,
+    'precio_oferta' => 134,
     'stock' => 16,
     'destacado' => false,
     'desc_corta' => 'Comodidad legendaria Cloud con hasta 120 horas de batería y micrófono ultra nítido de 10mm.',
     'desc' => 'Los audífonos gaming definitivos para largas jornadas de juego. Sus controladores en ángulo de 53mm sintonizan con precisión los pasos y disparos enemigos en shooters competitivos.',
-    'peso' => 0.33,
-    'largo' => 20.0,
+    'peso' => 0.342,
+    'largo' => 20,
     'ancho' => 15.5,
-    'alto' => 9.0,
+    'alto' => 9,
     'specs' => 
     array (
-      'Batería' => '120 Horas inalámbricas',
-      'Micrófono' => '10mm con filtro pop interno',
-      'Audio' => 'DTS Headphone:X Spatial Audio',
+      'Tipo' => 'Headset gamer circumaural',
+      'Conexión' => 'Inalámbrica de 2.4 GHz',
+      'Transductores' => '53 mm angulados',
+      'Respuesta de frecuencia' => '10 Hz–21 kHz',
+      'Autonomía' => 'Hasta 120 horas',
+      'Micrófono' => 'Desmontable de 10 mm con indicador LED',
+      'Compatibilidad' => 'PC, PS5, PS4 y Nintendo Switch',
+      'Características' => 'DTS Headphone:X en plataformas compatibles',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   55 => 
   array (
@@ -2799,7 +3566,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MON-15-1',
     'nombre' => 'LG UltraGear 27GR95QE-B OLED 240Hz',
     'marca' => 'LG',
-    'modelo' => '27GR95QE-B',
+    'modelo' => 'UltraGear 27GR95QE-B',
     'precio' => 799.0,
     'precio_oferta' => NULL,
     'stock' => 6,
@@ -2807,17 +3574,27 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Panel OLED QHD de 27 pulgadas con 240Hz y un tiempo de respuesta casi instantáneo de 0.03ms.',
     'desc' => 'La cúspide visual para juegos de competición. Negros perfectos gracias a sus píxeles autoemisivos con contraste 1.500.000:1 y compatibilidad certificada con NVIDIA G-SYNC y AMD FreeSync Premium.',
     'peso' => 7.35,
-    'largo' => 60.45,
-    'ancho' => 25.8,
-    'alto' => 57.4,
+    'largo' => 25.8,
+    'ancho' => 60.44,
+    'alto' => 57.44,
     'specs' => 
     array (
-      'Panel' => '27" QHD (2560x1440) OLED',
+      'Pantalla' => '26.5 pulgadas OLED, clase 27',
+      'Resolución' => '2560 × 1440 QHD',
       'Frecuencia' => '240 Hz',
-      'Tiempo Respuesta' => '0.03 ms GtG',
-      'Color' => 'DCI-P3 98.5%',
+      'Respuesta' => '0.03 ms GtG',
+      'HDR' => 'HDR10',
+      'Sincronización' => 'FreeSync Premium y compatible con G-SYNC',
+      'Conectores' => 'HDMI 2.1, DisplayPort 1.4 y hub USB',
+      'Características' => 'Soporte con altura, giro, inclinación y pivote',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   56 => 
   array (
@@ -2825,7 +3602,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MON-15-2',
     'nombre' => 'Samsung Odyssey G7 32" Curvo 240Hz',
     'marca' => 'Samsung',
-    'modelo' => 'LC32G75TQSNXZA',
+    'modelo' => 'Odyssey G7 32 pulgadas, LC32G75TQSPXEN',
     'precio' => 599.0,
     'precio_oferta' => NULL,
     'stock' => 7,
@@ -2833,17 +3610,27 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Curvatura profunda 1000R que coincide con el campo de visión humano, panel QLED WQHD y 240Hz.',
     'desc' => 'Inmersión periférica total que reduce la fatiga visual. Tecnología Quantum Dot para colores intensos con certificación VESA DisplayHDR 600 y retroiluminación trasera CoreSync.',
     'peso' => 8.2,
-    'largo' => 71.01,
-    'ancho' => 30.59,
+    'largo' => 30.59,
+    'ancho' => 71.01,
     'alto' => 59.45,
     'specs' => 
     array (
-      'Pantalla' => '32" Curva 1000R WQHD',
+      'Pantalla' => '32 pulgadas VA curva 1000R',
+      'Resolución' => '2560 × 1440 QHD',
       'Frecuencia' => '240 Hz',
+      'Respuesta' => '1 ms GtG',
       'HDR' => 'DisplayHDR 600',
-      'Panel' => 'VA QLED',
+      'Sincronización' => 'FreeSync Premium Pro y compatible con G-SYNC',
+      'Conectores' => 'HDMI y DisplayPort',
+      'Características' => 'Panel QLED y soporte regulable',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   57 => 
   array (
@@ -2851,7 +3638,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MON-15-3',
     'nombre' => 'Dell UltraSharp U2723QE 27" 4K IPS Black',
     'marca' => 'Dell',
-    'modelo' => 'U2723QE',
+    'modelo' => 'UltraSharp U2723QE',
     'precio' => 549.0,
     'precio_oferta' => NULL,
     'stock' => 9,
@@ -2859,17 +3646,27 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Tecnología IPS Black pionera con contraste 2000:1, resolución 4K UHD y hub USB-C de 90W.',
     'desc' => 'El monitor favorito de diseñadores, fotógrafos y desarrolladores. Conecta tu laptop con un solo cable USB-C que transmite video 4K, datos de red Gigabit Ethernet y carga tu batería.',
     'peso' => 6.64,
-    'largo' => 61.22,
-    'ancho' => 18.5,
-    'alto' => 53.55,
+    'largo' => 18.5,
+    'ancho' => 61.14,
+    'alto' => 38.518,
     'specs' => 
     array (
-      'Resolución' => '3840 x 2160 (4K UHD)',
-      'Tecnología' => 'IPS Black 2000:1',
-      'Color' => '100% sRGB / 98% DCI-P3',
-      'Hub' => 'USB-C 90W + RJ45',
+      'Pantalla' => '27 pulgadas IPS Black',
+      'Resolución' => '3840 × 2160 4K',
+      'Frecuencia' => '60 Hz',
+      'Contraste' => '2000:1',
+      'Color' => '98% DCI-P3',
+      'USB-C' => 'Video y alimentación hasta 90 W',
+      'Conectores' => 'HDMI, DisplayPort, USB-C, hub USB y Ethernet RJ45',
+      'Características' => 'KVM y conexión de monitores en cadena',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   58 => 
   array (
@@ -2885,16 +3682,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Calibración de color de fábrica con reporte individual y certificaciones Calman y Pantone.',
     'desc' => 'Precisión cromática garantizada para creadores. Incluye controlador externo Hotkey Puck G2 para cambiar modos de color (sRGB, Rec.709, Darkroom, CAD/CAM) sin tocar los botones de la pantalla.',
     'peso' => 9.3,
-    'largo' => 61.4,
-    'ancho' => 23.83,
-    'alto' => 55.27,
+    'largo' => 25.68,
+    'ancho' => 61.4,
+    'alto' => 56.09,
     'specs' => 
     array (
-      'Pantalla' => '27" 4K UHD IPS',
-      'Certificaciones' => 'Pantone / Calman Verified',
-      'KVM' => 'Switch integrado para dos computadoras',
+      'Pantalla' => '27 pulgadas IPS',
+      'Resolución' => '3840 × 2160 4K',
+      'Frecuencia' => '60 Hz',
+      'Color' => '99% sRGB y 99% Rec.709',
+      'USB-C' => 'Alimentación hasta 65 W',
+      'Audio' => '2 altavoces de 2.5 W',
+      'Características' => 'KVM, modos CAD/CAM, Darkroom y M-Book',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   59 => 
   array (
@@ -2902,7 +3709,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'MON-15-5',
     'nombre' => 'ViewSonic ELITE XG270QG Gaming',
     'marca' => 'ViewSonic',
-    'modelo' => 'XG270QG',
+    'modelo' => 'ELITE XG270QG',
     'precio' => 429.0,
     'precio_oferta' => NULL,
     'stock' => 10,
@@ -2910,21 +3717,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Panel Nano IPS de 1ms con tecnología NVIDIA G-SYNC nativa y viseras laterales antideslumbrantes.',
     'desc' => 'Colores de calidad Nano IPS combinados con la fluidez que exigen los torneos de eSports. Incluye soportes para audífonos y bungee retráctil para el cable del mouse integrados en la base.',
     'peso' => 7.7,
-    'largo' => 61.4,
-    'ancho' => 26.5,
-    'alto' => 57.2,
+    'largo' => 26.52,
+    'ancho' => 61.42,
+    'alto' => 57.16,
     'specs' => 
     array (
-      'Pantalla' => '27" QHD Nano IPS',
-      'G-SYNC' => 'Módulo NVIDIA G-SYNC nativo',
-      'Accesorios' => 'Viseras laterales incluidas',
+      'Pantalla' => '27 pulgadas Nano IPS',
+      'Resolución' => '2560 × 1440',
+      'Frecuencia' => '144 Hz nativos, hasta 165 Hz con overclock',
+      'Respuesta' => '1 ms GtG',
+      'Color' => '98% DCI-P3',
+      'Sincronización' => 'NVIDIA G-SYNC',
+      'Conectores' => 'DisplayPort, HDMI y hub USB',
+      'Características' => 'Soporte ajustable e iluminación ELITE RGB',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'MON-15-5-V1',
-        'precio' => 399.0,
+        'precio' => 399,
         'stock' => 6,
         'opcion' => 
         array (
@@ -2935,7 +3747,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'MON-15-5-V2',
-        'precio' => 479.0,
+        'precio' => 479,
         'stock' => 4,
         'opcion' => 
         array (
@@ -2944,6 +3756,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   60 => 
   array (
@@ -2951,24 +3769,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SND-16-1',
     'nombre' => 'Bose SoundLink Flex Bluetooth',
     'marca' => 'Bose',
-    'modelo' => '865983-0100',
+    'modelo' => 'SoundLink Flex, 1.ª generación',
     'precio' => 149.0,
     'precio_oferta' => NULL,
     'stock' => 18,
     'destacado' => true,
     'desc_corta' => 'Audio nítido y graves profundos con tecnología PositionIQ y resistencia al agua IP67 que flota.',
     'desc' => 'Diseñado para acompañarte a la playa o la piscina. La tecnología PositionIQ detecta automáticamente si el altavoz está de pie, acostado o colgado y calibra el sonido para ofrecer siempre el mejor timbre.',
-    'peso' => 0.6,
-    'largo' => 20.1,
-    'ancho' => 9.0,
-    'alto' => 5.2,
+    'peso' => 0.59,
+    'largo' => 5.2324,
+    'ancho' => 20.1422,
+    'alto' => 9.0424,
     'specs' => 
     array (
-      'Resistencia' => 'IP67 (a prueba de agua, polvo y flota)',
-      'Batería' => 'Hasta 12 horas',
-      'Conexión' => 'Bluetooth 4.2 / USB-C',
+      'Tipo' => 'Altavoz Bluetooth portátil',
+      'Bluetooth' => '4.2',
+      'Protección' => 'IP67',
+      'Autonomía' => 'Hasta 12 horas',
+      'Carga' => 'USB-C',
+      'Micrófono' => 'Integrado para llamadas',
+      'Características' => 'PositionIQ y Bose Connect',
+      'Potencia RMS' => 'No publicada por el fabricante',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   61 => 
   array (
@@ -2976,29 +3805,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SND-16-2',
     'nombre' => 'JBL Charge 5 Altavoz Portátil',
     'marca' => 'JBL',
-    'modelo' => 'JBLCHARGE5BLKAM',
+    'modelo' => 'Charge 5, versión Bluetooth',
     'precio' => 179.0,
-    'precio_oferta' => 159.0,
+    'precio_oferta' => 159,
     'stock' => 25,
     'destacado' => true,
     'desc_corta' => 'Sonido JBL Original Pro con tweeter independiente, doble radiador pasivo y power bank integrado.',
     'desc' => 'El rey de las fiestas al aire libre. Sus radiadores pasivos de graves hacen vibrar la música con claridad. Su batería masiva de 7500mAh te permite cargar tu celular mientras escuchas tus canciones favoritas.',
     'peso' => 0.96,
-    'largo' => 22.3,
-    'ancho' => 9.65,
-    'alto' => 9.4,
+    'largo' => 9.4,
+    'ancho' => 22.3,
+    'alto' => 9.65,
     'specs' => 
     array (
-      'Potencia' => '40W RMS',
-      'Batería' => 'Hasta 20 horas',
-      'Función' => 'Power bank USB integrado / IP67',
+      'Potencia' => '40 W RMS: 30 W woofer y 10 W tweeter',
+      'Bluetooth' => '5.1',
+      'Respuesta de frecuencia' => '60 Hz–20 kHz',
+      'Protección' => 'IP67',
+      'Autonomía' => 'Hasta 20 horas',
+      'Batería' => '27 Wh',
+      'Carga' => 'USB-C',
+      'Características' => 'JBL PartyBoost y salida USB para cargar dispositivos',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'SND-16-2-V1',
-        'precio' => 179.0,
+        'precio' => 179,
         'stock' => 15,
         'opcion' => 
         array (
@@ -3009,7 +3843,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'SND-16-2-V2',
-        'precio' => 179.0,
+        'precio' => 179,
         'stock' => 10,
         'opcion' => 
         array (
@@ -3018,6 +3852,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   62 => 
   array (
@@ -3025,7 +3865,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SND-16-3',
     'nombre' => 'Marshall Emberton II Portátil Vintage',
     'marca' => 'Marshall',
-    'modelo' => '1006234',
+    'modelo' => 'Emberton II, Black & Steel',
     'precio' => 169.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -3033,16 +3873,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Estilo clásico de amplificador de guitarra con sonido multidireccional True Stereophonic de 360°.',
     'desc' => 'Sonido estéreo espacial que llena toda la habitación. Construido con un 50% de plástico reciclado posconsumo y resistente al agua IP67 con más de 30 horas de reproducción.',
     'peso' => 0.7,
-    'largo' => 16.0,
-    'ancho' => 7.6,
+    'largo' => 7.6,
+    'ancho' => 16.0,
     'alto' => 6.8,
     'specs' => 
     array (
-      'Batería' => 'Más de 30 horas',
-      'Sonido' => 'True Stereophonic 360°',
-      'Modo' => 'Stack Mode para conectar varios',
+      'Potencia' => '2 amplificadores clase D de 10 W',
+      'Bluetooth' => '5.1',
+      'Respuesta de frecuencia' => '60 Hz–20 kHz',
+      'Protección' => 'IP67',
+      'Autonomía' => 'Más de 30 horas',
+      'Carga' => 'USB-C',
+      'Características' => 'Sonido estéreo multidireccional y Stack Mode',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   63 => 
   array (
@@ -3050,7 +3900,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SND-16-4',
     'nombre' => 'Edifier R1280DB Altavoces de Estudio Bluetooth',
     'marca' => 'Edifier',
-    'modelo' => 'R1280DB-BK',
+    'modelo' => 'R1280DB, par de altavoces activos',
     'precio' => 139.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -3058,16 +3908,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Monitores de estantería de madera MDF con entradas óptica, coaxial, RCA doble y Bluetooth.',
     'desc' => 'Sonido cálido y detallado para tu setup de computadora o tocadiscos de vinilo. Controles laterales para agudos, graves y volumen más control remoto inalámbrico.',
     'peso' => 4.9,
-    'largo' => 24.1,
-    'ancho' => 17.8,
-    'alto' => 14.6,
+    'largo' => 19.6,
+    'ancho' => 14.6,
+    'alto' => 23.4,
     'specs' => 
     array (
-      'Potencia' => '42W RMS',
-      'Conexiones' => 'Bluetooth, Óptica, Coaxial, Dual RCA',
-      'Gabinete' => 'Madera acústica MDF',
+      'Tipo' => 'Altavoces de estantería activos de 2 vías',
+      'Potencia total' => '42 W RMS, 21 W por canal',
+      'Entradas' => 'Bluetooth, 2 RCA, óptica y coaxial',
+      'Woofer' => '4 pulgadas',
+      'Tweeter' => '13 mm',
+      'Características' => 'Control remoto y controles laterales de graves, agudos y volumen',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   64 => 
   array (
@@ -3075,24 +3934,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SND-16-5',
     'nombre' => 'Sony SRS-XB100 Altavoz Ultra Compacto',
     'marca' => 'Sony',
-    'modelo' => 'SRSXB100/B',
+    'modelo' => 'SRS-XB100, negro',
     'precio' => 59.0,
     'precio_oferta' => NULL,
     'stock' => 20,
     'destacado' => false,
     'desc_corta' => 'Tamaño de bolsillo con correa versátil, procesador Sound Diffusion y EXTRA BASS potente.',
     'desc' => 'Sonido amplio y envolvente que desafía su tamaño miniatura. Su micrófono incorporado con cancelación de eco permite atender llamadas con manos libres de forma impecable.',
-    'peso' => 0.27,
-    'largo' => 7.6,
-    'ancho' => 7.6,
-    'alto' => 9.5,
+    'peso' => 0.274,
+    'largo' => 7.5,
+    'ancho' => 7.5,
+    'alto' => 9.1,
     'specs' => 
     array (
-      'Batería' => 'Hasta 16 horas',
-      'Resistencia' => 'IP67 agua y polvo',
-      'Micrófono' => 'Manos libres integrado',
+      'Tipo' => 'Altavoz Bluetooth compacto',
+      'Bluetooth' => '5.3',
+      'Protección' => 'IP67',
+      'Autonomía' => 'Hasta 16 horas',
+      'Carga' => 'USB-C',
+      'Micrófono' => 'Integrado',
+      'Características' => 'Sound Diffusion Processor y emparejamiento estéreo entre dos XB100',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   65 => 
   array (
@@ -3100,24 +3969,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RTR-18-1',
     'nombre' => 'TP-Link Archer AX73 Wi-Fi 6 AX5400',
     'marca' => 'TP-Link',
-    'modelo' => 'ARCHER-AX73',
+    'modelo' => 'Archer AX73',
     'precio' => 129.0,
-    'precio_oferta' => 119.0,
+    'precio_oferta' => 119,
     'stock' => 16,
     'destacado' => true,
     'desc_corta' => '6 antenas de alta ganancia con beamforming y velocidades Wi-Fi 6 de hasta 5400 Mbps.',
     'desc' => 'Maneja streaming en 8K sin cortes y descargas masivas simultáneas gracias a su estructura 4T4R y modulación 1024-QAM. Incluye seguridad TP-Link HomeShield con antivirus.',
     'peso' => 0.66,
-    'largo' => 27.25,
-    'ancho' => 14.72,
+    'largo' => 14.72,
+    'ancho' => 27.25,
     'alto' => 4.92,
     'specs' => 
     array (
-      'Velocidad' => '4804 Mbps (5 GHz) + 574 Mbps (2.4 GHz)',
-      'Puertos' => 'Gigabit WAN + 4x LAN + USB 3.0',
-      'Antenas' => '6x Antenas externas',
+      'Estándar' => 'Wi-Fi 6, doble banda',
+      'Clase' => 'AX5400',
+      'Velocidades de enlace' => 'Hasta 4804 Mb/s en 5 GHz y 574 Mb/s en 2.4 GHz',
+      'Puertos' => '1 WAN Gigabit y 4 LAN Gigabit',
+      'USB' => '1 USB 3.0',
+      'Antenas' => '6 externas fijas',
+      'Características' => 'OFDMA, MU-MIMO y canal de 160 MHz',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   66 => 
   array (
@@ -3125,7 +4004,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RTR-18-2',
     'nombre' => 'ASUS RT-AX88U Pro Dual Band Wi-Fi 6',
     'marca' => 'ASUS',
-    'modelo' => 'RT-AX88U-PRO',
+    'modelo' => 'RT-AX88U Pro',
     'precio' => 249.0,
     'precio_oferta' => NULL,
     'stock' => 7,
@@ -3133,16 +4012,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Doble puerto de 2.5 Gbps, procesador quad-core de 2.0 GHz y aceleración de juegos por hardware.',
     'desc' => 'Potencia de red sin concesiones. Su doble puerto 2.5G permite aprovechar conexiones de fibra óptica multigigabit y transferencias ultra rápidas a servidores NAS locales.',
     'peso' => 1.01,
-    'largo' => 30.0,
-    'ancho' => 18.8,
-    'alto' => 6.0,
+    'largo' => 18.8,
+    'ancho' => 30.0,
+    'alto' => 6.05,
     'specs' => 
     array (
-      'Puertos' => '2x 2.5G Ethernet + 4x Gigabit LAN',
-      'Seguridad' => 'AiProtection Pro con Trend Micro',
-      'Wi-Fi' => 'AX6000',
+      'Estándar' => 'Wi-Fi 6, doble banda',
+      'Clase' => 'AX6000',
+      'Velocidades' => 'Hasta 4804 Mb/s en 5 GHz y 1148 Mb/s en 2.4 GHz',
+      'Puertos' => '1 WAN de 2.5 GbE, 1 LAN de 2.5 GbE y 4 LAN Gigabit',
+      'USB' => '1 USB 3.2 Gen 1',
+      'Características' => 'AiMesh, AiProtection Pro y soporte de VPN',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   67 => 
   array (
@@ -3150,7 +4038,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RTR-18-3',
     'nombre' => 'Netgear Nighthawk RAXE500 Wi-Fi 6E',
     'marca' => 'Netgear',
-    'modelo' => 'RAXE500-100NAS',
+    'modelo' => 'Nighthawk RAXE500',
     'precio' => 399.0,
     'precio_oferta' => NULL,
     'stock' => 5,
@@ -3158,16 +4046,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Tecnología tri-banda Wi-Fi 6E con acceso a la nueva autopista libre de 6 GHz a 10.8 Gbps.',
     'desc' => 'Diseño futurista en forma de alas que oculta 8 antenas prealineadas para máxima cobertura. La banda de 6GHz elimina por completo la interferencia de los vecinos.',
     'peso' => 1.45,
-    'largo' => 29.8,
-    'ancho' => 21.1,
-    'alto' => 8.4,
+    'largo' => 22.12,
+    'ancho' => 34.5,
+    'alto' => 16.95,
     'specs' => 
     array (
-      'Bandas' => 'Tri-Band 2.4GHz / 5GHz / 6GHz',
-      'Velocidad' => 'Hasta 10.8 Gbps',
-      'Puerto' => 'Multi-Gig 2.5G',
+      'Estándar' => 'Wi-Fi 6E tribanda',
+      'Clase' => 'AXE11000',
+      'Bandas' => '2.4 GHz, 5 GHz y 6 GHz',
+      'Velocidades' => 'Hasta 1.2 + 4.8 + 4.8 Gb/s',
+      'Puertos' => '1 WAN Gigabit, 4 LAN Gigabit y 1 puerto 2.5G',
+      'USB' => '2 USB 3.0',
+      'Características' => 'Canales de 160 MHz y antenas integradas',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   68 => 
   array (
@@ -3175,24 +4073,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RTR-18-4',
     'nombre' => 'D-Link EAGLE PRO AI AX3200 Smart Router',
     'marca' => 'D-Link',
-    'modelo' => 'R32-US',
+    'modelo' => 'EAGLE PRO AI R32',
     'precio' => 99.0,
     'precio_oferta' => NULL,
     'stock' => 12,
     'destacado' => false,
     'desc_corta' => 'Optimización automática del tráfico impulsada por algoritmos de Inteligencia Artificial.',
     'desc' => 'El asistente de IA monitorea de forma continua los canales disponibles y asigna el ancho de banda ideal a cada dispositivo de tu hogar evitando congestiones.',
-    'peso' => 0.48,
-    'largo' => 22.8,
-    'ancho' => 15.9,
-    'alto' => 4.5,
+    'peso' => 0.446,
+    'largo' => 15.9,
+    'ancho' => 22.83,
+    'alto' => 6.19,
     'specs' => 
     array (
-      'Wi-Fi' => 'Wi-Fi 6 AX3200',
-      'IA' => 'AI Wi-Fi Optimizer / AI Mesh',
-      'Control' => 'App EAGLE PRO AI',
+      'Estándar' => 'Wi-Fi 6, doble banda',
+      'Clase' => 'AX3200',
+      'Velocidades' => 'Hasta 2402 Mb/s en 5 GHz y 800 Mb/s en 2.4 GHz',
+      'Puertos' => '1 WAN Gigabit y 4 LAN Gigabit',
+      'Antenas' => '4 externas',
+      'Seguridad' => 'WPA3',
+      'Características' => 'AI Wi-Fi Optimizer y control parental',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   69 => 
   array (
@@ -3200,24 +4108,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'RTR-18-5',
     'nombre' => 'Ubiquiti UniFi Dream Router (UDR)',
     'marca' => 'Ubiquiti',
-    'modelo' => 'UDR-US',
+    'modelo' => 'UniFi Dream Router UDR original',
     'precio' => 199.0,
     'precio_oferta' => NULL,
     'stock' => 8,
     'destacado' => true,
     'desc_corta' => 'Router corporativo todo en uno: switch PoE, punto de acceso Wi-Fi 6 y pantalla LCM de estado.',
     'desc' => 'La puerta de entrada al ecosistema profesional UniFi. Administra redes avanzadas, cámaras de seguridad UniFi Protect con su ranura MicroSD interna y alimenta dispositivos mediante puertos PoE.',
-    'peso' => 1.15,
+    'peso' => 1.2,
     'largo' => 11.0,
     'ancho' => 11.0,
-    'alto' => 18.42,
+    'alto' => 18.41,
     'specs' => 
     array (
-      'Pantalla' => '0.96" LCM táctil',
-      'Puertos' => '2x PoE Out 802.3af + 2x GbE LAN',
-      'Wi-Fi' => 'Wi-Fi 6 4x4 MU-MIMO',
+      'Estándar' => 'Wi-Fi 6',
+      'Puertos' => '1 WAN Gigabit y 4 LAN Gigabit',
+      'PoE' => '2 puertos LAN con salida PoE',
+      'Gestión' => 'UniFi Network y aplicaciones compatibles',
+      'Almacenamiento' => '128 GB integrado y ranura microSD',
+      'Características' => 'Router, punto de acceso y controlador UniFi en un equipo',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   70 => 
   array (
@@ -3225,7 +4142,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SW-19-1',
     'nombre' => 'TP-Link TL-SG108E Gigabit 8 Puertos Easy Smart',
     'marca' => 'TP-Link',
-    'modelo' => 'TL-SG108E',
+    'modelo' => 'TL-SG108E, revisión V5',
     'precio' => 29.0,
     'precio_oferta' => NULL,
     'stock' => 20,
@@ -3233,16 +4150,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Chasis de acero robusto con administración web sencilla, soporte de VLAN y QoS para prioridad de red.',
     'desc' => 'Mejora tu red con monitoreo de tráfico, priorización de paquetes para streaming y telefonía IP, y prevención de bucles de red. Diseño fanless sin ventilador 100% silencioso.',
     'peso' => 0.54,
-    'largo' => 15.8,
-    'ancho' => 10.1,
+    'largo' => 10.1,
+    'ancho' => 15.8,
     'alto' => 2.5,
     'specs' => 
     array (
-      'Puertos' => '8x Gigabit RJ45 10/100/1000',
-      'Gestión' => 'VLAN por puerto / 802.1Q',
-      'Chasis' => 'Metal blindado',
+      'Tipo' => 'Switch Easy Smart',
+      'Puertos' => '8 RJ45 10/100/1000 Mb/s',
+      'Capacidad de conmutación' => '16 Gb/s',
+      'Gestión' => 'VLAN 802.1Q, QoS, IGMP Snooping y port mirroring',
+      'PoE' => 'No',
+      'Características' => 'Carcasa metálica y diseño sin ventilador',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   71 => 
   array (
@@ -3250,7 +4176,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SW-19-2',
     'nombre' => 'Netgear GS305E 5 Puertos Gigabit Plus',
     'marca' => 'Netgear',
-    'modelo' => 'GS305E-100NAS',
+    'modelo' => 'GS305E',
     'precio' => 24.0,
     'precio_oferta' => NULL,
     'stock' => 18,
@@ -3258,16 +4184,24 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Switch inteligente gestionable con diagnóstico de cables y montaje en pared o escritorio.',
     'desc' => 'Configura y soluciona problemas de red fácilmente. Detecta si un cable de red está roto o dañado mediante su utilidad de comprobación integrada.',
     'peso' => 0.25,
-    'largo' => 9.4,
-    'ancho' => 10.0,
-    'alto' => 2.6,
+    'largo' => 10.0,
+    'ancho' => 9.4,
+    'alto' => 2.7,
     'specs' => 
     array (
-      'Puertos' => '5x Gigabit',
-      'Eficiencia' => 'Energy Efficient Ethernet IEEE 802.3az',
-      'Garantía' => '3 Años',
+      'Tipo' => 'Switch Gigabit Plus/Easy Smart',
+      'Puertos' => '5 RJ45 10/100/1000 Mb/s',
+      'Gestión' => 'VLAN, QoS e IGMP Snooping',
+      'PoE' => 'No',
+      'Características' => 'Carcasa metálica y refrigeración pasiva',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   72 => 
   array (
@@ -3275,24 +4209,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SW-19-3',
     'nombre' => 'D-Link DGS-1008G 8 Puertos Gigabit Desktop',
     'marca' => 'D-Link',
-    'modelo' => 'DGS-1008G',
+    'modelo' => 'DGS-1008G, revisión D1',
     'precio' => 26.0,
     'precio_oferta' => NULL,
     'stock' => 15,
     'destacado' => false,
     'desc_corta' => 'Plug and play inmediato con tecnología D-Link Green que reduce el consumo hasta un 80%.',
     'desc' => 'Detecta automáticamente la longitud del cable conectado y el estado de enlace de los dispositivos para apagar los puertos inactivos y ahorrar energía eléctrica.',
-    'peso' => 0.33,
-    'largo' => 13.0,
-    'ancho' => 7.9,
-    'alto' => 2.2,
+    'peso' => 0.13,
+    'largo' => 8.5,
+    'ancho' => 13.8,
+    'alto' => 3.4,
     'specs' => 
     array (
-      'Capacidad Switching' => '16 Gbps',
-      'Instalación' => 'Plug and Play sin software',
-      'Puertos' => '8x 10/100/1000 Mbps',
+      'Tipo' => 'Switch no administrable',
+      'Puertos' => '8 Gigabit Ethernet RJ45',
+      'Capacidad de conmutación' => '16 Gb/s',
+      'PoE' => 'No',
+      'Alimentación' => 'Adaptador de 5 V/1 A',
+      'Características' => 'Auto MDI/MDIX y funcionamiento sin ventilador',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   73 => 
   array (
@@ -3300,7 +4243,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SW-19-4',
     'nombre' => 'Ubiquiti UniFi Switch Flex Mini 5 Puertos',
     'marca' => 'Ubiquiti',
-    'modelo' => 'USW-Flex-Mini',
+    'modelo' => 'UniFi Switch Flex Mini, USW-Flex-Mini',
     'precio' => 35.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -3308,16 +4251,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Switch administrado de bolsillo que puede alimentarse por PoE 802.3af o por cable USB-C.',
     'desc' => 'Extiende la red UniFi a cualquier rincón de tu oficina o centro de entretenimiento. Gestionable desde el controlador central UniFi Network con estadísticas de tráfico por puerto.',
     'peso' => 0.15,
-    'largo' => 10.72,
-    'ancho' => 7.01,
-    'alto' => 2.11,
+    'largo' => 7.015,
+    'ancho' => 10.716,
+    'alto' => 2.117,
     'specs' => 
     array (
-      'Alimentación' => 'PoE In (Puerto 1) o USB-C 5V',
-      'Puertos' => '5x GbE RJ45',
-      'Consumo' => 'Apenas 2.5W',
+      'Tipo' => 'Switch gestionado por UniFi Network',
+      'Puertos' => '5 Gigabit RJ45',
+      'Alimentación' => 'USB-C de 5 V o entrada PoE 802.3af/at',
+      'Salida PoE' => 'No',
+      'Conmutación' => '10 Gb/s',
+      'Características' => 'Equipo compacto para redes UniFi',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   74 => 
   array (
@@ -3325,24 +4277,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'SW-19-5',
     'nombre' => 'Anker PowerExpand USB-C a Gigabit Ethernet',
     'marca' => 'Anker',
-    'modelo' => 'A83610A1',
+    'modelo' => 'PowerExpand USB-C to Gigabit Ethernet Adapter, A8313',
     'precio' => 19.0,
     'precio_oferta' => NULL,
     'stock' => 26,
     'destacado' => false,
     'desc_corta' => 'Añade un puerto de red cableado Gigabit a laptops modernas sin puerto RJ45 nativo.',
     'desc' => 'Carcasa de aluminio disipador de calor y cable de nylon trenzado. Compatible con MacBooks, iPads, laptops Windows y consolas Nintendo Switch para una conexión sin lag.',
-    'peso' => 0.03,
+    'peso' => 0.023,
     'largo' => 5.2,
     'ancho' => 2.4,
     'alto' => 1.4,
     'specs' => 
     array (
-      'Velocidad' => '1000 Mbps Gigabit',
-      'Conexión' => 'USB-C macho a RJ45 hembra',
-      'Plug & Play' => 'Sin drivers en Windows/Mac',
+      'Tipo' => 'Adaptador de red',
+      'Conexión al equipo' => 'USB-C',
+      'Puerto de red' => '1 RJ45',
+      'Velocidad' => 'Hasta 1 Gb/s',
+      'Alimentación' => 'Mediante USB',
+      'Características' => 'Adaptador compacto para conexión Ethernet por cable',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   75 => 
   array (
@@ -3350,7 +4311,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CBL-20-1',
     'nombre' => 'Anker 765 USB-C a USB-C Cable 140W Nylon',
     'marca' => 'Anker',
-    'modelo' => 'A8865011',
+    'modelo' => '765 USB-C a USB-C, 140 W, versión de 3 pies',
     'precio' => 19.0,
     'precio_oferta' => NULL,
     'stock' => 45,
@@ -3358,21 +4319,24 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Carga ultrarrápida USB Power Delivery 3.1 de 140W con chip E-Marker y prueba de 35.000 flexiones.',
     'desc' => 'Capaz de cargar desde audífonos hasta una MacBook Pro de 16 pulgadas a máxima velocidad. Trenzado con fibras de nylon de grado aeroespacial para resistir tirones y dobladuras.',
     'peso' => 0.08,
-    'largo' => 100.0,
+    'largo' => 100,
     'ancho' => 1.2,
     'alto' => 0.6,
     'specs' => 
     array (
-      'Potencia Soportada' => 'Hasta 140W (28V/5A)',
-      'Velocidad Datos' => '480 Mbps USB 2.0',
-      'Material' => 'Nylon trenzado doble',
+      'Conectores' => 'USB-C macho en ambos extremos',
+      'Potencia' => 'Hasta 140 W con equipos y cargador compatibles',
+      'Longitud' => '0.9144 m (3 pies)',
+      'Datos' => 'USB 2.0, hasta 480 Mb/s',
+      'Recubrimiento' => 'Nylon trenzado',
+      'Características' => 'Cable orientado a carga de alta potencia',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'CBL-20-1-V1',
-        'precio' => 19.0,
+        'precio' => 19,
         'stock' => 25,
         'opcion' => 
         array (
@@ -3383,7 +4347,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'CBL-20-1-V2',
-        'precio' => 24.0,
+        'precio' => 24,
         'stock' => 20,
         'opcion' => 
         array (
@@ -3392,6 +4356,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   76 => 
   array (
@@ -3399,7 +4369,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CBL-20-2',
     'nombre' => 'Belkin Ultra HD Alta Velocidad HDMI 2.1 4K/8K',
     'marca' => 'Belkin',
-    'modelo' => 'AV10175bt2M-BLK',
+    'modelo' => 'Ultra HD High Speed HDMI, AV10175, 2 m',
     'precio' => 24.0,
     'precio_oferta' => NULL,
     'stock' => 35,
@@ -3407,21 +4377,23 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Certificación oficial HDMI Forum: ancho de banda de 48 Gbps para 4K a 120Hz y 8K a 60Hz.',
     'desc' => 'Aprobado para PlayStation 5, Xbox Series X y televisores OLED. Soporta VRR (Tasa de Refresco Variable), ALLM (Modo de Baja Latencia Automático) y eARC para audio Dolby Atmos.',
     'peso' => 0.12,
-    'largo' => 100.0,
+    'largo' => 100,
     'ancho' => 1.8,
     'alto' => 0.9,
     'specs' => 
     array (
-      'Ancho de Banda' => '48 Gbps Ultra High Speed',
-      'HDR' => 'Dolby Vision / HDR10+',
-      'Resoluciones' => '8K@60Hz / 4K@120Hz',
+      'Conectores' => 'HDMI macho a HDMI macho',
+      'Longitud' => '2 m',
+      'Ancho de banda' => 'Hasta 48 Gb/s',
+      'Video' => 'Hasta 4K a 120 Hz u 8K a 60 Hz con equipos compatibles',
+      'Características' => 'HDR y canal de retorno de audio',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'CBL-20-2-V1',
-        'precio' => 24.0,
+        'precio' => 24,
         'stock' => 20,
         'opcion' => 
         array (
@@ -3432,7 +4404,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'CBL-20-2-V2',
-        'precio' => 29.0,
+        'precio' => 29,
         'stock' => 15,
         'opcion' => 
         array (
@@ -3441,6 +4413,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   77 => 
   array (
@@ -3448,7 +4426,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CBL-20-3',
     'nombre' => 'Apple Cable Thunderbolt 4 Pro Trenzado',
     'marca' => 'Apple',
-    'modelo' => 'MU883AM/A',
+    'modelo' => 'Thunderbolt 4 Pro USB-C, versión de 3 m',
     'precio' => 69.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -3456,16 +4434,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Transferencia de datos a 40 Gbps, salida de video DisplayPort y carga rápida de hasta 100W.',
     'desc' => 'Diseño trenzado negro de primera calidad que se enrolla sin enredos. Permite conectar monitores Studio Display, tarjetas gráficas externas (eGPU) y discos duros RAID profesionales.',
     'peso' => 0.09,
-    'largo' => 180.0,
+    'largo' => 180,
     'ancho' => 1.2,
     'alto' => 0.5,
     'specs' => 
     array (
-      'Velocidad' => 'Hasta 40 Gb/s',
-      'Video' => 'DisplayPort (HBR3)',
-      'Carga' => '100W Power Delivery',
+      'Conectores' => 'USB-C en ambos extremos',
+      'Longitud' => '3 m',
+      'Datos' => 'Hasta 40 Gb/s por Thunderbolt 3/4 y USB4',
+      'USB 3' => 'Hasta 10 Gb/s',
+      'Carga' => 'Hasta 100 W',
+      'Video' => 'DisplayPort HBR3',
+      'Características' => 'Cable activo negro de diseño trenzado',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   78 => 
   array (
@@ -3473,7 +4461,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CBL-20-4',
     'nombre' => 'TP-Link Cable Patch Cord Cat6 Gigabit RJ45',
     'marca' => 'TP-Link',
-    'modelo' => 'TL-EC605',
+    'modelo' => 'Cable Cat6 atribuido a TP-Link, modelo no identificado',
     'precio' => 6.0,
     'precio_oferta' => NULL,
     'stock' => 50,
@@ -3481,21 +4469,23 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Cable de red ensamblado en fábrica con conductores de cobre puro y contactos dorados.',
     'desc' => 'Garantiza el 100% de la velocidad contratada de tu plan de internet sin interferencias electromagnéticas gracias a su cruceta interna separadora de pares.',
     'peso' => 0.08,
-    'largo' => 200.0,
+    'largo' => 200,
     'ancho' => 1.1,
     'alto' => 0.6,
     'specs' => 
     array (
-      'Categoría' => 'Cat6 UTP',
-      'Frecuencia' => '250 MHz',
-      'Conectores' => 'RJ45 con funda protectora antienganche',
+      'Tipo declarado' => 'Patch cord Cat6 RJ45',
+      'Código del fabricante' => 'No proporcionado',
+      'Longitud' => 'No proporcionada',
+      'Estado de verificación' => 'No se confirmó un modelo oficial que corresponda al nombre',
+      'Acción' => 'Solicitar foto del empaque y código del producto antes de publicar',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'CBL-20-4-V1',
-        'precio' => 6.0,
+        'precio' => 6,
         'stock' => 30,
         'opcion' => 
         array (
@@ -3506,7 +4496,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'CBL-20-4-V2',
-        'precio' => 10.0,
+        'precio' => 10,
         'stock' => 20,
         'opcion' => 
         array (
@@ -3515,6 +4505,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   79 => 
   array (
@@ -3522,7 +4518,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CBL-20-5',
     'nombre' => 'D-Link Cable de Red Cat6 UTP 3m Certificado',
     'marca' => 'D-Link',
-    'modelo' => 'NCB-C6UBLR1-3',
+    'modelo' => 'Patch cord D-Link Cat6 UTP, referencia de 3 m',
     'precio' => 7.5,
     'precio_oferta' => NULL,
     'stock' => 30,
@@ -3530,16 +4526,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Longitud intermedia ideal para conectar consolas, smart TVs o PCs al router o switch.',
     'desc' => 'Revestimiento de PVC resistente y flexible de color azul. Cumple con los estándares internacionales TIA/EIA-568-C.2.',
     'peso' => 0.1,
-    'largo' => 300.0,
+    'largo' => 300,
     'ancho' => 1.1,
     'alto' => 0.6,
     'specs' => 
     array (
-      'Longitud' => '3 Metros',
-      'Conductor' => '24 AWG Cobre Sólido',
-      'Color' => 'Azul',
+      'Categoría' => 'Cat6',
+      'Conectores' => 'RJ45 macho a RJ45 macho',
+      'Longitud' => '3 m',
+      'Blindaje' => 'UTP, sin blindaje',
+      'Uso' => 'Conexión Ethernet entre equipos y puertos de red',
+      'Características' => 'Patch cord para redes Gigabit',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   80 => 
   array (
@@ -3547,30 +4552,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'EXT-21-1',
     'nombre' => 'SanDisk Extreme Portable SSD USB 3.2 Gen 2',
     'marca' => 'SanDisk',
-    'modelo' => 'SDSSDE61-1T00-G25',
+    'modelo' => 'Extreme Portable SSD 1 TB, SDSSDE61-1T00-Z25B',
     'precio' => 109.0,
-    'precio_oferta' => 99.0,
+    'precio_oferta' => 99,
     'stock' => 28,
     'destacado' => true,
     'desc_corta' => 'Carcasa engomada resistente a caídas de hasta 2 metros con protección IP55 contra lluvia y polvo.',
     'desc' => 'El disco duro de bolsillo favorito de fotógrafos y viajeros. Su práctico mosquetón permite engancharlo a la mochila mientras caminas. Velocidades NVMe de hasta 1050 MB/s de lectura.',
     'peso' => 0.05,
-    'largo' => 10.05,
-    'ancho' => 5.24,
-    'alto' => 0.89,
+    'largo' => 10.08,
+    'ancho' => 5.255,
+    'alto' => 0.96,
     'specs' => 
     array (
-      'Lectura' => '1050 MB/s',
-      'Escritura' => '1000 MB/s',
-      'Protección' => 'IP55 resistente a agua/polvo',
-      'Seguridad' => 'Cifrado AES 256-bit',
+      'Capacidad' => '1 TB',
+      'Interfaz' => 'USB 3.2 Gen 2, 10 Gb/s',
+      'Conector' => 'USB-C',
+      'Lectura' => 'Hasta 1050 MB/s',
+      'Escritura' => 'Hasta 1000 MB/s',
+      'Protección' => 'IP65 en la revisión seleccionada',
+      'Características' => 'Carcasa de silicona y protección contra caídas de hasta 3 m',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'EXT-21-1-V1',
-        'precio' => 109.0,
+        'precio' => 109,
         'stock' => 16,
         'opcion' => 
         array (
@@ -3581,7 +4589,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'EXT-21-1-V2',
-        'precio' => 169.0,
+        'precio' => 169,
         'stock' => 12,
         'opcion' => 
         array (
@@ -3590,6 +4598,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   81 => 
   array (
@@ -3597,24 +4611,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'EXT-21-2',
     'nombre' => 'Samsung T7 Shield Portable SSD Resistente',
     'marca' => 'Samsung',
-    'modelo' => 'MU-PE2T0S/AM',
+    'modelo' => 'T7 Shield 2 TB, negro',
     'precio' => 179.0,
     'precio_oferta' => NULL,
     'stock' => 14,
     'destacado' => false,
     'desc_corta' => 'Exterior de elastómero de alta tecnología resistente a golpes, agua y polvo con certificación IP65.',
     'desc' => 'Protección térmica avanzada Dynamic Thermal Guard para evitar caídas de velocidad por sobrecalentamiento al transferir archivos gigantes de video.',
-    'peso' => 0.09,
+    'peso' => 0.098,
     'largo' => 8.8,
     'ancho' => 5.9,
     'alto' => 1.3,
     'specs' => 
     array (
       'Capacidad' => '2 TB',
-      'Velocidad' => '1050 MB/s',
-      'Certificación' => 'IP65 y caída de 3 metros',
+      'Interfaz' => 'USB 3.2 Gen 2, 10 Gb/s',
+      'Conector' => 'USB-C',
+      'Lectura' => 'Hasta 1050 MB/s',
+      'Escritura' => 'Hasta 1000 MB/s',
+      'Protección' => 'IP65',
+      'Características' => 'Protección contra caídas de hasta 3 m y cifrado AES de 256 bits',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   82 => 
   array (
@@ -3622,24 +4646,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'EXT-21-3',
     'nombre' => 'Western Digital My Passport 2TB HDD USB 3.0',
     'marca' => 'Western Digital',
-    'modelo' => 'WDBYVG0020BBK-WESN',
+    'modelo' => 'My Passport HDD 2 TB, edición de 13.5 mm',
     'precio' => 69.0,
     'precio_oferta' => NULL,
     'stock' => 19,
     'destacado' => false,
     'desc_corta' => 'Disco duro externo confiable y estilizado con software de respaldo automático y contraseña.',
     'desc' => 'El clásico indiscutible para copias de seguridad de fotos familiares, películas y documentos importantes. Compatible de fábrica con Windows y Mac.',
-    'peso' => 0.12,
+    'peso' => 0.14,
     'largo' => 10.72,
     'ancho' => 7.5,
-    'alto' => 1.11,
+    'alto' => 1.35,
     'specs' => 
     array (
       'Capacidad' => '2 TB',
-      'Interfaz' => 'USB 3.2 Gen 1 (USB 3.0)',
-      'Seguridad' => 'Protección con contraseña',
+      'Tipo' => 'Disco duro portátil',
+      'Interfaz' => 'USB 3.2 Gen 1/USB 3.0',
+      'Conector del cable al PC' => 'USB-A',
+      'Alimentación' => 'Mediante USB',
+      'Características' => 'Software de respaldo y protección mediante contraseña',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   83 => 
   array (
@@ -3647,24 +4680,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'EXT-21-4',
     'nombre' => 'Seagate Expansion 4TB Disco Externo',
     'marca' => 'Seagate',
-    'modelo' => 'STKM4000400',
+    'modelo' => 'Expansion Portable 4 TB',
     'precio' => 99.0,
-    'precio_oferta' => 89.0,
+    'precio_oferta' => 89,
     'stock' => 15,
     'destacado' => false,
     'desc_corta' => 'Almacenamiento masivo de 4 Terabytes sin necesidad de adaptador de corriente adicional.',
     'desc' => 'Almacena miles de horas de series, juegos de consola o archivos de diseño. Simplemente conecta el cable USB y arrastra los archivos para guardarlos al instante.',
-    'peso' => 0.26,
+    'peso' => 0.257,
     'largo' => 11.53,
     'ancho' => 8.0,
     'alto' => 2.09,
     'specs' => 
     array (
-      'Capacidad' => '4 TB (4000 GB)',
-      'Alimentación' => 'Por USB directa',
-      'Garantía' => '2 Años con Rescue Data Recovery',
+      'Capacidad' => '4 TB',
+      'Tipo' => 'HDD portátil',
+      'Interfaz' => 'USB 3.0',
+      'Alimentación' => 'Mediante USB',
+      'Compatibilidad' => 'Reformateo según sistema operativo y uso',
+      'Características' => 'Almacenamiento externo portátil sin adaptador de CA',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   84 => 
   array (
@@ -3672,24 +4714,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'EXT-21-5',
     'nombre' => 'Crucial X9 Pro 1TB Portable SSD 1050MB/s',
     'marca' => 'Crucial',
-    'modelo' => 'CT1000X9PROSSD9',
+    'modelo' => 'X9 Pro 1 TB, CT1000X9PROSSD9',
     'precio' => 89.0,
     'precio_oferta' => NULL,
     'stock' => 16,
     'destacado' => false,
     'desc_corta' => 'Tamaño ultracompacto menor al de una tarjeta de crédito con cuerpo de aluminio anodizado.',
     'desc' => 'Elegante y discreto en la palma de tu mano. Resistencia al agua y polvo IP55 con indicador LED de actividad discreto en la ranura de cuerda.',
-    'peso' => 0.04,
+    'peso' => 0.038,
     'largo' => 6.5,
     'ancho' => 5.0,
     'alto' => 1.0,
     'specs' => 
     array (
       'Capacidad' => '1 TB',
-      'Lectura' => '1050 MB/s',
-      'Dimensiones' => '65 x 50 mm ultra portátil',
+      'Interfaz' => 'USB 3.2 Gen 2',
+      'Conector' => 'USB-C',
+      'Lectura y escritura' => 'Hasta 1050 MB/s',
+      'Protección' => 'IP55',
+      'Cifrado' => 'AES de 256 bits',
+      'Características' => 'Carcasa compacta con resistencia a caídas de hasta 2 m',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   85 => 
   array (
@@ -3697,24 +4749,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHG-23-1',
     'nombre' => 'Anker 735 GaNPrime 65W Cargador 3 Puertos',
     'marca' => 'Anker',
-    'modelo' => 'A2668111',
+    'modelo' => '735 Charger GaNPrime 65W, A2668, enchufe US',
     'precio' => 49.0,
     'precio_oferta' => NULL,
     'stock' => 22,
     'destacado' => true,
     'desc_corta' => 'Tecnología GaNPrime más pequeña que un cargador de laptop tradicional para cargar 3 dispositivos a la vez.',
     'desc' => 'Equipado con 2 puertos USB-C y 1 puerto USB-A. Su tecnología PowerIQ 4.0 detecta dinámicamente las necesidades de energía de cada equipo para distribuir los 65W inteligentemente.',
-    'peso' => 0.13,
-    'largo' => 6.6,
-    'ancho' => 3.8,
-    'alto' => 2.9,
+    'peso' => 0.132,
+    'largo' => 3.8,
+    'ancho' => 2.9,
+    'alto' => 6.6,
     'specs' => 
     array (
-      'Potencia Total' => '65W Max',
-      'Puertos' => '2x USB-C + 1x USB-A',
-      'Tecnología' => 'GaNPrime / ActiveShield 2.0',
+      'Puertos' => '2 USB-C y 1 USB-A',
+      'Potencia total' => '65 W',
+      'USB-C individual' => 'Hasta 65 W',
+      'USB-A individual' => 'Hasta 22.5 W',
+      'Tecnología' => 'GaNPrime, PowerIQ 4.0 y PPS',
+      'Entrada' => '100–240 V CA',
+      'Características' => 'Distribución inteligente de potencia',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   86 => 
   array (
@@ -3722,7 +4784,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHG-23-2',
     'nombre' => 'Belkin BoostCharge Pro 3 en 1 MagSafe 15W',
     'marca' => 'Belkin',
-    'modelo' => 'WIZ017ttBK',
+    'modelo' => 'BoostCharge Pro 3-in-1 MagSafe, WIZ017',
     'precio' => 129.0,
     'precio_oferta' => NULL,
     'stock' => 8,
@@ -3730,16 +4792,24 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Estación de carga inalámbrica rápida oficial de 15W para iPhone, Apple Watch y AirPods simultáneamente.',
     'desc' => 'Diseño arquitectónico con acabados cromados y base pesada que no se desliza en tu mesa de noche. Carga rápida oficial para Apple Watch Series 7 en adelante.',
     'peso' => 0.5,
-    'largo' => 13.5,
-    'ancho' => 13.5,
-    'alto' => 13.0,
+    'largo' => 13.373,
+    'ancho' => 13.373,
+    'alto' => 14.364,
     'specs' => 
     array (
-      'MagSafe' => '15W Oficial certificado por Apple',
-      'Carga Simultánea' => '3 Dispositivos',
-      'Compatibilidad' => 'iPhone 12 a 15, Watch, AirPods',
+      'Tipo' => 'Base inalámbrica de 3 dispositivos',
+      'Carga de iPhone' => 'MagSafe hasta 15 W',
+      'Carga adicional' => 'Apple Watch y AirPods compatibles',
+      'Alimentación' => 'Adaptador externo incluido según presentación',
+      'Características' => 'Soporte vertical y carga simultánea',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   87 => 
   array (
@@ -3747,7 +4817,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHG-23-3',
     'nombre' => 'Apple Adaptador de Corriente USB-C de 20W',
     'marca' => 'Apple',
-    'modelo' => 'MHJA3AM/A',
+    'modelo' => 'Adaptador de corriente USB-C de 20 W, enchufe US',
     'precio' => 19.0,
     'precio_oferta' => NULL,
     'stock' => 35,
@@ -3760,11 +4830,20 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.8,
     'specs' => 
     array (
-      'Potencia' => '20 Watts USB-PD',
-      'Conexión' => 'USB-C hembra',
-      'Seguridad' => 'Protección contra sobretensiones Apple',
+      'Potencia' => '20 W',
+      'Puerto' => '1 USB-C',
+      'Tecnología' => 'USB Power Delivery',
+      'Carga rápida' => 'Disponible en iPhone compatibles',
+      'Contenido' => 'Adaptador, cable no incluido',
+      'Características' => 'Fuente de alimentación compacta para dispositivos USB-C',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   88 => 
   array (
@@ -3772,23 +4851,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHG-23-4',
     'nombre' => 'Samsung 45W Super Fast Wall Charger USB-C',
     'marca' => 'Samsung',
-    'modelo' => 'EP-T4510XBEGUS',
+    'modelo' => 'Cargador 45 W, EP-T4510XBEGCA',
     'precio' => 34.0,
-    'precio_oferta' => 29.0,
+    'precio_oferta' => 29,
     'stock' => 20,
     'destacado' => false,
     'desc_corta' => 'Carga Super Rápida 2.0 oficial para Galaxy S24 Ultra, S23 Ultra y tablets Galaxy Tab.',
     'desc' => 'Incluye cable USB-C a USB-C de 5A de alta capacidad. Compatible con el estándar universal USB Power Delivery PPS para alimentar también laptops y otras marcas.',
-    'peso' => 0.1,
-    'largo' => 5.4,
-    'ancho' => 4.3,
-    'alto' => 2.8,
+    'peso' => 0.0922,
+    'largo' => 2.8,
+    'ancho' => 4.35,
+    'alto' => 6.37,
     'specs' => 
     array (
-      'Potencia' => '45W PPS',
-      'Cable' => 'USB-C a USB-C 5A de 1.8m incluido',
+      'Potencia' => 'Hasta 45 W',
+      'Puerto' => 'USB-C',
+      'Protocolos' => 'USB PD 3.0 PDO/PPS y Super Fast Charging 2.0',
+      'Entrada' => '100–240 V',
+      'Cable' => 'USB-C a USB-C de 5 A, 1.8 m incluido',
+      'Características' => 'Carga rápida para equipos Samsung compatibles',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   89 => 
   array (
@@ -3796,7 +4885,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHG-23-5',
     'nombre' => 'Xiaomi 67W GaN Fast Charger Combo',
     'marca' => 'Xiaomi',
-    'modelo' => 'BHR6127EU',
+    'modelo' => 'Xiaomi 67W HyperCharge Power Adapter Type-A, MDY-12-EH',
     'precio' => 29.0,
     'precio_oferta' => NULL,
     'stock' => 18,
@@ -3804,16 +4893,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Cargador de nitruro de galio ultracompacto de 67W capaz de cargar laptops y smartphones.',
     'desc' => 'Alta potencia en tamaño reducido. Control térmico inteligente de temperatura constante y materiales resistentes al fuego de alta graduación.',
     'peso' => 0.09,
-    'largo' => 5.5,
-    'ancho' => 3.2,
-    'alto' => 3.2,
+    'largo' => 7.3,
+    'ancho' => 4.93,
+    'alto' => 2.8,
     'specs' => 
     array (
-      'Potencia' => '67W Max',
-      'Material' => 'GaN (Nitruro de Galio)',
-      'Cable' => 'Cable USB-A a USB-C 6A incluido',
+      'Potencia' => 'Hasta 67 W',
+      'Puerto' => 'USB-A',
+      'Entrada' => '100–240 V CA',
+      'Carga normal' => '5 V/3 A',
+      'Salida rápida' => '5–20 V, hasta 67 W',
+      'Características' => 'Identificación inteligente de dispositivo y compatibilidad de carga rápida',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   90 => 
   array (
@@ -3821,7 +4919,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PWR-24-1',
     'nombre' => 'Anker 737 Power Bank 24000mAh 140W',
     'marca' => 'Anker',
-    'modelo' => 'A1289011',
+    'modelo' => '737 Power Bank PowerCore 24K, A1289',
     'precio' => 119.0,
     'precio_oferta' => NULL,
     'stock' => 10,
@@ -3829,16 +4927,24 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Pantalla digital a color que muestra vatios de entrada/salida y tiempo restante de batería.',
     'desc' => 'El power bank más avanzado del mercado. Entrega hasta 140W de potencia para cargar laptops de alta gama mientras cargas dos celulares al mismo tiempo.',
     'peso' => 0.63,
-    'largo' => 15.58,
+    'largo' => 15.57,
     'ancho' => 5.46,
-    'alto' => 4.96,
+    'alto' => 4.95,
     'specs' => 
     array (
-      'Capacidad' => '24.000 mAh (86.4 Wh)',
-      'Salida Máxima' => '140W Power Delivery 3.1',
-      'Pantalla' => 'Smart Digital Display a color',
+      'Capacidad nominal' => '24000 mAh',
+      'Potencia' => 'Hasta 140 W',
+      'Puertos' => '2 USB-C y 1 USB-A',
+      'Tecnología' => 'USB PD 3.1',
+      'Características' => 'Carga bidireccional y pantalla digital',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   91 => 
   array (
@@ -3846,7 +4952,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PWR-24-2',
     'nombre' => 'Xiaomi 50W Power Bank 20000mAh',
     'marca' => 'Xiaomi',
-    'modelo' => 'BHR5121GL',
+    'modelo' => 'Mi 50W Power Bank 20000, PB200SZM',
     'precio' => 49.0,
     'precio_oferta' => NULL,
     'stock' => 15,
@@ -3859,11 +4965,20 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 2.75,
     'specs' => 
     array (
-      'Capacidad' => '20.000 mAh (74 Wh)',
-      'Potencia' => '50W Max',
-      'Puertos' => '1x USB-C + 2x USB-A',
+      'Capacidad de celdas' => '20000 mAh, 74 Wh',
+      'Capacidad nominal a la salida' => '12000 mAh a 5 V/4 A',
+      'Potencia de salida' => 'Hasta 50 W',
+      'Entrada' => 'USB-C, hasta 45 W',
+      'Puertos' => 'USB-C y USB-A',
+      'Características' => 'Carga de múltiples dispositivos y modo de baja corriente',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   92 => 
   array (
@@ -3871,7 +4986,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PWR-24-3',
     'nombre' => 'Anker Nano Power Bank 5000mAh USB-C',
     'marca' => 'Anker',
-    'modelo' => 'A1653011',
+    'modelo' => 'Nano Power Bank 5000 mAh, A1653',
     'precio' => 25.0,
     'precio_oferta' => NULL,
     'stock' => 32,
@@ -3879,21 +4994,22 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Conector USB-C plegable integrado: se conecta directamente a la base de tu celular sin cables.',
     'desc' => 'Cabe en cualquier bolsillo de pantalón. Olvídate de llevar cables enredados. Simplemente despliega el conector USB-C, conéctalo a tu smartphone y sigue usándolo con normalidad.',
     'peso' => 0.1,
-    'largo' => 7.7,
-    'ancho' => 3.68,
-    'alto' => 2.5,
+    'largo' => 7.6962,
+    'ancho' => 3.683,
+    'alto' => 2.4892,
     'specs' => 
     array (
-      'Capacidad' => '5.000 mAh',
-      'Potencia' => '22.5W Carga Rápida',
-      'Conector' => 'USB-C plegable integrado',
+      'Capacidad' => '5000 mAh',
+      'Potencia' => 'Hasta 22.5 W',
+      'Conexión' => 'Conector USB-C integrado plegable y puerto USB-C',
+      'Características' => 'Formato compacto para carga de teléfonos compatibles',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'PWR-24-3-V1',
-        'precio' => 25.0,
+        'precio' => 25,
         'stock' => 18,
         'opcion' => 
         array (
@@ -3904,7 +5020,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'PWR-24-3-V2',
-        'precio' => 25.0,
+        'precio' => 25,
         'stock' => 14,
         'opcion' => 
         array (
@@ -3913,6 +5029,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   93 => 
   array (
@@ -3920,7 +5042,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PWR-24-4',
     'nombre' => 'Belkin BoostCharge Power Bank 10000mAh',
     'marca' => 'Belkin',
-    'modelo' => 'BPB011btBK',
+    'modelo' => 'BoostCharge Power Bank 10K, BPB011',
     'precio' => 29.0,
     'precio_oferta' => NULL,
     'stock' => 20,
@@ -3933,11 +5055,19 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.57,
     'specs' => 
     array (
-      'Capacidad' => '10.000 mAh',
-      'Puertos' => '1x USB-C + 2x USB-A',
-      'Potencia Total' => '15W',
+      'Capacidad' => '10000 mAh',
+      'Potencia total' => 'Hasta 15 W',
+      'Puertos' => '1 USB-C y 2 USB-A',
+      'Carga simultánea' => 'Hasta 3 dispositivos',
+      'Características' => 'Indicadores LED de batería',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   94 => 
   array (
@@ -3945,9 +5075,9 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PWR-24-5',
     'nombre' => 'Samsung 25W Power Bank 10000mAh Batería',
     'marca' => 'Samsung',
-    'modelo' => 'EB-P3400XUEGUS',
+    'modelo' => 'Battery Pack 10000 mAh 25W, EB-P3400',
     'precio' => 39.0,
-    'precio_oferta' => 34.0,
+    'precio_oferta' => 34,
     'stock' => 16,
     'destacado' => false,
     'desc_corta' => 'Carga super rápida de 25W en dos puertos USB-C fabricada con materiales reciclados ecológicos.',
@@ -3958,11 +5088,20 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.56,
     'specs' => 
     array (
-      'Capacidad' => '10.000 mAh',
-      'Potencia' => '25W Super Fast Charging',
-      'Puertos' => '2x USB-C',
+      'Capacidad' => '10000 mAh',
+      'Potencia' => 'Hasta 25 W',
+      'Puertos' => '2 USB-C',
+      'Protocolos' => 'USB PD 3.0 PDO/PPS y Samsung SFC',
+      'Carga inalámbrica' => 'No',
+      'Características' => 'Carga de dos dispositivos y diseño portátil',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   95 => 
   array (
@@ -3970,7 +5109,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CS-25-1',
     'nombre' => 'Apple Funda de Silicona con MagSafe iPhone 15',
     'marca' => 'Apple',
-    'modelo' => 'MT113ZM/A',
+    'modelo' => 'Funda de silicona MagSafe para iPhone 15, negro',
     'precio' => 49.0,
     'precio_oferta' => NULL,
     'stock' => 25,
@@ -3978,21 +5117,23 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Tacto exterior sedoso y forro interior de microfibra suave que abraza y protege el iPhone.',
     'desc' => 'Imanes perfectamente alineados que hacen que la carga inalámbrica MagSafe sea más rápida y cómoda. Tratamiento oleofóbico que repele huellas dactilares y suciedad.',
     'peso' => 0.05,
-    'largo' => 15.0,
+    'largo' => 15,
     'ancho' => 7.5,
     'alto' => 1.2,
     'specs' => 
     array (
-      'Material' => 'Silicona líquida y microfibra',
-      'MagSafe' => 'Integrado',
-      'Compatibilidad' => 'iPhone 15',
+      'Compatibilidad' => 'iPhone 15 de 6.1 pulgadas',
+      'Material exterior' => 'Silicona',
+      'Interior' => 'Microfibra',
+      'MagSafe' => 'Imanes integrados',
+      'Características' => 'Protección del cuerpo y compatibilidad con carga inalámbrica',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'CS-25-1-V1',
-        'precio' => 49.0,
+        'precio' => 49,
         'stock' => 15,
         'opcion' => 
         array (
@@ -4003,7 +5144,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'CS-25-1-V2',
-        'precio' => 49.0,
+        'precio' => 49,
         'stock' => 10,
         'opcion' => 
         array (
@@ -4012,6 +5153,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   96 => 
   array (
@@ -4019,24 +5166,31 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CS-25-2',
     'nombre' => 'Samsung Funda Standing Grip Galaxy S24 Ultra',
     'marca' => 'Samsung',
-    'modelo' => 'EF-GS928CBEGUS',
+    'modelo' => 'Standing Grip Case Galaxy S24 Ultra, EF-GS928C',
     'precio' => 39.0,
     'precio_oferta' => NULL,
     'stock' => 18,
     'destacado' => false,
     'desc_corta' => 'Correa de sujeción trasera que funciona también como soporte de pie para ver videos en horizontal.',
     'desc' => 'Sujeta tu smartphone con total seguridad con una sola mano pasando los dedos por la correa flexible integrada, o despliégala para apoyarlo en la mesa.',
-    'peso' => 0.06,
-    'largo' => 16.5,
-    'ancho' => 8.2,
-    'alto' => 1.3,
+    'peso' => 0.056,
+    'largo' => 1.28,
+    'ancho' => 8.35,
+    'alto' => 16.61,
     'specs' => 
     array (
       'Compatibilidad' => 'Galaxy S24 Ultra',
-      'Función' => 'Correa de agarre + Kickstand',
-      'Material' => 'Policarbonato y silicona',
+      'Tipo' => 'Funda con correa de agarre y soporte',
+      'Material' => 'Acabado de silicona',
+      'Características' => 'Soporte para visualización horizontal y agarre posterior',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   97 => 
   array (
@@ -4044,7 +5198,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CS-25-3',
     'nombre' => 'Belkin Protector de Pantalla UltraGlass 2',
     'marca' => 'Belkin',
-    'modelo' => 'OVA132zz',
+    'modelo' => 'UltraGlass 2 para iPhone 15 Pro Max, OVA130dsAPL',
     'precio' => 29.0,
     'precio_oferta' => NULL,
     'stock' => 30,
@@ -4053,15 +5207,22 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Grosor ultrafino de apenas 0.29mm que conserva la sensibilidad táctil original de la pantalla al 100%. Incluye bandeja Easy Align para una instalación perfecta sin burbujas.',
     'peso' => 0.03,
     'largo' => 14.5,
-    'ancho' => 7.0,
+    'ancho' => 7,
     'alto' => 0.03,
     'specs' => 
     array (
-      'Dureza' => '9H de silicato de litio',
-      'Grosor' => '0.29 mm',
-      'Antimicrobiano' => 'Tratamiento antibacteriano',
+      'Compatibilidad' => 'iPhone 15 Pro Max',
+      'Tipo' => 'Protector de pantalla',
+      'Material' => 'Vidrio UltraGlass 2',
+      'Características' => 'Protección de pantalla y conservación de sensibilidad táctil',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   98 => 
   array (
@@ -4069,7 +5230,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CS-25-4',
     'nombre' => 'Anker Protector de Lente de Cámara Tempered Glass',
     'marca' => 'Anker',
-    'modelo' => 'A7240011',
+    'modelo' => 'Protector de lente atribuido a Anker, modelo no confirmado',
     'precio' => 14.0,
     'precio_oferta' => NULL,
     'stock' => 35,
@@ -4082,10 +5243,19 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.2,
     'specs' => 
     array (
-      'Dureza' => 'Vidrio 9H + Marco de aluminio',
-      'Claridad' => '99.9% de transmisión de luz',
+      'Tipo declarado' => 'Protector de lentes de cámara',
+      'Marca declarada' => 'Anker',
+      'Modelo' => 'No identificado',
+      'Compatibilidad' => 'Teléfono no indicado',
+      'Estado' => 'Sin ficha oficial verificable',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   99 => 
   array (
@@ -4093,7 +5263,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CS-25-5',
     'nombre' => 'Apple Funda Smart Folio para iPad Air',
     'marca' => 'Apple',
-    'modelo' => 'MMW73ZM/A',
+    'modelo' => 'Smart Folio para iPad Air 11 pulgadas M2, gris carbón',
     'precio' => 79.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -4101,16 +5271,24 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Funda magnética frontal y trasera que activa y suspende la pantalla al abrirla o cerrarla.',
     'desc' => 'Se pliega en diferentes posiciones para crear un soporte para leer, ver videos, escribir con el teclado o dibujar con el Apple Pencil con comodidad.',
     'peso' => 0.2,
-    'largo' => 25.0,
-    'ancho' => 18.0,
+    'largo' => 25,
+    'ancho' => 18,
     'alto' => 1.1,
     'specs' => 
     array (
-      'Compatibilidad' => 'iPad Air 11" (M2) y 5.ª Gen',
-      'Material' => 'Poliuretano premium',
-      'Sujeción' => 'Magnética',
+      'Compatibilidad seleccionada' => 'iPad Air de 11 pulgadas M2',
+      'Tipo' => 'Funda magnética frontal y posterior',
+      'Función' => 'Activación al abrir y reposo al cerrar',
+      'Características' => 'Soporte plegable con varios ángulos',
+      'Contenido' => 'Smart Folio, iPad no incluido',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   100 => 
   array (
@@ -4118,30 +5296,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PH-27-1',
     'nombre' => 'Apple iPhone 15 Pro Max Titanio',
     'marca' => 'Apple',
-    'modelo' => 'MU773LL/A',
+    'modelo' => 'iPhone 15 Pro Max, 256 GB, titanio natural',
     'precio' => 1199.0,
     'precio_oferta' => NULL,
     'stock' => 16,
     'destacado' => true,
     'desc_corta' => 'Estructura de titanio aeroespacial, chip A17 Pro, botón de Acción y teleobjetivo de 5 aumentos.',
     'desc' => 'El iPhone más ligero y potente de la historia. Integra el revolucionario chip A17 Pro con trazado de rayos por hardware para juegos de consola. Su cámara de 48MP ofrece 7 distancias focales profesionales y transferencia USB 3 a 10Gbps.',
-    'peso' => 0.22,
+    'peso' => 0.221,
     'largo' => 15.99,
     'ancho' => 7.67,
-    'alto' => 0.83,
+    'alto' => 0.825,
     'specs' => 
     array (
-      'Pantalla' => '6.7" Super Retina XDR OLED 120Hz',
-      'Procesador' => 'A17 Pro (3nm)',
-      'Cámara' => '48 MP + 12 MP Ultra Wide + 12 MP Telefoto 5x',
-      'Conector' => 'USB-C (USB 3)',
+      'Procesador' => 'Apple A17 Pro',
+      'Almacenamiento' => '256 GB',
+      'Pantalla' => '6.7 pulgadas OLED Super Retina XDR, 2796 × 1290, ProMotion hasta 120 Hz',
+      'Cámara trasera' => 'Principal 48 MP, ultra gran angular 12 MP y teleobjetivo 12 MP de 5×',
+      'Cámara frontal' => '12 MP TrueDepth',
+      'Conexión' => '5G, Wi-Fi 6E, Bluetooth 5.3 y USB-C USB 3',
+      'Protección' => 'IP68, condiciones de laboratorio',
+      'Seguridad' => 'Face ID',
+      'Características' => 'Botón de acción y estructura de titanio',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'PH-27-1-V1',
-        'precio' => 1199.0,
+        'precio' => 1199,
         'stock' => 10,
         'opcion' => 
         array (
@@ -4152,7 +5335,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'PH-27-1-V2',
-        'precio' => 1399.0,
+        'precio' => 1399,
         'stock' => 6,
         'opcion' => 
         array (
@@ -4161,6 +5344,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   101 => 
   array (
@@ -4168,25 +5357,37 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PH-27-2',
     'nombre' => 'Samsung Galaxy S24 Ultra 5G con Galaxy AI',
     'marca' => 'Samsung',
-    'modelo' => 'SM-S928UZKEXAA',
+    'modelo' => 'Galaxy S24 Ultra, SM-S928B, 12 GB/256 GB',
     'precio' => 1299.0,
-    'precio_oferta' => 1199.0,
+    'precio_oferta' => 1199,
     'stock' => 12,
     'destacado' => true,
     'desc_corta' => 'Pantalla plana Dynamic AMOLED 2X de 2600 nits, marco de titanio, S Pen y Galaxy AI integrado.',
     'desc' => 'La era de la Inteligencia Artificial móvil. Traduce llamadas en vivo, rodea para buscar en Google y edita fotos mágicamente. Equipado con cámara de 200MP y cristal Corning Gorilla Armor antirreflejo.',
-    'peso' => 0.23,
+    'peso' => 0.232,
     'largo' => 16.23,
     'ancho' => 7.9,
     'alto' => 0.86,
     'specs' => 
     array (
-      'Pantalla' => '6.8" QHD+ 120Hz 2600 nits',
       'Procesador' => 'Snapdragon 8 Gen 3 for Galaxy',
-      'Cámara' => '200 MP + 50 MP + 12 MP + 10 MP',
-      'Lápiz' => 'S Pen integrado',
+      'Memoria' => '12 GB',
+      'Almacenamiento' => '256 GB',
+      'Pantalla' => '6.8 pulgadas Dynamic AMOLED 2X, 3120 × 1440, hasta 120 Hz',
+      'Cámaras posteriores' => '200 MP + 50 MP + 12 MP + 10 MP',
+      'Cámara frontal' => '12 MP',
+      'Batería' => '5000 mAh típica',
+      'Carga por cable' => 'Hasta 45 W',
+      'Protección' => 'IP68',
+      'Características' => 'S Pen, Galaxy AI y Samsung DeX',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   102 => 
   array (
@@ -4194,24 +5395,37 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PH-27-3',
     'nombre' => 'Google Pixel 8 Pro 128GB Obsidian 5G',
     'marca' => 'Google',
-    'modelo' => 'GA04833-US',
+    'modelo' => 'Pixel 8 Pro, 128 GB, Obsidian',
     'precio' => 799.0,
     'precio_oferta' => NULL,
     'stock' => 9,
     'destacado' => false,
     'desc_corta' => 'Procesador Google Tensor G3, las mejores cámaras computacionales del mundo y 7 años de soporte.',
     'desc' => 'Experiencia Android pura con la mejor fotografía móvil. Funciones exclusivas como Mejor Toma (Best Take), Editor Mágico y Borrador Mágico para Audio.',
-    'peso' => 0.21,
+    'peso' => 0.213,
     'largo' => 16.26,
     'ancho' => 7.65,
     'alto' => 0.88,
     'specs' => 
     array (
-      'Pantalla' => '6.7" LTPO OLED 120Hz',
       'Procesador' => 'Google Tensor G3',
-      'Sensor' => 'Termómetro integrado',
+      'Memoria' => '12 GB LPDDR5X',
+      'Almacenamiento' => '128 GB UFS 3.1',
+      'Pantalla' => '6.7 pulgadas LTPO OLED, 2992 × 1344, 1–120 Hz',
+      'Cámaras posteriores' => '50 MP + 48 MP ultra gran angular + 48 MP teleobjetivo',
+      'Cámara frontal' => '10.5 MP',
+      'Batería' => '5050 mAh típica',
+      'Conectividad' => '5G, Wi-Fi 7 y Bluetooth 5.3',
+      'Protección' => 'IP68',
+      'Características' => 'Actualizaciones durante 7 años desde lanzamiento',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   103 => 
   array (
@@ -4219,24 +5433,37 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PH-27-4',
     'nombre' => 'Xiaomi 14 Ultra 512GB Óptica Leica',
     'marca' => 'Xiaomi',
-    'modelo' => 'MZB0G68EU',
+    'modelo' => 'Xiaomi 14 Ultra global, 16 GB/512 GB, negro',
     'precio' => 1099.0,
     'precio_oferta' => NULL,
     'stock' => 7,
     'destacado' => false,
     'desc_corta' => 'Sensor de 1 pulgada con apertura variable continua, óptica Leica Summilux y 16GB de RAM.',
     'desc' => 'Una cámara profesional que también es un smartphone. 4 sensores de 50MP desarrollados junto a Leica para una calidad cinematográfica superior en foto y video.',
-    'peso' => 0.22,
+    'peso' => 0.2198,
     'largo' => 16.14,
     'ancho' => 7.53,
     'alto' => 0.92,
     'specs' => 
     array (
-      'Cámara' => 'Sensor Sony LYT-900 1" 50MP',
-      'Carga' => '90W con cable / 80W inalámbrica',
-      'Batería' => '5000 mAh',
+      'Procesador' => 'Snapdragon 8 Gen 3',
+      'Memoria' => '16 GB LPDDR5X',
+      'Almacenamiento' => '512 GB UFS 4.0',
+      'Pantalla' => '6.73 pulgadas LTPO AMOLED 3200 × 1440, 1–120 Hz',
+      'Cámaras' => 'Cuatro cámaras Leica de 50 MP',
+      'Cámara principal' => 'Sensor LYT-900 de 1 pulgada, apertura variable f/1.63–f/4.0',
+      'Batería' => '5000 mAh típica, versión global',
+      'Carga' => '90 W por cable y 80 W inalámbrica',
+      'Protección' => 'IP68',
+      'Características' => 'Óptica Leica y teleobjetivos de 75 y 120 mm',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   104 => 
   array (
@@ -4244,7 +5471,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PH-27-5',
     'nombre' => 'OnePlus 12 512GB Snapdragon 8 Gen 3',
     'marca' => 'OnePlus',
-    'modelo' => 'CPH2583',
+    'modelo' => 'OnePlus 12 global, 16 GB/512 GB',
     'precio' => 799.0,
     'precio_oferta' => NULL,
     'stock' => 11,
@@ -4254,14 +5481,27 @@ class CatalogoFijoSeeder extends Seeder
     'peso' => 0.22,
     'largo' => 16.43,
     'ancho' => 7.58,
-    'alto' => 0.92,
+    'alto' => 0.915,
     'specs' => 
     array (
-      'Pantalla' => '6.82" 2K 120Hz 4500 nits',
-      'Batería' => '5400 mAh dual-cell',
-      'RAM' => '16 GB LPDDR5X',
+      'Procesador' => 'Snapdragon 8 Gen 3',
+      'Memoria' => '16 GB LPDDR5X',
+      'Almacenamiento' => '512 GB UFS 4.0',
+      'Pantalla' => '6.82 pulgadas LTPO, 3168 × 1440, 1–120 Hz',
+      'Cámaras posteriores' => '50 MP + 48 MP + 64 MP',
+      'Cámara frontal' => '32 MP',
+      'Batería' => '5400 mAh',
+      'Carga' => 'Hasta 100 W SUPERVOOC y 50 W AIRVOOC en referencia europea',
+      'Protección' => 'IP65',
+      'Características' => 'Sistema de cámara Hasselblad',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   105 => 
   array (
@@ -4269,29 +5509,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TAB-28-1',
     'nombre' => 'Apple iPad Pro 11" M4 Pantalla Ultra Retina',
     'marca' => 'Apple',
-    'modelo' => 'MVV83LL/A',
+    'modelo' => 'iPad Pro 11 pulgadas M4 (2024), Wi-Fi, 256 GB',
     'precio' => 999.0,
     'precio_oferta' => NULL,
     'stock' => 13,
     'destacado' => true,
     'desc_corta' => 'El dispositivo Apple más delgado de la historia: chip M4 con pantalla OLED en tándem de 1000 nits.',
     'desc' => 'Potencia descomunal para ilustradores, editores y diseñadores. El chip M4 con motor neuronal de 38 billones de operaciones por segundo vuela en tareas de inteligencia artificial.',
-    'peso' => 0.44,
+    'peso' => 0.444,
     'largo' => 24.97,
     'ancho' => 17.75,
     'alto' => 0.53,
     'specs' => 
     array (
-      'Pantalla' => '11" Ultra Retina XDR Tandem OLED',
-      'Procesador' => 'Apple M4',
-      'Grosor' => 'Apenas 5.3 mm',
+      'Procesador' => 'Apple M4, CPU de 9 núcleos y GPU de 10 núcleos en 256 GB',
+      'Memoria' => '8 GB',
+      'Almacenamiento' => '256 GB',
+      'Pantalla' => 'Ultra Retina XDR Tandem OLED, 2420 × 1668, ProMotion 10–120 Hz',
+      'Cámara' => 'Trasera 12 MP y frontal ultra gran angular 12 MP',
+      'Puerto' => 'Thunderbolt/USB 4 USB-C',
+      'Conectividad' => 'Wi-Fi 6E y Bluetooth 5.3',
+      'Seguridad' => 'Face ID',
+      'Características' => 'Compatible con Apple Pencil Pro y Apple Pencil USB-C',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'TAB-28-1-V1',
-        'precio' => 999.0,
+        'precio' => 999,
         'stock' => 8,
         'opcion' => 
         array (
@@ -4302,7 +5548,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'TAB-28-1-V2',
-        'precio' => 1199.0,
+        'precio' => 1199,
         'stock' => 5,
         'opcion' => 
         array (
@@ -4311,6 +5557,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   106 => 
   array (
@@ -4318,24 +5570,37 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TAB-28-2',
     'nombre' => 'Samsung Galaxy Tab S9 Ultra 256GB 14.6"',
     'marca' => 'Samsung',
-    'modelo' => 'SM-X910NZAAXAR',
+    'modelo' => 'Galaxy Tab S9 Ultra Wi-Fi 256 GB, SM-X910',
     'precio' => 1049.0,
-    'precio_oferta' => 999.0,
+    'precio_oferta' => 999,
     'stock' => 8,
     'destacado' => false,
     'desc_corta' => 'Pantalla gigante Dynamic AMOLED 2X de 14.6", resistencia al agua IP68 y S Pen incluido en caja.',
     'desc' => 'Reemplaza a tu laptop con Samsung DeX multiventana. Única tablet de su tamaño con certificación IP68 para resistir accidentes con líquidos en el escritorio.',
-    'peso' => 0.73,
+    'peso' => 0.732,
     'largo' => 32.64,
     'ancho' => 20.86,
     'alto' => 0.55,
     'specs' => 
     array (
-      'Pantalla' => '14.6" WQXGA+ 120Hz',
       'Procesador' => 'Snapdragon 8 Gen 2 for Galaxy',
-      'Batería' => '11.200 mAh',
+      'Memoria' => '12 GB',
+      'Almacenamiento' => '256 GB y expansión microSD',
+      'Pantalla' => '14.6 pulgadas Dynamic AMOLED 2X, 2960 × 1848, 120 Hz',
+      'Cámaras traseras' => '13 MP + 8 MP',
+      'Cámaras frontales' => '12 MP + 12 MP',
+      'Batería' => '11200 mAh típica',
+      'Carga' => 'Hasta 45 W',
+      'Protección' => 'IP68',
+      'Características' => 'S Pen incluido y Samsung DeX',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   107 => 
   array (
@@ -4343,7 +5608,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TAB-28-3',
     'nombre' => 'Xiaomi Pad 6 128GB 11" 144Hz WQHD+',
     'marca' => 'Xiaomi',
-    'modelo' => 'VHU4379EU',
+    'modelo' => 'Xiaomi Pad 6, 6 GB/128 GB, gris grafito',
     'precio' => 349.0,
     'precio_oferta' => NULL,
     'stock' => 16,
@@ -4351,16 +5616,28 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Increíble pantalla 2.8K fluida de 144Hz, cuerpo de aluminio unibody y 4 altavoces Dolby Atmos.',
     'desc' => 'La mejor tablet de gama media para estudiantes y entretenimiento multimedia. Batería de 8840mAh para ver series y trabajar durante todo el día sin recargar.',
     'peso' => 0.49,
-    'largo' => 25.39,
-    'ancho' => 16.51,
-    'alto' => 0.65,
+    'largo' => 25.395,
+    'ancho' => 16.518,
+    'alto' => 0.651,
     'specs' => 
     array (
-      'Pantalla' => '11" 2.8K 144Hz IPS',
       'Procesador' => 'Snapdragon 870',
-      'Audio' => '4 Altavoces estéreo',
+      'Memoria' => '6 GB LPDDR5',
+      'Almacenamiento' => '128 GB UFS 3.1',
+      'Pantalla' => '11 pulgadas LCD 2880 × 1800, hasta 144 Hz',
+      'Cámara trasera/frontal' => '13 MP/8 MP',
+      'Batería' => '8840 mAh típica',
+      'Carga' => '33 W',
+      'Audio' => 'Cuatro altavoces Dolby Atmos',
+      'Características' => 'Wi-Fi, sin conexión celular',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   108 => 
   array (
@@ -4368,7 +5645,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TAB-28-4',
     'nombre' => 'Lenovo Tab P11 Pro Gen 2 128GB OLED',
     'marca' => 'Lenovo',
-    'modelo' => 'ZAB50101US',
+    'modelo' => 'Tab P11 Pro Gen 2, 6 GB/128 GB',
     'precio' => 329.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -4381,11 +5658,22 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 0.68,
     'specs' => 
     array (
-      'Pantalla' => '11.2" 2.5K OLED 120Hz',
-      'Altavoces' => '4x JBL con Dolby Atmos',
-      'Modo' => 'Segunda pantalla PC',
+      'Procesador' => 'MediaTek Kompanio 1300T',
+      'Memoria' => '6 GB',
+      'Almacenamiento' => '128 GB con expansión microSD',
+      'Pantalla' => '11.2 pulgadas OLED, 2560 × 1536, 120 Hz',
+      'Cámara trasera/frontal' => '13 MP/8 MP',
+      'Batería' => '8200 mAh típica',
+      'Audio' => 'Cuatro altavoces JBL con Dolby Atmos',
+      'Características' => 'Dolby Vision y HDR10+',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   109 => 
   array (
@@ -4393,24 +5681,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TAB-28-5',
     'nombre' => 'Huawei MatePad 11.5" PaperMatte Edition',
     'marca' => 'Huawei',
-    'modelo' => 'GOT-W29',
+    'modelo' => 'MatePad 11.5 PaperMatte Edition (2023), 8 GB/256 GB',
     'precio' => 299.0,
     'precio_oferta' => NULL,
     'stock' => 12,
     'destacado' => false,
     'desc_corta' => 'Pantalla antirreflejo con textura de papel que elimina el 97% de los brillos para lectura y dibujo.',
     'desc' => 'Escribe y dibuja como si fuera un cuaderno de papel real gracias a su grabado nanométrico que simula la fricción del grafito. Cuida la vista en largas lecturas.',
-    'peso' => 0.5,
-    'largo' => 26.09,
-    'ancho' => 17.68,
-    'alto' => 0.69,
+    'peso' => 0.499,
+    'largo' => 26.088,
+    'ancho' => 17.682,
+    'alto' => 0.685,
     'specs' => 
     array (
-      'Pantalla' => '11.5" 120Hz PaperMatte',
-      'Relación' => '3:2 para productividad',
-      'Software' => 'Huawei Notes integrado',
+      'Procesador' => 'Qualcomm Snapdragon 7 Gen 1',
+      'Memoria' => '8 GB',
+      'Almacenamiento' => '256 GB',
+      'Pantalla' => '11.5 pulgadas PaperMatte 2200 × 1440, hasta 120 Hz',
+      'Cámara trasera/frontal' => '13 MP/8 MP',
+      'Batería' => '7700 mAh típica',
+      'Carga' => '22.5 W',
+      'Características' => 'Pantalla antirreflejos y HarmonyOS',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   110 => 
   array (
@@ -4418,29 +5717,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'WAT-29-1',
     'nombre' => 'Apple Watch Series 9 GPS 45mm',
     'marca' => 'Apple',
-    'modelo' => 'MR9A3LL/A',
+    'modelo' => 'Watch Series 9 GPS, aluminio, 45 mm',
     'precio' => 399.0,
     'precio_oferta' => NULL,
     'stock' => 21,
     'destacado' => true,
     'desc_corta' => 'Gesto de Doble Toque, pantalla con el doble de brillo de 2000 nits y chip S9 SiP ultrarrápido.',
     'desc' => 'Controla tu reloj sin tocar la pantalla simplemente juntando el dedo índice y el pulgar dos veces. Sensor de temperatura, medición de oxígeno en sangre y electrocardiograma (ECG).',
-    'peso' => 0.04,
+    'peso' => 0.0387,
     'largo' => 4.5,
     'ancho' => 3.8,
     'alto' => 1.07,
     'specs' => 
     array (
-      'Pantalla' => 'OLED Retina Siempre Activa 2000 nits',
       'Chip' => 'Apple S9 SiP',
-      'Sensores' => 'ECG, SpO2, Temperatura, Detección de Caídas',
+      'Pantalla' => 'Retina LTPO OLED siempre activa, hasta 2000 nits',
+      'Almacenamiento' => '64 GB',
+      'Conexión' => 'GPS, Wi-Fi y Bluetooth 5.3',
+      'Resistencia' => 'Agua hasta 50 m e IP6X',
+      'Autonomía' => 'Hasta 18 horas, hasta 36 en bajo consumo',
+      'Características' => 'Digital Crown y gesto de doble toque',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'WAT-29-1-V1',
-        'precio' => 399.0,
+        'precio' => 399,
         'stock' => 12,
         'opcion' => 
         array (
@@ -4451,7 +5754,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'WAT-29-1-V2',
-        'precio' => 399.0,
+        'precio' => 399,
         'stock' => 9,
         'opcion' => 
         array (
@@ -4460,6 +5763,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   111 => 
   array (
@@ -4467,24 +5776,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'WAT-29-2',
     'nombre' => 'Samsung Galaxy Watch 6 Classic 47mm LTE',
     'marca' => 'Samsung',
-    'modelo' => 'SM-R965UZKAXAA',
+    'modelo' => 'Galaxy Watch6 Classic LTE 47 mm, SM-R965F',
     'precio' => 369.0,
-    'precio_oferta' => 339.0,
+    'precio_oferta' => 339,
     'stock' => 11,
     'destacado' => false,
     'desc_corta' => 'Bisel giratorio físico icónico, cristal de zafiro y análisis de composición corporal BIA.',
     'desc' => 'Navega por tus aplicaciones girando su bisel de acero inoxidable con respuesta táctil mecánica. Monitorea tu porcentaje de grasa corporal, masa muscular y calidad de sueño.',
-    'peso' => 0.06,
+    'peso' => 0.059,
     'largo' => 4.65,
     'ancho' => 4.65,
     'alto' => 1.09,
     'specs' => 
     array (
-      'Bisel' => 'Giratorio físico de acero',
-      'Cristal' => 'Cristal de zafiro',
-      'Conectividad' => '4G LTE + GPS + NFC',
+      'Procesador' => 'Exynos W930',
+      'Memoria' => '2 GB RAM y 16 GB almacenamiento',
+      'Pantalla' => '1.5 pulgadas Super AMOLED, 480 × 480',
+      'Batería' => '425 mAh típica',
+      'Conectividad' => 'LTE/eSIM, Bluetooth 5.3, Wi-Fi y NFC',
+      'Protección' => '5 ATM e IP68',
+      'Características' => 'Bisel giratorio y Wear OS',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   112 => 
   array (
@@ -4492,24 +5811,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'WAT-29-3',
     'nombre' => 'Garmin Fenix 7 Pro Sapphire Solar GPS Titán',
     'marca' => 'Garmin',
-    'modelo' => '010-02777-10',
+    'modelo' => 'fēnix 7 Pro Sapphire Solar, 47 mm, titanio',
     'precio' => 799.0,
     'precio_oferta' => NULL,
     'stock' => 6,
     'destacado' => true,
     'desc_corta' => 'Lente de carga solar que extiende la batería hasta 22 días, linterna LED y mapas topográficos.',
     'desc' => 'El reloj de aventura multideporte definitivo. Caja de polímero reforzado con bisel y tapa trasera de titanio. Mide métricas de entrenamiento avanzadas, pendientes en subida y resistencia en carrera.',
-    'peso' => 0.07,
+    'peso' => 0.073,
     'largo' => 4.7,
     'ancho' => 4.7,
     'alto' => 1.45,
     'specs' => 
     array (
-      'Batería' => 'Hasta 22 días con energía solar',
-      'GPS' => 'Multibanda de alta precisión',
-      'Linterna' => 'LED integrada',
+      'Pantalla' => '1.3 pulgadas MIP, 260 × 260',
+      'Cristal' => 'Power Sapphire con carga solar',
+      'Caja' => '47 mm, bisel de titanio',
+      'Posicionamiento' => 'GNSS multibanda y SatIQ',
+      'Resistencia' => '10 ATM',
+      'Autonomía' => 'Hasta 18 días en modo smartwatch, hasta 22 con condiciones solares oficiales',
+      'Características' => 'Linterna LED, mapas y métricas deportivas',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   113 => 
   array (
@@ -4517,7 +5846,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'WAT-29-4',
     'nombre' => 'Amazfit GTR 4 Smartwatch GPS Dual Band',
     'marca' => 'Amazfit',
-    'modelo' => 'W2166OV1N',
+    'modelo' => 'GTR 4 original',
     'precio' => 189.0,
     'precio_oferta' => NULL,
     'stock' => 18,
@@ -4530,11 +5859,21 @@ class CatalogoFijoSeeder extends Seeder
     'alto' => 1.06,
     'specs' => 
     array (
-      'Pantalla' => '1.43" AMOLED HD',
-      'Batería' => '14 Días de uso típico',
-      'Deportes' => '150+ Modos deportivos',
+      'Pantalla' => '1.43 pulgadas AMOLED, 466 × 466',
+      'GPS' => 'Doble banda',
+      'Resistencia' => '5 ATM',
+      'Batería' => '475 mAh',
+      'Autonomía' => 'Hasta 14 días con uso típico',
+      'Sistema' => 'Zepp OS',
+      'Características' => 'Llamadas Bluetooth y seguimiento de salud',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   114 => 
   array (
@@ -4542,24 +5881,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'WAT-29-5',
     'nombre' => 'Xiaomi Watch 2 Pro 46mm Wear OS Snapdragon',
     'marca' => 'Xiaomi',
-    'modelo' => 'BHR7584GL',
+    'modelo' => 'Watch 2 Pro, versión Bluetooth',
     'precio' => 229.0,
     'precio_oferta' => NULL,
     'stock' => 14,
     'destacado' => false,
     'desc_corta' => 'Sistema Google Wear OS con Google Wallet, Maps, Play Store y procesador Snapdragon W5+ Gen 1.',
     'desc' => 'Toda la tienda de Google en tu muñeca. Paga tus compras con Google Pay mediante NFC y responde mensajes de WhatsApp con teclado en pantalla o dictado de voz.',
-    'peso' => 0.05,
+    'peso' => 0.0545,
     'largo' => 4.76,
     'ancho' => 4.59,
     'alto' => 1.18,
     'specs' => 
     array (
-      'Sistema' => 'Wear OS by Google',
-      'Procesador' => 'Snapdragon W5+ Gen 1 (4nm)',
-      'Cuerpo' => 'Acero inoxidable',
+      'Procesador' => 'Snapdragon W5+ Gen 1',
+      'Memoria' => '2 GB RAM y 32 GB almacenamiento',
+      'Pantalla' => '1.43 pulgadas AMOLED, 466 × 466',
+      'Batería' => '495 mAh',
+      'Autonomía' => 'Hasta 65 horas para Bluetooth',
+      'Sistema' => 'Wear OS',
+      'Resistencia' => '5 ATM',
+      'Características' => 'GNSS y aplicaciones de Google',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   115 => 
   array (
@@ -4567,25 +5917,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TV-30-1',
     'nombre' => 'LG OLED evo C3 55" 4K Smart TV 120Hz',
     'marca' => 'LG',
-    'modelo' => 'OLED55C3PUA',
+    'modelo' => 'OLED evo C3 55 pulgadas, OLED55C3PSA',
     'precio' => 1299.0,
-    'precio_oferta' => 1199.0,
+    'precio_oferta' => 1199,
     'stock' => 6,
     'destacado' => true,
     'desc_corta' => 'Procesador α9 AI 4K Gen6, brillo potenciado Brightness Booster y 4 puertos HDMI 2.1 a 120Hz.',
     'desc' => 'La televisión predilecta para cinéfilos y gamers. Píxeles autoemisivos que se apagan por completo para un contraste infinito con Dolby Vision, Dolby Atmos y FreeSync / G-SYNC.',
     'peso' => 16.0,
-    'largo' => 122.2,
-    'ancho' => 23.0,
+    'largo' => 23.0,
+    'ancho' => 122.2,
     'alto' => 75.7,
     'specs' => 
     array (
-      'Panel' => '55" OLED evo 4K 120Hz',
-      'Puertos' => '4x HDMI 2.1 48Gbps',
+      'Pantalla' => 'OLED evo de 55 pulgadas',
+      'Resolución' => '3840 × 2160 4K',
+      'Frecuencia' => '120 Hz',
+      'Procesador' => 'α9 AI 4K Gen6',
       'Sistema' => 'webOS 23',
-      'Gaming' => 'G-SYNC / FreeSync / 0.1ms',
+      'HDR' => 'Dolby Vision, HDR10 y HLG',
+      'HDMI' => '4 puertos con funciones HDMI 2.1',
+      'Características' => 'VRR, ALLM, G-SYNC Compatible y FreeSync',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   116 => 
   array (
@@ -4593,7 +5953,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TV-30-2',
     'nombre' => 'Samsung Neo QLED 65" QN90C 4K Mini-LED',
     'marca' => 'Samsung',
-    'modelo' => 'QN65QN90CAFXZA',
+    'modelo' => 'Neo QLED QN90C 65 pulgadas, QN65QN90CAPXPA',
     'precio' => 1499.0,
     'precio_oferta' => NULL,
     'stock' => 5,
@@ -4601,16 +5961,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Miles de Quantum Mini LEDs con control de luz preciso Quantum Matrix y procesador Neural 4K.',
     'desc' => 'Brillo despampanante ideal para salas iluminadas con grandes ventanales. La tecnología antirreflejo elimina los destellos de lámparas y el sonido OTS+ sigue la acción en pantalla.',
     'peso' => 27.5,
-    'largo' => 144.6,
-    'ancho' => 27.0,
-    'alto' => 89.1,
+    'largo' => 27.06,
+    'ancho' => 144.63,
+    'alto' => 89.13,
     'specs' => 
     array (
-      'Panel' => '65" Neo QLED Mini-LED 120Hz',
-      'Procesador' => 'Neural Quantum Processor 4K',
-      'Audio' => 'Dolby Atmos 60W 4.2.2 canales',
+      'Pantalla' => 'Neo QLED Mini LED de 65 pulgadas',
+      'Resolución' => '3840 × 2160',
+      'Frecuencia' => '120 Hz',
+      'Sistema' => 'Tizen Smart TV',
+      'HDR' => 'Neo Quantum HDR+',
+      'HDMI' => '4 puertos',
+      'Características' => 'Quantum Matrix, VRR, ALLM y eARC',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   117 => 
   array (
@@ -4618,25 +5988,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TV-30-3',
     'nombre' => 'Sony Bravia XR 55" A80L OLED 4K Google TV',
     'marca' => 'Sony',
-    'modelo' => 'XR55A80L',
+    'modelo' => 'BRAVIA XR-55A80L',
     'precio' => 1399.0,
     'precio_oferta' => NULL,
     'stock' => 5,
     'destacado' => false,
     'desc_corta' => 'Procesador Cognitivo XR que replica cómo perciben los ojos humanos y sonido Acoustic Surface.',
     'desc' => 'La propia pantalla vibra con actuadores invisibles para emitir el sonido directamente desde el lugar donde ocurren los diálogos. Funciones exclusivas diseñadas para PlayStation 5.',
-    'peso' => 17.9,
-    'largo' => 122.7,
-    'ancho' => 32.7,
+    'peso' => 19.5,
+    'largo' => 33.0,
+    'ancho' => 122.7,
     'alto' => 73.8,
     'specs' => 
     array (
-      'Panel' => '55" OLED 4K HDR',
+      'Pantalla' => 'OLED de 55 pulgadas',
+      'Resolución' => '3840 × 2160',
+      'Frecuencia' => '120 Hz',
       'Procesador' => 'Cognitive Processor XR',
-      'Audio' => 'Acoustic Surface Audio+',
       'Sistema' => 'Google TV',
+      'HDR' => 'Dolby Vision, HDR10 y HLG',
+      'HDMI' => '4 puertos, dos con funciones HDMI 2.1 avanzadas',
+      'Características' => 'Acoustic Surface Audio+, VRR y ALLM',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   118 => 
   array (
@@ -4644,24 +6024,33 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TV-30-4',
     'nombre' => 'Hisense U8K 55" Mini-LED ULED 4K 144Hz',
     'marca' => 'Hisense',
-    'modelo' => '55U8K',
+    'modelo' => 'U8K 55 pulgadas, 55U8K, edición estadounidense',
     'precio' => 749.0,
-    'precio_oferta' => 699.0,
+    'precio_oferta' => 699,
     'stock' => 8,
     'destacado' => false,
     'desc_corta' => 'Brillo pico colosal de 1500 nits, panel nativo de 144Hz con FreeSync Premium Pro y subwoofer.',
     'desc' => 'El mejor valor de la tecnología Mini-LED del mercado. Integra subwoofer trasero de 50W y compatibilidad total con todos los formatos HDR del mercado (Dolby Vision IQ, HDR10+, HLG).',
-    'peso' => 19.8,
-    'largo' => 123.2,
-    'ancho' => 30.0,
-    'alto' => 77.0,
+    'peso' => 19.006,
+    'largo' => 32.004,
+    'ancho' => 123.19,
+    'alto' => 77.47,
     'specs' => 
     array (
-      'Panel' => '55" Mini-LED ULED 144Hz',
-      'Brillo' => '1500 nits pico',
-      'Atenuación Local' => 'Más de 600 zonas',
+      'Pantalla' => 'LCD Mini LED ULED de 55 pulgadas',
+      'Resolución' => '3840 × 2160',
+      'Frecuencia nativa' => '144 Hz',
+      'Sistema' => 'Google TV',
+      'HDR' => 'Dolby Vision y HDR10+',
+      'Características' => 'Atenuación local y funciones de juego VRR',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   119 => 
   array (
@@ -4669,24 +6058,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'TV-30-5',
     'nombre' => 'Philips 55" 4K UHD LED Ambilight Android TV',
     'marca' => 'Philips',
-    'modelo' => '55PUT7906',
+    'modelo' => 'Philips 55PUT7374/56',
     'precio' => 529.0,
     'precio_oferta' => NULL,
     'stock' => 9,
     'destacado' => false,
     'desc_corta' => 'Luces LED inteligentes Ambilight en tres lados que proyectan los colores de la pantalla en tu pared.',
     'desc' => 'Una experiencia visual única: las luces traseras Ambilight se sincronizan en milisegundos con las escenas de tu película para hacer que la pantalla parezca mucho más grande.',
-    'peso' => 14.5,
-    'largo' => 123.1,
-    'ancho' => 25.6,
-    'alto' => 73.5,
+    'peso' => 16.4,
+    'largo' => 23.54,
+    'ancho' => 123.66,
+    'alto' => 74.2,
     'specs' => 
     array (
-      'Iluminación' => 'Ambilight de 3 lados integrado',
-      'Resolución' => '4K UHD HDR',
-      'Sistema' => 'Android TV con comandos de voz',
+      'Pantalla' => 'LED de 55 pulgadas',
+      'Resolución' => '3840 × 2160 4K',
+      'Sistema' => 'Android TV',
+      'Procesador' => 'P5 Perfect Picture Engine',
+      'Ambilight' => '3 lados',
+      'HDR' => 'HDR10+',
+      'Características' => 'Televisor con iluminación ambiental Ambilight',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   120 => 
   array (
@@ -4694,24 +6093,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PRN-31-1',
     'nombre' => 'Epson EcoTank L3250 Multifuncional Wi-Fi',
     'marca' => 'Epson',
-    'modelo' => 'C11CJ67301',
+    'modelo' => 'EcoTank L3250',
     'precio' => 189.0,
-    'precio_oferta' => 179.0,
+    'precio_oferta' => 179,
     'stock' => 18,
     'destacado' => true,
     'desc_corta' => 'Imprime hasta 4500 páginas en negro y 7500 a color con la tinta incluida sin cartuchos costosos.',
     'desc' => 'La multifuncional más vendida para hogares y estudiantes. Sistema de tanque de tinta frontal EcoTank con botellas codificadas que no derraman. Conexión inalámbrica y app Epson Smart Panel.',
     'peso' => 3.9,
-    'largo' => 37.5,
-    'ancho' => 34.7,
+    'largo' => 34.7,
+    'ancho' => 37.5,
     'alto' => 17.9,
     'specs' => 
     array (
-      'Rendimiento' => '4.500 págs negro / 7.500 págs color',
-      'Resolución' => '5760 x 1440 dpi',
-      'Tecnología' => 'MicroPiezo Heat-Free sin calor',
+      'Funciones' => 'Impresión, copia y escaneo',
+      'Tecnología' => 'Inyección de tinta con depósitos',
+      'Color' => '4 colores',
+      'Resolución de impresión' => 'Hasta 5760 × 1440 dpi',
+      'Velocidad ISO' => 'Hasta 10 ppm en negro y 5 ppm en color',
+      'Conectividad' => 'USB, Wi-Fi y Wi-Fi Direct',
+      'Dúplex' => 'Manual',
+      'Características' => 'Impresión desde dispositivos móviles',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   121 => 
   array (
@@ -4719,7 +6129,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PRN-31-2',
     'nombre' => 'HP Smart Tank 580 Multifuncional Inalámbrica',
     'marca' => 'HP',
-    'modelo' => '1F3Y2A',
+    'modelo' => 'Smart Tank 580, 1F3Y2A',
     'precio' => 169.0,
     'precio_oferta' => NULL,
     'stock' => 15,
@@ -4727,15 +6137,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Conexión Wi-Fi autorreparable, escáner de alta resolución y hasta 2 años de tinta en la caja.',
     'desc' => 'Imprime, escanea y copia sin interrupciones. Los sensores automáticos de nivel de tinta te alertan antes de que se agote. Compatible con Apple AirPrint y Wi-Fi Direct.',
     'peso' => 5.03,
-    'largo' => 43.46,
-    'ancho' => 36.15,
-    'alto' => 15.72,
+    'largo' => 36.153,
+    'ancho' => 43.466,
+    'alto' => 15.726,
     'specs' => 
     array (
-      'Velocidad' => '12 ppm negro / 5 ppm color',
-      'Conectividad' => 'Wi-Fi doble banda / Bluetooth LE / USB',
+      'Funciones' => 'Impresión, copia y escaneo',
+      'Tecnología' => 'Inyección de tinta con depósitos',
+      'Color' => '4 colores',
+      'Velocidad ISO' => 'Hasta 12 ppm en negro y 5 ppm en color',
+      'Conectividad' => 'USB, Wi-Fi y Wi-Fi Direct',
+      'Dúplex' => 'Manual',
+      'Características' => 'Impresión móvil mediante servicios compatibles',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   122 => 
   array (
@@ -4743,7 +6164,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PRN-31-3',
     'nombre' => 'Canon PIXMA G3110 Tanque Continuo Wi-Fi',
     'marca' => 'Canon',
-    'modelo' => '2315C004AA',
+    'modelo' => 'PIXMA G3110',
     'precio' => 159.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -4751,15 +6172,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Texto negro nítido con tinta de pigmento y fotos vibrantes sin bordes hasta tamaño carta.',
     'desc' => 'Sistema de tinta híbrido que combina tinta negra a base de pigmento para documentos de texto que no se corren con el resaltador y tintas a base de colorantes para fotos brillantes.',
     'peso' => 6.3,
-    'largo' => 44.5,
-    'ancho' => 33.0,
+    'largo' => 33.0,
+    'ancho' => 44.5,
     'alto' => 16.3,
     'specs' => 
     array (
-      'Fotos' => 'Impresión de fotos sin bordes 10x15cm en 60s',
-      'Rendimiento' => '6.000 págs negro / 7.000 págs color',
+      'Funciones' => 'Impresión, copia y escaneo',
+      'Tecnología' => 'Inyección de tinta de tanque integrado',
+      'Resolución de impresión' => 'Hasta 4800 × 1200 dpi',
+      'Velocidad' => 'Hasta 8.8 ipm negro y 5 ipm color',
+      'Conectividad' => 'USB y Wi-Fi',
+      'Dúplex' => 'Manual',
+      'Características' => 'Canon PRINT y escaneo de documentos A4/carta',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   123 => 
   array (
@@ -4767,7 +6199,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PRN-31-4',
     'nombre' => 'Brother HL-L2350DW Láser Monocromática Dúplex',
     'marca' => 'Brother',
-    'modelo' => 'HLL2350DW',
+    'modelo' => 'HL-L2350DW, referencia europea A4',
     'precio' => 149.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -4775,17 +6207,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Velocidad láser de hasta 32 páginas por minuto con impresión a doble cara automática (dúplex).',
     'desc' => 'El caballo de batalla para oficinas y despachos de abogados. Bandeja de papel cerrada con capacidad para 250 hojas que protege el papel del polvo y la humedad.',
     'peso' => 7.2,
-    'largo' => 35.6,
-    'ancho' => 36.0,
+    'largo' => 36.0,
+    'ancho' => 35.6,
     'alto' => 18.3,
     'specs' => 
     array (
-      'Tecnología' => 'Láser electrofotográfico',
-      'Velocidad' => '32 ppm',
-      'Bandeja' => '250 Hojas',
+      'Tipo' => 'Impresora láser monocromática, sin escáner',
+      'Velocidad' => 'Hasta 30 ppm A4',
       'Dúplex' => 'Automático',
+      'Bandeja' => '250 hojas',
+      'Conectividad' => 'USB, Wi-Fi y Wi-Fi Direct',
+      'Memoria' => '64 MB',
+      'Características' => 'Impresión móvil y pantalla LCD de una línea',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   124 => 
   array (
@@ -4793,7 +6234,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'PRN-31-5',
     'nombre' => 'Epson EcoTank L8180 Fotográfica 6 Colores A3+',
     'marca' => 'Epson',
-    'modelo' => 'C11CJ21301',
+    'modelo' => 'EcoTank L8180',
     'precio' => 649.0,
     'precio_oferta' => NULL,
     'stock' => 5,
@@ -4801,16 +6242,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => '6 tintas Claria ET con gris y negro fotográfico para impresiones artísticas de hasta tamaño A3+.',
     'desc' => 'La impresora soñada para fotógrafos de estudio, arquitectos y diseñadores gráficos. Permite imprimir sobre cartulinas gruesas de hasta 1.3mm y lienzos canvas sin atascos.',
     'peso' => 11.1,
-    'largo' => 52.3,
-    'ancho' => 37.9,
+    'largo' => 37.9,
+    'ancho' => 52.3,
     'alto' => 16.9,
     'specs' => 
     array (
-      'Formato Máximo' => 'A3+ (32.9 x 48.3 cm)',
-      'Tintas' => '6 Colores Claria ET',
-      'Pantalla' => '4.3" Táctil a color',
+      'Funciones' => 'Impresión, copia y escaneo',
+      'Tecnología' => 'Tanques de tinta de 6 colores',
+      'Impresión máxima' => 'A3+',
+      'Resolución de impresión' => 'Hasta 5760 × 1440 dpi',
+      'Conectividad' => 'USB, Ethernet, Wi-Fi y Wi-Fi Direct',
+      'Características' => 'Impresión fotográfica y dúplex en tamaños compatibles',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   125 => 
   array (
@@ -4818,7 +6268,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CON-33-1',
     'nombre' => 'Sony PlayStation 5 Slim Edición Disco 1TB',
     'marca' => 'Sony',
-    'modelo' => 'CFI-2000A01',
+    'modelo' => 'PlayStation 5 Slim Disc, familia CFI-2000, 1 TB',
     'precio' => 499.0,
     'precio_oferta' => NULL,
     'stock' => 12,
@@ -4826,16 +6276,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Chasis un 30% más compacto con 1TB de SSD ultra rápido, audio 3D Tempest y control DualSense.',
     'desc' => 'Disfruta de juegos en 4K hasta a 120 FPS con retroalimentación háptica y gatillos adaptativos que simulan la tensión de una cuerda de arco o el retroceso de un arma en tus manos.',
     'peso' => 3.2,
-    'largo' => 35.8,
-    'ancho' => 21.6,
+    'largo' => 21.6,
+    'ancho' => 35.8,
     'alto' => 9.6,
     'specs' => 
     array (
-      'Almacenamiento' => '1 TB SSD personalizado',
-      'Unidad Óptica' => 'Ultra HD Blu-ray desmontable',
-      'Resolución' => '4K / 120Hz / HDR',
+      'Procesador' => 'AMD Zen 2 de 8 núcleos y 16 hilos',
+      'Gráficos' => 'AMD RDNA 2 personalizada',
+      'Memoria' => '16 GB GDDR6',
+      'Almacenamiento' => 'SSD de 1 TB',
+      'Unidad óptica' => 'Ultra HD Blu-ray',
+      'Video' => 'HDMI con salida hasta 4K/120 Hz en juegos compatibles',
+      'Características' => 'Mando DualSense y lector de discos desmontable',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   126 => 
   array (
@@ -4843,24 +6303,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CON-33-2',
     'nombre' => 'Microsoft Xbox Series X 1TB Consola',
     'marca' => 'Microsoft',
-    'modelo' => 'RRT-00001',
+    'modelo' => 'Xbox Series X 1 TB, negro, lector de discos',
     'precio' => 489.0,
     'precio_oferta' => NULL,
     'stock' => 10,
     'destacado' => true,
     'desc_corta' => '12 teraflops de potencia gráfica pura: la consola más potente del mercado con Xbox Game Pass.',
     'desc' => 'Tiempos de carga casi inexistentes con Xbox Velocity Architecture y función Quick Resume para alternar entre múltiples juegos al instante exactamente donde los dejaste.',
-    'peso' => 4.45,
+    'peso' => 4.4,
     'largo' => 15.1,
     'ancho' => 15.1,
     'alto' => 30.1,
     'specs' => 
     array (
-      'Potencia' => '12 TFLOPS AMD RDNA 2',
-      'Almacenamiento' => '1 TB Custom NVMe',
-      'Compatibilidad' => '4 Generaciones de Xbox',
+      'Procesador' => 'AMD Zen 2 de 8 núcleos',
+      'Gráficos' => 'AMD RDNA 2, 12 TFLOPS',
+      'Memoria' => '16 GB GDDR6',
+      'Almacenamiento' => 'SSD NVMe de 1 TB',
+      'Unidad óptica' => '4K UHD Blu-ray',
+      'Video' => '4K y hasta 120 fps en contenido compatible',
+      'Características' => 'Quick Resume y ranura de expansión de almacenamiento',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   127 => 
   array (
@@ -4868,7 +6338,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CON-33-3',
     'nombre' => 'Nintendo Switch OLED 64GB',
     'marca' => 'Nintendo',
-    'modelo' => 'HEG-S-KAAAA',
+    'modelo' => 'Switch OLED, HEG-001',
     'precio' => 339.0,
     'precio_oferta' => NULL,
     'stock' => 20,
@@ -4876,21 +6346,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Pantalla OLED vibrante de 7 pulgadas, soporte ajustable amplio y base con puerto LAN por cable.',
     'desc' => 'Juega en casa en tu televisor o llévala contigo donde quieras. Su pantalla OLED llena tus aventuras de colores vivos con audio mejorado en modo portátil y 64GB de almacenamiento.',
     'peso' => 0.42,
-    'largo' => 24.13,
-    'ancho' => 10.16,
-    'alto' => 1.39,
+    'largo' => 2.84,
+    'ancho' => 24.2,
+    'alto' => 10.2,
     'specs' => 
     array (
-      'Pantalla' => '7.0" OLED Multi-touch',
-      'Modos' => 'Televisor, Sobremesa, Portátil',
-      'Base' => 'Con puerto Ethernet LAN',
+      'Pantalla' => 'OLED táctil de 7 pulgadas, 1280 × 720',
+      'Almacenamiento' => '64 GB',
+      'Expansión' => 'microSD',
+      'Salida en TV' => 'Hasta 1920 × 1080 a 60 fps',
+      'Conectividad' => 'Wi-Fi y Bluetooth 4.1',
+      'Autonomía' => '4.5–9 horas',
+      'Características' => 'Joy-Con, base con LAN y soporte ajustable',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'CON-33-3-V1',
-        'precio' => 339.0,
+        'precio' => 339,
         'stock' => 10,
         'opcion' => 
         array (
@@ -4901,7 +6375,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'CON-33-3-V2',
-        'precio' => 339.0,
+        'precio' => 339,
         'stock' => 10,
         'opcion' => 
         array (
@@ -4910,6 +6384,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   128 => 
   array (
@@ -4917,24 +6397,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CON-33-4',
     'nombre' => 'ASUS ROG Ally Z1 Extreme 512GB Consola PC',
     'marca' => 'ASUS',
-    'modelo' => 'RC71L-ALLY.Z1X_512',
+    'modelo' => 'ROG Ally (2023), RC71L, Z1 Extreme 512 GB',
     'precio' => 599.0,
-    'precio_oferta' => 549.0,
+    'precio_oferta' => 549,
     'stock' => 8,
     'destacado' => false,
     'desc_corta' => 'Consola portátil con Windows 11: juega tus títulos de Steam, Game Pass, Epic Games y Battle.net.',
     'desc' => 'Tu biblioteca completa de juegos de computadora en la palma de tu mano. Pantalla Full HD de 120Hz con FreeSync Premium y procesador AMD Ryzen Z1 Extreme con arquitectura RDNA 3.',
-    'peso' => 0.61,
-    'largo' => 28.0,
-    'ancho' => 11.1,
-    'alto' => 2.12,
+    'peso' => 0.608,
+    'largo' => 11.1,
+    'ancho' => 28.0,
+    'alto' => 3.24,
     'specs' => 
     array (
-      'Pantalla' => '7" FHD 120Hz 500 nits IPS',
-      'Procesador' => 'AMD Ryzen Z1 Extreme (8C/16T)',
+      'Procesador' => 'AMD Ryzen Z1 Extreme, 8 núcleos y 16 hilos',
+      'Gráficos' => 'AMD Radeon RDNA 3 de 12 CU',
+      'Memoria' => '16 GB LPDDR5',
+      'Almacenamiento' => 'SSD NVMe de 512 GB, M.2 2230',
+      'Pantalla' => '7 pulgadas IPS 1920 × 1080, 120 Hz',
       'Sistema' => 'Windows 11 Home',
+      'Batería' => '40 Wh',
+      'Características' => 'Controles integrados y lector microSD',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   129 => 
   array (
@@ -4942,7 +6433,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CON-33-5',
     'nombre' => 'Sony PlayStation Portal Remote Player',
     'marca' => 'Sony',
-    'modelo' => 'CFI-Y1001',
+    'modelo' => 'PlayStation Portal Remote Player, CFI-Y1001',
     'precio' => 199.0,
     'precio_oferta' => NULL,
     'stock' => 14,
@@ -4951,15 +6442,25 @@ class CatalogoFijoSeeder extends Seeder
     'desc' => 'Siente la inmersión total del control DualSense con gatillos adaptativos y respuesta háptica mientras otra persona usa el televisor de la casa.',
     'peso' => 0.54,
     'largo' => 30.5,
-    'ancho' => 12.0,
+    'ancho' => 12,
     'alto' => 6.5,
     'specs' => 
     array (
-      'Pantalla' => '8" LCD 1080p a 60 FPS',
-      'Controles' => 'DualSense integrados completos',
-      'Conectividad' => 'Wi-Fi 5 GHz',
+      'Tipo' => 'Dispositivo de juego remoto',
+      'Pantalla' => 'LCD táctil de 8 pulgadas, 1920 × 1080',
+      'Video' => 'Hasta 60 fps',
+      'Conectividad' => 'Wi-Fi y PlayStation Link',
+      'Controles' => 'Gatillos adaptativos y respuesta háptica',
+      'Audio' => 'Altavoces y conector de 3.5 mm',
+      'Características' => 'Remote Play desde PS5 y funciones en línea según disponibilidad',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   130 => 
   array (
@@ -4967,29 +6468,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHR-34-1',
     'nombre' => 'Corsair T3 Rush Silla Gamer Tela Transpirable',
     'marca' => 'Corsair',
-    'modelo' => 'CF-9010029-WW',
+    'modelo' => 'T3 RUSH Fabric (2023), CF-9010056-WW',
     'precio' => 299.0,
     'precio_oferta' => NULL,
     'stock' => 12,
     'destacado' => true,
     'desc_corta' => 'Tapizado en tela suave transpirable que no retiene calor, reposabrazos 4D y cojines de espuma viscoelástica.',
     'desc' => 'Inspirada en los asientos de autos de carreras deportivos de alto rendimiento. Mantiene tu cuerpo fresco durante el calor de Panamá con reclinación de hasta 160 grados.',
-    'peso' => 22.5,
+    'peso' => 21.3,
     'largo' => 88.5,
-    'ancho' => 69.0,
+    'ancho' => 69,
     'alto' => 37.5,
     'specs' => 
     array (
-      'Material' => 'Tela suave transpirable',
-      'Pistón' => 'Gas Clase 4 con soporte hasta 120 kg',
-      'Reposabrazos' => 'Ajustables en 4 direcciones (4D)',
+      'Tapizado' => 'Tejido transpirable',
+      'Estructura' => 'Acero',
+      'Carga máxima' => '120 kg',
+      'Reposabrazos' => '4D',
+      'Asiento' => '49 cm de profundidad × 54 cm de ancho',
+      'Respaldo' => '85 cm de alto',
+      'Altura del asiento' => 'Desde 48 cm',
+      'Características' => 'Cojines cervical y lumbar',
     ),
     'variantes' => 
     array (
       0 => 
       array (
         'sku' => 'CHR-34-1-V1',
-        'precio' => 299.0,
+        'precio' => 299,
         'stock' => 7,
         'opcion' => 
         array (
@@ -5000,7 +6506,7 @@ class CatalogoFijoSeeder extends Seeder
       1 => 
       array (
         'sku' => 'CHR-34-1-V2',
-        'precio' => 299.0,
+        'precio' => 299,
         'stock' => 5,
         'opcion' => 
         array (
@@ -5009,6 +6515,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   131 => 
   array (
@@ -5016,24 +6528,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHR-34-2',
     'nombre' => 'Razer Iskur Silla Ergonómica Soporte Lumbar',
     'marca' => 'Razer',
-    'modelo' => 'RZ38-02770100-R3U1',
+    'modelo' => 'Iskur original, RZ38-0277',
     'precio' => 399.0,
     'precio_oferta' => NULL,
     'stock' => 6,
     'destacado' => false,
     'desc_corta' => 'Sistema de curvatura lumbar ergonómico totalmente ajustable que acompaña la forma de tu columna.',
     'desc' => 'A diferencia de las sillas convencionales con cojines planos, la Razer Iskur cuenta con un respaldo lumbar mecánico curvo que empuja y soporta tu espalda baja para evitar dolores tras horas de trabajo o juego.',
-    'peso' => 30.0,
-    'largo' => 137.0,
+    'peso' => 30.3,
+    'largo' => 74.5,
     'ancho' => 66.5,
-    'alto' => 74.5,
+    'alto' => 137.0,
     'specs' => 
     array (
-      'Soporte Lumbar' => 'Mecánico ajustable por palanca',
-      'Cuero' => 'Sintético multicapa de alta resistencia',
-      'Peso Soportado' => 'Hasta 136 kg',
+      'Tipo' => 'Silla gamer ergonómica',
+      'Tapizado' => 'Cuero sintético multicapa',
+      'Soporte lumbar' => 'Sistema ajustable integrado',
+      'Reposabrazos' => '4D',
+      'Elevación' => 'Pistón de gas clase 4',
+      'Carga recomendada' => 'Menos de 130 kg, según ficha de soporte',
+      'Características' => 'Cojín de espuma viscoelástica y soporte lumbar mecánico',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   132 => 
   array (
@@ -5041,7 +6563,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHR-34-3',
     'nombre' => 'Cooler Master Caliber R2 Silla Ergonómica',
     'marca' => 'Cooler Master',
-    'modelo' => 'CMI-GCR2-2019',
+    'modelo' => 'Caliber R2 negro',
     'precio' => 249.0,
     'precio_oferta' => NULL,
     'stock' => 9,
@@ -5049,16 +6571,28 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Cuero sintético transpirable perforado y base de estrella de acero reforzado para máxima estabilidad.',
     'desc' => 'Construcción con espuma moldeada en frío de densidad ultra alta que no se deforma con el paso de los años. Reclinación plana de 180° para descansar entre partidas.',
     'peso' => 21.5,
-    'largo' => 86.0,
-    'ancho' => 70.0,
-    'alto' => 34.0,
+    'largo' => 86,
+    'ancho' => 70,
+    'alto' => 34,
     'specs' => 
     array (
-      'Reclinación' => 'Hasta 180 grados',
-      'Estructura' => 'Acero tubular soldado',
-      'Cojines' => 'Cervical y lumbar incluidos',
+      'Tapizado' => 'Cuero PU',
+      'Estructura' => 'Acero',
+      'Carga máxima' => '150 kg',
+      'Reposabrazos' => '2D',
+      'Reclinación' => '90°–180°',
+      'Altura total' => '125.5–133.5 cm',
+      'Altura del asiento' => '48–56 cm',
+      'Asiento' => '54 cm profundidad, 58 cm ancho con laterales',
+      'Características' => 'Cojines cervical y lumbar y pistón clase 4',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   133 => 
   array (
@@ -5066,24 +6600,35 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHR-34-4',
     'nombre' => 'Thermaltake U Fit Black-Red Silla Gaming',
     'marca' => 'Thermaltake',
-    'modelo' => 'GGC-UFT-BRMWDS-01',
+    'modelo' => 'U Fit Black-Red, GGC-UFT-BRMWDS-01',
     'precio' => 219.0,
     'precio_oferta' => NULL,
     'stock' => 10,
     'destacado' => false,
     'desc_corta' => 'Acolchado grueso con acabados de costura estilo fibra de carbono y ruedas de 60mm suaves.',
     'desc' => 'Ideal para jugadores que buscan confort garantizado a precio asequible. Base de 5 puntas de alta resistencia y pistón de elevación certificado por TÜV Rheinland.',
-    'peso' => 24.0,
-    'largo' => 89.0,
-    'ancho' => 69.0,
-    'alto' => 38.0,
+    'peso' => 24,
+    'largo' => 89,
+    'ancho' => 69,
+    'alto' => 38,
     'specs' => 
     array (
-      'Material' => 'PVC Premium antidesgaste',
-      'Capacidad' => 'Hasta 140 kg',
-      'Reposabrazos' => 'Ajustables en 2D',
+      'Tipo' => 'Silla gamer',
+      'Tapizado' => 'PVC',
+      'Reposabrazos' => '2D',
+      'Altura del asiento' => '45–53 cm',
+      'Profundidad del asiento' => '55 cm total',
+      'Altura del respaldo' => '84 cm',
+      'Elevación' => 'Pistón clase 4',
+      'Características' => 'Cojines cervical y lumbar y ajuste de inclinación',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   134 => 
   array (
@@ -5091,7 +6636,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CHR-34-5',
     'nombre' => 'MSI MAG CH130 X Silla Gaming Confort Pro',
     'marca' => 'MSI',
-    'modelo' => '306-7Y25B11-W57',
+    'modelo' => 'MAG CH130 X',
     'precio' => 279.0,
     'precio_oferta' => NULL,
     'stock' => 7,
@@ -5099,16 +6644,26 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Asiento ensanchado de 57cm con profundidad extra y marco de acero inoxidable de alta rigidez.',
     'desc' => 'Diseñada con curvatura en los hombros para mejorar la postura natural del cuerpo y evitar la tensión muscular en el cuello durante extensas sesiones.',
     'peso' => 21.9,
-    'largo' => 90.0,
-    'ancho' => 68.0,
-    'alto' => 38.0,
+    'largo' => 70.0,
+    'ancho' => 69.0,
+    'alto' => 140.0,
     'specs' => 
     array (
-      'Asiento' => '57 cm de ancho ultra espacioso',
-      'Pistón' => 'Clase 4',
-      'Espuma' => 'Espuma de alta densidad (45-48 kg/m³)',
+      'Tipo' => 'Silla gamer ergonómica',
+      'Estructura' => 'Acero',
+      'Tapizado' => 'Cuero sintético PVC',
+      'Carga máxima' => '150 kg',
+      'Elevación' => 'Pistón clase 4',
+      'Reclinación' => 'Hasta 150°',
+      'Características' => 'Cojines de cabeza y lumbar y reposabrazos ajustables',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   135 => 
   array (
@@ -5116,7 +6671,7 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CAM-35-1',
     'nombre' => 'TP-Link Tapo C210 Cámara de Seguridad Wi-Fi 2K Pan/Tilt',
     'marca' => 'TP-Link',
-    'modelo' => 'TAPO-C210',
+    'modelo' => 'Tapo C210, referencia V2.20',
     'precio' => 34.99,
     'precio_oferta' => NULL,
     'stock' => 38,
@@ -5124,14 +6679,20 @@ class CatalogoFijoSeeder extends Seeder
     'desc_corta' => 'Rotación horizontal de 360°, visión nocturna nítida, audio bidireccional y detección de movimiento.',
     'desc' => 'Vigila tu casa o negocio desde tu smartphone en tiempo real. Graba en tarjeta MicroSD de hasta 512GB sin costos mensuales de suscripción y recibe alertas instantáneas cuando detecte personas.',
     'peso' => 0.19,
-    'largo' => 8.66,
-    'ancho' => 8.5,
+    'largo' => 8.68,
+    'ancho' => 8.54,
     'alto' => 11.77,
     'specs' => 
     array (
-      'Rotación' => '360° Horizontal / 114° Vertical',
-      'Visión Nocturna' => 'Hasta 9 metros en oscuridad total',
-      'Almacenamiento' => 'Ranura MicroSD hasta 512GB',
+      'Resolución' => '3 MP, 2304 × 1296',
+      'Video' => 'H.264, hasta 15 fps en referencia consultada',
+      'Conexión' => 'Wi-Fi de 2.4 GHz',
+      'Movimiento' => 'Cobertura horizontal de 360°',
+      'Visión nocturna' => 'Infrarroja, hasta unos 9 m',
+      'Audio' => 'Bidireccional',
+      'Almacenamiento' => 'microSD y nube opcional',
+      'Uso' => 'Interiores',
+      'Características' => 'Detección de movimiento y control desde Tapo',
     ),
     'variantes' => 
     array (
@@ -5158,6 +6719,12 @@ class CatalogoFijoSeeder extends Seeder
         ),
       ),
     ),
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   136 => 
   array (
@@ -5165,24 +6732,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CAM-35-2',
     'nombre' => 'Google Nest Cam Indoor/Outdoor con Batería',
     'marca' => 'Google',
-    'modelo' => 'GA01317-US',
+    'modelo' => 'Nest Cam de interior/exterior con batería',
     'precio' => 159.0,
     'precio_oferta' => NULL,
     'stock' => 11,
     'destacado' => false,
     'desc_corta' => 'Cámara inteligente resistente a la intemperie sin cables: reconoce personas, animales y autos.',
     'desc' => 'Instalación magnética en segundos sin necesidad de enchufes cercanos. Su Inteligencia Artificial procesa el video en el propio dispositivo para avisarte solo de eventos relevantes.',
-    'peso' => 0.4,
+    'peso' => 0.398,
     'largo' => 8.3,
     'ancho' => 8.3,
     'alto' => 8.3,
     'specs' => 
     array (
-      'Alimentación' => 'Batería recargable integrada',
-      'Intemperie' => 'Resistente a lluvia y sol IP54',
-      'Video' => '1080p HDR con visión nocturna',
+      'Video' => '1080p HDR, hasta 30 fps',
+      'Campo de visión' => '130° diagonal',
+      'Conectividad' => 'Wi-Fi',
+      'Alimentación' => 'Batería recargable',
+      'Audio' => 'Bidireccional',
+      'Protección' => 'IP54',
+      'Características' => 'Detección de personas, animales y vehículos y visión nocturna',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   137 => 
   array (
@@ -5190,24 +6767,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CAM-35-3',
     'nombre' => 'Xiaomi Smart Camera C400 2.5K 360°',
     'marca' => 'Xiaomi',
-    'modelo' => 'BHR6619GL',
+    'modelo' => 'Smart Camera C400, MJSXJ23CM',
     'precio' => 44.0,
     'precio_oferta' => NULL,
     'stock' => 22,
     'destacado' => false,
     'desc_corta' => 'Sensor de 4 megapíxeles con resolución 2.5K ultra clara y seguimiento automático de humanos por IA.',
     'desc' => 'Conectividad Wi-Fi de doble banda (2.4GHz y 5GHz) para transferencias de video sin cortes. Micrófono con reducción de ruido ambiental para escuchar con claridad.',
-    'peso' => 0.31,
+    'peso' => 0.318,
     'largo' => 7.8,
     'ancho' => 7.8,
     'alto' => 11.9,
     'specs' => 
     array (
-      'Resolución' => '2560 x 1440 (2.5K 4MP)',
-      'Wi-Fi' => 'Dual Band 2.4 / 5 GHz',
-      'Cifrado' => 'Chip de seguridad Xiaomi MJA1',
+      'Resolución' => '2560 × 1440, 4 MP',
+      'Conexión' => 'Wi-Fi 2.4/5 GHz',
+      'Almacenamiento' => 'microSD de hasta 256 GB',
+      'Entrada' => '5 V/2 A',
+      'Movimiento' => 'Visión panorámica motorizada',
+      'Audio' => 'Bidireccional',
+      'Características' => 'Visión nocturna y control desde Xiaomi Home',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   138 => 
   array (
@@ -5215,24 +6802,36 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CAM-35-4',
     'nombre' => 'Canon EOS R50 Cámara Mirrorless 4K Vlog',
     'marca' => 'Canon',
-    'modelo' => '5811C002',
+    'modelo' => 'EOS R50, cuerpo negro sin lente',
     'precio' => 649.0,
     'precio_oferta' => NULL,
     'stock' => 6,
     'destacado' => true,
     'desc_corta' => 'Sensor APS-C de 24.2 MP, video 4K sin recorte a 30p y pantalla táctil de ángulo variable.',
     'desc' => 'La cámara definitiva para creadores de contenido de YouTube, TikTok e Instagram. Enfoque automático Dual Pixel CMOS AF II con detección de personas, perros, gatos y vehículos.',
-    'peso' => 0.38,
-    'largo' => 11.63,
-    'ancho' => 8.55,
-    'alto' => 6.88,
+    'peso' => 0.375,
+    'largo' => 6.88,
+    'ancho' => 11.63,
+    'alto' => 8.55,
     'specs' => 
     array (
-      'Sensor' => '24.2 MP CMOS APS-C',
-      'Video' => '4K UHD 30p sobremuestreado de 6K',
-      'Pantalla' => 'Táctil abatible de 3.0"',
+      'Tipo' => 'Cámara mirrorless',
+      'Sensor' => 'APS-C CMOS de 24.2 MP efectivos',
+      'Montura' => 'Canon RF',
+      'Procesador' => 'DIGIC X',
+      'Video' => '4K hasta 30p sobremuestreado de 6K y Full HD hasta 120p',
+      'Enfoque' => 'Dual Pixel CMOS AF II',
+      'Pantalla' => 'LCD táctil de ángulo variable',
+      'Conexión' => 'Wi-Fi y Bluetooth',
+      'Características' => 'Grabación para creación de contenido y visor electrónico',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
   139 => 
   array (
@@ -5240,24 +6839,34 @@ class CatalogoFijoSeeder extends Seeder
     'sku' => 'CAM-35-5',
     'nombre' => 'GoPro HERO12 Black Cámara de Acción 5.3K',
     'marca' => 'GoPro',
-    'modelo' => 'CHDHX-121-CN',
+    'modelo' => 'HERO12 Black, CHDHX-121',
     'precio' => 379.0,
-    'precio_oferta' => 349.0,
+    'precio_oferta' => 349,
     'stock' => 14,
     'destacado' => false,
     'desc_corta' => 'Estabilización HyperSmooth 6.0 galardonada con un Emmy, video 5.3K60 y sumergible a 10m sin carcasa.',
     'desc' => 'Captura tus aventuras más extremas con calidad profesional. Soporte para audio inalámbrico por Bluetooth para AirPods y micrófonos externos, video HDR y batería Enduro para bajas temperaturas.',
-    'peso' => 0.15,
-    'largo' => 7.18,
-    'ancho' => 5.08,
-    'alto' => 3.36,
+    'peso' => 0.154,
+    'largo' => 3.36,
+    'ancho' => 7.18,
+    'alto' => 5.08,
     'specs' => 
     array (
-      'Video' => '5.3K a 60 fps / 4K a 120 fps',
-      'Estabilización' => 'HyperSmooth 6.0 con Bloqueo de Horizonte 360°',
-      'Sumergible' => 'Hasta 10 metros',
+      'Video' => 'Hasta 5.3K60, 4K120 y 2.7K240',
+      'Fotografía' => '27 MP',
+      'Estabilización' => 'HyperSmooth 6.0',
+      'Batería' => 'Enduro de 1720 mAh',
+      'Resistencia al agua' => 'Hasta 10 m sin carcasa, según condiciones del fabricante',
+      'Audio' => 'Compatibilidad Bluetooth para accesorios',
+      'Características' => 'Video HDR, formato 8:7 y montaje integrado',
     ),
     'variantes' => NULL,
+    'garantia' => 
+    array (
+      'nombre' => 'Garantía del producto según proveedor',
+      'duracion' => 'Confirmar plazo aplicable con proveedor',
+      'contacto' => 'Puedes devolver tu producto directamente a PayMe Panamá y gestionaremos cualquier problema de garantía directamente con el fabricante por ti. También puedes comunicarte con el fabricante directamente usando tu factura.',
+    ),
   ),
 );
     }
