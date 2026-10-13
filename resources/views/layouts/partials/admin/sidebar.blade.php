@@ -65,9 +65,12 @@
                         class="w-full group relative flex items-center justify-between gap-3 px-3.5 py-2.5 text-xs font-bold transition-all rounded-full mr-3 {{ $isVentasActive ? 'text-white is-active-parent' : 'text-slate-300 hover:bg-[#2B3648]/60 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         {{-- Ícono con indicador de notificaciones (solo visible cuando el sidebar está colapsado) --}}
-                        <span class="relative">
+                        <span class="relative inline-flex items-center justify-center">
                             <span class="material-symbols-outlined text-[19px] transition-colors {{ $isVentasActive ? 'text-[#34D399]' : 'text-slate-400 group-hover:text-[#34D399]' }}" style="{{ $isVentasActive ? 'font-variation-settings: \'FILL\' 1;' : '' }}">shopping_cart</span>
-                                <span x-show="totalCount > 0" class="sidebar-collapsed-badge" style="position:absolute; top:-6px; right:-6px; min-width:16px; height:16px; padding:0 3px; border-radius:999px; background:#f43f5e; color:#fff; font-size:9px; font-weight:800; line-height:16px; text-align:center; box-shadow:0 0 0 2px #1F2937; {{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" x-text="Math.min(totalCount, 99)">
+                            <span x-show="totalCount > 0" 
+                                  class="sidebar-collapsed-badge absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-0.5 rounded-full bg-[#f43f5e] text-white text-[9px] font-extrabold flex items-center justify-center text-center shadow-[0_0_0_2px_#1F2937]"
+                                  style="{{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" 
+                                  x-text="Math.min(totalCount, 99)">
                                 {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
                             </span>
                         </span>
@@ -75,7 +78,10 @@
                     </div>
                     {{-- Cuando el sidebar está expandido mostramos también el total junto al chevron --}}
                     <div class="sidebar-text flex items-center gap-1.5">
-                        <span x-show="totalCount > 0" style="background:#f43f5e; color:#fff; font-size:10px; font-weight:800; padding:1px 6px; border-radius:999px; line-height:16px; {{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" x-text="Math.min(totalCount, 99)">
+                        <span x-show="totalCount > 0" 
+                              class="w-5 h-5 min-w-[20px] rounded-full bg-[#f43f5e] text-white text-[10px] font-extrabold flex items-center justify-center text-center leading-none"
+                              style="{{ ($nuevosPedidosCount + $nuevasDevolucionesCount) > 0 ? '' : 'display:none;' }}" 
+                              x-text="Math.min(totalCount, 99)">
                             {{ min($nuevosPedidosCount + $nuevasDevolucionesCount, 99) }}
                         </span>
                         <span class="material-symbols-outlined text-[16px] transition-transform duration-300" :class="open ? 'rotate-180' : ''">expand_more</span>
