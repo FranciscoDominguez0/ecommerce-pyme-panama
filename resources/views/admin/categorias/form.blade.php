@@ -519,8 +519,8 @@
             const card = document.createElement('div');
             card.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${
                 isSelected 
-                    ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs' 
-                    : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/80 hover:border-slate-300 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 hover:shadow-2xs'
+                    ? 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs' 
+                    : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/80 hover:border-emerald-500 dark:hover:border-emerald-500/70 hover:bg-slate-50 dark:hover:bg-emerald-500/10 hover:shadow-2xs'
             }`;
 
             // Mover horizontalmente según el nivel de profundidad (20px por nivel)
@@ -534,11 +534,11 @@
 
             card.innerHTML = `
                 <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-8 h-8 rounded-lg ${isSelected ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300'} flex items-center justify-center shrink-0 shadow-2xs">
+                    <div class="w-8 h-8 rounded-lg ${isSelected ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300' : 'bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300'} flex items-center justify-center shrink-0 shadow-2xs">
                         <span class="material-symbols-outlined text-[18px]">${nivel > 0 ? 'subdirectory_arrow_right' : 'folder'}</span>
                     </div>
                     <div class="min-w-0">
-                        <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 dark:text-gray-100 group-hover:text-slate-900 dark:text-white'} truncate">
+                        <div class="text-xs font-bold ${isSelected ? 'text-emerald-950 dark:text-emerald-300' : 'text-slate-800 dark:text-gray-100 group-hover:text-slate-900 dark:text-white'} truncate">
                             ${padre.nombre}
                         </div>
                         ${padre.padre_nombre ? `

@@ -31,10 +31,6 @@ class TurnstileService
      */
     public function verificar(?string $token, ?string $ip = null): bool
     {
-        if (app()->environment(['local', 'testing'])) {
-            return true;
-        }
-
         if (empty($token)) {
             return false;
         }

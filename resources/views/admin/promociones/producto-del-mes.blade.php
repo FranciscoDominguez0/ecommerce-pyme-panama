@@ -255,7 +255,7 @@
                 emptyText: 'No se encontró ningún producto para',
                 render: (prod) => {
                     const card = document.createElement('div');
-                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs`;
+                    card.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 dark:hover:border-emerald-500/70 hover:bg-emerald-50/40 dark:hover:bg-emerald-500/10 hover:shadow-2xs`;
                     card.onclick = () => seleccionarProductoModal(prod);
 
                     card.innerHTML = `
@@ -264,7 +264,7 @@
                                 ${prod.imagen_url ? `<img src="${prod.imagen_url}" class="w-full h-full object-cover">` : '<span class="material-symbols-outlined text-slate-400">inventory_2</span>'}
                             </div>
                             <div class="min-w-0">
-                                <div class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-950 truncate">${prod.nombre}</div>
+                                <div class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-900 dark:group-hover:text-white truncate">${prod.nombre}</div>
                                 <div class="text-[10px] text-slate-400 font-mono">${prod.sku} — $${prod.precio_base.toFixed(2)}</div>
                             </div>
                         </div>

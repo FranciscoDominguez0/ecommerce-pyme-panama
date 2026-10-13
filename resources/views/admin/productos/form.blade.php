@@ -648,8 +648,8 @@
 
                         const card = document.createElement('div');
                         card.className = `p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between group ${isSelected
-                            ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs'
+                            ? 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
+                            : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 dark:hover:border-emerald-500/70 hover:bg-emerald-50/40 dark:hover:bg-emerald-500/10 hover:shadow-2xs'
                             }`;
                         card.onclick = () => seleccionarCategoria(cat.id, cat.nombre);
 
@@ -660,12 +660,12 @@
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center gap-1.5 flex-wrap">
-                                            <div class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-950'} truncate">${cat.nombre}</div>
+                                            <div class="text-xs font-bold ${isSelected ? 'text-emerald-950 dark:text-emerald-300' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-900 dark:group-hover:text-white'} truncate">${cat.nombre}</div>
                                             ${esServicio ? '<span class="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 shrink-0">Servicio</span>' : ''}
                                         </div>
                                     </div>
                                 </div>
-                                ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>' : ''}
+                                ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[18px]">check_circle</span>' : ''}
                             `;
                         return card;
                     }
@@ -681,17 +681,17 @@
 
                         const card = document.createElement('div');
                         card.className = `p-3 rounded-xl border transition-all cursor-pointer flex flex-col items-center justify-center text-center gap-1.5 group relative ${isSelected
-                            ? 'bg-emerald-50/90 border-emerald-400 ring-2 ring-emerald-500/20 shadow-xs'
-                            : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 hover:bg-emerald-50/40 hover:shadow-2xs'
+                            ? 'bg-emerald-50/90 dark:bg-emerald-950/40 border-emerald-400 dark:border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
+                            : 'bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 dark:hover:border-emerald-500/70 hover:bg-emerald-50/40 dark:hover:bg-emerald-500/10 hover:shadow-2xs'
                             }`;
                         card.onclick = () => seleccionarMarca(brand.nombre);
 
                         card.innerHTML = `
-                                ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 text-[16px] absolute top-1.5 right-1.5">check_circle</span>' : ''}
+                                ${isSelected ? '<span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[16px] absolute top-1.5 right-1.5">check_circle</span>' : ''}
                                 <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700 flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-2xs group-hover:scale-105 transition-transform">
                                     ${getLogoHtmlForBrand(brand)}
                                 </div>
-                                <span class="text-xs font-bold ${isSelected ? 'text-emerald-950' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-950'} truncate max-w-full leading-tight">${brand.nombre}</span>
+                                <span class="text-xs font-bold ${isSelected ? 'text-emerald-950 dark:text-emerald-300' : 'text-slate-800 dark:text-gray-100 group-hover:text-emerald-900 dark:group-hover:text-white'} truncate max-w-full leading-tight">${brand.nombre}</span>
                             `;
                         return card;
                     }

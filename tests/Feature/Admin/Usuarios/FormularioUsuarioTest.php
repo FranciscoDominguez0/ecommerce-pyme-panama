@@ -37,7 +37,7 @@ class FormularioUsuarioTest extends BaseAdminTest
             ->post(route('admin.usuarios.store', $rolAdmin->id), $datos);
 
         $response->assertRedirect(route('admin.usuarios.por-rol', $rolAdmin->id));
-        $response->assertSessionHas('toast_success', 'Usuario creado correctamente.');
+        $response->assertSessionHas('toast_success', 'Usuario creado correctamente y se le ha enviado un correo para establecer su contraseña.');
 
         $this->assertDatabaseHas('usuarios', [
             'nombre' => 'Juan',
@@ -62,15 +62,13 @@ class FormularioUsuarioTest extends BaseAdminTest
         $datosInvalidos = [
             'nombre' => '',
             'email' => 'correo-invalido',
-            'password' => '123',
-            'password_confirmation' => 'abc',
             'rol_id' => 9999, // Rol inexistente
         ];
 
         $response = $this->actingAs($superAdmin)
             ->post(route('admin.usuarios.store', $rolAdmin->id), $datosInvalidos);
 
-        $response->assertSessionHasErrors(['nombre', 'email', 'password', 'rol_id']);
+        $response->assertSessionHasErrors(['nombre', 'email', 'rol_id']);
 
         // Intento con correo duplicado
         $datosDuplicados = [
