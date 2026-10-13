@@ -21,6 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Session\Middleware\AuthenticateSession::class,
         ]);
 
+        $middleware->encryptCookies(except: [
+            'admin_theme',
+            'color-theme',
+        ]);
+
         $middleware->preventRequestForgery(except: [
             'stripe/*',
             'api/webhooks/*',

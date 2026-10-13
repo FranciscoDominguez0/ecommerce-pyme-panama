@@ -65,7 +65,7 @@
                     <thead>
                         <tr class="bg-slate-50 dark:bg-transparent/80 border-b border-slate-200 dark:border-gray-700/80 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                             <th class="py-3.5 px-5">Courier & Sucursal</th>
-                            <th class="py-3.5 px-5">Zona</th>
+                            <th class="py-3.5 px-5">Provincia</th>
                             <th class="py-3.5 px-5">Tarifa</th>
                             <th class="py-3.5 px-5">Estado</th>
                             <th class="py-3.5 px-5 text-right">Acciones</th>
@@ -171,8 +171,8 @@
 
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Zona <span class="text-rose-500">*</span></label>
-                    <input type="text" id="input-zona" name="zona" required class="input-panama w-full text-xs rounded-xl border-slate-200 dark:border-gray-700 dark:bg-[#121415] dark:text-white focus:border-emerald-500 focus:ring-emerald-500/20 py-2.5 px-3">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Provincia <span class="text-rose-500">*</span></label>
+                    <x-select-provincias id="input-zona" name="zona" required placeholder="-- Selecciona una provincia --" />
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Courier <span class="text-rose-500">*</span></label>

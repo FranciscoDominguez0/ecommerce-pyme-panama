@@ -184,16 +184,26 @@
 
             window.addEventListener('pageshow', window.cleanupTransition);
 
+            // Asegurar tema durante el proceso de navegación de Livewire
+            function enforceActiveTheme() {
+                const savedTheme = localStorage.getItem('color-theme');
+                if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                }
+            }
+
+            document.addEventListener('livewire:navigating', enforceActiveTheme);
+
             document.addEventListener('livewire:navigated', () => {
                 window.cleanupTransition();
                 window.handleLoginSkeleton();
 
-                // 1. Restaurar modo oscuro
-                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
+                // 1. Restaurar tema exacto (oscuro o claro)
+                enforceActiveTheme();
                 window.updateThemeToggleUI();
 
                 // 2. Restaurar sidebar collapsed

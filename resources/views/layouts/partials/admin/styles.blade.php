@@ -22,7 +22,7 @@
     :root {
         --admin-bg-light: #f8fafc;
         --admin-bg-dark: #181a1b;
-        --admin-bg: var(--admin-bg-dark);
+        --admin-bg: var(--admin-bg-light);
     }
     html.dark {
         --admin-bg: var(--admin-bg-dark);
@@ -41,6 +41,17 @@
     html.light body {
         background-color: #f8fafc !important;
         color: #111827;
+    }
+    @media (prefers-color-scheme: dark) {
+        html:not(.light) {
+            --admin-bg: var(--admin-bg-dark);
+            background-color: #181a1b !important;
+            color-scheme: dark;
+        }
+        html:not(.light) body {
+            background-color: #181a1b !important;
+            color: #f8fafc;
+        }
     }
 
     /* Soporte universal para elementos select y option en Modo Oscuro con fondo negro del tema */

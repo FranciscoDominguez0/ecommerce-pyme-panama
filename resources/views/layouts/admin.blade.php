@@ -1,20 +1,47 @@
+@php
+    $serverTheme = $_COOKIE['admin_theme'] ?? request()->cookie('admin_theme');
+@endphp
 <!DOCTYPE html>
-<html class="{{ request()->cookie('admin_theme') === 'light' ? 'light' : 'dark' }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="{{ $serverTheme === 'dark' ? 'dark' : ($serverTheme === 'light' ? 'light' : '') }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    {{-- Script inline prioritario: resuelve dark/light antes de cargar cualquier CSS para evitar parpadeos --}}
+    {{-- Script inline prioritario anti-parpadeo --}}
     <script>
         (function() {
-            var theme = localStorage.getItem('color-theme');
-            var isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            if (isDark) {
-                document.documentElement.classList.add('dark');
-                document.documentElement.classList.remove('light');
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.documentElement.classList.add('light');
+            function applyTheme() {
+                var theme = localStorage.getItem('color-theme');
+                if (!theme) {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                var cl = document.documentElement.classList;
+                if (theme === 'dark') {
+                    if (!cl.contains('dark')) cl.add('dark');
+                    if (cl.contains('light')) cl.remove('light');
+                } else {
+                    if (cl.contains('dark')) cl.remove('dark');
+                    if (!cl.contains('light')) cl.add('light');
+                }
+                document.cookie = "admin_theme=" + theme + ";path=/;max-age=31536000;SameSite=Lax";
+            }
+            applyTheme();
+
+            // Evitar que morphs de Livewire o navegación quiten la clase antes del render
+            if (window.MutationObserver && !window.__themeObserver) {
+                window.__themeObserver = new MutationObserver(function() {
+                    applyTheme();
+                });
+                window.__themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
             }
         })();
     </script>
+
+    {{-- Estilo crítico inline para pintar el fondo de inmediato sin esperar CSS externo --}}
+    <style id="theme-preload-style">
+        html.dark, html.dark body { background-color: #181a1b !important; color-scheme: dark; }
+        html.light, html.light body { background-color: #f8fafc !important; color-scheme: light; }
+        @media (prefers-color-scheme: dark) {
+            html:not(.light), html:not(.light) body { background-color: #181a1b !important; color-scheme: dark; }
+        }
+    </style>
 
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>

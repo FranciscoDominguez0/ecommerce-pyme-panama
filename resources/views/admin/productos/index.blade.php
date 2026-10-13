@@ -53,9 +53,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">En Stock</p>
-                    <h3 class="text-2xl font-extrabold text-emerald-600 mt-1">{{ $kpiEnStock }}</h3>
+                    <h3 class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">{{ $kpiEnStock }}</h3>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[22px]">check_circle</span>
                 </div>
             </div>
@@ -70,13 +70,13 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Stock Bajo / Crítico</p>
-                    <h3 class="text-2xl font-extrabold text-amber-600 mt-1">{{ $kpiStockBajo }}</h3>
+                    <h3 class="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">{{ $kpiStockBajo }}</h3>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[22px]">warning</span>
                 </div>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[11px] text-amber-600 font-medium">
+            <div class="mt-3 flex items-center gap-1.5 text-[11px] text-amber-600 dark:text-amber-400 font-medium">
                 <span class="material-symbols-outlined text-[14px]">priority_high</span>
                 <span>Requieren reposición</span>
             </div>
@@ -87,9 +87,9 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Variantes Creadas</p>
-                    <h3 class="text-2xl font-extrabold text-purple-600 mt-1">{{ $kpiVariantes }}</h3>
+                    <h3 class="text-2xl font-extrabold text-purple-600 dark:text-purple-400 mt-1">{{ $kpiVariantes }}</h3>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                     <span class="material-symbols-outlined text-[22px]">style</span>
                 </div>
             </div>
@@ -182,7 +182,7 @@
         <div class="px-5 py-4 border-b border-slate-100 dark:border-gray-700 flex items-center justify-between flex-wrap gap-3">
             <div class="flex items-center gap-2">
                 <h3 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Catálogo de Productos</h3>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-500/20">
                     {{ $productos->total() }} productos registrados
                 </span>
             </div>
@@ -254,7 +254,7 @@
                             <td class="py-3 px-4">
                                 <div>
                                     @if($prod->tieneOfertaValida())
-                                        <div class="font-extrabold text-emerald-700">${{ number_format($prod->precio_oferta, 2) }}</div>
+                                        <div class="font-extrabold text-emerald-700 dark:text-emerald-400">${{ number_format($prod->precio_oferta, 2) }}</div>
                                         <div class="text-[10px] text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</div>
                                     @else
                                         <div class="font-bold text-slate-900 dark:text-white">${{ number_format($prod->precio, 2) }}</div>
@@ -270,17 +270,17 @@
                                 <div class="space-y-1.5">
                                     <div class="flex items-center gap-2">
                                         @if($prod->stock > ($prod->stock_minimo ?? 5))
-                                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700">
+                                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                                 <span>{{ $prod->stock }} en stock</span>
                                             </span>
                                         @elseif($prod->stock > 0)
-                                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700">
+                                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 dark:text-amber-400">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                                                 <span>{{ $prod->stock }} bajo stock</span>
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700">
+                                            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 dark:text-rose-400">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                                                 <span>Agotado</span>
                                             </span>
