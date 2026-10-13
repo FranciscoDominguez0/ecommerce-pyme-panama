@@ -138,10 +138,14 @@
 
         if (document.documentElement.classList.contains('dark')) {
             document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
             localStorage.setItem('color-theme', 'light');
+            document.cookie = "admin_theme=light;path=/;max-age=31536000;SameSite=Lax";
         } else {
             document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
             localStorage.setItem('color-theme', 'dark');
+            document.cookie = "admin_theme=dark;path=/;max-age=31536000;SameSite=Lax";
         }
         window.updateThemeToggleUI();
         window.dispatchEvent(new Event('theme-changed'));
@@ -162,18 +166,6 @@
             sidebarLinks.forEach(link => {
                 if (!link.dataset.navBound) {
                     link.dataset.navBound = 'true';
-                    link.addEventListener('click', function() {
-                        const href = this.getAttribute('href');
-                        if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
-                        if (this.getAttribute('target') === '_blank') return;
-                        if (href === window.location.href || href === window.location.pathname) return;
-
-                        document.body.classList.add('navigating');
-                        const actualContent = document.getElementById('actual-page-content');
-                        if (actualContent) {
-                            actualContent.classList.add('page-transitioning');
-                        }
-                    });
                 }
             });
         }

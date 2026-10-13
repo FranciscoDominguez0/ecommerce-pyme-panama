@@ -66,10 +66,10 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs font-medium text-slate-700 dark:text-slate-300">
                     @forelse($promociones as $promo)
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 /60 transition-colors">
+                        <tr class="hover:bg-slate-50 dark:hover:bg-gray-700/30 transition-colors">
                             <td class="py-3.5 px-5 font-bold text-slate-900 dark:text-white">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center shrink-0 shadow-2xs">
                                         <span class="material-symbols-outlined text-[18px]">distance</span>
                                     </div>
                                     <div>
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-3.5 px-5 font-bold text-emerald-700 text-sm">
+                            <td class="py-3.5 px-5 font-bold text-emerald-700 dark:text-emerald-400 text-sm">
                                 ${{ number_format($promo->monto_minimo, 2) }}
                             </td>
                             <td class="py-3.5 px-5 text-slate-600 dark:text-slate-400">
@@ -88,13 +88,13 @@
                             </td>
                             <td class="py-3.5 px-5">
                                 @if($promo->esVigente())
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
                                         Activo
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-transparent text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-gray-700">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500"></span>
                                         Inactivo / Expirado
                                     </span>
                                 @endif
@@ -103,14 +103,14 @@
                                 <div class="flex items-center justify-end gap-1">
                                     <button type="button" 
                                             onclick='editarReglaEnvio(@json($promo))' 
-                                            class="p-1.5 text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-transparent rounded-lg transition-colors"
+                                            class="p-1.5 text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors"
                                             title="Editar">
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </button>
 
                                     <form action="{{ route('admin.promociones.envio-gratis.toggle', $promo->id) }}" method="POST" class="inline">
                                         @csrf
-                                        <button type="submit" class="p-1.5 {{ $promo->activo ? 'text-emerald-600' : 'text-slate-400' }} hover:bg-slate-100 dark:bg-transparent rounded-lg transition-colors">
+                                        <button type="submit" class="p-1.5 {{ $promo->activo ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400' }} hover:bg-slate-100 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">{{ $promo->activo ? 'toggle_on' : 'toggle_off' }}</span>
                                         </button>
                                     </form>
@@ -121,7 +121,7 @@
                                                 nombre: 'Envío gratis: {{ addslashes($promo->zonaEnvio ? $promo->zonaEnvio->nombre : 'Todas las zonas') }} (Min. ${{ number_format($promo->monto_minimo, 2) }})',
                                                 titulo: '¿Eliminar Regla de Envío Gratis?'
                                             })" 
-                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
                                             title="Eliminar regla">
                                         <span class="material-symbols-outlined text-[18px]">delete</span>
                                     </button>
@@ -170,7 +170,7 @@
             <!-- Zona de Envío -->
             <div>
                 <label for="zona_envio_id" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Zona de Envío</label>
-                <select id="zona_envio_id" name="zona_envio_id" required class="w-full bg-slate-50 dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 outline-none">
+                <select id="zona_envio_id" name="zona_envio_id" required class="w-full bg-slate-50 dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 outline-none">
                     <option value="" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white">-- Selecciona una zona --</option>
                     @foreach($zonasEnvio as $zona)
                         <option value="{{ $zona->id }}" class="bg-white dark:bg-[#181a1b] text-slate-900 dark:text-white">{{ $zona->nombre }} (${{ number_format($zona->costo, 2) }})</option>
@@ -181,18 +181,18 @@
             <!-- Monto mínimo -->
             <div>
                 <label for="monto_minimo_envio" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Monto Mínimo de Compra ($ PAB)</label>
-                <input type="number" id="monto_minimo_envio" name="monto_minimo" step="0.01" min="0" required placeholder="50.00" class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 dark:text-white focus:bg-white dark:bg-[#121415] focus:border-emerald-500 outline-none">
+                <input type="number" id="monto_minimo_envio" name="monto_minimo" step="0.01" min="0" required placeholder="50.00" class="w-full bg-slate-50 dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 dark:text-white focus:border-emerald-500 outline-none">
             </div>
 
             <!-- Fechas -->
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label for="inicio_en_envio" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Inicio</label>
-                    <input type="date" id="inicio_en_envio" name="inicio_en" required class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:bg-[#121415] focus:border-emerald-500 outline-none">
+                    <input type="date" id="inicio_en_envio" name="inicio_en" required class="w-full bg-slate-50 dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 outline-none">
                 </div>
                 <div>
                     <label for="fin_en_envio" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Fin (Opcional)</label>
-                    <input type="date" id="fin_en_envio" name="fin_en" class="w-full bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:bg-white dark:bg-[#121415] focus:border-emerald-500 outline-none">
+                    <input type="date" id="fin_en_envio" name="fin_en" class="w-full bg-slate-50 dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 dark:text-white focus:border-emerald-500 outline-none">
                 </div>
             </div>
 
@@ -204,8 +204,8 @@
 
             <!-- Actions -->
             <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-gray-700">
-                <button type="button" onclick="cerrarModalEnvioGratis()" class="px-4 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl">Cancelar</button>
-                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs">Guardar Regla</button>
+                <button type="button" onclick="cerrarModalEnvioGratis()" class="px-4 py-2 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition-colors">Cancelar</button>
+                <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors">Guardar Regla</button>
             </div>
         </form>
     </div>

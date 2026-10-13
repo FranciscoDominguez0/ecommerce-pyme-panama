@@ -99,22 +99,36 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                             @php
                                 $estadoClasses = [
-                                    'pendiente' => 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-gray-700 dark:border-slate-700',
-                                    'pago_confirmado' => 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800',
-                                    'pago_rechazado' => 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800',
-                                    'en_preparacion' => 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
-                                    'listo_para_envio' => 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 border-teal-200 dark:border-teal-800',
-                                    'enviado' => 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800',
-                                    'entregado' => 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
-                                    'cancelado' => 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800',
-                                    'devolucion_solicitada' => 'bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-800',
-                                    'reembolsado' => 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-gray-100 dark:text-slate-300 border-slate-300 dark:border-gray-700 dark:border-slate-600',
+                                    'pendiente' => 'bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-500/20',
+                                    'pago_confirmado' => 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20',
+                                    'pago_rechazado' => 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20',
+                                    'en_preparacion' => 'bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20',
+                                    'listo_para_envio' => 'bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-200 dark:border-teal-500/20',
+                                    'enviado' => 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/20',
+                                    'entregado' => 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20',
+                                    'cancelado' => 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20',
+                                    'devolucion_solicitada' => 'bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-500/20',
+                                    'reembolsado' => 'bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-500/20',
+                                ];
+                                $estadoDots = [
+                                    'pendiente' => 'bg-slate-400 dark:bg-slate-500',
+                                    'pago_confirmado' => 'bg-blue-500 dark:bg-blue-400',
+                                    'pago_rechazado' => 'bg-rose-500 dark:bg-rose-400',
+                                    'en_preparacion' => 'bg-amber-500 dark:bg-amber-400',
+                                    'listo_para_envio' => 'bg-teal-500 dark:bg-teal-400',
+                                    'enviado' => 'bg-indigo-500 dark:bg-indigo-400',
+                                    'entregado' => 'bg-emerald-500 dark:bg-emerald-400',
+                                    'cancelado' => 'bg-rose-500 dark:bg-rose-400',
+                                    'devolucion_solicitada' => 'bg-orange-500 dark:bg-orange-400',
+                                    'reembolsado' => 'bg-slate-400 dark:bg-slate-500',
                                 ];
                                 $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
-                                $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-gray-700 dark:border-slate-700';
+                                $claseEstado = $estadoClasses[$ultimoEstado] ?? 'bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-500/20';
+                                $dotEstado = $estadoDots[$ultimoEstado] ?? 'bg-slate-400 dark:bg-slate-500';
                                 $labelEstado = ucfirst(str_replace('_', ' ', $ultimoEstado));
                             @endphp
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $claseEstado }}">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border {{ $claseEstado }}">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $dotEstado }}"></span>
                                 {{ $labelEstado }}
                             </span>
                         </td>

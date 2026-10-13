@@ -167,17 +167,17 @@
                             <!-- Aplicación -->
                             <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400">
                                 @if($cupon->aplica_a === 'catalogo' || $cupon->aplica_a === 'todo')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 text-[11px] font-semibold">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-500/20 text-[11px] font-semibold">
                                         <span class="material-symbols-outlined text-[14px]">storefront</span>
                                         Todo el catálogo
                                     </span>
                                 @elseif($cupon->aplica_a === 'categoria')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 text-[11px] font-semibold truncate max-w-[180px]">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-500/20 text-[11px] font-semibold truncate max-w-[180px]">
                                         <span class="material-symbols-outlined text-[14px]">category</span>
                                         {{ $cupon->categoria ? $cupon->categoria->nombre : 'Categoría' }}
                                     </span>
                                 @elseif($cupon->aplica_a === 'producto')
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 text-[11px] font-semibold truncate max-w-[180px]">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-500/20 text-[11px] font-semibold truncate max-w-[180px]">
                                         <span class="material-symbols-outlined text-[14px]">inventory_2</span>
                                         {{ $cupon->producto ? $cupon->producto->nombre : 'Producto' }}
                                     </span>
@@ -220,23 +220,23 @@
                             <td class="py-3.5 px-4">
                                 @php $estado = $cupon->obtenerEstadoTexto(); @endphp
                                 @if($estado === 'Activo')
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
                                         Activo
                                     </span>
                                 @elseif($estado === 'Inactivo')
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-transparent text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-gray-700">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500"></span>
                                         Inactivo
                                     </span>
                                 @elseif($estado === 'Vencido')
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400"></span>
                                         Vencido
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400"></span>
                                         Agotado
                                     </span>
                                 @endif

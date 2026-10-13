@@ -6,7 +6,7 @@
     body { 
         font-family: 'Plus Jakarta Sans', 'Figtree', sans-serif; 
         letter-spacing: -0.011em;
-        background-color: #F8FAFC;
+        background-color: var(--admin-bg);
         color: #111827;
     }
     .material-symbols-outlined {
@@ -22,14 +22,25 @@
     :root {
         --admin-bg-light: #f8fafc;
         --admin-bg-dark: #181a1b;
-        --admin-bg: var(--admin-bg-light);
+        --admin-bg: var(--admin-bg-dark);
     }
     html.dark {
         --admin-bg: var(--admin-bg-dark);
+        background-color: #181a1b !important;
         color-scheme: dark;
     }
+    html.dark body {
+        background-color: #181a1b !important;
+        color: #f8fafc;
+    }
     html.light {
+        --admin-bg: var(--admin-bg-light);
+        background-color: #f8fafc !important;
         color-scheme: light;
+    }
+    html.light body {
+        background-color: #f8fafc !important;
+        color: #111827;
     }
 
     /* Soporte universal para elementos select y option en Modo Oscuro con fondo negro del tema */
@@ -101,19 +112,9 @@
     }
 
     /* Animaciones Suaves de Página */
-    @keyframes subtleFadeIn {
-        0% { opacity: 0; transform: translateY(6px); }
-        100% { opacity: 1; transform: none; }
-    }
-    .animate-fade-in-up {
-        animation: subtleFadeIn 0.35s ease-out;
-    }
-    
-    /* Animación de salida */
+    /* Transición instantánea sin parpadeo */
     .page-transitioning {
-        opacity: 0.65 !important;
         pointer-events: none;
-        transition: opacity 0.2s ease-out !important;
     }
 
     /* Seamless Active Sidebar Item */

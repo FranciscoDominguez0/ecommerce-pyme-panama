@@ -87,24 +87,24 @@
                                 </td>
 
                                 <td class="py-4 px-5">
-                                    <span class="inline-flex px-2 py-1 rounded bg-slate-100 text-slate-700 text-[11px]">{{ $zona->zona }}</span>
+                                    <span class="inline-flex px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-500/20 text-[11px] font-medium">{{ $zona->zona }}</span>
                                 </td>
 
                                 <td class="py-4 px-5">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-xs font-mono">
-                                        ${{ number_format((float) ($zona->tarifa_uno_hasta_7lb ?? 0), 2) }} <span class="text-[10px] text-emerald-600 font-normal">USD</span>
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 font-bold text-xs font-mono">
+                                        ${{ number_format((float) ($zona->tarifa_uno_hasta_7lb ?? 0), 2) }} <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-normal">USD</span>
                                     </span>
                                 </td>
 
                                 <td class="py-4 px-5">
                                     @if($zona->activo)
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100/80 border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 text-[11px] font-semibold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
                                             <span>Activa</span>
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 text-[11px] font-semibold">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-500/10 border border-slate-200 dark:border-slate-500/20 text-slate-600 dark:text-slate-400 text-[11px] font-semibold">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500"></span>
                                             <span>Inactiva</span>
                                         </span>
                                     @endif

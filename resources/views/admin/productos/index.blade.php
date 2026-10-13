@@ -239,12 +239,12 @@
                                         <span class="font-mono font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-transparent px-1.5 py-0.5 rounded border border-slate-200 dark:border-gray-700">SKU: {{ $prod->sku ?? 'N/A' }}</span>
                                         
                                         @if($prod->categoria)
-                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-500/20">
                                                 <span class="material-symbols-outlined text-[11px]">folder</span>
                                                 <span>{{ $prod->categoria->nombre }}</span>
                                             </span>
                                         @else
-                                            <span class="text-slate-400 italic text-[10px]">Sin categoría</span>
+                                            <span class="text-slate-400 dark:text-slate-600 italic text-[10px]">Sin categoría</span>
                                         @endif
                                     </div>
                                 </div>
@@ -287,7 +287,7 @@
                                         @endif
                                         
                                         @if($prod->variantes_count > 0)
-                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200" title="Este producto tiene {{ $prod->variantes_count }} combinaciones">
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/20" title="Este producto tiene {{ $prod->variantes_count }} combinaciones">
                                                 <span class="material-symbols-outlined text-[11px]">style</span>
                                                 <span>{{ $prod->variantes_count }} var</span>
                                             </span>
@@ -303,12 +303,13 @@
                             <!-- Estado (Activo / Inactivo) -->
                             <td class="py-3 px-4">
                                 @if($prod->activo)
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
                                         <span>Activo</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-transparent text-slate-500 dark:text-slate-400">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 dark:bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500"></span>
                                         <span>Inactivo</span>
                                     </span>
                                 @endif

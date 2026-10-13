@@ -123,7 +123,7 @@
                                         <div class="font-bold text-slate-900 dark:text-white {{ $esHija ? 'text-xs' : 'text-sm' }} flex items-center gap-1.5">
                                             <span>{{ $categoria->nombre }}</span>
                                             @if($tieneHijas)
-                                                <span class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 dark:bg-transparent text-slate-600 dark:text-slate-400 font-semibold">
+                                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20 font-semibold">
                                                     {{ $categoria->hijas->count() }} sub
                                                 </span>
                                             @endif
@@ -153,20 +153,26 @@
                             <!-- Categoría Padre -->
                             <td class="py-3.5 px-4 text-center">
                                 @if($categoria->padre)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-transparent text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-500/20">
                                         <span class="material-symbols-outlined text-[13px] text-slate-400">folder</span>
                                         <span class="truncate max-w-[140px]">{{ $categoria->padre->nombre }}</span>
                                     </span>
                                 @else
-                                    <span class="text-slate-400 font-medium text-[11px]">— Raíz —</span>
+                                    <span class="text-slate-400 dark:text-slate-600 font-medium text-[11px]">— Raíz —</span>
                                 @endif
                             </td>
 
                             <!-- Total Productos -->
                             <td class="py-3.5 px-4 text-center">
-                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold {{ $tieneProductos ? 'bg-emerald-50 text-emerald-800 border border-emerald-100' : 'bg-slate-50 dark:bg-transparent text-slate-400 border border-slate-200 dark:border-gray-700' }}">
-                                    {{ $categoria->productos_count }} prod.
-                                </span>
+                                @if($tieneProductos)
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20">
+                                        {{ $categoria->productos_count }} prod.
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-50 dark:bg-slate-500/10 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-500/20">
+                                        0 prod.
+                                    </span>
+                                @endif
                             </td>
 
                             <!-- Estado (Toggle) -->
@@ -174,9 +180,11 @@
                                 <form method="POST" action="{{ route('admin.categorias.toggle-estado', $categoria->id) }}" class="inline-block">
                                     @csrf
                                     <button type="submit" 
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all {{ $categoria->activo ? 'bg-emerald-50 text-emerald-700 border border-emerald-100 hover:bg-emerald-100' : 'bg-slate-100 dark:bg-transparent text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-gray-700 hover:bg-slate-200 dark:bg-gray-700' }}"
+                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer {{ $categoria->activo 
+                                                ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20 hover:bg-emerald-100 dark:hover:bg-emerald-500/20' 
+                                                : 'bg-slate-100 dark:bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20 hover:bg-slate-200 dark:hover:bg-slate-500/20' }}"
                                             title="Click para cambiar estado">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ $categoria->activo ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $categoria->activo ? 'bg-emerald-500 dark:bg-emerald-400' : 'bg-slate-400 dark:bg-slate-500' }}"></span>
                                         <span>{{ $categoria->activo ? 'Activa' : 'Inactiva' }}</span>
                                     </button>
                                 </form>

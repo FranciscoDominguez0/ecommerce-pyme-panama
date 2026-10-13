@@ -1,6 +1,21 @@
 <!DOCTYPE html>
-<html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html class="{{ request()->cookie('admin_theme') === 'light' ? 'light' : 'dark' }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    {{-- Script inline prioritario: resuelve dark/light antes de cargar cualquier CSS para evitar parpadeos --}}
+    <script>
+        (function() {
+            var theme = localStorage.getItem('color-theme');
+            var isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
+        })();
+    </script>
+
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -19,21 +34,6 @@
     @include('layouts.partials.admin.styles')
 
     @stack('styles')
-
-    {{-- Script inline: aplica dark mode desde localStorage ANTES del primer render para evitar flash blanco --}}
-    <script>
-        (function() {
-            var theme = localStorage.getItem('color-theme');
-            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (theme === 'dark' || (!theme && prefersDark)) {
-                document.documentElement.classList.add('dark');
-                document.documentElement.classList.remove('light');
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.documentElement.classList.add('light');
-            }
-        })();
-    </script>
 </head>
 <body class="text-slate-900 dark:text-slate-100 min-h-screen flex flex-col md:flex-row text-sm antialiased selection:bg-emerald-100 selection:text-emerald-900 w-full max-w-full overflow-x-clip relative" style="background-color: var(--admin-bg);">
     
@@ -71,7 +71,7 @@
 
         <!-- Main Body -->
         <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto relative">
-            <div id="actual-page-content" class="w-full h-full transition-all duration-300 {{ $isFromLogin ? 'opacity-0' : 'animate-fade-in-up' }}">
+            <div id="actual-page-content" class="w-full h-full {{ $isFromLogin ? 'opacity-0' : '' }}">
                 @yield('content')
             </div>
         </main>

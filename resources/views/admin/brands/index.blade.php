@@ -117,20 +117,26 @@
 
                             <!-- Productos vinculados -->
                             <td class="py-3.5 px-4 text-center">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold {{ $brand->productos_count > 0 ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-50 dark:bg-transparent text-slate-400' }}">
-                                    {{ $brand->productos_count }}
-                                </span>
+                                @if($brand->productos_count > 0)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/20">
+                                        {{ $brand->productos_count }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-50 dark:bg-slate-500/10 text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-500/20">
+                                        0
+                                    </span>
+                                @endif
                             </td>
 
                             <!-- Estado Verificada -->
                             <td class="py-3.5 px-4 text-center">
                                 @if($brand->verified)
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 text-[11px] font-semibold">
                                         <span class="material-symbols-outlined text-[12px]">verified</span>
                                         <span>Oficial</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 dark:bg-transparent text-slate-500 dark:text-slate-400 text-[11px] font-medium">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20 text-[11px] font-medium">
                                         Estándar
                                     </span>
                                 @endif
