@@ -12,9 +12,9 @@
         <div class="flex flex-col lg:flex-row gap-8 items-start">
             
             <!-- Left Column: Lista de Productos -->
-            <div class="flex-1 w-full bg-white border border-gray-200/90 rounded-xl p-6 shadow-sm">
+            <div class="flex-1 w-full bg-white border border-gray-200/90 rounded-xl p-4 sm:p-6 shadow-sm">
                 
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Productos</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Productos</h2>
                 <hr class="border-gray-200 mb-2">
 
                 @foreach($items as $item)
@@ -25,9 +25,9 @@
                         $imagenRuta = $item->imagen_url;
                     @endphp
 
-                    <div wire:key="cart-item-{{ $item->id }}" class="border-b border-gray-200 py-6 last:border-0">
+                    <div wire:key="cart-item-{{ $item->id }}" class="border-b border-gray-200 py-4 sm:py-6 last:border-0">
                         <!-- Product Title -->
-                        <h3 class="text-[17px] leading-snug mb-4">
+                        <h3 class="text-sm sm:text-[17px] leading-snug mb-3 sm:mb-4">
                             @if($producto)
                                 <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" wire:navigate class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
                                     {{ $producto->nombre }}
@@ -37,39 +37,39 @@
                             @endif
                         </h3>
 
-                        <div class="flex gap-6 items-start">
+                        <div class="flex gap-3 sm:gap-6 items-start">
                             <!-- Image -->
-                            <div class="w-32 h-32 shrink-0 flex items-center justify-center">
+                            <div class="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 shrink-0 flex items-center justify-center bg-gray-50/60 rounded-lg p-1 border border-gray-100 overflow-hidden">
                                 <img src="{{ $imagenRuta }}" 
                                      alt="{{ $producto->nombre ?? 'Producto' }}" 
                                      class="max-w-full max-h-full object-contain"
                                      onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Sin+Imagen';" />
                             </div>
 
-                            <!-- Details -->
-                            <div class="flex-1 flex justify-between items-start">
-                                <div class="text-[15px] text-gray-800 space-y-1.5">
+                            <!-- Details & Eliminar -->
+                            <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:justify-between items-start gap-2.5 sm:gap-4">
+                                <div class="text-[13px] sm:text-[15px] text-gray-800 space-y-1 sm:space-y-1.5 min-w-0 w-full">
                                     
                                     <!-- Stock / Disponible -->
-                                    <div class="flex items-center gap-1.5 text-emerald-600 mb-3">
-                                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                                        <span class="font-medium">Disponible</span>
+                                    <div class="flex items-center gap-1.5 text-emerald-600 mb-2 sm:mb-3">
+                                        <span class="material-symbols-outlined text-[16px] sm:text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        <span class="font-medium text-xs sm:text-sm">Disponible</span>
                                     </div>
 
                                     <!-- Alertas de stock adicionales -->
                                     @if(isset($stockAdvertencias[$item->id]))
-                                        <div class="text-red-600 text-sm font-semibold flex items-center gap-1 mb-2">
+                                        <div class="text-red-600 text-xs sm:text-sm font-semibold flex items-center gap-1 mb-2">
                                             <span class="material-symbols-outlined text-[16px]">error</span>
                                             {{ $stockAdvertencias[$item->id] }}
                                         </div>
                                     @endif
 
-                                    <div class="flex items-center gap-1.5">
+                                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
                                         <span class="font-bold text-gray-900">Precio Unitario:</span> 
                                         <span>${{ number_format((float)$item->precio_unitario, 2) }} USD</span>
                                     </div>
                                     
-                                    <div class="flex items-center gap-1.5" x-data="{ editando: false }">
+                                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5" x-data="{ editando: false }">
                                         <span class="font-bold text-gray-900">Cantidad:</span> 
                                         
                                         <div x-show="!editando" class="flex items-center gap-1">
@@ -79,33 +79,34 @@
                                         
                                         <div x-show="editando" x-cloak class="flex items-center gap-2 ml-1">
                                             <div class="inline-flex items-center bg-gray-50 border border-gray-300 rounded shadow-xs">
-                                                <button type="button" wire:click="decrementar({{ $item->id }})" class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[16px]">remove</span></button>
-                                                <span class="w-8 text-center text-sm font-mono border-x border-gray-300 h-7 flex items-center justify-center bg-white">{{ $item->cantidad }}</span>
-                                                <button type="button" wire:click="incrementar({{ $item->id }})" class="w-7 h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[16px]">add</span></button>
+                                                <button type="button" wire:click="decrementar({{ $item->id }})" class="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[14px] sm:text-[16px]">remove</span></button>
+                                                <span class="w-7 sm:w-8 text-center text-xs sm:text-sm font-mono border-x border-gray-300 h-6 sm:h-7 flex items-center justify-center bg-white">{{ $item->cantidad }}</span>
+                                                <button type="button" wire:click="incrementar({{ $item->id }})" class="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[14px] sm:text-[16px]">add</span></button>
                                             </div>
                                             <button type="button" @click="editando = false" class="text-xs text-blue-600 hover:underline cursor-pointer">Listo</button>
                                         </div>
                                     </div>
 
-                                    <div class="flex items-center gap-1.5 pt-0.5">
+                                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 pt-0.5">
                                         <span class="font-bold text-gray-900">Precio Total:</span> 
-                                        <span>${{ number_format($item->subtotal, 2) }} USD</span>
+                                        <span class="font-semibold text-gray-900">${{ number_format($item->subtotal, 2) }} USD</span>
                                     </div>
                                     
                                     @if($item->variante_texto)
-                                        <div class="mt-2 text-sm text-gray-500">
+                                        <div class="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-500">
                                             Variante: {{ $item->variante_texto }}
                                         </div>
                                     @endif
                                 </div>
 
                                 <!-- Eliminar Button -->
-                                <div>
+                                <div class="shrink-0 self-end sm:self-start pt-1 sm:pt-0">
                                     <button type="button" 
                                             wire:click="eliminar({{ $item->id }})" 
-                                            class="text-[#d93025] hover:text-[#b3261e] hover:underline text-[15px] cursor-pointer" 
+                                            class="inline-flex items-center gap-1 text-[#d93025] hover:text-[#b3261e] hover:underline text-xs sm:text-[15px] font-medium cursor-pointer" 
                                             title="Eliminar producto">
-                                        Eliminar
+                                        <span class="material-symbols-outlined text-[16px] sm:hidden">delete</span>
+                                        <span>Eliminar</span>
                                     </button>
                                 </div>
                             </div>
@@ -122,9 +123,9 @@
                     </a>
                 </div>
 
-                <!-- Productos Relacionados -->
+                <!-- Productos Relacionados (Solo Modo PC) -->
                 @if($productosRelacionados->isNotEmpty())
-                    <div class="mt-10 pt-8 border-t border-gray-200">
+                    <div class="hidden lg:block mt-10 pt-8 border-t border-gray-200">
                         <h3 class="text-xl font-bold text-[#002349] mb-6">Productos Relacionados</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                             @foreach($productosRelacionados as $prod)
