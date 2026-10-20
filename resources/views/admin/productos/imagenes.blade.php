@@ -105,10 +105,10 @@
                 </div>
 
                 <!-- Contenedor de la Imagen Elegante -->
-                <div class="h-32 w-full bg-slate-50 dark:bg-transparent/80 flex items-center justify-center p-3 group-hover:bg-slate-100 dark:bg-transparent/50 transition-colors">
+                <div class="h-32 w-full bg-slate-50 dark:bg-[#121415] flex items-center justify-center p-3 group-hover:bg-slate-100 dark:group-hover:bg-[#151718] transition-colors">
                     <div class="w-full h-full flex items-center justify-center text-slate-700 dark:text-slate-300">
                         @if(!empty($img->ruta) && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'storage/')))
-                            <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain mix-blend-multiply transition-transform group-hover:scale-105">
+                            <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain transition-transform group-hover:scale-105">
                         @elseif(!empty($img->ruta) && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
                             <div class="w-full h-full flex items-center justify-center svg-container">{!! $img->ruta !!}</div>
                         @elseif(!empty($img->ruta))
@@ -200,7 +200,7 @@
 
         let contentPreview = '';
         if (rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http') || rutaOrBase64.startsWith('/storage') || rutaOrBase64.startsWith('storage/')) {
-            contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain mix-blend-multiply transition-transform group-hover:scale-105">`;
+            contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain transition-transform group-hover:scale-105">`;
         } else if (rutaOrBase64.includes('<svg') || rutaOrBase64.includes('</svg>')) {
             contentPreview = `<div class="w-full h-full flex items-center justify-center svg-container">${rutaOrBase64}</div>`;
         } else {
@@ -238,7 +238,7 @@
                 </button>
             </div>
 
-            <div class="h-32 w-full bg-slate-50 dark:bg-transparent/80 flex items-center justify-center p-3 group-hover:bg-slate-100 dark:bg-transparent/50 transition-colors">
+            <div class="h-32 w-full bg-slate-50 dark:bg-[#121415] flex items-center justify-center p-3 group-hover:bg-slate-100 dark:group-hover:bg-[#151718] transition-colors">
                 <div class="w-full h-full flex items-center justify-center text-slate-700 dark:text-slate-300">
                     ${contentPreview}
                 </div>

@@ -106,7 +106,7 @@ class IntegracionEnvioPedidoTest extends BaseAdminTest
     }
 
     #[Test]
-    public function los_estados_logisticos_avanzados_exigen_envio_configurado(): void
+    public function los_estados_logisticos_avanzados_no_bloquean_sin_envio_configurado(): void
     {
         $admin = $this->crearAdmin();
         $cliente = $this->crearCliente();
@@ -114,27 +114,12 @@ class IntegracionEnvioPedidoTest extends BaseAdminTest
         $producto = Producto::factory()->create(['precio' => 50.00, 'stock' => 10]);
         $pedido = $this->crearPedidoReal($cliente, $direccion, $producto);
 
-        // Sin envío registrado: 'en_transito' es rechazado con aviso.
+        // Sin envío registrado: 'en_transito' es aceptado directamente
         $this->actingAs($admin)
             ->from(route('admin.pedidos.detalle', $pedido->id))
             ->post(route('admin.pedidos.estado', $pedido->id), ['estado' => 'en_transito'])
             ->assertRedirect(route('admin.pedidos.detalle', $pedido->id))
-            ->assertSessionHas('toast_error');
-
-        $this->assertSame(
-            0,
-            EstadoPedido::where('pedido_id', $pedido->id)->where('estado', 'en_transito')->count()
-        );
-
-        // Con envío registrado: 'en_transito' es aceptado.
-        $this->actingAs($admin)
-            ->put(route('admin.pedidos.envio.update', $pedido->id), [
-                'metodo_envio' => 'Company Delivery',
-                'numero_guia'  => 'GUIA-TRANSITO-001',
-            ]);
-
-        $this->actingAs($admin)
-            ->post(route('admin.pedidos.estado', $pedido->id), ['estado' => 'en_transito']);
+            ->assertSessionHas('toast_success');
 
         $this->assertSame(
             1,
