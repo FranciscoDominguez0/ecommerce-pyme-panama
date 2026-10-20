@@ -155,7 +155,17 @@ class PerfilController extends Controller
             ['two_fa_habilitado' => $habilitar]
         );
 
-        return redirect()->route('admin.perfil')->with('toast_success', "Autenticación de Dos Factores " . ($habilitar ? 'activada' : 'desactivada') . ".");
+        $mensaje = "Autenticación de Dos Factores " . ($habilitar ? 'activada' : 'desactivada') . ".";
+
+        if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'exito' => true,
+                'habilitado' => (bool)$habilitar,
+                'mensaje' => $mensaje,
+            ]);
+        }
+
+        return redirect()->route('admin.perfil')->with('toast_success', $mensaje);
     }
 
     /**

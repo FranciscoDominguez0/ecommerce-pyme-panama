@@ -30,7 +30,7 @@
     <!-- Main Content -->
     <main class="flex-1 relative">
         @php
-            $isFromLogin = session()->pull('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '/2fa');
+            $isFromLogin = session()->pull('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '2fa-challenge');
         @endphp
         
         <!-- Esqueleto de Carga (Solo post-login) -->

@@ -71,11 +71,11 @@
                     </div>
                     <div class="flex flex-col items-center justify-center">
                         <div class="text-3xl font-black text-emerald-600">
-                            <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">
+                            <span id="stat-2fa-icon" class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">
                                 {{ $usuario->two_fa_habilitado ? 'verified_user' : 'gpp_bad' }}
                             </span>
                         </div>
-                        <div class="text-[11px] uppercase font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mt-1">
+                        <div id="stat-2fa-status" class="text-[11px] uppercase font-extrabold tracking-widest text-slate-500 dark:text-slate-400 mt-1">
                             {{ $usuario->two_fa_habilitado ? '2FA Activo' : '2FA Inactivo' }}
                         </div>
                     </div>
@@ -212,21 +212,67 @@
                         Añade una capa de seguridad extra con un código de verificación.
                     </p>
                     
-                    <form action="{{ route('admin.perfil.2fa.update') }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="two_fa_habilitado" value="0">
-                        
-                        <label class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
+                    <div x-data="{
+                        habilitado: {{ $usuario->two_fa_habilitado ? 'true' : 'false' }},
+                        cargando: false,
+                        toggle() {
+                            if (this.cargando) return;
+                            this.cargando = true;
+                            const nuevoEstado = !this.habilitado;
+
+                            fetch('{{ route('admin.perfil.2fa.update') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    _method: 'PUT',
+                                    two_fa_habilitado: nuevoEstado ? 1 : 0
+                                })
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                this.cargando = false;
+                                if (data.exito) {
+                                    this.habilitado = nuevoEstado;
+                                    const statEl = document.getElementById('stat-2fa-status');
+                                    const iconEl = document.getElementById('stat-2fa-icon');
+                                    if (statEl) statEl.textContent = nuevoEstado ? '2FA Activo' : '2FA Inactivo';
+                                    if (iconEl) iconEl.textContent = nuevoEstado ? 'verified_user' : 'gpp_bad';
+                                    if (window.mostrarToast) {
+                                        window.mostrarToast('success', data.mensaje);
+                                    }
+                                } else {
+                                    if (window.mostrarToast) {
+                                        window.mostrarToast('error', data.mensaje || 'Error al actualizar 2FA.');
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                this.cargando = false;
+                                if (window.mostrarToast) {
+                                    window.mostrarToast('error', 'Error de conexión.');
+                                }
+                            });
+                        }
+                    }">
+                        <label @click.prevent="toggle()" 
+                               class="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-all outline-none focus:outline-none focus:ring-0 focus-within:outline-none focus-within:ring-0 select-none"
+                               :class="{ 'opacity-60 pointer-events-none': cargando }">
                             <div class="relative inline-flex items-center">
-                                <input type="checkbox" name="two_fa_habilitado" value="1" class="sr-only peer" onchange="this.form.submit()" {{ $usuario->two_fa_habilitado ? 'checked' : '' }}>
-                                <div class="w-9 h-5 bg-slate-200 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#181a1b] after:border-slate-300 dark:border-gray-700 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                                <div class="w-9 h-5 rounded-full transition-colors relative"
+                                     :class="habilitado ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-gray-700'">
+                                    <div class="absolute top-[2px] left-[2px] bg-white dark:bg-[#181a1b] border border-slate-300 dark:border-gray-700 rounded-full h-4 w-4 transition-transform"
+                                         :class="habilitado ? 'translate-x-full border-white' : ''"></div>
+                                </div>
                             </div>
-                            <span class="text-sm font-bold text-slate-700 dark:text-slate-300 select-none">
-                                {{ $usuario->two_fa_habilitado ? 'Desactivar 2FA' : 'Activar 2FA' }}
-                            </span>
+                            <span class="text-sm font-bold text-slate-700 dark:text-slate-300 select-none" 
+                                  x-text="habilitado ? 'Desactivar 2FA' : 'Activar 2FA'"></span>
                         </label>
-                    </form>
+                    </div>
                 </div>
             </div>
 
