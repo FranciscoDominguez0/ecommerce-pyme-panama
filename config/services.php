@@ -49,6 +49,7 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
+        'analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-MLCZR3R9SP'),
     ],
 
     'turnstile' => [
