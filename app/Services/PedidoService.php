@@ -65,7 +65,6 @@ class PedidoService
      */
     public function calcularTotales(Carrito $carrito, ?ZonaEnvio $zonaEnvio, ?Cupon $cupon, ?float $costoEnvioPersonalizado = null): array
     {
-        // Subtotal e ITBMS compartidos con el carrito (respeta aplica_itbms por producto).
         $desglose = $this->carritoService->calcularSubtotalEItbms($carrito);
         $subtotal = $desglose['subtotal'];
         $descuento = 0.00;
@@ -77,7 +76,6 @@ class PedidoService
             } elseif ($cupon->tipo === 'monto_fijo') {
                 $descuento = $cupon->valor;
             }
-            // envio_gratis no genera descuento sobre productos
             if ($descuento > $subtotal) {
                 $descuento = $subtotal;
             }
@@ -85,14 +83,11 @@ class PedidoService
             $descuento = $carrito->descuento_aplicado;
         }
 
-        // Evaluar si el carrito requiere flete físico o si todos los productos son digitales/licencias
         $requiereEnvioFisico = $this->carritoRequiereEnvioFisico($carrito);
 
         if ($costoEnvioPersonalizado !== null) {
-            // El costo personalizado (ej. Courier) tiene prioridad absoluta
             $costoEnvio = $costoEnvioPersonalizado;
         } elseif (!$requiereEnvioFisico) {
-            // Si son productos digitales/servicios y no hay courier explícito, envío es gratis
             $costoEnvio = 0.00;
         } elseif ($zonaEnvio) {
             $costoEnvio = $this->envioService->calcularCostoEnvio($zonaEnvio, $carrito);
@@ -134,8 +129,7 @@ class PedidoService
     }
 
     /**
-     * Crea un pedido a partir del carrito. Se ejecuta dentro de una transacción en el controlador,
-     * o maneja su propia transacción si falla la validación inicial.
+     * Crea un pedido a partir del carrito.
      */
     public function crearDesdeCarrito(
         Carrito $carrito,
@@ -148,7 +142,7 @@ class PedidoService
         ?float $costoEnvioPersonalizado = null
     ): Pedido {
         return DB::transaction(function () use ($carrito, $direccionId, $metodoPago, $notasCliente, $zonaEnvio, $comprobantePagoRuta, $notasInternas, $costoEnvioPersonalizado) {
-            // 1. Validar stock
+            // Validar stock disponible
             foreach ($carrito->items as $item) {
                 $stockDisponible = $item->variante ? $item->variante->stock : $item->producto->stock;
                 if ($item->cantidad > $stockDisponible) {
@@ -156,12 +150,11 @@ class PedidoService
                 }
             }
 
-            // 2. Calcular totales
+            // Calcular totales
             $cupon = $carrito->cupon;
             $totales = $this->calcularTotales($carrito, $zonaEnvio, $cupon, $costoEnvioPersonalizado);
 
-            // 3. Crear registro de Pedido con número generado de forma atómica
-            //    (ver generarNumeroPedido). Ya NO existe el trigger DB que lo llenaba.
+            // Guardar pedido
             $pedido = Pedido::create([
                 'usuario_id' => $carrito->usuario_id,
                 'direccion_id' => $direccionId,
@@ -179,7 +172,7 @@ class PedidoService
                 'comprobante_pago_ruta' => $comprobantePagoRuta,
             ]);
 
-            // 4. Copiar items, deducir stock y registrar el movimiento de inventario
+            // Guardar items, descontar stock y registrar movimiento
             foreach ($carrito->items as $item) {
                 ItemPedido::create([
                     'pedido_id' => $pedido->id,
@@ -190,7 +183,6 @@ class PedidoService
                     'subtotal' => $item->subtotal,
                 ]);
 
-                // Deducir stock (atómico dentro de la transacción) y capturar valores.
                 if ($item->variante) {
                     $stockAntes = (int) $item->variante->stock;
                     $item->variante->decrement('stock', $item->cantidad);
@@ -201,7 +193,6 @@ class PedidoService
                     $varianteId = null;
                 }
 
-                // Trazabilidad de inventario: salida por venta (misma transacción).
                 DB::table('movimientos_inventario')->insert([
                     'producto_id' => $item->producto_id,
                     'variante_producto_id' => $varianteId,
@@ -216,7 +207,7 @@ class PedidoService
                     'creado_en' => now(),
                 ]);
 
-                // Notificar stock mínimo si aplica
+                // Notificar si el stock llega al mínimo
                 $stockDespues = $stockAntes - $item->cantidad;
                 $stockMinimo = $item->producto->stock_minimo ?? 0;
                 if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
@@ -227,7 +218,6 @@ class PedidoService
                     $usuariosNotificar = Usuario::role($roles)->get();
                     Notification::send($usuariosNotificar, new StockMinimoNotification($item->producto, $item->variante));
 
-                    // Correos adicionales sin cuenta
                     if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
                         $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
                         if (!empty(trim($adicionales))) {
@@ -242,17 +232,16 @@ class PedidoService
                 }
             }
 
-            // 5. Crear estado inicial
+            // Estado inicial y vaciado del carrito
             $this->cambiarEstado($pedido, 'pendiente', $carrito->usuario_id, 'Pedido creado.');
 
-            // 6. Limpiar carrito
             $carrito->items()->delete();
             $carrito->update([
                 'cupon_id' => null,
                 'descuento_aplicado' => 0.00,
             ]);
 
-            // 7. Enviar notificaciones a los administradores
+            // Notificar a los administradores
             $admins = Usuario::role('super_admin')->get();
             Notification::send($admins, new NuevoPedidoNotification($pedido));
 
@@ -261,27 +250,21 @@ class PedidoService
     }
 
     /**
-     * Registra un nuevo estado para el pedido aplicando las reglas de negocio.
-     *
-     * @throws Exception Si el cambio de estado no es permitido.
+     * Registra un nuevo estado para el pedido.
      */
     public function cambiarEstado(Pedido $pedido, string $nuevoEstado, ?int $usuarioId = null, ?string $comentario = null): EstadoPedido
     {
-        // Un pedido reembolsado tiene su ciclo financiero y logístico cerrado permanentemente
+        // No permitir cambios si el pedido ya fue reembolsado
         if ($pedido->ultimoEstado?->estado === 'reembolsado' && $nuevoEstado !== 'reembolsado') {
             throw new Exception('Este pedido ya se encuentra reembolsado y su ciclo está cerrado. No se permiten más cambios de estado.');
         }
 
-        // Bloquear reembolsos directos desde el selector genérico de logística, a menos que provenga del flujo de reembolso (Stripe)
-        // Nota: en este caso asumimos que si el comentario incluye "Stripe" es válido, 
-        // pero idealmente esto se maneja con un método dedicado `reembolsarPedido`
+        // Los reembolsos deben procesarse formalmente mediante su botón de reembolso
         if ($nuevoEstado === 'reembolsado' && !str_contains($comentario ?? '', 'Stripe')) {
             throw new Exception('Los reembolsos financieros deben ejecutarse formalmente mediante el botón de Reembolso.');
         }
 
-
         if (!$comentario) {
-            // Auto-generar comentarios para estados de envío si no se provee uno
             $empresa = $pedido->envio?->empresa_mensajeria ?? 'nuestra logística';
             $guia = ($pedido->envio && $pedido->envio->numero_guia) ? " (Referencia: {$pedido->envio->numero_guia})" : "";
             
@@ -316,22 +299,18 @@ class PedidoService
             'comentario' => $comentario,
         ]);
 
-        // Regla de negocio: Generar factura cuando el pago es confirmado
         if ($nuevoEstado === 'pago_confirmado') {
             app(FacturaService::class)->generarFactura($pedido);
         }
 
-        // Regla de negocio: Anular factura cuando el pedido se cancela o reembolsa
         if (in_array($nuevoEstado, ['cancelado', 'reembolsado'])) {
             app(FacturaService::class)->anularFactura($pedido);
         }
 
-        // Regla de negocio: Registrar fecha de entrega real
         if ($nuevoEstado === 'entregado' && $pedido->envio) {
             $pedido->envio->update(['fecha_entrega_real' => now()]);
         }
 
-        // Regla de negocio: Enviar email cuando el pedido es entregado
         if ($nuevoEstado === 'entregado') {
             Mail::to($pedido->usuario->email)->send(new PedidoEntregadoMail($pedido));
         }
@@ -340,20 +319,10 @@ class PedidoService
     }
 
     /**
-     * Genera el siguiente número de pedido con el formato corto "#PM-XXXXXX".
-     *
-     * Única fuente de verdad (el trigger DB trg_numero_pedido fue eliminado en la
-     * migración 2026_08_11_000000_drop_trigger_numero_pedido). Usa un correlativo
-     * secuencial en la tabla "configuracion" con bloqueo de fila (lockForUpdate),
-     * el mismo patrón atómico que facturas.numero (generar_numero_factura), por lo
-     * que es seguro ante creación concurrente de pedidos.
-     *
-     * Debe invocarse DENTRO de una transacción de base de datos.
+     * Genera el siguiente número secuencial de pedido (#PM-XXXXXX).
      */
     protected function generarNumeroPedido(): string
     {
-        // Asegurar que exista la fila del correlativo (clave-valor de configuracion).
-        // El valor inicial continúa la numeración id-base previa (#PM-260001 = 260000 + id).
         DB::table('configuracion')->insertOrIgnore([
             'clave' => 'pedido_correlativo',
             'valor' => (string) (Pedido::max('id') ?? 0),
@@ -362,8 +331,6 @@ class PedidoService
             'actualizado_en' => now(),
         ]);
 
-        // Bloquear la fila y leer el correlativo: dentro de la transacción, cualquier
-        // otro pedido concurrente queda en espera hasta que esta transacción termina.
         $fila = DB::table('configuracion')
             ->where('clave', 'pedido_correlativo')
             ->lockForUpdate()
@@ -376,7 +343,6 @@ class PedidoService
                 ->where('clave', 'pedido_correlativo')
                 ->update(['valor' => (string) $correlativo, 'actualizado_en' => now()]);
         } else {
-            // Caso borde defensivo: la fila no existía, se crea con el valor consumido.
             DB::table('configuracion')->insert([
                 'clave' => 'pedido_correlativo',
                 'valor' => (string) $correlativo,

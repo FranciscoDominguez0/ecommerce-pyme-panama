@@ -45,19 +45,16 @@ class FacturaService
                 'emitida_en' => now(),
             ]);
 
-            // Generar PDF y almacenarlo con imágenes incrustadas en Base64
             $pdfRuta = $this->generarPdf($factura);
 
-            // Enviar correo automático en segundo plano usando defer() de Laravel 11+
-            // Esto asegura que la transacción de BD se haya cerrado y el usuario reciba
-            // respuesta inmediata, evitando que el tiempo de conexión SMTP bloquee el sistema.
+            // Envío del correo en segundo plano
             defer(function () use ($factura) {
                 try {
                     Mail::to($factura->usuario->email)->send(new FacturaMail($factura));
                     
                     ReenvioFactura::create([
                         'factura_id' => $factura->id,
-                        'usuario_id' => $factura->usuario_id, // Atribuido al sistema o al usuario del pedido
+                        'usuario_id' => $factura->usuario_id,
                         'email_destino' => $factura->usuario->email,
                         'mensaje_personalizado' => 'Envío automático inicial',
                         'enviado_en' => now(),
