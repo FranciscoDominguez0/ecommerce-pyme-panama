@@ -50,7 +50,7 @@
 
                 <!-- Textos del Hero (Garantizados sobre fondo blanco) -->
                 <div class="flex-1 pt-2 md:pt-4 pb-2">
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $usuario->nombre_completo }}</h2>
+                    <h2 id="hero-nombre-completo" class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $usuario->nombre_completo }}</h2>
                     <div class="flex flex-wrap items-center gap-3 mt-2 text-slate-600 dark:text-slate-400 text-sm md:text-base font-semibold">
                         <span class="flex items-center gap-1.5 bg-slate-100 dark:bg-transparent px-3 py-1 rounded-lg text-slate-800 dark:text-gray-100 border border-slate-200 dark:border-gray-700 shadow-sm">
                             <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
@@ -103,20 +103,82 @@
                     </div>
                 </div>
                 <div class="p-6">
-                    <form action="{{ route('admin.perfil.datos.update') }}" method="POST" class="space-y-4">
+                    <form action="{{ route('admin.perfil.datos.update') }}" 
+                          method="POST" 
+                          class="space-y-4"
+                          x-data="{
+                              cargando: false,
+                              errores: {},
+                              guardarDatos(e) {
+                                  if (this.cargando) return;
+                                  this.cargando = true;
+                                  this.errores = {};
+                                  const form = e.target;
+                                  const formData = new FormData(form);
+
+                                  fetch(form.action, {
+                                      method: 'POST',
+                                      headers: {
+                                          'X-Requested-With': 'XMLHttpRequest',
+                                          'Accept': 'application/json',
+                                          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                      },
+                                      body: formData
+                                  })
+                                  .then(async res => {
+                                      const data = await res.json().catch(() => ({}));
+                                      this.cargando = false;
+                                      if (res.ok && data.exito) {
+                                          if (data.usuario && data.usuario.nombre_completo) {
+                                              const heroNombre = document.getElementById('hero-nombre-completo');
+                                              if (heroNombre) heroNombre.textContent = data.usuario.nombre_completo;
+                                          }
+                                          if (window.mostrarToast) {
+                                              window.mostrarToast('success', data.mensaje);
+                                          }
+                                      } else if (res.status === 422 && data.errors) {
+                                          this.errores = data.errors;
+                                          if (window.mostrarToast) {
+                                              window.mostrarToast('error', 'Por favor verifica los campos con error.');
+                                          }
+                                      } else {
+                                          if (window.mostrarToast) {
+                                              window.mostrarToast('error', data.mensaje || 'Error al actualizar los datos.');
+                                          }
+                                      }
+                                  })
+                                  .catch(() => {
+                                      this.cargando = false;
+                                      if (window.mostrarToast) {
+                                          window.mostrarToast('error', 'Error de conexión con el servidor.');
+                                      }
+                                  });
+                              }
+                          }"
+                          @submit.prevent="guardarDatos($event)">
                         @csrf
                         @method('PUT')
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nombre <span class="text-red-500">*</span></label>
-                                <input type="text" name="nombre" value="{{ old('nombre', $usuario->nombre) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                @error('nombre') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                <input type="text" name="nombre" value="{{ old('nombre', $usuario->nombre) }}" 
+                                       class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none"
+                                       :class="errores.nombre ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''">
+                                <template x-if="errores.nombre">
+                                    <span class="text-xs text-red-500 mt-1 block" x-text="errores.nombre[0]"></span>
+                                </template>
+                                @error('nombre') <span class="text-xs text-red-500 mt-1 block" x-show="!errores.nombre">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Apellido <span class="text-red-500">*</span></label>
-                                <input type="text" name="apellido" value="{{ old('apellido', $usuario->apellido) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                @error('apellido') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                <input type="text" name="apellido" value="{{ old('apellido', $usuario->apellido) }}" 
+                                       class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none"
+                                       :class="errores.apellido ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''">
+                                <template x-if="errores.apellido">
+                                    <span class="text-xs text-red-500 mt-1 block" x-text="errores.apellido[0]"></span>
+                                </template>
+                                @error('apellido') <span class="text-xs text-red-500 mt-1 block" x-show="!errores.apellido">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Correo Electrónico (Solo Lectura)</label>
@@ -124,19 +186,37 @@
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Teléfono</label>
-                                <input type="text" name="telefono" value="{{ old('telefono', $usuario->telefono) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                @error('telefono') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                <input type="text" name="telefono" value="{{ old('telefono', $usuario->telefono) }}" 
+                                       class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none"
+                                       :class="errores.telefono ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''">
+                                <template x-if="errores.telefono">
+                                    <span class="text-xs text-red-500 mt-1 block" x-text="errores.telefono[0]"></span>
+                                </template>
+                                @error('telefono') <span class="text-xs text-red-500 mt-1 block" x-show="!errores.telefono">{{ $message }}</span> @enderror
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Fecha de Nacimiento</label>
-                                <input type="date" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', $usuario->fecha_nacimiento?->format('Y-m-d')) }}" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                @error('fecha_nacimiento') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                <input type="date" name="fecha_nacimiento" value="{{ old('fecha_nacimiento', $usuario->fecha_nacimiento?->format('Y-m-d')) }}" 
+                                       class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#181a1b] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none"
+                                       :class="errores.fecha_nacimiento ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''">
+                                <template x-if="errores.fecha_nacimiento">
+                                    <span class="text-xs text-red-500 mt-1 block" x-text="errores.fecha_nacimiento[0]"></span>
+                                </template>
+                                @error('fecha_nacimiento') <span class="text-xs text-red-500 mt-1 block" x-show="!errores.fecha_nacimiento">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
                         <div class="pt-4 flex justify-end">
-                            <button type="submit" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors">
-                                Guardar Cambios
+                            <button type="submit" 
+                                    :disabled="cargando"
+                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-slate-900 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl shadow-sm transition-all outline-none focus:outline-none focus:ring-0 active:outline-none select-none">
+                                <template x-if="cargando">
+                                    <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </template>
+                                <span x-text="cargando ? 'Guardando...' : 'Guardar Cambios'">Guardar Cambios</span>
                             </button>
                         </div>
                     </form>
@@ -154,34 +234,94 @@
                     </div>
                 </div>
                 <div class="p-6">
-                    <form action="{{ route('admin.perfil.password.update') }}" method="POST" class="space-y-4">
+                    <form action="{{ route('admin.perfil.password.update') }}" 
+                          method="POST" 
+                          class="space-y-4"
+                          x-data="{
+                              cargando: false,
+                              errores: {},
+                              guardarPassword(e) {
+                                  if (this.cargando) return;
+                                  this.cargando = true;
+                                  this.errores = {};
+                                  const form = e.target;
+                                  const formData = new FormData(form);
+
+                                  fetch(form.action, {
+                                      method: 'POST',
+                                      headers: {
+                                          'X-Requested-With': 'XMLHttpRequest',
+                                          'Accept': 'application/json',
+                                          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                      },
+                                      body: formData
+                                  })
+                                  .then(async res => {
+                                      const data = await res.json().catch(() => ({}));
+                                      this.cargando = false;
+                                      if (res.ok && data.exito) {
+                                          form.reset();
+                                          if (window.mostrarToast) {
+                                              window.mostrarToast('success', data.mensaje);
+                                          }
+                                      } else if (res.status === 422 && data.errors) {
+                                          this.errores = data.errors;
+                                          if (window.mostrarToast) {
+                                              window.mostrarToast('error', data.errors.current_password ? data.errors.current_password[0] : 'Verifica los campos de contraseña.');
+                                          }
+                                      } else {
+                                          if (window.mostrarToast) {
+                                              window.mostrarToast('error', data.mensaje || 'Error al actualizar la contraseña.');
+                                          }
+                                      }
+                                  })
+                                  .catch(() => {
+                                      this.cargando = false;
+                                      if (window.mostrarToast) {
+                                          window.mostrarToast('error', 'Error de conexión con el servidor.');
+                                      }
+                                  });
+                              }
+                          }"
+                          @submit.prevent="guardarPassword($event)">
                         @csrf
                         @method('PUT')
 
                         <div class="space-y-4 max-w-md">
                             <div>
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Contraseña Actual <span class="text-red-500">*</span></label>
-                                <input type="password" name="current_password" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                @error('current_password') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                <input type="password" name="current_password" 
+                                       class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none"
+                                       :class="errores.current_password ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''">
+                                <template x-if="errores.current_password">
+                                    <span class="text-xs text-red-500 mt-1 block" x-text="errores.current_password[0]"></span>
+                                </template>
+                                @error('current_password') <span class="text-xs text-red-500 mt-1 block" x-show="!errores.current_password">{{ $message }}</span> @enderror
                             </div>
                             
                             <!-- Inputs de Contraseña con Toggle (Alpine) -->
                             <div x-data="{ show: false }">
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Nueva Contraseña <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input :type="show ? 'text' : 'password'" name="password" class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400">
+                                    <input :type="show ? 'text' : 'password'" name="password" 
+                                           class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none"
+                                           :class="errores.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400 outline-none focus:outline-none focus:ring-0">
                                         <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
                                     </button>
                                 </div>
-                                @error('password') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                                <template x-if="errores.password">
+                                    <span class="text-xs text-red-500 mt-1 block" x-text="errores.password[0]"></span>
+                                </template>
+                                @error('password') <span class="text-xs text-red-500 mt-1 block" x-show="!errores.password">{{ $message }}</span> @enderror
                             </div>
 
                             <div x-data="{ show: false }">
                                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Confirmar Nueva Contraseña <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input :type="show ? 'text' : 'password'" name="password_confirmation" class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400">
+                                    <input :type="show ? 'text' : 'password'" name="password_confirmation" 
+                                           class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400 outline-none focus:outline-none focus:ring-0">
                                         <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
                                     </button>
                                 </div>
@@ -189,8 +329,16 @@
                         </div>
 
                         <div class="pt-4 flex justify-start">
-                            <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors">
-                                Actualizar Contraseña
+                            <button type="submit" 
+                                    :disabled="cargando"
+                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl shadow-sm transition-all outline-none focus:outline-none focus:ring-0 active:outline-none select-none">
+                                <template x-if="cargando">
+                                    <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </template>
+                                <span x-text="cargando ? 'Actualizando...' : 'Actualizar Contraseña'">Actualizar Contraseña</span>
                             </button>
                         </div>
                     </form>
@@ -313,7 +461,7 @@
                     @endif
 
                     <div class="pt-2">
-                        <button type="button" @click="modalOpen = true" class="w-full px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors text-center">
+                        <button type="button" @click="modalOpen = true" class="w-full px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors text-center outline-none focus:outline-none focus:ring-0">
                             Cerrar Sesión en Otros Dispositivos
                         </button>
                     </div>
@@ -345,7 +493,7 @@
                             <div x-data="{ show: false }" class="mb-5">
                                 <div class="relative">
                                     <input :type="show ? 'text' : 'password'" name="password" placeholder="Contraseña Actual" required class="w-full pl-3.5 pr-10 py-2.5 text-sm bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl focus:bg-white dark:bg-[#121415] focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 text-slate-800 dark:text-gray-100 transition-all outline-none">
-                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400">
+                                    <button type="button" @click="show = !show" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:text-slate-400 outline-none focus:outline-none focus:ring-0">
                                         <span class="material-symbols-outlined text-[20px]" x-text="show ? 'visibility_off' : 'visibility'"></span>
                                     </button>
                                 </div>
@@ -353,10 +501,10 @@
                             </div>
 
                             <div class="flex justify-end gap-2">
-                                <button type="button" @click="modalOpen = false" class="px-4 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-xl transition-colors">
+                                <button type="button" @click="modalOpen = false" class="px-4 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 text-sm font-semibold rounded-xl transition-colors outline-none focus:outline-none focus:ring-0">
                                     Cancelar
                                 </button>
-                                <button type="submit" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors">
+                                <button type="submit" class="px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors outline-none focus:outline-none focus:ring-0">
                                     Cerrar Sesiones
                                 </button>
                             </div>

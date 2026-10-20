@@ -9,6 +9,16 @@
         background-color: var(--admin-bg);
         color: #111827;
     }
+
+    /* Prevenir el recuadro azul nativo de Chromium en botones y elementos interactivos */
+    button:focus,
+    button:focus-visible,
+    input[type="submit"]:focus,
+    input[type="submit"]:focus-visible,
+    input[type="button"]:focus,
+    input[type="button"]:focus-visible {
+        outline: none !important;
+    }
     .material-symbols-outlined {
         font-family: 'Material Symbols Outlined';
         font-weight: normal;

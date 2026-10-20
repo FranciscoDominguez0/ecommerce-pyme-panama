@@ -63,7 +63,24 @@ class PerfilController extends Controller
             $datosValidados
         );
 
-        return redirect()->route('admin.perfil')->with('toast_success', 'Datos personales actualizados correctamente.');
+        $mensaje = 'Datos personales actualizados correctamente.';
+
+        if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'exito' => true,
+                'mensaje' => $mensaje,
+                'usuario' => [
+                    'nombre' => $usuario->nombre,
+                    'apellido' => $usuario->apellido,
+                    'nombre_completo' => $usuario->nombre_completo,
+                    'iniciales' => $usuario->iniciales,
+                    'telefono' => $usuario->telefono,
+                    'fecha_nacimiento' => $usuario->fecha_nacimiento?->format('Y-m-d'),
+                ]
+            ]);
+        }
+
+        return redirect()->route('admin.perfil')->with('toast_success', $mensaje);
     }
 
     /**
@@ -125,7 +142,16 @@ class PerfilController extends Controller
             null
         );
 
-        return redirect()->route('admin.perfil')->with('toast_success', 'Contraseña actualizada correctamente.');
+        $mensaje = 'Contraseña actualizada correctamente.';
+
+        if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'exito' => true,
+                'mensaje' => $mensaje,
+            ]);
+        }
+
+        return redirect()->route('admin.perfil')->with('toast_success', $mensaje);
     }
 
     /**
@@ -189,7 +215,16 @@ class PerfilController extends Controller
             null
         );
 
-        return back()->with('toast_success', 'Se han cerrado las sesiones en otros dispositivos.');
+        $mensaje = 'Se han cerrado las sesiones en otros dispositivos.';
+
+        if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'exito' => true,
+                'mensaje' => $mensaje,
+            ]);
+        }
+
+        return back()->with('toast_success', $mensaje);
     }
 
     /**
