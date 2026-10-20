@@ -245,7 +245,7 @@ class CuponController extends Controller
     /**
      * Alterna el estado activo/inactivo de un cupón vía AJAX o POST.
      */
-    public function toggleEstado(Request $request, int $id): JsonResponse|RedirectResponse
+    public function alternarEstado(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $cupon = Cupon::find($id);
 

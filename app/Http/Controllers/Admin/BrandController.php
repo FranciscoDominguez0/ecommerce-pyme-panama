@@ -31,7 +31,7 @@ class BrandController extends Controller
         }]);
 
         if (!empty($busqueda)) {
-            $query->search($busqueda);
+            $query->buscar($busqueda);
         }
 
         if ($filtroVerificada === 'yes') {

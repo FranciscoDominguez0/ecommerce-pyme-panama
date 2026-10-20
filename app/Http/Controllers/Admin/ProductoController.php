@@ -117,7 +117,7 @@ class ProductoController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $this->validarRequest($request);
+        $this->validarPeticion($request);
 
         DB::transaction(function () use ($request) {
             list($brandId, $nombreMarca) = $this->productoService->resolverMarca($request);
@@ -148,7 +148,7 @@ class ProductoController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
         $producto = Producto::sinEliminar()->findOrFail($id);
-        $this->validarRequest($request, $producto->id);
+        $this->validarPeticion($request, $producto->id);
 
         DB::transaction(function () use ($request, $producto) {
             list($brandId, $nombreMarca) = $this->productoService->resolverMarca($request);
@@ -188,7 +188,7 @@ class ProductoController extends Controller
         return redirect()->route('admin.productos.index')->with('success', 'Producto eliminado del catálogo.');
     }
 
-    private function validarRequest(Request $request, ?int $id = null): void
+    private function validarPeticion(Request $request, ?int $id = null): void
     {
         $slugRule = $id ? "unique:productos,slug,{$id}" : "unique:productos,slug";
         $skuRule = $id ? "unique:productos,sku,{$id}" : "unique:productos,sku";

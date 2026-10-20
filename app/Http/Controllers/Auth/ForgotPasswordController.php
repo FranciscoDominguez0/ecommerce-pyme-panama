@@ -17,7 +17,7 @@ class ForgotPasswordController extends Controller
     /**
      * Muestra el formulario para solicitar restablecimiento de contraseña.
      */
-    public function showLinkRequestForm(): View
+    public function mostrarFormularioSolicitud(): View
     {
         return view('auth.forgot-password');
     }
@@ -27,13 +27,13 @@ class ForgotPasswordController extends Controller
      */
     public function create(): View
     {
-        return $this->showLinkRequestForm();
+        return $this->mostrarFormularioSolicitud();
     }
 
     /**
      * Envía el enlace con el token de recuperación al correo indicado.
      */
-    public function sendResetLinkEmail(Request $request): RedirectResponse
+    public function enviarEnlaceRestablecimiento(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => ['required', 'email'],
@@ -86,6 +86,6 @@ class ForgotPasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return $this->sendResetLinkEmail($request);
+        return $this->enviarEnlaceRestablecimiento($request);
     }
 }

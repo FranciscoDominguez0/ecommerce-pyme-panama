@@ -34,13 +34,13 @@ Route::get('/', function () {
         ->take(8)
         ->get();
 
-    $marcasDistribuidores = \App\Models\Brand::verified()->get();
+    $marcasDistribuidores = \App\Models\Brand::verificada()->get();
 
     return view('welcome', compact('destacados', 'marcasDistribuidores'));
 })->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
-Route::get('/buscar-predictivo', [CatalogoController::class, 'searchPredictivo'])->name('cliente.buscar-predictivo');
+Route::get('/buscar-predictivo', [CatalogoController::class, 'buscarPredictivo'])->name('cliente.buscar-predictivo');
 Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
 Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
 Route::get('/terminos-y-condiciones', function () {
@@ -88,8 +88,8 @@ Route::get('/home', function () {
 Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Cliente\PerfilController::class, 'edit'])->name('datos');
     Route::put('/perfil', [\App\Http\Controllers\Cliente\PerfilController::class, 'update'])->name('datos.update');
-    Route::post('/perfil/foto', [\App\Http\Controllers\Cliente\PerfilController::class, 'updateFoto'])->name('foto.update');
-    Route::put('/password', [\App\Http\Controllers\Cliente\PerfilController::class, 'updatePassword'])->name('password.update');
+    Route::post('/perfil/foto', [\App\Http\Controllers\Cliente\PerfilController::class, 'actualizarFoto'])->name('foto.update');
+    Route::put('/password', [\App\Http\Controllers\Cliente\PerfilController::class, 'actualizarPassword'])->name('password.update');
     Route::put('/2fa', [\App\Http\Controllers\Cliente\PerfilController::class, 'actualizarDosFactores'])->name('2fa.update');
 
     Route::get('/password', function () {
@@ -141,7 +141,7 @@ Route::get('/dashboard', function () {
             return array_search($cat->slug, $slugsOrdenados);
         });
         
-    $marcas = \App\Models\Brand::verified()
+    $marcas = \App\Models\Brand::verificada()
         ->get();
         
     return view('dashboard', compact('productos', 'categoriasPrincipales', 'marcas'));
@@ -169,8 +169,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     });
 
     // Módulo de Categorías
-    Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'toggleEstado'])->name('admin.categorias.toggle-estado');
-    Route::post('/categorias/{id}/toggle-exento-envio', [CategoriaController::class, 'toggleExentoEnvio'])->name('admin.categorias.toggle-exento-envio');
+    Route::post('/categorias/{id}/toggle-estado', [CategoriaController::class, 'alternarEstado'])->name('admin.categorias.toggle-estado');
+    Route::post('/categorias/{id}/toggle-exento-envio', [CategoriaController::class, 'alternarExentoEnvio'])->name('admin.categorias.toggle-exento-envio');
     Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
 
     // Módulo de Pedidos
@@ -202,13 +202,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::get('/stock/exportar-excel', [InventarioController::class, 'exportarStockExcel'])->name('stock.exportar-excel');
         Route::get('/stock/exportar-pdf', [InventarioController::class, 'exportarStockPdf'])->name('stock.exportar-pdf');
         // Registrar entrada
-        Route::get('/entrada', [InventarioController::class, 'entradaForm'])->name('entrada.form');
+        Route::get('/entrada', [InventarioController::class, 'formularioEntrada'])->name('entrada.form');
         Route::post('/entrada', [InventarioController::class, 'entrada'])->name('entrada');
         // Registrar salida
-        Route::get('/salida', [InventarioController::class, 'salidaForm'])->name('salida.form');
+        Route::get('/salida', [InventarioController::class, 'formularioSalida'])->name('salida.form');
         Route::post('/salida', [InventarioController::class, 'salida'])->name('salida');
         // Ajuste manual
-        Route::get('/ajuste', [InventarioController::class, 'ajusteForm'])->name('ajuste.form');
+        Route::get('/ajuste', [InventarioController::class, 'formularioAjuste'])->name('ajuste.form');
         Route::post('/ajuste', [InventarioController::class, 'ajuste'])->name('ajuste');
         // AJAX helpers
         Route::get('/variantes/{productoId}', [InventarioController::class, 'variantesPorProducto'])->name('variantes');
@@ -235,7 +235,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::get('/zonas-envio', [ZonaEnvioController::class, 'index'])->name('admin.zonas-envio.index');
     Route::post('/zonas-envio', [ZonaEnvioController::class, 'store'])->name('admin.zonas-envio.store');
     Route::put('/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'update'])->name('admin.zonas-envio.update');
-    Route::post('/zonas-envio/{zonaEnvio}/toggle', [ZonaEnvioController::class, 'toggle'])->name('admin.zonas-envio.toggle');
+    Route::post('/zonas-envio/{zonaEnvio}/toggle', [ZonaEnvioController::class, 'alternarEstado'])->name('admin.zonas-envio.toggle');
     Route::delete('/zonas-envio/{zonaEnvio}', [ZonaEnvioController::class, 'destroy'])->name('admin.zonas-envio.destroy');
 
     // Módulo de Cupones y Promociones (FASE 11)
@@ -244,21 +244,21 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::post('/promociones/cupones', [CuponController::class, 'store'])->name('admin.promociones.cupones.guardar');
     Route::get('/promociones/cupones/{id}/editar', [CuponController::class, 'edit'])->name('admin.promociones.cupones.editar');
     Route::put('/promociones/cupones/{id}', [CuponController::class, 'update'])->name('admin.promociones.cupones.actualizar');
-    Route::post('/promociones/cupones/{id}/toggle', [CuponController::class, 'toggleEstado'])->name('admin.promociones.cupones.toggle');
+    Route::post('/promociones/cupones/{id}/toggle', [CuponController::class, 'alternarEstado'])->name('admin.promociones.cupones.toggle');
     Route::delete('/promociones/cupones/{id}', [CuponController::class, 'destroy'])->name('admin.promociones.cupones.eliminar');
 
     // Promociones de Envío Gratis
-    Route::get('/promociones/envio-gratis', [PromocionController::class, 'envioGratisIndex'])->name('admin.promociones.envio-gratis');
-    Route::post('/promociones/envio-gratis', [PromocionController::class, 'envioGratisStore'])->name('admin.promociones.envio-gratis.guardar');
-    Route::put('/promociones/envio-gratis/{id}', [PromocionController::class, 'envioGratisUpdate'])->name('admin.promociones.envio-gratis.actualizar');
-    Route::post('/promociones/envio-gratis/{id}/toggle', [PromocionController::class, 'envioGratisToggle'])->name('admin.promociones.envio-gratis.toggle');
-    Route::delete('/promociones/envio-gratis/{id}', [PromocionController::class, 'envioGratisDestroy'])->name('admin.promociones.envio-gratis.eliminar');
+    Route::get('/promociones/envio-gratis', [PromocionController::class, 'envioGratisInicio'])->name('admin.promociones.envio-gratis');
+    Route::post('/promociones/envio-gratis', [PromocionController::class, 'envioGratisGuardar'])->name('admin.promociones.envio-gratis.guardar');
+    Route::put('/promociones/envio-gratis/{id}', [PromocionController::class, 'envioGratisActualizar'])->name('admin.promociones.envio-gratis.actualizar');
+    Route::post('/promociones/envio-gratis/{id}/toggle', [PromocionController::class, 'envioGratisAlternar'])->name('admin.promociones.envio-gratis.toggle');
+    Route::delete('/promociones/envio-gratis/{id}', [PromocionController::class, 'envioGratisEliminar'])->name('admin.promociones.envio-gratis.eliminar');
 
     // Producto del Mes
-    Route::get('/promociones/producto-del-mes', [PromocionController::class, 'productoDelMesIndex'])->name('admin.promociones.producto-del-mes');
-    Route::post('/promociones/producto-del-mes', [PromocionController::class, 'productoDelMesStore'])->name('admin.promociones.producto-del-mes.guardar');
-    Route::post('/promociones/producto-del-mes/{id}/toggle', [PromocionController::class, 'productoDelMesToggle'])->name('admin.promociones.producto-del-mes.toggle');
-    Route::delete('/promociones/producto-del-mes/{id}', [PromocionController::class, 'productoDelMesDestroy'])->name('admin.promociones.producto-del-mes.eliminar');
+    Route::get('/promociones/producto-del-mes', [PromocionController::class, 'productoDelMesInicio'])->name('admin.promociones.producto-del-mes');
+    Route::post('/promociones/producto-del-mes', [PromocionController::class, 'productoDelMesGuardar'])->name('admin.promociones.producto-del-mes.guardar');
+    Route::post('/promociones/producto-del-mes/{id}/toggle', [PromocionController::class, 'productoDelMesAlternar'])->name('admin.promociones.producto-del-mes.toggle');
+    Route::delete('/promociones/producto-del-mes/{id}', [PromocionController::class, 'productoDelMesEliminar'])->name('admin.promociones.producto-del-mes.eliminar');
 
     // Módulo de Usuarios, Roles y Permisos (FASE 18)
     Route::prefix('usuarios')->name('admin.usuarios.')->group(function () {
@@ -280,7 +280,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::put('/roles/{rol}', [\App\Http\Controllers\Admin\RolController::class, 'update'])->name('roles.update');
         Route::delete('/roles/{rol}', [\App\Http\Controllers\Admin\RolController::class, 'destroy'])->name('roles.destroy');
         Route::get('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'permisos'])->name('roles-permisos');
-        Route::put('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'updatePermisos'])->name('update-permisos');
+        Route::put('/roles/{rol}/permisos', [\App\Http\Controllers\Admin\RolController::class, 'actualizarPermisos'])->name('update-permisos');
     });
 
     // Módulo de Configuración General
@@ -312,5 +312,5 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
 require __DIR__ . '/auth.php';
 
 // Webhooks de Stripe (sin protección CSRF configurado en bootstrap/app.php)
-Route::post('/api/webhooks/stripe', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handleWebhook'])->name('webhooks.stripe');
-Route::post('/stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handleWebhook']);
+Route::post('/api/webhooks/stripe', [\App\Http\Controllers\Api\StripeWebhookController::class, 'procesarWebhook'])->name('webhooks.stripe');
+Route::post('/stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'procesarWebhook']);

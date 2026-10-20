@@ -316,6 +316,6 @@ class Producto extends Model
             return $this->brand->logo_html;
         }
 
-        return \App\Helpers\BrandHelper::getLogoHtml($this->marca, $this->marca_logo);
+        return \App\Helpers\BrandHelper::obtenerLogoHtml($this->marca, $this->marca_logo);
     }
 }

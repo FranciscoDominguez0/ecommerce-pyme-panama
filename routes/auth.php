@@ -14,41 +14,41 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     // Registro
-    Route::get('register', [RegisterController::class, 'showRegistrationForm'])
+    Route::get('register', [RegisterController::class, 'mostrarFormularioRegistro'])
         ->name('register');
-    Route::post('register', [RegisterController::class, 'register']);
+    Route::post('register', [RegisterController::class, 'registrar']);
 
     // Inicio de Sesión
-    Route::get('login', [LoginController::class, 'showLoginForm'])
+    Route::get('login', [LoginController::class, 'mostrarFormularioLogin'])
         ->name('login');
-    Route::post('login', [LoginController::class, 'login']);
+    Route::post('login', [LoginController::class, 'iniciarSesion']);
 
     // Inicio de Sesión con Google
-    Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])
+    Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'redirigir'])
         ->name('auth.google');
-    Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])
+    Route::get('auth/google/callback', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'procesarCallback'])
         ->name('auth.google.callback');
 
     // 2FA Challenge
-    Route::get('2fa-challenge', [TwoFactorController::class, 'showChallenge'])
+    Route::get('2fa-challenge', [TwoFactorController::class, 'mostrarDesafio'])
         ->name('2fa.challenge');
-    Route::post('2fa-challenge', [TwoFactorController::class, 'verify'])
+    Route::post('2fa-challenge', [TwoFactorController::class, 'verificar'])
         ->name('2fa.verify');
-    Route::post('2fa-challenge/resend', [TwoFactorController::class, 'resend'])
+    Route::post('2fa-challenge/resend', [TwoFactorController::class, 'reenviar'])
         ->name('2fa.resend');
-    Route::post('2fa-challenge/cancel', [TwoFactorController::class, 'cancel'])
+    Route::post('2fa-challenge/cancel', [TwoFactorController::class, 'cancelar'])
         ->name('2fa.cancel');
 
     // Recuperación de Contraseña
-    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    Route::get('forgot-password', [ForgotPasswordController::class, 'mostrarFormularioSolicitud'])
         ->name('password.request');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+    Route::post('forgot-password', [ForgotPasswordController::class, 'enviarEnlaceRestablecimiento'])
         ->name('password.email');
 
     // Restablecimiento de Contraseña con Token
-    Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'mostrarFormularioRestablecimiento'])
         ->name('password.reset');
-    Route::post('reset-password', [ResetPasswordController::class, 'reset'])
+    Route::post('reset-password', [ResetPasswordController::class, 'restablecer'])
         ->name('password.store');
 });
 
@@ -73,6 +73,6 @@ Route::middleware('auth')->group(function () {
         ->name('password.update');
 
     // Cierre de Sesión
-    Route::post('logout', [LoginController::class, 'logout'])
+    Route::post('logout', [LoginController::class, 'cerrarSesion'])
         ->name('logout');
 });

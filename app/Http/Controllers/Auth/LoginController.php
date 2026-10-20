@@ -19,7 +19,7 @@ class LoginController extends Controller
     /**
      * Muestra la vista del formulario de inicio de sesión.
      */
-    public function showLoginForm(): View
+    public function mostrarFormularioLogin(): View
     {
         return view('auth.login');
     }
@@ -29,13 +29,13 @@ class LoginController extends Controller
      */
     public function create(): View
     {
-        return $this->showLoginForm();
+        return $this->mostrarFormularioLogin();
     }
 
     /**
      * Procesa el inicio de sesión del usuario.
      */
-    public function login(Request $request)
+    public function iniciarSesion(Request $request)
     {
         $reglas = [
             'email' => ['required', 'string', 'email'],
@@ -59,7 +59,7 @@ class LoginController extends Controller
         if (!app()->environment(['local', 'testing']) || $turnstileResponse !== null) {
             $turnstileService = app(TurnstileService::class);
             if (!$turnstileService->verificar($turnstileResponse, $request->ip())) {
-                return $this->loginFailedResponse(
+                return $this->respuestaLoginFallido(
                     $request,
                     'Error en la verificación de seguridad (Captcha). Por favor, inténtelo de nuevo.',
                     'cf-turnstile-response'
@@ -76,14 +76,14 @@ class LoginController extends Controller
 
         // 1. Revisar si el usuario está bloqueado permanentemente en la BD
         if ($usuario && $usuario->bloqueado) {
-            return $this->loginFailedResponse($request, 'Su cuenta ha sido inhabilitada por seguridad tras múltiples intentos fallidos. Por favor, comuníquese con soporte.');
+            return $this->respuestaLoginFallido($request, 'Su cuenta ha sido inhabilitada por seguridad tras múltiples intentos fallidos. Por favor, comuníquese con soporte.');
         }
 
         // 2. Revisar si hay un bloqueo temporal activo
         if (Cache::has($lockKey)) {
             $expiresAt = Cache::get($lockKey);
             $seconds = max(0, $expiresAt - now()->timestamp);
-            return $this->loginFailedResponse($request, "Demasiados intentos de acceso. Por favor intente nuevamente en {$seconds} segundos.");
+            return $this->respuestaLoginFallido($request, "Demasiados intentos de acceso. Por favor intente nuevamente en {$seconds} segundos.");
         }
 
         // Validar credenciales contra la columna password_hash
@@ -113,7 +113,7 @@ class LoginController extends Controller
                 $msg = 'Demasiados intentos de acceso. Por favor intente nuevamente en 1 minuto.';
             }
 
-            return $this->loginFailedResponse($request, $msg);
+            return $this->respuestaLoginFallido($request, $msg);
         }
 
         // Login exitoso, limpiamos fallos
@@ -122,7 +122,7 @@ class LoginController extends Controller
 
         // Si el usuario tiene 2FA habilitado, interceptamos el login
         if ($usuario->two_fa_habilitado) {
-            \App\Http\Controllers\Auth\TwoFactorController::triggerChallenge($usuario, $request->boolean('remember'));
+            \App\Http\Controllers\Auth\TwoFactorController::iniciarDesafio($usuario, $request->boolean('remember'));
 
             // Redirigir a la pantalla de verificación
             if ($request->wantsJson()) {
@@ -185,13 +185,13 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->login($request);
+        return $this->iniciarSesion($request);
     }
 
     /**
      * Cierra la sesión activa del usuario.
      */
-    public function logout(Request $request)
+    public function cerrarSesion(Request $request)
     {
         Auth::logout();
 
@@ -206,13 +206,13 @@ class LoginController extends Controller
      */
     public function destroy(Request $request)
     {
-        return $this->logout($request);
+        return $this->cerrarSesion($request);
     }
 
     /**
      * Helper para responder con error de login
      */
-    protected function loginFailedResponse(Request $request, string $msg, string $field = 'email')
+    protected function respuestaLoginFallido(Request $request, string $msg, string $field = 'email')
     {
         if ($request->wantsJson()) {
             return response()->json([

@@ -418,18 +418,18 @@ class LoginTest extends TestCase
 
     public function test_las_rutas_de_login_apuntan_al_controlador_de_login(): void
     {
-        // GET /login → showLoginForm (named route 'login')
+        // GET /login → mostrarFormularioLogin (named route 'login')
         $rutaGet = Route::getRoutes()->getByName('login');
         $this->assertNotNull($rutaGet, 'Falta la ruta GET "login".');
         $this->assertContains('GET', $rutaGet->methods());
-        $this->assertStringContainsString('LoginController@showLoginForm', $rutaGet->getActionName());
+        $this->assertStringContainsString('LoginController@mostrarFormularioLogin', $rutaGet->getActionName());
 
-        // POST /login → login
+        // POST /login → iniciarSesion
         $rutaPost = collect(Route::getRoutes()->getRoutes())->first(
             fn($ruta) => in_array('POST', $ruta->methods()) && $ruta->uri() === 'login'
         );
         $this->assertNotNull($rutaPost, 'Falta la ruta POST /login.');
-        $this->assertStringContainsString('LoginController@login', $rutaPost->getActionName());
+        $this->assertStringContainsString('LoginController@iniciarSesion', $rutaPost->getActionName());
     }
 
     // =====================================================================

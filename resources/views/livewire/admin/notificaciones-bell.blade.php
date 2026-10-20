@@ -31,7 +31,7 @@
         <span class="material-symbols-outlined text-[20px] transition-transform duration-200" :class="open ? 'scale-110' : ''">
             notifications
         </span>
-        @if($unreadCount > 0)
+        @if($conteoNoLeidas > 0)
             <span class="absolute top-1.5 right-1.5 flex h-2 w-2">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -54,11 +54,11 @@
         <div class="px-4 py-3 border-b border-slate-100 dark:border-gray-700 flex items-center justify-between bg-white/50 dark:bg-[#181a1b]/50 backdrop-blur-sm">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 Notificaciones
-                @if($unreadCount > 0)
-                    <span class="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 py-0.5 px-2 rounded-full text-[10px] font-bold">{{ $unreadCount }} nuevas</span>
+                @if($conteoNoLeidas > 0)
+                    <span class="bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 py-0.5 px-2 rounded-full text-[10px] font-bold">{{ $conteoNoLeidas }} nuevas</span>
                 @endif
             </h3>
-            @if($unreadCount > 0)
+            @if($conteoNoLeidas > 0)
                 <button wire:click="marcarTodasComoLeidas" class="text-[11px] font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
                     Marcar todas leídas
                 </button>

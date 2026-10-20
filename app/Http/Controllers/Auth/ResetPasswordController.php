@@ -16,7 +16,7 @@ class ResetPasswordController extends Controller
     /**
      * Muestra el formulario para ingresar la nueva contraseña.
      */
-    public function showResetForm(Request $request, ?string $token = null): View
+    public function mostrarFormularioRestablecimiento(Request $request, ?string $token = null): View
     {
         return view('auth.reset-password', [
             'token' => $token ?? $request->route('token'),
@@ -29,13 +29,13 @@ class ResetPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-        return $this->showResetForm($request, $request->route('token'));
+        return $this->mostrarFormularioRestablecimiento($request, $request->route('token'));
     }
 
     /**
      * Valida el token y restablece la contraseña del usuario.
      */
-    public function reset(Request $request): RedirectResponse
+    public function restablecer(Request $request): RedirectResponse
     {
         $request->validate([
             'token' => ['required'],
@@ -100,6 +100,6 @@ class ResetPasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return $this->reset($request);
+        return $this->restablecer($request);
     }
 }

@@ -43,7 +43,7 @@ class RolController extends Controller
     /**
      * Actualiza los permisos de un rol específico.
      */
-    public function updatePermisos(Request $request, Role $rol)
+    public function actualizarPermisos(Request $request, Role $rol)
     {
         // Autorización basada en permisos
         \Illuminate\Support\Facades\Gate::authorize('admin.usuarios.editar');

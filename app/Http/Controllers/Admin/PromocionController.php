@@ -23,7 +23,7 @@ class PromocionController extends Controller
     // 1. GESTIÓN DE PROMOCIONES DE ENVÍO GRATIS
     // ─────────────────────────────────────────────────────────
 
-    public function envioGratisIndex(): View
+    public function envioGratisInicio(): View
     {
         $promociones = PromocionEnvioGratis::with('zonaEnvio')
             ->orderBy('creado_en', 'desc')
@@ -34,7 +34,7 @@ class PromocionController extends Controller
         return view('admin.promociones.envio-gratis', compact('promociones', 'zonasEnvio'));
     }
 
-    public function envioGratisStore(Request $request): RedirectResponse
+    public function envioGratisGuardar(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'zona_envio_id' => 'required|exists:zonas_envio,id',
@@ -64,7 +64,7 @@ class PromocionController extends Controller
             ->with('success', 'Regla de envío gratis creada correctamente.');
     }
 
-    public function envioGratisUpdate(Request $request, int $id): RedirectResponse
+    public function envioGratisActualizar(Request $request, int $id): RedirectResponse
     {
         $promocion = PromocionEnvioGratis::find($id);
 
@@ -99,7 +99,7 @@ class PromocionController extends Controller
             ->with('success', 'Regla de envío gratis actualizada.');
     }
 
-    public function envioGratisToggle(Request $request, int $id): JsonResponse|RedirectResponse
+    public function envioGratisAlternar(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $promocion = PromocionEnvioGratis::find($id);
 
@@ -124,7 +124,7 @@ class PromocionController extends Controller
         return back()->with('success', 'Estado de la regla de envío gratis actualizado.');
     }
 
-    public function envioGratisDestroy(int $id): RedirectResponse
+    public function envioGratisEliminar(int $id): RedirectResponse
     {
         $promocion = PromocionEnvioGratis::find($id);
         if ($promocion) {
@@ -140,7 +140,7 @@ class PromocionController extends Controller
     // 2. GESTIÓN DE PRODUCTO DEL MES
     // ─────────────────────────────────────────────────────────
 
-    public function productoDelMesIndex(): View
+    public function productoDelMesInicio(): View
     {
         $promocionActual = ProductoDelMes::with('producto.imagenes')
             ->orderBy('creado_en', 'desc')
@@ -166,7 +166,7 @@ class PromocionController extends Controller
         return view('admin.promociones.producto-del-mes', compact('promocionActual', 'productos', 'productosFormatted'));
     }
 
-    public function productoDelMesStore(Request $request): RedirectResponse
+    public function productoDelMesGuardar(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'producto_id' => 'required|exists:productos,id',
@@ -217,7 +217,7 @@ class PromocionController extends Controller
             ->with('success', 'El Producto del Mes ha sido configurado correctamente.');
     }
 
-    public function productoDelMesToggle(Request $request, int $id): JsonResponse|RedirectResponse
+    public function productoDelMesAlternar(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $promocion = ProductoDelMes::find($id);
 
@@ -242,7 +242,7 @@ class PromocionController extends Controller
         return back()->with('success', 'Estado de Producto del Mes actualizado.');
     }
 
-    public function productoDelMesDestroy(int $id): RedirectResponse
+    public function productoDelMesEliminar(int $id): RedirectResponse
     {
         $promocion = ProductoDelMes::find($id);
         if ($promocion) {

@@ -24,7 +24,7 @@ class StripeWebhookController extends Controller
     /**
      * Procesa los eventos enviados por Stripe (webhooks).
      */
-    public function handleWebhook(Request $request): JsonResponse
+    public function procesarWebhook(Request $request): JsonResponse
     {
         $payload = $request->getContent();
         $sigHeader = $request->header('Stripe-Signature');
@@ -63,11 +63,11 @@ class StripeWebhookController extends Controller
         switch ($eventType) {
             case 'charge.refunded':
             case 'charge.refund.updated':
-                $this->handleChargeRefunded($event);
+                $this->procesarCargoReembolsado($event);
                 break;
 
             case 'payment_intent.succeeded':
-                $this->handlePaymentIntentSucceeded($event);
+                $this->procesarIntentoPagoExitoso($event);
                 break;
 
             default:
@@ -80,7 +80,7 @@ class StripeWebhookController extends Controller
     /**
      * Procesa un reembolso emitido en Stripe (charge.refunded).
      */
-    protected function handleChargeRefunded(object|array $event): void
+    protected function procesarCargoReembolsado(object|array $event): void
     {
         $dataObject = is_object($event) ? $event->data->object : (object) $event['data']['object'];
         
@@ -133,7 +133,7 @@ class StripeWebhookController extends Controller
     /**
      * Confirma el pago si se recibe payment_intent.succeeded
      */
-    protected function handlePaymentIntentSucceeded(object|array $event): void
+    protected function procesarIntentoPagoExitoso(object|array $event): void
     {
         $dataObject = is_object($event) ? $event->data->object : (object) $event['data']['object'];
         $paymentIntentId = $dataObject->id ?? null;

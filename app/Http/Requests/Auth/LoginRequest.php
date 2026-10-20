@@ -40,7 +40,7 @@ class LoginRequest extends FormRequest
      *
      * @throws ValidationException
      */
-    public function authenticate(): void
+    public function autenticar(): void
     {
         $user = Usuario::where('email', $this->string('email'))->first();
 
@@ -50,17 +50,22 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        $this->ensureIsNotRateLimited();
+        $this->asegurarNoExcedeLimiteIntentos();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            $this->incrementFailedAttempts($user);
+            $this->incrementarIntentosFallidos($user);
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
-        $this->clearLoginAttempts();
+        $this->limpiarIntentosAcceso();
+    }
+
+    public function authenticate(): void
+    {
+        $this->autenticar();
     }
 
     /**
@@ -68,9 +73,9 @@ class LoginRequest extends FormRequest
      *
      * @throws ValidationException
      */
-    public function ensureIsNotRateLimited(): void
+    public function asegurarNoExcedeLimiteIntentos(): void
     {
-        $lockKey = $this->throttleKey() . ':lockout';
+        $lockKey = $this->claveControlTasa() . ':lockout';
 
         if (Cache::has($lockKey)) {
             event(new Lockout($this));
@@ -87,13 +92,18 @@ class LoginRequest extends FormRequest
         }
     }
 
-    protected function incrementFailedAttempts(?Usuario $user): void
+    public function ensureIsNotRateLimited(): void
     {
-        $attemptsKey = $this->throttleKey() . ':fail_count';
+        $this->asegurarNoExcedeLimiteIntentos();
+    }
+
+    protected function incrementarIntentosFallidos(?Usuario $user): void
+    {
+        $attemptsKey = $this->claveControlTasa() . ':fail_count';
         $attempts = (int) Cache::get($attemptsKey, 0) + 1;
         Cache::put($attemptsKey, $attempts, now()->addHours(24));
 
-        $lockKey = $this->throttleKey() . ':lockout';
+        $lockKey = $this->claveControlTasa() . ':lockout';
 
         if ($attempts >= 9) {
             if ($user) {
@@ -115,18 +125,23 @@ class LoginRequest extends FormRequest
         }
     }
 
-    protected function clearLoginAttempts(): void
+    protected function limpiarIntentosAcceso(): void
     {
-        Cache::forget($this->throttleKey() . ':fail_count');
-        Cache::forget($this->throttleKey() . ':lockout');
-        RateLimiter::clear($this->throttleKey());
+        Cache::forget($this->claveControlTasa() . ':fail_count');
+        Cache::forget($this->claveControlTasa() . ':lockout');
+        RateLimiter::clear($this->claveControlTasa());
     }
 
     /**
      * Genera la clave única para el control de tasa de intentos por usuario e IP.
      */
-    public function throttleKey(): string
+    public function claveControlTasa(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+    }
+
+    public function throttleKey(): string
+    {
+        return $this->claveControlTasa();
     }
 }

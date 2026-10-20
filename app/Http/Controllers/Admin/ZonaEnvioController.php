@@ -85,7 +85,7 @@ class ZonaEnvioController extends Controller
     /**
      * Alterna el estado activo / inactivo de una sucursal.
      */
-    public function toggle($id)
+    public function alternarEstado($id)
     {
         $courierSucursal = \App\Models\CourierSucursal::findOrFail($id);
         try {

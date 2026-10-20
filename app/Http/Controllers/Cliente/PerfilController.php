@@ -67,7 +67,7 @@ class PerfilController extends Controller
         return redirect()->route('cliente.perfil.datos')->with('toast_success', 'Perfil actualizado correctamente.');
     }
 
-    public function updateFoto(Request $request): JsonResponse
+    public function actualizarFoto(Request $request): JsonResponse
     {
         $request->validate([
             'foto_perfil' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
@@ -111,7 +111,7 @@ class PerfilController extends Controller
         return response()->json(['ok' => false, 'mensaje' => 'No se recibió ninguna imagen.'], 422);
     }
 
-    public function updatePassword(Request $request): RedirectResponse
+    public function actualizarPassword(Request $request): RedirectResponse
     {
         $usuario = Auth::user();
 

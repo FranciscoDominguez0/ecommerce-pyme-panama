@@ -17,7 +17,7 @@ class RegisterController extends Controller
     /**
      * Muestra la vista del formulario de registro.
      */
-    public function showRegistrationForm(): View
+    public function mostrarFormularioRegistro(): View
     {
         return view('auth.register');
     }
@@ -27,13 +27,13 @@ class RegisterController extends Controller
      */
     public function create(): View
     {
-        return $this->showRegistrationForm();
+        return $this->mostrarFormularioRegistro();
     }
 
     /**
      * Procesa la creación de un nuevo usuario en la base de datos.
      */
-    public function register(Request $request): RedirectResponse
+    public function registrar(Request $request): RedirectResponse
     {
         $request->validate([
             'nombre' => ['required', 'string', 'max:100'],
@@ -107,6 +107,6 @@ class RegisterController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return $this->register($request);
+        return $this->registrar($request);
     }
 }

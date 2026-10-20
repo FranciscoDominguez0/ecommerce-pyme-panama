@@ -105,18 +105,29 @@ class Brand extends Model
 
 
 
-    public function scopeVerified($query)
+    public function scopeVerificada($query)
     {
         return $query->where('verified', true);
     }
 
-    public function scopeSearch($query, ?string $term)
+    public function scopeVerified($query)
     {
-        if (empty($term))
+        return $this->scopeVerificada($query);
+    }
+
+    public function scopeBuscar($query, ?string $term)
+    {
+        if (empty($term)) {
             return $query;
+        }
         return $query->where(function ($q) use ($term) {
             $q->whereRaw('unaccent(name) ILIKE unaccent(?)', ["%{$term}%"])
                 ->orWhereRaw('unaccent(slug) ILIKE unaccent(?)', ["%{$term}%"]);
         });
+    }
+
+    public function scopeSearch($query, ?string $term)
+    {
+        return $this->scopeBuscar($query, $term);
     }
 }

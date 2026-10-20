@@ -17,7 +17,7 @@ class TwoFactorController extends Controller
     /**
      * Prepara el desafío 2FA para un usuario (genera código, guarda sesión y envía correo).
      */
-    public static function triggerChallenge(Usuario $usuario, bool $remember = false): void
+    public static function iniciarDesafio(Usuario $usuario, bool $remember = false): void
     {
         // Generar código numérico de 4 dígitos
         $code = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
@@ -42,7 +42,7 @@ class TwoFactorController extends Controller
     /**
      * Muestra la vista de desafío de 2FA.
      */
-    public function showChallenge(Request $request)
+    public function mostrarDesafio(Request $request)
     {
         if (!session()->has('2fa:user:id')) {
             return redirect()->route('login');
@@ -54,7 +54,7 @@ class TwoFactorController extends Controller
     /**
      * Verifica el código ingresado.
      */
-    public function verify(Request $request)
+    public function verificar(Request $request)
     {
         $request->validate([
             'code' => ['required', 'string', 'size:4'],
@@ -154,7 +154,7 @@ class TwoFactorController extends Controller
     /**
      * Reenvía un nuevo código al correo del usuario.
      */
-    public function resend(Request $request)
+    public function reenviar(Request $request)
     {
         $userId = session('2fa:user:id');
 
@@ -195,7 +195,7 @@ class TwoFactorController extends Controller
     /**
      * Cancela el inicio de sesión y limpia la sesión temporal de 2FA.
      */
-    public function cancel(Request $request)
+    public function cancelar(Request $request)
     {
         $userId = session('2fa:user:id');
         if ($userId) {

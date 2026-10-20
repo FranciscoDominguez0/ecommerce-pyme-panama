@@ -12,7 +12,7 @@ class GoogleAuthController extends Controller
     /**
      * Redirige al usuario a la página de autenticación de Google.
      */
-    public function redirect()
+    public function redirigir()
     {
         return Socialite::driver('google')->redirect();
     }
@@ -20,7 +20,7 @@ class GoogleAuthController extends Controller
     /**
      * Obtiene la información del usuario desde Google.
      */
-    public function callback()
+    public function procesarCallback()
     {
         try {
             // FIX para entorno local Windows: Desactivar verificación SSL de cURL
@@ -57,10 +57,10 @@ class GoogleAuthController extends Controller
 
             // Si el usuario tiene 2FA habilitado, interceptamos el login
             if ($usuario->two_fa_habilitado) {
-                \App\Http\Controllers\Auth\TwoFactorController::triggerChallenge($usuario, true);
+                \App\Http\Controllers\Auth\TwoFactorController::iniciarDesafio($usuario, true);
 
                 // Redirigir a la pantalla de verificación 2FA
-                return $this->closePopupAndRedirect(route('2fa.challenge'));
+                return $this->cerrarPopupYRedirigir(route('2fa.challenge'));
             }
 
             // Obtener el ID de la sesión antes de regenerarla para fusionar el carrito
@@ -81,11 +81,11 @@ class GoogleAuthController extends Controller
             session()->put('is_from_login', true);
 
             // Redirigir al home o donde corresponda
-            return $this->closePopupAndRedirect(redirect()->intended(route('home'))->getTargetUrl());
+            return $this->cerrarPopupYRedirigir(redirect()->intended(route('home'))->getTargetUrl());
 
         } catch (\Exception $e) {
             // En caso de error o cancelación, redirigir al login con un mensaje
-            return $this->closePopupAndRedirect(route('login'), 'Ocurrió un error al intentar iniciar sesión con Google: ' . $e->getMessage());
+            return $this->cerrarPopupYRedirigir(route('login'), 'Ocurrió un error al intentar iniciar sesión con Google: ' . $e->getMessage());
         }
     }
 
@@ -93,7 +93,7 @@ class GoogleAuthController extends Controller
      * Cierra el popup (si existe) y redirige la ventana padre.
      * Si no hay ventana padre, simplemente redirige.
      */
-    private function closePopupAndRedirect($url, $error = null)
+    private function cerrarPopupYRedirigir($url, $error = null)
     {
         if ($error) {
             session()->flash('errors', (new \Illuminate\Support\MessageBag)->add('email', $error));

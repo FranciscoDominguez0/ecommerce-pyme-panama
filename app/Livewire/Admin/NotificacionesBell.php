@@ -10,7 +10,7 @@ use Illuminate\Notifications\DatabaseNotification;
 class NotificacionesBell extends Component
 {
     public $notificaciones = [];
-    public $unreadCount = 0;
+    public $conteoNoLeidas = 0;
 
     public function mount()
     {
@@ -23,12 +23,12 @@ class NotificacionesBell extends Component
     {
         $user = Auth::user();
         if ($user) {
-            $conteoAnterior = $this->unreadCount;
+            $conteoAnterior = $this->conteoNoLeidas;
             
             $this->notificaciones = $user->unreadNotifications()->take(15)->get();
-            $this->unreadCount = $user->unreadNotifications()->count();
+            $this->conteoNoLeidas = $user->unreadNotifications()->count();
             
-            if ($playAudio && $this->unreadCount > $conteoAnterior) {
+            if ($playAudio && $this->conteoNoLeidas > $conteoAnterior) {
                 $this->dispatch('nueva-notificacion-recibida');
             }
 

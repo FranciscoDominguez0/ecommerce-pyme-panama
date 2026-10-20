@@ -274,7 +274,7 @@ class CategoriaController extends Controller
             ->with('success', "Categoría eliminada exitosamente.");
     }
 
-        public function toggleEstado(Request $request, int $id): JsonResponse|RedirectResponse
+    public function alternarEstado(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $categoria = Categoria::sinEliminar()->find($id);
 
@@ -312,7 +312,7 @@ class CategoriaController extends Controller
      * Alterna la exención de cobro de envío de una categoría mediante AJAX o formulario rápido.
      * Si la categoría padre tiene activo que no lleva envío, las hijas lo heredan automáticamente.
      */
-    public function toggleExentoEnvio(Request $request, int $id): JsonResponse|RedirectResponse
+    public function alternarExentoEnvio(Request $request, int $id): JsonResponse|RedirectResponse
     {
         $categoria = Categoria::sinEliminar()->find($id);
 

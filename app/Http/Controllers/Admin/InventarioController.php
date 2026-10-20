@@ -106,7 +106,7 @@ class InventarioController extends Controller
 
     // ─── 3. Registrar Entrada ──────────────────────────────────────────────────
 
-    public function entradaForm()
+    public function formularioEntrada()
     {
         $productos = Producto::sinEliminar()->orderBy('nombre')->get(['id', 'nombre', 'sku', 'stock']);
         return view('admin.inventario.entrada', compact('productos'));
@@ -148,7 +148,7 @@ class InventarioController extends Controller
 
     // ─── 4. Registrar Salida ───────────────────────────────────────────────────
 
-    public function salidaForm()
+    public function formularioSalida()
     {
         $productos = Producto::sinEliminar()->orderBy('nombre')->get(['id', 'nombre', 'sku', 'stock']);
         return view('admin.inventario.salida', compact('productos'));
@@ -186,7 +186,7 @@ class InventarioController extends Controller
 
     // ─── 5. Ajuste Manual ─────────────────────────────────────────────────────
 
-    public function ajusteForm()
+    public function formularioAjuste()
     {
         $productos = Producto::sinEliminar()->orderBy('nombre')->get(['id', 'nombre', 'sku', 'stock', 'stock_minimo']);
         return view('admin.inventario.ajuste', compact('productos'));

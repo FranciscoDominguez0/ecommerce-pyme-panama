@@ -10,7 +10,7 @@ class BrandHelper
     /**
      * Retorna el listado completo de marcas registradas en la base de datos.
      */
-    public static function getAvailableBrands(): array
+    public static function obtenerMarcasDisponibles(): array
     {
         try {
             return Brand::orderBy('name', 'asc')
@@ -31,10 +31,15 @@ class BrandHelper
         }
     }
 
+    public static function getAvailableBrands(): array
+    {
+        return self::obtenerMarcasDisponibles();
+    }
+
     /**
      * Busca la ruta de imagen registrada en la base de datos para la marca dada.
      */
-    public static function getBrandImagePath(?string $marca): ?string
+    public static function obtenerRutaImagenMarca(?string $marca): ?string
     {
         if (empty($marca)) {
             return null;
@@ -51,10 +56,15 @@ class BrandHelper
         }
     }
 
+    public static function getBrandImagePath(?string $marca): ?string
+    {
+        return self::obtenerRutaImagenMarca($marca);
+    }
+
     /**
      * Retorna el HTML del logotipo oficial de la marca desde la base de datos o fallback.
      */
-    public static function getLogoHtml(?string $marca, ?string $customLogoUrl = null): string
+    public static function obtenerLogoHtml(?string $marca, ?string $customLogoUrl = null): string
     {
         if (!empty($customLogoUrl)) {
             return '<img src="' . htmlspecialchars($customLogoUrl) . '" alt="' . htmlspecialchars($marca ?? 'Marca') . '" class="h-6 max-h-7 max-w-[85px] object-contain select-none">';
@@ -77,5 +87,10 @@ class BrandHelper
         }
 
         return '<span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black tracking-wider uppercase">' . htmlspecialchars($marca) . '</span>';
+    }
+
+    public static function getLogoHtml(?string $marca, ?string $customLogoUrl = null): string
+    {
+        return self::obtenerLogoHtml($marca, $customLogoUrl);
     }
 }

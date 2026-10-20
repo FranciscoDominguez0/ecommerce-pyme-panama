@@ -94,7 +94,7 @@ class CatalogoController extends Controller
     /**
      * Búsqueda predictiva AJAX
      */
-    public function searchPredictivo(Request $request)
+    public function buscarPredictivo(Request $request)
     {
         $buscar = $request->input('buscar', '');
         if (empty($buscar) || strlen($buscar) < 2) {
