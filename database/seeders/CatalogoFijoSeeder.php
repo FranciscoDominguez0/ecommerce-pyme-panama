@@ -29,10 +29,13 @@ class CatalogoFijoSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->command->info("Limpiando tablas de catálogo...");
+        // Si ya existen productos, no sobrescribir para proteger fotos, pedidos e inventario
+        if (Producto::count() > 0) {
+            $this->command->info("El catálogo ya contiene productos. Se omite la siembra para proteger los datos existentes.");
+            return;
+        }
 
-        DB::statement('TRUNCATE TABLE variantes_producto RESTART IDENTITY CASCADE');
-        DB::statement('TRUNCATE TABLE productos RESTART IDENTITY CASCADE');
+        $this->command->info("Iniciando siembra del catálogo...");
 
         // Consultar marcas y categorías directamente de la base de datos
         $marcasDB = Brand::all()->keyBy(fn($b) => mb_strtolower($b->name));
@@ -5714,51 +5717,41 @@ class CatalogoFijoSeeder extends Seeder
     'largo' => 15.0,
     'ancho' => 35.2,
     'alto' => 3.8,
-    'specs' => 
-    array (
-      0 => 
-      array (
+    'specs' => [
+      [
         'grupo' => 'Especificaciones Técnicas',
-        'atributos' => 
-        array (
-          0 => 
-          array (
+        'atributos' => [
+          [
             'clave' => 'Formato',
             'valor' => 'Tenkeyless, sin bloque numérico',
-          ),
-          1 => 
-          array (
+          ],
+          [
             'clave' => 'Tipo',
             'valor' => 'Mecánico',
-          ),
-          2 => 
-          array (
+          ],
+          [
             'clave' => 'Conexión',
             'valor' => 'LIGHTSPEED, Bluetooth y USB',
-          ),
-          3 => 
-          array (
+          ],
+          [
             'clave' => 'Interruptores',
             'valor' => 'GX Brown táctiles',
-          ),
-          4 => 
-          array (
+          ],
+          [
             'clave' => 'Iluminación',
             'valor' => 'LIGHTSYNC RGB',
-          ),
-          5 => 
-          array (
+          ],
+          [
             'clave' => 'Características',
             'valor' => 'Controles multimedia, rueda de volumen y funda de transporte',
-          ),
-          6 => 
-          array (
+          ],
+          [
             'clave' => 'Autonomía',
             'valor' => 'Hasta 50 horas',
-          ),
-        ),
-      ),
-    ),
+          ],
+        ],
+      ],
+    ],
     'variantes' => 
     array (
       0 => 

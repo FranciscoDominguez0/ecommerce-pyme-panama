@@ -23,6 +23,10 @@ php artisan storage:link --force 2>/dev/null || true
 if [ "$RUN_MIGRATIONS" != "false" ]; then
     echo ">> Ejecutando migraciones..."
     php artisan migrate --force
+fi
+
+# Seeders solo si se solicitan explícitamente (ej. primer arranque del sistema)
+if [ "$RUN_SEEDERS" = "true" ]; then
     echo ">> Ejecutando seeders (roles y datos base)..."
     php artisan db:seed --force
 fi
