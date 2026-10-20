@@ -16,8 +16,6 @@
 
     <!-- Default Laravel Font: Figtree & Material Symbols (Local) -->
     <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
-    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2"
-        crossorigin>
 
     <!-- Tailwind CSS compilado vía Vite -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))

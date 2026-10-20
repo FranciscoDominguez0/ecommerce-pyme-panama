@@ -171,21 +171,23 @@
             <!-- Sidebar de Filtros -->
             <aside x-data
                    x-init="
+                       let ticking = false;
                        const update = () => {
-                           if (window.innerWidth < 1024) {
-                               $el.style.top = '';
-                               return;
-                           }
-                           let h = $el.offsetHeight;
-                           let wh = window.innerHeight;
-                           if (h > wh - 96) {
-                               $el.style.top = (wh - h - 20) + 'px';
-                           } else {
-                               $el.style.top = '6rem';
-                           }
+                           if (ticking) return;
+                           ticking = true;
+                           requestAnimationFrame(() => {
+                               ticking = false;
+                               if (window.innerWidth < 1024) {
+                                   $el.style.top = '';
+                                   return;
+                               }
+                               let h = $el.offsetHeight;
+                               let wh = window.innerHeight;
+                               $el.style.top = (h > wh - 96) ? (wh - h - 20) + 'px' : '6rem';
+                           });
                        };
                        update();
-                       window.addEventListener('resize', update);
+                       window.addEventListener('resize', update, { passive: true });
                        new ResizeObserver(update).observe($el);
                    "
                    class="lg:col-span-3 space-y-5 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs lg:sticky lg:z-10">

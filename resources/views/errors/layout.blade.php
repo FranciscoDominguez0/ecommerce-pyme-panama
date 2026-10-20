@@ -7,7 +7,6 @@
     
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
-    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
     
     @vite(['resources/css/app.css'])
 
