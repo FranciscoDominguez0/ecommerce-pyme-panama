@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Pedido;
+use App\Services\Pagos\Contracts\MetodoPagoInterface;
+use App\Services\Pagos\DTOs\ResultadoPago;
 use Illuminate\Support\Facades\Log;
 use Stripe\Exception\CardException;
 use Stripe\PaymentIntent;
@@ -11,6 +13,120 @@ use Throwable;
 
 class PagoService
 {
+    /**
+     * @var array<string, MetodoPagoInterface>
+     */
+    protected array $metodos = [];
+
+    /**
+     * Inicializa y registra las pasarelas de pago configuradas.
+     */
+    public function __construct()
+    {
+        $clases = config('pagos.metodos', []);
+        foreach ($clases as $id => $clase) {
+            if (is_string($clase) && class_exists($clase)) {
+                try {
+                    $ref = new \ReflectionClass($clase);
+                    $constructor = $ref->getConstructor();
+                    if ($constructor && $constructor->getNumberOfParameters() > 0) {
+                        $instancia = $ref->newInstance($this);
+                    } else {
+                        $instancia = $ref->newInstance();
+                    }
+                } catch (\Throwable) {
+                    $instancia = app($clase);
+                }
+
+                if ($instancia instanceof MetodoPagoInterface) {
+                    $this->registrar($instancia);
+                }
+            }
+        }
+    }
+
+    /**
+     * Registra un método de pago en el orquestador.
+     */
+    public function registrar(MetodoPagoInterface $metodo): self
+    {
+        $this->metodos[$metodo->id()] = $metodo;
+        return $this;
+    }
+
+    /**
+     * Obtiene una pasarela por su identificador ('stripe', 'yappy', etc.).
+     */
+    public function obtener(string $id): ?MetodoPagoInterface
+    {
+        return $this->metodos[$id] ?? null;
+    }
+
+    /**
+     * Retorna todas las pasarelas registradas.
+     *
+     * @return array<string, MetodoPagoInterface>
+     */
+    public function todos(): array
+    {
+        return $this->metodos;
+    }
+
+    /**
+     * Retorna únicamente los métodos de pago habilitados.
+     *
+     * @return array<string, MetodoPagoInterface>
+     */
+    public function activos(): array
+    {
+        return array_filter($this->metodos, fn(MetodoPagoInterface $m) => $m->estaActivo());
+    }
+
+    /**
+     * Retorna los identificadores de los métodos de pago habilitados.
+     *
+     * @return array<int, string>
+     */
+    public function idsActivos(): array
+    {
+        return array_keys($this->activos());
+    }
+
+    /**
+     * Procesa un cobro de forma polimórfica según el método seleccionado.
+     *
+     * @param string $metodoId
+     * @param array<string, mixed> $contexto
+     */
+    public function procesar(string $metodoId, array $contexto): ResultadoPago
+    {
+        $metodo = $this->obtener($metodoId);
+        if (!$metodo || !$metodo->estaActivo()) {
+            return ResultadoPago::fallo("El método de pago '{$metodoId}' no está disponible.");
+        }
+
+        return $metodo->procesar($contexto);
+    }
+
+    /**
+     * Ejecuta el reembolso polimórfico del pedido según su pasarela de origen.
+     *
+     * @return array{exito: bool, mensaje: string, refund_id: ?string, monto: float}
+     */
+    public function reembolsar(Pedido $pedido, ?float $monto = null, ?string $motivo = null): array
+    {
+        $metodo = $this->obtener($pedido->metodo_pago);
+        if (!$metodo) {
+            return [
+                'exito' => false,
+                'mensaje' => "No se encontró el controlador para el método de pago '{$pedido->metodo_pago}'.",
+                'refund_id' => null,
+                'monto' => 0.0,
+            ];
+        }
+
+        return $metodo->reembolsar($pedido, $monto, $motivo);
+    }
     /**
      * Procesa el pago con Stripe usando PaymentIntents de la API oficial de Stripe.
      *

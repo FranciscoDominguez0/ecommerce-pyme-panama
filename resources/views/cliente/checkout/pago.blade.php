@@ -40,93 +40,28 @@
         @csrf
 
         <div class="space-y-4">
-            
-            <!-- Tarjeta de Crédito (Stripe) -->
-            @if (\App\Models\Configuracion::obtenerBool('pagos.stripe.activo', true))
-            <label class="relative block cursor-pointer group" id="label_stripe">
-                <input type="radio" name="metodo_pago" value="stripe" class="peer sr-only" id="radio_stripe" required />
+            @forelse($metodosPago as $metodo)
+            <label class="relative block cursor-pointer group" id="label_{{ $metodo->id() }}">
+                <input type="radio" 
+                       name="metodo_pago" 
+                       value="{{ $metodo->id() }}" 
+                       class="peer sr-only" 
+                       id="radio_{{ $metodo->id() }}" 
+                       {{ (session('checkout_metodo_pago') === $metodo->id() || $loop->first) ? 'checked' : '' }}
+                       required />
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-4">
-                            <span class="material-symbols-outlined text-on-surface-variant text-3xl">credit_card</span>
-                            <div>
-                                <span class="block text-base font-semibold text-primary">Tarjeta de Crédito / Débito</span>
-                                <span class="block text-xs text-on-surface-variant">Pago seguro y validación en tiempo real con Stripe</span>
-                            </div>
-                        </div>
-                        <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary text-[14px] opacity-0 peer-checked:group-[]:opacity-100">check</span>
-                        </div>
-                    </div>
-
-                    <!-- Sub-formulario Stripe Elements -->
-                    <div id="form_stripe" class="hidden mt-6 pt-6 border-t border-outline-variant w-full">
-                        <div class="mb-4">
-                            <div class="flex items-center justify-between mb-2">
-                                <label class="text-xs font-semibold text-primary">Ingresa los datos de tu tarjeta</label>
-                                <div class="flex items-center gap-1.5">
-                                    <x-tarjeta-marca-logo brand="visa" class="w-7 h-4.5" />
-                                    <x-tarjeta-marca-logo brand="mastercard" class="w-7 h-4.5" />
-                                    <x-tarjeta-marca-logo brand="amex" class="w-7 h-4.5" />
-                                </div>
-                            </div>
-                            
-                            <!-- Contenedor donde Stripe monta el formulario seguro de tarjeta -->
-                            <div id="stripe-card-element" class="p-3.5 bg-white border border-slate-300 rounded-lg text-sm transition-all focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 shadow-2xs"></div>
-                            
-                            <!-- Mensajes de validación de Stripe (tarjeta incorrecta, vencida, etc.) -->
-                            <div id="stripe-card-errors" class="text-rose-600 text-xs mt-2 font-semibold hidden flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[16px]">error</span>
-                                <span id="stripe-error-text"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center gap-1.5 text-[11px] text-slate-400">
-                            <span class="material-symbols-outlined text-[14px]">lock</span>
-                            <span>Tus datos viajan cifrados bajo estándar PCI-DSS y nunca se almacenan en nuestros servidores.</span>
-                        </div>
-                    </div>
-                </div>
-            </label>
-            <input type="hidden" name="stripe_payment_method_id" id="stripe_payment_method_id">
-            <input type="hidden" name="stripe_last4" id="stripe_last4">
-            <input type="hidden" name="stripe_brand" id="stripe_brand">
-            @endif
-
-            <!-- Yappy -->
-            @if (\App\Models\Configuracion::obtenerBool('pagos.yappy.activo', true))
-            <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="yappy" class="peer sr-only" required />
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-4">
+                            @if(str_starts_with($metodo->icono(), 'asset:'))
                             <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-slate-200 p-1">
-                                <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">
+                                <img src="{{ asset(substr($metodo->icono(), 6)) }}" alt="{{ $metodo->nombre() }}" class="max-w-full max-h-full object-contain">
                             </div>
+                            @else
+                            <span class="material-symbols-outlined text-on-surface-variant text-3xl">{{ $metodo->icono() }}</span>
+                            @endif
                             <div>
-                                <span class="block text-base font-semibold text-primary">Yappy</span>
-                                <span class="block text-xs text-on-surface-variant">Paga rápido con tu directorio de Banco General</span>
-                            </div>
-                        </div>
-                        <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary text-[14px] opacity-0 peer-checked:group-[]:opacity-100">check</span>
-                        </div>
-                    </div>
-                </div>
-            </label>
-            @endif
-
-            <!-- Transferencia ACH -->
-            @if (\App\Models\Configuracion::obtenerBool('pagos.transferencia.activo', true))
-            <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="transferencia" class="peer sr-only" id="radio_transferencia" required />
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-4">
-                            <span class="material-symbols-outlined text-on-surface-variant text-3xl">account_balance</span>
-                            <div>
-                                <span class="block text-base font-semibold text-primary">Transferencia Bancaria (ACH)</span>
-                                <span class="block text-xs text-on-surface-variant">Envía el comprobante para procesar tu pedido</span>
+                                <span class="block text-base font-semibold text-primary">{{ $metodo->nombre() }}</span>
+                                <span class="block text-xs text-on-surface-variant">{{ $metodo->descripcion() }}</span>
                             </div>
                         </div>
                         <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
@@ -134,48 +69,16 @@
                         </div>
                     </div>
 
-                    <!-- Sub-formulario Transferencia -->
-                    <div id="form_transferencia" class="hidden mt-6 pt-6 border-t border-outline-variant w-full">
-                        <div class="bg-surface-container-low p-4 rounded-lg mb-6 border border-outline-variant">
-                            <p class="text-sm font-semibold text-primary mb-2">Datos Bancarios:</p>
-                            <div class="space-y-1 text-xs text-on-surface-variant">
-                                <p>Banco: Banco General</p>
-                                <p>Cuenta Corriente: 03-XX-XXXX-X</p>
-                                <p>A nombre de: PayMe Panamá S.A.</p>
-                            </div>
-                        </div>
-                        
-                        <label class="block text-xs font-semibold text-on-surface-variant mb-2">Sube tu comprobante de pago</label>
-                        <input type="file" name="comprobante_pago" id="comprobante_pago" accept="image/*,.pdf" class="block w-full text-sm text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-surface-container file:text-primary hover:file:bg-surface-container-high transition-colors cursor-pointer">
-                        @error('comprobante_pago')
-                            <p class="mt-2 text-sm text-error flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">error</span> {{ $message }}</p>
-                        @enderror
-                    </div>
+                    @if($metodo->vistaSubformulario())
+                        @include($metodo->vistaSubformulario())
+                    @endif
                 </div>
             </label>
-            @endif
-
-            <!-- Contra Entrega -->
-            @if (\App\Models\Configuracion::obtenerBool('pagos.contra_entrega.activo', true))
-            <label class="relative block cursor-pointer group">
-                <input type="radio" name="metodo_pago" value="contra_entrega" class="peer sr-only" required />
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 transition-all duration-200 peer-checked:border-secondary peer-checked:shadow-[0_4px_20px_rgba(0,35,73,0.05)] hover:shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-4">
-                            <span class="material-symbols-outlined text-on-surface-variant text-3xl">local_shipping</span>
-                            <div>
-                                <span class="block text-base font-semibold text-primary">Pago Contra Entrega</span>
-                                <span class="block text-xs text-on-surface-variant">Paga en efectivo o tarjeta al recibir tu pedido</span>
-                            </div>
-                        </div>
-                        <div class="w-5 h-5 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-secondary peer-checked:group-[]:bg-secondary transition-colors shrink-0">
-                            <span class="material-symbols-outlined text-on-secondary text-[14px] opacity-0 peer-checked:group-[]:opacity-100">check</span>
-                        </div>
-                    </div>
-                </div>
-            </label>
-            @endif
-
+            @empty
+            <div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl text-sm">
+                No hay métodos de pago habilitados temporalmente. Por favor, comunícate con el soporte técnico.
+            </div>
+            @endforelse
         </div>
 
         <!-- Action Buttons -->
@@ -257,18 +160,17 @@
             const selected = document.querySelector('input[name="metodo_pago"]:checked');
             if (!selected) return;
 
-            if (selected.value === 'transferencia') {
-                if (formTransferencia) formTransferencia.classList.remove('hidden');
-                if (inputComprobante) inputComprobante.required = true;
-                if (formStripe) formStripe.classList.add('hidden');
-            } else if (selected.value === 'stripe') {
-                if (formTransferencia) formTransferencia.classList.add('hidden');
-                if (inputComprobante) inputComprobante.required = false;
-                if (formStripe) formStripe.classList.remove('hidden');
-            } else {
-                if (formTransferencia) formTransferencia.classList.add('hidden');
-                if (inputComprobante) inputComprobante.required = false;
-                if (formStripe) formStripe.classList.add('hidden');
+            // Ocultar todos los subformularios dinámicamente
+            document.querySelectorAll('[id^="form_"]').forEach(el => el.classList.add('hidden'));
+
+            // Mostrar el subformulario del método seleccionado si existe
+            const subform = document.getElementById('form_' + selected.value);
+            if (subform) {
+                subform.classList.remove('hidden');
+            }
+
+            if (inputComprobante) {
+                inputComprobante.required = (selected.value === 'transferencia');
             }
         }
 

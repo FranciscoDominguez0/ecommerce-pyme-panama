@@ -126,7 +126,7 @@ class PedidoController extends Controller
         $pagoService = app(\App\Services\PagoService::class);
         $montoSolicitado = $request->filled('monto') ? (float) $request->monto : (float) $pedido->total;
         
-        $resultado = $pagoService->reembolsarStripe(
+        $resultado = $pagoService->reembolsar(
             $pedido, 
             $montoSolicitado, 
             $request->motivo
@@ -139,7 +139,8 @@ class PedidoController extends Controller
         $montoReembolsado = $resultado['monto'] ?: $montoSolicitado;
         $pedido->update(['monto_reembolsado' => $montoReembolsado]);
 
-        $comentario = 'Reembolso de $' . number_format($montoReembolsado, 2) . ' procesado con Stripe.';
+        $nombreMetodo = ucfirst(str_replace('_', ' ', $pedido->metodo_pago));
+        $comentario = 'Reembolso de $' . number_format($montoReembolsado, 2) . ' procesado con ' . $nombreMetodo . '.';
         if ($request->filled('motivo')) {
             $comentario .= ' Motivo: ' . $request->motivo;
         }
