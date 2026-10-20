@@ -45,7 +45,7 @@ class CheckoutController extends Controller
         $zonasEnvio = ZonaEnvio::activo()->get();
         $requiereEnvio = $this->pedidoService->carritoRequiereEnvioFisico($carrito);
 
-        return view('cliente.checkout.direccion', compact('zonasEnvio', 'requiereEnvio'));
+        return view('cliente.checkout.direccion', compact('zonasEnvio', 'requiereEnvio', 'carrito'));
     }
 
     /**

@@ -126,8 +126,11 @@
                         }
                         if (window.ModalArticuloAgregado) {
                             window.ModalArticuloAgregado.abrir({
+                                id: productoId,
                                 nombre: data.producto_nombre,
                                 imagen: data.producto_imagen,
+                                precio: '{{ $prod->precio_oferta ?? $prod->precio }}',
+                                cantidad: 1,
                                 cantidadTotal: data.cantidad_total || 1,
                                 variante: data.variante_texto
                             });

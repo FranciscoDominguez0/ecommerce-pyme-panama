@@ -121,6 +121,16 @@
                     }
                 }
 
+                // Medición E-commerce: Agregar al carrito
+                if (window.gtagEcommerce && datos) {
+                    window.gtagEcommerce.addToCart({
+                        id: datos.id,
+                        name: datos.nombre,
+                        variant: datos.variante,
+                        price: datos.precio
+                    }, datos.cantidad || 1);
+                }
+
                 panel.classList.remove('hidden');
                 panel.classList.add('flex');
             },

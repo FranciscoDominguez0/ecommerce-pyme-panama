@@ -884,8 +884,11 @@
                 }
                 if (window.ModalArticuloAgregado) {
                     window.ModalArticuloAgregado.abrir({
+                        id: '{{ $producto->id }}',
                         nombre: data.producto_nombre,
                         imagen: data.producto_imagen,
+                        precio: '{{ $producto->precio_oferta ?? $producto->precio }}',
+                        cantidad: cantidad,
                         cantidadTotal: data.cantidad_total || 1,
                         variante: data.variante_texto
                     });
@@ -1023,6 +1026,16 @@
     window.comprarAhora = comprarAhora;
     window.cerrarLightbox = cerrarLightbox;
     window.enviarNotificacionStock = enviarNotificacionStock;
+    // Medición E-commerce: Ver detalle de producto
+    if (window.gtagEcommerce) {
+        window.gtagEcommerce.viewItem({
+            id: '{{ $producto->id }}',
+            name: @json($producto->nombre),
+            category: @json($producto->categoria?->nombre ?? ''),
+            brand: @json($producto->brand?->nombre ?? ''),
+            price: {{ number_format((float)($producto->precio_oferta ?? $producto->precio), 2, '.', '') }}
+        });
+    }
     })();
 </script>
 @endsection

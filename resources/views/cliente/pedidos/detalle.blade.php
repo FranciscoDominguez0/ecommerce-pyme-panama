@@ -25,6 +25,29 @@
             <p class="text-on-surface-variant text-center" x-show="show" x-transition:enter="transition ease-out duration-500 delay-400" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">Tu orden ha sido procesada exitosamente.</p>
         </div>
     </div>
+    <script>
+        (function() {
+            if (window.gtagEcommerce) {
+                window.gtagEcommerce.purchase({
+                    id: '{{ $pedido->numero_pedido ?? $pedido->id }}',
+                    total: {{ number_format((float)$pedido->total, 2, '.', '') }},
+                    tax: {{ number_format((float)($pedido->itbms_monto ?? 0), 2, '.', '') }},
+                    shipping: {{ number_format((float)($pedido->costo_envio ?? 0), 2, '.', '') }},
+                    coupon: '{{ $pedido->cupon?->codigo ?? "" }}',
+                    items: [
+                        @foreach($pedido->items as $item)
+                        {
+                            item_id: '{{ $item->producto_id }}',
+                            item_name: @json($item->producto?->nombre ?? 'Producto'),
+                            price: {{ number_format((float)$item->precio_unitario, 2, '.', '') }},
+                            quantity: {{ (int)$item->cantidad }}
+                        }@if(!$loop->last),@endif
+                        @endforeach
+                    ]
+                });
+            }
+        })();
+    </script>
     @endif
 
     @php

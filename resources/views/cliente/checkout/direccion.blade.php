@@ -39,5 +39,27 @@
     </div>
 
     <livewire:checkout-envio :zonasEnvio="$zonasEnvio" :requiereEnvio="$requiereEnvio ?? true" />
+
+    @if(isset($carrito) && $carrito->items->isNotEmpty())
+        <script>
+            (function() {
+                if (window.gtagEcommerce) {
+                    window.gtagEcommerce.beginCheckout(
+                        {{ number_format((float)$carrito->total, 2, '.', '') }},
+                        [
+                            @foreach($carrito->items as $item)
+                            {
+                                item_id: '{{ $item->producto_id }}',
+                                item_name: @json($item->producto?->nombre ?? 'Producto'),
+                                price: {{ number_format((float)$item->precio_unitario, 2, '.', '') }},
+                                quantity: {{ (int)$item->cantidad }}
+                            }@if(!$loop->last),@endif
+                            @endforeach
+                        ]
+                    );
+                }
+            })();
+        </script>
+    @endif
 </div>
 @endsection
