@@ -172,20 +172,39 @@ npm install
 
 ### Paso 9 — Sembrar los datos base
 
-Ejecuta los seeders en el siguiente orden:
+Ejecuta el seeder principal para inicializar la base de datos completa (roles, permisos, usuario administrador, marcas, categorías, atributos, sucursales de courier, zonas de envío y el catálogo completo de 175 productos y servicios):
 
 ```bash
-# Roles, permisos, 63 marcas y atributos de variante
+# Siembra completa recomendada (ejecuta DatabaseSeeder)
 php artisan db:seed
+```
 
-# Usuario administrador (admin@example.com)
+Si prefieres sembrar por separado o actualizar un módulo específico:
+
+```bash
+# 1. Roles del sistema (super_admin, admin, cliente)
+php artisan db:seed --class=RolesSeeder
+
+# 2. Permisos y usuario administrador inicial (admin@example.com)
 php artisan db:seed --class=RolesPermisosSeeder
 
-# 43 categorias y subcategorias en espanol
+# 3. 63 Marcas de tecnología y hardware
+php artisan db:seed --class=BrandSeeder
+
+# 4. 43 Categorías y subcategorías en español
 php artisan db:seed --class=CategoriaSeeder
 
-# Zonas de envio por provincia de Panama
+# 5. Atributos y opciones para variantes (Color, RAM, etc.)
+php artisan db:seed --class=AtributosVarianteSeeder
+
+# 6. Sucursales de Courier (Fletes Chavale, etc.)
+php artisan db:seed --class=CourierSucursalesSeeder
+
+# 7. Zonas de envío por provincia de Panamá y tarifas de flete
 php artisan db:seed --class=ZonaEnvioSeeder
+
+# 8. Catálogo fijo de 175 productos reales y servicios con especificaciones y garantías
+php artisan db:seed --class=CatalogoFijoSeeder
 ```
 
 ---
@@ -309,12 +328,44 @@ Una vez iniciado el servidor, verifica que las siguientes URLs respondan correct
 
 ### Seeders de instalacion
 
-| Seeder | Que genera | Comando |
+El proyecto cuenta con una cadena de seeders modular y determinista. Al ejecutar `php artisan db:seed`, `DatabaseSeeder` ejecuta los siguientes componentes en orden estricto:
+
+| Seeder | Que genera | Comando individual |
 |---|---|---|
-| `DatabaseSeeder` | Roles (`Admin`, `super_admin`, `cliente`), permisos, 63 marcas, atributos de variante | `php artisan db:seed` |
-| `RolesPermisosSeeder` | Usuario administrador `admin@example.com` con rol `super_admin` | `php artisan db:seed --class=RolesPermisosSeeder` |
+| `DatabaseSeeder` | **Orquestador completo:** ejecuta todos los seeders en orden secuencial | `php artisan db:seed` |
+| `RolesSeeder` | Roles del sistema (`super_admin`, `Admin`, `cliente`) | `php artisan db:seed --class=RolesSeeder` |
+| `RolesPermisosSeeder` | Permisos del sistema y usuario admin inicial (`admin@example.com`) | `php artisan db:seed --class=RolesPermisosSeeder` |
+| `BrandSeeder` | 63 marcas de tecnologia y hardware | `php artisan db:seed --class=BrandSeeder` |
 | `CategoriaSeeder` | 43 categorias y subcategorias (nombres en espanol, slugs canonicos) | `php artisan db:seed --class=CategoriaSeeder` |
-| `ZonaEnvioSeeder` | Zonas de envio por provincia de Panama | `php artisan db:seed --class=ZonaEnvioSeeder` |
+| `AtributosVarianteSeeder` | Tipos de variante (Color, RAM, etc.) y opciones para productos | `php artisan db:seed --class=AtributosVarianteSeeder` |
+| `CourierSucursalesSeeder` | Sucursales de Courier (Fletes Chavale, etc.) y tarifas de retiro | `php artisan db:seed --class=CourierSucursalesSeeder` |
+| `ZonaEnvioSeeder` | Zonas de envio por provincia de Panama y tarifas de flete | `php artisan db:seed --class=ZonaEnvioSeeder` |
+| `CatalogoFijoSeeder` | **Catalogo oficial:** 175 productos y servicios reales con especificaciones y garantias | `php artisan db:seed --class=CatalogoFijoSeeder` |
+
+---
+
+### CatalogoFijoSeeder — Catalogo oficial de productos
+
+`CatalogoFijoSeeder` es el seeder oficial para poblar el catálogo de productos y servicios de la plataforma, leyendo directamente las marcas, categorías y atributos existentes en la base de datos.
+
+```bash
+php artisan db:seed --class=CatalogoFijoSeeder
+```
+
+**Caracteristicas principales:**
+
+| Aspecto | Detalle |
+|---|---|
+| **Total de items** | **175 productos y servicios** en catálogo |
+| **Servicios y software** | 35 items (licencias y soporte técnico exentos de flete, `es_digital = true`, `stock = 999`) |
+| **Bienes fisicos** | 140 productos (hardware, laptops, componentes, redes, monitores, audio, etc.) |
+| **Dimensiones y peso** | Cada producto físico incluye `peso`, `dimension_largo`, `dimension_ancho` y `dimension_alto` para el cálculo automático de flete con courier |
+| **Especificaciones tecnicas** | Arreglos JSON estructurados con clave/valor por producto (procesador, memoria, conectividad, etc.) |
+| **Garantia oficial** | Información de política de garantía local con soporte y cobertura para Panamá |
+| **Variantes reales** | Genera variantes vinculadas a `tipos_variante` y `opciones_variante` (máximo 2 por producto) |
+| **Seguridad de datos** | **Idempotente y no destructivo:** si ya existen productos en la base de datos, omite la siembra para proteger fotos, pedidos e inventario |
+
+---
 
 ### CatalogoDemoSeeder — Solo para testing
 
@@ -373,7 +424,8 @@ php artisan test --env=testing
 | `php artisan serve` | Servidor de desarrollo con cabeceras de cache |
 | `php artisan migrate` | Ejecuta las migraciones pendientes |
 | `php artisan migrate:status` | Lista el estado de todas las migraciones |
-| `php artisan db:seed` | Ejecuta `DatabaseSeeder` (roles, marcas, atributos) |
+| `php artisan db:seed` | Ejecuta `DatabaseSeeder` (roles, marcas, courier, zonas y 175 productos del catálogo) |
+| `php artisan db:seed --class=CatalogoFijoSeeder` | Siembra únicamente el catálogo fijo de 175 productos y servicios |
 | `php artisan storage:link` | Enlaza `storage/app/public` con `public/storage` |
 | `php artisan key:generate` | Genera `APP_KEY` en el `.env` |
 | `php artisan tinker` | Consola interactiva de Laravel |
