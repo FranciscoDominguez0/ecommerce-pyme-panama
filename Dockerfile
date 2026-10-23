@@ -1,13 +1,13 @@
 ###############################################################
 # eCommerce PyME Panamá — Dockerfile
-# PHP 8.4-FPM + Nginx interno | Composer 2 | Node 22
+# PHP 8.4.27-FPM + Nginx interno | Composer 2 | Node 22
 # NPM (Nginx Proxy Manager) hace proxy_pass HTTP al puerto 80.
 ###############################################################
 
 #############################
 # Stage 1: Composer
 #############################
-FROM php:8.4-cli-alpine AS vendor
+FROM php:8.4.27-cli-alpine AS vendor
 
 RUN apk add --no-cache git unzip libzip icu-libs libpng libjpeg-turbo freetype libwebp \
     && apk add --no-cache --virtual .build-deps \
@@ -48,7 +48,7 @@ RUN npm run build
 #############################
 # Stage 3: Runtime (Nginx + PHP-FPM + Supervisor)
 #############################
-FROM php:8.4-fpm-alpine AS runtime
+FROM php:8.4.27-fpm-alpine AS runtime
 
 WORKDIR /var/www/html
 
