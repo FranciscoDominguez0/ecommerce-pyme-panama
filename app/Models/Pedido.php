@@ -97,6 +97,11 @@ class Pedido extends Model
         return $this->hasOne(Devolucion::class, 'pedido_id');
     }
 
+    public function valoraciones(): HasMany
+    {
+        return $this->hasMany(ValoracionProducto::class, 'pedido_id');
+    }
+
     /**
      * Obtiene los metadatos de tarjeta guardados en notas_internas (JSON).
      */

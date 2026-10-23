@@ -27,7 +27,19 @@ class CatalogoController extends Controller
     /**
      * Relaciones necesarias para la página de detalle de un producto.
      */
-    private const RELACIONES_DETALLE = ['categoria', 'imagenes', 'variantes.opciones.tipo', 'promocionesProductoDelMes'];
+    private const RELACIONES_DETALLE = [
+        'categoria',
+        'imagenes',
+        'variantes.opciones.tipo',
+        'promocionesProductoDelMes',
+        'valoracionesAprobadas.usuario',
+    ];
+
+    public function __construct(
+        protected ?\App\Services\ValoracionService $valoracionService = null
+    ) {
+        $this->valoracionService = $valoracionService ?? app(\App\Services\ValoracionService::class);
+    }
 
     /**
      * Muestra el catálogo público de productos con filtros y paginación.
@@ -87,8 +99,9 @@ class CatalogoController extends Controller
 
         $relacionados = $this->obtenerProductosRelacionados($producto);
         $categorias   = Categoria::sinEliminar()->orderBy('nombre')->get();
+        $estadisticasValoracion = $this->valoracionService->obtenerEstadisticasProducto($producto->id);
 
-        return view('cliente.catalogo.detalle', compact('producto', 'relacionados', 'categorias'));
+        return view('cliente.catalogo.detalle', compact('producto', 'relacionados', 'categorias', 'estadisticasValoracion'));
     }
 
     /**

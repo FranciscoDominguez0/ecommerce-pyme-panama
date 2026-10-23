@@ -41,14 +41,26 @@ class PedidoController extends Controller
 
     public function detalle($id)
     {
-        $pedido = Pedido::with(['items.producto.imagenes', 'items.variante.opciones.tipo', 'estados', 'ultimoEstado', 'direccion', 'zonaEnvio', 'factura', 'devolucion', 'cupon'])
+        $pedido = Pedido::with([
+            'items.producto.imagenes',
+            'items.variante.opciones.tipo',
+            'estados',
+            'ultimoEstado',
+            'direccion',
+            'zonaEnvio',
+            'factura',
+            'devolucion',
+            'cupon',
+            'valoraciones',
+        ])
             ->where('usuario_id', Auth::id())
             ->findOrFail($id);
 
         $estadosOrdenados = $pedido->estados->sortBy('creado_en')->values();
         $totalArticulos = $pedido->items->sum('cantidad');
+        $valoracionesPorProducto = $pedido->valoraciones->keyBy('producto_id');
 
-        return view('cliente.pedidos.detalle', compact('pedido', 'estadosOrdenados', 'totalArticulos'));
+        return view('cliente.pedidos.detalle', compact('pedido', 'estadosOrdenados', 'totalArticulos', 'valoracionesPorProducto'));
     }
 
     public function confirmarRecepcion($id)

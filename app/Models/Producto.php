@@ -147,6 +147,50 @@ class Producto extends Model
     }
 
     /**
+     * Todas las valoraciones y reseñas recibidas por este producto.
+     */
+    public function valoraciones(): HasMany
+    {
+        return $this->hasMany(ValoracionProducto::class, 'producto_id');
+    }
+
+    /**
+     * Valoraciones aprobadas y visibles para el público.
+     */
+    public function valoracionesAprobadas(): HasMany
+    {
+        return $this->hasMany(ValoracionProducto::class, 'producto_id')
+            ->where('es_aprobado', true)
+            ->orderByDesc('creado_en');
+    }
+
+    /**
+     * Promedio de estrellas de 1 a 5 (redondeado a 1 decimal).
+     */
+    public function getPromedioCalificacionAttribute(): float
+    {
+        if ($this->relationLoaded('valoracionesAprobadas')) {
+            $promedio = $this->valoracionesAprobadas->avg('calificacion');
+            return $promedio !== null ? round((float) $promedio, 1) : 0.0;
+        }
+
+        $promedio = $this->valoracionesAprobadas()->avg('calificacion');
+        return $promedio !== null ? round((float) $promedio, 1) : 0.0;
+    }
+
+    /**
+     * Total de valoraciones aprobadas recibidas.
+     */
+    public function getTotalValoracionesAttribute(): int
+    {
+        if ($this->relationLoaded('valoracionesAprobadas')) {
+            return $this->valoracionesAprobadas->count();
+        }
+
+        return $this->valoracionesAprobadas()->count();
+    }
+
+    /**
      * Obtiene la imagen principal del producto.
      */
     public function imagenPrincipal()

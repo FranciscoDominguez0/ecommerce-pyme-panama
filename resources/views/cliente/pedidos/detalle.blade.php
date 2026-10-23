@@ -240,51 +240,227 @@
                 @endif
             </div>
 
+            <!-- Banner de valoración cuando el pedido está entregado -->
+            @if($ultimoEstado === 'entregado')
+            <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/5 border border-emerald-200/80 dark:border-emerald-500/20 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                        <span class="material-symbols-outlined text-[22px]">hotel_class</span>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">¡Tu pedido ha sido entregado exitosamente!</h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
+                            Tu opinión ayuda a otros compradores. Valora con estrellas tus productos recibidos a continuación.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- Artículos del pedido -->
             <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
                 <h2 class="text-sm font-bold text-primary">Artículos del pedido</h2>
                 <div class="space-y-6">
                     @foreach($pedido->items as $item)
-                    <div class="flex flex-col sm:flex-row items-start gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
-                        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container-low">
-                            @if($item->producto)
-                                <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-outline-variant">image</span>
-                                </div>
-                            @endif
-                        </div>
-                        
-                        <div class="flex-1 min-w-0 w-full flex flex-col sm:flex-row justify-between gap-4">
-                            <!-- Info Producto -->
-                            <div class="flex-1">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <h3 class="text-sm font-semibold text-on-surface line-clamp-2">
-                                        {{ $item->producto?->nombre ?? 'Producto no disponible' }}
-                                    </h3>
-                                </div>
-                                @if($item->variante && $item->variante->opciones->isNotEmpty())
-                                    <p class="text-on-surface-variant text-sm mt-1">
-                                        @foreach($item->variante->opciones as $opcion)
-                                            <span class="inline-block mr-2">{{ $opcion->tipo->nombre }}: <span class="font-medium text-on-surface">{{ $opcion->valor }}</span></span>
-                                        @endforeach
-                                    </p>
+                    @php
+                        $valoracion = isset($valoracionesPorProducto) ? $valoracionesPorProducto->get($item->producto_id) : null;
+                    @endphp
+                    <div class="flex flex-col items-start gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
+                        <div class="flex flex-col sm:flex-row items-start gap-4 w-full">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container-low">
+                                @if($item->producto)
+                                    <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-outline-variant">image</span>
+                                    </div>
                                 @endif
-                                
-                                <!-- Precio y Cantidad Mobile -->
-                                <div class="mt-2 sm:hidden flex items-center justify-between">
-                                    <p class="text-on-surface-variant text-sm">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }}</p>
-                                    <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
-                                </div>
                             </div>
                             
-                            <!-- Precio y Cantidad Desktop -->
-                            <div class="hidden sm:flex flex-col items-end gap-1 min-w-[120px]">
-                                <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
-                                <p class="text-on-surface-variant text-xs">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }} c/u</p>
+                            <div class="flex-1 min-w-0 w-full flex flex-col sm:flex-row justify-between gap-4">
+                                <!-- Info Producto -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h3 class="text-sm font-semibold text-on-surface line-clamp-2">
+                                            {{ $item->producto?->nombre ?? 'Producto no disponible' }}
+                                        </h3>
+                                    </div>
+                                    @if($item->variante && $item->variante->opciones->isNotEmpty())
+                                        <p class="text-on-surface-variant text-sm mt-1">
+                                            @foreach($item->variante->opciones as $opcion)
+                                                <span class="inline-block mr-2">{{ $opcion->tipo->nombre }}: <span class="font-medium text-on-surface">{{ $opcion->valor }}</span></span>
+                                            @endforeach
+                                        </p>
+                                    @endif
+                                    
+                                    <!-- Precio y Cantidad Mobile -->
+                                    <div class="mt-2 sm:hidden flex items-center justify-between">
+                                        <p class="text-on-surface-variant text-sm">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }}</p>
+                                        <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Precio y Cantidad Desktop -->
+                                <div class="hidden sm:flex flex-col items-end gap-1 min-w-[120px]">
+                                    <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
+                                    <p class="text-on-surface-variant text-xs">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }} c/u</p>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Sección de Valoración para productos entregados -->
+                        @if($ultimoEstado === 'entregado' && $item->producto)
+                        <div x-data="{
+                            abierto: false,
+                            calificacion: {{ $valoracion?->calificacion ?? 5 }},
+                            hoverCalificacion: 0,
+                            etiquetas: {1: 'Muy malo', 2: 'Malo', 3: 'Regular', 4: 'Bueno', 5: '¡Excelente!'}
+                        }" class="w-full pt-3 border-t border-slate-100 dark:border-gray-700/60">
+
+                            @if($valoracion)
+                                <!-- Valoración registrada por el cliente -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-50/60 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-3.5">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center gap-2">
+                                            <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 dark:text-emerald-400">
+                                                <span class="material-symbols-outlined text-[15px]">verified</span>
+                                                <span>Tu valoración</span>
+                                            </span>
+                                            <div class="flex items-center text-amber-400">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <span class="material-symbols-outlined star-filled text-[17px] {{ $i <= $valoracion->calificacion ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600' }}"
+                                                          style="{{ $i <= $valoracion->calificacion ? "font-variation-settings: 'FILL' 1;" : "font-variation-settings: 'FILL' 0;" }}">star</span>
+                                                @endfor
+                                            </div>
+                                            <span class="text-[11px] font-bold text-slate-600 dark:text-slate-400">({{ $valoracion->calificacion }}/5)</span>
+                                        </div>
+
+                                        @if($valoracion->titulo)
+                                            <h4 class="text-xs font-bold text-slate-800 dark:text-gray-200">{{ $valoracion->titulo }}</h4>
+                                        @endif
+
+                                        @if($valoracion->comentario)
+                                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{{ $valoracion->comentario }}</p>
+                                        @endif
+
+                                        <p class="text-[10px] text-slate-400">Publicado el {{ $valoracion->creado_en->translatedFormat('d M, Y') }}</p>
+                                    </div>
+
+                                    <button type="button" 
+                                            @click="abierto = !abierto" 
+                                            class="self-start sm:self-auto inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-gray-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#181a1b] hover:border-emerald-500 transition-colors shrink-0">
+                                        <span class="material-symbols-outlined text-[14px]">edit</span>
+                                        <span x-text="abierto ? 'Cerrar edición' : 'Editar opinión'">Editar opinión</span>
+                                    </button>
+                                </div>
+                            @else
+                                <!-- Botón para abrir el formulario de valoración -->
+                                <div class="flex items-center justify-between" x-show="!abierto">
+                                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-amber-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
+                                        <span>¿Recibiste este artículo? ¡Valora su calidad!</span>
+                                    </span>
+                                    <button type="button" 
+                                            @click="abierto = true" 
+                                            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all shadow-2xs">
+                                        <span class="material-symbols-outlined text-[15px]">rate_review</span>
+                                        <span>Valorar producto</span>
+                                    </button>
+                                </div>
+                            @endif
+
+                            <!-- Formulario interactivo para registrar o editar valoración -->
+                            <div x-show="abierto" x-cloak class="mt-3 bg-slate-50 dark:bg-transparent/60 border border-slate-200 dark:border-gray-700 rounded-2xl p-4 sm:p-5 space-y-4" x-transition>
+                                <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-gray-700 pb-3">
+                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        <span>{{ $valoracion ? 'Modificar valoración' : 'Escribir tu valoración' }}</span>
+                                    </h4>
+                                    <button type="button" @click="abierto = false" class="text-slate-400 hover:text-slate-600 text-xs">
+                                        <span class="material-symbols-outlined text-[18px]">close</span>
+                                    </button>
+                                </div>
+
+                                <form action="{{ route('cliente.perfil.pedidos.valorar', $pedido->id) }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <input type="hidden" name="producto_id" value="{{ $item->producto_id }}">
+                                    <input type="hidden" name="calificacion" :value="calificacion">
+
+                                    <!-- Selector interactivo de estrellas tocándolas y con relleno amarillo -->
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                                            Calificación general <span class="text-rose-500">*</span>
+                                        </label>
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex items-center gap-1 select-none" @mouseleave="hoverCalificacion = 0">
+                                                <template x-for="i in 5" :key="i">
+                                                    <button type="button" 
+                                                            @mouseenter="hoverCalificacion = i" 
+                                                            @touchstart.prevent="calificacion = i; hoverCalificacion = 0"
+                                                            @pointerdown="calificacion = i; hoverCalificacion = 0"
+                                                            @click.prevent="calificacion = i; hoverCalificacion = 0" 
+                                                            class="p-1 sm:p-1.5 touch-manipulation hover:scale-125 active:scale-95 transition-transform focus:outline-none cursor-pointer"
+                                                            :title="etiquetas[i]">
+                                                        <span class="material-symbols-outlined text-[32px] sm:text-[36px] transition-all leading-none"
+                                                              :class="(hoverCalificacion ? i <= hoverCalificacion : i <= calificacion) ? 'text-amber-400 star-filled drop-shadow-xs' : 'text-slate-300 dark:text-slate-600'"
+                                                              :style="(hoverCalificacion ? i <= hoverCalificacion : i <= calificacion) ? 'font-variation-settings: \'FILL\' 1;' : 'font-variation-settings: \'FILL\' 0;'">
+                                                            star
+                                                        </span>
+                                                    </button>
+                                                </template>
+                                            </div>
+                                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-[#181a1b] text-slate-700 dark:text-slate-300"
+                                                  x-text="etiquetas[hoverCalificacion || calificacion]"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Título de la reseña -->
+                                    <div>
+                                        <label for="titulo-{{ $item->id }}" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                                            Título de tu opinión <span class="text-slate-400 font-normal">(Opcional)</span>
+                                        </label>
+                                        <input type="text" 
+                                               id="titulo-{{ $item->id }}" 
+                                               name="titulo" 
+                                               maxlength="120"
+                                               value="{{ old('titulo', $valoracion?->titulo) }}"
+                                               placeholder="Ej: Excelente calidad, justo lo que esperaba"
+                                               class="w-full text-xs rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-800 dark:text-gray-100 py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">
+                                    </div>
+
+                                    <!-- Comentario sanitizado -->
+                                    <div x-data="{ caracteres: {{ mb_strlen($valoracion?->comentario ?? '') }} }">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <label for="comentario-{{ $item->id }}" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                                Comentario detallado <span class="text-slate-400 font-normal">(Opcional)</span>
+                                            </label>
+                                            <span class="text-[10px] text-slate-400"><span x-text="caracteres"></span> / 1000</span>
+                                        </div>
+                                        <textarea id="comentario-{{ $item->id }}" 
+                                                  name="comentario" 
+                                                  rows="3" 
+                                                  maxlength="1000"
+                                                  @input="caracteres = $el.value.length"
+                                                  placeholder="Cuéntanos sobre el producto, funcionamiento o tu experiencia de uso..."
+                                                  class="w-full text-xs rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-800 dark:text-gray-100 py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">{{ old('comentario', $valoracion?->comentario) }}</textarea>
+                                    </div>
+
+                                    <!-- Botones de acción -->
+                                    <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-200/80 dark:border-gray-700">
+                                        <button type="button" @click="abierto = false" class="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-gray-700 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent transition-colors">
+                                            Cancelar
+                                        </button>
+                                        <button type="submit" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer">
+                                            <span class="material-symbols-outlined text-[15px]">send</span>
+                                            <span>{{ $valoracion ? 'Actualizar valoración' : 'Publicar valoración' }}</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                        @endif
+
                     </div>
                     @endforeach
                 </div>

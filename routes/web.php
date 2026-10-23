@@ -87,6 +87,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->
     Route::post('/mis-pedidos/{id}/devolucion', [\App\Http\Controllers\Cliente\DevolucionController::class, 'store'])->name('pedidos.devolucion.store');
     
     Route::post('/mis-pedidos/{id}/confirmar-recepcion', [ClientePedidoController::class, 'confirmarRecepcion'])->name('pedidos.confirmar-recepcion');
+    Route::post('/mis-pedidos/{id}/valorar', [\App\Http\Controllers\Cliente\ValoracionController::class, 'store'])->name('pedidos.valorar');
 });
 
 Route::middleware('auth')->group(function () {

@@ -88,6 +88,14 @@
             SKU: {{ $prod->sku }}
         </span>
 
+        @if($prod->relationLoaded('valoracionesAprobadas') && $prod->total_valoraciones > 0)
+            <div class="flex items-center justify-center gap-1 text-[11px] text-amber-500 font-bold">
+                <span class="material-symbols-outlined star-filled text-[14px] text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span>{{ number_format($prod->promedio_calificacion, 1) }}</span>
+                <span class="text-slate-400 font-normal">({{ $prod->total_valoraciones }})</span>
+            </div>
+        @endif
+
         <div class="pt-2">
             @if($prod->tienePromocionOPrecioOferta())
                 <div class="text-lg font-extrabold text-emerald-700">
