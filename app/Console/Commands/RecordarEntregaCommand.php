@@ -52,13 +52,13 @@ class RecordarEntregaCommand extends Command
                 if (!$yaNotificado) {
                     Mail::to($pedido->usuario->email)->send(new RecordatorioEntregaMail($pedido));
                     
-                    LogAuditoria::create([
-                        'modulo' => 'pedidos',
-                        'accion' => 'recordatorio_entrega',
-                        'descripcion' => 'Correo de recordatorio de entrega enviado al cliente',
-                        'valor_nuevo' => $pedido->id,
-                        'ip' => '127.0.0.1',
-                    ]);
+                    \App\Services\AuditoriaService::registrar(
+                        'pedidos',
+                        'recordatorio_entrega',
+                        'Correo de recordatorio de entrega enviado al cliente',
+                        null,
+                        $pedido->id
+                    );
                     
                     $contador++;
                 }

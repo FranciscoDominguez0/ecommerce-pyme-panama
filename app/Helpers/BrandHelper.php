@@ -31,11 +31,6 @@ class BrandHelper
         }
     }
 
-    public static function getAvailableBrands(): array
-    {
-        return self::obtenerMarcasDisponibles();
-    }
-
     /**
      * Busca la ruta de imagen registrada en la base de datos para la marca dada.
      */
@@ -54,11 +49,6 @@ class BrandHelper
         } catch (\Throwable $e) {
             return null;
         }
-    }
-
-    public static function getBrandImagePath(?string $marca): ?string
-    {
-        return self::obtenerRutaImagenMarca($marca);
     }
 
     /**
@@ -87,10 +77,5 @@ class BrandHelper
         }
 
         return '<span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black tracking-wider uppercase">' . htmlspecialchars($marca) . '</span>';
-    }
-
-    public static function getLogoHtml(?string $marca, ?string $customLogoUrl = null): string
-    {
-        return self::obtenerLogoHtml($marca, $customLogoUrl);
     }
 }

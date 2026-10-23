@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Direccion;
 use App\Models\ZonaEnvio;
 use App\Services\CarritoService;
+use App\Services\EnvioService;
 use App\Services\PagoService;
 use App\Services\PedidoService;
 use Illuminate\Http\Request;
@@ -15,16 +16,12 @@ use Exception;
 
 class CheckoutController extends Controller
 {
-    protected CarritoService $carritoService;
-    protected PedidoService $pedidoService;
-    protected PagoService $pagoService;
-
-    public function __construct(CarritoService $carritoService, PedidoService $pedidoService, PagoService $pagoService)
-    {
-        $this->carritoService = $carritoService;
-        $this->pedidoService = $pedidoService;
-        $this->pagoService = $pagoService;
-    }
+    public function __construct(
+        protected CarritoService $carritoService,
+        protected PedidoService $pedidoService,
+        protected PagoService $pagoService,
+        protected EnvioService $envioService
+    ) {}
 
     /**
      * Paso 1: Dirección de Envío
@@ -122,26 +119,12 @@ class CheckoutController extends Controller
         $zonaEnvio = ZonaEnvio::find(session('checkout_zona_envio_id'));
         $metodoPago = session('checkout_metodo_pago');
         $metodoEntrega = session('checkout_metodo_entrega', 'delivery');
-        $courierSucursal = null;
-        $costoEnvioEspecial = null;
+        $courierSucursalId = session('checkout_courier_sucursal');
+        $courierSucursal = ($metodoEntrega === 'retiro_courier' && $courierSucursalId)
+            ? \App\Models\CourierSucursal::find($courierSucursalId)
+            : null;
 
-        if ($metodoEntrega === 'retiro_courier' && session()->has('checkout_courier_sucursal')) {
-            $courierSucursal = \App\Models\CourierSucursal::find(session('checkout_courier_sucursal'));
-            if ($courierSucursal) {
-                $baseCosto = (float)$courierSucursal->tarifa_uno_hasta_7lb;
-                $pesoTotalLbs = app(\App\Services\EnvioService::class)->calcularPesoTotalLibras($carrito);
-                
-                if ($pesoTotalLbs > 7) {
-                    $librasExtras = $pesoTotalLbs - 7;
-                    $recargo = $librasExtras * 0.50;
-                    $costoEnvioEspecial = $baseCosto + $recargo;
-                } else {
-                    $costoEnvioEspecial = $baseCosto;
-                }
-            }
-        } elseif ($metodoEntrega === 'retiro_local') {
-            $costoEnvioEspecial = 0.00;
-        }
+        $costoEnvioEspecial = $this->envioService->calcularCostoEspecial($metodoEntrega, $courierSucursalId, $carrito);
         
         $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
 
@@ -186,25 +169,7 @@ class CheckoutController extends Controller
             return redirect()->route('cliente.checkout.direccion')->with('error', 'Faltan datos para procesar tu pedido.');
         }
 
-        $costoEnvioEspecial = null;
-        if ($metodoEntrega === 'retiro_courier' && $courierSucursalId) {
-            $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
-            if ($sucursal) {
-                $baseCosto = (float)$sucursal->tarifa_uno_hasta_7lb;
-                $pesoTotalLbs = app(\App\Services\EnvioService::class)->calcularPesoTotalLibras($carrito);
-                
-                if ($pesoTotalLbs > 7) {
-                    $librasExtras = $pesoTotalLbs - 7;
-                    $recargo = $librasExtras * 0.50;
-                    $costoEnvioEspecial = $baseCosto + $recargo;
-                } else {
-                    $costoEnvioEspecial = $baseCosto;
-                }
-            }
-        } elseif ($metodoEntrega === 'retiro_local') {
-            $costoEnvioEspecial = 0.00;
-        }
-
+        $costoEnvioEspecial = $this->envioService->calcularCostoEspecial($metodoEntrega, $courierSucursalId, $carrito);
         $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
         $pagoExitoso = false;
         $resultadoPago = null;

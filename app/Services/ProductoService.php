@@ -206,21 +206,40 @@ class ProductoService
         $urlsCreadas = $this->guardarImagenesUrl($request, $producto);
         $archivosCreados = $this->guardarImagenesArchivos($request, $producto);
 
-        // Si se envió el orden unificado de la galería, ordenar todas las imágenes (existentes, nuevas y urls)
+        // Guardamos el orden de la galería si fue enviado
         if ($request->has('orden_galeria') && is_array($request->orden_galeria)) {
             $this->aplicarOrdenGaleria($request->orden_galeria, $producto, $archivosCreados, $urlsCreadas);
         }
 
-        // Si se especificó una clave de portada (nueva o existente)
+        // Fijamos la portada seleccionada
         if (!empty($portadaClave)) {
             $this->aplicarPortadaPorClave($portadaClave, $producto, $archivosCreados, $urlsCreadas);
         }
 
+        // Asignamos portada a la primera imagen si ninguna está marcada
         if ($producto->imagenes()->exists() && !$producto->imagenes()->where('es_principal', true)->exists()) {
             $primera = ImagenProducto::where('producto_id', $producto->id)->orderBy('orden')->first();
             if ($primera) {
                 $primera->update(['es_principal' => true]);
             }
+        }
+    }
+
+    // Fija una imagen existente como portada
+    public function establecerPortada(Producto $producto, int $imagenId): ImagenProducto
+    {
+        $imagen = $producto->imagenes()->findOrFail($imagenId);
+        $producto->imagenes()->update(['es_principal' => false]);
+        $imagen->update(['es_principal' => true]);
+
+        return $imagen;
+    }
+
+    // Actualiza la posición de las imágenes
+    public function reordenarImagenes(Producto $producto, array $orden): void
+    {
+        foreach ($orden as $posicion => $imagenId) {
+            $producto->imagenes()->where('id', $imagenId)->update(['orden' => $posicion + 1]);
         }
     }
 

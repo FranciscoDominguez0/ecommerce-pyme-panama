@@ -270,4 +270,131 @@ class CuponService
             })
             ->first();
     }
+
+    // Prepara categorías y productos formateados para los selectores del formulario
+    public function obtenerDatosFormulario(): array
+    {
+        $categorias = \App\Models\Categoria::sinEliminar()->with('padre')->orderBy('nombre', 'asc')->get();
+        $categoriasFormatted = $categorias->map(function ($cat) {
+            return [
+                'id' => $cat->id,
+                'nombre' => $cat->nombre,
+                'padre_nombre' => $cat->padre ? $cat->padre->nombre : null,
+                'imagen_url' => $cat->imagen_ruta ? asset($cat->imagen_ruta) : null,
+            ];
+        });
+
+        $productos = \App\Models\Producto::sinEliminar()->where('activo', true)->with('imagenes')->orderBy('nombre', 'asc')->get();
+        $productosFormatted = $productos->map(function ($prod) {
+            $img = $prod->imagenes->where('es_principal', true)->first() ?? $prod->imagenes->first();
+            return [
+                'id' => $prod->id,
+                'nombre' => $prod->nombre,
+                'sku' => $prod->sku ?? "PROD-{$prod->id}",
+                'precio_base' => (float) $prod->precio,
+                'imagen_url' => $img ? asset($img->ruta) : null,
+            ];
+        });
+
+        return compact('categorias', 'categoriasFormatted', 'productos', 'productosFormatted');
+    }
+
+    // Registra un nuevo cupón y guarda auditoría
+    public function crear(array $validados, bool $activo): Cupon
+    {
+        $cupon = Cupon::create([
+            'codigo' => strtoupper(trim($validados['codigo'])),
+            'tipo' => $validados['tipo'],
+            'valor' => (float) $validados['valor'],
+            'monto_minimo' => isset($validados['monto_minimo']) ? (float) $validados['monto_minimo'] : 0.00,
+            'maximo_usos_total' => !empty($validados['maximo_usos_total']) ? (int) $validados['maximo_usos_total'] : null,
+            'usos_por_cliente' => !empty($validados['usos_por_cliente']) ? (int) $validados['usos_por_cliente'] : 1,
+            'usos_actuales' => 0,
+            'activo' => $activo,
+            'aplica_a' => $validados['aplica_a'],
+            'categoria_id' => $validados['aplica_a'] === 'categoria' ? $validados['categoria_id'] : null,
+            'producto_id' => $validados['aplica_a'] === 'producto' ? $validados['producto_id'] : null,
+            'inicio_en' => Carbon::parse($validados['inicio_en']),
+            'fin_en' => !empty($validados['fin_en']) ? Carbon::parse($validados['fin_en']) : null,
+            'creado_en' => Carbon::now(),
+            'actualizado_en' => Carbon::now(),
+        ]);
+
+        AuditoriaService::registrar(
+            'Cupones y Promociones',
+            'crear_cupon',
+            "Cupón '{$cupon->codigo}' creado.",
+            null,
+            $cupon->toArray()
+        );
+
+        return $cupon;
+    }
+
+    // Actualiza los valores de un cupón existente
+    public function actualizar(Cupon $cupon, array $validados, bool $activo): Cupon
+    {
+        $valorAnterior = $cupon->toArray();
+
+        $cupon->update([
+            'codigo' => strtoupper(trim($validados['codigo'])),
+            'tipo' => $validados['tipo'],
+            'valor' => (float) $validados['valor'],
+            'monto_minimo' => isset($validados['monto_minimo']) ? (float) $validados['monto_minimo'] : 0.00,
+            'maximo_usos_total' => !empty($validados['maximo_usos_total']) ? (int) $validados['maximo_usos_total'] : null,
+            'usos_por_cliente' => !empty($validados['usos_por_cliente']) ? (int) $validados['usos_por_cliente'] : 1,
+            'activo' => $activo,
+            'aplica_a' => $validados['aplica_a'],
+            'categoria_id' => $validados['aplica_a'] === 'categoria' ? $validados['categoria_id'] : null,
+            'producto_id' => $validados['aplica_a'] === 'producto' ? $validados['producto_id'] : null,
+            'inicio_en' => Carbon::parse($validados['inicio_en']),
+            'fin_en' => !empty($validados['fin_en']) ? Carbon::parse($validados['fin_en']) : null,
+            'actualizado_en' => Carbon::now(),
+        ]);
+
+        AuditoriaService::registrar(
+            'Cupones y Promociones',
+            'actualizar_cupon',
+            "Cupón '{$cupon->codigo}' actualizado.",
+            $valorAnterior,
+            $cupon->toArray()
+        );
+
+        return $cupon;
+    }
+
+    // Alterna el estado activo de un cupón
+    public function alternarEstado(Cupon $cupon): bool
+    {
+        $estadoAnterior = $cupon->activo;
+        $cupon->activo = !$cupon->activo;
+        $cupon->actualizado_en = Carbon::now();
+        $cupon->save();
+
+        AuditoriaService::registrar(
+            'Cupones y Promociones',
+            'toggle_cupon',
+            "Estado del cupón '{$cupon->codigo}' cambiado a " . ($cupon->activo ? 'Activo' : 'Inactivo'),
+            ['activo' => $estadoAnterior],
+            ['activo' => $cupon->activo]
+        );
+
+        return $cupon->activo;
+    }
+
+    // Elimina el cupón del sistema
+    public function eliminar(Cupon $cupon): void
+    {
+        $codigo = $cupon->codigo;
+        $datosAnteriores = $cupon->toArray();
+        $cupon->delete();
+
+        AuditoriaService::registrar(
+            'Cupones y Promociones',
+            'eliminar_cupon',
+            "Cupón '{$codigo}' eliminado.",
+            $datosAnteriores,
+            null
+        );
+    }
 }

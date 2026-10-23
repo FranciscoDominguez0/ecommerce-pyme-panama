@@ -104,4 +104,38 @@ class EnvioService
         // Si pesa menos de 10 libras, se cobra solo la tarifa base.
         return $baseCosto;
     }
+
+    // Calcula la tarifa de sucursal de courier considerando peso y recargo por libra adicional
+    public function calcularCostoCourier(?\App\Models\CourierSucursal $sucursal, \App\Models\Carrito $carrito): float
+    {
+        if (!$sucursal) {
+            return 0.00;
+        }
+
+        $baseCosto = (float) $sucursal->tarifa_uno_hasta_7lb;
+        $pesoTotalLbs = $this->calcularPesoTotalLibras($carrito);
+
+        if ($pesoTotalLbs > 7) {
+            $librasExtras = $pesoTotalLbs - 7;
+            $recargo = $librasExtras * 0.50;
+            return $baseCosto + $recargo;
+        }
+
+        return $baseCosto;
+    }
+
+    // Resuelve el costo especial de envío según el método de entrega (retiro local, courier, etc.)
+    public function calcularCostoEspecial(string $metodoEntrega, ?int $courierSucursalId, \App\Models\Carrito $carrito): ?float
+    {
+        if ($metodoEntrega === 'retiro_local') {
+            return 0.00;
+        }
+
+        if ($metodoEntrega === 'retiro_courier' && $courierSucursalId) {
+            $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
+            return $this->calcularCostoCourier($sucursal, $carrito);
+        }
+
+        return null;
+    }
 }

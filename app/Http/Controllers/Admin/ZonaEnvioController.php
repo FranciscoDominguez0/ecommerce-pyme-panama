@@ -42,8 +42,7 @@ class ZonaEnvioController extends Controller
             return redirect()->route('admin.zonas-envio.index')
                 ->with('success', 'Sucursal de Courier creada exitosamente.');
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            dd($e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Error al crear sucursal de Courier: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Ocurrió un error al intentar crear la sucursal de Courier.')
                 ->withInput();

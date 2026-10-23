@@ -6,6 +6,6 @@ use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+})->purpose('Muestra una frase inspiradora');
 
 Schedule::command('app:recordar-entrega')->dailyAt('10:00');

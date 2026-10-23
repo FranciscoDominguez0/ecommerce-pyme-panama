@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ActualizarPerfilRequest;
 use App\Http\Requests\Admin\ActualizarPasswordRequest;
 use App\Models\LogAuditoria;
+use App\Services\AuditoriaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -54,8 +55,7 @@ class PerfilController extends Controller
         
         $usuario->update($datosValidados);
 
-        $this->registrarAuditoria(
-            $usuario->id,
+        AuditoriaService::registrar(
             'Perfil',
             'Datos actualizados',
             'Se actualizaron los datos personales del perfil',
@@ -109,8 +109,7 @@ class PerfilController extends Controller
 
             $usuario->update(['foto_perfil_ruta' => $rutaCompleta]);
 
-            $this->registrarAuditoria(
-                $usuario->id,
+            AuditoriaService::registrar(
                 'Perfil',
                 'Foto actualizada',
                 'Se actualizó la foto de perfil',
@@ -133,8 +132,7 @@ class PerfilController extends Controller
             'password_hash' => Hash::make($request->password)
         ]);
 
-        $this->registrarAuditoria(
-            $usuario->id,
+        AuditoriaService::registrar(
             'Perfil',
             'Contraseña actualizada',
             'El usuario ha cambiado su contraseña de acceso',
@@ -172,8 +170,7 @@ class PerfilController extends Controller
 
         $accion = $habilitar ? '2FA activado' : '2FA desactivado';
         
-        $this->registrarAuditoria(
-            $usuario->id,
+        AuditoriaService::registrar(
             'Perfil',
             $accion,
             "El usuario ha $accion la autenticación de dos factores",
@@ -205,9 +202,7 @@ class PerfilController extends Controller
 
         \Illuminate\Support\Facades\Auth::logoutOtherDevices($request->password);
 
-        $usuario = auth()->user();
-        $this->registrarAuditoria(
-            $usuario->id,
+        AuditoriaService::registrar(
             'Perfil',
             'Sesiones cerradas',
             'Se cerraron las sesiones activas en otros dispositivos',
@@ -266,22 +261,5 @@ class PerfilController extends Controller
         }
 
         return (object) ['platform' => $platform, 'browser' => $browser, 'icon' => $icon];
-    }
-
-    /**
-     * Método auxiliar para registrar en logs_auditoria
-     */
-    private function registrarAuditoria($usuarioId, $modulo, $accion, $descripcion, $valorAnterior = null, $valorNuevo = null)
-    {
-        LogAuditoria::create([
-            'usuario_id' => $usuarioId,
-            'modulo' => $modulo,
-            'accion' => $accion,
-            'descripcion' => $descripcion,
-            'valor_anterior' => $valorAnterior,
-            'valor_nuevo' => $valorNuevo,
-            'ip' => request()->ip(),
-            'agente_usuario' => request()->userAgent(),
-        ]);
     }
 }

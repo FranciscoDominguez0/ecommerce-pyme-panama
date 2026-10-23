@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\LogAuditoria;
 use App\Models\Producto;
 use App\Models\ProductoDelMes;
 use App\Models\PromocionEnvioGratis;
 use App\Models\ZonaEnvio;
+use App\Services\AuditoriaService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -57,7 +57,7 @@ class PromocionController extends Controller
             'creado_en' => Carbon::now(),
         ]);
 
-        $this->registrarAuditoria('crear_envio_gratis', "Regla de envío gratis para zona #{$promocion->zona_envio_id} creada.", null, $promocion->toArray());
+        AuditoriaService::registrar('Promociones & Envío', 'crear_envio_gratis', "Regla de envío gratis para zona #{$promocion->zona_envio_id} creada.", null, $promocion->toArray());
 
         return redirect()
             ->route('admin.promociones.envio-gratis')
@@ -92,7 +92,7 @@ class PromocionController extends Controller
             'activo' => $request->has('activo') ? (bool) $request->input('activo') : false,
         ]);
 
-        $this->registrarAuditoria('actualizar_envio_gratis', "Regla de envío gratis #{$promocion->id} actualizada.", $valorAnterior, $promocion->toArray());
+        AuditoriaService::registrar('Promociones & Envío', 'actualizar_envio_gratis', "Regla de envío gratis #{$promocion->id} actualizada.", $valorAnterior, $promocion->toArray());
 
         return redirect()
             ->route('admin.promociones.envio-gratis')
@@ -210,7 +210,7 @@ class PromocionController extends Controller
             'creado_en' => Carbon::now(),
         ]);
 
-        $this->registrarAuditoria('crear_producto_del_mes', "Producto del Mes creado para el producto ID #{$promocion->producto_id}.", null, $promocion->toArray());
+        AuditoriaService::registrar('Promociones & Envío', 'crear_producto_del_mes', "Producto del Mes creado para el producto ID #{$promocion->producto_id}.", null, $promocion->toArray());
 
         return redirect()
             ->route('admin.promociones.producto-del-mes')
@@ -252,23 +252,5 @@ class PromocionController extends Controller
         return redirect()
             ->route('admin.promociones.producto-del-mes')
             ->with('success', 'Promoción de Producto del Mes eliminada.');
-    }
-
-    private function registrarAuditoria(string $accion, string $descripcion, ?array $anterior = null, ?array $nuevo = null): void
-    {
-        try {
-            LogAuditoria::create([
-                'usuario_id' => Auth::id(),
-                'modulo' => 'Promociones & Envío',
-                'accion' => $accion,
-                'descripcion' => $descripcion,
-                'valor_anterior' => $anterior ? json_encode($anterior) : null,
-                'valor_nuevo' => $nuevo ? json_encode($nuevo) : null,
-                'ip' => request()->ip(),
-                'agente_usuario' => request()->userAgent(),
-            ]);
-        } catch (\Throwable $e) {
-            // Log fallback
-        }
     }
 }

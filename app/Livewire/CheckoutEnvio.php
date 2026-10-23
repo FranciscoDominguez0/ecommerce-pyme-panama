@@ -100,16 +100,7 @@ class CheckoutEnvio extends Component
             if (session('checkout_courier_sucursal')) {
                 $suc = CourierSucursal::find(session('checkout_courier_sucursal'));
                 if ($suc) {
-                    $baseCosto = (float)$suc->tarifa_uno_hasta_7lb;
-                    $pesoTotalLbs = $envioService->calcularPesoTotalLibras($carrito);
-                    
-                    if ($pesoTotalLbs > 7) {
-                        $librasExtras = $pesoTotalLbs - 7;
-                        $recargo = $librasExtras * 0.50;
-                        $costoFinal = $baseCosto + $recargo;
-                    } else {
-                        $costoFinal = $baseCosto;
-                    }
+                    $costoFinal = $envioService->calcularCostoCourier($suc, $carrito);
 
                     return [
                         'costo' => $costoFinal,

@@ -55,7 +55,9 @@ class CarritoDrawer extends Component
         $sesionId = Session::getId();
 
         $carrito = $this->carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
-        $carrito->load(['items.producto.imagenes', 'items.producto.brand', 'items.variante.opciones']);
+        if (!$carrito->relationLoaded('items')) {
+            $carrito->load(['items.producto.imagenes', 'items.variante.opciones']);
+        }
 
         $this->carritoId = $carrito->id;
         $this->cantidadTotal = $carrito->cantidad_total;

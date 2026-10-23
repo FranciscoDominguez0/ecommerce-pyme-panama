@@ -17,27 +17,19 @@ use App\Http\Controllers\Cliente\FacturaController as ClienteFacturaController;
 use App\Http\Controllers\Cliente\CarritoController;
 use App\Http\Controllers\Cliente\CatalogoController;
 use App\Http\Controllers\Cliente\CheckoutController;
+use App\Http\Controllers\Cliente\InicioController;
 use App\Http\Controllers\Cliente\ListaDeseosController;
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - eCommerce PyME Panamá
+| Rutas Web - eCommerce PyME Panamá
 |--------------------------------------------------------------------------
 */
 
 // 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida, Carrito)
-Route::get('/', function () {
-    $destacados = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo', 'promocionesProductoDelMes'])
-        ->destacados()
-        ->take(8)
-        ->get();
-
-    $marcasDistribuidores = \App\Models\Brand::verificada()->get();
-
-    return view('welcome', compact('destacados', 'marcasDistribuidores'));
-})->name('inicio');
+Route::get('/', [InicioController::class, 'inicio'])->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
 Route::get('/buscar-predictivo', [CatalogoController::class, 'buscarPredictivo'])->name('cliente.buscar-predictivo');
@@ -73,16 +65,7 @@ Route::post('/lista-deseos/mover-al-carrito/{productoId}', [ListaDeseosControlle
 Route::delete('/lista-deseos/eliminar/{productoId}', [ListaDeseosController::class, 'eliminar'])->name('cliente.lista-deseos.eliminar');
 
 // 2. Ruta /home para clientes autenticados (Redirección dinámica)
-Route::get('/home', function () {
-    $user = auth()->user();
-    if ($user) {
-        $isCustomer = $user->hasRole('cliente') || $user->roles->isEmpty();
-        if (!$isCustomer) {
-            return redirect()->route('admin.dashboard');
-        }
-    }
-    return redirect()->route('dashboard');
-})->middleware(['auth'])->name('home');
+Route::get('/home', [InicioController::class, 'redirigirSegunRol'])->middleware(['auth'])->name('home');
 
 // 3. Perfil del Cliente: Datos, Direcciones, Pedidos
 Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->prefix('mi-cuenta')->name('cliente.perfil.')->group(function () {
@@ -112,40 +95,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // 4. Panel de Cliente autenticado
-Route::get('/dashboard', function () {
-    $productos = \App\Models\Producto::with(['categoria', 'imagenes', 'variantes.opciones.tipo'])
-        ->sinEliminar()
-        ->where('activo', true)
-        ->where('es_digital', false)
-        ->whereHas('categoria', function($q) {
-            $q->where('exento_envio', false);
-        })
-        ->inRandomOrder()
-        ->take(8)
-        ->get();
-        
-    $slugsOrdenados = [
-        'laptops-y-computadoras',
-        'componentes-de-pc',
-        'perifericos',
-        'monitores',
-        'audio',
-        'redes-y-conectividad',
-        'almacenamiento',
-        'accesorios'
-    ];
-    $categoriasPrincipales = \App\Models\Categoria::whereIn('slug', $slugsOrdenados)
-        ->where('activo', true)
-        ->get()
-        ->sortBy(function($cat) use ($slugsOrdenados) {
-            return array_search($cat->slug, $slugsOrdenados);
-        });
-        
-    $marcas = \App\Models\Brand::verificada()
-        ->get();
-        
-    return view('dashboard', compact('productos', 'categoriasPrincipales', 'marcas'));
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [InicioController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
 // 4. Panel de Administración: Exige autenticación y Rol de Administrador ('admin' o 'super_admin')
 Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App\Http\Middleware\CheckAdminPermissions::class])->group(function () {

@@ -369,4 +369,71 @@ class InventarioService
 
         return $enviados;
     }
+
+    // Obtiene y unifica productos y variantes con filtros aplicados para exportación
+    public function obtenerDatosStockFiltrado(\Illuminate\Http\Request $request): \Illuminate\Support\Collection
+    {
+        // 1. Productos sin variantes
+        $qProductos = Producto::with(['categoria'])
+            ->sinEliminar()
+            ->whereDoesntHave('variantes')
+            ->orderBy('nombre');
+
+        if ($request->filled('q')) {
+            $buscar = $request->q;
+            $qProductos->where(function ($q) use ($buscar) {
+                $q->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereRaw('unaccent(sku) ILIKE unaccent(?)', ["%{$buscar}%"]);
+            });
+        }
+
+        if ($request->filled('categoria')) {
+            $qProductos->where('categoria_id', $request->categoria);
+        }
+
+        if ($request->boolean('stock_bajo')) {
+            $qProductos->whereRaw('stock <= stock_minimo');
+        }
+
+        // 2. Variantes activas
+        $qVariantes = VarianteProducto::with(['producto.categoria', 'opciones.tipo'])
+            ->where('variantes_producto.activo', true)
+            ->whereHas('producto', fn($q) => $q->sinEliminar())
+            ->join('productos', 'variantes_producto.producto_id', '=', 'productos.id')
+            ->select('variantes_producto.*')
+            ->orderBy('productos.nombre');
+
+        if ($request->filled('q')) {
+            $buscar = $request->q;
+            $qVariantes->where(function ($q) use ($buscar) {
+                $q->whereRaw('unaccent(variantes_producto.sku) ILIKE unaccent(?)', ["%{$buscar}%"])
+                  ->orWhereHas('producto', fn($p) => $p->whereRaw('unaccent(nombre) ILIKE unaccent(?)', ["%{$buscar}%"]));
+            });
+        }
+
+        if ($request->filled('categoria')) {
+            $qVariantes->whereHas('producto', fn($p) => $p->where('categoria_id', $request->categoria));
+        }
+
+        if ($request->boolean('stock_bajo')) {
+            $qVariantes->whereRaw('variantes_producto.stock <= productos.stock_minimo');
+        }
+
+        $productos = $qProductos->get()->map(function ($p) {
+            $p->es_variante = false;
+            $p->nombre_completo = $p->nombre;
+            return $p;
+        });
+
+        $variantes = $qVariantes->get()->map(function ($v) {
+            $v->es_variante = true;
+            $etiqueta = $v->opciones->map(fn($o) => $o->valor)->join(' - ');
+            $v->nombre_completo = $v->producto->nombre . ' (' . $etiqueta . ')';
+            $v->categoria = $v->producto->categoria;
+            $v->stock_minimo = $v->producto->stock_minimo;
+            return $v;
+        });
+
+        return $productos->concat($variantes)->sortBy('nombre_completo')->values();
+    }
 }

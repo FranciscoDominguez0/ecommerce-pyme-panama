@@ -192,10 +192,7 @@ class ProductoController extends Controller
     public function hacerPortada(int $id, int $imagenId): JsonResponse
     {
         $producto = Producto::sinEliminar()->findOrFail($id);
-        $imagen = $producto->imagenes()->findOrFail($imagenId);
-
-        $producto->imagenes()->update(['es_principal' => false]);
-        $imagen->update(['es_principal' => true]);
+        $imagen = $this->productoService->establecerPortada($producto, $imagenId);
 
         return response()->json([
             'success' => true,
@@ -212,9 +209,7 @@ class ProductoController extends Controller
             'orden.*' => 'integer',
         ]);
 
-        foreach ($request->orden as $posicion => $imagenId) {
-            $producto->imagenes()->where('id', $imagenId)->update(['orden' => $posicion + 1]);
-        }
+        $this->productoService->reordenarImagenes($producto, $request->orden);
 
         return response()->json([
             'success' => true,
