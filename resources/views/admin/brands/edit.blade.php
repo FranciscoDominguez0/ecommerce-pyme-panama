@@ -6,16 +6,16 @@
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
     <a href="{{ route('admin.brands.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-gray-100 transition-colors">Marcas</a>
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
-    <span class="font-bold text-slate-900 dark:text-white truncate">Editar Marca</span>
+    <span class="font-bold text-slate-900 dark:text-white truncate">Editar</span>
 @endsection
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
 
-    <!-- Header -->
+    <!-- Encabezado de la página con botón de retorno -->
     <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.brands.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-transparent transition-colors">
+            <a href="{{ route('admin.brands.index') }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-transparent transition-colors" title="Volver al listado">
                 <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             </a>
             <div>
@@ -25,13 +25,14 @@
         </div>
     </div>
 
-    <!-- Formulario Principal -->
+    <!-- Formulario de edición de marca -->
     <form method="POST" action="{{ route('admin.brands.update', $brand) }}{{ request()->getQueryString() ? '?' . request()->getQueryString() : '' }}" enctype="multipart/form-data" class="space-y-6">
         @csrf
         @method('PUT')
 
         <div class="card-elevated rounded-2xl p-6 sm:p-8 space-y-6">
             
+            <!-- Datos básicos de la marca -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <!-- Nombre de la Marca -->
@@ -76,7 +77,7 @@
 
             </div>
 
-            <!-- Logotipo Upload & Preview -->
+            <!-- Subida y cambio de logotipo oficial -->
             <div class="border-t border-slate-100 dark:border-gray-700 pt-6">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
                     Logotipo Oficial de la Marca (Imagen WebP, PNG, SVG)
@@ -84,7 +85,7 @@
                 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
                     
-                    <!-- Drag & Drop / File Input -->
+                    <!-- Selector interactivo de archivo -->
                     <div class="sm:col-span-2">
                         <label for="logo" class="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-gray-700 hover:border-emerald-400 rounded-2xl p-6 bg-slate-50 dark:bg-transparent hover:bg-emerald-50/20 transition-all cursor-pointer group">
                             <div class="w-10 h-10 rounded-xl bg-white dark:bg-[#181a1b] shadow-2xs flex items-center justify-center text-slate-400 group-hover:text-emerald-600 transition-colors mb-2">
@@ -101,7 +102,7 @@
                         @enderror
                     </div>
 
-                    <!-- Live Preview Box -->
+                    <!-- Caja con previsualización del logotipo actual o nuevo -->
                     <div class="flex flex-col items-center justify-center p-4 rounded-2xl bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700/80 min-h-[120px] text-center">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Logo Actual / Previo</span>
                         <div id="preview-container" class="w-28 h-12 rounded-xl bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/80 shadow-2xs flex items-center justify-center p-2 overflow-hidden">
@@ -115,9 +116,9 @@
                 </div>
             </div>
 
-            <!-- Opciones y Destacados -->
+            <!-- Opciones adicionales -->
             <div class="border-t border-slate-100 dark:border-gray-700 pt-6">
-                <!-- Verificada Checkbox Card -->
+                <!-- Casilla de marca oficial verificada -->
                 <label class="flex items-start gap-3 p-4 rounded-2xl border border-slate-200 dark:border-gray-700 hover:border-emerald-300 hover:bg-emerald-50/20 transition-all cursor-pointer group">
                     <input type="checkbox" 
                            name="verified" 
@@ -137,7 +138,7 @@
 
         </div>
 
-        <!-- Botones de Acción -->
+        <!-- Botones para guardar cambios o cancelar -->
         <div class="flex items-center justify-end gap-3">
             <a href="{{ route('admin.brands.index') }}" class="px-5 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent transition-colors">
                 Cancelar
@@ -154,6 +155,7 @@
 
 @push('scripts')
 <script>
+    // Genera automáticamente un slug limpio en tiempo real a partir del nombre ingresado
     function generarSlugAutomatico(texto) {
         const slugInput = document.getElementById('slug');
         if (!slugInput) return;
@@ -167,6 +169,7 @@
         slugInput.value = slug;
     }
 
+    // Muestra una previsualización inmediata de la nueva imagen seleccionada
     function previsualizarLogo(input) {
         const file = input.files[0];
         const current = document.getElementById('preview-current');
@@ -190,7 +193,3 @@
 @endpush
 
 @endsection
-
-
-
-

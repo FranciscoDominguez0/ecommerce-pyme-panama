@@ -15,7 +15,8 @@ class BrandHelper
         try {
             return Brand::orderBy('name', 'asc')
                 ->get()
-                ->map(function (Brand $brand) {
+                ->map(function ($brand) {
+                    /** @var Brand $brand */
                     return [
                         'id' => $brand->id,
                         'nombre' => $brand->name,

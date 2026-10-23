@@ -10,7 +10,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    <!-- Page Header & Action Bar -->
+    <!-- Encabezado de la página y botón para nueva marca -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Gestión de Marcas</h2>
@@ -25,9 +25,7 @@
         </div>
     </div>
 
-
-
-    <!-- Filtros y Búsqueda -->
+    <!-- Filtros y búsqueda -->
     <div class="card-elevated rounded-xl p-4 sm:p-5">
         <form method="GET" action="{{ route('admin.brands.index') }}" class="flex flex-col sm:flex-row gap-3 items-center justify-between" x-data="adminAutoFilter">
             
@@ -126,18 +124,17 @@
                                         0
                                     </span>
                                 @endif
-                            </td>
-
-                            <!-- Estado Verificada -->
+                                                    <!-- Estado Verificada -->
                             <td class="py-3.5 px-4 text-center">
                                 @if($brand->verified)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 text-[11px] font-semibold">
-                                        <span class="material-symbols-outlined text-[12px]">verified</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20 text-[11px] font-semibold">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                         <span>Oficial</span>
                                     </span>
                                 @else
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20 text-[11px] font-medium">
-                                        Estándar
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-500/20 text-[11px] font-medium">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        <span>Estándar</span>
                                     </span>
                                 @endif
                             </td>
@@ -200,7 +197,3 @@
 </div>
 
 @endsection
-
-
-
-
