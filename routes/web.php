@@ -225,6 +225,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('admin.productos.update');
     Route::patch('/productos/{id}', [ProductoController::class, 'update']);
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('admin.productos.destroy');
+    Route::post('/productos/{id}/imagenes/{imagenId}/portada', [ProductoController::class, 'hacerPortada'])->name('admin.productos.imagenes.portada');
+    Route::post('/productos/{id}/imagenes/reordenar', [ProductoController::class, 'reordenarImagenes'])->name('admin.productos.imagenes.reordenar');
+
 
     // Módulo de Devoluciones
     Route::get('/devoluciones', [DevolucionController::class, 'index'])->name('admin.devoluciones.index');

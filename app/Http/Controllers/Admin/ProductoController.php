@@ -9,6 +9,7 @@ use App\Models\VarianteProducto;
 use App\Models\Categoria;
 use App\Services\ProductoService;
 use App\Services\InventarioService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -158,7 +159,7 @@ class ProductoController extends Controller
                 ImagenProducto::whereIn('id', $request->imagenes_eliminar)->where('producto_id', $producto->id)->delete();
             }
 
-            if ($request->has('orden_imagenes') && is_array($request->orden_imagenes)) {
+            if ($request->has('orden_imagenes') && is_array($request->orden_imagenes) && !$request->has('orden_galeria')) {
                 foreach ($request->orden_imagenes as $posicion => $imagenId) {
                     if (is_numeric($imagenId)) {
                         ImagenProducto::where('id', $imagenId)->where('producto_id', $producto->id)->update(['orden' => $posicion + 1]);
@@ -166,7 +167,7 @@ class ProductoController extends Controller
                 }
             }
 
-            if ($request->filled('imagen_principal_id')) {
+            if ($request->filled('imagen_principal_id') && !$request->has('imagen_portada_clave')) {
                 $producto->imagenes()->update(['es_principal' => false]);
                 $producto->imagenes()->where('id', $request->imagen_principal_id)->update(['es_principal' => true]);
             }
@@ -186,6 +187,39 @@ class ProductoController extends Controller
         $producto->update(['eliminado_en' => now()]);
 
         return redirect()->route('admin.productos.index')->with('success', 'Producto eliminado del catálogo.');
+    }
+
+    public function hacerPortada(int $id, int $imagenId): JsonResponse
+    {
+        $producto = Producto::sinEliminar()->findOrFail($id);
+        $imagen = $producto->imagenes()->findOrFail($imagenId);
+
+        $producto->imagenes()->update(['es_principal' => false]);
+        $imagen->update(['es_principal' => true]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Imagen establecida como portada correctamente.',
+            'imagen_id' => $imagen->id,
+        ]);
+    }
+
+    public function reordenarImagenes(Request $request, int $id): JsonResponse
+    {
+        $producto = Producto::sinEliminar()->findOrFail($id);
+        $request->validate([
+            'orden' => 'required|array',
+            'orden.*' => 'integer',
+        ]);
+
+        foreach ($request->orden as $posicion => $imagenId) {
+            $producto->imagenes()->where('id', $imagenId)->update(['orden' => $posicion + 1]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Orden de imágenes actualizado correctamente.',
+        ]);
     }
 
     private function validarPeticion(Request $request, ?int $id = null): void

@@ -201,9 +201,21 @@ class ProductoService
 
     public function procesarImagenes(Request $request, Producto $producto): void
     {
-        $this->guardarImagenesUrl($request, $producto);
-        $this->guardarImagenesArchivos($request, $producto);
-        
+        $portadaClave = $request->input('imagen_portada_clave');
+
+        $urlsCreadas = $this->guardarImagenesUrl($request, $producto);
+        $archivosCreados = $this->guardarImagenesArchivos($request, $producto);
+
+        // Si se envió el orden unificado de la galería, ordenar todas las imágenes (existentes, nuevas y urls)
+        if ($request->has('orden_galeria') && is_array($request->orden_galeria)) {
+            $this->aplicarOrdenGaleria($request->orden_galeria, $producto, $archivosCreados, $urlsCreadas);
+        }
+
+        // Si se especificó una clave de portada (nueva o existente)
+        if (!empty($portadaClave)) {
+            $this->aplicarPortadaPorClave($portadaClave, $producto, $archivosCreados, $urlsCreadas);
+        }
+
         if ($producto->imagenes()->exists() && !$producto->imagenes()->where('es_principal', true)->exists()) {
             $primera = ImagenProducto::where('producto_id', $producto->id)->orderBy('orden')->first();
             if ($primera) {
@@ -212,7 +224,50 @@ class ProductoService
         }
     }
 
-    private function guardarImagenesUrl(Request $request, Producto $producto): void
+    private function aplicarOrdenGaleria(array $ordenGaleria, Producto $producto, array $archivosCreados, array $urlsCreadas): void
+    {
+        foreach ($ordenGaleria as $posicion => $itemClave) {
+            $orden = $posicion + 1;
+
+            if (str_starts_with($itemClave, 'existente:')) {
+                $id = (int) substr($itemClave, 10);
+                ImagenProducto::where('id', $id)->where('producto_id', $producto->id)->update(['orden' => $orden]);
+            } elseif (str_starts_with($itemClave, 'archivo:')) {
+                $idx = (int) substr($itemClave, 8);
+                if (isset($archivosCreados[$idx])) {
+                    $archivosCreados[$idx]->update(['orden' => $orden]);
+                }
+            } elseif (str_starts_with($itemClave, 'url:')) {
+                $idx = (int) substr($itemClave, 4);
+                if (isset($urlsCreadas[$idx])) {
+                    $urlsCreadas[$idx]->update(['orden' => $orden]);
+                }
+            }
+        }
+    }
+
+    private function aplicarPortadaPorClave(string $portadaClave, Producto $producto, array $archivosCreados, array $urlsCreadas): void
+    {
+        if (str_starts_with($portadaClave, 'existente:')) {
+            $id = (int) substr($portadaClave, 10);
+            $producto->imagenes()->update(['es_principal' => false]);
+            $producto->imagenes()->where('id', $id)->update(['es_principal' => true]);
+        } elseif (str_starts_with($portadaClave, 'archivo:')) {
+            $idx = (int) substr($portadaClave, 8);
+            if (isset($archivosCreados[$idx])) {
+                $producto->imagenes()->update(['es_principal' => false]);
+                $archivosCreados[$idx]->update(['es_principal' => true]);
+            }
+        } elseif (str_starts_with($portadaClave, 'url:')) {
+            $idx = (int) substr($portadaClave, 4);
+            if (isset($urlsCreadas[$idx])) {
+                $producto->imagenes()->update(['es_principal' => false]);
+                $urlsCreadas[$idx]->update(['es_principal' => true]);
+            }
+        }
+    }
+
+    private function guardarImagenesUrl(Request $request, Producto $producto): array
     {
         $urls = [];
 
@@ -230,28 +285,33 @@ class ProductoService
             }
         }
 
-        if (empty($urls)) return;
+        if (empty($urls)) return [];
 
         $tienePrincipal = $producto->imagenes()->where('es_principal', true)->exists();
         $maxOrden = (int) $producto->imagenes()->max('orden');
+        $creadas = [];
 
         foreach ($urls as $i => $url) {
             $esPrincipal = !$tienePrincipal && $i === 0;
-            $producto->imagenes()->create([
+            $imagen = $producto->imagenes()->create([
                 'ruta' => $url,
                 'es_principal' => $esPrincipal,
                 'orden' => $maxOrden + 1 + $i,
             ]);
+            $creadas[] = $imagen;
             if ($esPrincipal) $tienePrincipal = true;
         }
+
+        return $creadas;
     }
 
-    private function guardarImagenesArchivos(Request $request, Producto $producto): void
+    private function guardarImagenesArchivos(Request $request, Producto $producto): array
     {
-        if (!$request->hasFile('imagenes')) return;
+        if (!$request->hasFile('imagenes')) return [];
 
         $tienePrincipal = $producto->imagenes()->where('es_principal', true)->exists();
         $maxOrden = (int) $producto->imagenes()->max('orden');
+        $creadas = [];
 
         foreach ($request->file('imagenes') as $i => $archivo) {
             if (!$archivo->isValid()) continue;
@@ -259,14 +319,17 @@ class ProductoService
             $ruta = $archivo->store("productos/{$producto->id}", 'public');
             $esPrincipal = !$tienePrincipal && $i === 0;
 
-            $producto->imagenes()->create([
+            $imagen = $producto->imagenes()->create([
                 'ruta' => 'storage/' . $ruta,
                 'es_principal' => $esPrincipal,
                 'orden' => $maxOrden + 1 + $i,
             ]);
 
+            $creadas[] = $imagen;
             if ($esPrincipal) $tienePrincipal = true;
         }
+
+        return $creadas;
     }
 
     public function guardarVariantes(Request $request, Producto $producto): void

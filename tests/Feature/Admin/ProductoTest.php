@@ -6,7 +6,9 @@ use App\Models\Categoria;
 use App\Models\ImagenProducto;
 use App\Models\Producto;
 use App\Models\VarianteProducto;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -358,6 +360,88 @@ class ProductoTest extends BaseAdminTest
             ]));
 
         $this->assertDatabaseMissing('imagenes_producto', ['id' => $imagen->id]);
+    }
+
+    public function test_se_puede_hacer_portada_una_imagen_via_ajax(): void
+    {
+        $admin = $this->crearAdmin();
+        $categoria = Categoria::factory()->create();
+        $producto = Producto::factory()->create(['categoria_id' => $categoria->id]);
+
+        $primera = ImagenProducto::create([
+            'producto_id' => $producto->id,
+            'ruta' => 'https://ejemplo.com/1.jpg',
+            'es_principal' => true,
+            'orden' => 1,
+        ]);
+        $segunda = ImagenProducto::create([
+            'producto_id' => $producto->id,
+            'ruta' => 'https://ejemplo.com/2.jpg',
+            'es_principal' => false,
+            'orden' => 2,
+        ]);
+
+        $respuesta = $this->actingAs($admin)
+            ->postJson("/admin/productos/{$producto->id}/imagenes/{$segunda->id}/portada");
+
+        $respuesta->assertOk()
+            ->assertJson([
+                'success' => true,
+                'imagen_id' => $segunda->id,
+            ]);
+
+        $this->assertFalse($primera->fresh()->es_principal);
+        $this->assertTrue($segunda->fresh()->es_principal);
+    }
+
+    public function test_se_pueden_reordenar_imagenes_via_ajax(): void
+    {
+        $admin = $this->crearAdmin();
+        $categoria = Categoria::factory()->create();
+        $producto = Producto::factory()->create(['categoria_id' => $categoria->id]);
+
+        $img1 = ImagenProducto::create(['producto_id' => $producto->id, 'ruta' => '1.jpg', 'es_principal' => true, 'orden' => 1]);
+        $img2 = ImagenProducto::create(['producto_id' => $producto->id, 'ruta' => '2.jpg', 'es_principal' => false, 'orden' => 2]);
+        $img3 = ImagenProducto::create(['producto_id' => $producto->id, 'ruta' => '3.jpg', 'es_principal' => false, 'orden' => 3]);
+
+        $respuesta = $this->actingAs($admin)
+            ->postJson("/admin/productos/{$producto->id}/imagenes/reordenar", [
+                'orden' => [$img3->id, $img1->id, $img2->id],
+            ]);
+
+        $respuesta->assertOk()
+            ->assertJson(['success' => true]);
+
+        $this->assertSame(1, $img3->fresh()->orden);
+        $this->assertSame(2, $img1->fresh()->orden);
+        $this->assertSame(3, $img2->fresh()->orden);
+    }
+
+    public function test_se_guardan_las_imagenes_nuevas_en_el_orden_reordenado_antes_de_guardar(): void
+    {
+        Storage::fake('public');
+        $admin = $this->crearAdmin();
+        $categoria = Categoria::factory()->create();
+        $producto = Producto::factory()->create(['categoria_id' => $categoria->id]);
+
+        $archivo1 = UploadedFile::fake()->image('primero.jpg');
+        $archivo2 = UploadedFile::fake()->image('segundo.jpg');
+
+        // Simulamos que el usuario adjuntó dos archivos pero los reordenó: [archivo:1, archivo:0] y marcó archivo:1 como portada
+        $this->actingAs($admin)
+            ->put('/admin/productos/' . $producto->id, $this->datosProductoValidos([
+                'categoria_id' => $categoria->id,
+                'imagenes' => [$archivo1, $archivo2],
+                'orden_galeria' => ['archivo:1', 'archivo:0'],
+                'imagen_portada_clave' => 'archivo:1',
+            ]));
+
+        $imagenes = $producto->fresh()->imagenes()->orderBy('orden')->get();
+        $this->assertCount(2, $imagenes);
+        $this->assertSame(1, $imagenes[0]->orden);
+        $this->assertTrue($imagenes[0]->es_principal);
+        $this->assertSame(2, $imagenes[1]->orden);
+        $this->assertFalse($imagenes[1]->es_principal);
     }
 
     // =====================================================================

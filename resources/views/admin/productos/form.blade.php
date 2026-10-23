@@ -440,7 +440,10 @@
                     @include('admin.productos.especificaciones-dinamicas')
 
                 <!-- ── SECCIÓN: IMÁGENES ── -->
-                    @include('admin.productos.imagenes', ['imagenes' => $producto->imagenes ?? collect()])
+                    @include('admin.productos.imagenes', [
+                        'imagenes' => $producto->imagenes ?? collect(),
+                        'productoId' => $producto->id ?? null
+                    ])
 
                 <!-- ── SECCIÓN: VARIANTES ── -->
                     @include('admin.productos.variantes', [

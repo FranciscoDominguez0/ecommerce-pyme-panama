@@ -1,15 +1,22 @@
 @php
     /** @var \Illuminate\Support\Collection<int, \App\Models\ImagenProducto>|\App\Models\ImagenProducto[] $imagenes */
+    $prodId = $productoId ?? ($producto->id ?? null);
+    $imgPrincipal = optional($imagenes->where('es_principal', true)->first());
 @endphp
 
 <!-- Submódulo: Galería de Imágenes del Producto -->
 <div class="card-elevated p-5 sm:p-6 rounded-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-3">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-emerald-600 text-[20px]">photo_library</span>
-            <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Galería de Imágenes</h2>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-3 gap-2">
+        <div>
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-600 text-[20px]">photo_library</span>
+                <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Galería de Imágenes</h2>
+            </div>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                Arrastra las fotos como bloques para ordenarlas a tu gusto. Haz clic en "Hacer Portada" para fijar la foto principal.
+            </p>
         </div>
-        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-transparent px-2.5 py-1 rounded-full" id="contador-imagenes">
+        <span class="text-[11px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-transparent px-2.5 py-1 rounded-full self-start sm:self-auto" id="contador-imagenes">
             {{ count($imagenes ?? []) }} imágenes cargadas
         </span>
     </div>
@@ -57,20 +64,27 @@
         </button>
     </div>
 
-    <!-- Input oculto para rastrear el ID de la imagen principal -->
-    <input type="hidden" name="imagen_principal_id" id="input-imagen-principal-id" value="{{ optional($imagenes->where('es_principal', true)->first())->id ?? '' }}">
+    <!-- Inputs ocultos para rastrear Portada (tanto ID de BD como clave unificada) -->
+    <input type="hidden" name="imagen_portada_clave" id="input-imagen-portada-clave" value="{{ $imgPrincipal ? 'existente:' . $imgPrincipal->id : '' }}">
+    <input type="hidden" name="imagen_principal_id" id="input-imagen-principal-id" value="{{ $imgPrincipal->id ?? '' }}">
 
     <!-- Grid de Miniaturas de Imágenes (Full-Width Responsive) -->
-    <div id="grid-imagenes-producto" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3.5 pt-2">
+    <div id="grid-imagenes-producto" 
+         data-producto-id="{{ $prodId }}"
+         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3.5 pt-2">
         
         @forelse($imagenes ?? [] as $idx => $img)
             @php /** @var \App\Models\ImagenProducto $img */ @endphp
-            {{-- Input oculto para marcar esta imagen como existente; si se elimina, el JS lo convierte a imagenes_eliminar[] --}}
-            <div class="relative group card-elevated rounded-2xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200 dark:border-gray-700/90 hover:border-slate-300 dark:border-gray-700 shadow-2xs' }} bg-white dark:bg-[#181a1b] flex flex-col item-imagen transition-all duration-200" data-id="{{ $img->id }}" data-db-id="{{ $img->id }}">
+            {{-- Tarjeta interactiva con soporte drag & drop para ordenar como LEGO --}}
+            <div class="relative group card-elevated rounded-2xl overflow-hidden {{ $img->es_principal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200 dark:border-gray-700/90 hover:border-slate-300 dark:border-gray-700 shadow-2xs' }} bg-white dark:bg-[#181a1b] flex flex-col item-imagen transition-all duration-200 cursor-grab active:cursor-grabbing select-none" 
+                 draggable="true"
+                 data-id="{{ $img->id }}" 
+                 data-db-id="{{ $img->id }}"
+                 data-clave="existente:{{ $img->id }}">
                 
                 <!-- Badge de Portada / Principal -->
                 <div class="badge-principal-container {{ $img->es_principal ? '' : 'hidden' }}">
-                    <div class="absolute top-2 left-2 z-10">
+                    <div class="absolute top-2 left-2 z-10 pointer-events-none">
                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shadow-sm">
                             <span class="material-symbols-outlined text-[11px]">star</span>
                             <span>Portada</span>
@@ -78,12 +92,16 @@
                     </div>
                 </div>
 
-                <!-- Input oculto: si el usuario elimina esta card, el JS agrega imagenes_eliminar[id] al form -->
+                <!-- Inputs ocultos para persistencia de orden y estado -->
                 <input type="hidden" name="imagenes_existentes[]" value="{{ $img->id }}" class="input-imagen-existente">
                 <input type="hidden" name="orden_imagenes[]" value="{{ $img->id }}" class="input-orden-imagen">
+                <input type="hidden" name="orden_galeria[]" value="existente:{{ $img->id }}" class="input-orden-galeria">
 
                 <!-- Botones de Acción Rápida -->
                 <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-xl backdrop-blur-xs shadow-md">
+                    <div class="drag-handle text-slate-400 hover:text-white p-0.5 cursor-grab active:cursor-grabbing" title="Arrastrar para ordenar">
+                        <span class="material-symbols-outlined text-[14px]">drag_indicator</span>
+                    </div>
                     <button type="button" 
                             onclick="moverImagenIzquierda(this)" 
                             title="Mover a la izquierda" 
@@ -105,10 +123,10 @@
                 </div>
 
                 <!-- Contenedor de la Imagen Elegante -->
-                <div class="h-32 w-full bg-slate-50 dark:bg-[#121415] flex items-center justify-center p-3 group-hover:bg-slate-100 dark:group-hover:bg-[#151718] transition-colors">
+                <div class="h-32 w-full bg-slate-50 dark:bg-[#121415] flex items-center justify-center p-3 group-hover:bg-slate-100 dark:group-hover:bg-[#151718] transition-colors pointer-events-none">
                     <div class="w-full h-full flex items-center justify-center text-slate-700 dark:text-slate-300">
                         @if(!empty($img->ruta) && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'storage/')))
-                            <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain transition-transform group-hover:scale-105">
+                            <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}" alt="Foto producto" class="max-h-full max-w-full object-contain transition-transform group-hover:scale-105 pointer-events-none">
                         @elseif(!empty($img->ruta) && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
                             <div class="w-full h-full flex items-center justify-center svg-container">{!! $img->ruta !!}</div>
                         @elseif(!empty($img->ruta))
@@ -119,7 +137,7 @@
                     </div>
                 </div>
 
-                <!-- Footer sin nombre de archivo, centrado y limpio -->
+                <!-- Footer centrado y limpio -->
                 <div class="p-1.5 border-t border-slate-100 dark:border-gray-700 bg-white dark:bg-[#181a1b] flex items-center justify-center text-[11px] card-footer-actions min-h-[28px]">
                     <div class="estado-portada-container w-full text-center">
                         @if($img->es_principal)
@@ -151,25 +169,188 @@
 </div>
 
 <script>
-    // Manejo de carga de archivos locales con Previsualización Inmediata
+    // Variables de estado para archivos locales y Drag & Drop
+    let archivosLocales = []; // { id: 'file_...', file: File, name: '...' }
+    let tarjetaArrastrada = null;
+    let ordenInicialDrag = '';
+
+    // Sincronizar input[type="file"] y los inputs ocultos de orden según la posición actual en el DOM
+    function sincronizarArchivosYOrden() {
+        const grid = document.getElementById('grid-imagenes-producto');
+        const fileInput = document.getElementById('input-archivos-imagenes');
+        if (!grid) return;
+
+        const allCards = Array.from(grid.querySelectorAll('.item-imagen'));
+
+        // 1. Reconstruir los archivos dentro del input file en el orden visual exacto de las tarjetas
+        if (fileInput) {
+            try {
+                const dt = new DataTransfer();
+                allCards.forEach(card => {
+                    if (card.dataset.nuevoId) {
+                        const found = archivosLocales.find(a => a.id === card.dataset.nuevoId);
+                        if (found && found.file) {
+                            dt.items.add(found.file);
+                        }
+                    }
+                });
+                fileInput.files = dt.files;
+            } catch (e) {
+                console.warn('Error al actualizar DataTransfer del file input:', e);
+            }
+        }
+
+        // 2. Sincronizar inputs orden_galeria[] con claves unificadas
+        let archivoIdx = 0;
+        let urlIdx = 0;
+
+        allCards.forEach((card) => {
+            let inputGaleria = card.querySelector('.input-orden-galeria');
+            if (!inputGaleria) {
+                inputGaleria = document.createElement('input');
+                inputGaleria.type = 'hidden';
+                inputGaleria.name = 'orden_galeria[]';
+                inputGaleria.className = 'input-orden-galeria';
+                card.appendChild(inputGaleria);
+            }
+
+            let inputOrden = card.querySelector('.input-orden-imagen');
+            if (!inputOrden) {
+                inputOrden = document.createElement('input');
+                inputOrden.type = 'hidden';
+                inputOrden.name = 'orden_imagenes[]';
+                inputOrden.className = 'input-orden-imagen';
+                card.appendChild(inputOrden);
+            }
+
+            if (card.dataset.dbId) {
+                card.dataset.clave = `existente:${card.dataset.dbId}`;
+                inputGaleria.value = card.dataset.clave;
+                inputOrden.value = card.dataset.dbId;
+            } else if (card.dataset.nuevoId) {
+                card.dataset.clave = `archivo:${archivoIdx}`;
+                inputGaleria.value = card.dataset.clave;
+                inputOrden.value = card.dataset.nuevoId;
+                archivoIdx++;
+            } else if (card.dataset.esUrl === 'true') {
+                card.dataset.clave = `url:${urlIdx}`;
+                inputGaleria.value = card.dataset.clave;
+                inputOrden.value = `url_${urlIdx}`;
+                urlIdx++;
+            }
+        });
+
+        // 3. Identificar cuál tarjeta es la portada actual y actualizar las claves de portada
+        const cardPortada = allCards.find(c => {
+            const badge = c.querySelector('.badge-principal-container');
+            return badge && !badge.classList.contains('hidden');
+        }) || allCards[0];
+
+        const inputPortadaClave = document.getElementById('input-imagen-portada-clave');
+        const inputPrincipalId = document.getElementById('input-imagen-principal-id');
+
+        if (cardPortada && cardPortada.dataset.clave) {
+            if (inputPortadaClave) inputPortadaClave.value = cardPortada.dataset.clave;
+            if (inputPrincipalId) {
+                inputPrincipalId.value = cardPortada.dataset.dbId || '';
+            }
+        }
+    }
+
+    // Inicializar listeners de arrastre (Drag and Drop estilo LEGO) en una tarjeta
+    function inicializarDragAndDrop(card) {
+        if (!card || card.dataset.dndInited === 'true') return;
+        card.dataset.dndInited = 'true';
+        card.setAttribute('draggable', 'true');
+
+        card.addEventListener('dragstart', function(e) {
+            if (e.target.closest('button, a, input')) {
+                e.preventDefault();
+                return;
+            }
+
+            tarjetaArrastrada = card;
+            const grid = document.getElementById('grid-imagenes-producto');
+            ordenInicialDrag = grid ? Array.from(grid.querySelectorAll('.item-imagen')).map(c => c.dataset.id || c.dataset.dbId || c.dataset.nuevoId).join(',') : '';
+
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', card.dataset.dbId || card.dataset.nuevoId || card.dataset.id || '');
+
+            setTimeout(() => {
+                card.classList.add('opacity-40', 'scale-95', 'ring-2', 'ring-emerald-500', 'ring-dashed');
+            }, 0);
+        });
+
+        card.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            if (!tarjetaArrastrada || tarjetaArrastrada === card) return;
+
+            const grid = document.getElementById('grid-imagenes-producto');
+            if (!grid) return;
+
+            const rect = card.getBoundingClientRect();
+            const midpointX = rect.left + rect.width / 2;
+
+            if (e.clientX > midpointX) {
+                if (card.nextElementSibling !== tarjetaArrastrada) {
+                    grid.insertBefore(tarjetaArrastrada, card.nextElementSibling);
+                }
+            } else {
+                if (card !== tarjetaArrastrada.nextElementSibling) {
+                    grid.insertBefore(tarjetaArrastrada, card);
+                }
+            }
+        });
+
+        card.addEventListener('dragend', function() {
+            card.classList.remove('opacity-40', 'scale-95', 'ring-2', 'ring-emerald-500', 'ring-dashed');
+
+            const grid = document.getElementById('grid-imagenes-producto');
+            if (grid) {
+                const ordenFinal = Array.from(grid.querySelectorAll('.item-imagen')).map(c => c.dataset.id || c.dataset.dbId || c.dataset.nuevoId).join(',');
+                if (ordenFinal !== ordenInicialDrag) {
+                    sincronizarArchivosYOrden();
+                    guardarNuevoOrden(true);
+                }
+            }
+
+            tarjetaArrastrada = null;
+            ordenInicialDrag = '';
+        });
+    }
+
+    // Inicializar todas las tarjetas existentes en el DOM
+    function inicializarTodasLasCards() {
+        const grid = document.getElementById('grid-imagenes-producto');
+        if (!grid) return;
+        grid.querySelectorAll('.item-imagen').forEach(card => {
+            inicializarDragAndDrop(card);
+        });
+        sincronizarArchivosYOrden();
+    }
+
+    // Manejo de carga de archivos locales con Previsualización Inmediata y Acumulación
     function handleSeleccionArchivos(input) {
-        const files = input.files;
-        if (!files || files.length === 0) return;
+        const files = Array.from(input.files || []);
+        if (files.length === 0) return;
 
         const grid = document.getElementById('grid-imagenes-producto');
         const empty = document.getElementById('empty-state-galeria');
         if (empty) empty.remove();
 
-        Array.from(files).forEach((file, i) => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const src = e.target.result;
-                const isFirst = grid.querySelectorAll('.item-imagen').length === 0;
-                crearCardImagenHtml(src, file.name, isFirst, false);
-                actualizarContadorGaleria();
-            };
-            reader.readAsDataURL(file);
+        files.forEach((file) => {
+            const fileUid = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+            archivosLocales.push({ id: fileUid, file: file, name: file.name });
+
+            const src = URL.createObjectURL(file);
+            const esPrimera = grid.querySelectorAll('.item-imagen').length === 0;
+            crearCardImagenHtml(src, file.name, esPrimera, false, fileUid);
         });
+
+        actualizarContadorGaleria();
+        sincronizarArchivosYOrden();
     }
 
     // Agregar imagen rápida por URL
@@ -177,7 +358,11 @@
         const input = document.getElementById('input-url-imagen-rapida');
         const val = input.value.trim();
         if (!val) {
-            alert('Por favor ingresa una URL de imagen válida o un ícono.');
+            if (typeof window.mostrarToast === 'function') {
+                window.mostrarToast('Por favor ingresa una URL de imagen o ícono válido.', 'warning');
+            } else {
+                alert('Por favor ingresa una URL de imagen válida o un ícono.');
+            }
             return;
         }
 
@@ -187,27 +372,36 @@
 
         const isFirst = grid.querySelectorAll('.item-imagen').length === 0;
         const nombreMostrar = val.length > 25 ? val.substring(0, 22) + '...' : val;
-        crearCardImagenHtml(val, nombreMostrar, isFirst, true);
+        crearCardImagenHtml(val, nombreMostrar, isFirst, true, null);
         actualizarContadorGaleria();
+        sincronizarArchivosYOrden();
         input.value = '';
     }
 
     // Crear el elemento HTML de miniatura de imagen
-    function crearCardImagenHtml(rutaOrBase64, nombreArchivo, esPrincipal, esUrl) {
+    function crearCardImagenHtml(rutaOrBase64, nombreArchivo, esPrincipal, esUrl, nuevoId) {
         const grid = document.getElementById('grid-imagenes-producto');
         const div = document.createElement('div');
-        div.className = `relative group card-elevated rounded-2xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200 dark:border-gray-700/90 hover:border-slate-300 dark:border-gray-700 shadow-2xs'} bg-white dark:bg-[#181a1b] flex flex-col item-imagen transition-all duration-200`;
+        const tempId = nuevoId || ('temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5));
+        
+        div.className = `relative group card-elevated rounded-2xl overflow-hidden ${esPrincipal ? 'border-2 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' : 'border border-slate-200 dark:border-gray-700/90 hover:border-slate-300 dark:border-gray-700 shadow-2xs'} bg-white dark:bg-[#181a1b] flex flex-col item-imagen transition-all duration-200 cursor-grab active:cursor-grabbing select-none`;
+        div.dataset.id = tempId;
+        if (nuevoId) {
+            div.dataset.nuevoId = nuevoId;
+        }
+        if (esUrl) {
+            div.dataset.esUrl = 'true';
+        }
 
         let contentPreview = '';
-        if (rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http') || rutaOrBase64.startsWith('/storage') || rutaOrBase64.startsWith('storage/')) {
-            contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain transition-transform group-hover:scale-105">`;
+        if (rutaOrBase64.startsWith('blob:') || rutaOrBase64.startsWith('data:image') || rutaOrBase64.startsWith('http') || rutaOrBase64.startsWith('/storage') || rutaOrBase64.startsWith('storage/')) {
+            contentPreview = `<img src="${rutaOrBase64}" alt="${nombreArchivo}" class="max-h-full max-w-full object-contain transition-transform group-hover:scale-105 pointer-events-none">`;
         } else if (rutaOrBase64.includes('<svg') || rutaOrBase64.includes('</svg>')) {
             contentPreview = `<div class="w-full h-full flex items-center justify-center svg-container">${rutaOrBase64}</div>`;
         } else {
             contentPreview = `<span class="material-symbols-outlined text-[42px] text-slate-600 dark:text-slate-400">${rutaOrBase64}</span>`;
         }
 
-        // Input oculto para enviar al backend si fue ingresada por URL
         let hiddenInput = '';
         if (esUrl) {
             const escapedValue = rutaOrBase64.replace(/"/g, '&quot;');
@@ -216,9 +410,11 @@
 
         div.innerHTML = `
             ${hiddenInput}
+            <input type="hidden" name="orden_imagenes[]" value="${tempId}" class="input-orden-imagen">
+            <input type="hidden" name="orden_galeria[]" value="" class="input-orden-galeria">
 
             <div class="badge-principal-container ${esPrincipal ? '' : 'hidden'}">
-                <div class="absolute top-2 left-2 z-10">
+                <div class="absolute top-2 left-2 z-10 pointer-events-none">
                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white shadow-sm">
                         <span class="material-symbols-outlined text-[11px]">star</span>
                         <span>Portada</span>
@@ -227,6 +423,9 @@
             </div>
 
             <div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 bg-slate-900/85 p-1 rounded-xl backdrop-blur-xs shadow-md">
+                <div class="drag-handle text-slate-400 hover:text-white p-0.5 cursor-grab active:cursor-grabbing" title="Arrastrar para ordenar">
+                    <span class="material-symbols-outlined text-[14px]">drag_indicator</span>
+                </div>
                 <button type="button" onclick="moverImagenIzquierda(this)" title="Mover a la izquierda" class="text-white hover:text-emerald-400 p-0.5 transition-colors">
                     <span class="material-symbols-outlined text-[14px]">arrow_back</span>
                 </button>
@@ -238,7 +437,7 @@
                 </button>
             </div>
 
-            <div class="h-32 w-full bg-slate-50 dark:bg-[#121415] flex items-center justify-center p-3 group-hover:bg-slate-100 dark:group-hover:bg-[#151718] transition-colors">
+            <div class="h-32 w-full bg-slate-50 dark:bg-[#121415] flex items-center justify-center p-3 group-hover:bg-slate-100 dark:group-hover:bg-[#151718] transition-colors pointer-events-none">
                 <div class="w-full h-full flex items-center justify-center text-slate-700 dark:text-slate-300">
                     ${contentPreview}
                 </div>
@@ -261,31 +460,28 @@
         `;
 
         grid.appendChild(div);
+        inicializarDragAndDrop(div);
     }
 
+    // Establecer una imagen como Portada principal
     function hacerImagenPrincipal(btn) {
         const grid = document.getElementById('grid-imagenes-producto');
         const cardActual = btn.closest('.item-imagen');
         if (!grid || !cardActual) return;
 
-        // Actualizar input oculto para ID de BD si aplica
-        const principalInput = document.getElementById('input-imagen-principal-id');
-        if (principalInput) {
-            principalInput.value = cardActual.dataset.dbId || '';
-        }
+        const productoId = grid.dataset.productoId;
+        const dbId = cardActual.dataset.dbId;
 
-        // Resetear todas las tarjetas
+        // Resetear visualmente todas las demás tarjetas
         grid.querySelectorAll('.item-imagen').forEach(card => {
             card.classList.remove('border-2', 'border-emerald-500', 'shadow-md', 'ring-2', 'ring-emerald-500/20');
-            card.classList.add('border', 'border-slate-200 dark:border-gray-700/90', 'shadow-2xs');
+            card.classList.add('border', 'border-slate-200', 'dark:border-gray-700/90', 'shadow-2xs');
 
-            // Ocultar badge principal
             const badgeContainer = card.querySelector('.badge-principal-container');
             if (badgeContainer) {
                 badgeContainer.classList.add('hidden');
             }
 
-            // Restablecer botón a "Hacer Portada" (solo visible al pasar mouse)
             const estadoContainer = card.querySelector('.estado-portada-container');
             if (estadoContainer) {
                 estadoContainer.innerHTML = `
@@ -296,17 +492,15 @@
             }
         });
 
-        // Activar borde y estilo de tarjeta seleccionada
-        cardActual.classList.remove('border', 'border-slate-200 dark:border-gray-700/90', 'shadow-2xs');
+        // Activar visualmente la tarjeta seleccionada
+        cardActual.classList.remove('border', 'border-slate-200', 'dark:border-gray-700/90', 'shadow-2xs');
         cardActual.classList.add('border-2', 'border-emerald-500', 'shadow-md', 'ring-2', 'ring-emerald-500/20');
 
-        // Mostrar badge principal en la seleccionada
         const badgeActual = cardActual.querySelector('.badge-principal-container');
         if (badgeActual) {
             badgeActual.classList.remove('hidden');
         }
 
-        // Mostrar texto de "Portada" en la seleccionada
         const estadoActual = cardActual.querySelector('.estado-portada-container');
         if (estadoActual) {
             estadoActual.innerHTML = `
@@ -316,14 +510,117 @@
                 </span>
             `;
         }
+
+        // Sincronizar inputs de portada
+        sincronizarArchivosYOrden();
+
+        // Si el producto y la imagen ya existen en base de datos, guardar por AJAX inmediatamente
+        if (productoId && dbId) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            fetch(`/admin/productos/${productoId}/imagenes/${dbId}/portada`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast(data.message || 'Imagen establecida como portada correctamente.', 'success');
+                    }
+                } else {
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast(data.message || 'Error al actualizar la portada.', 'error');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Error al actualizar portada:', err);
+                if (typeof window.mostrarToast === 'function') {
+                    window.mostrarToast('Error al conectar con el servidor para fijar portada.', 'error');
+                }
+            });
+        } else {
+            // Imagen recién adjuntada o producto nuevo
+            if (typeof window.mostrarToast === 'function') {
+                window.mostrarToast('Imagen seleccionada como portada.', 'success');
+            }
+        }
+    }
+
+    // Persistir el orden de las imágenes vía AJAX y sincronizar inputs ocultos
+    function guardarNuevoOrden(notificar = true) {
+        const grid = document.getElementById('grid-imagenes-producto');
+        if (!grid) return;
+
+        sincronizarArchivosYOrden();
+
+        const cards = Array.from(grid.querySelectorAll('.item-imagen'));
+        const productoId = grid.dataset.productoId;
+        const ordenDbIds = cards.map(c => c.dataset.dbId).filter(Boolean);
+
+        // Si todas las imágenes ordenadas ya están en BD, guardar orden por AJAX inmediatamente
+        if (productoId && ordenDbIds.length > 0 && ordenDbIds.length === cards.length) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            fetch(`/admin/productos/${productoId}/imagenes/reordenar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ orden: ordenDbIds })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && notificar) {
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast(data.message || 'Orden de imágenes actualizado correctamente.', 'success');
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Error al actualizar orden de imágenes:', err);
+                if (notificar && typeof window.mostrarToast === 'function') {
+                    window.mostrarToast('Error al guardar el nuevo orden de imágenes.', 'error');
+                }
+            });
+        } else if (notificar && cards.length > 1) {
+            if (typeof window.mostrarToast === 'function') {
+                window.mostrarToast('Orden de imágenes actualizado.', 'success');
+            }
+        }
     }
 
     // Eliminar imagen NUEVA (subida en esta sesión, sin ID de BD)
     function eliminarCardImagen(btn) {
         const card = btn.closest('.item-imagen');
-        if (card) {
-            card.remove();
-            actualizarContadorGaleria();
+        if (!card) return;
+
+        const nuevoId = card.dataset.nuevoId;
+        if (nuevoId) {
+            archivosLocales = archivosLocales.filter(a => a.id !== nuevoId);
+        }
+
+        const eraPortada = !card.querySelector('.badge-principal-container')?.classList.contains('hidden');
+        card.remove();
+
+        actualizarContadorGaleria();
+        sincronizarArchivosYOrden();
+
+        if (eraPortada) {
+            const primerCard = document.querySelector('#grid-imagenes-producto .item-imagen');
+            if (primerCard) {
+                const btnPortada = primerCard.querySelector('.btn-hacer-portada');
+                if (btnPortada) hacerImagenPrincipal(btnPortada);
+            }
+        }
+
+        if (typeof window.mostrarToast === 'function') {
+            window.mostrarToast('Imagen quitada de la galería.', 'info');
         }
     }
 
@@ -334,7 +631,6 @@
 
         const dbId = card.dataset.dbId;
         if (dbId) {
-            // Agrega un input oculto al formulario para que el controller elimine este ID
             const form = document.getElementById('form-producto');
             if (form) {
                 const hidden = document.createElement('input');
@@ -345,21 +641,40 @@
             }
         }
 
+        const eraPortada = !card.querySelector('.badge-principal-container')?.classList.contains('hidden');
         card.remove();
+
         actualizarContadorGaleria();
+        sincronizarArchivosYOrden();
+
+        if (eraPortada) {
+            const primerCard = document.querySelector('#grid-imagenes-producto .item-imagen');
+            if (primerCard) {
+                const btnPortada = primerCard.querySelector('.btn-hacer-portada');
+                if (btnPortada) hacerImagenPrincipal(btnPortada);
+            }
+        }
+
+        if (typeof window.mostrarToast === 'function') {
+            window.mostrarToast('Imagen marcada para eliminar. Guarda los cambios para confirmar.', 'info');
+        }
     }
 
     function moverImagenIzquierda(btn) {
         const card = btn.closest('.item-imagen');
-        if (card && card.previousElementSibling && !card.previousElementSibling.id) {
+        if (card && card.previousElementSibling && card.previousElementSibling.classList.contains('item-imagen')) {
             card.parentNode.insertBefore(card, card.previousElementSibling);
+            sincronizarArchivosYOrden();
+            guardarNuevoOrden(true);
         }
     }
 
     function moverImagenDerecha(btn) {
         const card = btn.closest('.item-imagen');
-        if (card && card.nextElementSibling) {
+        if (card && card.nextElementSibling && card.nextElementSibling.classList.contains('item-imagen')) {
             card.parentNode.insertBefore(card.nextElementSibling, card);
+            sincronizarArchivosYOrden();
+            guardarNuevoOrden(true);
         }
     }
 
@@ -383,8 +698,17 @@
             `;
         }
     }
+
+    // Inicializar de inmediato y en navegaciones SPA Livewire
+    inicializarTodasLasCards();
+    document.addEventListener('DOMContentLoaded', inicializarTodasLasCards);
+    document.addEventListener('livewire:navigated', inicializarTodasLasCards);
+
+    // Asegurar sincronización final antes de enviar el formulario
+    const formProducto = document.getElementById('form-producto');
+    if (formProducto) {
+        formProducto.addEventListener('submit', function() {
+            sincronizarArchivosYOrden();
+        });
+    }
 </script>
-
-
-
-
