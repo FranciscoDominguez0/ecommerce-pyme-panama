@@ -716,6 +716,213 @@
 
         </div>
 
+        {{-- Experiencia y Opinión de Compra (Modal Inteligente Post-Compra) --}}
+        @php
+            $evaluacionPrevia = $pedido->evaluacionUsabilidad;
+            $abrirAuto = session('pedido_creado_animacion') || request()->has('calificar');
+        @endphp
+
+        <div x-data="{
+            modalAbierto: false,
+            evaluado: {{ $evaluacionPrevia ? 'true' : 'false' }},
+            puntuacion: {{ $evaluacionPrevia?->puntuacion_facilidad ?? 5 }},
+            hoverPuntuacion: 0,
+            comentario: '{{ addslashes($evaluacionPrevia?->comentario ?? '') }}',
+            enviando: false,
+            enviadoExito: false,
+            etiquetas: {
+                1: 'Malo',
+                2: 'Regular',
+                3: 'Bueno',
+                4: 'Muy Bueno',
+                5: '¡Excelente!'
+            },
+            init() {
+                @if($abrirAuto && !$evaluacionPrevia)
+                    setTimeout(() => {
+                        this.modalAbierto = true;
+                    }, 3800);
+                @endif
+            },
+            abrirModal() {
+                this.modalAbierto = true;
+                this.enviadoExito = false;
+            },
+            cerrarModal() {
+                this.modalAbierto = false;
+            },
+            enviar() {
+                if (this.enviando) return;
+                this.enviando = true;
+
+                fetch('{{ route('cliente.perfil.pedidos.usabilidad', $pedido->id) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        puntuacion_facilidad: this.puntuacion,
+                        comentario: this.comentario,
+                        tiempo_checkout_segundos: 35,
+                        dispositivo: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.enviando = false;
+                    if (data.success) {
+                        this.evaluado = true;
+                        this.enviadoExito = true;
+                        setTimeout(() => {
+                            this.cerrarModal();
+                        }, 1800);
+                        if (window.mostrarToast) {
+                            window.mostrarToast('success', '¡Gracias por compartir tu opinión!');
+                        }
+                    }
+                })
+                .catch(err => {
+                    this.enviando = false;
+                    if (window.mostrarToast) {
+                        window.mostrarToast('error', 'No se pudo registrar tu calificación.');
+                    }
+                });
+            }
+        }">
+
+            <!-- Tarjeta limpia y discreta en la página -->
+            <template x-if="evaluado">
+                <div class="flex items-center justify-between p-4 sm:p-5 rounded-3xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/50 shadow-2xs">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                            <span class="material-symbols-outlined text-[20px]">verified</span>
+                        </div>
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-200">¡Calificación registrada!</h4>
+                            <p class="text-[11px] text-emerald-700 dark:text-emerald-400 mt-0.5">
+                                Calificaste tu experiencia con <strong x-text="puntuacion + ' de 5 estrellas'"></strong> (<span x-text="etiquetas[puntuacion]"></span>).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="!evaluado">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-3xl bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 shadow-xs">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center shrink-0 border border-amber-100 dark:border-amber-800/60 shadow-2xs">
+                            <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
+                        </div>
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">¿Qué tal estuvo tu compra hoy?</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tu opinión nos ayuda a ofrecerte siempre el mejor servicio.</p>
+                        </div>
+                    </div>
+                    <button type="button" @click="abrirModal()" class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[16px]">rate_review</span>
+                        <span>Calificar compra</span>
+                    </button>
+                </div>
+            </template>
+
+            <!-- Modal Emergente Post-Compra (Estilo Grandes Empresas) -->
+            <div x-show="modalAbierto" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center p-4" x-transition.opacity.duration.250ms>
+                <!-- Backdrop oscuro con blur -->
+                <div class="fixed inset-0 bg-slate-950/65 backdrop-blur-sm transition-opacity" @click="cerrarModal()"></div>
+
+                <!-- Contenedor del Modal -->
+                <div class="relative bg-white dark:bg-[#1f2327] rounded-3xl p-6 sm:p-8 max-w-sm w-full shadow-2xl border border-slate-200/80 dark:border-slate-800 text-center z-10"
+                     @click.stop
+                     x-transition:enter="transition ease-out duration-250"
+                     x-transition:enter-start="opacity-0 scale-95 translate-y-3"
+                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 scale-95 translate-y-3">
+
+                    <!-- Botón cerrar (X) -->
+                    <button type="button" @click="cerrarModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-full transition-colors cursor-pointer" title="Cerrar">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+
+                    <!-- Estado tras enviar calificación -->
+                    <template x-if="enviadoExito">
+                        <div class="py-6 space-y-3">
+                            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-200 dark:border-emerald-800">
+                                <span class="material-symbols-outlined text-3xl">task_alt</span>
+                            </div>
+                            <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white">¡Muchas gracias!</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Tu opinión nos impulsa a seguir mejorando cada día.</p>
+                        </div>
+                    </template>
+
+                    <!-- Formulario de calificación -->
+                    <template x-if="!enviadoExito">
+                        <div class="space-y-4">
+                            <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center border border-amber-100 dark:border-amber-800/60 shadow-2xs">
+                                <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
+                            </div>
+
+                            <div>
+                                <h3 class="text-lg font-black text-slate-900 dark:text-white tracking-tight">¿Qué tal estuvo tu compra hoy?</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                    Califica cómo sentiste el proceso de compra.
+                                </p>
+                            </div>
+
+                            <!-- Estrellas interactivas doradas -->
+                            <div class="py-1 space-y-1">
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <template x-for="i in 5" :key="i">
+                                        <button type="button"
+                                                @mouseenter="hoverPuntuacion = i"
+                                                @mouseleave="hoverPuntuacion = 0"
+                                                @click="puntuacion = i"
+                                                class="p-1 touch-manipulation hover:scale-125 transition-transform cursor-pointer"
+                                                :title="etiquetas[i]">
+                                            <span class="material-symbols-outlined text-[34px] sm:text-[38px] transition-colors"
+                                                  :class="(hoverPuntuacion ? i <= hoverPuntuacion : i <= puntuacion) ? 'text-amber-400' : 'text-slate-200 dark:text-slate-700'"
+                                                  :style="(hoverPuntuacion ? i <= hoverPuntuacion : i <= puntuacion) ? 'font-variation-settings: \'FILL\' 1;' : 'font-variation-settings: \'FILL\' 0;'">
+                                                star
+                                            </span>
+                                        </button>
+                                    </template>
+                                </div>
+                                <div class="text-xs font-bold text-amber-600 dark:text-amber-400 h-5"
+                                     x-text="etiquetas[hoverPuntuacion || puntuacion]"></div>
+                            </div>
+
+                            <!-- Comentario opcional -->
+                            <div class="text-left space-y-1.5 pt-1">
+                                <label for="modal-opinion-comentario" class="block text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                    ¿Algún comentario o sugerencia? <span class="text-slate-400 font-normal">(Opcional)</span>
+                                </label>
+                                <textarea id="modal-opinion-comentario" x-model="comentario" rows="2" maxlength="500"
+                                          placeholder="Cuéntanos qué te gustó o qué podemos mejorar..."
+                                          class="w-full text-xs rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-3 focus:bg-white focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none"></textarea>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div class="space-y-2 pt-2">
+                                <button type="button" @click="enviar()" :disabled="enviando"
+                                        class="w-full py-3 px-4 rounded-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[17px] animate-spin" x-show="enviando" style="display: none;">progress_activity</span>
+                                    <span x-text="enviando ? 'Enviando...' : 'Enviar Calificación'"></span>
+                                </button>
+                                <button type="button" @click="cerrarModal()" class="w-full py-1.5 text-xs font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+                                    Ahora no
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+
+        </div>
+
         {{-- CARD 8: ¿Necesitas ayuda con tu pedido? (Footer Card del ejemplo en español) --}}
         <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-8 sm:p-10 text-center shadow-xs">
             <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-1.5">¿Necesitas ayuda con tu pedido?</h3>

@@ -58,6 +58,7 @@ class PedidoController extends Controller
             'devolucion',
             'cupon',
             'valoraciones',
+            'evaluacionUsabilidad',
         ])
             ->where('usuario_id', Auth::id())
             ->findOrFail($id);

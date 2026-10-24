@@ -207,8 +207,6 @@
                         {{ $factura->pedido->direccion->direccion_exacta }}<br>
                         {{ $factura->pedido->direccion->corregimiento }}, {{ $factura->pedido->direccion->distrito }}<br>
                         {{ $factura->pedido->direccion->provincia }}
-                    @else
-                        <em>Retiro en tienda o sin dirección registrada</em>
                     @endif
                 </div>
             </td>

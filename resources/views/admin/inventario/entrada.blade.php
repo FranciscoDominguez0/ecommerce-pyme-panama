@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-3xl space-y-6">
+<div class="max-w-3xl mx-auto space-y-6">
 
     {{-- Page Header --}}
     <div class="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-gray-700/80">

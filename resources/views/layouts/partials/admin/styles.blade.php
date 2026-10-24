@@ -20,13 +20,21 @@
         outline: none !important;
     }
     .material-symbols-outlined {
-        font-family: 'Material Symbols Outlined';
+        font-family: 'Material Symbols Outlined' !important;
         font-weight: normal;
         font-style: normal;
         font-size: 20px;
         line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
         display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        font-feature-settings: 'liga';
         -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
     }
 
     :root {

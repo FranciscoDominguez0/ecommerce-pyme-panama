@@ -172,16 +172,6 @@
                 </div>
             </div>
 
-            {{-- Warning box --}}
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <div class="flex items-start gap-2.5">
-                    <span class="material-symbols-outlined text-amber-500 text-[18px] shrink-0 mt-0.5">info</span>
-                    <div class="text-xs text-amber-700 space-y-1">
-                        <p class="font-bold">Acción de alto impacto</p>
-                        <p>Un ajuste modifica el stock directamente y queda registrado en el historial con tu usuario como responsable. No se puede deshacer.</p>
-                    </div>
-                </div>
-            </div>
 
             {{-- Low stock warning (conditional) --}}
             <div id="alerta-stock-bajo" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">

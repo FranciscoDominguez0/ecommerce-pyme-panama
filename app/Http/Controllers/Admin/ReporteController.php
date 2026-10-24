@@ -35,6 +35,15 @@ class ReporteController extends Controller
         return view('admin.reportes.index', $datos);
     }
 
+    /**
+     * Muestra el dashboard de métricas de usabilidad y experiencia (CES, CSAT, TSR).
+     */
+    public function usabilidad(\App\Services\UsabilidadService $usabilidadService)
+    {
+        $metricas = $usabilidadService->obtenerMetricas();
+        return view('admin.reportes.usabilidad', $metricas);
+    }
+
     public function exportarExcel(Request $request, AuditoriaService $auditoria)
     {
         $datos = $this->reporteService->obtenerEstadisticas($request);

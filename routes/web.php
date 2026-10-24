@@ -88,6 +88,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckAdminPermissions::class])->
     
     Route::post('/mis-pedidos/{id}/confirmar-recepcion', [ClientePedidoController::class, 'confirmarRecepcion'])->name('pedidos.confirmar-recepcion');
     Route::post('/mis-pedidos/{id}/valorar', [\App\Http\Controllers\Cliente\ValoracionController::class, 'store'])->name('pedidos.valorar');
+    Route::post('/mis-pedidos/{id}/evaluar-usabilidad', [\App\Http\Controllers\Cliente\UsabilidadController::class, 'store'])->name('pedidos.usabilidad');
 });
 
 Route::middleware('auth')->group(function () {
@@ -105,6 +106,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     // Módulo de Reportes y Estadísticas
     Route::prefix('reportes')->name('admin.reportes.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\ReporteController::class, 'index'])->name('index');
+        Route::get('/usabilidad', [\App\Http\Controllers\Admin\ReporteController::class, 'usabilidad'])->name('usabilidad');
         Route::get('/exportar-excel', [\App\Http\Controllers\Admin\ReporteController::class, 'exportarExcel'])->name('exportar-excel');
         Route::get('/exportar-pdf', [\App\Http\Controllers\Admin\ReporteController::class, 'exportarPdf'])->name('exportar-pdf');
     });
