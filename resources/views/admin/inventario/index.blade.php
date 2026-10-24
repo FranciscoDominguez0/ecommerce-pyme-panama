@@ -181,86 +181,100 @@
 
             {{-- Table --}}
             <div class="overflow-x-auto">
-                <table class="w-full text-left min-w-[860px]">
+                <table class="w-full text-left min-w-[760px]">
                     <thead>
                         <tr class="border-b border-slate-100 dark:border-gray-700 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
                             <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Fecha</th>
-                            <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Producto / Variante</th>
+                            <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Producto</th>
                             <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tipo</th>
-                            <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cantidad</th>
-                            <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Stock</th>
+                            <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Movimiento</th>
                             <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Motivo</th>
-                            <th class="px-5 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Responsable</th>
+                            <th class="px-4 py-3.5 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center w-16">Detalle</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-gray-700/50 text-xs">
                         @forelse($movimientos as $mov)
-                            <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
+                            <tr class="hover:bg-slate-50/80 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                                 {{-- Fecha --}}
-                                <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap font-mono text-[11px]">
-                                    {{ $mov->creado_en->format('d/m/Y') }}<br>
-                                    <span class="text-slate-400">{{ $mov->creado_en->format('h:i A') }}</span>
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    <div class="font-medium text-slate-700 dark:text-slate-300 text-xs">{{ $mov->creado_en->format('d/m/Y') }}</div>
+                                    <div class="text-[11px] text-slate-400 font-mono mt-0.5">{{ $mov->creado_en->format('h:i A') }}</div>
                                 </td>
+
                                 {{-- Producto --}}
                                 <td class="px-5 py-3.5">
-                                    <div class="font-semibold text-slate-800 dark:text-gray-100">{{ $mov->producto?->nombre ?? '—' }}</div>
-                                    @if($mov->variante)
-                                        <div class="text-[11px] text-slate-400 mt-0.5">
-                                            {{ $mov->variante->opciones->map(fn($o) => $o->tipo?->nombre . ': ' . $o->valor)->join(' / ') }}
-                                            @if($mov->variante->sku)
-                                                · <span class="font-mono">{{ $mov->variante->sku }}</span>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-2xs">
+                                            @if($mov->producto?->imagen_url)
+                                                <img src="{{ $mov->producto->imagen_url }}" alt="{{ $mov->producto->nombre }}" class="w-full h-full object-cover">
+                                            @else
+                                                <span class="material-symbols-outlined text-slate-400 text-[18px]">inventory_2</span>
                                             @endif
                                         </div>
-                                    @elseif($mov->producto?->sku)
-                                        <div class="text-[11px] text-slate-400 font-mono mt-0.5">{{ $mov->producto->sku }}</div>
-                                    @endif
-                                </td>
-                                {{-- Tipo badge --}}
-                                <td class="px-5 py-3.5">
-                                    @if($mov->tipo === 'entrada')
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">
-                                            <span class="material-symbols-outlined text-[12px]">south_east</span> Entrada
-                                        </span>
-                                    @elseif($mov->tipo === 'salida')
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">
-                                            <span class="material-symbols-outlined text-[12px]">north_east</span> Salida
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">
-                                            <span class="material-symbols-outlined text-[12px]">sync_alt</span> Ajuste
-                                        </span>
-                                    @endif
-                                </td>
-                                {{-- Cantidad --}}
-                                <td class="px-5 py-3.5 font-bold tabular-nums {{ $mov->tipo === 'entrada' ? 'text-emerald-600' : ($mov->tipo === 'salida' ? 'text-red-600' : 'text-amber-600') }}">
-                                    {{ $mov->tipo === 'entrada' ? '+' : ($mov->tipo === 'salida' ? '-' : '±') }}{{ $mov->cantidad }}
-                                </td>
-                                {{-- Stock antes → después --}}
-                                <td class="px-5 py-3.5">
-                                    <div class="flex items-center gap-1.5 text-[11px] tabular-nums">
-                                        <span class="text-slate-500 dark:text-slate-400">{{ $mov->stock_antes }}</span>
-                                        <span class="material-symbols-outlined text-slate-300 text-[14px]">arrow_forward</span>
-                                        <span class="font-bold text-slate-800 dark:text-gray-100">{{ $mov->stock_despues }}</span>
+                                        <div class="min-w-0">
+                                            <div class="font-semibold text-slate-800 dark:text-gray-100 truncate max-w-[240px]" title="{{ $mov->producto?->nombre }}">
+                                                {{ $mov->producto?->nombre ?? '—' }}
+                                            </div>
+                                            @if($mov->texto_variante)
+                                                <div class="text-[11px] text-slate-400 mt-0.5 truncate max-w-[240px]">
+                                                    {{ $mov->texto_variante }}
+                                                </div>
+                                            @elseif($mov->producto?->sku)
+                                                <div class="text-[11px] text-slate-400 font-mono mt-0.5">{{ $mov->producto->sku }}</div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </td>
-                                {{-- Motivo --}}
-                                <td class="px-5 py-3.5 text-slate-600 dark:text-slate-400 max-w-[200px]">
-                                    <div class="truncate" title="{{ $mov->motivo }}">{{ $mov->motivo }}</div>
-                                    @if($mov->pedido_id)
-                                        <a href="{{ route('admin.pedidos.detalle', $mov->pedido_id) }}"
-                                           class="text-[11px] text-slate-400 hover:text-slate-600 dark:text-slate-400 font-mono">
-                                            {{ $mov->pedido?->numero_pedido }}
-                                        </a>
+
+                                {{-- Tipo badge --}}
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    @if($mov->tipo === 'entrada')
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/60 uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Entrada
+                                        </span>
+                                    @elseif($mov->tipo === 'salida')
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-100 dark:border-rose-800/60 uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Salida
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-100 dark:border-amber-800/60 uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Ajuste
+                                        </span>
                                     @endif
                                 </td>
-                                {{-- Responsable --}}
-                                <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400">
-                                    {{ $mov->usuario ? $mov->usuario->nombre_completo : 'Sistema' }}
+
+                                {{-- Movimiento (Cantidad + Stock resultante) --}}
+                                <td class="px-5 py-3.5 whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-extrabold text-xs tabular-nums {{ $mov->tipo === 'entrada' ? 'text-emerald-600 dark:text-emerald-400' : ($mov->tipo === 'salida' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400') }}">
+                                            {{ $mov->tipo === 'entrada' ? '+' : ($mov->tipo === 'salida' ? '-' : '±') }}{{ $mov->cantidad }}
+                                        </span>
+                                        <span class="text-slate-300 dark:text-gray-600">·</span>
+                                        <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400 tabular-nums">
+                                            Stock: <strong class="text-slate-700 dark:text-slate-300 font-bold">{{ $mov->stock_despues }}</strong>
+                                        </span>
+                                    </div>
+                                </td>
+
+                                {{-- Motivo --}}
+                                <td class="px-5 py-3.5 text-slate-600 dark:text-slate-400">
+                                    <div class="truncate max-w-[220px] font-medium" title="{{ $mov->motivo }}">{{ $mov->motivo }}</div>
+                                </td>
+
+                                {{-- Detalle (Botón ojito) --}}
+                                <td class="px-4 py-3.5 text-center whitespace-nowrap">
+                                    <button type="button"
+                                            data-movimiento='@json($mov->payload_modal)'
+                                            onclick="window.abrirModalDetalleMovimiento(JSON.parse(this.dataset.movimiento))"
+                                            class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                                            title="Ver detalles del movimiento">
+                                        <span class="material-symbols-outlined text-[19px]">visibility</span>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-5 py-16 text-center">
+                                <td colspan="6" class="px-5 py-16 text-center">
                                     <div class="flex flex-col items-center gap-3">
                                         <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-transparent flex items-center justify-center">
                                             <span class="material-symbols-outlined text-[28px] text-slate-400">history</span>
@@ -471,6 +485,133 @@
         </div>
     @endif
 
+    {{-- Modal Detalle de Movimiento --}}
+    <div id="modal-detalle-movimiento" 
+         class="fixed inset-0 top-0 left-0 right-0 bottom-0 z-[99999] hidden items-center justify-center p-4 overflow-y-auto select-none" 
+         style="background-color: rgba(15, 23, 42, 0.75); backdrop-filter: blur(8px);"
+         onclick="if(event.target === this) window.cerrarModalDetalleMovimiento();"
+         role="dialog"
+         aria-modal="true">
+        <div class="bg-white dark:bg-[#181a1b] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-gray-700/80 space-y-5 animate-in fade-in zoom-in-95 duration-150 relative z-10 text-left my-auto">
+            {{-- Header --}}
+            <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div id="mdm-icono-container" class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0">
+                        <span id="mdm-icono" class="material-symbols-outlined text-[24px]"></span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white">Detalle de Movimiento</h3>
+                            <span id="mdm-tipo-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider"></span>
+                        </div>
+                        <p id="mdm-fecha" class="text-xs text-slate-400 font-medium mt-0.5"></p>
+                    </div>
+                </div>
+                <button type="button" 
+                        onclick="window.cerrarModalDetalleMovimiento()" 
+                        class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            {{-- Tarjeta Producto --}}
+            <div class="flex items-center gap-3.5 p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-gray-800">
+                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white dark:bg-[#121415] flex items-center justify-center">
+                    <img id="mdm-img" src="" alt="" class="w-full h-full object-cover hidden">
+                    <span id="mdm-placeholder-img" class="material-symbols-outlined text-slate-400 text-[22px]">inventory_2</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h4 id="mdm-producto-nombre" class="text-sm font-bold text-slate-900 dark:text-white truncate"></h4>
+                    <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-400">
+                        <span id="mdm-producto-sku" class="font-mono"></span>
+                        <span id="mdm-variante-badge" class="hidden px-2 py-0.5 rounded bg-slate-200 dark:bg-gray-800 text-slate-700 dark:text-slate-300 text-[11px] truncate"></span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Métricas de Transición de Stock --}}
+            <div class="grid grid-cols-3 gap-2.5 p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-gray-800 text-center">
+                <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Stock Inicial</span>
+                    <p id="mdm-stock-antes" class="text-lg font-extrabold text-slate-700 dark:text-slate-300 tabular-nums">—</p>
+                </div>
+                <div class="space-y-1 border-x border-slate-200 dark:border-gray-700/60">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Variación</span>
+                    <p id="mdm-cantidad" class="text-lg font-extrabold tabular-nums">—</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Stock Final</span>
+                    <p id="mdm-stock-despues" class="text-lg font-extrabold text-slate-900 dark:text-white tabular-nums">—</p>
+                </div>
+            </div>
+
+            {{-- Tarjeta Responsable y Origen del Movimiento --}}
+            <div class="p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-gray-800 space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Responsable / Origen</span>
+                    <span id="mdm-responsable-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider"></span>
+                </div>
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center shrink-0 text-slate-600 dark:text-slate-300 font-bold text-xs">
+                            <span class="material-symbols-outlined text-[18px]">person</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <a id="mdm-responsable-link" href="#" target="_blank" class="font-bold text-xs text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline flex items-center gap-1 truncate group" title="Ver perfil del usuario en el sistema">
+                                    <span id="mdm-responsable-nombre"></span>
+                                    <span class="material-symbols-outlined text-[13px] text-slate-400 group-hover:text-emerald-600">open_in_new</span>
+                                </a>
+                                <span id="mdm-responsable-nombre-static" class="hidden font-bold text-xs text-slate-900 dark:text-white truncate"></span>
+                            </div>
+                            <p id="mdm-responsable-email" class="text-[11px] text-slate-400 font-mono truncate"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-2 border-t border-slate-200/60 dark:border-gray-800 text-[11px] flex items-start gap-1.5 text-slate-600 dark:text-slate-300">
+                    <span class="material-symbols-outlined text-[15px] shrink-0 mt-0.5 text-emerald-600">info</span>
+                    <span id="mdm-responsable-detalle" class="leading-relaxed"></span>
+                </div>
+            </div>
+
+            {{-- Información operativa --}}
+            <div class="space-y-2.5 text-xs">
+                <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
+                    <span class="text-slate-400 font-medium">Motivo:</span>
+                    <span id="mdm-motivo" class="font-semibold text-slate-800 dark:text-slate-200 text-right"></span>
+                </div>
+                <div id="mdm-pedido-row" class="hidden flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
+                    <span class="text-slate-400 font-medium">Pedido asociado:</span>
+                    <a id="mdm-pedido-link" href="#" class="inline-flex items-center gap-1 font-mono font-bold text-emerald-600 hover:text-emerald-700 hover:underline">
+                        <span id="mdm-pedido-numero"></span>
+                        <span class="material-symbols-outlined text-[13px]">open_in_new</span>
+                    </a>
+                </div>
+                <div id="mdm-proveedor-row" class="hidden flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
+                    <span class="text-slate-400 font-medium">Proveedor:</span>
+                    <span id="mdm-proveedor" class="font-semibold text-slate-800 dark:text-slate-200"></span>
+                </div>
+                <div id="mdm-factura-row" class="hidden flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
+                    <span class="text-slate-400 font-medium">Factura / Remito:</span>
+                    <span id="mdm-factura" class="font-mono font-semibold text-slate-800 dark:text-slate-200"></span>
+                </div>
+                <div id="mdm-notas-row" class="hidden pt-1">
+                    <span class="text-slate-400 font-medium block mb-1">Notas / Observaciones:</span>
+                    <div id="mdm-notas" class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-100 dark:border-gray-800 text-slate-600 dark:text-slate-300 italic text-[11px] leading-relaxed"></div>
+                </div>
+            </div>
+
+            {{-- Footer --}}
+            <div class="pt-2 flex justify-end">
+                <button type="button" 
+                        onclick="window.cerrarModalDetalleMovimiento()" 
+                        class="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 rounded-xl transition-all cursor-pointer">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
 
@@ -498,6 +639,158 @@
         form.submit();
         
         setTimeout(() => { form.action = actionOriginal; form.target = "_self"; }, 100);
+    }
+
+    // Modal de detalle de movimiento de inventario
+    window.abrirModalDetalleMovimiento = function(m) {
+        let modal = document.getElementById('modal-detalle-movimiento');
+        if (!modal) return;
+
+        // Aseguramos que el modal esté directamente en el <body> para que el backdrop cubra el 100% del viewport
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+
+        // Fecha
+        document.getElementById('mdm-fecha').textContent = m.fecha;
+
+        // Tipo, icono y badge
+        const icnContainer = document.getElementById('mdm-icono-container');
+        const icn = document.getElementById('mdm-icono');
+        const tipoBadge = document.getElementById('mdm-tipo-badge');
+
+        if (m.tipo === 'entrada') {
+            icnContainer.className = 'w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80';
+            icn.textContent = 'south_east';
+            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300';
+            tipoBadge.textContent = 'Entrada';
+        } else if (m.tipo === 'salida') {
+            icnContainer.className = 'w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200 dark:border-rose-800/80';
+            icn.textContent = 'north_east';
+            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-300';
+            tipoBadge.textContent = 'Salida';
+        } else {
+            icnContainer.className = 'w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800/80';
+            icn.textContent = 'sync_alt';
+            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300';
+            tipoBadge.textContent = 'Ajuste';
+        }
+
+        // Producto
+        document.getElementById('mdm-producto-nombre').textContent = m.producto_nombre;
+        document.getElementById('mdm-producto-sku').textContent = m.producto_sku ? 'SKU: ' + m.producto_sku : '';
+
+        const imgEl = document.getElementById('mdm-img');
+        const placeholderImg = document.getElementById('mdm-placeholder-img');
+        if (m.producto_imagen) {
+            imgEl.src = m.producto_imagen;
+            imgEl.classList.remove('hidden');
+            placeholderImg.classList.add('hidden');
+        } else {
+            imgEl.src = '';
+            imgEl.classList.add('hidden');
+            placeholderImg.classList.remove('hidden');
+        }
+
+        const varBadge = document.getElementById('mdm-variante-badge');
+        if (m.variante) {
+            varBadge.textContent = m.variante;
+            varBadge.classList.remove('hidden');
+        } else {
+            varBadge.classList.add('hidden');
+        }
+
+        // Métricas de stock
+        document.getElementById('mdm-stock-antes').textContent = m.stock_antes;
+        const cantEl = document.getElementById('mdm-cantidad');
+        const signo = m.tipo === 'entrada' ? '+' : (m.tipo === 'salida' ? '-' : '±');
+        cantEl.textContent = signo + m.cantidad;
+        cantEl.className = 'text-lg font-extrabold tabular-nums ' + (m.tipo === 'entrada' ? 'text-emerald-600 dark:text-emerald-400' : (m.tipo === 'salida' ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'));
+        document.getElementById('mdm-stock-despues').textContent = m.stock_despues;
+
+        // Responsable completo
+        const resp = m.responsable || {};
+        const respLink = document.getElementById('mdm-responsable-link');
+        const respStatic = document.getElementById('mdm-responsable-nombre-static');
+        const respBadge = document.getElementById('mdm-responsable-badge');
+
+        if (resp.url) {
+            respLink.href = resp.url;
+            document.getElementById('mdm-responsable-nombre').textContent = resp.nombre;
+            respLink.classList.remove('hidden');
+            respStatic.classList.add('hidden');
+        } else {
+            respStatic.textContent = resp.nombre;
+            respStatic.classList.remove('hidden');
+            respLink.classList.add('hidden');
+        }
+
+        document.getElementById('mdm-responsable-email').textContent = resp.email ? resp.email : '';
+        document.getElementById('mdm-responsable-detalle').textContent = resp.detalle || '';
+        respBadge.textContent = resp.badge || 'Sistema';
+        respBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ' + (resp.badge_class || 'bg-slate-100 text-slate-700');
+
+        // Datos operativos
+        document.getElementById('mdm-motivo').textContent = m.motivo || '—';
+
+        // Pedido
+        const pedRow = document.getElementById('mdm-pedido-row');
+        if (m.pedido_numero && m.pedido_url) {
+            document.getElementById('mdm-pedido-numero').textContent = m.pedido_numero;
+            document.getElementById('mdm-pedido-link').href = m.pedido_url;
+            pedRow.classList.remove('hidden');
+        } else {
+            pedRow.classList.add('hidden');
+        }
+
+        // Proveedor
+        const provRow = document.getElementById('mdm-proveedor-row');
+        if (m.proveedor) {
+            document.getElementById('mdm-proveedor').textContent = m.proveedor;
+            provRow.classList.remove('hidden');
+        } else {
+            provRow.classList.add('hidden');
+        }
+
+        // Factura
+        const factRow = document.getElementById('mdm-factura-row');
+        if (m.factura_proveedor) {
+            document.getElementById('mdm-factura').textContent = m.factura_proveedor;
+            factRow.classList.remove('hidden');
+        } else {
+            factRow.classList.add('hidden');
+        }
+
+        // Notas
+        const notasRow = document.getElementById('mdm-notas-row');
+        if (m.notas) {
+            document.getElementById('mdm-notas').textContent = m.notas;
+            notasRow.classList.remove('hidden');
+        } else {
+            notasRow.classList.add('hidden');
+        }
+
+        // Mostrar modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.cerrarModalDetalleMovimiento = function() {
+        const modal = document.getElementById('modal-detalle-movimiento');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    };
+
+    if (!window._mdmEscapeListenerAttached) {
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.cerrarModalDetalleMovimiento();
+            }
+        });
+        window._mdmEscapeListenerAttached = true;
     }
 </script>
 @endpush

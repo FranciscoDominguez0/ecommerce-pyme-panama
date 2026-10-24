@@ -19,7 +19,7 @@ class InventarioController extends Controller
 
     public function index(Request $request)
     {
-        $query = MovimientoInventario::with(['producto', 'variante.opciones.tipo', 'usuario', 'pedido'])
+        $query = MovimientoInventario::with(['producto.imagenes', 'variante.opciones.tipo', 'usuario', 'pedido.usuario'])
             ->orderByDesc('creado_en');
 
         // Filtro: tipo
@@ -46,9 +46,76 @@ class InventarioController extends Controller
         }
 
         $movimientos = $query->paginate(20)->withQueryString();
-        $kpis        = $this->inventario->calcularKpis();
+
+        $movimientos->getCollection()->transform(function ($mov) {
+            $mov->payload_modal  = $this->formatearMovimientoModal($mov);
+            $mov->texto_variante = $mov->variante 
+                ? $mov->variante->opciones->map(fn($o) => ($o->tipo?->nombre ? $o->tipo->nombre . ': ' : '') . $o->valor)->join(' / ') 
+                : null;
+            return $mov;
+        });
+
+        $kpis = $this->inventario->calcularKpis();
 
         return view('admin.inventario.index', compact('movimientos', 'kpis'));
+    }
+
+    /**
+     * Prepara el payload estructurado para el modal de detalle de movimiento.
+     */
+    protected function formatearMovimientoModal(MovimientoInventario $mov): array
+    {
+        $usuarioResp = $mov->usuario ?? $mov->pedido?->usuario;
+        $esPorPedido = !empty($mov->pedido_id);
+
+        if ($esPorPedido) {
+            $numPedido = $mov->pedido?->numero_pedido ?? ('#' . $mov->pedido_id);
+            $respTipo = 'Compra de Cliente (Online)';
+            $respDetalle = 'Movimiento originado automáticamente por la compra del cliente en el Pedido ' . $numPedido;
+            $respBadge = 'Cliente';
+            $respBadgeClass = 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60';
+        } elseif ($mov->usuario) {
+            $respTipo = 'Manual de Administración';
+            $respDetalle = 'Movimiento registrado manualmente por el usuario desde el panel administrativo';
+            $respBadge = 'Administración';
+            $respBadgeClass = 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60';
+        } else {
+            $respTipo = 'Sistema Automático';
+            $respDetalle = 'Movimiento generado automáticamente por proceso interno del sistema';
+            $respBadge = 'Sistema';
+            $respBadgeClass = 'bg-slate-100 text-slate-700 dark:bg-gray-800 dark:text-slate-300 border border-slate-200 dark:border-gray-700';
+        }
+
+        $labelVariante = $mov->variante ? $mov->variante->opciones->map(fn($o) => ($o->tipo?->nombre ? $o->tipo->nombre . ': ' : '') . $o->valor)->join(' / ') : null;
+
+        return [
+            'id'                => $mov->id,
+            'fecha'             => $mov->creado_en->format('d/m/Y h:i A'),
+            'tipo'              => $mov->tipo,
+            'cantidad'          => $mov->cantidad,
+            'stock_antes'       => $mov->stock_antes,
+            'stock_despues'     => $mov->stock_despues,
+            'motivo'            => $mov->motivo,
+            'proveedor'         => $mov->proveedor,
+            'factura_proveedor' => $mov->factura_proveedor,
+            'notas'             => $mov->notas,
+            'responsable'       => [
+                'nombre'      => $usuarioResp ? $usuarioResp->nombre_completo : 'Sistema',
+                'email'       => $usuarioResp?->email,
+                'url'         => $usuarioResp ? route('admin.usuarios.show', $usuarioResp->id) : null,
+                'tipo'        => $respTipo,
+                'detalle'     => $respDetalle,
+                'badge'       => $respBadge,
+                'badge_class' => $respBadgeClass,
+                'es_cliente'  => $esPorPedido,
+            ],
+            'producto_nombre'   => $mov->producto?->nombre ?? 'Producto no disponible',
+            'producto_sku'      => $mov->variante?->sku ?? ($mov->producto?->sku ?? '—'),
+            'producto_imagen'   => $mov->producto?->imagen_url ?? null,
+            'variante'          => $labelVariante,
+            'pedido_numero'     => $mov->pedido?->numero_pedido,
+            'pedido_url'        => $mov->pedido_id ? route('admin.pedidos.detalle', $mov->pedido_id) : null,
+        ];
     }
 
     // ─── 2. Stock Actual ───────────────────────────────────────────────────────

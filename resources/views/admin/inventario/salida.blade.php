@@ -24,11 +24,6 @@
         </div>
     </div>
 
-    {{-- Warning banner --}}
-    <div class="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-700">
-        <span class="material-symbols-outlined text-[18px] text-amber-500 shrink-0 mt-0.5">warning</span>
-        <span>Las salidas <strong>reducen el stock</strong> permanentemente. No se puede deshacer — registra con cuidado.</span>
-    </div>
 
     {{-- Errors --}}
     @if(session('error'))

@@ -13,7 +13,7 @@
 <div class="space-y-6 max-w-[1600px] mx-auto pb-12">
 
     <!-- Navegación entre Pestañas de Reportes -->
-    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
+    <div class="flex items-center gap-2 border-b border-slate-200 dark:border-gray-700/80 pb-3">
         <a href="{{ route('admin.reportes.index') }}" 
            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
             <span class="material-symbols-outlined text-[18px]">query_stats</span>
@@ -36,7 +36,7 @@
                 Métricas de satisfacción post-compra, facilidad de uso y comentarios de compradores.
             </p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-[#1f2327] border border-slate-200 dark:border-slate-800 px-3.5 py-2 rounded-xl shadow-2xs">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 px-3.5 py-2 rounded-xl shadow-xs">
             <span class="material-symbols-outlined text-[18px] text-emerald-600">verified</span>
             <span>{{ $total_evaluaciones }} calificaciones recibidas</span>
         </div>
@@ -46,10 +46,10 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         
         <!-- KPI 1: Facilidad de Compra -->
-        <div class="bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-5 shadow-xs flex flex-col justify-between">
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between gap-3 mb-2">
                 <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Facilidad de Compra</span>
-                <div class="w-9 h-9 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800/60">
+                <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800/60">
                     <span class="material-symbols-outlined text-[19px]">thumb_up</span>
                 </div>
             </div>
@@ -59,17 +59,17 @@
                 </div>
                 <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">Consideran el proceso Fácil o Muy Fácil</p>
             </div>
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px]">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Nivel de servicio</span>
                 <span class="font-bold text-emerald-600">Excelente</span>
             </div>
         </div>
 
         <!-- KPI 2: Satisfacción General (CSAT) -->
-        <div class="bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-5 shadow-xs flex flex-col justify-between">
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between gap-3 mb-2">
                 <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Satisfacción General</span>
-                <div class="w-9 h-9 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center shrink-0 border border-amber-100 dark:border-amber-800/60">
+                <div class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center shrink-0 border border-amber-100 dark:border-amber-800/60">
                     <span class="material-symbols-outlined text-[19px]">hotel_class</span>
                 </div>
             </div>
@@ -84,17 +84,17 @@
                     @endfor
                 </div>
             </div>
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px]">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Promedio de compras</span>
                 <span class="font-bold text-amber-600">Sobresaliente</span>
             </div>
         </div>
 
         <!-- KPI 3: Tasa de Finalización -->
-        <div class="bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-5 shadow-xs flex flex-col justify-between">
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between gap-3 mb-2">
                 <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Finalización de Pedidos</span>
-                <div class="w-9 h-9 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-800/60">
+                <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 border border-blue-100 dark:border-blue-800/60">
                     <span class="material-symbols-outlined text-[19px]">check_circle</span>
                 </div>
             </div>
@@ -106,17 +106,17 @@
                     {{ $pedidos_exitosos }} de {{ $total_pedidos }} compras confirmadas
                 </p>
             </div>
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px]">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Efectividad</span>
                 <span class="font-bold text-blue-600">Alta</span>
             </div>
         </div>
 
         <!-- KPI 4: Tiempo en Checkout -->
-        <div class="bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-5 shadow-xs flex flex-col justify-between">
+        <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
             <div class="flex items-center justify-between gap-3 mb-2">
                 <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tiempo Promedio en Pago</span>
-                <div class="w-9 h-9 rounded-2xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-100 dark:border-purple-800/60">
+                <div class="w-9 h-9 rounded-lg bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 border border-purple-100 dark:border-purple-800/60">
                     <span class="material-symbols-outlined text-[19px]">timer</span>
                 </div>
             </div>
@@ -127,7 +127,7 @@
                 </div>
                 <p class="text-[11px] text-purple-600 dark:text-purple-400 font-semibold mt-1">Proceso de compra ágil en 3 pasos</p>
             </div>
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px]">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Velocidad</span>
                 <span class="font-bold text-purple-600">Rápida</span>
             </div>
@@ -139,8 +139,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start w-full">
         
         <!-- Distribución de Estrellas -->
-        <div class="w-full bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="w-full bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-gray-700">
                 <div>
                     <h3 class="text-sm font-bold text-slate-900 dark:text-white">Distribución de Calificaciones</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Opiniones recopiladas al finalizar pedidos</p>
@@ -169,22 +169,22 @@
                             <span class="text-slate-700 dark:text-slate-300">{{ $etiquetasEstrellas[$estrella] }}</span>
                             <span class="text-slate-500 font-semibold">{{ $cantidad }} ({{ $porcentajeFila }}%)</span>
                         </div>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+                        <div class="w-full bg-slate-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
                             <div class="h-2.5 rounded-full {{ $estrella >= 4 ? 'bg-emerald-500' : ($estrella === 3 ? 'bg-amber-400' : 'bg-rose-500') }} transition-all duration-500" style="width: {{ $porcentajeFila }}%"></div>
                         </div>
                     </div>
                 @endforeach
             </div>
 
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 flex items-center justify-between">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 text-xs text-slate-500 flex items-center justify-between">
                 <span>Total de opiniones registradas:</span>
                 <span class="font-bold text-slate-800 dark:text-slate-200">{{ $total_evaluaciones }} compradores</span>
             </div>
         </div>
 
         <!-- Rendimiento y Velocidad de la Tienda -->
-        <div class="w-full bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div class="w-full bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-gray-700">
                 <div>
                     <h3 class="text-sm font-bold text-slate-900 dark:text-white">Velocidad y Rendimiento de la Tienda</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tiempos de carga y respuesta medidos en tiempo real</p>
@@ -193,26 +193,26 @@
             </div>
 
             <div class="grid grid-cols-3 gap-3 pt-1">
-                <div class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
+                <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
                     <span class="block text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Carga Inicial</span>
                     <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">1.2s</div>
                     <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">Ultra rápida</span>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
+                <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
                     <span class="block text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Respuesta al Clic</span>
                     <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">42ms</div>
                     <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">Instantánea</span>
                 </div>
 
-                <div class="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
+                <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
                     <span class="block text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Estabilidad</span>
                     <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">100%</div>
                     <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">Sin saltos visuales</span>
                 </div>
             </div>
 
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 flex items-center justify-between">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 text-xs text-slate-500 flex items-center justify-between">
                 <span>Experiencia de navegación:</span>
                 <span class="font-bold text-emerald-600">Rápida y sin demoras</span>
             </div>
@@ -221,8 +221,8 @@
     </div>
 
     <!-- 3. Comentarios y Opiniones de Compradores -->
-    <div class="bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 shadow-xs space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+    <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-gray-700">
             <div>
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white">Opiniones de Compradores</h3>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Comentarios directos dejados en el checkout</p>
@@ -233,7 +233,7 @@
         @if($comentarios_recientes->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                 @foreach($comentarios_recientes as $eval)
-                    <div class="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 space-y-2">
+                    <div class="p-4 rounded-xl border border-slate-100 dark:border-gray-700/60 bg-slate-50/70 dark:bg-[#121415]/60 space-y-2">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">
@@ -250,7 +250,7 @@
                         <p class="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">
                             "{{ $eval->comentario }}"
                         </p>
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-gray-700/60">
                             <span>Pedido #{{ $eval->pedido?->numero_pedido }}</span>
                             <span>{{ $eval->creado_en->diffForHumans() }}</span>
                         </div>
