@@ -38,7 +38,7 @@
 # Non-fingerprinted static assets (fonts, logo, icons, favicon): 1 week.
 # User-uploaded content (storage/, uploads/): 1 day (it can change).
 <IfModule mod_headers.c>
-    <FilesMatch "\.(woff2?|ttf|otf|eot)$">
+    <FilesMatch "\.(woff2?|ttf|otf|eot|mp3|wav|ogg)$">
         Header set Cache-Control "public, max-age=604800"
     </FilesMatch>
     <FilesMatch "\.(svg|png|jpe?g|gif|webp|ico)$">

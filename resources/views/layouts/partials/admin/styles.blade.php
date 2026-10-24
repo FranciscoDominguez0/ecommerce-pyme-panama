@@ -472,6 +472,21 @@
     html.sidebar-collapsed #admin-sidebar .submenu-container .sidebar-active-item::after {
         display: none !important;
     }
+
+    /* Animación de campana sonando / repique */
+    @keyframes bell-ring {
+        0%, 100% { transform: rotate(0); }
+        15% { transform: rotate(14deg); }
+        30% { transform: rotate(-14deg); }
+        45% { transform: rotate(10deg); }
+        60% { transform: rotate(-10deg); }
+        75% { transform: rotate(4deg); }
+        85% { transform: rotate(-4deg); }
+    }
+    .animate-bell-ring {
+        animation: bell-ring 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        transform-origin: top center;
+    }
 </style>
 
 <!-- Dark Mode Initializer -->

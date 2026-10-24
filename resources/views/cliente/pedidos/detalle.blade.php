@@ -283,8 +283,8 @@
         </div>
 
         {{-- CARD 5: Productos del Pedido con Comentarios y Reseñas Incorporadas Profesionalemente --}}
-        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
-            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-4 mb-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-4 sm:p-8 shadow-xs">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-3 sm:pb-4 mb-5 sm:mb-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <span class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-emerald-600 text-[22px]">shopping_bag</span>
                     <span>Productos del Pedido</span>
@@ -299,27 +299,35 @@
                         $valoracion = isset($valoracionesPorProducto) ? $valoracionesPorProducto->get($item->producto_id) : null;
                     @endphp
 
-                    <div class="py-5 first:pt-0 last:pb-0 flex flex-col gap-4">
-                        {{-- Fila del producto: Imagen, info y precio --}}
-                        <div class="flex items-start justify-between gap-4">
-                            <div class="flex items-center gap-4 min-w-0">
-                                <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 overflow-hidden flex items-center justify-center shrink-0">
-                                    @if($item->imagen_url)
-                                        <img src="{{ $item->imagen_url }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
-                                    @else
-                                        <span class="material-symbols-outlined text-slate-400 text-2xl">inventory_2</span>
-                                    @endif
-                                </div>
+                    <div class="py-4 sm:py-5 first:pt-0 last:pb-0 flex flex-col gap-4">
+                        {{-- Fila del producto: Imagen, info y precio totalmente adaptativo a móviles --}}
+                        <div class="flex items-start gap-3.5 sm:gap-4">
+                            {{-- Miniatura del producto fija y proporcionada --}}
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 overflow-hidden flex items-center justify-center shrink-0">
+                                @if($item->imagen_url)
+                                    <img src="{{ $item->imagen_url }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
+                                @else
+                                    <span class="material-symbols-outlined text-slate-400 text-2xl">inventory_2</span>
+                                @endif
+                            </div>
 
-                                <div class="min-w-0">
-                                    <h4 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white line-clamp-2">
-                                        {{ $item->producto?->nombre ?? 'Producto no disponible' }}
+                            {{-- Información del producto y precios --}}
+                            <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4">
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+                                        @if($item->producto)
+                                            <a href="{{ route('cliente.catalogo.detalle', $item->producto->slug) }}" wire:navigate class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                                                {{ $item->producto->nombre }}
+                                            </a>
+                                        @else
+                                            <span>Producto no disponible</span>
+                                        @endif
                                     </h4>
                                     
                                     @if($item->variante && $item->variante->opciones->isNotEmpty())
-                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 flex flex-wrap gap-x-2.5 gap-y-0.5">
                                             @foreach($item->variante->opciones as $opcion)
-                                                <span class="inline-block mr-2.5">{{ $opcion->tipo->nombre }}: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ $opcion->valor }}</span></span>
+                                                <span>{{ $opcion->tipo->nombre }}: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ $opcion->valor }}</span></span>
                                             @endforeach
                                         </p>
                                     @endif
@@ -328,17 +336,18 @@
                                         Cantidad: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ $item->cantidad }}</span>
                                     </p>
                                 </div>
-                            </div>
 
-                            <div class="text-right shrink-0">
-                                <span class="text-sm sm:text-base font-black text-slate-900 dark:text-white block">
-                                    ${{ number_format($item->subtotal, 2) }}
-                                </span>
-                                @if($item->cantidad > 1)
-                                    <span class="text-xs text-slate-400 block mt-0.5">
-                                        ${{ number_format($item->precio_unitario, 2) }} c/u
+                                {{-- Precio: en móvil se alinea con claridad y en desktop a la derecha --}}
+                                <div class="mt-1 sm:mt-0 flex sm:flex-col items-baseline sm:items-end justify-between sm:justify-start gap-1 sm:text-right shrink-0 pt-0.5 sm:pt-0 border-t sm:border-0 border-slate-100 dark:border-slate-800/60">
+                                    <span class="text-sm sm:text-base font-black text-slate-900 dark:text-white block">
+                                        ${{ number_format($item->subtotal, 2) }}
                                     </span>
-                                @endif
+                                    @if($item->cantidad > 1)
+                                        <span class="text-[11px] sm:text-xs text-slate-400 block sm:mt-0.5">
+                                            ${{ number_format($item->precio_unitario, 2) }} c/u
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
 
@@ -702,22 +711,6 @@
             }
         }">
 
-            <!-- Tarjeta limpia y discreta en la página -->
-            <template x-if="evaluado">
-                <div class="flex items-center justify-between p-4 sm:p-5 rounded-3xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/50 shadow-2xs">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
-                            <span class="material-symbols-outlined text-[20px]">verified</span>
-                        </div>
-                        <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-200">¡Calificación registrada!</h4>
-                            <p class="text-[11px] text-emerald-700 dark:text-emerald-400 mt-0.5">
-                                Calificaste tu experiencia con <strong x-text="puntuacion + ' de 5 estrellas'"></strong> (<span x-text="etiquetas[puntuacion]"></span>).
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </template>
 
             <template x-if="!evaluado">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-3xl bg-white dark:bg-[#1f2327] border border-slate-200/90 dark:border-slate-800 shadow-xs">

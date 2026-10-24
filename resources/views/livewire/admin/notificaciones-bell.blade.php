@@ -1,34 +1,80 @@
 <div class="relative shrink-0" 
-     x-data="{ open: false }" 
-     @click.outside="open = false"
-     @nueva-notificacion-recibida.window="
-         let audio = document.getElementById('notification-sound');
-         if (audio) {
-             audio.play().catch(e => {});
+     x-data="{ 
+         open: false,
+         repicando: false,
+         sonarCampana() {
+             this.repicando = true;
+             setTimeout(() => { this.repicando = false; }, 1500);
+
+             try {
+                 let audio = document.getElementById('notification-sound');
+                 if (!audio) {
+                     audio = new Audio('{{ asset('sounds/Notificacion.mp3') }}');
+                 }
+                 audio.currentTime = 0;
+                 let playPromise = audio.play();
+                 if (playPromise !== undefined) {
+                     playPromise.catch(err => {
+                         console.warn('Reproducción de audio bloqueada por el navegador (requiere interacción previa):', err);
+                     });
+                 }
+             } catch (e) {
+                 console.warn('Error al reproducir audio de notificación:', e);
+             }
          }
-     "
+     }" 
+     @click.outside="open = false"
+     @nueva-notificacion-recibida.window="sonarCampana()"
      x-init="
+         const desbloquear = () => {
+             const audio = document.getElementById('notification-sound');
+             if (audio) {
+                 audio.load();
+             }
+             window.removeEventListener('click', desbloquear);
+             window.removeEventListener('keydown', desbloquear);
+             window.removeEventListener('touchstart', desbloquear);
+         };
+         window.addEventListener('click', desbloquear, { once: true });
+         window.addEventListener('keydown', desbloquear, { once: true });
+         window.addEventListener('touchstart', desbloquear, { once: true });
+
          const setupEcho = () => {
              if (window.Echo && !window._reverbBound) {
                  window._reverbBound = true;
                  window.Echo.private(`App.Models.Usuario.{{ auth()->id() }}`)
                      .notification((notification) => {
-                         $wire.cargarNotificaciones(true);
+                         sonarCampana();
+                         $wire.cargarNotificaciones(false);
                      });
              }
          };
-         if (window.Echo) { setupEcho(); } 
-         else { document.addEventListener('DOMContentLoaded', setupEcho); }
+
+         if (window.Echo) { 
+             setupEcho(); 
+         } else { 
+             let checkEcho = setInterval(() => {
+                 if (window.Echo) {
+                     clearInterval(checkEcho);
+                     setupEcho();
+                 }
+             }, 200);
+             setTimeout(() => clearInterval(checkEcho), 10000);
+         }
      ">
      
-    <!-- Audio para notificaciones -->
-    <audio id="notification-sound" src="{{ asset('sounds/Notificacion.mp3') }}" preload="auto" style="display: none;"></audio>
+    <!-- Audio para notificaciones con wire:ignore -->
+    <div wire:ignore>
+        <audio id="notification-sound" src="{{ asset('sounds/Notificacion.mp3') }}" preload="auto" style="display: none;"></audio>
+    </div>
+
     <!-- Notifications Toggle Button -->
     <button @click="open = !open" 
             class="relative p-1.5 rounded-lg transition-colors shrink-0 outline-none"
             :class="open ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800'"
             title="Notificaciones">
-        <span class="material-symbols-outlined text-[20px] transition-transform duration-200" :class="open ? 'scale-110' : ''">
+        <span class="material-symbols-outlined text-[20px] transition-transform duration-200 inline-block" 
+              :class="{ 'scale-110': open, 'animate-bell-ring text-emerald-500': repicando }">
             notifications
         </span>
         @if($conteoNoLeidas > 0)

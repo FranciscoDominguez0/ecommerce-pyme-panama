@@ -19,16 +19,14 @@ class NotificacionesBell extends Component
 
 
 
-    public function cargarNotificaciones($playAudio = true)
+    public function cargarNotificaciones($playAudio = false)
     {
         $user = Auth::user();
         if ($user) {
-            $conteoAnterior = $this->conteoNoLeidas;
-            
             $this->notificaciones = $user->unreadNotifications()->take(15)->get();
             $this->conteoNoLeidas = $user->unreadNotifications()->count();
             
-            if ($playAudio && $this->conteoNoLeidas > $conteoAnterior) {
+            if ($playAudio) {
                 $this->dispatch('nueva-notificacion-recibida');
             }
 

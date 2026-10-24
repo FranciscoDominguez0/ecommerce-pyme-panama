@@ -31,8 +31,8 @@ class StockMinimoNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        // Guardamos en la base de datos para los usuarios registrados del panel
-        $canales = $notifiable instanceof AnonymousNotifiable ? [] : ['database'];
+        // Guardamos en la base de datos y emitimos por broadcast para los usuarios registrados del panel
+        $canales = $notifiable instanceof AnonymousNotifiable ? [] : ['database', 'broadcast'];
         
         $activo = Configuracion::obtenerBool('notificaciones.stock.email.activo', false);
         if ($activo) {

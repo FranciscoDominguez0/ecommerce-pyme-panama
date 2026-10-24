@@ -34,6 +34,9 @@ if ($uri !== '/' && file_exists($publicPath.$uri) && !is_dir($publicPath.$uri)) 
         'woff' => 'font/woff',
         'ttf' => 'font/ttf',
         'otf' => 'font/otf',
+        'mp3' => 'audio/mpeg',
+        'wav' => 'audio/wav',
+        'ogg' => 'audio/ogg',
     ];
 
     if (preg_match('#^/build/assets/.*\.(js|css)$#', $uri)) {
@@ -41,6 +44,9 @@ if ($uri !== '/' && file_exists($publicPath.$uri) && !is_dir($publicPath.$uri)) 
         $cacheControl = 'public, max-age=31536000, immutable';
     } elseif (preg_match('#\.(woff2?|ttf|otf|eot)(\?.*)?$#', $uri)) {
         // Fuentes locales: 1 semana
+        $cacheControl = 'public, max-age=604800';
+    } elseif (preg_match('#\.(mp3|wav|ogg)$#', $uri)) {
+        // Audio de notificaciones y efectos: 1 semana
         $cacheControl = 'public, max-age=604800';
     } elseif (preg_match('#^/(storage|uploads)/.*\.(svg|png|jpe?g|gif|webp|ico)$#', $uri)) {
         // Contenido subido por usuarios: 1 día (puede cambiar)

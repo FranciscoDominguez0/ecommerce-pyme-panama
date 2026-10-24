@@ -46,33 +46,18 @@
 @section('content')
     <div class="space-y-6 max-w-[1600px] mx-auto">
 
-        <!-- Navegación entre Pestañas de Reportes -->
-        <div class="flex items-center gap-2 border-b border-slate-200 dark:border-gray-700/80 pb-3">
-            <a href="{{ route('admin.reportes.index') }}" 
-               class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 text-white shadow-xs">
-                <span class="material-symbols-outlined text-[18px]">query_stats</span>
-                <span>Ventas y Negocio</span>
-            </a>
-            <a href="{{ route('admin.reportes.usabilidad') }}" 
-               class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                <span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
-                <span>Experiencia del Cliente</span>
-            </a>
-        </div>
-
         <!-- Header y Filtros -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700 dark:border-gray-700/80">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
             <div>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white dark:text-white tracking-tight">Reportes Avanzados</h2>
-                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 dark:text-slate-400 font-medium mt-0.5">Métricas clave e inteligencia de negocio.
-                </p>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Reportes Avanzados</h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Métricas clave e inteligencia de negocio.</p>
             </div>
 
             <form method="GET" action="{{ route('admin.reportes.index') }}"
                 class="flex flex-wrap items-center gap-3 w-full sm:w-auto" id="form-filtros">
                 <div class="relative">
                     <select name="tipo"
-                        class="pl-8 pr-8 py-1.5 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 dark:border-gray-700 text-slate-700 dark:text-slate-300 dark:text-slate-300 text-xs font-semibold rounded-lg focus:ring-emerald-500 focus:border-emerald-500 appearance-none shadow-xs cursor-pointer"
+                        class="pl-8 pr-8 py-1.5 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-lg focus:ring-emerald-500 focus:border-emerald-500 appearance-none shadow-xs cursor-pointer"
                         onchange="document.getElementById('form-filtros').submit()">
                         <option value="mes" {{ $tipoFiltro === 'mes' ? 'selected' : '' }}>Este mes</option>
                         <option value="año" {{ $tipoFiltro === 'año' ? 'selected' : '' }}>Este año</option>
@@ -87,6 +72,20 @@
                     <x-btn-exportar excel-onclick="exportar('excel')" pdf-onclick="exportar('pdf')" />
                 </div>
             </form>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-slate-200 dark:border-gray-700 gap-6">
+            <a href="{{ route('admin.reportes.index') }}" 
+               class="pb-3 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">query_stats</span>
+                <span>Ventas y Negocio</span>
+            </a>
+            <a href="{{ route('admin.reportes.usabilidad') }}" 
+               class="pb-3 text-xs font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">sentiment_satisfied</span>
+                <span>Experiencia del Cliente</span>
+            </a>
         </div>
 
         <!-- KPIs Principales -->

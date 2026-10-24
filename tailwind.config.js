@@ -75,6 +75,7 @@ export default {
             },
 
             spacing: {
+                '18': '4.5rem',
                 'gutter': '24px',
                 'container-max': '1200px',
                 'margin-desktop': '64px',
