@@ -1,669 +1,773 @@
 @extends('layouts.cliente')
 
-@section('title', 'Detalle del Pedido')
+@section('title', 'Rastreo del Pedido ' . $pedido->numero_pedido)
 
 @section('content')
-<div class="min-h-[calc(100vh-160px)] bg-surface/50 py-6 md:py-8">
-    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-    
-    @if(session('pedido_creado_animacion'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-md" x-transition.opacity.duration.500ms>
-        <div class="bg-surface rounded-3xl p-10 flex flex-col items-center justify-center max-w-sm w-full mx-4 shadow-2xl" x-show="show" x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 scale-50 translate-y-10" x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-            <!-- SVG Checkmark Animado -->
-            <div class="relative w-28 h-28 mb-6 text-secondary">
-                <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-lg" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="50" cy="50" r="45" stroke-dasharray="300" stroke-dashoffset="300" style="animation: animCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;"></circle>
-                    <path d="M 30 50 L 45 65 L 70 35" stroke-dasharray="100" stroke-dashoffset="100" style="animation: animCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards; animation-delay: 0.4s;"></path>
-                </svg>
+<div id="area-detalle-web" class="min-h-[calc(100vh-160px)] bg-slate-50/70 dark:bg-[#121415] py-8 sm:py-10">
+    <div class="w-full max-w-4xl lg:max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+
+        {{-- Animación de compra confirmada (si viene desde checkout) --}}
+        @if(session('pedido_creado_animacion'))
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-md" x-transition.opacity.duration.500ms>
+            <div class="bg-white dark:bg-[#1f2327] rounded-3xl p-8 sm:p-10 flex flex-col items-center justify-center max-w-sm w-full mx-4 shadow-2xl text-center">
+                <div class="relative w-24 h-24 mb-5 text-emerald-500">
+                    <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="50" cy="50" r="45" stroke-dasharray="300" stroke-dashoffset="300" style="animation: animCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;"></circle>
+                        <path d="M 30 50 L 45 65 L 70 35" stroke-dasharray="100" stroke-dashoffset="100" style="animation: animCheck 0.5s cubic-bezier(0.65, 0, 0.45, 1) forwards; animation-delay: 0.4s;"></path>
+                    </svg>
+                </div>
+                <style>
+                    @keyframes animCircle { to { stroke-dashoffset: 0; } }
+                    @keyframes animCheck { to { stroke-dashoffset: 0; } }
+                </style>
+                <h2 class="text-xl font-extrabold text-slate-900 dark:text-white mb-1.5">¡Pedido Confirmado!</h2>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Tu orden ha sido registrada exitosamente en nuestro sistema.</p>
             </div>
-            <style>
-                @keyframes animCircle { to { stroke-dashoffset: 0; } }
-                @keyframes animCheck { to { stroke-dashoffset: 0; } }
-            </style>
-            
-            <h2 class="text-2xl font-bold text-on-surface mb-2 text-center" x-show="show" x-transition:enter="transition ease-out duration-500 delay-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">¡Pedido Confirmado!</h2>
-            <p class="text-on-surface-variant text-center" x-show="show" x-transition:enter="transition ease-out duration-500 delay-400" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0">Tu orden ha sido procesada exitosamente.</p>
         </div>
-    </div>
-    <script>
-        (function() {
-            if (window.gtagEcommerce) {
-                window.gtagEcommerce.purchase({
-                    id: '{{ $pedido->numero_pedido ?? $pedido->id }}',
-                    total: {{ number_format((float)$pedido->total, 2, '.', '') }},
-                    tax: {{ number_format((float)($pedido->itbms_monto ?? 0), 2, '.', '') }},
-                    shipping: {{ number_format((float)($pedido->costo_envio ?? 0), 2, '.', '') }},
-                    coupon: '{{ $pedido->cupon?->codigo ?? "" }}',
-                    items: [
-                        @foreach($pedido->items as $item)
-                        {
-                            item_id: '{{ $item->producto_id }}',
-                            item_name: @json($item->producto?->nombre ?? 'Producto'),
-                            price: {{ number_format((float)$item->precio_unitario, 2, '.', '') }},
-                            quantity: {{ (int)$item->cantidad }}
-                        }@if(!$loop->last),@endif
-                        @endforeach
-                    ]
-                });
-            }
-        })();
-    </script>
-    @endif
+        <script>
+            (function() {
+                if (window.gtagEcommerce) {
+                    window.gtagEcommerce.purchase({
+                        id: '{{ $pedido->numero_pedido ?? $pedido->id }}',
+                        total: {{ number_format((float)$pedido->total, 2, '.', '') }},
+                        tax: {{ number_format((float)($pedido->itbms_monto ?? 0), 2, '.', '') }},
+                        shipping: {{ number_format((float)($pedido->costo_envio ?? 0), 2, '.', '') }},
+                        coupon: '{{ $pedido->cupon?->codigo ?? "" }}',
+                        items: [
+                            @foreach($pedido->items as $item)
+                            {
+                                item_id: '{{ $item->producto_id }}',
+                                item_name: @json($item->producto?->nombre ?? 'Producto'),
+                                price: {{ number_format((float)$item->precio_unitario, 2, '.', '') }},
+                                quantity: {{ (int)$item->cantidad }}
+                            }{{ $loop->last ? '' : ',' }}
+                            @endforeach
+                        ]
+                    });
+                }
+            })();
+        </script>
+        @endif
 
-    @php
-        $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
+        @php
+            $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
 
-        $configEstado = match($ultimoEstado) {
-            'entregado' => [
-                'badge_bg' => 'bg-secondary/10',
-                'badge_text' => 'text-secondary',
-                'icon' => 'check_circle',
-                'label' => 'Entregado',
-            ],
-            'enviado' => [
-                'badge_bg' => 'bg-secondary/10',
-                'badge_text' => 'text-secondary',
-                'icon' => 'local_shipping',
-                'label' => 'En tránsito',
-            ],
-            'pendiente', 'pago_confirmado', 'en_preparacion', 'listo_para_envio' => [
-                'badge_bg' => 'bg-tertiary-container/20',
-                'badge_text' => 'text-tertiary',
-                'icon' => 'schedule',
-                'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
-            ],
-            'cancelado', 'pago_rechazado', 'devolucion_solicitada' => [
-                'badge_bg' => 'bg-primary/10',
-                'badge_text' => 'text-primary',
-                'icon' => 'flag',
-                'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
-            ],
-            'reembolsado' => [
-                'badge_bg' => 'bg-slate-100',
-                'badge_text' => 'text-slate-800',
-                'icon' => 'currency_exchange',
-                'label' => 'Reembolsado',
-            ],
-            default => [
-                'badge_bg' => 'bg-surface-container-high',
-                'badge_text' => 'text-on-surface',
-                'icon' => 'info',
-                'label' => ucfirst(str_replace('_', ' ', $ultimoEstado)),
-            ],
-        };
+            // Configuración visual del estado y del porcentaje de avance
+            $configEstado = match($ultimoEstado) {
+                'entregado' => [
+                    'label' => 'Entregado',
+                    'dot' => 'bg-emerald-500',
+                    'badge' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
+                    'progress_step' => 4,
+                    'progress_pct' => 100,
+                ],
+                'enviado', 'en_transito' => [
+                    'label' => 'En camino',
+                    'dot' => 'bg-blue-500',
+                    'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/60',
+                    'progress_step' => 3,
+                    'progress_pct' => 75,
+                ],
+                'listo_para_envio', 'en_preparacion' => [
+                    'label' => 'En preparación',
+                    'dot' => 'bg-amber-500',
+                    'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
+                    'progress_step' => 2,
+                    'progress_pct' => 50,
+                ],
+                'pago_confirmado' => [
+                    'label' => 'Pago confirmado',
+                    'dot' => 'bg-teal-500',
+                    'badge' => 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 border border-teal-200/80 dark:border-teal-800/60',
+                    'progress_step' => 2,
+                    'progress_pct' => 50,
+                ],
+                'cancelado' => [
+                    'label' => 'Cancelado',
+                    'dot' => 'bg-rose-500',
+                    'badge' => 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
+                    'progress_step' => 1,
+                    'progress_pct' => 15,
+                ],
+                'reembolsado' => [
+                    'label' => 'Reembolsado',
+                    'dot' => 'bg-slate-400',
+                    'badge' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700',
+                    'progress_step' => 1,
+                    'progress_pct' => 15,
+                ],
+                default => [
+                    'label' => 'Pendiente',
+                    'dot' => 'bg-amber-500',
+                    'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
+                    'progress_step' => 1,
+                    'progress_pct' => 20,
+                ],
+            };
 
-        $metodosPago = [
-            'stripe' => ['icon' => 'credit_card', 'label' => 'Tarjeta de crédito / débito'],
-            'yappy' => ['icon' => 'yappy', 'label' => 'Yappy'],
-            'transferencia' => ['icon' => 'account_balance', 'label' => 'Transferencia bancaria'],
-            'contra_entrega' => ['icon' => 'local_shipping', 'label' => 'Pago contra entrega'],
-        ];
-        $pagoInfo = $metodosPago[$pedido->metodo_pago] ?? ['icon' => 'payment', 'label' => ucfirst(str_replace('_', ' ', $pedido->metodo_pago))];
-    @endphp
+            // Fechas de hitos
+            $fechaCreado = $pedido->creado_en;
+            $fechaConfirmado = $estadosOrdenados->firstWhere('estado', 'pago_confirmado')?->creado_en ?? ($estadosOrdenados->firstWhere('estado', 'en_preparacion')?->creado_en);
+            $fechaEnviado = $estadosOrdenados->firstWhere('estado', 'enviado')?->creado_en ?? ($estadosOrdenados->firstWhere('estado', 'en_transito')?->creado_en);
+            $fechaEntregado = $estadosOrdenados->firstWhere('estado', 'entregado')?->creado_en;
 
-    <!-- Encabezado -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            $paso2Completado = $configEstado['progress_step'] >= 2;
+            $paso3Completado = $configEstado['progress_step'] >= 3;
+            $paso4Completado = $configEstado['progress_step'] >= 4;
+        @endphp
+
+        {{-- Encabezado Principal --}}
         <div>
-            <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-label-caps text-xs font-bold tracking-wider uppercase mb-2">
-                <span class="material-symbols-outlined text-sm">arrow_back</span>
-                Volver a mis pedidos
+            <a href="{{ route('cliente.perfil.pedidos.index') }}" wire:navigate 
+               class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors uppercase tracking-wider mb-2.5">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                <span>Volver a mis pedidos</span>
             </a>
-            <div class="flex items-center gap-3">
-                <h1 class="text-xl md:text-2xl font-bold text-primary">Pedido {{ $pedido->numero_pedido }}</h1>
-            </div>
-            <p class="text-sm text-on-surface-variant mt-1">Realizado el {{ $pedido->creado_en->translatedFormat('d \d\e F, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Rastreo de tu Pedido</h1>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Consulta el avance logístico, detalles de envío y artículos incluidos en tu compra.
+            </p>
         </div>
-        <div class="flex flex-col items-end gap-3">
-            @if($pedido->factura)
-                <a href="{{ route('cliente.facturas.pdf', $pedido->factura->id) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-surface text-primary border border-primary text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary/5 transition-colors shadow-sm">
-                    <span class="material-symbols-outlined text-[16px]">receipt_long</span>
-                    Descargar Recibo
-                </a>
-            @endif
 
-            @if(in_array($ultimoEstado, ['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'en_transito', 'entregado']) && $ultimoEstado !== 'reembolsado')
-                @if(!$pedido->devolucion)
-                    <a href="{{ route('cliente.perfil.pedidos.devolucion.create', $pedido->id) }}" wire:navigate class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-primary-container transition-colors shadow-sm">
-                        <span class="material-symbols-outlined text-[16px]">assignment_return</span>
-                        Solicitar Devolución / Reembolso
-                    </a>
-                @else
-                    <span class="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface-variant text-xs font-bold uppercase tracking-wider rounded-lg border border-outline-variant/30">
-                        <span class="material-symbols-outlined text-[16px]">info</span>
-                        Devolución Solicitada
-                    </span>
-                @endif
-            @endif
-        </div>
-    </div>
-
-    @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
-        <div class="mb-8 p-5 rounded-2xl bg-slate-100 border border-slate-200 text-slate-800 flex items-start gap-4 shadow-xs">
-            <span class="material-symbols-outlined text-slate-700 text-3xl shrink-0 mt-0.5">currency_exchange</span>
+        {{-- Banner de Reembolso (si aplica) --}}
+        @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
+        <div class="p-5 rounded-2xl bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 flex items-start gap-4">
+            <span class="material-symbols-outlined text-slate-700 dark:text-slate-300 text-2xl shrink-0 mt-0.5">currency_exchange</span>
             <div>
-                <h3 class="text-base font-bold text-slate-900">Reembolso Procesado</h3>
-                <p class="text-sm text-slate-600 mt-1 leading-relaxed">
-                    Este pedido fue reembolsado por un monto total de <span class="font-bold text-slate-900">${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }} USD</span> a tu método de pago original con <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" class="h-4 inline-block align-text-bottom ml-1">.
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Reembolso Procesado</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    Este pedido fue reembolsado por un monto de <span class="font-bold text-slate-900 dark:text-white">${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }} USD</span> a tu método de pago original.
                 </p>
             </div>
         </div>
-    @endif
+        @endif
 
-    <!-- Grid principal -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <!-- Columna izquierda -->
-        <div class="col-span-1 md:col-span-8 flex flex-col gap-6">
-
-            <!-- Estado y línea de tiempo -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                <div class="flex justify-between items-center mb-6 pb-4 border-b border-outline-variant/50">
-                    <h2 class="text-sm font-bold text-primary">Estado del envío</h2>
-                    <span class="{{ $configEstado['badge_bg'] }} {{ $configEstado['badge_text'] }} px-3 py-1 rounded-full font-label-caps text-xs font-bold tracking-wider flex items-center gap-2 uppercase">
-                        <span class="material-symbols-outlined text-sm">{{ $configEstado['icon'] }}</span>
-                        {{ $configEstado['label'] }}
-                    </span>
+        {{-- CARD 1: Pedido Actual y Botones de Acción (Sin badge al lado del número) --}}
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Pedido {{ $pedido->numero_pedido }}</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[15px] text-slate-400">calendar_today</span>
+                        <span>Realizado el {{ $pedido->creado_en->translatedFormat('d \d\e F, Y') }} a las {{ $pedido->creado_en->format('h:i A') }}</span>
+                    </p>
                 </div>
 
-                @if($pedido->zonaEnvio || $pedido->numero_pedido)
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 bg-surface-container-low p-4 rounded-lg">
-                    @if($pedido->zonaEnvio)
-                    <div>
-                        <p class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-1">Zona de envío</p>
-                        <p class="text-sm font-semibold text-on-surface">{{ $pedido->zonaEnvio->nombre }}</p>
-                    </div>
-                    @endif
-                    <div>
-                        <p class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-1">Número de pedido</p>
-                        <p class="text-sm font-semibold text-on-surface">{{ $pedido->numero_pedido }}</p>
-                    </div>
-                    <div>
-                        <p class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-1">Costo de envío</p>
-                        <p class="text-sm font-semibold text-secondary">${{ number_format($pedido->costo_envio, 2) }}</p>
-                    </div>
-                </div>
-                @endif
+                {{-- Acciones a la derecha en español --}}
+                <div class="flex flex-wrap items-center gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
+                    @if($pedido->factura)
+                        <a href="{{ route('cliente.facturas.pdf', $pedido->factura->id) }}" target="_blank"
+                           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs">
+                            <span class="material-symbols-outlined text-[16px]">download</span>
+                            <span>Descargar Factura</span>
+                        </a>
 
-                @if($estadosOrdenados->isNotEmpty())
-                <div class="relative pl-6 border-l-2 border-surface-variant space-y-6">
-                    @foreach($estadosOrdenados as $historial)
-                        @php
-                            $esActual = $loop->last;
-                            $esProblema = $historial->estado === 'problema_entrega';
-                            $esReembolso = $historial->estado === 'reembolsado';
-                            
-                            if ($esProblema) {
-                                $dotClass = $esActual ? 'bg-red-500 animate-pulse' : 'bg-red-500';
-                                $textClass = 'text-red-600';
-                            } elseif ($esReembolso) {
-                                $dotClass = $esActual ? 'bg-slate-700 animate-pulse' : 'bg-slate-700';
-                                $textClass = 'text-slate-800 font-semibold';
-                            } else {
-                                $dotClass = $esActual
-                                    ? 'bg-tertiary-container animate-pulse'
-                                    : 'bg-secondary';
-                                $textClass = $esActual ? 'text-tertiary' : 'text-on-surface';
-                            }
-                        @endphp
-                        <div class="relative">
-                            <div class="absolute -left-[31px] w-4 h-4 rounded-full {{ $dotClass }} border-4 border-surface-container-lowest"></div>
-                            <div class="flex flex-col">
-                                <p class="text-sm font-semibold {{ $textClass }}">
-                                    {{ ucfirst(str_replace('_', ' ', $historial->estado)) }}
-                                </p>
-                                <p class="text-sm text-on-surface-variant mt-1">
-                                    {{ $historial->creado_en->translatedFormat('d M, Y') }} · {{ $historial->creado_en->format('h:i A') }}
-                                    @if($historial->comentario)
-                                        <br><span class="text-xs opacity-90 mt-1 block">{{ $historial->comentario }}</span>
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                @else
-                <p class="text-on-surface-variant text-sm">Aún no hay actualizaciones registradas para este pedido.</p>
-                @endif
-
-                @if(in_array($ultimoEstado, ['enviado', 'en_transito']))
-                <div class="mt-8 p-6 bg-emerald-50 rounded-xl border border-emerald-200 flex flex-col items-center text-center">
-                    <span class="material-symbols-outlined text-emerald-600 text-3xl mb-2">inventory_2</span>
-                    <h3 class="text-lg font-bold text-emerald-900 mb-1">¿Ya recibiste tu pedido?</h3>
-                    <p class="text-sm text-emerald-700 mb-4 max-w-md">Ayúdanos a confirmar que el paquete llegó correctamente a tus manos.</p>
-                    <form action="{{ route('cliente.perfil.pedidos.confirmar-recepcion', $pedido->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 text-white rounded-full font-bold shadow hover:bg-emerald-700 transition-colors">
-                            <span class="material-symbols-outlined text-sm">thumb_up</span>
-                            Sí, ya recibí mi pedido
+                        <button type="button" onclick="imprimirReciboPdf('{{ route('cliente.facturas.pdf', [$pedido->factura->id, 'modo' => 'inline']) }}')"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">print</span>
+                            <span>Imprimir Recibo</span>
                         </button>
-                    </form>
-                </div>
-                @endif
-            </div>
+                    @endif
 
-            <!-- Banner de valoración cuando el pedido está entregado -->
-            @if($ultimoEstado === 'entregado')
-            <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/5 border border-emerald-200/80 dark:border-emerald-500/20 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
-                <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
-                        <span class="material-symbols-outlined text-[22px]">hotel_class</span>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">¡Tu pedido ha sido entregado exitosamente!</h3>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-                            Tu opinión ayuda a otros compradores. Valora con estrellas tus productos recibidos a continuación.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            @endif
-
-            <!-- Artículos del pedido -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h2 class="text-sm font-bold text-primary">Artículos del pedido</h2>
-                <div class="space-y-6">
-                    @foreach($pedido->items as $item)
-                    @php
-                        $valoracion = isset($valoracionesPorProducto) ? $valoracionesPorProducto->get($item->producto_id) : null;
-                    @endphp
-                    <div class="flex flex-col items-start gap-4 {{ !$loop->last ? 'pb-6 border-b border-outline-variant/50' : '' }}">
-                        <div class="flex flex-col sm:flex-row items-start gap-4 w-full">
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container-low">
-                                @if($item->producto)
-                                    <img src="{{ $item->producto->imagen_url }}" alt="{{ $item->producto->nombre }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center">
-                                        <span class="material-symbols-outlined text-outline-variant">image</span>
-                                    </div>
-                                @endif
-                            </div>
-                            
-                            <div class="flex-1 min-w-0 w-full flex flex-col sm:flex-row justify-between gap-4">
-                                <!-- Info Producto -->
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 flex-wrap">
-                                        <h3 class="text-sm font-semibold text-on-surface line-clamp-2">
-                                            {{ $item->producto?->nombre ?? 'Producto no disponible' }}
-                                        </h3>
-                                    </div>
-                                    @if($item->variante && $item->variante->opciones->isNotEmpty())
-                                        <p class="text-on-surface-variant text-sm mt-1">
-                                            @foreach($item->variante->opciones as $opcion)
-                                                <span class="inline-block mr-2">{{ $opcion->tipo->nombre }}: <span class="font-medium text-on-surface">{{ $opcion->valor }}</span></span>
-                                            @endforeach
-                                        </p>
-                                    @endif
-                                    
-                                    <!-- Precio y Cantidad Mobile -->
-                                    <div class="mt-2 sm:hidden flex items-center justify-between">
-                                        <p class="text-on-surface-variant text-sm">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }}</p>
-                                        <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- Precio y Cantidad Desktop -->
-                                <div class="hidden sm:flex flex-col items-end gap-1 min-w-[120px]">
-                                    <p class="text-sm font-bold text-primary">${{ number_format($item->subtotal, 2) }}</p>
-                                    <p class="text-on-surface-variant text-xs">{{ $item->cantidad }} x ${{ number_format($item->precio_unitario, 2) }} c/u</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sección de Valoración para productos entregados -->
-                        @if($ultimoEstado === 'entregado' && $item->producto)
-                        <div x-data="{
-                            abierto: false,
-                            calificacion: {{ $valoracion?->calificacion ?? 5 }},
-                            hoverCalificacion: 0,
-                            etiquetas: {1: 'Muy malo', 2: 'Malo', 3: 'Regular', 4: 'Bueno', 5: '¡Excelente!'}
-                        }" class="w-full pt-3 border-t border-slate-100 dark:border-gray-700/60">
-
-                            @if($valoracion)
-                                <!-- Valoración registrada por el cliente -->
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-50/60 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/20 rounded-xl p-3.5">
-                                    <div class="space-y-1">
-                                        <div class="flex items-center gap-2">
-                                            <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 dark:text-emerald-400">
-                                                <span class="material-symbols-outlined text-[15px]">verified</span>
-                                                <span>Tu valoración</span>
-                                            </span>
-                                            <div class="flex items-center text-amber-400">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    <span class="material-symbols-outlined star-filled text-[17px] {{ $i <= $valoracion->calificacion ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600' }}"
-                                                          style="{{ $i <= $valoracion->calificacion ? "font-variation-settings: 'FILL' 1;" : "font-variation-settings: 'FILL' 0;" }}">star</span>
-                                                @endfor
-                                            </div>
-                                            <span class="text-[11px] font-bold text-slate-600 dark:text-slate-400">({{ $valoracion->calificacion }}/5)</span>
-                                        </div>
-
-                                        @if($valoracion->titulo)
-                                            <h4 class="text-xs font-bold text-slate-800 dark:text-gray-200">{{ $valoracion->titulo }}</h4>
-                                        @endif
-
-                                        @if($valoracion->comentario)
-                                            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{{ $valoracion->comentario }}</p>
-                                        @endif
-
-                                        <p class="text-[10px] text-slate-400">Publicado el {{ $valoracion->creado_en->translatedFormat('d M, Y') }}</p>
-                                    </div>
-
-                                    <button type="button" 
-                                            @click="abierto = !abierto" 
-                                            class="self-start sm:self-auto inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-gray-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#181a1b] hover:border-emerald-500 transition-colors shrink-0">
-                                        <span class="material-symbols-outlined text-[14px]">edit</span>
-                                        <span x-text="abierto ? 'Cerrar edición' : 'Editar opinión'">Editar opinión</span>
-                                    </button>
-                                </div>
-                            @else
-                                <!-- Botón para abrir el formulario de valoración -->
-                                <div class="flex items-center justify-between" x-show="!abierto">
-                                    <span class="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                                        <span class="material-symbols-outlined text-amber-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
-                                        <span>¿Recibiste este artículo? ¡Valora su calidad!</span>
-                                    </span>
-                                    <button type="button" 
-                                            @click="abierto = true" 
-                                            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all shadow-2xs">
-                                        <span class="material-symbols-outlined text-[15px]">rate_review</span>
-                                        <span>Valorar producto</span>
-                                    </button>
-                                </div>
-                            @endif
-
-                            <!-- Formulario interactivo para registrar o editar valoración -->
-                            <div x-show="abierto" x-cloak class="mt-3 bg-slate-50 dark:bg-transparent/60 border border-slate-200 dark:border-gray-700 rounded-2xl p-4 sm:p-5 space-y-4" x-transition>
-                                <div class="flex items-center justify-between border-b border-slate-200/80 dark:border-gray-700 pb-3">
-                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                                        <span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                                        <span>{{ $valoracion ? 'Modificar valoración' : 'Escribir tu valoración' }}</span>
-                                    </h4>
-                                    <button type="button" @click="abierto = false" class="text-slate-400 hover:text-slate-600 text-xs">
-                                        <span class="material-symbols-outlined text-[18px]">close</span>
-                                    </button>
-                                </div>
-
-                                <form action="{{ route('cliente.perfil.pedidos.valorar', $pedido->id) }}" method="POST" class="space-y-4">
-                                    @csrf
-                                    <input type="hidden" name="producto_id" value="{{ $item->producto_id }}">
-                                    <input type="hidden" name="calificacion" :value="calificacion">
-
-                                    <!-- Selector interactivo de estrellas tocándolas y con relleno amarillo -->
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                                            Calificación general <span class="text-rose-500">*</span>
-                                        </label>
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex items-center gap-1 select-none" @mouseleave="hoverCalificacion = 0">
-                                                <template x-for="i in 5" :key="i">
-                                                    <button type="button" 
-                                                            @mouseenter="hoverCalificacion = i" 
-                                                            @touchstart.prevent="calificacion = i; hoverCalificacion = 0"
-                                                            @pointerdown="calificacion = i; hoverCalificacion = 0"
-                                                            @click.prevent="calificacion = i; hoverCalificacion = 0" 
-                                                            class="p-1 sm:p-1.5 touch-manipulation hover:scale-125 active:scale-95 transition-transform focus:outline-none cursor-pointer"
-                                                            :title="etiquetas[i]">
-                                                        <span class="material-symbols-outlined text-[32px] sm:text-[36px] transition-all leading-none"
-                                                              :class="(hoverCalificacion ? i <= hoverCalificacion : i <= calificacion) ? 'text-amber-400 star-filled drop-shadow-xs' : 'text-slate-300 dark:text-slate-600'"
-                                                              :style="(hoverCalificacion ? i <= hoverCalificacion : i <= calificacion) ? 'font-variation-settings: \'FILL\' 1;' : 'font-variation-settings: \'FILL\' 0;'">
-                                                            star
-                                                        </span>
-                                                    </button>
-                                                </template>
-                                            </div>
-                                            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-[#181a1b] text-slate-700 dark:text-slate-300"
-                                                  x-text="etiquetas[hoverCalificacion || calificacion]"></span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Título de la reseña -->
-                                    <div>
-                                        <label for="titulo-{{ $item->id }}" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                                            Título de tu opinión <span class="text-slate-400 font-normal">(Opcional)</span>
-                                        </label>
-                                        <input type="text" 
-                                               id="titulo-{{ $item->id }}" 
-                                               name="titulo" 
-                                               maxlength="120"
-                                               value="{{ old('titulo', $valoracion?->titulo) }}"
-                                               placeholder="Ej: Excelente calidad, justo lo que esperaba"
-                                               class="w-full text-xs rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-800 dark:text-gray-100 py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">
-                                    </div>
-
-                                    <!-- Comentario sanitizado -->
-                                    <div x-data="{ caracteres: {{ mb_strlen($valoracion?->comentario ?? '') }} }">
-                                        <div class="flex items-center justify-between mb-1">
-                                            <label for="comentario-{{ $item->id }}" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                                Comentario detallado <span class="text-slate-400 font-normal">(Opcional)</span>
-                                            </label>
-                                            <span class="text-[10px] text-slate-400"><span x-text="caracteres"></span> / 1000</span>
-                                        </div>
-                                        <textarea id="comentario-{{ $item->id }}" 
-                                                  name="comentario" 
-                                                  rows="3" 
-                                                  maxlength="1000"
-                                                  @input="caracteres = $el.value.length"
-                                                  placeholder="Cuéntanos sobre el producto, funcionamiento o tu experiencia de uso..."
-                                                  class="w-full text-xs rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-800 dark:text-gray-100 py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">{{ old('comentario', $valoracion?->comentario) }}</textarea>
-                                    </div>
-
-                                    <!-- Botones de acción -->
-                                    <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-200/80 dark:border-gray-700">
-                                        <button type="button" @click="abierto = false" class="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-gray-700 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent transition-colors">
-                                            Cancelar
-                                        </button>
-                                        <button type="submit" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer">
-                                            <span class="material-symbols-outlined text-[15px]">send</span>
-                                            <span>{{ $valoracion ? 'Actualizar valoración' : 'Publicar valoración' }}</span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div>
+                    @if(in_array($ultimoEstado, ['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'en_transito', 'entregado']) && $ultimoEstado !== 'reembolsado')
+                        @if(!$pedido->devolucion)
+                            <a href="{{ route('cliente.perfil.pedidos.devolucion.create', $pedido->id) }}" wire:navigate
+                               class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs">
+                                <span class="material-symbols-outlined text-[16px]">assignment_return</span>
+                                <span>Solicitar Devolución</span>
+                            </a>
                         @endif
-
-                    </div>
-                    @endforeach
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Columna derecha -->
-        <div class="col-span-1 md:col-span-4 flex flex-col gap-6">
+        {{-- CARD 2: Progreso de Entrega (Delivery Progress con barra superior gruesa y 4 hitos en español) --}}
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Progreso de Entrega</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                @if($ultimoEstado === 'entregado')
+                    Entrega finalizada con éxito el {{ $fechaEntregado ? $fechaEntregado->format('d/m/Y') : $pedido->creado_en->format('d/m/Y') }}
+                @else
+                    Fecha estimada de entrega: {{ $pedido->creado_en->addDays(3)->format('d/m/Y') }}
+                @endif
+            </p>
 
-            <!-- Resumen -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8 shadow-[0_4px_20px_rgba(0,35,73,0.05)]">
-                <h2 class="text-sm font-bold text-primary mb-6">Resumen del pedido</h2>
-                <div class="space-y-2 mb-6">
-                    <div class="flex justify-between text-on-surface-variant text-sm">
-                        <span>Subtotal ({{ $totalArticulos }} {{ $totalArticulos === 1 ? 'artículo' : 'artículos' }})</span>
-                        <span class="font-numeric-data font-semibold">${{ number_format($pedido->subtotal, 2) }}</span>
+            {{-- Barra de progreso horizontal superior gruesa --}}
+            <div class="mt-6 mb-8 w-full bg-slate-200 dark:bg-slate-800 h-2 sm:h-2.5 rounded-full overflow-hidden">
+                <div class="h-full bg-slate-900 dark:bg-emerald-500 rounded-full transition-all duration-700" 
+                     style="width: {{ $configEstado['progress_pct'] }}%;"></div>
+            </div>
+
+            {{-- 4 Hitos debajo de la barra con círculos e iconos en español --}}
+            <div class="grid grid-cols-4 gap-2 text-center">
+                {{-- 1. Realizado --}}
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">check</span>
                     </div>
+                    <span class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-2.5">Realizado</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaCreado->format('d M') }}</span>
+                </div>
+
+                {{-- 2. Confirmado --}}
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $paso2Completado ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $paso2Completado ? 'check' : 'inventory_2' }}</span>
+                    </div>
+                    <span class="text-xs sm:text-sm font-bold {{ $paso2Completado ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">Confirmado</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaConfirmado ? $fechaConfirmado->format('d M') : '—' }}</span>
+                </div>
+
+                {{-- 3. En camino --}}
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $paso3Completado ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $paso3Completado ? 'check' : 'local_shipping' }}</span>
+                    </div>
+                    <span class="text-xs sm:text-sm font-bold {{ $paso3Completado ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">En camino</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaEnviado ? $fechaEnviado->format('d M') : '—' }}</span>
+                </div>
+
+                {{-- 4. Entregado --}}
+                <div class="flex flex-col items-center">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $paso4Completado ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $paso4Completado ? 'check' : 'package_2' }}</span>
+                    </div>
+                    <span class="text-xs sm:text-sm font-bold {{ $paso4Completado ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">Entregado</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaEntregado ? $fechaEntregado->format('d M') : '—' }}</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- CARD 3: Historial del Pedido (Order Timeline vertical) --}}
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-4 mb-6 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-600 text-[22px]">history</span>
+                <span>Historial del Pedido</span>
+            </h3>
+
+            @if($estadosOrdenados->isNotEmpty())
+                <div class="relative pl-6 sm:pl-8 space-y-7 before:content-[''] before:absolute before:left-3 sm:before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
+                    @foreach($estadosOrdenados as $historial)
+                        @php
+                            $esActual = $loop->last;
+                            $nombreEstado = ucfirst(str_replace('_', ' ', $historial->estado));
+                        @endphp
+                        <div class="relative">
+                            {{-- Checkmark verde --}}
+                            <div class="absolute -left-[27px] sm:-left-[31px] w-6 h-6 rounded-full {{ $esActual ? 'bg-emerald-600 text-white ring-4 ring-emerald-100 dark:ring-emerald-950/60' : 'bg-emerald-500 text-white' }} flex items-center justify-center z-10 shadow-xs">
+                                <span class="material-symbols-outlined text-[14px]">check</span>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">{{ $nombreEstado }}</h4>
+                                    @if($esActual)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300/40">Actual</span>
+                                    @endif
+                                </div>
+                                <span class="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
+                                    {{ $historial->creado_en->translatedFormat('d M, Y') }} · {{ $historial->creado_en->format('h:i A') }}
+                                </span>
+                            </div>
+
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                {{ $historial->comentario ?? 'Estado registrado correctamente en el sistema.' }}
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-xs text-slate-500 dark:text-slate-400">Aún no hay actualizaciones registradas para este pedido.</p>
+            @endif
+
+            {{-- Botón para confirmar recepción si el paquete está en camino --}}
+            @if(in_array($ultimoEstado, ['enviado', 'en_transito']))
+                <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 bg-emerald-50/60 dark:bg-emerald-950/30 p-4 sm:p-5 rounded-2xl border border-emerald-200/80 dark:border-emerald-800/50">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-emerald-600 text-2xl">mark_email_read</span>
+                        <div>
+                            <h4 class="text-xs sm:text-sm font-bold text-emerald-900 dark:text-emerald-300">¿Ya recibiste tu compra?</h4>
+                            <p class="text-[11px] text-emerald-700 dark:text-emerald-400">Confirma la entrega para completar el proceso de despacho.</p>
+                        </div>
+                    </div>
+                    <form action="{{ route('cliente.perfil.pedidos.confirmar-recepcion', $pedido->id) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">thumb_up</span>
+                            <span>Confirmar Recepción</span>
+                        </button>
+                    </form>
+                </div>
+            @endif
+        </div>
+
+        {{-- CARD 4: Información de Rastreo --}}
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-4 mb-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                <span class="material-symbols-outlined text-emerald-600 text-[22px]">local_shipping</span>
+                <span>Información de Rastreo</span>
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-slate-50 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Empresa Logística</span>
+                    <p class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+                        <span>Logística PyME Panamá</span>
+                    </p>
+                    <span class="text-[11px] text-slate-500 font-mono mt-0.5 block">Guía: #{{ $pedido->numero_pedido }}</span>
+                </div>
+
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Estado de Envío</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold {{ $configEstado['badge'] }}">
+                        <span class="w-1.5 h-1.5 rounded-full {{ $configEstado['dot'] }}"></span>
+                        <span>{{ $configEstado['label'] }}</span>
+                    </span>
+                </div>
+
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Última Actualización</span>
+                    <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100">
+                        {{ $pedido->ultimoEstado?->creado_en?->format('d/m/Y · h:i A') ?? 'Reciente' }}
+                    </p>
+                </div>
+
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Zona de Destino</span>
+                    <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100">
+                        {{ $pedido->zonaEnvio?->nombre ?? ($pedido->direccion?->provincia ?? 'Panamá') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {{-- CARD 5: Productos del Pedido con Comentarios y Reseñas Incorporadas Profesionalemente --}}
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-4 mb-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-emerald-600 text-[22px]">shopping_bag</span>
+                    <span>Productos del Pedido</span>
+                </span>
+                <span class="text-xs text-slate-500 dark:text-slate-400 font-semibold">{{ $totalArticulos }} {{ $totalArticulos == 1 ? 'artículo' : 'artículos' }}</span>
+            </h3>
+
+            {{-- Listado de productos --}}
+            <div class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                @foreach($pedido->items as $item)
+                    @php
+                        $valoracion = isset($valoracionesPorProducto) ? $valoracionesPorProducto->get($item->producto_id) : null;
+                        
+                        $itemImg = null;
+                        if ($item->variante && $item->variante->imagen_ruta) {
+                            $itemImg = asset('storage/' . $item->variante->imagen_ruta);
+                        } elseif ($item->producto) {
+                            $itemImg = $item->producto->imagen_url;
+                        }
+                    @endphp
+
+                    <div class="py-5 first:pt-0 last:pb-0 flex flex-col gap-4">
+                        {{-- Fila del producto: Imagen, info y precio --}}
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex items-center gap-4 min-w-0">
+                                <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 overflow-hidden flex items-center justify-center shrink-0">
+                                    @if($itemImg)
+                                        <img src="{{ $itemImg }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
+                                    @else
+                                        <span class="material-symbols-outlined text-slate-400 text-2xl">inventory_2</span>
+                                    @endif
+                                </div>
+
+                                <div class="min-w-0">
+                                    <h4 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white line-clamp-2">
+                                        {{ $item->producto?->nombre ?? 'Producto no disponible' }}
+                                    </h4>
+                                    
+                                    @if($item->variante && $item->variante->opciones->isNotEmpty())
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                            @foreach($item->variante->opciones as $opcion)
+                                                <span class="inline-block mr-2.5">{{ $opcion->tipo->nombre }}: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ $opcion->valor }}</span></span>
+                                            @endforeach
+                                        </p>
+                                    @endif
+
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                        Cantidad: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ $item->cantidad }}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="text-right shrink-0">
+                                <span class="text-sm sm:text-base font-black text-slate-900 dark:text-white block">
+                                    ${{ number_format($item->subtotal, 2) }}
+                                </span>
+                                @if($item->cantidad > 1)
+                                    <span class="text-xs text-slate-400 block mt-0.5">
+                                        ${{ number_format($item->precio_unitario, 2) }} c/u
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        {{-- SECCIÓN PROFESIONAL DE COMENTARIOS Y VALORACIÓN --}}
+                        @if($item->producto)
+                            @if($ultimoEstado === 'entregado')
+                                {{-- Pedido entregado: el cliente PUEDE valorar o editar su valoración --}}
+                                <div x-data="{
+                                    formularioAbierto: false,
+                                    calificacion: {{ $valoracion?->calificacion ?? 5 }},
+                                    hoverCalificacion: 0,
+                                    etiquetas: {1: 'Muy malo', 2: 'Malo', 3: 'Regular', 4: 'Bueno', 5: '¡Excelente!'}
+                                }" class="w-full bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/70 dark:border-slate-800 rounded-2xl p-4 sm:p-5 mt-1">
+                                    
+                                    @if($valoracion)
+                                        {{-- Valoración ya registrada --}}
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                            <div class="space-y-1">
+                                                <div class="flex items-center gap-2">
+                                                    <span class="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 dark:text-emerald-400">
+                                                        <span class="material-symbols-outlined text-[15px]">verified</span>
+                                                        <span>Tu opinión y valoración:</span>
+                                                    </span>
+                                                    <div class="flex items-center text-amber-400">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <span class="material-symbols-outlined text-[18px] {{ $i <= $valoracion->calificacion ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600' }}"
+                                                                  style="{{ $i <= $valoracion->calificacion ? "font-variation-settings: 'FILL' 1;" : "font-variation-settings: 'FILL' 0;" }}">star</span>
+                                                        @endfor
+                                                    </div>
+                                                    <span class="text-xs font-bold text-slate-600 dark:text-slate-400">({{ $valoracion->calificacion }}/5)</span>
+                                                </div>
+
+                                                @if($valoracion->titulo)
+                                                    <h5 class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200">{{ $valoracion->titulo }}</h5>
+                                                @endif
+                                                @if($valoracion->comentario)
+                                                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{{ $valoracion->comentario }}</p>
+                                                @endif
+                                                <p class="text-[10px] text-slate-400">Publicado el {{ $valoracion->creado_en->translatedFormat('d M, Y') }}</p>
+                                            </div>
+
+                                            <button type="button" @click="formularioAbierto = !formularioAbierto"
+                                                    class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:border-emerald-600 transition-colors shrink-0">
+                                                <span class="material-symbols-outlined text-[14px]">edit</span>
+                                                <span x-text="formularioAbierto ? 'Ocultar edición' : 'Editar opinión'">Editar opinión</span>
+                                            </button>
+                                        </div>
+                                    @else
+                                        {{-- Aún no ha calificado --}}
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3" x-show="!formularioAbierto">
+                                            <div>
+                                                <h5 class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                                                    <span class="material-symbols-outlined text-amber-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                                    <span>¿Recibiste este producto? ¡Valora su calidad!</span>
+                                                </h5>
+                                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                                    Comparte tu experiencia con otros compradores sobre la calidad de este artículo.
+                                                </p>
+                                            </div>
+
+                                            <button type="button" @click="formularioAbierto = true"
+                                                    class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-2xs cursor-pointer shrink-0">
+                                                <span class="material-symbols-outlined text-[16px]">rate_review</span>
+                                                <span>Escribir opinión</span>
+                                            </button>
+                                        </div>
+                                    @endif
+
+                                    {{-- Formulario interactivo para registrar o editar valoración --}}
+                                    <div x-show="formularioAbierto" x-cloak class="mt-4 pt-4 border-t border-slate-200/80 dark:border-slate-700 space-y-4" x-transition>
+                                        <div class="flex items-center justify-between">
+                                            <h5 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                                                <span class="material-symbols-outlined text-amber-500 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                                <span>{{ $valoracion ? 'Modificar tu opinión' : 'Escribir comentario y valoración' }}</span>
+                                            </h5>
+                                            <button type="button" @click="formularioAbierto = false" class="text-slate-400 hover:text-slate-600 text-xs">
+                                                <span class="material-symbols-outlined text-[18px]">close</span>
+                                            </button>
+                                        </div>
+
+                                        <form action="{{ route('cliente.perfil.pedidos.valorar', $pedido->id) }}" method="POST" class="space-y-3.5">
+                                             @csrf
+                                            <input type="hidden" name="producto_id" value="{{ $item->producto_id }}">
+                                            <input type="hidden" name="calificacion" :value="calificacion">
+
+                                            {{-- Estrellas amarillas tocables --}}
+                                            <div>
+                                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tu puntuación</label>
+                                                <div class="flex items-center gap-3">
+                                                    <div class="flex items-center gap-1 select-none" @mouseleave="hoverCalificacion = 0">
+                                                        <template x-for="i in 5" :key="i">
+                                                            <button type="button" 
+                                                                    @mouseenter="hoverCalificacion = i" 
+                                                                    @touchstart.prevent="calificacion = i; hoverCalificacion = 0"
+                                                                    @pointerdown="calificacion = i; hoverCalificacion = 0"
+                                                                    @click.prevent="calificacion = i; hoverCalificacion = 0" 
+                                                                    class="p-1 touch-manipulation hover:scale-125 transition-transform cursor-pointer"
+                                                                    :title="etiquetas[i]">
+                                                                <span class="material-symbols-outlined text-[30px] leading-none transition-all"
+                                                                      :class="(hoverCalificacion ? i <= hoverCalificacion : i <= calificacion) ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'"
+                                                                      :style="(hoverCalificacion ? i <= hoverCalificacion : i <= calificacion) ? 'font-variation-settings: \'FILL\' 1;' : 'font-variation-settings: \'FILL\' 0;'">
+                                                                    star
+                                                                </span>
+                                                            </button>
+                                                        </template>
+                                                    </div>
+                                                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300 px-2.5 py-0.5 rounded-full bg-slate-200/80 dark:bg-slate-700"
+                                                          x-text="etiquetas[hoverCalificacion || calificacion]"></span>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label for="titulo-{{ $item->id }}" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                                                    Título de la reseña <span class="text-slate-400 font-normal">(Opcional)</span>
+                                                </label>
+                                                <input type="text" id="titulo-{{ $item->id }}" name="titulo" maxlength="120"
+                                                       value="{{ old('titulo', $valoracion?->titulo) }}"
+                                                       placeholder="Ej: Excelente calidad, 100% recomendado"
+                                                       class="w-full text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-2.5 px-3.5 focus:ring-emerald-500 focus:border-emerald-500">
+                                            </div>
+
+                                            <div>
+                                                <label for="comentario-{{ $item->id }}" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                                                    Comentario detallado <span class="text-slate-400 font-normal">(Opcional)</span>
+                                                </label>
+                                                <textarea id="comentario-{{ $item->id }}" name="comentario" rows="3" maxlength="1000"
+                                                          placeholder="Escribe tu opinión sobre el producto, funciones, diseño o experiencia de compra..."
+                                                          class="w-full text-xs sm:text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 py-2.5 px-3.5 focus:ring-emerald-500 focus:border-emerald-500">{{ old('comentario', $valoracion?->comentario) }}</textarea>
+                                            </div>
+
+                                            <div class="flex items-center justify-end gap-2.5 pt-2 border-t border-slate-200/80 dark:border-slate-700">
+                                                <button type="button" @click="formularioAbierto = false" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 transition-colors">
+                                                    Cancelar
+                                                </button>
+                                                <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-2xs cursor-pointer">
+                                                    {{ $valoracion ? 'Actualizar opinión' : 'Publicar opinión' }}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            @endif
+                        @endif
+
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- Desglose y Resumen de Totales al pie de los productos --}}
+            <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+                <div class="text-xs text-slate-500 dark:text-slate-400">
+                    <span class="font-bold text-slate-700 dark:text-slate-300">{{ $totalArticulos }} artículos</span> incluidos en esta compra.
+                </div>
+
+                <div class="space-y-2 text-right w-full sm:w-72">
+                    <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span>Subtotal</span>
+                        <span class="font-semibold text-slate-700 dark:text-slate-300">${{ number_format($pedido->subtotal, 2) }}</span>
+                    </div>
+
                     @if($pedido->descuento > 0)
-                    <div class="flex justify-between text-secondary text-sm">
-                        <span>Descuento</span>
-                        <span class="font-numeric-data font-semibold">-${{ number_format($pedido->descuento, 2) }}</span>
+                    <div class="flex justify-between text-xs text-emerald-600 dark:text-emerald-400">
+                        <span>
+                            Descuento
+                            @if($pedido->cupon)
+                                ({{ $pedido->cupon->codigo }})
+                            @endif
+                        </span>
+                        <span class="font-bold">-${{ number_format($pedido->descuento, 2) }}</span>
                     </div>
                     @endif
-                    <div class="flex justify-between text-on-surface-variant text-sm">
+
+                    <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
                         <span>Envío</span>
                         @if((float) $pedido->costo_envio === 0.0)
                             <span class="font-semibold text-emerald-600">Gratis</span>
                         @else
-                            <span class="font-numeric-data font-semibold">${{ number_format($pedido->costo_envio, 2) }}</span>
+                            <span class="font-semibold text-slate-700 dark:text-slate-300">${{ number_format($pedido->costo_envio, 2) }}</span>
                         @endif
                     </div>
-                    <div class="flex justify-between text-on-surface-variant text-sm">
-                        <span>ITBMS (7%)</span>
-                        <span class="font-numeric-data font-semibold">${{ number_format($pedido->itbms_monto, 2) }}</span>
-                    </div>
-                </div>
-                <div class="pt-4 border-t border-outline-variant/50 flex justify-between items-center mb-6">
-                    <span class="text-sm font-bold text-on-surface">Total</span>
-                    <span class="text-base font-bold text-primary">${{ number_format($pedido->total, 2) }}</span>
-                </div>
-                @if($ultimoEstado === 'reembolsado' || (float)$pedido->monto_reembolsado > 0)
-                    <div class="flex justify-between items-center bg-slate-100 px-3 py-2 rounded-lg border border-slate-200 text-slate-800 font-semibold text-xs mb-6">
-                        <span class="flex items-center gap-1">
-                            <span class="material-symbols-outlined text-sm text-slate-600">currency_exchange</span>
-                            Monto Reembolsado
-                        </span>
-                        <span class="font-numeric-data font-bold text-rose-600">-${{ number_format($pedido->monto_reembolsado > 0 ? $pedido->monto_reembolsado : $pedido->total, 2) }}</span>
-                    </div>
-                @endif
-                <a href="{{ route('cliente.catalogo') }}" wire:navigate class="block w-full py-3 bg-secondary text-on-secondary rounded-lg font-label-caps text-xs font-bold tracking-wider uppercase text-center shadow-sm hover:bg-on-secondary-container transition-colors">
-                    Seguir comprando
-                </a>
-            </div>
 
-            <!-- Método de pago -->
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">payment</span>
-                    Método de pago
-                </h3>
-                <div class="flex items-center gap-3">
-                    @if($pedido->metodo_pago === 'stripe')
-                        @php
-                            $detallesTarjeta = $pedido->detalles_tarjeta;
-                            $stripeBrand = strtolower($detallesTarjeta['tarjeta_marca'] ?? '');
-                            $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
-                            $brandLabels = [
-                                'visa' => 'Visa',
-                                'mastercard' => 'Mastercard',
-                                'amex' => 'American Express',
-                                'discover' => 'Discover',
-                                'diners' => 'Diners Club',
-                                'jcb' => 'JCB',
-                                'unionpay' => 'UnionPay',
-                            ];
-                            $nombreMarca = $brandLabels[$stripeBrand] ?? (!empty($stripeBrand) ? ucfirst($stripeBrand) : 'Tarjeta de crédito / débito');
-                        @endphp
-                        <div class="shrink-0 shadow-2xs rounded-md overflow-hidden border border-slate-200">
-                            <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-12 h-8 block" />
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <p class="text-sm font-semibold text-on-surface">{{ $nombreMarca }}</p>
-                                @if($stripeLast4)
-                                    <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $stripeLast4 }}</span>
-                                @endif
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
-                                Pago seguro en tiempo real vía 
-                                <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" class="h-4 object-contain">
-                            </p>
-                        </div>
-                    @elseif($pedido->metodo_pago === 'yappy')
-                        <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 p-1 shrink-0">
-                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-w-full max-h-full object-contain">
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Pago verificado vía Yappy</p>
-                        </div>
-                    @elseif($pedido->metodo_pago === 'transferencia')
-                        <span class="material-symbols-outlined text-2xl text-on-surface-variant">account_balance</span>
-                        <div>
-                            <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
-                            @if($pedido->comprobante_pago_ruta)
-                                <p class="text-xs text-secondary mt-0.5 flex items-center gap-1 font-semibold">
-                                    <span class="material-symbols-outlined text-[14px]">done</span> Comprobante adjunto
+                    <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <span>ITBMS (7%)</span>
+                        <span class="font-semibold text-slate-700 dark:text-slate-300">${{ number_format($pedido->itbms_monto, 2) }}</span>
+                    </div>
+
+                    <div class="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">Total</span>
+                        <span class="text-lg sm:text-xl font-black text-slate-900 dark:text-white">${{ number_format($pedido->total, 2) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- CARDS 6 y 7: Dirección de Entrega y Método de Pago con Logos Reales (Visa, Mastercard, Stripe, Yappy) --}}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            
+            {{-- Tarjeta: Dirección de Entrega --}}
+            <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">location_on</span>
+                        <span>Dirección de Entrega</span>
+                    </h3>
+
+                    @if($pedido->direccion)
+                        <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
+                            <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{{ $pedido->direccion->nombre_receptor }}</p>
+                            <p>{{ $pedido->direccion->direccion_exacta }}</p>
+                            <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
+                            <p>{{ $pedido->direccion->provincia }}, Panamá</p>
+                            @if($pedido->direccion->telefono)
+                                <p class="text-slate-500 pt-1.5 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[15px]">call</span>
+                                    <span>+507 {{ $pedido->direccion->telefono }}</span>
                                 </p>
-                            @else
-                                <p class="text-xs text-slate-500 mt-0.5">Pendiente de comprobante</p>
                             @endif
                         </div>
                     @else
-                        <span class="material-symbols-outlined text-2xl text-on-surface-variant">{{ $pagoInfo['icon'] }}</span>
-                        <div>
-                            <p class="text-sm font-semibold text-on-surface">{{ $pagoInfo['label'] }}</p>
-                            <p class="text-xs text-slate-500 mt-0.5">Pago registrado al recibir el pedido</p>
+                        <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
+                            <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Retiro en Local</p>
+                            <p>Sucursal Principal de PyME Panamá</p>
+                            <p>Entrega gratuita en instalaciones.</p>
                         </div>
                     @endif
                 </div>
             </div>
 
-            <!-- Dirección o Courier de envío -->
-            @php
-                $notas = json_decode($pedido->notas_internas, true);
-                $metodoEntrega = $notas['metodo_entrega'] ?? ($pedido->direccion ? 'delivery' : 'retiro_local');
-            @endphp
-
-            @if($pedido->direccion)
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">location_on</span>
-                    {{ (float) $pedido->costo_envio === 0.0 ? 'Datos del cliente' : 'Dirección de envío' }}
-                </h3>
-                <div class="text-sm text-on-surface space-y-1">
-                    <p class="font-semibold">{{ $pedido->direccion->nombre_receptor }}</p>
-                    <p>{{ $pedido->direccion->direccion_exacta }}</p>
-                    <p>{{ $pedido->direccion->corregimiento }}, {{ $pedido->direccion->distrito }}</p>
-                    <p>{{ $pedido->direccion->provincia }}</p>
-                    @if($pedido->direccion->referencia)
-                        <p class="text-on-surface-variant mt-2 text-sm">Ref: {{ $pedido->direccion->referencia }}</p>
-                    @endif
-                </div>
-            </div>
-            @elseif($metodoEntrega === 'retiro_courier' && isset($notas['courier_sucursal_id']))
-                @php
-                    $sucursal = \App\Models\CourierSucursal::find($notas['courier_sucursal_id']);
-                @endphp
-                @if($sucursal)
-                    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                        <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2 text-orange-600">
-                            <span class="material-symbols-outlined text-sm">store</span>
-                            Retiro en Sucursal Courier
-                        </h3>
-                        <div class="text-sm text-on-surface space-y-1">
-                            <p class="font-semibold">{{ $sucursal->courier }} - {{ $sucursal->sucursal }}</p>
-                            <p>{{ $sucursal->direccion }}</p>
-                            <p>{{ $sucursal->zona }}</p>
-                            @if($sucursal->telefono)
-                                <p class="text-on-surface-variant mt-2 text-sm">Tel: {{ $sucursal->telefono }}</p>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-            @elseif($metodoEntrega === 'retiro_local')
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                    <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2 text-emerald-600">
-                        <span class="material-symbols-outlined text-sm">storefront</span>
-                        Retiro en Local PYME PANAMÁ
+            {{-- Tarjeta: Método de Pago con Imagen de Marca Real --}}
+            <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">payment</span>
+                        <span>Método de Pago</span>
                     </h3>
-                    <div class="text-sm text-on-surface space-y-1">
-                        <p class="font-semibold">Sucursal Principal</p>
-                        <p class="text-on-surface-variant">Retiro gratuito en nuestras instalaciones.</p>
+
+                    <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-3">
+                        @if($pedido->metodo_pago === 'stripe')
+                            @php
+                                $detallesTarjeta = $pedido->detalles_tarjeta;
+                                $stripeBrand = strtolower($detallesTarjeta['tarjeta_marca'] ?? '');
+                                $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
+                                
+                                // Determinar la imagen oficial correspondiente
+                                if (str_contains($stripeBrand, 'visa')) {
+                                    $logoTarjeta = asset('images/VISA-Logo.webp');
+                                    $nombreMarca = 'Visa';
+                                } elseif (str_contains($stripeBrand, 'mastercard') || str_contains($stripeBrand, 'master')) {
+                                    $logoTarjeta = asset('images/mastercard-logo.png');
+                                    $nombreMarca = 'Mastercard';
+                                } else {
+                                    $logoTarjeta = asset('images/stripe.webp');
+                                    $nombreMarca = !empty($stripeBrand) ? ucfirst($stripeBrand) : 'Stripe';
+                                }
+                            @endphp
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-white/95 p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
+                                    <img src="{{ $logoTarjeta }}" alt="{{ $nombreMarca }}" class="max-h-full max-w-full object-contain">
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Tarjeta de Crédito / Débito</p>
+                                    <p class="text-xs text-slate-500 font-mono mt-0.5">
+                                        {{ $nombreMarca }} @if($stripeLast4) · Terminación •••• {{ $stripeLast4 }} @endif
+                                    </p>
+                                </div>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'yappy')
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-white/95 p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
+                                    <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="max-h-full max-w-full object-contain">
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Yappy Comercial</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Pago verificado al instante</p>
+                                </div>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'transferencia')
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[24px]">account_balance</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Transferencia Bancaria</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Banco General / ACH</p>
+                                </div>
+                            </div>
+                        @else
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                                    <span class="material-symbols-outlined text-emerald-600 text-[24px]">payments</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Pago Contra Entrega</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Al recibir tu paquete</p>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs sm:text-sm">
+                            <span class="text-slate-500">Monto abonado:</span>
+                            <span class="font-extrabold text-slate-900 dark:text-white">${{ number_format($pedido->total, 2) }}</span>
+                        </div>
                     </div>
                 </div>
-            @endif
-
-            <!-- Datos de Contacto del Pedido -->
-            @if(isset($notas['contacto']))
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">contact_mail</span>
-                    Datos de Contacto
-                </h3>
-                <div class="text-sm text-on-surface space-y-1">
-                    <p class="font-semibold">{{ current(explode(' ', $notas['contacto']['nombre'] ?? '')) }} {{ current(explode(' ', $notas['contacto']['apellido'] ?? '')) }}</p>
-                    <p>{{ $notas['contacto']['email'] ?? '' }}</p>
-                    <p>{{ $notas['contacto']['telefono1'] ?? '' }}</p>
-                    @if(!empty($notas['contacto']['telefono2']))
-                        <p>{{ $notas['contacto']['telefono2'] }}</p>
-                    @endif
-                </div>
             </div>
-            @endif
 
-            @if($pedido->notas_cliente)
-            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 md:p-8">
-                <h3 class="font-label-caps text-[10px] font-bold tracking-wider text-on-surface-variant uppercase mb-3">Notas adicionales</h3>
-                <p class="text-sm text-on-surface-variant italic">"{{ $pedido->notas_cliente }}"</p>
-            </div>
-            @endif
         </div>
-    </div>
+
+        {{-- CARD 8: ¿Necesitas ayuda con tu pedido? (Footer Card del ejemplo en español) --}}
+        <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-8 sm:p-10 text-center shadow-xs">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mb-1.5">¿Necesitas ayuda con tu pedido?</h3>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-5">
+                Nuestro equipo de soporte técnico y atención está listo para asistirte en todo momento.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-3.5">
+                <a href="https://wa.me/50760000000?text=Hola,%20tengo%20una%20consulta%20sobre%20mi%20pedido%20{{ $pedido->numero_pedido }}" target="_blank"
+                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs">
+                    <span class="material-symbols-outlined text-[18px]">support_agent</span>
+                    <span>Contactar Soporte</span>
+                </a>
+                <a href="{{ route('cliente.catalogo') }}" wire:navigate
+                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition-colors shadow-2xs">
+                    <span class="material-symbols-outlined text-[18px]">storefront</span>
+                    <span>Seguir Comprando</span>
+                </a>
+            </div>
+        </div>
+
     </div>
 </div>
+
+<script>
+    // Imprime el recibo PDF directamente en la misma página sin abrir una pestaña externa
+    window.imprimirReciboPdf = function(urlPdf) {
+        let iframe = document.getElementById('iframe-impresion-recibo');
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.id = 'iframe-impresion-recibo';
+            iframe.style.position = 'fixed';
+            iframe.style.right = '0';
+            iframe.style.bottom = '0';
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.border = '0';
+            iframe.style.visibility = 'hidden';
+            document.body.appendChild(iframe);
+        }
+
+        iframe.onload = function() {
+            try {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+            } catch (e) {
+                // Si la política de seguridad del navegador bloquea print() entre frames, abrir la URL directamente
+                window.location.href = urlPdf;
+            }
+        };
+
+        iframe.src = urlPdf;
+    };
+</script>
 @endsection
+

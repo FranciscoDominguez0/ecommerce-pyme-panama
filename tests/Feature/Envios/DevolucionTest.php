@@ -42,7 +42,7 @@ class DevolucionTest extends BaseAdminTest
             ->assertSee('name="motivo"', false)
             ->assertSee('name="descripcion"', false)
             ->assertSee('name="foto_evidencia"', false)
-            ->assertSee('Motivo de devolución');
+            ->assertSee('Motivo de la Devolución');
     }
 
     #[Test]

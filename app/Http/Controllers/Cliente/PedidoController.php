@@ -19,7 +19,7 @@ class PedidoController extends Controller
     public function index(Request $request)
     {
         $query = Pedido::where('usuario_id', Auth::id())
-            ->with(['items', 'ultimoEstado'])
+            ->with(['items.producto.imagenes', 'items.variante', 'ultimoEstado'])
             ->orderByDesc('creado_en');
 
         if ($request->estado === 'pendiente') {
@@ -31,7 +31,13 @@ class PedidoController extends Controller
         }
 
         if ($request->filled('buscar')) {
-            $query->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', ['%' . $request->buscar . '%']);
+            $termino = '%' . $request->buscar . '%';
+            $query->where(function ($q) use ($termino) {
+                $q->whereRaw('unaccent(numero_pedido) ILIKE unaccent(?)', [$termino])
+                    ->orWhereHas('items.producto', function ($qProd) use ($termino) {
+                        $qProd->whereRaw('unaccent(nombre) ILIKE unaccent(?)', [$termino]);
+                    });
+            });
         }
 
         $pedidos = $query->paginate(9)->withQueryString();
