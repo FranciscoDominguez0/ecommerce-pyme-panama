@@ -315,10 +315,12 @@
                             <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-start justify-between gap-1.5 sm:gap-4">
                                 <div class="min-w-0 flex-1">
                                     <h4 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
-                                        @if($item->producto)
-                                            <a href="{{ route('cliente.catalogo.detalle', $item->producto->slug) }}" wire:navigate class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                                        @if($item->producto && $item->producto->slug)
+                                            <a href="{{ route('cliente.producto.detalle', $item->producto->slug) }}" wire:navigate class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                                                 {{ $item->producto->nombre }}
                                             </a>
+                                        @elseif($item->producto)
+                                            <span>{{ $item->producto->nombre }}</span>
                                         @else
                                             <span>Producto no disponible</span>
                                         @endif
