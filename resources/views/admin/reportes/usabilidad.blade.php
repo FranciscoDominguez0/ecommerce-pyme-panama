@@ -57,11 +57,17 @@
                 <div class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                     {{ $porcentaje_ces }}%
                 </div>
-                <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">Consideran el proceso Fácil o Muy Fácil</p>
+                <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
+                    @if($total_evaluaciones > 0)
+                        {{ $respuestas_positivas ?? 0 }} de {{ $total_evaluaciones }} consideran el proceso Fácil o Muy Fácil
+                    @else
+                        Sin evaluaciones registradas aún
+                    @endif
+                </p>
             </div>
             <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Nivel de servicio</span>
-                <span class="font-bold text-emerald-600">Excelente</span>
+                <span class="font-bold {{ $nivel_ces['color'] }}">{{ $nivel_ces['texto'] }}</span>
             </div>
         </div>
 
@@ -80,13 +86,13 @@
                 </div>
                 <div class="flex items-center gap-1 text-amber-400 mt-1">
                     @for($i = 1; $i <= 5; $i++)
-                        <span class="material-symbols-outlined text-[17px] {{ $i <= round($promedio_csat) ? 'text-amber-400' : 'text-slate-300 dark:text-slate-700' }}" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="material-symbols-outlined text-[17px] {{ $total_evaluaciones > 0 && $i <= round($promedio_csat) ? 'text-amber-400' : 'text-slate-300 dark:text-slate-700' }}" style="font-variation-settings: 'FILL' 1;">star</span>
                     @endfor
                 </div>
             </div>
             <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Promedio de compras</span>
-                <span class="font-bold text-amber-600">Sobresaliente</span>
+                <span class="font-bold {{ $nivel_csat['color'] }}">{{ $nivel_csat['texto'] }}</span>
             </div>
         </div>
 
@@ -108,7 +114,7 @@
             </div>
             <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Efectividad</span>
-                <span class="font-bold text-blue-600">Alta</span>
+                <span class="font-bold {{ $nivel_tsr['color'] }}">{{ $nivel_tsr['texto'] }}</span>
             </div>
         </div>
 
@@ -122,14 +128,24 @@
             </div>
             <div class="my-2">
                 <div class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-baseline gap-1.5">
-                    <span>{{ $tiempo_promedio_checkout }}</span>
-                    <span class="text-base text-slate-400 font-normal">segundos</span>
+                    @if($tiempo_promedio_checkout !== null)
+                        <span>{{ $tiempo_promedio_checkout }}</span>
+                        <span class="text-base text-slate-400 font-normal">segundos</span>
+                    @else
+                        <span class="text-2xl text-slate-400 font-semibold">N/D</span>
+                    @endif
                 </div>
-                <p class="text-[11px] text-purple-600 dark:text-purple-400 font-semibold mt-1">Proceso de compra ágil en 3 pasos</p>
+                <p class="text-[11px] text-purple-600 dark:text-purple-400 font-semibold mt-1">
+                    @if($tiempo_promedio_checkout !== null)
+                        Tiempo medido en proceso de pago
+                    @else
+                        Pendiente de registros de pago
+                    @endif
+                </p>
             </div>
             <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs mt-2">
                 <span class="text-slate-400">Velocidad</span>
-                <span class="font-bold text-purple-600">Rápida</span>
+                <span class="font-bold {{ $nivel_tiempo['color'] }}">{{ $nivel_tiempo['texto'] }}</span>
             </div>
         </div>
 
@@ -175,32 +191,49 @@
                     <h3 class="text-sm font-bold text-slate-900 dark:text-white">Velocidad y Rendimiento de la Tienda</h3>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tiempos de carga y respuesta medidos en tiempo real</p>
                 </div>
-                <span class="material-symbols-outlined text-emerald-600">bolt</span>
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-800/60">
+                    <span class="material-symbols-outlined text-[18px]">bolt</span>
+                </div>
             </div>
 
             <div class="grid grid-cols-3 gap-3 pt-1">
-                <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
-                    <span class="block text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Carga Inicial</span>
-                    <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">1.2s</div>
-                    <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">Ultra rápida</span>
+                <!-- Carga del Servidor -->
+                <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-[#202326] border border-slate-200/90 dark:border-gray-700 text-center">
+                    <span class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Carga Servidor</span>
+                    <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400" id="metrica-carga-servidor">
+                        {{ $rendimiento['tiempo_servidor_segundos'] }}s
+                    </div>
+                    <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium" id="calif-carga-servidor">
+                        {{ $rendimiento['calificacion_servidor'] }}
+                    </span>
                 </div>
 
-                <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
-                    <span class="block text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Respuesta al Clic</span>
-                    <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">42ms</div>
-                    <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">Instantánea</span>
+                <!-- Latencia de Base de Datos -->
+                <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-[#202326] border border-slate-200/90 dark:border-gray-700 text-center">
+                    <span class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Respuesta BD</span>
+                    <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">
+                        {{ $rendimiento['latencia_db_ms'] }}ms
+                    </div>
+                    <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">
+                        {{ $rendimiento['calificacion_db'] }}
+                    </span>
                 </div>
 
-                <div class="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/70 dark:border-emerald-800/40 text-center">
-                    <span class="block text-[10px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider mb-1">Estabilidad</span>
-                    <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">100%</div>
-                    <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">Sin saltos visuales</span>
+                <!-- Estabilidad del Sistema -->
+                <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-[#202326] border border-slate-200/90 dark:border-gray-700 text-center">
+                    <span class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Estabilidad</span>
+                    <div class="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">
+                        {{ $rendimiento['estabilidad_porcentaje'] }}%
+                    </div>
+                    <span class="text-[10px] text-emerald-600 dark:text-emerald-500 font-medium">
+                        {{ $rendimiento['calificacion_estabilidad'] }}
+                    </span>
                 </div>
             </div>
 
-            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 text-xs text-slate-500 flex items-center justify-between">
+            <div class="pt-3 border-t border-slate-100 dark:border-gray-700 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
                 <span>Experiencia de navegación:</span>
-                <span class="font-bold text-emerald-600">Rápida y sin demoras</span>
+                <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ $rendimiento['experiencia_general'] }}</span>
             </div>
         </div>
 
@@ -213,43 +246,114 @@
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white">Opiniones de Compradores</h3>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Comentarios directos dejados en el checkout</p>
             </div>
-            <span class="material-symbols-outlined text-slate-400">rate_review</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-800/60">
+                <span class="material-symbols-outlined text-[18px]">rate_review</span>
+            </div>
         </div>
 
         @if($comentarios_recientes->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
                 @foreach($comentarios_recientes as $eval)
-                    <div class="p-4 rounded-xl border border-slate-100 dark:border-gray-700/60 bg-slate-50/70 dark:bg-[#121415]/60 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-bold">
-                                    {{ strtoupper(substr($eval->usuario?->nombre ?? 'C', 0, 1)) }}
+                    <div class="p-5 rounded-2xl border border-slate-200/80 dark:border-gray-800 bg-white dark:bg-[#1f2327] hover:border-slate-300 dark:hover:border-gray-700 transition-all shadow-sm flex flex-col justify-between">
+                        <div>
+                            <!-- Cabecera: Avatar, Nombre, Estrellas y Tiempo -->
+                            <div class="flex items-center justify-between gap-3 mb-3">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    @if($eval->usuario?->foto_perfil_ruta)
+                                        <img src="{{ $eval->usuario->foto_perfil_ruta }}" 
+                                             alt="{{ $eval->usuario->nombre }}" 
+                                             referrerpolicy="no-referrer"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                             class="w-10 h-10 rounded-full object-cover border border-slate-200 dark:border-gray-700 shrink-0">
+                                        <div class="w-10 h-10 rounded-full bg-emerald-600 dark:bg-emerald-600 text-white hidden items-center justify-center text-sm font-bold shrink-0">
+                                            {{ strtoupper(substr($eval->usuario?->nombre ?? 'C', 0, 1)) }}
+                                        </div>
+                                    @else
+                                        <div class="w-10 h-10 rounded-full bg-emerald-600 dark:bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shrink-0">
+                                            {{ strtoupper(substr($eval->usuario?->nombre ?? 'C', 0, 1)) }}
+                                        </div>
+                                    @endif
+                                    <div class="min-w-0">
+                                        <h4 class="text-sm font-bold text-slate-900 dark:text-white capitalize truncate">
+                                            {{ $eval->usuario ? $eval->usuario->nombre . ' ' . substr($eval->usuario->apellido, 0, 1) . '.' : 'Cliente verificado' }}
+                                        </h4>
+                                        <div class="flex items-center text-amber-400 mt-0.5">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <span class="material-symbols-outlined text-[15px] {{ $i <= $eval->puntuacion_facilidad ? 'text-amber-400' : 'text-slate-300 dark:text-gray-700' }}" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            @endfor
+                                        </div>
+                                    </div>
                                 </div>
-                                <span class="text-xs font-bold text-slate-800 dark:text-slate-200">
-                                    {{ $eval->usuario ? $eval->usuario->nombre . ' ' . substr($eval->usuario->apellido, 0, 1) . '.' : 'Cliente verificado' }}
+
+                                <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap shrink-0 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                    {{ $eval->creado_en->diffForHumans() }}
                                 </span>
                             </div>
-                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                                {{ $eval->etiqueta_facilidad }}
-                            </span>
+
+                            <!-- Comentario del cliente -->
+                            <p class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed font-normal my-2 italic">
+                                “{{ $eval->comentario }}”
+                            </p>
                         </div>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed">
-                            "{{ $eval->comentario }}"
-                        </p>
-                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-gray-700/60">
-                            <span>Pedido #{{ $eval->pedido?->numero_pedido }}</span>
-                            <span>{{ $eval->creado_en->diffForHumans() }}</span>
+
+                        <!-- Pie: Pedido y dispositivo -->
+                        <div class="pt-3 mt-2 border-t border-slate-100 dark:border-gray-800 flex items-center justify-between text-xs text-slate-400 dark:text-slate-400">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-gray-800/80 text-slate-600 dark:text-slate-300 font-semibold border border-slate-200/60 dark:border-gray-700/50">
+                                <span class="material-symbols-outlined text-[15px] text-slate-400">receipt_long</span>
+                                Pedido {{ str_starts_with($eval->pedido?->numero_pedido ?? '', '#') ? $eval->pedido?->numero_pedido : '#' . ($eval->pedido?->numero_pedido ?? 'S/N') }}
+                            </span>
+
+                            @if($eval->dispositivo)
+                                <span class="inline-flex items-center gap-1 text-[11px] text-slate-400 dark:text-slate-500">
+                                    <span class="material-symbols-outlined text-[13px]">{{ strtolower($eval->dispositivo) === 'mobile' ? 'smartphone' : 'computer' }}</span>
+                                    {{ $eval->dispositivo }}
+                                </span>
+                            @endif
                         </div>
                     </div>
                 @endforeach
             </div>
         @else
-            <div class="py-12 text-center text-slate-400 space-y-2">
-                <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600">reviews</span>
-                <p class="text-xs font-medium">Aún no se han registrado comentarios adicionales en las evaluaciones de compra.</p>
+            <div class="py-12 text-center space-y-3">
+                <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-gray-800 text-slate-400 dark:text-slate-400 flex items-center justify-center mx-auto border border-slate-200 dark:border-gray-700">
+                    <span class="material-symbols-outlined text-2xl">rate_review</span>
+                </div>
+                <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">Sin comentarios adicionales</p>
+                <p class="text-xs text-slate-400 dark:text-slate-400 max-w-sm mx-auto">Aún no se han registrado comentarios escritos en las evaluaciones de compra.</p>
             </div>
         @endif
     </div>
 
 </div>
+
+@push('scripts')
+<script>
+    (function() {
+        function actualizarRendimientoReal() {
+            if (window.performance && window.performance.getEntriesByType) {
+                var nav = window.performance.getEntriesByType('navigation')[0];
+                if (nav && nav.duration > 0) {
+                    var segundos = (nav.duration / 1000).toFixed(2);
+                    var elCarga = document.getElementById('metrica-carga-servidor');
+                    var elCalif = document.getElementById('calif-carga-servidor');
+                    if (elCarga && segundos > 0) {
+                        elCarga.textContent = segundos + 's';
+                    }
+                    if (elCalif) {
+                        elCalif.textContent = nav.duration < 600 ? 'Ultra rápida' : (nav.duration < 1500 ? 'Rápida' : 'Aceptable');
+                    }
+                }
+            }
+        }
+        if (document.readyState === 'complete') {
+            setTimeout(actualizarRendimientoReal, 150);
+        } else {
+            window.addEventListener('load', function() {
+                setTimeout(actualizarRendimientoReal, 150);
+            });
+        }
+    })();
+</script>
+@endpush
 @endsection

@@ -97,54 +97,20 @@ class CatalogoController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $relacionados = $this->obtenerProductosRelacionados($producto);
-        $categorias   = Categoria::sinEliminar()->orderBy('nombre')->get();
+        $relacionados           = $this->obtenerProductosRelacionados($producto);
+        $categorias             = Categoria::sinEliminar()->orderBy('nombre')->get();
         $estadisticasValoracion = $this->valoracionService->obtenerEstadisticasProducto($producto->id);
 
-        // Preparamos la colección de imágenes estructurada para el visor dinámico
-        $todasImagenes = $producto->imagenes ?? collect();
-        if ($todasImagenes->isEmpty()) {
-            $todasImagenes = collect([(object)[
-                'id' => 0,
-                'ruta' => 'image',
-                'es_principal' => true
-            ]]);
-        }
-
-        $imagenesJson = $todasImagenes->map(function ($foto, $index) {
-            $ruta = $foto->ruta;
-            $esUrl = str_starts_with($ruta, 'http') || str_starts_with($ruta, 'data:image');
-            $esStorage = str_starts_with($ruta, 'storage/') || str_starts_with($ruta, '/storage');
-            $esSvg = str_contains($ruta, '<svg') || str_contains($ruta, '</svg>');
-            $esIcono = !$esUrl && !$esStorage && !$esSvg;
-
-            $src = '';
-            if ($esStorage) {
-                $src = asset(ltrim($ruta, '/'));
-            } elseif ($esUrl) {
-                $src = $ruta;
-            }
-
-            return [
-                'index' => $index,
-                'id' => $foto->id ?? $index,
-                'ruta' => $ruta,
-                'src' => $src,
-                'es_svg' => $esSvg,
-                'es_icono' => $esIcono,
-                'es_principal' => (bool)($foto->es_principal ?? false)
-            ];
-        })->values();
-
-        $indiceInicial = $imagenesJson->search(fn($img) => $img['es_principal']);
-        if ($indiceInicial === false) {
-            $indiceInicial = 0;
-        }
+        [
+            'todasImagenes' => $todasImagenes,
+            'imagenesJson'  => $imagenesJson,
+            'indiceInicial' => $indiceInicial,
+        ] = $this->prepararGaleriaImagenes($producto);
 
         // Datos de promociones y descuentos ya calculados para la vista
-        $promoMes = $producto->promocionDelMesActiva();
+        $promoMes       = $producto->promocionDelMesActiva();
         $tienePromocion = $producto->tienePromocionOPrecioOferta();
-        $precioFinal = $producto->precioFinalPromocional();
+        $precioFinal    = $producto->precioFinalPromocional();
         $porcentajeDesc = $producto->porcentajeDescuentoPromocional();
 
         return view('cliente.catalogo.detalle', compact(
@@ -338,4 +304,55 @@ class CatalogoController extends Controller
             ->take($cantidad)
             ->get();
     }
+
+    /**
+     * Prepara la colección de imágenes y el índice inicial para el visor interactivo.
+     *
+     * @return array{todasImagenes: Collection, imagenesJson: Collection, indiceInicial: int}
+     */
+    private function prepararGaleriaImagenes(Producto $producto): array
+    {
+        $todasImagenes = $producto->imagenes ?? collect();
+        if ($todasImagenes->isEmpty()) {
+            $todasImagenes = collect([(object) [
+                'id'           => 0,
+                'ruta'         => 'image',
+                'es_principal' => true,
+            ]]);
+        }
+
+        $imagenesJson = $todasImagenes->map(function ($foto, int $index) {
+            $ruta      = (string) ($foto->ruta ?? '');
+            $esUrl     = str_starts_with($ruta, 'http') || str_starts_with($ruta, 'data:image');
+            $esStorage = str_starts_with($ruta, 'storage/') || str_starts_with($ruta, '/storage');
+            $esSvg     = str_contains($ruta, '<svg') || str_contains($ruta, '</svg>');
+            $esIcono   = ! $esUrl && ! $esStorage && ! $esSvg;
+
+            $src = '';
+            if ($esStorage) {
+                $src = asset(ltrim($ruta, '/'));
+            } elseif ($esUrl) {
+                $src = $ruta;
+            }
+
+            return [
+                'index'        => $index,
+                'id'           => $foto->id ?? $index,
+                'ruta'         => $ruta,
+                'src'          => $src,
+                'es_svg'       => $esSvg,
+                'es_icono'     => $esIcono,
+                'es_principal' => (bool) ($foto->es_principal ?? false),
+            ];
+        })->values();
+
+        $indiceInicial = $imagenesJson->search(fn(array $img) => $img['es_principal']);
+
+        return [
+            'todasImagenes' => $todasImagenes,
+            'imagenesJson'  => $imagenesJson,
+            'indiceInicial' => $indiceInicial === false ? 0 : (int) $indiceInicial,
+        ];
+    }
 }
+

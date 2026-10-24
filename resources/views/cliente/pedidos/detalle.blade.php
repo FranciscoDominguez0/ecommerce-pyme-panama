@@ -675,7 +675,7 @@
                     body: JSON.stringify({
                         puntuacion_facilidad: this.puntuacion,
                         comentario: this.comentario,
-                        tiempo_checkout_segundos: 35,
+                        tiempo_checkout_segundos: {{ session('pedido_checkout_duracion') ? (int) session('pedido_checkout_duracion') : 'null' }},
                         dispositivo: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
                     })
                 })

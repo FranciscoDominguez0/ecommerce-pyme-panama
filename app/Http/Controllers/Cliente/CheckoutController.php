@@ -43,6 +43,10 @@ class CheckoutController extends Controller
         $zonasEnvio = ZonaEnvio::activo()->get();
         $requiereEnvio = $this->pedidoService->carritoRequiereEnvioFisico($carrito);
 
+        if (!session()->has('checkout_iniciado_en')) {
+            session(['checkout_iniciado_en' => now()->timestamp]);
+        }
+
         return view('cliente.checkout.direccion', compact('zonasEnvio', 'requiereEnvio', 'carrito'));
     }
 
@@ -293,8 +297,14 @@ class CheckoutController extends Controller
                 $this->pedidoService->cambiarEstado($pedido, 'pago_confirmado', $usuario->id, $comentario);
             }
 
+            // Calcular duración real del checkout
+            $inicioCheckout = session('checkout_iniciado_en');
+            $duracionCheckout = $inicioCheckout ? max(5, now()->timestamp - (int) $inicioCheckout) : null;
+            session(['pedido_checkout_duracion' => $duracionCheckout]);
+
             // Limpiar sesión
             session()->forget([
+                'checkout_iniciado_en',
                 'checkout_direccion_id',
                 'checkout_zona_envio_id',
                 'checkout_metodo_pago',
