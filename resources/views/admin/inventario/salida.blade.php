@@ -145,153 +145,17 @@
         </form>
     </div>
 
-    {{-- Modal Selector de Productos --}}
-    <x-modal-busqueda id="modal-productos" titulo="Seleccionar Producto" subtitulo="Busca y selecciona un producto para la salida" icono="inventory_2" />
+    {{-- Selector inteligente de productos y variantes para salida --}}
+    <x-inventario-selector-movimiento 
+        tipo="salida" 
+        :productos="$productosDataJson" 
+        titulo-modal="Seleccionar Producto" 
+        subtitulo-modal="Busca y selecciona un producto para la salida" 
+    />
 </div>
 @endsection
 
-@push('scripts')
-@php
-    $productosDataJson = $productos->map(function($p) {
-        return [
-            'id' => $p->id,
-            'nombre' => $p->nombre,
-            'sku' => $p->sku,
-            'stock' => $p->stock,
-            'imagen_ruta' => $p->imagen_url,
-            'subtitulo' => $p->sku ? 'SKU: ' . $p->sku . ' | Stock: ' . $p->stock : 'Stock: ' . $p->stock,
-            'icono' => 'inventory_2'
-        ];
-    })->values();
-@endphp
-<script>
-(function() {
-    const productoSelect  = document.getElementById('producto_id');
-    const varianteSelect  = document.getElementById('variante_id');
-    const cantidadInput   = document.getElementById('cantidad');
-    const resumenAntes    = document.getElementById('resumen-stock-antes');
-    const resumenCantidad = document.getElementById('resumen-cantidad');
-    const resumenNuevo    = document.getElementById('resumen-stock-nuevo');
-    const avisoStock      = document.getElementById('aviso-stock');
-    const btnSubmit       = document.getElementById('btn-submit');
 
-    let stockActual = null;
-
-    function actualizarResumen() {
-        const cant = parseInt(cantidadInput.value, 10) || 0;
-        if (stockActual !== null) {
-            const nuevo = stockActual - cant;
-            resumenAntes.textContent    = stockActual;
-            resumenCantidad.textContent = '-' + cant;
-            resumenNuevo.textContent    = nuevo < 0 ? '⚠ ' + nuevo : nuevo;
-            resumenNuevo.className      = 'text-3xl font-extrabold tabular-nums ' + (nuevo < 0 ? 'text-red-600' : 'text-slate-900 dark:text-white');
-
-            if (cant > stockActual) {
-                avisoStock.classList.remove('hidden');
-                btnSubmit.disabled = true;
-            } else {
-                avisoStock.classList.add('hidden');
-                btnSubmit.disabled = false;
-            }
-        } else {
-            resumenAntes.textContent    = '—';
-            resumenCantidad.textContent = '-' + cant;
-            resumenNuevo.textContent    = '—';
-        }
-    }
-
-    function cargarVariantes(productoId) {
-        varianteSelect.innerHTML = '<option value="">Cargando…</option>';
-        varianteSelect.disabled  = true;
-
-        fetch('{{ url("/admin/inventario/variantes") }}/' + productoId, {
-            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
-        })
-        .then(r => r.json())
-        .then(data => {
-            varianteSelect.innerHTML = '<option value="">Sin variante (producto base)</option>';
-            if (data.length > 0) {
-                data.forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value            = v.id;
-                    opt.dataset.stock    = v.stock;
-                    opt.textContent      = v.label + (v.sku ? ' — ' + v.sku : '') + ' (stock: ' + v.stock + ')';
-                    varianteSelect.appendChild(opt);
-                });
-                varianteSelect.disabled = false;
-                const first = data[0];
-                stockActual = first ? first.stock : null;
-            } else {
-                varianteSelect.disabled = true;
-                const selected = document.getElementById('producto_id');
-                stockActual = selected.dataset.stock ? parseInt(selected.dataset.stock, 10) : null;
-            }
-            actualizarResumen();
-        })
-        .catch(() => {
-            varianteSelect.innerHTML = '<option value="">Error al cargar</option>';
-            varianteSelect.disabled  = true;
-        });
-    }
-
-    productoSelect.addEventListener('change', function() {
-        stockActual = null;
-        actualizarResumen();
-        if (this.value) {
-            cargarVariantes(this.value);
-        } else {
-            varianteSelect.innerHTML = '<option value="">Selecciona un producto primero</option>';
-            varianteSelect.disabled  = true;
-        }
-    });
-
-    varianteSelect.addEventListener('change', function() {
-        const opt = this.options[this.selectedIndex];
-        if (opt && opt.value) {
-            stockActual = parseInt(opt.dataset.stock, 10);
-        } else {
-            const prodOpt = document.getElementById('producto_id');
-            stockActual = prodOpt.dataset.stock ? parseInt(prodOpt.dataset.stock, 10) : null;
-        }
-        actualizarResumen();
-    });
-
-    cantidadInput.addEventListener('input', actualizarResumen);
-
-    // Initializer para el Modal Buscador
-    const productosData = @json($productosDataJson);
-
-    window.ModalBuscador.init('modal-productos', {
-        items: productosData,
-        porPagina: 10,
-        onSelect: function(item) {
-            const selectProd = document.getElementById('producto_id');
-            selectProd.value = item.id;
-            selectProd.dataset.stock = item.stock;
-            
-            window.updateProductSelectorUI('producto_id', item);
-            window.ModalBuscador.cerrar('modal-productos');
-            
-            // Disparar evento para cargar variantes
-            selectProd.dispatchEvent(new Event('change'));
-        }
-    });
-
-    // Pre-load logic if old input or query param exists
-    (function init() {
-        const val = productoSelect.value;
-        if (val) {
-            const prod = productosData.find(p => p.id == val);
-            if (prod) {
-                productoSelect.dataset.stock = prod.stock;
-                window.updateProductSelectorUI('producto_id', prod);
-            }
-            cargarVariantes(val);
-        }
-    })();
-})();
-</script>
-@endpush
 
 
 

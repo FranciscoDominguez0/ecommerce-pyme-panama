@@ -212,4 +212,22 @@ class Categoria extends Model
 
         return (bool) ($this->padre?->exento_envio ?? false);
     }
+
+    /**
+     * Retorna el icono de Material Symbols según el slug de la categoría.
+     */
+    public function getIconoAttribute(): string
+    {
+        $slug = $this->slug ?? '';
+
+        if (str_contains($slug, 'laptop')) return 'laptop_mac';
+        if (str_contains($slug, 'gamer') || str_contains($slug, 'consola')) return 'sports_esports';
+        if (str_contains($slug, 'smartphones') || str_contains($slug, 'celular')) return 'smartphone';
+        if (str_contains($slug, 'monitor')) return 'monitor';
+        if (str_contains($slug, 'teclado') || str_contains($slug, 'mouse')) return 'keyboard';
+        if (str_contains($slug, 'red') || str_contains($slug, 'router')) return 'router';
+        if (str_contains($slug, 'audio') || str_contains($slug, 'audifonos')) return 'headphones';
+
+        return 'devices';
+    }
 }

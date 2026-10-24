@@ -51,69 +51,8 @@
 
         @php
             $ultimoEstado = $pedido->ultimoEstado?->estado ?? 'pendiente';
-
-            // Configuración visual del estado y del porcentaje de avance
-            $configEstado = match($ultimoEstado) {
-                'entregado' => [
-                    'label' => 'Entregado',
-                    'dot' => 'bg-emerald-500',
-                    'badge' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-                    'progress_step' => 4,
-                    'progress_pct' => 100,
-                ],
-                'enviado', 'en_transito' => [
-                    'label' => 'En camino',
-                    'dot' => 'bg-blue-500',
-                    'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/60',
-                    'progress_step' => 3,
-                    'progress_pct' => 75,
-                ],
-                'listo_para_envio', 'en_preparacion' => [
-                    'label' => 'En preparación',
-                    'dot' => 'bg-amber-500',
-                    'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
-                    'progress_step' => 2,
-                    'progress_pct' => 50,
-                ],
-                'pago_confirmado' => [
-                    'label' => 'Pago confirmado',
-                    'dot' => 'bg-teal-500',
-                    'badge' => 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 border border-teal-200/80 dark:border-teal-800/60',
-                    'progress_step' => 2,
-                    'progress_pct' => 50,
-                ],
-                'cancelado' => [
-                    'label' => 'Cancelado',
-                    'dot' => 'bg-rose-500',
-                    'badge' => 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
-                    'progress_step' => 1,
-                    'progress_pct' => 15,
-                ],
-                'reembolsado' => [
-                    'label' => 'Reembolsado',
-                    'dot' => 'bg-slate-400',
-                    'badge' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700',
-                    'progress_step' => 1,
-                    'progress_pct' => 15,
-                ],
-                default => [
-                    'label' => 'Pendiente',
-                    'dot' => 'bg-amber-500',
-                    'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
-                    'progress_step' => 1,
-                    'progress_pct' => 20,
-                ],
-            };
-
-            // Fechas de hitos
-            $fechaCreado = $pedido->creado_en;
-            $fechaConfirmado = $estadosOrdenados->firstWhere('estado', 'pago_confirmado')?->creado_en ?? ($estadosOrdenados->firstWhere('estado', 'en_preparacion')?->creado_en);
-            $fechaEnviado = $estadosOrdenados->firstWhere('estado', 'enviado')?->creado_en ?? ($estadosOrdenados->firstWhere('estado', 'en_transito')?->creado_en);
-            $fechaEntregado = $estadosOrdenados->firstWhere('estado', 'entregado')?->creado_en;
-
-            $paso2Completado = $configEstado['progress_step'] >= 2;
-            $paso3Completado = $configEstado['progress_step'] >= 3;
-            $paso4Completado = $configEstado['progress_step'] >= 4;
+            $pasoActual = $pedido->config_estado['progress_step'];
+            $progresoPct = $pedido->config_estado['progress_pct'];
         @endphp
 
         {{-- Encabezado Principal --}}
@@ -187,7 +126,7 @@
             <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Progreso de Entrega</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 @if($ultimoEstado === 'entregado')
-                    Entrega finalizada con éxito el {{ $fechaEntregado ? $fechaEntregado->format('d/m/Y') : $pedido->creado_en->format('d/m/Y') }}
+                    Entrega finalizada con éxito el {{ $hitosFechas['entregado'] ? $hitosFechas['entregado']->format('d/m/Y') : $pedido->creado_en->format('d/m/Y') }}
                 @else
                     Fecha estimada de entrega: {{ $pedido->creado_en->addDays(3)->format('d/m/Y') }}
                 @endif
@@ -196,7 +135,7 @@
             {{-- Barra de progreso horizontal superior gruesa --}}
             <div class="mt-6 mb-8 w-full bg-slate-200 dark:bg-slate-800 h-2 sm:h-2.5 rounded-full overflow-hidden">
                 <div class="h-full bg-slate-900 dark:bg-emerald-500 rounded-full transition-all duration-700" 
-                     style="width: {{ $configEstado['progress_pct'] }}%;"></div>
+                     style="width: {{ $progresoPct }}%;"></div>
             </div>
 
             {{-- 4 Hitos debajo de la barra con círculos e iconos en español --}}
@@ -207,34 +146,34 @@
                         <span class="material-symbols-outlined text-[20px] sm:text-[22px]">check</span>
                     </div>
                     <span class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white mt-2.5">Realizado</span>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaCreado->format('d M') }}</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $hitosFechas['creado']?->format('d M') }}</span>
                 </div>
 
                 {{-- 2. Confirmado --}}
                 <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $paso2Completado ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
-                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $paso2Completado ? 'check' : 'inventory_2' }}</span>
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $pasoActual >= 2 ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $pasoActual >= 2 ? 'check' : 'inventory_2' }}</span>
                     </div>
-                    <span class="text-xs sm:text-sm font-bold {{ $paso2Completado ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">Confirmado</span>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaConfirmado ? $fechaConfirmado->format('d M') : '—' }}</span>
+                    <span class="text-xs sm:text-sm font-bold {{ $pasoActual >= 2 ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">Confirmado</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $hitosFechas['confirmado'] ? $hitosFechas['confirmado']->format('d M') : '—' }}</span>
                 </div>
 
                 {{-- 3. En camino --}}
                 <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $paso3Completado ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
-                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $paso3Completado ? 'check' : 'local_shipping' }}</span>
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $pasoActual >= 3 ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $pasoActual >= 3 ? 'check' : 'local_shipping' }}</span>
                     </div>
-                    <span class="text-xs sm:text-sm font-bold {{ $paso3Completado ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">En camino</span>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaEnviado ? $fechaEnviado->format('d M') : '—' }}</span>
+                    <span class="text-xs sm:text-sm font-bold {{ $pasoActual >= 3 ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">En camino</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $hitosFechas['enviado'] ? $hitosFechas['enviado']->format('d M') : '—' }}</span>
                 </div>
 
                 {{-- 4. Entregado --}}
                 <div class="flex flex-col items-center">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $paso4Completado ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
-                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $paso4Completado ? 'check' : 'package_2' }}</span>
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-full {{ $pasoActual >= 4 ? 'bg-emerald-500 text-white shadow-xs' : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border border-slate-200 dark:border-slate-700' }} flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px] sm:text-[22px]">{{ $pasoActual >= 4 ? 'check' : 'package_2' }}</span>
                     </div>
-                    <span class="text-xs sm:text-sm font-bold {{ $paso4Completado ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">Entregado</span>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $fechaEntregado ? $fechaEntregado->format('d M') : '—' }}</span>
+                    <span class="text-xs sm:text-sm font-bold {{ $pasoActual >= 4 ? 'text-slate-900 dark:text-white' : 'text-slate-400 dark:text-slate-500' }} mt-2.5">Entregado</span>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">{{ $hitosFechas['entregado'] ? $hitosFechas['entregado']->format('d M') : '—' }}</span>
                 </div>
             </div>
         </div>
@@ -321,9 +260,9 @@
 
                 <div>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Estado de Envío</span>
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold {{ $configEstado['badge'] }}">
-                        <span class="w-1.5 h-1.5 rounded-full {{ $configEstado['dot'] }}"></span>
-                        <span>{{ $configEstado['label'] }}</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold {{ $pedido->config_estado['badge'] }}">
+                        <span class="w-1.5 h-1.5 rounded-full {{ $pedido->config_estado['dot'] }}"></span>
+                        <span>{{ $pedido->config_estado['label'] }}</span>
                     </span>
                 </div>
 
@@ -358,13 +297,6 @@
                 @foreach($pedido->items as $item)
                     @php
                         $valoracion = isset($valoracionesPorProducto) ? $valoracionesPorProducto->get($item->producto_id) : null;
-                        
-                        $itemImg = null;
-                        if ($item->variante && $item->variante->imagen_ruta) {
-                            $itemImg = asset('storage/' . $item->variante->imagen_ruta);
-                        } elseif ($item->producto) {
-                            $itemImg = $item->producto->imagen_url;
-                        }
                     @endphp
 
                     <div class="py-5 first:pt-0 last:pb-0 flex flex-col gap-4">
@@ -372,8 +304,8 @@
                         <div class="flex items-start justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
                                 <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/60 overflow-hidden flex items-center justify-center shrink-0">
-                                    @if($itemImg)
-                                        <img src="{{ $itemImg }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
+                                    @if($item->imagen_url)
+                                        <img src="{{ $item->imagen_url }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
                                     @else
                                         <span class="material-symbols-outlined text-slate-400 text-2xl">inventory_2</span>
                                     @endif
@@ -646,31 +578,14 @@
 
                     <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-3">
                         @if($pedido->metodo_pago === 'stripe')
-                            @php
-                                $detallesTarjeta = $pedido->detalles_tarjeta;
-                                $stripeBrand = strtolower($detallesTarjeta['tarjeta_marca'] ?? '');
-                                $stripeLast4 = $detallesTarjeta['tarjeta_last4'] ?? null;
-                                
-                                // Determinar la imagen oficial correspondiente
-                                if (str_contains($stripeBrand, 'visa')) {
-                                    $logoTarjeta = asset('images/VISA-Logo.webp');
-                                    $nombreMarca = 'Visa';
-                                } elseif (str_contains($stripeBrand, 'mastercard') || str_contains($stripeBrand, 'master')) {
-                                    $logoTarjeta = asset('images/mastercard-logo.png');
-                                    $nombreMarca = 'Mastercard';
-                                } else {
-                                    $logoTarjeta = asset('images/stripe.webp');
-                                    $nombreMarca = !empty($stripeBrand) ? ucfirst($stripeBrand) : 'Stripe';
-                                }
-                            @endphp
                             <div class="flex items-center gap-3.5">
                                 <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-white/95 p-1 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
-                                    <img src="{{ $logoTarjeta }}" alt="{{ $nombreMarca }}" class="max-h-full max-w-full object-contain">
+                                    <img src="{{ $pedido->info_tarjeta['logo'] }}" alt="{{ $pedido->info_tarjeta['nombre'] }}" class="max-h-full max-w-full object-contain">
                                 </div>
                                 <div>
                                     <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Tarjeta de Crédito / Débito</p>
                                     <p class="text-xs text-slate-500 font-mono mt-0.5">
-                                        {{ $nombreMarca }} @if($stripeLast4) · Terminación •••• {{ $stripeLast4 }} @endif
+                                        {{ $pedido->info_tarjeta['nombre'] }} @if($pedido->info_tarjeta['last4']) · Terminación •••• {{ $pedido->info_tarjeta['last4'] }} @endif
                                     </p>
                                 </div>
                             </div>
@@ -717,11 +632,6 @@
         </div>
 
         {{-- Experiencia y Opinión de Compra (Modal Inteligente Post-Compra) --}}
-        @php
-            $evaluacionPrevia = $pedido->evaluacionUsabilidad;
-            $abrirAuto = session('pedido_creado_animacion') || request()->has('calificar');
-        @endphp
-
         <div x-data="{
             modalAbierto: false,
             evaluado: {{ $evaluacionPrevia ? 'true' : 'false' }},

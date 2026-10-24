@@ -149,28 +149,14 @@
             </div>
 
             <div class="space-y-3 pt-1">
-                @php
-                    $etiquetasEstrellas = [
-                        5 => '5 ★ (Excelente)',
-                        4 => '4 ★ (Muy bueno)',
-                        3 => '3 ★ (Bueno)',
-                        2 => '2 ★ (Regular)',
-                        1 => '1 ★ (Malo)',
-                    ];
-                @endphp
-
-                @foreach([5, 4, 3, 2, 1] as $estrella)
-                    @php
-                        $cantidad = $distribucion_estrellas[$estrella] ?? 0;
-                        $porcentajeFila = $total_evaluaciones > 0 ? round(($cantidad / $total_evaluaciones) * 100) : ($estrella >= 4 ? 50 : 0);
-                    @endphp
+                @foreach($distribucion_detallada as $estrella => $fila)
                     <div>
                         <div class="flex justify-between items-center text-xs mb-1 font-medium">
-                            <span class="text-slate-700 dark:text-slate-300">{{ $etiquetasEstrellas[$estrella] }}</span>
-                            <span class="text-slate-500 font-semibold">{{ $cantidad }} ({{ $porcentajeFila }}%)</span>
+                            <span class="text-slate-700 dark:text-slate-300">{{ $fila['etiqueta'] }}</span>
+                            <span class="text-slate-500 font-semibold">{{ $fila['cantidad'] }} ({{ $fila['porcentaje'] }}%)</span>
                         </div>
                         <div class="w-full bg-slate-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
-                            <div class="h-2.5 rounded-full {{ $estrella >= 4 ? 'bg-emerald-500' : ($estrella === 3 ? 'bg-amber-400' : 'bg-rose-500') }} transition-all duration-500" style="width: {{ $porcentajeFila }}%"></div>
+                            <div class="h-2.5 rounded-full {{ $estrella >= 4 ? 'bg-emerald-500' : ($estrella === 3 ? 'bg-amber-400' : 'bg-rose-500') }} transition-all duration-500" style="width: {{ $fila['porcentaje'] }}%"></div>
                         </div>
                     </div>
                 @endforeach

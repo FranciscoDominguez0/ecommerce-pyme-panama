@@ -67,7 +67,26 @@ class PedidoController extends Controller
         $totalArticulos = $pedido->items->sum('cantidad');
         $valoracionesPorProducto = $pedido->valoraciones->keyBy('producto_id');
 
-        return view('cliente.pedidos.detalle', compact('pedido', 'estadosOrdenados', 'totalArticulos', 'valoracionesPorProducto'));
+        // Fechas de hitos para la barra de seguimiento logístico
+        $hitosFechas = [
+            'creado'     => $pedido->creado_en,
+            'confirmado' => $estadosOrdenados->firstWhere('estado', 'pago_confirmado')?->creado_en ?? ($estadosOrdenados->firstWhere('estado', 'en_preparacion')?->creado_en),
+            'enviado'    => $estadosOrdenados->firstWhere('estado', 'enviado')?->creado_en ?? ($estadosOrdenados->firstWhere('estado', 'en_transito')?->creado_en),
+            'entregado'  => $estadosOrdenados->firstWhere('estado', 'entregado')?->creado_en,
+        ];
+
+        $evaluacionPrevia = $pedido->evaluacionUsabilidad;
+        $abrirAuto = session('pedido_creado_animacion') || request()->has('calificar');
+
+        return view('cliente.pedidos.detalle', compact(
+            'pedido',
+            'estadosOrdenados',
+            'totalArticulos',
+            'valoracionesPorProducto',
+            'hitosFechas',
+            'evaluacionPrevia',
+            'abrirAuto'
+        ));
     }
 
     public function confirmarRecepcion($id)

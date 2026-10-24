@@ -136,4 +136,84 @@ class Pedido extends Model
     {
         return $this->ultimoEstado?->estado === 'reembolsado' || (float) $this->monto_reembolsado > 0;
     }
+
+    /**
+     * Retorna la configuración visual (badge, punto de color y barra de progreso) según el estado actual.
+     */
+    public function getConfigEstadoAttribute(): array
+    {
+        $estado = $this->ultimoEstado?->estado ?? 'pendiente';
+
+        return match ($estado) {
+            'entregado' => [
+                'label' => 'Entregado',
+                'dot' => 'bg-emerald-500',
+                'badge' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
+                'progress_step' => 4,
+                'progress_pct' => 100,
+            ],
+            'enviado', 'en_transito' => [
+                'label' => 'En camino',
+                'dot' => 'bg-blue-500',
+                'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/60',
+                'progress_step' => 3,
+                'progress_pct' => 75,
+            ],
+            'listo_para_envio', 'en_preparacion' => [
+                'label' => 'En preparación',
+                'dot' => 'bg-amber-500',
+                'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
+                'progress_step' => 2,
+                'progress_pct' => 50,
+            ],
+            'pago_confirmado' => [
+                'label' => 'Pago confirmado',
+                'dot' => 'bg-teal-500',
+                'badge' => 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 border border-teal-200/80 dark:border-teal-800/60',
+                'progress_step' => 2,
+                'progress_pct' => 50,
+            ],
+            'cancelado' => [
+                'label' => 'Cancelado',
+                'dot' => 'bg-rose-500',
+                'badge' => 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
+                'progress_step' => 1,
+                'progress_pct' => 15,
+            ],
+            default => [
+                'label' => 'Pendiente',
+                'dot' => 'bg-slate-400',
+                'badge' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700',
+                'progress_step' => 1,
+                'progress_pct' => 25,
+            ],
+        };
+    }
+
+    /**
+     * Retorna la información visual de la tarjeta de crédito usada para el pago.
+     */
+    public function getInfoTarjetaAttribute(): array
+    {
+        $detalles = $this->detalles_tarjeta ?? [];
+        $marca = strtolower($detalles['tarjeta_marca'] ?? '');
+        $last4 = $detalles['tarjeta_last4'] ?? null;
+
+        if (str_contains($marca, 'visa')) {
+            $logo = asset('images/VISA-Logo.webp');
+            $nombre = 'Visa';
+        } elseif (str_contains($marca, 'mastercard') || str_contains($marca, 'master')) {
+            $logo = asset('images/mastercard-logo.png');
+            $nombre = 'Mastercard';
+        } else {
+            $logo = asset('images/stripe.webp');
+            $nombre = !empty($marca) ? ucfirst($marca) : 'Stripe';
+        }
+
+        return [
+            'nombre' => $nombre,
+            'logo'   => $logo,
+            'last4'  => $last4,
+        ];
+    }
 }

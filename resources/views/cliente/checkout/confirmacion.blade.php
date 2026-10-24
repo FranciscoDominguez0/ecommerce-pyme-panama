@@ -121,29 +121,15 @@
                         <a href="{{ route('cliente.checkout.pago') }}" wire:navigate class="font-label-caps text-[10px] uppercase font-bold tracking-wider text-secondary hover:text-secondary-container transition-colors">Editar</a>
                     </div>
                     <div class="text-xs text-on-surface-variant flex items-center gap-3">
-                        @if($metodoPago === 'stripe')
-                            @php
-                                $stripeBrand = strtolower(session('checkout_stripe_brand', ''));
-                                $stripeLast4 = session('checkout_stripe_last4');
-                                $brandLabels = [
-                                    'visa' => 'Visa',
-                                    'mastercard' => 'Mastercard',
-                                    'amex' => 'American Express',
-                                    'discover' => 'Discover',
-                                    'diners' => 'Diners Club',
-                                    'jcb' => 'JCB',
-                                    'unionpay' => 'UnionPay',
-                                ];
-                                $nombreMarca = $brandLabels[$stripeBrand] ?? (!empty($stripeBrand) ? ucfirst($stripeBrand) : 'Tarjeta de Crédito / Débito');
-                            @endphp
+                        @if($metodoPago === 'stripe' && $infoStripe)
                             <div class="shrink-0 shadow-2xs rounded-md overflow-hidden border border-slate-200">
-                                <x-tarjeta-marca-logo :brand="$stripeBrand" class="w-12 h-8 block" />
+                                <x-tarjeta-marca-logo :brand="$infoStripe['marca']" class="w-12 h-8 block" />
                             </div>
                             <div>
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="font-semibold text-on-background">{{ $nombreMarca }}</span>
-                                    @if($stripeLast4)
-                                        <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $stripeLast4 }}</span>
+                                    <span class="font-semibold text-on-background">{{ $infoStripe['nombre_marca'] }}</span>
+                                    @if(!empty($infoStripe['last4']))
+                                        <span class="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">•••• {{ $infoStripe['last4'] }}</span>
                                     @endif
                                 </div>
                                 <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
@@ -267,23 +253,28 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+(function() {
+    function initConfirmacionPedido() {
         const form = document.getElementById('form-confirmar-pedido');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                const btn = document.getElementById('btn-confirmar-pedido');
-                if (btn) {
-                    if (btn.disabled) {
-                        e.preventDefault();
-                        return;
-                    }
-                    btn.disabled = true;
-                    // Cambiar el contenido del botón para mostrar estado de carga
-                    btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span> Procesando...';
-                    btn.classList.add('opacity-75', 'cursor-not-allowed');
+        if (!form || form.dataset.inited) return;
+        form.dataset.inited = 'true';
+
+        form.addEventListener('submit', function(e) {
+            const btn = document.getElementById('btn-confirmar-pedido');
+            if (btn) {
+                if (btn.disabled) {
+                    e.preventDefault();
+                    return;
                 }
-            });
-        }
-    });
+                btn.disabled = true;
+                btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">progress_activity</span> Procesando...';
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+        });
+    }
+
+    initConfirmacionPedido();
+    document.addEventListener('livewire:navigated', initConfirmacionPedido);
+})();
 </script>
 @endpush

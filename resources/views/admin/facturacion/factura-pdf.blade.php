@@ -153,27 +153,12 @@
     <table class="header">
         <tr>
             <td style="width: 50%;">
-                @php
-                    $rutaLogoConf = \App\Models\Configuracion::obtener('empresa.logo_ruta');
-                    $logoPath = $rutaLogoConf ? storage_path('app/public/' . $rutaLogoConf) : public_path('images/logo.png');
-                    $logoSrc = $logoPath;
-                    if (file_exists($logoPath)) {
-                        $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
-                        $logoSrc = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($logoPath));
-                    }
-
-                    $nombreEmpresa = \App\Models\Configuracion::obtener('empresa.nombre', 'PyME Panamá');
-                    $rucEmpresa = \App\Models\Configuracion::obtener('empresa.ruc', 'No registrado');
-                    $direccionEmpresa = \App\Models\Configuracion::obtener('empresa.direccion', 'Panamá');
-                    $emailEmpresa = \App\Models\Configuracion::obtener('empresa.correo_contacto', 'info@pymepanama.com');
-                    $telefonoEmpresa = \App\Models\Configuracion::obtener('empresa.telefono', '+507 830-4500');
-                @endphp
-                <img src="{{ $logoSrc }}" class="logo" alt="{{ $nombreEmpresa }}">
+                <img src="{{ $datosEmpresa['logo_src'] }}" class="logo" alt="{{ $datosEmpresa['nombre'] }}">
                 <div class="company-info">
-                    <strong>{{ $nombreEmpresa }}</strong><br>
-                    {!! nl2br(e($direccionEmpresa)) !!}<br>
-                    RUC: {{ $rucEmpresa }}<br>
-                    {{ $emailEmpresa }} @if($telefonoEmpresa) | {{ $telefonoEmpresa }} @endif
+                    <strong>{{ $datosEmpresa['nombre'] }}</strong><br>
+                    {!! nl2br(e($datosEmpresa['direccion'])) !!}<br>
+                    RUC: {{ $datosEmpresa['ruc'] }}<br>
+                    {{ $datosEmpresa['email'] }} @if($datosEmpresa['telefono']) | {{ $datosEmpresa['telefono'] }} @endif
                 </div>
             </td>
             <td style="width: 50%;" class="invoice-title-container">
@@ -314,7 +299,7 @@
     <div class="totals-container">
         <div class="notes">
             <strong>Notas Adicionales:</strong><br>
-            Cualquier consulta relacionada con esta factura, por favor contáctenos a {{ $emailEmpresa }} @if($telefonoEmpresa) o llámenos al {{ $telefonoEmpresa }}@endif.
+            Cualquier consulta relacionada con esta factura, por favor contáctenos a {{ $datosEmpresa['email'] }} @if($datosEmpresa['telefono']) o llámenos al {{ $datosEmpresa['telefono'] }}@endif.
         </div>
         
         <table class="totals-table">
@@ -346,7 +331,7 @@
 
     <div class="footer">
         Este documento es una representación impresa de un Comprobante Fiscal Digital.<br>
-        Gracias por su preferencia. | <strong>{{ \App\Models\Configuracion::obtener('empresa.nombre', 'PyME Panamá') }}</strong>
+        Gracias por su preferencia. | <strong>{{ $datosEmpresa['nombre'] }}</strong>
     </div>
 
 </body>

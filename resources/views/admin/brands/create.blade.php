@@ -150,43 +150,4 @@
 
 </div>
 
-@push('scripts')
-<script>
-    // Genera automáticamente un slug limpio en tiempo real a partir del nombre ingresado
-    function generarSlugAutomatico(texto) {
-        const slugInput = document.getElementById('slug');
-        if (!slugInput) return;
-        const slug = (texto || '')
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9 -]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-');
-        slugInput.value = slug;
-    }
-
-    // Muestra una previsualización inmediata de la imagen seleccionada
-    function previsualizarLogo(input) {
-        const file = input.files[0];
-        const placeholder = document.getElementById('preview-placeholder');
-        const img = document.getElementById('preview-img');
-        
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                img.src = e.target.result;
-                img.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            img.src = '';
-            img.classList.add('hidden');
-            placeholder.classList.remove('hidden');
-        }
-    }
-</script>
-@endpush
-
 @endsection

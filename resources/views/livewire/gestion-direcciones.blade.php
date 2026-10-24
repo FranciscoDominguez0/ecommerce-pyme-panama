@@ -17,7 +17,7 @@
                             <div class="flex justify-between items-start mb-4">
                                 <div class="flex items-center gap-2">
                                     <span class="material-symbols-outlined text-primary text-2xl">
-                                        {{ strtolower($dir->alias) == 'casa' ? 'home' : (strtolower($dir->alias) == 'oficina' ? 'work' : 'location_on') }}
+                                        {{ $dir->icono_alias }}
                                     </span>
                                     <span class="text-base font-semibold text-primary">{{ $dir->alias }}</span>
                                     @if($dir->es_predeterminada)
@@ -110,18 +110,10 @@
         @if($this->direcciones->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8" id="lista-direcciones">
                 @foreach($this->direcciones as $dir)
-                    @php
-                        $iconoAlias = match(mb_strtolower($dir->alias)) {
-                            'casa' => 'home',
-                            'oficina', 'trabajo' => 'work',
-                            'apartamento' => 'apartment',
-                            default => 'location_on',
-                        };
-                    @endphp
                     <div class="card-direccion bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4 ambient-shadow ambient-shadow-hover transition-all duration-300 relative group">
                         <div class="flex justify-between items-start">
                             <div class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-primary text-2xl">{{ $iconoAlias }}</span>
+                                <span class="material-symbols-outlined text-primary text-2xl">{{ $dir->icono_alias }}</span>
                                 <span class="text-base font-semibold text-primary">{{ $dir->alias }}</span>
                                 @if($dir->es_predeterminada)
                                     <span class="bg-secondary/10 text-secondary font-label-caps text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-sm">Predeterminada</span>

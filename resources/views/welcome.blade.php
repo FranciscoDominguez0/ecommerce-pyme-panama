@@ -479,35 +479,3 @@
         <span id="toast-text">Acción completada</span>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        function showToast(msg) {
-            const box = document.getElementById('toast-box');
-            const text = document.getElementById('toast-text');
-            text.textContent = msg;
-            box.classList.remove('hidden');
-            box.classList.add('flex');
-            setTimeout(() => {
-                box.classList.add('hidden');
-                box.classList.remove('flex');
-            }, 3000);
-        }
-
-        function addToCart(name, price) {
-            showToast(`¡"${name}" ($${price.toFixed(2)}) añadido a tu orden!`);
-        }
-
-        function copyCouponCode(code) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(code).then(() => {
-                    showToast(`¡Cupón "${code}" copiado al portapapeles!`);
-                }).catch(() => {
-                    showToast(`¡Cupón "${code}" listo para usar!`);
-                });
-            } else {
-                showToast(`¡Cupón "${code}" listo para usar!`);
-            }
-        }
-    </script>
-@endpush

@@ -67,4 +67,17 @@ class Direccion extends Model
 
         return null;
     }
+
+    /**
+     * Retorna el icono de Material Symbols según el alias de la dirección.
+     */
+    public function getIconoAliasAttribute(): string
+    {
+        return match(mb_strtolower($this->alias ?? '')) {
+            'casa' => 'home',
+            'oficina', 'trabajo' => 'work',
+            'apartamento' => 'apartment',
+            default => 'location_on',
+        };
+    }
 }

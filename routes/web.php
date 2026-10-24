@@ -36,10 +36,14 @@ Route::get('/buscar-predictivo', [CatalogoController::class, 'buscarPredictivo']
 Route::get('/producto/{slug?}', [CatalogoController::class, 'show'])->name('cliente.producto.detalle');
 Route::post('/producto/notificar-stock', [CatalogoController::class, 'solicitarNotificacionStock'])->name('cliente.producto.notificar-stock');
 Route::get('/terminos-y-condiciones', function () {
-    return view('paginas.terminos'); })->name('terminos');
+    $correoContacto = \App\Models\Configuracion::obtener('empresa.correo_contacto', 'soporte@paymepanama.com');
+    return view('paginas.terminos', compact('correoContacto'));
+})->name('terminos');
 
 Route::get('/politicas-de-privacidad', function () {
-    return view('paginas.privacidad'); })->name('privacidad');
+    $correoContacto = \App\Models\Configuracion::obtener('empresa.correo_contacto', 'soporte@paymepanama.com');
+    return view('paginas.privacidad', compact('correoContacto'));
+})->name('privacidad');
 
 // Carrito de Compras
 Route::get('/carrito', [CarritoController::class, 'index'])->name('cliente.carrito');

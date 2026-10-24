@@ -176,7 +176,8 @@ class InventarioController extends Controller
     public function formularioEntrada()
     {
         $productos = Producto::sinEliminar()->orderBy('nombre')->get(['id', 'nombre', 'sku', 'stock']);
-        return view('admin.inventario.entrada', compact('productos'));
+        $productosDataJson = $this->formatearProductosParaSelector($productos);
+        return view('admin.inventario.entrada', compact('productos', 'productosDataJson'));
     }
 
     public function entrada(Request $request)
@@ -218,7 +219,8 @@ class InventarioController extends Controller
     public function formularioSalida()
     {
         $productos = Producto::sinEliminar()->orderBy('nombre')->get(['id', 'nombre', 'sku', 'stock']);
-        return view('admin.inventario.salida', compact('productos'));
+        $productosDataJson = $this->formatearProductosParaSelector($productos);
+        return view('admin.inventario.salida', compact('productos', 'productosDataJson'));
     }
 
     public function salida(Request $request)
@@ -256,7 +258,32 @@ class InventarioController extends Controller
     public function formularioAjuste()
     {
         $productos = Producto::sinEliminar()->orderBy('nombre')->get(['id', 'nombre', 'sku', 'stock', 'stock_minimo']);
-        return view('admin.inventario.ajuste', compact('productos'));
+        $productosDataJson = $this->formatearProductosParaSelector($productos, true);
+        return view('admin.inventario.ajuste', compact('productos', 'productosDataJson'));
+    }
+
+    /**
+     * Da formato a la lista de productos para el modal selector en JavaScript.
+     */
+    private function formatearProductosParaSelector($productos, bool $incluirMinimo = false)
+    {
+        return $productos->map(function ($p) use ($incluirMinimo) {
+            $item = [
+                'id' => $p->id,
+                'nombre' => $p->nombre,
+                'sku' => $p->sku,
+                'stock' => $p->stock,
+                'imagen_ruta' => $p->imagen_url,
+                'subtitulo' => $p->sku ? 'SKU: ' . $p->sku . ' | Stock: ' . $p->stock : 'Stock: ' . $p->stock,
+                'icono' => 'inventory_2'
+            ];
+
+            if ($incluirMinimo) {
+                $item['minimo'] = $p->stock_minimo;
+            }
+
+            return $item;
+        })->values();
     }
 
     public function ajuste(Request $request)

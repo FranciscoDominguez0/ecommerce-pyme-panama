@@ -55,7 +55,7 @@
             </tr>
             <tr>
                 <td class="footer">
-                    &copy; {{ date('Y') }} {{ \App\Models\Configuracion::obtener('empresa.nombre', 'PayMe Panamá') }}. Todos los derechos reservados.
+                    &copy; {{ date('Y') }} {{ $nombreEmpresa ?? 'PayMe Panamá' }}. Todos los derechos reservados.
                 </td>
             </tr>
         </table>

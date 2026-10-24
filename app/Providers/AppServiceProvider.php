@@ -55,5 +55,28 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         );
+
+        // Proveedor de datos para el menú móvil de clientes (categorías principales)
+        \Illuminate\Support\Facades\View::composer('layouts.partials.cliente.mobile-menu', function ($view) {
+            $globalCats = \App\Models\Categoria::whereNull('padre_id')->orderBy('nombre')->get();
+            $view->with('globalCats', $globalCats);
+        });
+
+        // Proveedor de contadores de badges para la barra lateral administrativa
+        \Illuminate\Support\Facades\View::composer('layouts.partials.admin.sidebar', function ($view) {
+            $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
+                $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                      ->from('estados_pedido')
+                      ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
+                      ->whereNotIn('estados_pedido.estado', ['pendiente', 'pago_confirmado']);
+            })->count();
+
+            $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
+
+            $view->with([
+                'nuevosPedidosCount' => $nuevosPedidosCount,
+                'nuevasDevolucionesCount' => $nuevasDevolucionesCount,
+            ]);
+        });
     }
 }

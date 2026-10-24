@@ -60,24 +60,18 @@
         <!-- Grid de Productos -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($productos as $producto)
-                @php
-                    $imgRuta = $producto->imagen_url;
-                @endphp
                 <div class="bg-white border border-gray-200/90 rounded-2xl p-4 sm:p-5 flex flex-col group hover:shadow-md hover:border-gray-300 transition-all">
                     
                     <!-- Imagen con Badge de Descuento -->
                     <div class="w-full aspect-square bg-gray-50 rounded-xl overflow-hidden mb-4 relative border border-gray-100">
-                        <img src="{{ $imgRuta }}" 
+                        <img src="{{ $producto->imagen_url }}" 
                              alt="{{ $producto->nombre }}" 
                              class="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                              onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Sin+Imagen';" />
                         
                         @if($producto->oferta_activa && $producto->precio_oferta && (float)$producto->precio > (float)$producto->precio_oferta)
-                            @php
-                                $descuentoPorc = round((((float)$producto->precio - (float)$producto->precio_oferta) / (float)$producto->precio) * 100);
-                            @endphp
                             <span class="absolute top-2.5 right-2.5 bg-red-600 text-white font-bold text-[10px] px-2 py-0.5 rounded-full shadow-xs">
-                                -{{ $descuentoPorc }}%
+                                -{{ round($producto->porcentajeDescuentoPromocional()) }}%
                             </span>
                         @endif
 

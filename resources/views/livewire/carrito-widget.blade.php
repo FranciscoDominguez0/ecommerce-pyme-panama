@@ -356,11 +356,8 @@
                                  onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Sin+Imagen';" />
                             
                             @if($deseo->oferta_activa && $deseo->precio_oferta && (float)$deseo->precio > (float)$deseo->precio_oferta)
-                                @php
-                                    $descuentoPorc = round((((float)$deseo->precio - (float)$deseo->precio_oferta) / (float)$deseo->precio) * 100);
-                                @endphp
                                 <span class="absolute top-2 right-2 bg-red-600 text-white font-bold text-[10px] px-2 py-0.5 rounded-full shadow-xs">
-                                    -{{ $descuentoPorc }}%
+                                    -{{ round($deseo->porcentajeDescuentoPromocional()) }}%
                                 </span>
                             @endif
                         </div>

@@ -48,60 +48,6 @@
         <div class="flex flex-col gap-4">
             @foreach($pedidos as $pedido)
                 @php
-                    $ultimoEstado = $pedido->ultimoEstado ? $pedido->ultimoEstado->estado : 'pendiente';
-                    $configEstado = match($ultimoEstado) {
-                        'entregado' => [
-                            'label' => 'Entregado',
-                            'dot' => 'bg-emerald-500',
-                            'badge' => 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60',
-                        ],
-                        'enviado' => [
-                            'label' => 'Enviado',
-                            'dot' => 'bg-blue-500',
-                            'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/60',
-                        ],
-                        'en_transito' => [
-                            'label' => 'En tránsito',
-                            'dot' => 'bg-blue-500',
-                            'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/60',
-                        ],
-                        'listo_para_envio' => [
-                            'label' => 'Listo para envío',
-                            'dot' => 'bg-blue-500',
-                            'badge' => 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/60',
-                        ],
-                        'en_preparacion' => [
-                            'label' => 'En preparación',
-                            'dot' => 'bg-amber-500',
-                            'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
-                        ],
-                        'pago_confirmado' => [
-                            'label' => 'Pago confirmado',
-                            'dot' => 'bg-teal-500',
-                            'badge' => 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400 border border-teal-200/80 dark:border-teal-800/60',
-                        ],
-                        'cancelado' => [
-                            'label' => 'Cancelado',
-                            'dot' => 'bg-rose-500',
-                            'badge' => 'bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800/60',
-                        ],
-                        'reembolsado' => [
-                            'label' => 'Reembolsado',
-                            'dot' => 'bg-slate-400',
-                            'badge' => 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700',
-                        ],
-                        'devolucion_solicitada' => [
-                            'label' => 'Devolución solicitada',
-                            'dot' => 'bg-amber-500',
-                            'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
-                        ],
-                        default => [
-                            'label' => 'Pendiente',
-                            'dot' => 'bg-amber-500',
-                            'badge' => 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/60',
-                        ]
-                    };
-
                     $primerItem = $pedido->items->first();
                     $totalArticulos = $pedido->items->sum('cantidad');
                     $otrosItemsCount = $pedido->items->count() - 1;
@@ -122,30 +68,21 @@
                         </div>
 
                         {{-- Estado en pill redondeada --}}
-                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shrink-0 {{ $configEstado['badge'] }}">
-                            <span class="w-1.5 h-1.5 rounded-full {{ $configEstado['dot'] }}"></span>
-                            <span>{{ $configEstado['label'] }}</span>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shrink-0 {{ $pedido->config_estado['badge'] }}">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $pedido->config_estado['dot'] }}"></span>
+                            <span>{{ $pedido->config_estado['label'] }}</span>
                         </div>
                     </div>
 
                     {{-- Cuerpo de la tarjeta: 1 Imagen destacada con indicador numérico + Nombre + Cantidad + Total + Botón --}}
-                    @php
-                        $primerImg = null;
-                        if ($primerItem?->variante && $primerItem->variante->imagen_ruta) {
-                            $primerImg = asset('storage/' . $primerItem->variante->imagen_ruta);
-                        } elseif ($primerItem?->producto) {
-                            $primerImg = $primerItem->producto->imagen_url;
-                        }
-                    @endphp
-
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         
                         {{-- Producto Principal (1 sola imagen clara + badge N productos si compró 20) --}}
                         <div class="flex items-center gap-3.5 sm:gap-4 min-w-0 flex-1">
                             {{-- Contenedor de la imagen destacada --}}
                             <div class="relative w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/90 dark:border-slate-700/80 overflow-hidden shrink-0 flex items-center justify-center p-1">
-                                @if($primerImg)
-                                    <img src="{{ $primerImg }}" alt="{{ $primerItem->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-contain">
+                                @if($primerItem?->imagen_url)
+                                    <img src="{{ $primerItem->imagen_url }}" alt="{{ $primerItem->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-contain">
                                 @else
                                     <span class="material-symbols-outlined text-slate-400 text-2xl">inventory_2</span>
                                 @endif

@@ -76,10 +76,12 @@ class FacturaService
     {
         $factura->load(['pedido.items.producto.imagenes', 'pedido.items.variante', 'usuario', 'pedido.direccion']);
         $itemsFactura = $this->prepararItemsParaPdf($factura);
+        $datosEmpresa = $this->prepararDatosEmpresaParaPdf();
 
         $pdf = Pdf::loadView('admin.facturacion.factura-pdf', [
             'factura' => $factura,
             'itemsFactura' => $itemsFactura,
+            'datosEmpresa' => $datosEmpresa,
         ]);
 
         $pdfRuta = 'facturas/' . $factura->numero . '.pdf';
@@ -291,5 +293,28 @@ class FacturaService
 
         // Formato: F-2024-0001
         return 'F-' . $anio . '-' . str_pad((string)$correlativo, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Prepara los datos de la empresa y la imagen del logotipo para el PDF.
+     */
+    public function prepararDatosEmpresaParaPdf(): array
+    {
+        $rutaLogoConf = \App\Models\Configuracion::obtener('empresa.logo_ruta');
+        $logoPath = $rutaLogoConf ? storage_path('app/public/' . $rutaLogoConf) : public_path('images/logo.png');
+        $logoSrc = $logoPath;
+        if (file_exists($logoPath)) {
+            $ext = pathinfo($logoPath, PATHINFO_EXTENSION);
+            $logoSrc = 'data:image/' . $ext . ';base64,' . base64_encode(file_get_contents($logoPath));
+        }
+
+        return [
+            'nombre'    => \App\Models\Configuracion::obtener('empresa.nombre', 'PyME Panamá'),
+            'ruc'       => \App\Models\Configuracion::obtener('empresa.ruc', 'No registrado'),
+            'direccion' => \App\Models\Configuracion::obtener('empresa.direccion', 'Panamá'),
+            'email'     => \App\Models\Configuracion::obtener('empresa.correo_contacto', 'info@pymepanama.com'),
+            'telefono'  => \App\Models\Configuracion::obtener('empresa.telefono', '+507 830-4500'),
+            'logo_src'  => $logoSrc,
+        ];
     }
 }

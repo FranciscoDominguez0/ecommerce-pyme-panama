@@ -36,50 +36,6 @@
             
             <!-- Columna Izquierda: Galería de Imágenes Prioritaria y Ancha (7 columnas) -->
             <div class="lg:col-span-7 space-y-4 lg:sticky lg:top-24" id="galeria-producto-contenedor">
-                
-                @php
-                    $imgPrincipal = $producto->imagenPrincipal();
-                    $todasImagenes = $producto->imagenes ?? collect();
-                    
-                    // Si no tiene imágenes, crear un item por defecto
-                    if ($todasImagenes->isEmpty()) {
-                        $todasImagenes = collect([(object)[
-                            'id' => 0,
-                            'ruta' => 'image',
-                            'es_principal' => true
-                        ]]);
-                    }
-
-                    // Formatear array JSON estructurado para el visor dinámico
-                    $imagenesJson = $todasImagenes->map(function($foto, $index) {
-                        $ruta = $foto->ruta;
-                        $esUrl = str_starts_with($ruta, 'http') || str_starts_with($ruta, 'data:image');
-                        $esStorage = str_starts_with($ruta, 'storage/') || str_starts_with($ruta, '/storage');
-                        $esSvg = str_contains($ruta, '<svg') || str_contains($ruta, '</svg>');
-                        $esIcono = !$esUrl && !$esStorage && !$esSvg;
-                        
-                        $src = '';
-                        if ($esStorage) {
-                            $src = asset(ltrim($ruta, '/'));
-                        } elseif ($esUrl) {
-                            $src = $ruta;
-                        }
-
-                        return [
-                            'index' => $index,
-                            'id' => $foto->id ?? $index,
-                            'ruta' => $ruta,
-                            'src' => $src,
-                            'es_svg' => $esSvg,
-                            'es_icono' => $esIcono,
-                            'es_principal' => (bool)($foto->es_principal ?? false)
-                        ];
-                    })->values();
-
-                    // Índice inicial (priorizar la principal)
-                    $indiceInicial = $imagenesJson->search(fn($img) => $img['es_principal']);
-                    if ($indiceInicial === false) $indiceInicial = 0;
-                @endphp
 
                 <!-- Visor Principal de Imagen Amplio y Protagónico -->
                 <div class="relative w-full h-[320px] sm:h-[380px] md:h-[400px] lg:h-[410px] rounded-3xl bg-white border border-slate-200/90 shadow-sm flex items-center justify-center p-6 sm:p-8 overflow-hidden select-none group/visor"
@@ -207,13 +163,6 @@
 
                     <!-- Bloque de Precios y Promociones Especiales -->
                     <div class="space-y-1">
-                        @php
-                            $promoMes = $producto->promocionDelMesActiva();
-                            $tienePromocion = $producto->tienePromocionOPrecioOferta();
-                            $precioFinal = $producto->precioFinalPromocional();
-                            $porcentajeDesc = $producto->porcentajeDescuentoPromocional();
-                        @endphp
-
                         @if($promoMes)
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-lg text-xs font-bold shadow-2xs mb-1">
                                 <span class="material-symbols-outlined star-filled text-[16px] text-amber-600" style="font-variation-settings: 'FILL' 1;">star</span>

@@ -25,9 +25,6 @@
                     </div>
                     
                     <div class="overflow-y-auto flex-1 p-5 space-y-5">
-                        @php
-                            $globalCats = \App\Models\Categoria::whereNull('padre_id')->orderBy('nombre')->get();
-                        @endphp
                         <a href="{{ route('dashboard') }}" wire:navigate class="block text-slate-800 font-medium text-sm pb-4 border-b border-slate-100">Inicio</a>
                         
                         <div x-data="{ catOpen: false }" class="pb-4 border-b border-slate-100">

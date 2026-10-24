@@ -244,10 +244,11 @@
 
 @push('scripts')
 <script>
+(function() {
     const productosData = @json($productosFormatted ?? []);
     let precioBaseSeleccionado = {{ $promocionActual->producto->precio ?? 0 }};
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initSelectorProductoDelMes() {
         if (window.ModalBuscador) {
             window.ModalBuscador.init('modal-selector-producto', {
                 items: productosData,
@@ -256,7 +257,7 @@
                 render: (prod) => {
                     const card = document.createElement('div');
                     card.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between group bg-white dark:bg-[#181a1b] border-slate-200 dark:border-gray-700/90 hover:border-emerald-500 dark:hover:border-emerald-500/70 hover:bg-emerald-50/40 dark:hover:bg-emerald-500/10 hover:shadow-2xs`;
-                    card.onclick = () => seleccionarProductoModal(prod);
+                    card.onclick = () => window.seleccionarProductoModal(prod);
 
                     card.innerHTML = `
                         <div class="flex items-center gap-3 min-w-0">
@@ -274,13 +275,13 @@
                 }
             });
         }
-    });
-
-    function abrirModalSeleccionarProducto() {
-        if (window.ModalBuscador) window.ModalBuscador.abrir('modal-selector-producto');
     }
 
-    function seleccionarProductoModal(prod) {
+    window.abrirModalSeleccionarProducto = function() {
+        if (window.ModalBuscador) window.ModalBuscador.abrir('modal-selector-producto');
+    };
+
+    window.seleccionarProductoModal = function(prod) {
         document.getElementById('producto_id').value = prod.id;
         document.getElementById('display-prod-nombre').textContent = prod.nombre;
         document.getElementById('display-prod-precio').textContent = `Precio Base: $${prod.precio_base.toFixed(2)}`;
@@ -295,12 +296,12 @@
         }
 
         precioBaseSeleccionado = prod.precio_base;
-        calcularPrecioPromocional();
+        window.calcularPrecioPromocional();
 
         if (window.ModalBuscador) window.ModalBuscador.cerrar('modal-selector-producto');
-    }
+    };
 
-    function calcularPrecioPromocional() {
+    window.calcularPrecioPromocional = function() {
         const pctInput = document.getElementById('descuento_especial');
         const pct = parseFloat(pctInput.value || 0);
 
@@ -312,7 +313,11 @@
         document.getElementById('calc-precio-final').textContent = `$${final.toFixed(2)}`;
         document.getElementById('spotlight-precio-promo').textContent = `$${final.toFixed(2)}`;
         document.getElementById('spotlight-badge').textContent = `-${pct.toFixed(0)}%`;
-    }
+    };
+
+    initSelectorProductoDelMes();
+    document.addEventListener('livewire:navigated', initSelectorProductoDelMes);
+})();
 </script>
 @endpush
 @endsection

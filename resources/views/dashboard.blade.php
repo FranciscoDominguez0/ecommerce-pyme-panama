@@ -52,18 +52,7 @@
                 @foreach($categoriasPrincipales as $cat)
                 <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate class="snap-start shrink-0 w-24 flex flex-col items-center gap-3 group">
                     <div class="w-16 h-16 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center group-hover:shadow-md group-hover:border-emerald-400 group-hover:-translate-y-1 transition-all">
-                        <!-- Icono genérico basado en slug si no tiene imagen -->
-                        @php
-                            $icon = 'devices';
-                            if(str_contains($cat->slug, 'laptop')) $icon = 'laptop_mac';
-                            if(str_contains($cat->slug, 'gamer') || str_contains($cat->slug, 'consola')) $icon = 'sports_esports';
-                            if(str_contains($cat->slug, 'smartphones') || str_contains($cat->slug, 'celular')) $icon = 'smartphone';
-                            if(str_contains($cat->slug, 'monitor')) $icon = 'monitor';
-                            if(str_contains($cat->slug, 'teclado') || str_contains($cat->slug, 'mouse')) $icon = 'keyboard';
-                            if(str_contains($cat->slug, 'red') || str_contains($cat->slug, 'router')) $icon = 'router';
-                            if(str_contains($cat->slug, 'audio') || str_contains($cat->slug, 'audifonos')) $icon = 'headphones';
-                        @endphp
-                        <span class="material-symbols-outlined text-[28px] text-slate-700 group-hover:text-emerald-600 transition-colors">{{ $icon }}</span>
+                        <span class="material-symbols-outlined text-[28px] text-slate-700 group-hover:text-emerald-600 transition-colors">{{ $cat->icono }}</span>
                     </div>
                     <span class="text-xs font-semibold text-slate-700 text-center leading-tight group-hover:text-emerald-700">{{ $cat->nombre }}</span>
                 </a>

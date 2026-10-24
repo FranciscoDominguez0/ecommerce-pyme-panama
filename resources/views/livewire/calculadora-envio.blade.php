@@ -35,37 +35,27 @@
                         <li><strong>Costo de Retiro:</strong> GRATIS</li>
                     </ul>
                 @elseif($metodo_entrega === 'delivery')
-                    @if(session('checkout_direccion_id'))
-                        @php
-                            $dir = \App\Models\Direccion::with('zonaEnvio')->find(session('checkout_direccion_id'));
-                        @endphp
-                        @if($dir)
-                            <ul class="list-disc ml-4 space-y-3 text-[15px] text-slate-800">
-                                <li><strong>Zona:</strong> {{ $dir->zonaEnvio ? $dir->zonaEnvio->nombre : 'Zona por defecto' }}</li>
-                                <li><strong>Dirección:</strong> {{ $dir->direccion_exacta }}</li>
-                                <li><strong>Costo de Delivery:</strong> ${{ $dir->zonaEnvio ? number_format($dir->zonaEnvio->costo, 2) : '0.00' }} USD</li>
-                            </ul>
-                        @else
-                            <div class="text-red-500 text-sm font-bold py-2">Dirección seleccionada inválida. <button wire:click="abrirModalMetodo('delivery')" class="underline">Cambiar</button></div>
-                        @endif
+                    @if($this->direccionCheckout)
+                        <ul class="list-disc ml-4 space-y-3 text-[15px] text-slate-800">
+                            <li><strong>Zona:</strong> {{ $this->direccionCheckout->zonaEnvio ? $this->direccionCheckout->zonaEnvio->nombre : 'Zona por defecto' }}</li>
+                            <li><strong>Dirección:</strong> {{ $this->direccionCheckout->direccion_exacta }}</li>
+                            <li><strong>Costo de Delivery:</strong> ${{ $this->direccionCheckout->zonaEnvio ? number_format($this->direccionCheckout->zonaEnvio->costo, 2) : '0.00' }} USD</li>
+                        </ul>
+                    @elseif(session('checkout_direccion_id'))
+                        <div class="text-red-500 text-sm font-bold py-2">Dirección seleccionada inválida. <button wire:click="abrirModalMetodo('delivery')" class="underline">Cambiar</button></div>
                     @else
                         <div class="text-emerald-600 text-sm font-bold py-2 cursor-pointer hover:underline" wire:click="abrirModalMetodo('delivery')">
                             Falta seleccionar la dirección. Haz clic aquí para Cambiar.
                         </div>
                     @endif
                 @elseif($metodo_entrega === 'retiro_courier')
-                    @if($sucursalSeleccionada)
-                        @php
-                            $suc = \App\Models\CourierSucursal::find($sucursalSeleccionada);
-                        @endphp
-                        @if($suc)
-                            <ul class="list-disc ml-4 space-y-3 text-[15px] text-slate-800">
-                                <li><strong>Zona del Courier:</strong> {{ $suc->zona }} <a href="#" class="text-blue-500 hover:underline ml-1">(Ver mapa)</a></li>
-                                <li><strong>Lugar del Courier:</strong> {{ $suc->courier }} {{ $suc->sucursal }}</li>
-                                <li><strong>Servicio de Courier:</strong> Recoger en Tienda de Courier</li>
-                                <li><strong>Costo de Servicio:</strong> ${{ number_format($suc->tarifa_uno_hasta_7lb, 2) }} USD</li>
-                            </ul>
-                        @endif
+                    @if($this->sucursalCourier)
+                        <ul class="list-disc ml-4 space-y-3 text-[15px] text-slate-800">
+                            <li><strong>Zona del Courier:</strong> {{ $this->sucursalCourier->zona }} <a href="#" class="text-blue-500 hover:underline ml-1">(Ver mapa)</a></li>
+                            <li><strong>Lugar del Courier:</strong> {{ $this->sucursalCourier->courier }} {{ $this->sucursalCourier->sucursal }}</li>
+                            <li><strong>Servicio de Courier:</strong> Recoger en Tienda de Courier</li>
+                            <li><strong>Costo de Servicio:</strong> ${{ number_format($this->sucursalCourier->tarifa_uno_hasta_7lb, 2) }} USD</li>
+                        </ul>
                     @else
                         <div class="text-emerald-600 text-sm font-bold py-2 cursor-pointer hover:underline" wire:click="abrirModalMetodo('retiro_courier')">
                             Falta seleccionar la sucursal. Haz clic aquí para Cambiar.
@@ -128,7 +118,7 @@
                             <label class="font-bold text-primary w-24">Zona:</label>
                             <select wire:model.live="zonaSeleccionada" class="flex-grow border border-slate-300 rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm">
                                 <option value="">Seleccione una zona</option>
-                                @foreach(\App\Models\CourierSucursal::where('activo', true)->select('zona')->distinct()->pluck('zona') as $zona)
+                                @foreach($this->zonasCourier as $zona)
                                     <option value="{{ $zona }}">{{ $zona }}</option>
                                 @endforeach
                             </select>

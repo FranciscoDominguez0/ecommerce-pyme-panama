@@ -92,12 +92,6 @@
 </div>
 @endsection
 
-@push('scripts')
-<script>
-    // Ya no es necesario JS para el toggle, ahora es puro CSS como en pagos.
-</script>
-@endpush
-
 
 
 

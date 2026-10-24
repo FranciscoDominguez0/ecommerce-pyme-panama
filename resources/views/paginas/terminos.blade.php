@@ -52,7 +52,7 @@
 
             <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">4. Resolución de problemas</h3>
             <p>
-                Ante cualquier consulta, inconformidad o incidencia técnica, nuestro equipo de soporte está siempre disponible para brindarte asistencia oportuna. Puedes comunicarte con nosotros a través de <a href="mailto:{{ \App\Models\Configuracion::obtener('empresa.correo_contacto', 'soporte@paymepanama.com') }}" class="font-medium text-emerald-600 hover:text-emerald-700 transition-colors">{{ \App\Models\Configuracion::obtener('empresa.correo_contacto', 'soporte@paymepanama.com') }}</a>. Todas nuestras políticas y operaciones se encuentran amparadas bajo la legislación vigente de comercio electrónico de Panamá.
+                Ante cualquier consulta, inconformidad o incidencia técnica, nuestro equipo de soporte está siempre disponible para brindarte asistencia oportuna. Puedes comunicarte con nosotros a través de <a href="mailto:{{ $correoContacto }}" class="font-medium text-emerald-600 hover:text-emerald-700 transition-colors">{{ $correoContacto }}</a>. Todas nuestras políticas y operaciones se encuentran amparadas bajo la legislación vigente de comercio electrónico de Panamá.
             </p>
         </div>
 

@@ -16,6 +16,44 @@
         localStorage.setItem('sidebarExpanded', !isCollapsed);
     };
 
+    // Genera automáticamente un slug limpio a partir de un texto
+    window.generarSlugAutomatico = function(texto, targetId = 'slug') {
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        target.value = (texto || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9 -]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
+    };
+
+    // Previsualización inmediata de imagen para campos de archivo
+    window.previsualizarLogo = function(input, imgId = 'preview-img', placeholderId = 'preview-placeholder', currentId = 'preview-current') {
+        const file = input.files ? input.files[0] : null;
+        const img = document.getElementById(imgId);
+        const placeholder = document.getElementById(placeholderId);
+        const current = document.getElementById(currentId);
+        if (!img) return;
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.classList.remove('hidden');
+                if (placeholder) placeholder.classList.add('hidden');
+                if (current) current.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            img.src = '';
+            img.classList.add('hidden');
+            if (placeholder) placeholder.classList.remove('hidden');
+            if (current) current.classList.remove('hidden');
+        }
+    };
+
     // Mantener la posición del scroll del sidebar entre recargas y navegación SPA
     function initSidebarScrollPersistence() {
         const nav = document.querySelector('#admin-sidebar nav');

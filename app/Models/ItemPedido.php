@@ -37,4 +37,16 @@ class ItemPedido extends Model
     {
         return $this->belongsTo(VarianteProducto::class, 'variante_producto_id');
     }
+
+    /**
+     * Retorna la URL de la imagen del item (priorizando la imagen de la variante).
+     */
+    public function getImagenUrlAttribute(): ?string
+    {
+        if ($this->variante && $this->variante->imagen_ruta) {
+            return asset('storage/' . $this->variante->imagen_ruta);
+        }
+
+        return $this->producto?->imagen_url;
+    }
 }

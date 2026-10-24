@@ -119,8 +119,11 @@ class ConfiguracionController extends Controller
     {
         $configuraciones = Configuracion::porGrupo('correos')->pluck('valor', 'clave')->toArray();
         $roles = \App\Models\Role::all();
+        $activo = Configuracion::obtenerBool('notificaciones.stock.email.activo', false);
+        $rolesSeleccionados = json_decode(Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
+        $adicionales = Configuracion::obtener('notificaciones.stock.email.adicionales', '');
 
-        return view('admin.configuracion.notificaciones', compact('configuraciones', 'roles'));
+        return view('admin.configuracion.notificaciones', compact('configuraciones', 'roles', 'activo', 'rolesSeleccionados', 'adicionales'));
     }
 
     /**

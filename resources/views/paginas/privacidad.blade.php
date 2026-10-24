@@ -44,7 +44,7 @@
 
             <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">4. Tus derechos sobre la información (ARCO)</h3>
             <p>
-                Amparados en la legislación panameña vigente, garantizamos plenamente tus derechos de Acceso, Rectificación, Cancelación y Oposición (ARCO). Si deseas ejercer tu derecho a ser olvidado y solicitar la eliminación permanente de tu cuenta y base de datos asociada, el trámite será gestionado sin demoras innecesarias. Para este u otros requerimientos legales, por favor escríbenos a <a href="mailto:{{ \App\Models\Configuracion::obtener('empresa.correo_contacto', 'soporte@paymepanama.com') }}" class="font-medium text-emerald-600 hover:text-emerald-700 transition-colors">{{ \App\Models\Configuracion::obtener('empresa.correo_contacto', 'soporte@paymepanama.com') }}</a>.
+                Amparados en la legislación panameña vigente, garantizamos plenamente tus derechos de Acceso, Rectificación, Cancelación y Oposición (ARCO). Si deseas ejercer tu derecho a ser olvidado y solicitar la eliminación permanente de tu cuenta y base de datos asociada, el trámite será gestionado sin demoras innecesarias. Para este u otros requerimientos legales, por favor escríbenos a <a href="mailto:{{ $correoContacto }}" class="font-medium text-emerald-600 hover:text-emerald-700 transition-colors">{{ $correoContacto }}</a>.
             </p>
         </div>
 

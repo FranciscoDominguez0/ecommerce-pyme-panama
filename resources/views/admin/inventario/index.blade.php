@@ -492,7 +492,7 @@
          onclick="if(event.target === this) window.cerrarModalDetalleMovimiento();"
          role="dialog"
          aria-modal="true">
-        <div class="bg-white dark:bg-[#181a1b] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-gray-700/80 space-y-5 animate-in fade-in zoom-in-95 duration-150 relative z-10 text-left my-auto">
+        <div class="bg-white dark:bg-[#181a1b] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-gray-700 space-y-5 animate-in fade-in zoom-in-95 duration-150 relative z-10 text-left my-auto">
             {{-- Header --}}
             <div class="flex items-start justify-between gap-3">
                 <div class="flex items-center gap-3">
@@ -504,25 +504,25 @@
                             <h3 class="text-base font-bold text-slate-900 dark:text-white">Detalle de Movimiento</h3>
                             <span id="mdm-tipo-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider"></span>
                         </div>
-                        <p id="mdm-fecha" class="text-xs text-slate-400 font-medium mt-0.5"></p>
+                        <p id="mdm-fecha" class="text-xs text-slate-400 dark:text-gray-400 font-medium mt-0.5"></p>
                     </div>
                 </div>
                 <button type="button" 
                         onclick="window.cerrarModalDetalleMovimiento()" 
-                        class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+                        class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
                     <span class="material-symbols-outlined text-[20px]">close</span>
                 </button>
             </div>
 
             {{-- Tarjeta Producto --}}
-            <div class="flex items-center gap-3.5 p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-gray-800">
-                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white dark:bg-[#121415] flex items-center justify-center">
+            <div class="flex items-center gap-3.5 p-3.5 bg-slate-50 dark:bg-[#121415] rounded-2xl border border-slate-100 dark:border-gray-800">
+                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white dark:bg-[#181a1b] flex items-center justify-center">
                     <img id="mdm-img" src="" alt="" class="w-full h-full object-cover hidden">
-                    <span id="mdm-placeholder-img" class="material-symbols-outlined text-slate-400 text-[22px]">inventory_2</span>
+                    <span id="mdm-placeholder-img" class="material-symbols-outlined text-slate-400 dark:text-gray-500 text-[22px]">inventory_2</span>
                 </div>
                 <div class="min-w-0 flex-1">
                     <h4 id="mdm-producto-nombre" class="text-sm font-bold text-slate-900 dark:text-white truncate"></h4>
-                    <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-400">
+                    <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-400 dark:text-gray-400">
                         <span id="mdm-producto-sku" class="font-mono"></span>
                         <span id="mdm-variante-badge" class="hidden px-2 py-0.5 rounded bg-slate-200 dark:bg-gray-800 text-slate-700 dark:text-slate-300 text-[11px] truncate"></span>
                     </div>
@@ -530,30 +530,30 @@
             </div>
 
             {{-- Métricas de Transición de Stock --}}
-            <div class="grid grid-cols-3 gap-2.5 p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-gray-800 text-center">
+            <div class="grid grid-cols-3 gap-2.5 p-3.5 bg-slate-50 dark:bg-[#121415] rounded-2xl border border-slate-100 dark:border-gray-800 text-center">
                 <div class="space-y-1">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Stock Inicial</span>
-                    <p id="mdm-stock-antes" class="text-lg font-extrabold text-slate-700 dark:text-slate-300 tabular-nums">—</p>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">Stock Inicial</span>
+                    <p id="mdm-stock-antes" class="text-lg font-extrabold text-slate-700 dark:text-slate-200 tabular-nums">—</p>
                 </div>
-                <div class="space-y-1 border-x border-slate-200 dark:border-gray-700/60">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Variación</span>
+                <div class="space-y-1 border-x border-slate-200 dark:border-gray-700/80">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">Variación</span>
                     <p id="mdm-cantidad" class="text-lg font-extrabold tabular-nums">—</p>
                 </div>
                 <div class="space-y-1">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Stock Final</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">Stock Final</span>
                     <p id="mdm-stock-despues" class="text-lg font-extrabold text-slate-900 dark:text-white tabular-nums">—</p>
                 </div>
             </div>
 
             {{-- Tarjeta Responsable y Origen del Movimiento --}}
-            <div class="p-3.5 bg-slate-50 dark:bg-slate-900/40 rounded-2xl border border-slate-100 dark:border-gray-800 space-y-2.5">
+            <div class="p-3.5 bg-slate-50 dark:bg-[#121415] rounded-2xl border border-slate-100 dark:border-gray-800 space-y-2.5">
                 <div class="flex items-center justify-between">
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Responsable / Origen</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">Responsable / Origen</span>
                     <span id="mdm-responsable-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider"></span>
                 </div>
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5 min-w-0">
-                        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-gray-700 flex items-center justify-center shrink-0 text-slate-600 dark:text-slate-300 font-bold text-xs">
+                        <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-gray-800 flex items-center justify-center shrink-0 text-slate-600 dark:text-slate-300 font-bold text-xs">
                             <span class="material-symbols-outlined text-[18px]">person</span>
                         </div>
                         <div class="min-w-0">
@@ -564,12 +564,12 @@
                                 </a>
                                 <span id="mdm-responsable-nombre-static" class="hidden font-bold text-xs text-slate-900 dark:text-white truncate"></span>
                             </div>
-                            <p id="mdm-responsable-email" class="text-[11px] text-slate-400 font-mono truncate"></p>
+                            <p id="mdm-responsable-email" class="text-[11px] text-slate-400 dark:text-gray-400 font-mono truncate"></p>
                         </div>
                     </div>
                 </div>
                 <div class="pt-2 border-t border-slate-200/60 dark:border-gray-800 text-[11px] flex items-start gap-1.5 text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[15px] shrink-0 mt-0.5 text-emerald-600">info</span>
+                    <span class="material-symbols-outlined text-[15px] shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400">info</span>
                     <span id="mdm-responsable-detalle" class="leading-relaxed"></span>
                 </div>
             </div>
@@ -577,27 +577,27 @@
             {{-- Información operativa --}}
             <div class="space-y-2.5 text-xs">
                 <div class="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
-                    <span class="text-slate-400 font-medium">Motivo:</span>
+                    <span class="text-slate-400 dark:text-gray-400 font-medium">Motivo:</span>
                     <span id="mdm-motivo" class="font-semibold text-slate-800 dark:text-slate-200 text-right"></span>
                 </div>
                 <div id="mdm-pedido-row" class="hidden flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
-                    <span class="text-slate-400 font-medium">Pedido asociado:</span>
-                    <a id="mdm-pedido-link" href="#" class="inline-flex items-center gap-1 font-mono font-bold text-emerald-600 hover:text-emerald-700 hover:underline">
+                    <span class="text-slate-400 dark:text-gray-400 font-medium">Pedido asociado:</span>
+                    <a id="mdm-pedido-link" href="#" class="inline-flex items-center gap-1 font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline">
                         <span id="mdm-pedido-numero"></span>
                         <span class="material-symbols-outlined text-[13px]">open_in_new</span>
                     </a>
                 </div>
                 <div id="mdm-proveedor-row" class="hidden flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
-                    <span class="text-slate-400 font-medium">Proveedor:</span>
+                    <span class="text-slate-400 dark:text-gray-400 font-medium">Proveedor:</span>
                     <span id="mdm-proveedor" class="font-semibold text-slate-800 dark:text-slate-200"></span>
                 </div>
                 <div id="mdm-factura-row" class="hidden flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-gray-800">
-                    <span class="text-slate-400 font-medium">Factura / Remito:</span>
+                    <span class="text-slate-400 dark:text-gray-400 font-medium">Factura / Remito:</span>
                     <span id="mdm-factura" class="font-mono font-semibold text-slate-800 dark:text-slate-200"></span>
                 </div>
                 <div id="mdm-notas-row" class="hidden pt-1">
-                    <span class="text-slate-400 font-medium block mb-1">Notas / Observaciones:</span>
-                    <div id="mdm-notas" class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-100 dark:border-gray-800 text-slate-600 dark:text-slate-300 italic text-[11px] leading-relaxed"></div>
+                    <span class="text-slate-400 dark:text-gray-400 font-medium block mb-1">Notas / Observaciones:</span>
+                    <div id="mdm-notas" class="p-2.5 bg-slate-50 dark:bg-[#121415] rounded-xl border border-slate-100 dark:border-gray-800 text-slate-600 dark:text-slate-300 italic text-[11px] leading-relaxed"></div>
                 </div>
             </div>
 
@@ -605,7 +605,7 @@
             <div class="pt-2 flex justify-end">
                 <button type="button" 
                         onclick="window.cerrarModalDetalleMovimiento()" 
-                        class="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 rounded-xl transition-all cursor-pointer">
+                        class="w-full sm:w-auto px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 rounded-xl transition-all border border-transparent dark:border-gray-700 cursor-pointer">
                     Cerrar
                 </button>
             </div>
@@ -662,17 +662,17 @@
         if (m.tipo === 'entrada') {
             icnContainer.className = 'w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80';
             icn.textContent = 'south_east';
-            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300';
+            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60';
             tipoBadge.textContent = 'Entrada';
         } else if (m.tipo === 'salida') {
             icnContainer.className = 'w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200 dark:border-rose-800/80';
             icn.textContent = 'north_east';
-            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-300';
+            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-rose-100 text-rose-800 dark:bg-rose-900/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800/60';
             tipoBadge.textContent = 'Salida';
         } else {
             icnContainer.className = 'w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800/80';
             icn.textContent = 'sync_alt';
-            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300';
+            tipoBadge.className = 'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60';
             tipoBadge.textContent = 'Ajuste';
         }
 

@@ -44,12 +44,6 @@
             @csrf
             @method('PUT')
             
-            @php
-                $activo = \App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false);
-                $rolesSeleccionados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
-                $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
-            @endphp
-            
             <div class="p-6 flex flex-col gap-8">
                 <!-- Section 1: Stock Mínimo -->
                 <section>

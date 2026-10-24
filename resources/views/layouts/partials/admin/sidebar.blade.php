@@ -42,19 +42,12 @@
             @canany(['admin.pedidos.ver', 'admin.devoluciones.ver', 'admin.facturas.ver'])
             @php
                 $isVentasActive = request()->is('admin/pedidos*') || request()->routeIs('admin.devoluciones*') || request()->is('admin/facturas*');
-                $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
-                    $query->select(\Illuminate\Support\Facades\DB::raw(1))
-                          ->from('estados_pedido')
-                          ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
-                          ->whereNotIn('estados_pedido.estado', ['pendiente', 'pago_confirmado']);
-                })->count();
-                $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
             @endphp
             <div x-data="{ 
                     open: {{ $isVentasActive ? 'true' : 'false' }}, 
                     pinned: false,
-                    pedidosCount: {{ $nuevosPedidosCount }},
-                    devolucionesCount: {{ $nuevasDevolucionesCount }},
+                    pedidosCount: {{ $nuevosPedidosCount ?? 0 }},
+                    devolucionesCount: {{ $nuevasDevolucionesCount ?? 0 }},
                     get totalCount() { return this.pedidosCount + this.devolucionesCount; }
                  }" 
                  @click.outside="pinned = false" 

@@ -33,32 +33,8 @@
     @if($facturas->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach($facturas as $factura)
-                @php
-                    $configEstado = match($factura->estado) {
-                        'emitida' => [
-                            'bar' => 'bg-secondary/80',
-                            'chip_bg' => 'bg-secondary/10',
-                            'chip_text' => 'text-secondary',
-                            'icon' => 'check_circle',
-                        ],
-                        'anulada' => [
-                            'bar' => 'bg-primary',
-                            'chip_bg' => 'bg-primary/10',
-                            'chip_text' => 'text-primary',
-                            'icon' => 'cancel',
-                        ],
-                        default => [
-                            'bar' => 'bg-tertiary-container',
-                            'chip_bg' => 'bg-tertiary-container/20',
-                            'chip_text' => 'text-tertiary',
-                            'icon' => 'schedule',
-                        ]
-                    };
-                    $labelEstado = ucfirst(str_replace('_', ' ', $factura->estado));
-                @endphp
-
                 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col gap-4 ambient-shadow ambient-shadow-hover transition-all duration-300 relative overflow-hidden group {{ $factura->estado === 'anulada' ? 'opacity-75' : '' }}">
-                    <div class="absolute top-0 left-0 w-full h-1 {{ $configEstado['bar'] }}"></div>
+                    <div class="absolute top-0 left-0 w-full h-1 {{ $factura->config_estado['bar'] }}"></div>
 
                     <div class="flex justify-between items-start">
                         <div>
@@ -66,9 +42,9 @@
                             <div class="text-sm font-bold text-primary mt-1 {{ $factura->estado === 'anulada' ? 'line-through' : '' }}">{{ $factura->numero }}</div>
                         </div>
 
-                        <div class="px-3 py-1 rounded-full {{ $configEstado['chip_bg'] }} {{ $configEstado['chip_text'] }} font-label-caps text-[11px] font-bold tracking-wider flex items-center gap-1 uppercase">
-                            <span class="material-symbols-outlined text-[14px]">{{ $configEstado['icon'] }}</span>
-                            {{ $labelEstado }}
+                        <div class="px-3 py-1 rounded-full {{ $factura->config_estado['chip_bg'] }} {{ $factura->config_estado['chip_text'] }} font-label-caps text-[11px] font-bold tracking-wider flex items-center gap-1 uppercase">
+                            <span class="material-symbols-outlined text-[14px]">{{ $factura->config_estado['icon'] }}</span>
+                            {{ $factura->config_estado['label'] }}
                         </div>
                     </div>
 

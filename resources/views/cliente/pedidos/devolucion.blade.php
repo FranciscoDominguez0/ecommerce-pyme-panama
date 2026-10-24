@@ -34,19 +34,10 @@
 
                     <div class="space-y-4">
                         @foreach($pedido->items as $item)
-                            @php
-                                $imgUrl = null;
-                                if ($item->variante && $item->variante->imagen_ruta) {
-                                    $imgUrl = asset('storage/' . $item->variante->imagen_ruta);
-                                } elseif ($item->producto) {
-                                    $imgUrl = $item->producto->imagen_url;
-                                }
-                            @endphp
-
                             <div class="flex gap-3.5 items-center">
                                 <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 overflow-hidden shrink-0 flex items-center justify-center">
-                                    @if($imgUrl)
-                                        <img src="{{ $imgUrl }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
+                                    @if($item->imagen_url)
+                                        <img src="{{ $item->imagen_url }}" alt="{{ $item->producto?->nombre ?? 'Producto' }}" class="w-full h-full object-cover">
                                     @else
                                         <span class="material-symbols-outlined text-slate-400 text-xl">inventory_2</span>
                                     @endif

@@ -216,9 +216,10 @@
 
 @push('scripts')
 <script>
-    function abrirModalEnvioGratis() {
+    window.abrirModalEnvioGratis = function() {
         const modal = document.getElementById('modal-envio-gratis');
         const form = document.getElementById('form-envio-gratis');
+        if (!modal || !form) return;
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.getElementById('modal-title-envio').textContent = 'Nueva Regla de Envío Gratis';
@@ -226,17 +227,19 @@
         document.getElementById('form-envio-method').value = 'POST';
         form.reset();
         document.getElementById('inicio_en_envio').value = new Date().toISOString().split('T')[0];
-    }
+    };
 
-    function cerrarModalEnvioGratis() {
+    window.cerrarModalEnvioGratis = function() {
         const modal = document.getElementById('modal-envio-gratis');
+        if (!modal) return;
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-    }
+    };
 
-    function editarReglaEnvio(promo) {
-        abrirModalEnvioGratis();
+    window.editarReglaEnvio = function(promo) {
+        window.abrirModalEnvioGratis();
         const form = document.getElementById('form-envio-gratis');
+        if (!form) return;
         document.getElementById('modal-title-envio').textContent = 'Editar Regla de Envío Gratis';
         form.action = `/admin/promociones/envio-gratis/${promo.id}`;
         document.getElementById('form-envio-method').value = 'PUT';
@@ -247,7 +250,7 @@
         document.getElementById('activo_envio').checked = !!promo.activo;
         if (promo.inicio_en) document.getElementById('inicio_en_envio').value = promo.inicio_en.split('T')[0];
         if (promo.fin_en) document.getElementById('fin_en_envio').value = promo.fin_en.split('T')[0];
-    }
+    };
 </script>
 @endpush
 @endsection

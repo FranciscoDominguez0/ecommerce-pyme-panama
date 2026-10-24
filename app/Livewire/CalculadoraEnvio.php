@@ -110,6 +110,42 @@ class CalculadoraEnvio extends Component
             ->get();
     }
 
+    /**
+     * Obtiene la dirección seleccionada para el checkout actual.
+     */
+    public function getDireccionCheckoutProperty(): ?Direccion
+    {
+        $direccionId = session('checkout_direccion_id');
+        if (!$direccionId) {
+            return null;
+        }
+
+        return Direccion::with('zonaEnvio')->find($direccionId);
+    }
+
+    /**
+     * Obtiene los datos de la sucursal de courier seleccionada.
+     */
+    public function getSucursalCourierProperty(): ?CourierSucursal
+    {
+        if (!$this->sucursalSeleccionada) {
+            return null;
+        }
+
+        return CourierSucursal::find($this->sucursalSeleccionada);
+    }
+
+    /**
+     * Lista las zonas de courier activas disponibles.
+     */
+    public function getZonasCourierProperty()
+    {
+        return CourierSucursal::where('activo', true)
+            ->select('zona')
+            ->distinct()
+            ->pluck('zona');
+    }
+
     public function render()
     {
         return view('livewire.calculadora-envio');

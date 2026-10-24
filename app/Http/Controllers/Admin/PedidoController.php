@@ -34,7 +34,14 @@ class PedidoController extends Controller
             'usuario', 'items.producto', 'items.variante', 'estados.usuario', 'direccion', 'zonaEnvio'
         ])->findOrFail($id);
 
-        return view('admin.pedidos.detalle', compact('pedido'));
+        // Preparamos los datos de entrega y contacto extraídos de notas internas
+        $notasInternas = json_decode($pedido->notas_internas, true) ?? [];
+        $metodoEntrega = $notasInternas['metodo_entrega'] ?? 'desconocido';
+        $contacto = $notasInternas['contacto'] ?? null;
+        $courierSucursalId = $notasInternas['courier_sucursal_id'] ?? null;
+        $sucursal = $courierSucursalId ? \App\Models\CourierSucursal::find($courierSucursalId) : null;
+
+        return view('admin.pedidos.detalle', compact('pedido', 'metodoEntrega', 'contacto', 'sucursal'));
     }
 
     public function cambiarEstado(Request $request, $id)

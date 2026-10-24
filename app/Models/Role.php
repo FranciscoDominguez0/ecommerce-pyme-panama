@@ -23,4 +23,18 @@ class Role extends SpatieRole
         'name',
         'guard_name',
     ];
+
+    // Icono representativo para el rol en paneles y formularios
+    public function getIconoAttribute(): string
+    {
+        return in_array($this->name, ['super_admin', 'Administrador']) ? 'manage_accounts' : 'person';
+    }
+
+    // Color del icono según la jerarquía del rol
+    public function getIconoColorAttribute(): string
+    {
+        return in_array($this->name, ['super_admin', 'Administrador']) 
+            ? 'text-slate-900 dark:text-white' 
+            : 'text-slate-500 dark:text-slate-400';
+    }
 }

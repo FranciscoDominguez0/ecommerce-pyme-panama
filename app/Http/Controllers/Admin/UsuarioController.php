@@ -66,7 +66,13 @@ class UsuarioController extends Controller
     public function create(Role $rol): View
     {
         $roles = Role::all();
-        return view('admin.usuarios.form', compact('rol', 'roles'));
+        $isEdit = false;
+        $title = 'Nuevo Usuario';
+        $description = 'Complete la información para registrar un nuevo operador en el sistema.';
+        $actionUrl = route('admin.usuarios.store', $rol?->id ?? 1);
+        $backRoute = $rol->exists ? route('admin.usuarios.por-rol', $rol->id) : route('admin.usuarios.index');
+
+        return view('admin.usuarios.form', compact('rol', 'roles', 'isEdit', 'title', 'description', 'actionUrl', 'backRoute'));
     }
 
     // Guarda el nuevo usuario
@@ -93,7 +99,13 @@ class UsuarioController extends Controller
     {
         $roles = Role::all();
         $rol = $usuario->roles->first();
-        return view('admin.usuarios.form', compact('usuario', 'rol', 'roles'));
+        $isEdit = true;
+        $title = 'Editar Usuario';
+        $description = 'Modifique la información y permisos del operador.';
+        $actionUrl = route('admin.usuarios.update', $usuario->id);
+        $backRoute = $rol ? route('admin.usuarios.por-rol', $rol->id) : route('admin.usuarios.index');
+
+        return view('admin.usuarios.form', compact('usuario', 'rol', 'roles', 'isEdit', 'title', 'description', 'actionUrl', 'backRoute'));
     }
 
     // Actualiza un usuario existente

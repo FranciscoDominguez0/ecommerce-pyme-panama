@@ -128,16 +128,26 @@ class CheckoutController extends Controller
         
         $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
 
-        \Illuminate\Support\Facades\Log::info("Checkout confirmacion debug:", [
-            'metodoEntrega' => $metodoEntrega,
-            'sucursal_id' => $courierSucursal ? $courierSucursal->id : null,
-            'tarifa' => $courierSucursal ? $courierSucursal->tarifa_uno_hasta_7lb : null,
-            'costoEnvioEspecial' => $costoEnvioEspecial,
-            'totales_costo_envio' => $totales['costo_envio'],
-            'zona_envio_id' => session('checkout_zona_envio_id'),
-        ]);
+        $infoStripe = null;
+        if ($metodoPago === 'stripe') {
+            $stripeBrand = strtolower((string) session('checkout_stripe_brand', ''));
+            $nombresMarcas = [
+                'visa' => 'Visa',
+                'mastercard' => 'Mastercard',
+                'amex' => 'American Express',
+                'discover' => 'Discover',
+                'diners' => 'Diners Club',
+                'jcb' => 'JCB',
+                'unionpay' => 'UnionPay',
+            ];
+            $infoStripe = [
+                'marca' => $stripeBrand,
+                'nombre_marca' => $nombresMarcas[$stripeBrand] ?? (!empty($stripeBrand) ? ucfirst($stripeBrand) : 'Tarjeta de Crédito / Débito'),
+                'last4' => session('checkout_stripe_last4'),
+            ];
+        }
 
-        return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales', 'metodoEntrega', 'courierSucursal'));
+        return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales', 'metodoEntrega', 'courierSucursal', 'infoStripe'));
     }
 
     /**

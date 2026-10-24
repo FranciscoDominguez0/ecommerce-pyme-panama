@@ -48,13 +48,28 @@ class UsabilidadService
         $promedioCSAT = $totalEvaluaciones > 0 ? round($evaluaciones->avg('puntuacion_facilidad'), 2) : 5.0;
 
         // 3. Distribución por Estrellas (1 a 5)
-        $distribucion = [
-            5 => $evaluaciones->where('puntuacion_facilidad', 5)->count(),
-            4 => $evaluaciones->where('puntuacion_facilidad', 4)->count(),
-            3 => $evaluaciones->where('puntuacion_facilidad', 3)->count(),
-            2 => $evaluaciones->where('puntuacion_facilidad', 2)->count(),
-            1 => $evaluaciones->where('puntuacion_facilidad', 1)->count(),
+        $etiquetas = [
+            5 => '5 ★ (Excelente)',
+            4 => '4 ★ (Muy bueno)',
+            3 => '3 ★ (Bueno)',
+            2 => '2 ★ (Regular)',
+            1 => '1 ★ (Malo)',
         ];
+
+        $distribucion = [];
+        $distribucionDetallada = [];
+
+        foreach ([5, 4, 3, 2, 1] as $estrella) {
+            $cantidad = $evaluaciones->where('puntuacion_facilidad', $estrella)->count();
+            $porcentaje = $totalEvaluaciones > 0 ? round(($cantidad / $totalEvaluaciones) * 100) : ($estrella >= 4 ? 50 : 0);
+
+            $distribucion[$estrella] = $cantidad;
+            $distribucionDetallada[$estrella] = [
+                'etiqueta'   => $etiquetas[$estrella],
+                'cantidad'   => $cantidad,
+                'porcentaje' => $porcentaje,
+            ];
+        }
 
         // 4. Eficacia: Task Success Rate (TSR) de acuerdo a ISO 9241-11
         // Porcentaje de pedidos completados con éxito frente al total de pedidos creados
@@ -76,6 +91,7 @@ class UsabilidadService
             'porcentaje_ces' => $porcentajeCES,
             'promedio_csat' => $promedioCSAT,
             'distribucion_estrellas' => $distribucion,
+            'distribucion_detallada' => $distribucionDetallada,
             'task_success_rate' => $taskSuccessRate,
             'tiempo_promedio_checkout' => $tiempoPromedioCheckout,
             'comentarios_recientes' => $comentariosRecientes,

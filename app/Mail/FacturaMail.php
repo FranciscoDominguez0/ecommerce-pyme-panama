@@ -44,6 +44,9 @@ class FacturaMail extends Mailable
     {
         return new Content(
             view: 'emails.factura',
+            with: [
+                'nombreEmpresa' => \App\Models\Configuracion::obtener('empresa.nombre', 'PayMe Panamá'),
+            ],
         );
     }
 

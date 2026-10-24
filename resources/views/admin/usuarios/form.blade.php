@@ -1,13 +1,5 @@
 @extends('layouts.admin')
 
-@php
-    $isEdit = isset($usuario);
-    $title = $isEdit ? 'Editar Usuario' : 'Nuevo Usuario';
-    $description = $isEdit ? 'Modifique la información y permisos del operador.' : 'Complete la información para registrar un nuevo operador en el sistema.';
-    $actionUrl = $isEdit ? route('admin.usuarios.update', $usuario->id) : route('admin.usuarios.store', $rol?->id ?? 1);
-    $backRoute = $rol ? route('admin.usuarios.por-rol', $rol->id) : route('admin.usuarios.index');
-@endphp
-
 @section('title', $title)
 
 @section('content')
@@ -169,28 +161,14 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Seleccione el nivel de acceso operativo para este usuario.</p>
                 
                 <div class="space-y-3">
-                    @php
-                        $selectedRoleId = old('rol_id', $rol->id ?? null);
-                    @endphp
-                    
                     @foreach($roles as $r)
-                        @php
-                            $isSelected = $selectedRoleId == $r->id;
-                            $icon = match($r->name) {
-                                'super_admin', 'Administrador' => 'manage_accounts',
-                                default => 'person'
-                            };
-                            $iconColor = match($r->name) {
-                                'super_admin', 'Administrador' => 'text-slate-900 dark:text-white',
-                                default => 'text-slate-500 dark:text-slate-400'
-                            };
-                        @endphp
+                        @php $isSelected = (old('rol_id', $rol->id ?? null) == $r->id); @endphp
                         
-                        <label class="block cursor-pointer relative" onclick="selectRole('{{ $r->id }}', '{{ $r->name }}')">
+                        <label class="block cursor-pointer relative" onclick="window.selectRole('{{ $r->id }}')">
                             <input class="peer sr-only" name="rol_id" type="radio" value="{{ $r->id }}" {{ $isSelected ? 'checked' : '' }}/>
                             <div id="card-{{ $r->id }}" class="p-4 rounded-lg border {{ $isSelected ? 'border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 ' }} transition-colors flex gap-4 items-start">
-                                <div class="mt-0.5 {{ $iconColor }}">
-                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">{{ $icon }}</span>
+                                <div class="mt-0.5 {{ $r->icono_color }}">
+                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">{{ $r->icono }}</span>
                                 </div>
                                 <div>
                                     <div class="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider">{{ $r->nombre ?: $r->name }}</div>
@@ -206,14 +184,9 @@
 </form>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize based on current selection
-    });
-
-    function selectRole(roleId) {
+    window.selectRole = function(roleId) {
         const rolesIds = @json($roles->pluck('id'));
 
-        // Reset all cards
         rolesIds.forEach(id => {
             const card = document.getElementById('card-' + id);
             if (card) {
@@ -221,13 +194,11 @@
             }
         });
 
-        // Apply active state
         const activeCard = document.getElementById('card-' + roleId);
         if (activeCard) {
             activeCard.className = "p-4 rounded-lg border border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900 transition-colors flex gap-4 items-start";
         }
-
-    }
+    };
 </script>
 @endsection
 

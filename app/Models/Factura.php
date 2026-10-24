@@ -56,4 +56,35 @@ class Factura extends Model
     {
         return $this->hasMany(ReenvioFactura::class, 'factura_id');
     }
+
+    /**
+     * Retorna la configuración visual y etiqueta según el estado de la factura.
+     */
+    public function getConfigEstadoAttribute(): array
+    {
+        $config = match ($this->estado) {
+            'emitida' => [
+                'bar'       => 'bg-secondary/80',
+                'chip_bg'   => 'bg-secondary/10',
+                'chip_text' => 'text-secondary',
+                'icon'      => 'check_circle',
+            ],
+            'anulada' => [
+                'bar'       => 'bg-primary',
+                'chip_bg'   => 'bg-primary/10',
+                'chip_text' => 'text-primary',
+                'icon'      => 'cancel',
+            ],
+            default => [
+                'bar'       => 'bg-tertiary-container',
+                'chip_bg'   => 'bg-tertiary-container/20',
+                'chip_text' => 'text-tertiary',
+                'icon'      => 'schedule',
+            ],
+        };
+
+        $config['label'] = ucfirst(str_replace('_', ' ', $this->estado ?? 'pendiente'));
+
+        return $config;
+    }
 }

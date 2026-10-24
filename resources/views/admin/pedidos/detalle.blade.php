@@ -347,17 +347,6 @@
 
             <!-- Datos del Cliente & Entrega -->
             <div class="card-elevated rounded-xl p-6">
-                @php
-                    $notasInternas = json_decode($pedido->notas_internas, true) ?? [];
-                    $metodoEntrega = $notasInternas['metodo_entrega'] ?? 'desconocido';
-                    $contacto = $notasInternas['contacto'] ?? null;
-                    $courierSucursalId = $notasInternas['courier_sucursal_id'] ?? null;
-                    $sucursal = null;
-                    if ($courierSucursalId) {
-                        $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
-                    }
-                @endphp
-
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-gray-700 pb-2">Datos del Cliente</h2>
                 <div class="mb-4">
                     <p class="font-medium text-slate-900 dark:text-white text-sm">{{ $contacto['nombre'] ?? $pedido->usuario->nombre ?? 'Desconocido' }} {{ $contacto['apellido'] ?? '' }}</p>
