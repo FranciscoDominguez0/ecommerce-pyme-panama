@@ -32,8 +32,11 @@ class PedidoService
         $this->envioService = $envioService;
     }
 
-    public function obtenerPedidosPaginadosAdmin(string $estado, string $busqueda)
+    public function obtenerPedidosPaginadosAdmin(?string $estado = 'todos', ?string $busqueda = null)
     {
+        $estado = $estado ?: 'todos';
+        $busqueda = trim($busqueda ?? '');
+
         $query = Pedido::with(['usuario', 'ultimoEstado']);
 
         if ($estado !== 'todos') {

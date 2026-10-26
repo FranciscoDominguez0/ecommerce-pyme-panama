@@ -21,8 +21,8 @@ class PedidoController extends Controller
     public function index(Request $request)
     {
         $pedidos = $this->pedidoService->obtenerPedidosPaginadosAdmin(
-            $request->input('estado', 'todos'),
-            $request->input('q', '')
+            $request->input('estado') ?? 'todos',
+            $request->input('q') ?? ''
         );
 
         return view('admin.pedidos.index', compact('pedidos'));

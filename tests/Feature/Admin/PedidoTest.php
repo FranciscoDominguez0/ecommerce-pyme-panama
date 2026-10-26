@@ -82,6 +82,14 @@ class PedidoTest extends BaseAdminTest
             ->assertDontSee($pendiente->numero_pedido);
     }
 
+    public function test_el_listado_permite_filtrar_con_parametro_q_vacio(): void
+    {
+        $admin = $this->crearAdmin();
+        $this->actingAs($admin)
+            ->get('/admin/pedidos?estado=pendiente&q=')
+            ->assertOk();
+    }
+
     // =====================================================================
     //  DETALLE — acciones de aprobar/rechazar y cambio de estado
     // =====================================================================
