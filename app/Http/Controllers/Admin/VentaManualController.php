@@ -53,6 +53,7 @@ class VentaManualController extends PedidoController
                 return [
                     'id' => $p->id,
                     'nombre' => $p->nombre,
+                    'sku' => $p->sku,
                     'precio' => (float) $p->precio,
                     'stock' => (int) $p->stock,
                     'imagen' => $p->imagen_url,

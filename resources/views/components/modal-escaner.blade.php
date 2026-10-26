@@ -39,21 +39,36 @@
 <script src="https://unpkg.com/html5-qrcode" defer></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    (function() {
         let html5Qrcode = null;
-        const modal = document.getElementById('modal-escaner');
-        const modalContent = document.getElementById('modal-escaner-content');
+        
+        function getModalElements() {
+            return {
+                modal: document.getElementById('modal-escaner'),
+                modalContent: document.getElementById('modal-escaner-content')
+            };
+        }
         
         window.ModalEscaner = {
             targetInputName: '{{ $inputId }}',
             targetFormId: '{{ $formId }}',
+            onScanCallback: null,
 
-            abrir: function(inputName = '{{ $inputId }}', formId = '{{ $formId }}') {
-                this.targetInputName = inputName;
-                this.targetFormId = formId;
+            abrir: function(inputName = '{{ $inputId }}', formId = '{{ $formId }}', onScan = null) {
+                if (typeof inputName === 'function') {
+                    this.onScanCallback = inputName;
+                    this.targetInputName = null;
+                    this.targetFormId = null;
+                } else {
+                    this.targetInputName = inputName;
+                    this.targetFormId = formId;
+                    this.onScanCallback = typeof onScan === 'function' ? onScan : null;
+                }
+
+                const { modal, modalContent } = getModalElements();
+                if (!modal || !modalContent) return;
 
                 modal.style.display = 'flex';
-                // Trigger reflow
                 void modal.offsetWidth;
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 modalContent.classList.remove('scale-95');
@@ -62,6 +77,9 @@
             },
             
             cerrar: function() {
+                const { modal, modalContent } = getModalElements();
+                if (!modal || !modalContent) return;
+
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 modalContent.classList.add('scale-95');
                 
@@ -76,22 +94,20 @@
                     return; // Ya está iniciado
                 }
                 
-                // Solo inicializar si la librería ha cargado
                 if (typeof Html5Qrcode === 'undefined') {
-                    console.error("html5-qrcode no está cargado");
-                    setTimeout(() => this.iniciarScanner(), 500); // Reintentar
+                    setTimeout(() => this.iniciarScanner(), 400);
                     return;
                 }
                 
                 html5Qrcode = new Html5Qrcode("reader");
                 
-                const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+                const qrCodeSuccessCallback = (decodedText) => {
                     this.procesarCodigo(decodedText);
                 };
                 
                 const config = { 
-                    fps: 10, 
-                    qrbox: { width: 250, height: 150 },
+                    fps: 12, 
+                    qrbox: { width: 260, height: 160 },
                     aspectRatio: 1.0,
                     supportedScanTypes: [
                         Html5QrcodeScanType.SCAN_TYPE_CAMERA
@@ -99,13 +115,16 @@
                 };
                 
                 html5Qrcode.start(
-                    { facingMode: "environment" }, // Preferir cámara trasera
+                    { facingMode: "environment" },
                     config,
                     qrCodeSuccessCallback
                 ).catch((err) => {
                     console.error("Error al iniciar la cámara", err);
-                    // Opcional: mostrar un Toast de error
-                    alert("No se pudo acceder a la cámara. Revisa los permisos de tu navegador.");
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast("No se pudo acceder a la cámara. Revisa los permisos de tu navegador.", "error");
+                    } else {
+                        alert("No se pudo acceder a la cámara. Revisa los permisos de tu navegador.");
+                    }
                 });
             },
             
@@ -124,25 +143,33 @@
                 this.detenerScanner();
                 this.cerrar();
                 
-                // Buscar el input global
-                const searchInput = document.querySelector('input[name="' + this.targetInputName + '"]');
+                if (typeof this.onScanCallback === 'function') {
+                    this.onScanCallback(codigo);
+                    return;
+                }
+
+                let searchInput = this.targetInputName ? document.querySelector('input[name="' + this.targetInputName + '"]') : null;
+                if (!searchInput && this.targetInputName) {
+                    searchInput = document.getElementById(this.targetInputName);
+                }
+
                 let searchForm = null;
-                
-                if (this.targetFormId) {
+                if (this.targetFormId && this.targetFormId !== 'no-submit') {
                     searchForm = document.getElementById(this.targetFormId);
                 }
                 
                 if (searchInput) {
                     searchInput.value = codigo;
+                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
                     if (searchForm) {
                         searchForm.submit();
-                    } else if (searchInput.closest('form')) {
+                    } else if (searchInput.closest('form') && this.targetFormId !== 'no-submit') {
                         searchInput.closest('form').submit();
                     }
                 }
             }
         };
-    });
+    })();
 </script>
 
 <style>

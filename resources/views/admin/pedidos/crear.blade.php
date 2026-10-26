@@ -114,16 +114,36 @@
                         <span class="text-xs text-slate-400" x-text="todosProductosFiltrados().length + ' disponibles'"></span>
                     </div>
 
-                    <!-- Buscador en tiempo real -->
+                    <!-- Buscador en tiempo real con lector de código de barras -->
                     <div class="relative mb-4">
                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
                         </span>
                         <input type="text" 
+                               id="input-buscar-producto"
                                x-model="busquedaProducto" 
                                @input="paginaProducto = 1"
-                               placeholder="Buscar producto por nombre..." 
-                               class="block w-full rounded-lg border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                               @keydown.enter.prevent="procesarCodigoEscaner(busquedaProducto)"
+                               placeholder="Buscar por nombre, SKU o código de barras..." 
+                               class="block w-full rounded-lg border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 pl-9 pr-24 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+
+                        <!-- Acciones del Buscador: Limpiar y Botón Escáner Cámara -->
+                        <div class="absolute inset-y-0 right-0 pr-1.5 flex items-center gap-1">
+                            <button type="button" 
+                                    x-show="busquedaProducto" 
+                                    @click="busquedaProducto = ''; paginaProducto = 1;" 
+                                    class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md transition-colors cursor-pointer"
+                                    title="Limpiar búsqueda">
+                                <span class="material-symbols-outlined text-[16px]">close</span>
+                            </button>
+                            <button type="button" 
+                                    @click="abrirEscanerCamara()" 
+                                    title="Escanear código de barras con la cámara"
+                                    class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-2xs">
+                                <span class="material-symbols-outlined text-[16px]">barcode_scanner</span>
+                                <span class="hidden sm:inline text-[11px] font-bold">Escanear</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Listado de catálogo paginado -->
@@ -141,6 +161,9 @@
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <h3 class="text-xs font-bold text-slate-800 dark:text-white truncate" :title="prod.nombre" x-text="prod.nombre"></h3>
+                                        <template x-if="prod.sku">
+                                            <p class="text-[10px] font-mono text-slate-400 dark:text-slate-500 tracking-wider truncate" x-text="'SKU: ' + prod.sku"></p>
+                                        </template>
                                         <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5" x-text="'$' + prod.precio.toFixed(2)"></p>
                                         
                                         <!-- Stock o variantes -->
@@ -387,7 +410,7 @@
                                 :class="metodoPago === 'contra_entrega' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
                                 class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none col-span-2 sm:col-span-1"
                                 title="Pago Contra Entrega">
-                            <img src="{{ asset('images/contra-entrega.webp') }}" alt="Contra Entrega" class="h-10 w-auto max-w-[85%] object-contain" style="max-height: 40px;">
+                            <img src="{{ asset('images/contra-entrega-pago.webp') }}?v=2" alt="Contra Entrega" class="h-10 w-auto max-w-[85%] object-contain" style="max-height: 42px;">
                         </button>
                     </div>
 
@@ -728,11 +751,124 @@
                 }
             },
 
+            init() {
+                this.iniciarLectorPistola();
+            },
+
+            iniciarLectorPistola() {
+                let buffer = '';
+                let lastTime = 0;
+
+                window.addEventListener('keydown', (e) => {
+                    const active = document.activeElement;
+                    const isFormInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT');
+                    const isProductSearch = active && active.id === 'input-buscar-producto';
+
+                    // Si está escribiendo en campos de cliente o notas, ignorar pistola
+                    if (isFormInput && !isProductSearch) return;
+
+                    const now = Date.now();
+                    if (now - lastTime > 150) {
+                        buffer = '';
+                    }
+                    lastTime = now;
+
+                    if (e.key === 'Enter') {
+                        if (buffer.length >= 3) {
+                            e.preventDefault();
+                            this.procesarCodigoEscaner(buffer);
+                            buffer = '';
+                        }
+                    } else if (e.key.length === 1) {
+                        buffer += e.key;
+                    }
+                });
+            },
+
+            abrirEscanerCamara() {
+                if (window.ModalEscaner && typeof window.ModalEscaner.abrir === 'function') {
+                    window.ModalEscaner.abrir((codigo) => {
+                        this.procesarCodigoEscaner(codigo);
+                    });
+                } else {
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('El escáner de cámara no está disponible.', 'warning');
+                    } else {
+                        alert('El escáner de cámara no está disponible.');
+                    }
+                }
+            },
+
+            procesarCodigoEscaner(codigo) {
+                if (!codigo || !codigo.trim()) return;
+                const raw = codigo.trim();
+                const q = raw.toLowerCase();
+                this.busquedaProducto = raw;
+                this.paginaProducto = 1;
+
+                // 1. Buscar coincidencia exacta por SKU de producto o variante
+                let productoEncontrado = null;
+                let varianteEncontrada = null;
+
+                for (const p of this.productos) {
+                    if (p.sku && p.sku.toLowerCase() === q) {
+                        productoEncontrado = p;
+                        break;
+                    }
+                    if (p.variantes && p.variantes.length > 0) {
+                        const vMatch = p.variantes.find(v => v.sku && v.sku.toLowerCase() === q);
+                        if (vMatch) {
+                            productoEncontrado = p;
+                            varianteEncontrada = vMatch;
+                            break;
+                        }
+                    }
+                }
+
+                if (productoEncontrado) {
+                    if (varianteEncontrada) {
+                        productoEncontrado.varianteSeleccionadaId = varianteEncontrada.id;
+                        this.agregarAlCarrito(productoEncontrado);
+                    } else if (productoEncontrado.variantes && productoEncontrado.variantes.length > 0) {
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast(`Producto "${productoEncontrado.nombre}" detectado. Selecciona una variante.`, 'info');
+                        }
+                    } else {
+                        this.agregarAlCarrito(productoEncontrado);
+                    }
+                } else {
+                    const filtrados = this.todosProductosFiltrados();
+                    if (filtrados.length === 1) {
+                        const unico = filtrados[0];
+                        if (!unico.variantes || unico.variantes.length === 0) {
+                            this.agregarAlCarrito(unico);
+                        } else {
+                            if (typeof window.mostrarToast === 'function') {
+                                window.mostrarToast(`"${unico.nombre}" encontrado. Selecciona una variante.`, 'info');
+                            }
+                        }
+                    } else if (filtrados.length === 0) {
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast(`Código "${raw}" no encontrado en catálogo.`, 'error');
+                        }
+                    } else {
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast(`Se encontraron ${filtrados.length} productos coincidentes con "${raw}".`, 'info');
+                        }
+                    }
+                }
+            },
+
             // Métodos de catálogo y paginación (15 items por página)
             todosProductosFiltrados() {
                 const q = this.busquedaProducto.trim().toLowerCase();
                 if (!q) return this.productos;
-                return this.productos.filter(p => p.nombre.toLowerCase().includes(q));
+                return this.productos.filter(p => {
+                    if (p.nombre && p.nombre.toLowerCase().includes(q)) return true;
+                    if (p.sku && p.sku.toLowerCase().includes(q)) return true;
+                    if (p.variantes && p.variantes.some(v => (v.sku && v.sku.toLowerCase().includes(q)) || (v.nombre && v.nombre.toLowerCase().includes(q)))) return true;
+                    return false;
+                });
             },
 
             totalPaginasProductos() {
