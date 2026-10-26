@@ -275,7 +275,7 @@
                                     <button type="button" onclick="cambiarCantidad(-1)" class="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-700 font-bold transition-colors">
                                         -
                                     </button>
-                                    <input type="number" id="input-cantidad" value="1" min="1" max="{{ max(1, $producto->variantes && $producto->variantes->isNotEmpty() ? $producto->variantes->first()->stock : $producto->stock) }}" class="w-12 text-center bg-transparent border-none text-xs font-bold text-slate-900 focus:outline-none">
+                                    <input type="number" id="input-cantidad" value="1" min="1" max="{{ max(1, $producto->variantes && $producto->variantes->isNotEmpty() ? $producto->variantes->first()->stock : $producto->stock) }}" class="w-14 text-center bg-transparent border-none text-sm font-bold text-slate-900 focus:outline-none p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                                     <button type="button" onclick="cambiarCantidad(1)" class="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-700 font-bold transition-colors">
                                         +
                                     </button>
