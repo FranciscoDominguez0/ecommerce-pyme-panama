@@ -129,7 +129,9 @@
                         <h3 class="text-xl font-bold text-[#002349] mb-6">Productos Relacionados</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                             @foreach($productosRelacionados as $prod)
-                                <x-producto-card :prod="$prod" />
+                                <div wire:key="carrito-prod-rel-{{ $prod->id }}">
+                                    <x-producto-card :prod="$prod" />
+                                </div>
                             @endforeach
                         </div>
                     </div>
@@ -187,7 +189,7 @@
                         <div class="flex justify-between items-center text-gray-600">
                             <span class="flex items-center gap-1">
                                 <span>ITBMS (7%)</span>
-                                <span class="text-[10px] text-gray-400" title="Impuesto de Transferencia de Bienes Muebles y Servicios">(Ley de Panamá)</span>
+                                <span class="text-[10px] text-gray-400" title="Impuesto de Transferencia de Bienes Muebles y Servicios"></span>
                             </span>
                             <span class="font-bold text-gray-900 font-mono">
                                 ${{ number_format($resumen['itbms'], 2) }}
@@ -288,13 +290,27 @@
                     </a>
 
                     <!-- Métodos de pago aceptados -->
-                    <div class="pt-2 flex items-center justify-center gap-3 opacity-70">
-                        <span class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Aceptamos:</span>
-                        <span class="text-xs font-bold text-gray-600">Yappy</span>
-                        <span class="text-gray-300">•</span>
-                        <span class="text-xs font-bold text-gray-600">Visa / Mastercard</span>
-                        <span class="text-gray-300">•</span>
-                        <span class="text-xs font-bold text-gray-600">ACH</span>
+                    <div class="pt-3 border-t border-gray-100 flex items-center justify-center gap-1.5">
+                        <!-- Yappy -->
+                        <div class="h-6 px-1.5 py-0.5 bg-white rounded border border-slate-200 shadow-2xs flex items-center justify-center" title="Yappy">
+                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-4 w-auto object-contain">
+                        </div>
+                        <!-- Visa -->
+                        <div class="h-6 px-1.5 py-0.5 bg-white rounded border border-slate-200 shadow-2xs flex items-center justify-center" title="Visa">
+                            <img src="{{ asset('images/VISA-Logo.webp') }}" alt="Visa" class="h-3 w-auto object-contain">
+                        </div>
+                        <!-- Mastercard -->
+                        <div class="h-6 px-1.5 py-0.5 bg-white rounded border border-slate-200 shadow-2xs flex items-center justify-center" title="Mastercard">
+                            <img src="{{ asset('images/mastercard-logo.png') }}" alt="Mastercard" class="h-3.5 w-auto object-contain">
+                        </div>
+                        <!-- Clave -->
+                        <div class="h-6 px-1.5 py-0.5 bg-white rounded border border-slate-200 shadow-2xs flex items-center justify-center" title="Sistema Clave">
+                            <img src="{{ asset('images/clave-logo.png') }}" alt="Clave" class="h-3.5 w-auto object-contain">
+                        </div>
+                        <!-- ACH -->
+                        <div class="h-6 px-1.5 py-0.5 bg-white rounded border border-slate-200 shadow-2xs flex items-center justify-center" title="Transferencia ACH">
+                            <img src="{{ asset('images/ach-logo.svg') }}" alt="ACH" class="h-3.5 w-auto object-contain">
+                        </div>
                     </div>
 
                 </div>

@@ -38,9 +38,9 @@ class ReporteController extends Controller
     /**
      * Muestra el dashboard de métricas de usabilidad y experiencia (CES, CSAT, TSR).
      */
-    public function usabilidad(\App\Services\UsabilidadService $usabilidadService)
+    public function usabilidad(Request $request, \App\Services\UsabilidadService $usabilidadService)
     {
-        $metricas = $usabilidadService->obtenerMetricas();
+        $metricas = $usabilidadService->obtenerMetricas($request);
         return view('admin.reportes.usabilidad', $metricas);
     }
 

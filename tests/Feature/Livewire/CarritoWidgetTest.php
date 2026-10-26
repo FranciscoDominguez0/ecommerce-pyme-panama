@@ -184,6 +184,31 @@ class CarritoWidgetTest extends BaseAdminTest
         $this->assertSame('0.00', (string) $carrito->descuento_aplicado);
     }
 
+    public function test_productos_relacionados_no_cambian_al_aplicar_o_remover_cupon(): void
+    {
+        $usuario = $this->crearCliente();
+        $producto = Producto::factory()->create(['precio' => 50.00, 'stock' => 10]);
+        $this->crearCarritoConItem($usuario, $producto, 1, 50.00);
+
+        Producto::factory()->count(10)->create(['activo' => true]);
+        Cupon::factory()->create(['codigo' => 'DESC10', 'tipo' => 'porcentaje', 'valor' => 5]);
+
+        $test = Livewire::actingAs($usuario)
+            ->test(CarritoWidget::class);
+
+        $idsIniciales = $test->get('productosRelacionadosIds');
+        $this->assertNotEmpty($idsIniciales);
+
+        $test->set('codigoCupon', 'DESC10')
+            ->call('aplicarCupon');
+
+        $this->assertSame($idsIniciales, $test->get('productosRelacionadosIds'));
+
+        $test->call('removerCupon');
+
+        $this->assertSame($idsIniciales, $test->get('productosRelacionadosIds'));
+    }
+
     // =====================================================================
     //  HELPERS
     // =====================================================================

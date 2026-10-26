@@ -48,6 +48,7 @@ class InicioController extends Controller
     // Muestra el panel de inicio del cliente autenticado
     public function dashboard(): View
     {
+        // Ofertas Top & Tendencias: se mantienen estables al recargar
         $productos = Producto::with([
             'categoria',
             'imagenes',
@@ -59,9 +60,31 @@ class InicioController extends Controller
         ->whereHas('categoria', function ($q) {
             $q->where('exento_envio', false);
         })
-        ->inRandomOrder()
+        ->orderByDesc('destacado')
+        ->orderByDesc('id')
         ->take(8)
         ->get();
+
+        // Recomendado para ti: varían aleatoriamente en cada recarga
+        $recomendados = Producto::with([
+            'categoria',
+            'imagenes'
+        ])
+        ->sinEliminar()
+        ->where('activo', true)
+        ->whereNotIn('id', $productos->pluck('id'))
+        ->inRandomOrder()
+        ->take(2)
+        ->get();
+
+        if ($recomendados->count() < 2) {
+            $recomendados = Producto::with(['categoria', 'imagenes'])
+                ->sinEliminar()
+                ->where('activo', true)
+                ->inRandomOrder()
+                ->take(2)
+                ->get();
+        }
 
         $slugsOrdenados = [
             'laptops-y-computadoras',
@@ -83,6 +106,6 @@ class InicioController extends Controller
 
         $marcas = Brand::verificada()->get();
 
-        return view('dashboard', compact('productos', 'categoriasPrincipales', 'marcas'));
+        return view('dashboard', compact('productos', 'recomendados', 'categoriasPrincipales', 'marcas'));
     }
 }

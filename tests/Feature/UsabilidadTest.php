@@ -152,6 +152,30 @@ class UsabilidadTest extends BaseAdminTest
             ->assertSee('Finalización de Pedidos');
     }
 
+    #[Test]
+    public function un_administrador_puede_filtrar_el_reporte_de_usabilidad_por_periodo_y_estrellas(): void
+    {
+        $admin = $this->crearSuperAdmin();
+        $cliente = $this->crearCliente();
+        $pedido = $this->crearPedidoParaCliente($cliente);
+
+        EvaluacionUsabilidad::create([
+            'pedido_id' => $pedido->id,
+            'usuario_id' => $cliente->id,
+            'puntuacion_facilidad' => 5,
+            'comentario' => 'Servicio estelar único',
+            'tiempo_checkout_segundos' => 45,
+            'dispositivo' => 'Mobile',
+            'creado_en' => now(),
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.reportes.usabilidad', ['tipo' => 'mes', 'estrella' => 5]))
+            ->assertOk()
+            ->assertSee('Servicio estelar único')
+            ->assertSee('Móvil');
+    }
+
     protected function crearPedidoParaCliente($cliente): Pedido
     {
         $producto = Producto::factory()->create(['precio' => 100.00, 'stock' => 10]);

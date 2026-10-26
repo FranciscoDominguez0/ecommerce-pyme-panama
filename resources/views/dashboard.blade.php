@@ -84,7 +84,7 @@
                 <div>
                     <h3 class="text-base font-bold text-[#002349] mb-4">Recomendado para ti</h3>
                     <div class="space-y-4">
-                        @foreach($productos->take(2) as $miniProd)
+                        @foreach(($recomendados ?? $productos->take(2)) as $miniProd)
                         <a href="{{ route('cliente.producto.detalle', $miniProd->slug) }}" wire:navigate class="flex items-center gap-4 group">
                             <div class="w-16 h-16 rounded-lg bg-slate-50 border border-slate-100 flex-shrink-0 overflow-hidden flex items-center justify-center p-1">
                                 @if($miniProd->imagenPrincipal())

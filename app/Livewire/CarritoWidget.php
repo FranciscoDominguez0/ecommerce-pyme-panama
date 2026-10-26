@@ -18,6 +18,7 @@ class CarritoWidget extends Component
     public array $stockAdvertencias = [];
     public ?string $mensajeCupon = null;
     public ?string $tipoMensajeCupon = null;
+    public array $productosRelacionadosIds = [];
 
     /**
      * Incrementa en 1 la cantidad de un producto en el carrito validando stock.
@@ -305,28 +306,54 @@ class CarritoWidget extends Component
                 ->get();
         }
 
-        // Obtener productos relacionados (de la misma categoría de los que están en el carrito)
+        // Obtener productos relacionados de forma estable para que no cambien al aplicar cupones ni recargar
+        $productosRelacionados = $this->obtenerProductosRelacionados($items);
+
+        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'productosRelacionados', 'ubicacion'));
+    }
+
+    /**
+     * Obtiene los productos relacionados de forma estable para que no cambien
+     * al aplicar cupones, cambiar cantidades o interactuar con el carrito.
+     */
+    protected function obtenerProductosRelacionados($items): \Illuminate\Support\Collection
+    {
+        $productosIdsEnCarrito = $items->pluck('producto.id')->all();
+
+        // Si ya tenemos IDs calculados previamente en el componente y no están en el carrito, los conservamos
+        if (!empty($this->productosRelacionadosIds)) {
+            $idsValidos = array_values(array_diff($this->productosRelacionadosIds, $productosIdsEnCarrito));
+            if (count($idsValidos) >= 3) {
+                return Producto::with(['imagenes', 'categoria', 'brand'])
+                    ->sinEliminar()
+                    ->where('activo', true)
+                    ->whereIn('id', array_slice($idsValidos, 0, 3))
+                    ->get();
+            }
+        }
+
+        // Si es la primera carga o no hay suficientes, calculamos una lista determinista
         $productosRelacionados = collect();
         if ($items->count() > 0) {
             $categoriasIds = $items->pluck('producto.categoria_id')->unique()->filter();
-            $productosIds = $items->pluck('producto.id');
             
             $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
                 ->sinEliminar()
                 ->where('activo', true)
                 ->whereIn('categoria_id', $categoriasIds)
-                ->whereNotIn('id', $productosIds)
-                ->inRandomOrder()
+                ->whereNotIn('id', $productosIdsEnCarrito)
+                ->orderByDesc('destacado')
+                ->orderByDesc('id')
                 ->take(3)
                 ->get();
                 
-            // Fallback si no hay suficientes
             if ($productosRelacionados->count() < 3) {
                 $mas = Producto::with(['imagenes', 'categoria', 'brand'])
                     ->sinEliminar()
                     ->where('activo', true)
-                    ->whereNotIn('id', $productosIds->concat($productosRelacionados->pluck('id')))
-                    ->inRandomOrder()
+                    ->whereNotIn('id', array_merge($productosIdsEnCarrito, $productosRelacionados->pluck('id')->all()))
+                    ->orderByDesc('destacado')
+                    ->orderByDesc('id')
                     ->take(3 - $productosRelacionados->count())
                     ->get();
                 $productosRelacionados = $productosRelacionados->concat($mas);
@@ -335,11 +362,15 @@ class CarritoWidget extends Component
             $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
                 ->sinEliminar()
                 ->where('activo', true)
-                ->inRandomOrder()
+                ->orderByDesc('destacado')
+                ->orderByDesc('id')
                 ->take(3)
                 ->get();
         }
 
-        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'productosRelacionados', 'ubicacion'));
+        $this->productosRelacionadosIds = $productosRelacionados->pluck('id')->all();
+
+        return $productosRelacionados;
     }
 }
+

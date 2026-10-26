@@ -182,9 +182,6 @@
                             @endif
                         </div>
                     </div>
-                    <p class="text-xs text-slate-400">
-                        Precios en Balboas / Dólares (USD). {{ $producto->aplica_itbms ? 'Aplica ITBMS 7% en el checkout.' : 'Exento de ITBMS.' }}
-                    </p>
                 </div>
 
                 <!-- Descripción Corta -->

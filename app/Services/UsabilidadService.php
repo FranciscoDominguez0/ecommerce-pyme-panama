@@ -33,11 +33,39 @@ class UsabilidadService
     }
 
     /**
-     * Calcula los KPIs científicos de Usabilidad y Experiencia (ISO 9241-11, CES, CSAT, TSR).
+     * Calcula los KPIs de Usabilidad y Experiencia (ISO 9241-11, CES, CSAT, TSR).
+     * Todos los datos se extraen dinámicamente de la base de datos sin valores simulados.
      */
-    public function obtenerMetricas(): array
+    public function obtenerMetricas(?\Illuminate\Http\Request $request = null): array
     {
-        $evaluaciones = EvaluacionUsabilidad::with(['usuario', 'pedido'])->orderByDesc('creado_en')->get();
+        $tipoFiltro = $request ? $request->query('tipo', 'todo') : 'todo';
+        $fechaInicioStr = $request ? $request->query('fecha_inicio') : null;
+        $fechaFinStr = $request ? $request->query('fecha_fin') : null;
+        $filtroEstrella = $request ? $request->query('estrella') : null;
+
+        $fechaInicio = null;
+        $fechaFin = null;
+
+        if ($fechaInicioStr && $fechaFinStr) {
+            $fechaInicio = \Carbon\Carbon::parse($fechaInicioStr)->startOfDay();
+            $fechaFin = \Carbon\Carbon::parse($fechaFinStr)->endOfDay();
+        } elseif ($tipoFiltro === 'mes') {
+            $fechaInicio = \Carbon\Carbon::now()->startOfMonth();
+            $fechaFin = \Carbon\Carbon::now()->endOfMonth();
+        } elseif ($tipoFiltro === 'año') {
+            $fechaInicio = \Carbon\Carbon::now()->startOfYear();
+            $fechaFin = \Carbon\Carbon::now()->endOfYear();
+        }
+
+        $queryEvaluaciones = EvaluacionUsabilidad::with(['usuario', 'pedido'])->orderByDesc('creado_en');
+        $queryPedidos = Pedido::query();
+
+        if ($fechaInicio && $fechaFin) {
+            $queryEvaluaciones->whereBetween('creado_en', [$fechaInicio, $fechaFin]);
+            $queryPedidos->whereBetween('creado_en', [$fechaInicio, $fechaFin]);
+        }
+
+        $evaluaciones = $queryEvaluaciones->get();
         $totalEvaluaciones = $evaluaciones->count();
 
         // 1. Customer Effort Score (CES): % de respuestas positivas (4 o 5 = Fácil / Muy Fácil)
@@ -87,8 +115,8 @@ class UsabilidadService
         }
 
         // 4. Eficacia: Task Success Rate (TSR) de acuerdo a ISO 9241-11
-        $totalPedidos = Pedido::count();
-        $pedidosExitosos = Pedido::whereHas('estados', function ($q) {
+        $totalPedidos = $queryPedidos->count();
+        $pedidosExitosos = (clone $queryPedidos)->whereHas('estados', function ($q) {
             $q->whereIn('estado', ['pagado', 'pago_confirmado', 'preparando', 'en_camino', 'entregado']);
         })->count();
         $taskSuccessRate = $totalPedidos > 0 ? round(($pedidosExitosos / $totalPedidos) * 100, 1) : 0.0;
@@ -100,11 +128,14 @@ class UsabilidadService
             default => ['texto' => 'Baja', 'color' => 'text-rose-600 dark:text-rose-400'],
         };
 
-        // 5. Eficiencia: Tiempo promedio de Checkout
-        $evaluacionesConTiempo = $evaluaciones->whereNotNull('tiempo_checkout_segundos');
-        $tiempoPromedioCheckout = $evaluacionesConTiempo->count() > 0 
+        // 5. Eficiencia: Tiempo promedio y extremos de Checkout
+        $evaluacionesConTiempo = $evaluaciones->whereNotNull('tiempo_checkout_segundos')->where('tiempo_checkout_segundos', '>', 0);
+        $totalConTiempo = $evaluacionesConTiempo->count();
+        $tiempoPromedioCheckout = $totalConTiempo > 0 
             ? round($evaluacionesConTiempo->avg('tiempo_checkout_segundos')) 
             : null;
+        $tiempoMinCheckout = $totalConTiempo > 0 ? (int) $evaluacionesConTiempo->min('tiempo_checkout_segundos') : null;
+        $tiempoMaxCheckout = $totalConTiempo > 0 ? (int) $evaluacionesConTiempo->max('tiempo_checkout_segundos') : null;
 
         $nivelTiempo = match (true) {
             $tiempoPromedioCheckout === null => ['texto' => 'Sin datos', 'color' => 'text-slate-400 dark:text-slate-500'],
@@ -114,60 +145,60 @@ class UsabilidadService
             default => ['texto' => 'Lenta', 'color' => 'text-rose-600 dark:text-rose-400'],
         };
 
-        // 6. Rendimiento y Velocidad Técnica en Tiempo Real
-        // Benchmark real de base de datos
-        $inicioDb = microtime(true);
-        DB::select('SELECT 1');
-        $latenciaDbMs = round((microtime(true) - $inicioDb) * 1000, 1);
-        $calificacionDb = match (true) {
-            $latenciaDbMs < 10 => 'Instantánea',
-            $latenciaDbMs < 30 => 'Muy rápida',
-            $latenciaDbMs < 80 => 'Rápida',
-            default => 'Moderada',
-        };
+        // Rangos de tiempo de compra
+        $tiempoMenos60 = $evaluacionesConTiempo->where('tiempo_checkout_segundos', '<=', 60)->count();
+        $tiempoEntre60Y180 = $evaluacionesConTiempo->where('tiempo_checkout_segundos', '>', 60)->where('tiempo_checkout_segundos', '<=', 180)->count();
+        $tiempoMas180 = $evaluacionesConTiempo->where('tiempo_checkout_segundos', '>', 180)->count();
 
-        // Tiempo real de procesamiento del servidor (Backend execution)
-        $tiempoServidorSegundos = defined('LARAVEL_START') 
-            ? round(max(0.02, microtime(true) - LARAVEL_START), 2) 
-            : 0.12;
-        $calificacionServidor = match (true) {
-            $tiempoServidorSegundos < 0.5 => 'Ultra rápida',
-            $tiempoServidorSegundos < 1.2 => 'Rápida',
-            $tiempoServidorSegundos < 2.5 => 'Aceptable',
-            default => 'Lenta',
-        };
-
-        // Estabilidad: tasa de pedidos confirmados sin fallos ni cancelaciones
-        $pedidosCancelados = Pedido::whereHas('estados', function ($q) {
-            $q->whereIn('estado', ['cancelado', 'reembolsado']);
-        })->count();
-        $tasaEstabilidad = $totalPedidos > 0 
-            ? round((($totalPedidos - $pedidosCancelados) / $totalPedidos) * 100, 1) 
-            : 100.0;
-        $calificacionEstabilidad = match (true) {
-            $tasaEstabilidad >= 98 => 'Sin incidencias',
-            $tasaEstabilidad >= 90 => 'Alta fiabilidad',
-            default => 'Requiere atención',
-        };
-
-        $experienciaGeneral = ($tiempoServidorSegundos < 1.2 && $latenciaDbMs < 60 && $tasaEstabilidad >= 90)
-            ? 'Rápida y sin demoras'
-            : 'Estable con margen de optimización';
-
-        $rendimiento = [
-            'tiempo_servidor_segundos' => $tiempoServidorSegundos,
-            'calificacion_servidor' => $calificacionServidor,
-            'latencia_db_ms' => $latenciaDbMs,
-            'calificacion_db' => $calificacionDb,
-            'estabilidad_porcentaje' => $tasaEstabilidad,
-            'calificacion_estabilidad' => $calificacionEstabilidad,
-            'experiencia_general' => $experienciaGeneral,
+        $tiemposDetalle = [
+            'promedio' => $tiempoPromedioCheckout,
+            'minimo' => $tiempoMinCheckout,
+            'maximo' => $tiempoMaxCheckout,
+            'menos_60' => [
+                'cantidad' => $tiempoMenos60,
+                'porcentaje' => $totalConTiempo > 0 ? round(($tiempoMenos60 / $totalConTiempo) * 100) : 0,
+            ],
+            'entre_60_180' => [
+                'cantidad' => $tiempoEntre60Y180,
+                'porcentaje' => $totalConTiempo > 0 ? round(($tiempoEntre60Y180 / $totalConTiempo) * 100) : 0,
+            ],
+            'mas_180' => [
+                'cantidad' => $tiempoMas180,
+                'porcentaje' => $totalConTiempo > 0 ? round(($tiempoMas180 / $totalConTiempo) * 100) : 0,
+            ],
         ];
 
-        // 7. Comentarios cualitativos recientes
-        $comentariosRecientes = $evaluaciones->whereNotNull('comentario')->take(10);
+        // 6. Métricas por Dispositivo (Mobile vs Desktop)
+        $evaluacionesMobile = $evaluaciones->filter(fn($e) => strtolower((string)$e->dispositivo) === 'mobile');
+        $evaluacionesDesktop = $evaluaciones->filter(fn($e) => strtolower((string)$e->dispositivo) !== 'mobile');
+
+        $cantMobile = $evaluacionesMobile->count();
+        $cantDesktop = $evaluacionesDesktop->count();
+
+        $metricasDispositivos = [
+            'mobile' => [
+                'cantidad' => $cantMobile,
+                'porcentaje' => $totalEvaluaciones > 0 ? round(($cantMobile / $totalEvaluaciones) * 100) : 0,
+                'csat' => $cantMobile > 0 ? round($evaluacionesMobile->avg('puntuacion_facilidad'), 1) : 0.0,
+            ],
+            'desktop' => [
+                'cantidad' => $cantDesktop,
+                'porcentaje' => $totalEvaluaciones > 0 ? round(($cantDesktop / $totalEvaluaciones) * 100) : 0,
+                'csat' => $cantDesktop > 0 ? round($evaluacionesDesktop->avg('puntuacion_facilidad'), 1) : 0.0,
+            ],
+        ];
+
+        // 7. Comentarios de compradores (con filtro opcional por estrellas)
+        $comentariosQuery = $evaluaciones->whereNotNull('comentario');
+        if ($filtroEstrella && in_array((int) $filtroEstrella, [1, 2, 3, 4, 5])) {
+            $comentariosQuery = $comentariosQuery->where('puntuacion_facilidad', (int) $filtroEstrella);
+        }
+
+        $comentariosRecientes = $comentariosQuery->values();
 
         return [
+            'tipoFiltro' => $tipoFiltro,
+            'filtroEstrella' => $filtroEstrella,
             'total_evaluaciones' => $totalEvaluaciones,
             'respuestas_positivas' => $respuestasPositivas,
             'porcentaje_ces' => $porcentajeCES,
@@ -180,7 +211,8 @@ class UsabilidadService
             'nivel_tsr' => $nivelTSR,
             'tiempo_promedio_checkout' => $tiempoPromedioCheckout,
             'nivel_tiempo' => $nivelTiempo,
-            'rendimiento' => $rendimiento,
+            'tiempos_detalle' => $tiemposDetalle,
+            'metricas_dispositivos' => $metricasDispositivos,
             'comentarios_recientes' => $comentariosRecientes,
             'total_pedidos' => $totalPedidos,
             'pedidos_exitosos' => $pedidosExitosos,
