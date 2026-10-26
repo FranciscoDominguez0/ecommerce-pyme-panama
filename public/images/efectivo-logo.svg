@@ -1,0 +1,13 @@
+<svg viewBox="0 0 74 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="74" height="32" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Icono de Billetes / Efectivo en Emerald -->
+    <g transform="translate(6, 7)">
+        <rect x="0" y="3" width="17" height="11" rx="2" fill="#ECFDF5" stroke="#059669" stroke-width="1.2"/>
+        <circle cx="8.5" cy="8.5" r="2.2" fill="#059669"/>
+        <path d="M2.5 5.5H4M13 5.5H14.5M2.5 11.5H4M13 11.5H14.5" stroke="#059669" stroke-width="0.8" stroke-linecap="round"/>
+        <!-- Billete secundario superpuesto sutilmente detrás -->
+        <path d="M3 1.5H16.5C17.3 1.5 18 2.2 18 3V11" stroke="#10B981" stroke-width="1" stroke-linecap="round"/>
+    </g>
+    <!-- Texto EFECTIVO -->
+    <text x="28" y="20" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="800" fill="#0F172A" letter-spacing="0.5">EFECTIVO</text>
+</svg>

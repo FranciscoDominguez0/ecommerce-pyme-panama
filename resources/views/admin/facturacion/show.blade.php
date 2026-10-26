@@ -226,17 +226,91 @@
         </div>
     </div>
 
-    <!-- Modal para Vista Previa -->
+    <!-- Modal para Vista Previa (Factura y Ticket para Imprimir) -->
     <x-modal name="preview-factura" maxWidth="6xl">
-        <div class="p-4 bg-white dark:bg-gray-800">
-            <div class="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-gray-700 mb-4">
-                <h3 class="text-lg font-medium text-slate-900 dark:text-white">Vista Previa de Factura {{ $factura->numero }}</h3>
-                <button x-on:click="$dispatch('close-modal', 'preview-factura')" class="text-slate-400 hover:text-slate-500 transition">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
+        <div class="p-5 bg-white dark:bg-[#181a1b] font-sans" 
+             x-data="{ 
+                 formato: 'factura',
+                 imprimir() {
+                     const iframeId = this.formato === 'factura' ? 'visor-iframe-factura' : 'visor-iframe-ticket';
+                     const iframe = document.getElementById(iframeId);
+                     if (iframe && iframe.contentWindow) {
+                         try {
+                             iframe.contentWindow.focus();
+                             iframe.contentWindow.print();
+                             return;
+                         } catch (e) {
+                             // Fallback si el visor PDF bloquea contentWindow.print
+                         }
+                     }
+                     const url = this.formato === 'factura' 
+                         ? '{{ route('admin.facturas.verPdf', $factura) }}' 
+                         : '{{ route('admin.facturas.ticket', $factura) }}';
+                     window.open(url, '_blank');
+                 }
+             }">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-3 border-b border-slate-200 dark:border-gray-700 gap-3 mb-3">
+                <div class="flex flex-wrap items-center gap-3">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">
+                        Vista Previa e Impresión
+                    </h3>
+                    
+                    <!-- Selector de Formato: Factura vs Ticket -->
+                    <div class="inline-flex items-center p-0.5 rounded-lg bg-slate-100 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 text-xs">
+                        <button type="button" 
+                                @click="formato = 'factura'" 
+                                :class="formato === 'factura' ? 'bg-white dark:bg-gray-700 text-slate-900 dark:text-white font-bold shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-[15px]">description</span>
+                            <span>Factura</span>
+                        </button>
+                        <button type="button" 
+                                @click="formato = 'ticket'" 
+                                :class="formato === 'ticket' ? 'bg-white dark:bg-gray-700 text-slate-900 dark:text-white font-bold shadow-xs' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md transition-all cursor-pointer">
+                            <span class="material-symbols-outlined text-[15px]">receipt_long</span>
+                            <span>Ticket Térmico</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- Botón Imprimir directo / abrir pestaña -->
+                    <button type="button" 
+                            @click="imprimir()"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs transition cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">print</span>
+                        <span>Imprimir</span>
+                    </button>
+
+                    <!-- Botón Descargar PDF -->
+                    <a :href="formato === 'factura' ? '{{ route('admin.facturas.pdf', $factura) }}' : '{{ route('admin.facturas.ticketPdf', $factura) }}'" 
+                       class="inline-flex items-center gap-1 px-3 py-1.5 border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:hover:bg-gray-800 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">download</span>
+                        <span>Descargar</span>
+                    </a>
+
+                    <button x-on:click="$dispatch('close-modal', 'preview-factura')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg transition-colors cursor-pointer">
+                        <span class="material-symbols-outlined text-[18px]">close</span>
+                    </button>
+                </div>
             </div>
-            <div class="w-full" style="height: 80vh; min-height: 600px;">
-                <iframe src="{{ route('admin.facturas.verPdf', $factura) }}#zoom=90" class="w-full h-full border-0 rounded-md" style="height: 100%; width: 100%;" title="Vista Previa Factura"></iframe>
+
+            <!-- Contenedor del Visor con altura fija para evitar colapsos -->
+            <div class="w-full bg-slate-100 dark:bg-gray-900 rounded-xl overflow-hidden border border-slate-200 dark:border-gray-700 relative" style="height: 75vh; min-height: 580px;">
+                <!-- Iframe Factura A4 -->
+                <iframe id="visor-iframe-factura"
+                        x-show="formato === 'factura'" 
+                        src="{{ route('admin.facturas.verPdf', $factura) }}#zoom=90" 
+                        class="w-full h-full border-0" 
+                        title="Vista Previa Factura A4"></iframe>
+
+                <!-- Iframe Ticket Térmico 80mm -->
+                <iframe id="visor-iframe-ticket"
+                        x-show="formato === 'ticket'" 
+                        src="{{ route('admin.facturas.ticket', $factura) }}#zoom=115" 
+                        class="w-full h-full border-0" 
+                        title="Vista Previa Ticket Térmico"></iframe>
             </div>
         </div>
     </x-modal>

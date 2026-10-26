@@ -161,7 +161,7 @@
                                         <select x-model="prod.varianteSeleccionadaId" class="block w-full text-xs rounded-md border-slate-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white py-1 px-2 focus:border-emerald-500 focus:ring-emerald-500">
                                             <option value="">Seleccionar variante...</option>
                                             <template x-for="v in prod.variantes" :key="v.id">
-                                                <option :value="v.id" x-text="v.nombre + ' ($' + v.precio.toFixed(2) + ' - ' + v.stock + ' disp.)'" :disabled="v.stock <= 0"></option>
+                                                <option :value="v.id" x-text="(v.nombre || v.sku || 'Variante #' + v.id) + ' ($' + v.precio.toFixed(2) + ' - ' + v.stock + ' disp.)'" :disabled="v.stock <= 0"></option>
                                             </template>
                                         </select>
                                     </div>
@@ -215,7 +215,7 @@
                 <div class="card-elevated rounded-xl p-5 border border-slate-200/80 dark:border-gray-700/80 bg-white dark:bg-[#181a1b]">
                     <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100 dark:border-gray-800">
                         <h2 class="text-sm font-bold text-slate-900 dark:text-white">Productos en la Venta</h2>
-                        <button type="button" x-show="items.length > 0" @click="items = []" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition-colors">
+                        <button type="button" x-show="items.length > 0" @click="items = []; if (typeof window.mostrarToast === 'function') window.mostrarToast('Lista de productos vaciada', 'info');" class="text-xs text-rose-500 hover:text-rose-700 font-semibold transition-colors">
                             Vaciar lista
                         </button>
                     </div>
@@ -333,51 +333,61 @@
                     </div>
                 </div>
 
-                <!-- SECCIÓN 5: MÉTODO DE PAGO -->
+                <!-- SECCIÓN 5: FORMA DE PAGO -->
                 <div class="card-elevated rounded-xl p-5 border border-slate-200/80 dark:border-gray-700/80 bg-white dark:bg-[#181a1b]">
-                    <div class="pb-3 mb-4 border-b border-slate-100 dark:border-gray-800">
+                    <div class="pb-3 mb-4 border-b border-slate-100 dark:border-gray-800 flex items-center justify-between">
                         <h2 class="text-sm font-bold text-slate-900 dark:text-white">Forma de Pago</h2>
+                        <span class="text-xs font-semibold uppercase text-emerald-600 dark:text-emerald-400" x-text="metodoPago.replace('_', ' ')"></span>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         <!-- Efectivo -->
                         <button type="button" 
                                 @click="metodoPago = 'efectivo'"
-                                :class="metodoPago === 'efectivo' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-xs text-center transition-all">
-                            Efectivo
+                                :class="metodoPago === 'efectivo' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
+                                class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
+                                title="Pago en Efectivo">
+                            <img src="{{ asset('images/efectivo.webp') }}" alt="Efectivo" class="h-9 w-auto max-w-[85%] object-contain" style="max-height: 36px;">
                         </button>
 
-                        <!-- Punto de Venta / Tarjeta -->
+                        <!-- Punto de Venta / Tarjeta (Visa, Mastercard, Clave) -->
                         <button type="button" 
                                 @click="metodoPago = 'punto_venta'"
-                                :class="metodoPago === 'punto_venta' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-xs text-center transition-all">
-                            Terminal POS
+                                :class="metodoPago === 'punto_venta' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
+                                class="py-2 px-2 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
+                                title="Tarjeta de Débito / Crédito / Clave">
+                            <div class="flex items-center justify-center gap-1.5 w-full max-w-full px-1 overflow-hidden">
+                                <img src="{{ asset('images/visa-logo.png') }}" alt="Visa" class="w-auto object-contain shrink-0" style="height: 13px; max-height: 13px; max-width: 28%;">
+                                <img src="{{ asset('images/mastercard-logo.png') }}" alt="Mastercard" class="w-auto object-contain shrink-0" style="height: 18px; max-height: 18px; max-width: 28%;">
+                                <img src="{{ asset('images/clave-logo.png') }}" alt="Clave" class="w-auto object-contain rounded-xs shrink-0" style="height: 14px; max-height: 14px; max-width: 34%;">
+                            </div>
                         </button>
 
                         <!-- Yappy -->
                         <button type="button" 
                                 @click="metodoPago = 'yappy'"
-                                :class="metodoPago === 'yappy' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-xs text-center transition-all">
-                            Yappy
+                                :class="metodoPago === 'yappy' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
+                                class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
+                                title="Yappy Comercial">
+                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-7 w-auto max-w-[85%] object-contain rounded-md" style="max-height: 28px;">
                         </button>
 
                         <!-- Transferencia Bancaria / ACH -->
                         <button type="button" 
                                 @click="metodoPago = 'transferencia'"
-                                :class="metodoPago === 'transferencia' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-xs text-center transition-all">
-                            ACH / Banco
+                                :class="metodoPago === 'transferencia' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
+                                class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
+                                title="ACH / Transferencia Bancaria">
+                            <img src="{{ asset('images/ach.webp') }}" alt="ACH / Transferencia" class="h-9 w-auto max-w-[85%] object-contain" style="max-height: 36px;">
                         </button>
 
                         <!-- Contra Entrega -->
                         <button type="button" 
                                 @click="metodoPago = 'contra_entrega'"
-                                :class="metodoPago === 'contra_entrega' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-xs text-center transition-all col-span-2 sm:col-span-1">
-                            Contra Entrega
+                                :class="metodoPago === 'contra_entrega' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
+                                class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none col-span-2 sm:col-span-1"
+                                title="Pago Contra Entrega">
+                            <img src="{{ asset('images/contra-entrega.webp') }}" alt="Contra Entrega" class="h-10 w-auto max-w-[85%] object-contain" style="max-height: 40px;">
                         </button>
                     </div>
 
@@ -707,6 +717,9 @@
                         }
                         this.seleccionarCliente(data.cliente);
                         this.cerrarModalNuevoCliente();
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast(`Cliente "${data.cliente.nombre}" registrado y seleccionado`, 'success');
+                        }
                     }
                 } catch (err) {
                     this.errorModalCliente = err.message || 'Error de conexión al registrar cliente.';
@@ -746,7 +759,14 @@
                 let stock = prod.stock;
 
                 if (prod.variantes && prod.variantes.length > 0) {
-                    if (!prod.varianteSeleccionadaId) return;
+                    if (!prod.varianteSeleccionadaId) {
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast('Por favor selecciona una variante antes de agregar.', 'warning');
+                        } else {
+                            alert('Por favor selecciona una variante antes de agregar.');
+                        }
+                        return;
+                    }
                     const v = prod.variantes.find(item => item.id == prod.varianteSeleccionadaId);
                     if (!v) return;
                     varianteId = v.id;
@@ -756,19 +776,32 @@
                 }
 
                 if (stock <= 0) {
-                    alert('El producto seleccionado no cuenta con inventario disponible.');
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('El producto seleccionado no cuenta con inventario disponible.', 'error');
+                    } else {
+                        alert('El producto seleccionado no cuenta con inventario disponible.');
+                    }
                     return;
                 }
 
                 const key = prod.id + '_' + (varianteId || 'base');
                 const index = this.items.findIndex(i => i.key === key);
+                const nombreCompleto = prod.nombre + (varianteNombre ? ' (' + varianteNombre + ')' : '');
 
                 if (index >= 0) {
                     if (this.items[index].cantidad + 1 > stock) {
-                        alert('No puedes agregar más unidades del stock disponible (' + stock + ').');
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast('Stock máximo alcanzado (' + stock + ' disp.).', 'warning');
+                        } else {
+                            alert('No puedes agregar más unidades del stock disponible (' + stock + ').');
+                        }
                         return;
                     }
                     this.items[index].cantidad += 1;
+
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast(`+1 "${nombreCompleto}" agregado (Total: ${this.items[index].cantidad})`, 'success');
+                    }
                 } else {
                     this.items.push({
                         key: key,
@@ -781,6 +814,10 @@
                         stock_disponible: stock,
                         imagen: prod.imagen
                     });
+
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast(`"${nombreCompleto}" agregado a la venta`, 'success');
+                    }
                 }
             },
 
@@ -788,7 +825,11 @@
                 const nueva = item.cantidad + delta;
                 if (nueva <= 0) return;
                 if (nueva > item.stock_disponible) {
-                    alert('Stock máximo alcanzado (' + item.stock_disponible + ').');
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Stock máximo alcanzado (' + item.stock_disponible + ' disp.).', 'warning');
+                    } else {
+                        alert('Stock máximo alcanzado (' + item.stock_disponible + ').');
+                    }
                     return;
                 }
                 item.cantidad = nueva;
@@ -800,12 +841,21 @@
                 }
                 if (item.cantidad > item.stock_disponible) {
                     item.cantidad = item.stock_disponible;
-                    alert('Cantidad ajustada al stock disponible (' + item.stock_disponible + ').');
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Cantidad ajustada al stock disponible (' + item.stock_disponible + ').', 'warning');
+                    } else {
+                        alert('Cantidad ajustada al stock disponible (' + item.stock_disponible + ').');
+                    }
                 }
             },
 
             eliminarItem(index) {
+                const eliminado = this.items[index];
                 this.items.splice(index, 1);
+                if (eliminado && typeof window.mostrarToast === 'function') {
+                    const nombre = eliminado.nombre + (eliminado.variante_nombre ? ' (' + eliminado.variante_nombre + ')' : '');
+                    window.mostrarToast(`"${nombre}" removido de la venta`, 'info');
+                }
             },
 
             actualizarCostoZona() {
@@ -842,13 +892,21 @@
             prepararEnvio(e) {
                 if (this.items.length === 0) {
                     e.preventDefault();
-                    alert('Debes agregar al menos un producto para registrar la venta.');
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Debes agregar al menos un producto para registrar la venta.', 'warning');
+                    } else {
+                        alert('Debes agregar al menos un producto para registrar la venta.');
+                    }
                     return;
                 }
 
                 if (!this.clienteSeleccionado) {
                     e.preventDefault();
-                    alert('Por favor selecciona o crea un cliente para la venta.');
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Por favor selecciona o crea un cliente para la venta.', 'warning');
+                    } else {
+                        alert('Por favor selecciona o crea un cliente para la venta.');
+                    }
                     return;
                 }
 

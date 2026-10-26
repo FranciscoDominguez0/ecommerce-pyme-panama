@@ -363,12 +363,12 @@
                 </div>
                 
                 <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3 mt-6 border-t border-slate-100 dark:border-gray-700 pt-4">Modalidad de Entrega</h3>
-                @if($metodoEntrega === 'retiro_local')
+                @if($metodoEntrega === 'retiro_local' || $metodoEntrega === 'tienda_fisica')
                     <div class="p-3.5 bg-slate-50 dark:bg-gray-800/60 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-gray-700 flex items-start gap-3">
-                        <span class="material-symbols-outlined mt-0.5 text-slate-600 dark:text-slate-400">storefront</span>
+                        <span class="material-symbols-outlined mt-0.5 text-emerald-600 dark:text-emerald-400">storefront</span>
                         <div>
-                            <p class="font-bold text-sm text-slate-900 dark:text-white">Retiro en Sucursal (PYME PANAMA)</p>
-                            <p class="text-xs mt-0.5 text-slate-500 dark:text-slate-400">El cliente pasará a retirar su pedido presencialmente.</p>
+                            <p class="font-bold text-sm text-slate-900 dark:text-white">Venta en Tienda Física</p>
+                            <p class="text-xs mt-0.5 text-slate-500 dark:text-slate-400">Entrega presencial en mostrador / compra directa en tienda.</p>
                         </div>
                     </div>
                 @elseif($metodoEntrega === 'retiro_courier')
@@ -417,9 +417,12 @@
                         </div>
                     @endif
                 @else
-                    <div class="p-3 bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-2">
-                        <span class="material-symbols-outlined">help</span>
-                        <p class="font-bold text-sm">Método de entrega no definido (Antiguo)</p>
+                    <div class="p-3.5 bg-slate-50 dark:bg-gray-800/60 text-slate-800 dark:text-slate-200 rounded-xl border border-slate-200 dark:border-gray-700 flex items-start gap-3">
+                        <span class="material-symbols-outlined mt-0.5 text-emerald-600 dark:text-emerald-400">storefront</span>
+                        <div>
+                            <p class="font-bold text-sm text-slate-900 dark:text-white">Venta en Tienda Física</p>
+                            <p class="text-xs mt-0.5 text-slate-500 dark:text-slate-400">Entrega presencial en mostrador o compra directa en tienda.</p>
+                        </div>
                     </div>
                     @if($pedido->direccion)
                         <div class="mt-3 pl-2 border-l-2 border-slate-200 dark:border-slate-700 ml-2">

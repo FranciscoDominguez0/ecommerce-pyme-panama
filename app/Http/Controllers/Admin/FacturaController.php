@@ -85,6 +85,94 @@ class FacturaController extends Controller
         abort(404, 'PDF no encontrado');
     }
 
+    /**
+     * Transmite el PDF del Ticket configurado en formato 80mm para impresora térmica.
+     */
+    /**
+     * Transmite el PDF del Ticket configurado en formato 80mm para impresora térmica.
+     */
+    public function ticket(Factura $factura)
+    {
+        $factura->load(['pedido.items.producto', 'pedido.items.variante', 'pedido.vendedor', 'usuario', 'pedido.direccion']);
+        $datosEmpresa = $this->prepararDatosEmpresaTicket();
+
+        // Ancho estándar para impresora térmica de 80mm (226.77 pt)
+        $anchoPt = 80 * 2.83465;
+
+        // Cálculo de altura según contenido para bobina continua
+        $cantItems = $factura->pedido ? $factura->pedido->items->count() : 1;
+        $altoMm = 145 + ($cantItems * 14);
+        if (!empty($datosEmpresa['logo_src'])) {
+            $altoMm += 20;
+        }
+        if (!empty($factura->pedido?->notas_cliente) || !empty($factura->pedido?->notas_internas)) {
+            $altoMm += 20;
+        }
+        $altoMm = max($altoMm, 160);
+        $altoPt = $altoMm * 2.83465;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.facturacion.ticket-pdf', compact('factura', 'datosEmpresa'))
+            ->setPaper([0, 0, $anchoPt, $altoPt], 'portrait');
+
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="Ticket_' . $factura->numero . '.pdf"',
+        ]);
+    }
+
+    /**
+     * Descarga el PDF del Ticket en formato 80mm para impresora térmica.
+     */
+    public function ticketPdf(Factura $factura)
+    {
+        $factura->load(['pedido.items.producto', 'pedido.items.variante', 'pedido.vendedor', 'usuario', 'pedido.direccion']);
+        $datosEmpresa = $this->prepararDatosEmpresaTicket();
+
+        // Ancho estándar para impresora térmica de 80mm (226.77 pt)
+        $anchoPt = 80 * 2.83465;
+
+        $cantItems = $factura->pedido ? $factura->pedido->items->count() : 1;
+        $altoMm = 145 + ($cantItems * 14);
+        if (!empty($datosEmpresa['logo_src'])) {
+            $altoMm += 20;
+        }
+        if (!empty($factura->pedido?->notas_cliente) || !empty($factura->pedido?->notas_internas)) {
+            $altoMm += 20;
+        }
+        $altoMm = max($altoMm, 160);
+        $altoPt = $altoMm * 2.83465;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.facturacion.ticket-pdf', compact('factura', 'datosEmpresa'))
+            ->setPaper([0, 0, $anchoPt, $altoPt], 'portrait');
+
+        return $pdf->download('Ticket_' . $factura->numero . '.pdf');
+    }
+
+    /**
+     * Prepara los datos de la empresa garantizando que el logo sea monocromático para tickets térmicos.
+     */
+    protected function prepararDatosEmpresaTicket(): array
+    {
+        $datos = $this->facturaService->prepararDatosEmpresaParaPdf();
+
+        $rutaLogoConf = \App\Models\Configuracion::obtener('empresa.logo_ruta');
+        $logoPath = $rutaLogoConf ? storage_path('app/public/' . $rutaLogoConf) : public_path('images/logo.png');
+
+        if (file_exists($logoPath) && function_exists('imagecreatefromstring')) {
+            $content = file_get_contents($logoPath);
+            $im = @imagecreatefromstring($content);
+            if ($im) {
+                imagefilter($im, IMG_FILTER_GRAYSCALE);
+                ob_start();
+                imagepng($im);
+                $datos['logo_src'] = 'data:image/png;base64,' . base64_encode(ob_get_clean());
+                imagedestroy($im);
+            }
+        }
+
+        return $datos;
+    }
+
     public function reenviar(Request $request, Factura $factura)
     {
         $request->validate([

@@ -1,0 +1,15 @@
+<svg viewBox="0 0 78 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="78" height="32" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+    <!-- Icono de Camión / Delivery -->
+    <g transform="translate(6, 8)">
+        <path d="M1 3C1 2.44772 1.44772 2 2 2H10V11H1V3Z" fill="#F1F5F9" stroke="#0F172A" stroke-width="1.2"/>
+        <path d="M10 5H13.5L16 8V11H10V5Z" fill="#E2E8F0" stroke="#0F172A" stroke-width="1.2" stroke-linejoin="round"/>
+        <circle cx="4.5" cy="12" r="2" fill="#0F172A"/>
+        <circle cx="13" cy="12" r="2" fill="#0F172A"/>
+        <circle cx="4.5" cy="12" r="0.8" fill="#FFFFFF"/>
+        <circle cx="13" cy="12" r="0.8" fill="#FFFFFF"/>
+    </g>
+    <!-- Texto apilado CONTRA ENTREGA -->
+    <text x="27" y="14" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="800" fill="#0F172A" letter-spacing="0.4">CONTRA</text>
+    <text x="27" y="23" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="7.5" font-weight="800" fill="#0F172A" letter-spacing="0.4">ENTREGA</text>
+</svg>

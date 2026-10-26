@@ -166,7 +166,7 @@ class CarritoWidget extends Component
                 'tipo' => 'success',
                 'mensaje' => 'Producto movido al carrito.',
             ]);
-            
+
             $this->dispatch('carrito-actualizado');
         } else {
             $this->dispatch('mostrar-toast', [
@@ -203,7 +203,7 @@ class CarritoWidget extends Component
     public function resolverUbicacionEnvio(\App\Models\Carrito $carrito, \App\Services\EnvioService $envioService): array
     {
         $metodo = session('checkout_metodo_entrega', 'delivery');
-        
+
         if ($metodo === 'retiro_local') {
             return [
                 'costo' => 0.00,
@@ -214,9 +214,9 @@ class CarritoWidget extends Component
             if (session('checkout_courier_sucursal')) {
                 $suc = \App\Models\CourierSucursal::find(session('checkout_courier_sucursal'));
                 if ($suc) {
-                    $baseCosto = (float)$suc->tarifa_uno_hasta_7lb;
+                    $baseCosto = (float) $suc->tarifa_uno_hasta_7lb;
                     $pesoTotalLbs = $envioService->calcularPesoTotalLibras($carrito);
-                    
+
                     if ($pesoTotalLbs > 7) {
                         $librasExtras = $pesoTotalLbs - 7;
                         $recargo = $librasExtras * 0.50; // Tarifa estándar por libra adicional
@@ -256,10 +256,10 @@ class CarritoWidget extends Component
                     ];
                 }
             }
-            
+
             // Fallback: Si no ha elegido nada, estimamos usando la tarifa de Panamá o la primera zona disponible
             $zonaFallback = ZonaEnvio::where('nombre', 'like', '%Panamá%')->first() ?? ZonaEnvio::first();
-            
+
             return [
                 'costo' => $zonaFallback ? (float) $envioService->calcularCostoEnvio($zonaFallback, $carrito) : 0.00,
                 'ubicacion' => 'Estimado (' . ($zonaFallback ? $zonaFallback->nombre : 'Panamá') . ')',
@@ -336,7 +336,7 @@ class CarritoWidget extends Component
         $productosRelacionados = collect();
         if ($items->count() > 0) {
             $categoriasIds = $items->pluck('producto.categoria_id')->unique()->filter();
-            
+
             $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
                 ->sinEliminar()
                 ->where('activo', true)
@@ -346,7 +346,7 @@ class CarritoWidget extends Component
                 ->orderByDesc('id')
                 ->take(3)
                 ->get();
-                
+
             if ($productosRelacionados->count() < 3) {
                 $mas = Producto::with(['imagenes', 'categoria', 'brand'])
                     ->sinEliminar()

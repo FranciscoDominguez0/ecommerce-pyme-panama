@@ -57,11 +57,12 @@ class VentaManualController extends PedidoController
                     'stock' => (int) $p->stock,
                     'imagen' => $p->imagen_url,
                     'es_digital' => (bool) $p->es_digital,
-                    'variantes' => $p->variantes->map(function ($v) {
+                    'variantes' => $p->variantes->map(function ($v) use ($p) {
                         return [
                             'id' => $v->id,
                             'nombre' => $v->nombre,
-                            'precio' => (float) $v->precio,
+                            'sku' => $v->sku,
+                            'precio' => (float) ($v->precio > 0 ? $v->precio : $p->precio),
                             'stock' => (int) $v->stock,
                         ];
                     }),
@@ -149,7 +150,10 @@ class VentaManualController extends PedidoController
                 'costo_envio' => $validated['tipo_entrega'] === 'envio_domicilio' ? (float) ($validated['costo_envio'] ?? 0.00) : 0.00,
                 'descuento_manual' => (float) ($validated['descuento_manual'] ?? 0.00),
                 'notas_cliente' => $validated['notas_cliente'] ?? null,
-                'notas_internas' => $validated['notas_internas'] ?? 'Pedido registrado manualmente desde panel de administración.',
+                'notas_internas' => json_encode([
+                    'metodo_entrega' => $validated['tipo_entrega'] === 'envio_domicilio' ? 'delivery' : 'tienda_fisica',
+                    'nota' => $validated['notas_internas'] ?? 'Venta registrada en tienda física (POS).',
+                ], JSON_UNESCAPED_UNICODE),
                 'marcar_pagado' => $request->boolean('marcar_pagado'),
                 'emitir_factura' => $request->boolean('emitir_factura'),
             ];

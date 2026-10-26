@@ -69,4 +69,20 @@ class VarianteProducto extends Model
 
         return $precioBase;
     }
+
+    /**
+     * Nombre descriptivo de la variante según sus opciones asociadas o SKU.
+     */
+    public function getNombreAttribute(): string
+    {
+        $opciones = $this->relationLoaded('opciones') ? $this->opciones : $this->opciones()->with('tipo')->get();
+
+        if ($opciones->isNotEmpty()) {
+            return $opciones->map(function ($o) {
+                return ($o->tipo ? $o->tipo->nombre . ': ' : '') . $o->valor;
+            })->join(' / ');
+        }
+
+        return $this->sku ?: 'Variante #' . $this->id;
+    }
 }

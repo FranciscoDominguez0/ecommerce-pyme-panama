@@ -51,10 +51,17 @@ class PedidoController extends Controller
         }
 
         // Preparamos los datos de entrega y contacto extraídos de notas internas
-        $notasInternas = json_decode($pedido->notas_internas, true) ?? [];
-        $metodoEntrega = $notasInternas['metodo_entrega'] ?? 'desconocido';
-        $contacto = $notasInternas['contacto'] ?? null;
-        $courierSucursalId = $notasInternas['courier_sucursal_id'] ?? null;
+        $notasInternas = json_decode($pedido->notas_internas, true);
+        if (is_array($notasInternas)) {
+            $metodoEntrega = $notasInternas['metodo_entrega'] ?? ($pedido->direccion_id ? 'delivery' : 'tienda_fisica');
+            $contacto = $notasInternas['contacto'] ?? null;
+            $courierSucursalId = $notasInternas['courier_sucursal_id'] ?? null;
+        } else {
+            // Pedidos sin JSON estructurado en notas_internas (ventas físicas de mostrador / pedidos antiguos)
+            $metodoEntrega = $pedido->direccion_id ? 'delivery' : 'tienda_fisica';
+            $contacto = null;
+            $courierSucursalId = null;
+        }
         $sucursal = $courierSucursalId ? \App\Models\CourierSucursal::find($courierSucursalId) : null;
 
         return view('admin.pedidos.detalle', compact('pedido', 'metodoEntrega', 'contacto', 'sucursal'));

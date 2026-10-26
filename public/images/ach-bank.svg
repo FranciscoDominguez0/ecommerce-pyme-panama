@@ -1,0 +1,28 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Techo / Frontón triangular del Banco -->
+    <path d="M24 6L6 16H42L24 6Z" fill="#2563EB"/>
+    <path d="M24 8.5L10 16H38L24 8.5Z" fill="#3B82F6"/>
+    <!-- Medallón central en el frontón -->
+    <circle cx="24" cy="13" r="1.8" fill="#FFFFFF"/>
+    
+    <!-- Arquitrabe / Viga superior -->
+    <rect x="7" y="16" width="34" height="3" rx="0.5" fill="#1D4ED8"/>
+    
+    <!-- 4 Columnas clásicas -->
+    <rect x="9.5" y="19" width="4.5" height="15" rx="0.8" fill="#2563EB"/>
+    <rect x="10.5" y="19" width="1.5" height="15" fill="#60A5FA"/>
+
+    <rect x="17.5" y="19" width="4.5" height="15" rx="0.8" fill="#2563EB"/>
+    <rect x="18.5" y="19" width="1.5" height="15" fill="#60A5FA"/>
+
+    <rect x="26" y="19" width="4.5" height="15" rx="0.8" fill="#2563EB"/>
+    <rect x="27" y="19" width="1.5" height="15" fill="#60A5FA"/>
+
+    <rect x="34" y="19" width="4.5" height="15" rx="0.8" fill="#2563EB"/>
+    <rect x="35" y="19" width="1.5" height="15" fill="#60A5FA"/>
+
+    <!-- Base / Escalinata (2 niveles) -->
+    <rect x="7" y="34" width="34" height="3" rx="0.5" fill="#1D4ED8"/>
+    <rect x="5" y="37" width="38" height="4" rx="1" fill="#1E40AF"/>
+    <rect x="6" y="37.5" width="36" height="1" fill="#60A5FA" opacity="0.6"/>
+</svg>

@@ -9,9 +9,10 @@
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Administra todas las órdenes de la tienda.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('admin.pedidos.crear') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-sm shadow-emerald-600/20">
-                <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
-                <span>Nueva Venta / Pedido</span>
+            <a href="{{ route('admin.pedidos.crear') }}" 
+               class="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                <span>Nueva Venta</span>
             </a>
         </div>
     </div>
