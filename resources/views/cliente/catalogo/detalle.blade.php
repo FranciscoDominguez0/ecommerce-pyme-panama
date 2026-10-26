@@ -146,8 +146,7 @@
                     <div class="flex items-center gap-2 pt-0.5">
                         <div class="flex items-center text-amber-400">
                             @for($i = 1; $i <= 5; $i++)
-                                <span class="material-symbols-outlined text-[17px] {{ $i <= round($promedioEstrellas) ? 'text-amber-400 star-filled' : 'text-slate-200' }}"
-                                      style="{{ $i <= round($promedioEstrellas) ? "font-variation-settings: 'FILL' 1;" : "font-variation-settings: 'FILL' 0;" }}">star</span>
+                                <span class="material-symbols-outlined text-[17px] {{ $i <= round($promedioEstrellas) ? 'text-amber-400 star-filled' : 'text-slate-200' }}">star</span>
                             @endfor
                         </div>
                         @if($totalOpiniones > 0)
@@ -517,20 +516,11 @@
 
                 <!-- Opiniones y Valoraciones de Clientes -->
                 <div id="seccion-opiniones" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-7 space-y-6 scroll-mt-24">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-amber-500 text-[22px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <h2 class="text-lg font-bold text-slate-900">Opiniones de Clientes</h2>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-0.5">
-                                Reseñas y calificaciones de compradores con entregas verificadas.
-                            </p>
-                        </div>
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 self-start sm:self-auto">
-                            <span class="material-symbols-outlined text-[15px]">verified</span>
-                            <span>Compras 100% Verificadas</span>
-                        </span>
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-lg font-bold text-slate-900">Opiniones de Clientes</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            Calificaciones y reseñas de compradores con entregas verificadas en Panamá.
+                        </p>
                     </div>
 
                     @php
@@ -539,94 +529,112 @@
                     @endphp
 
                     @if($est['total'] > 0)
-                        <!-- Resumen y Barras de Progreso -->
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center bg-slate-50/70 rounded-2xl p-5 border border-slate-100">
-                            <!-- Puntaje Promedio -->
-                            <div class="md:col-span-4 text-center md:border-r md:border-slate-200/80 md:pr-4">
-                                <div class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
-                                    {{ number_format($est['promedio'], 1) }}
-                                </div>
-                                <div class="flex items-center justify-center gap-0.5 my-1.5 text-amber-400">
-                                    @for($i = 1; $i <= 5; $i++)
-                                        <span class="material-symbols-outlined text-[20px] {{ $i <= round($est['promedio']) ? 'text-amber-400 star-filled' : 'text-slate-300' }}"
-                                              style="{{ $i <= round($est['promedio']) ? "font-variation-settings: 'FILL' 1;" : "font-variation-settings: 'FILL' 0;" }}">star</span>
-                                    @endfor
-                                </div>
-                                <p class="text-xs text-slate-500">
-                                    Basado en {{ $est['total'] }} {{ $est['total'] === 1 ? 'opinión' : 'opiniones' }}
-                                </p>
-                            </div>
-
-                            <!-- Desglose por Estrellas -->
-                            <div class="md:col-span-8 space-y-2">
-                                @foreach([5, 4, 3, 2, 1] as $numEstrella)
-                                    @php
-                                        $d = $est['distribucion'][$numEstrella] ?? ['cantidad' => 0, 'porcentaje' => 0];
-                                    @endphp
-                                    <div class="flex items-center gap-3 text-xs">
-                                        <span class="w-12 font-semibold text-slate-700 flex items-center justify-end gap-0.5 shrink-0">
-                                            <span>{{ $numEstrella }}</span>
-                                            <span class="material-symbols-outlined star-filled text-[14px] text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
-                                        </span>
-                                        <div class="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
-                                            <div class="h-full rounded-full bg-amber-400 transition-all duration-500" style="width: {{ $d['porcentaje'] }}%;"></div>
+                        <!-- Resumen y Desglose de Estrellas (Estilo Retail Profesional) -->
+                        <div class="bg-white rounded-xl border border-slate-200/80 p-5 sm:p-7">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
+                                
+                                <!-- Puntaje Promedio y Estrellas (Izquierda) -->
+                                <div class="md:col-span-5 flex items-center justify-center sm:justify-start gap-5 md:border-r md:border-slate-200 md:pr-6">
+                                    <span class="text-6xl sm:text-7xl font-bold text-emerald-600 leading-none select-none tracking-tight">
+                                        {{ round($est['promedio'], 1) == round($est['promedio']) ? round($est['promedio']) : number_format($est['promedio'], 1) }}
+                                    </span>
+                                    <div class="flex flex-col justify-center">
+                                        <div class="flex items-center gap-0.5 text-amber-400 mb-1">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <span class="material-symbols-outlined text-[22px] {{ $i <= round($est['promedio']) ? 'text-amber-400 star-filled' : 'text-slate-200' }}">star</span>
+                                            @endfor
                                         </div>
-                                        <span class="w-10 text-right text-slate-400 text-[11px] font-mono shrink-0">{{ $d['porcentaje'] }}%</span>
+                                        <span class="text-xs text-slate-500 font-medium">
+                                            Basado en {{ $est['total'] }} {{ $est['total'] === 1 ? 'opinión' : 'opiniones' }}
+                                        </span>
                                     </div>
-                                @endforeach
+                                </div>
+
+                                <!-- Desglose por Estrellas (Derecha) -->
+                                <div class="md:col-span-7 space-y-2">
+                                    @foreach([5, 4, 3, 2, 1] as $numEstrella)
+                                        @php
+                                            $d = $est['distribucion'][$numEstrella] ?? ['cantidad' => 0, 'porcentaje' => 0];
+                                        @endphp
+                                        <div class="flex items-center gap-3 text-xs">
+                                            <span class="w-8 font-semibold text-slate-700 flex items-center gap-1 shrink-0 text-xs">
+                                                <span>{{ $numEstrella }}</span>
+                                                <span class="material-symbols-outlined star-filled text-[15px] text-amber-400">star</span>
+                                            </span>
+                                            <div class="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                                                <div class="h-full rounded-full {{ $d['cantidad'] > 0 ? 'bg-emerald-600' : 'bg-transparent' }} transition-all duration-300" 
+                                                     style="width: {{ $d['porcentaje'] }}%;"></div>
+                                            </div>
+                                            <span class="w-6 text-right text-slate-600 font-medium text-xs font-mono shrink-0">
+                                                {{ $d['cantidad'] }}
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                </div>
+
                             </div>
                         </div>
 
                         <!-- Lista de Reseñas de Clientes -->
-                        <div class="space-y-4 pt-2">
+                        <div class="divide-y divide-slate-100 pt-2">
                             @foreach($valoracionesListado as $val)
-                                <div class="p-4 sm:p-5 rounded-2xl border border-slate-100 hover:border-slate-200 transition-colors bg-white space-y-2.5">
-                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                        <div class="flex items-center gap-2.5">
-                                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0">
-                                                {{ mb_substr($val->nombre_autor, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <span class="text-xs font-bold text-slate-900 block leading-tight">{{ $val->nombre_autor }}</span>
-                                                <span class="text-[11px] text-emerald-700 font-medium inline-flex items-center gap-0.5">
-                                                    <span class="material-symbols-outlined text-[13px]">check_circle</span>
-                                                    <span>Compra verificada</span>
-                                                </span>
-                                            </div>
+                                <div class="py-6 sm:py-7 flex flex-col md:flex-row md:items-start justify-between gap-5 sm:gap-6">
+                                    
+                                    <!-- Autor y Verificación (Izquierda) -->
+                                    <div class="md:w-56 shrink-0 flex items-start gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-slate-200/90 text-slate-400 flex items-center justify-center shrink-0">
+                                            <span class="material-symbols-outlined text-[24px]">person</span>
                                         </div>
-
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex items-center text-amber-400">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    <span class="material-symbols-outlined text-[15px] {{ $i <= $val->calificacion ? 'text-amber-400 star-filled' : 'text-slate-200' }}"
-                                                          style="{{ $i <= $val->calificacion ? "font-variation-settings: 'FILL' 1;" : "font-variation-settings: 'FILL' 0;" }}">star</span>
-                                                @endfor
+                                        <div class="min-w-0">
+                                            <div class="text-xs sm:text-sm font-semibold text-slate-800 flex items-center gap-1">
+                                                <span class="truncate">{{ $val->nombre_autor }}</span>
+                                                <span class="text-[11px] font-bold text-slate-600 shrink-0">PA</span>
                                             </div>
-                                            <span class="text-[11px] text-slate-400">
-                                                {{ $val->creado_en->translatedFormat('d M, Y') }}
-                                            </span>
+                                            <div class="text-[11px] font-semibold text-emerald-700 flex items-center gap-1 mt-0.5">
+                                                <span class="material-symbols-outlined text-[13px] text-white bg-emerald-600 rounded-full p-[1px]">check</span>
+                                                <span>Opinión verificada</span>
+                                                <span class="sr-only">Compra verificada</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    @if($val->titulo)
-                                        <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
-                                            {{ $val->titulo }}
-                                        </h4>
-                                    @endif
+                                    <!-- Estrellas, Título y Comentario (Centro) -->
+                                    <div class="flex-1 min-w-0 space-y-2">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <div class="flex items-center text-amber-400">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <span class="material-symbols-outlined text-[18px] {{ $i <= $val->calificacion ? 'text-amber-400 star-filled' : 'text-slate-200' }}">star</span>
+                                                @endfor
+                                            </div>
+                                            @if($val->titulo)
+                                                <h4 class="text-sm font-bold text-slate-900 inline-block">
+                                                    {{ $val->titulo }}
+                                                </h4>
+                                            @endif
+                                        </div>
 
-                                    @if($val->comentario)
-                                        <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">
-                                            {{ $val->comentario }}
-                                        </p>
-                                    @endif
+                                        @if($val->comentario)
+                                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                                                {{ $val->comentario }}
+                                            </p>
+                                        @endif
+                                    </div>
+
+                                    <!-- Fecha (Derecha) -->
+                                    <div class="md:w-28 shrink-0 text-left md:text-right">
+                                        <span class="text-xs text-slate-400 font-mono">
+                                            {{ $val->creado_en->format('m/d/y') }}
+                                        </span>
+                                    </div>
+
                                 </div>
                             @endforeach
                         </div>
                     @else
                         <!-- Estado vacío cuando no hay valoraciones -->
                         <div class="py-10 px-4 text-center text-slate-400 space-y-3">
-                            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mx-auto shadow-2xs">
-                                <span class="material-symbols-outlined text-[26px]">hotel_class</span>
+                            <div class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center mx-auto border border-slate-100">
+                                <span class="material-symbols-outlined text-[24px]">rate_review</span>
                             </div>
                             <div class="space-y-1">
                                 <h3 class="text-sm font-bold text-slate-800">Este producto aún no tiene opiniones</h3>
