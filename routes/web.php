@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductoController;
 use App\Http\Controllers\Admin\PromocionController;
 use App\Http\Controllers\Admin\ZonaEnvioController;
 use App\Http\Controllers\Admin\PerfilController;
+use App\Http\Controllers\Admin\VentaManualController;
 use App\Http\Controllers\Admin\FacturaController as AdminFacturaController;
 use App\Http\Controllers\Cliente\FacturaController as ClienteFacturaController;
 use App\Http\Controllers\Cliente\CarritoController;
@@ -130,8 +131,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::post('/categorias/{id}/toggle-exento-envio', [CategoriaController::class, 'alternarExentoEnvio'])->name('admin.categorias.toggle-exento-envio');
     Route::resource('categorias', CategoriaController::class)->names('admin.categorias');
 
-    // Módulo de Pedidos
+    // Módulo de Pedidos y Ventas Manuales (POS)
     Route::get('/pedidos', [AdminPedidoController::class, 'index'])->name('admin.pedidos.index');
+    Route::get('/pedidos/crear', [VentaManualController::class, 'crear'])->name('admin.pedidos.crear');
+    Route::post('/pedidos/crear', [VentaManualController::class, 'guardar'])->name('admin.pedidos.guardar-manual');
+    Route::post('/pedidos/cliente-rapido', [VentaManualController::class, 'clienteRapido'])->name('admin.pedidos.cliente-rapido');
     Route::get('/pedidos/{id}', [AdminPedidoController::class, 'detalle'])->name('admin.pedidos.detalle');
     Route::post('/pedidos/{id}/estado', [AdminPedidoController::class, 'cambiarEstado'])->name('admin.pedidos.estado');
     Route::post('/pedidos/{id}/avanzar-estado', [AdminPedidoController::class, 'avanzarEstado'])->name('admin.pedidos.avanzar-estado');

@@ -37,7 +37,7 @@ class PedidoService
         $estado = $estado ?: 'todos';
         $busqueda = trim($busqueda ?? '');
 
-        $query = Pedido::with(['usuario', 'ultimoEstado']);
+        $query = Pedido::with(['usuario', 'vendedor', 'ultimoEstado']);
 
         if ($estado !== 'todos') {
             $query->whereHas('estados', function ($q) use ($estado) {
@@ -336,7 +336,7 @@ class PedidoService
     /**
      * Genera el siguiente número secuencial de pedido (#PM-XXXXXX).
      */
-    protected function generarNumeroPedido(): string
+    public function generarNumeroPedido(): string
     {
         DB::table('configuracion')->insertOrIgnore([
             'clave' => 'pedido_correlativo',
@@ -369,4 +369,18 @@ class PedidoService
 
         return '#PM-' . (260000 + $correlativo);
     }
+
+    /**
+     * Crea un pedido manual desde el panel de administración (Ventas Mostrador / POS / WhatsApp).
+     *
+     * @param array $datos
+     * @param int $vendedorId
+     * @return Pedido
+     * @throws Exception
+     */
+    public function crearPedidoManual(array $datos, int $vendedorId): Pedido
+    {
+        return app(VentaManualService::class)->registrarVentaManual($datos, $vendedorId);
+    }
 }
+

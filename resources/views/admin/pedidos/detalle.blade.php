@@ -56,7 +56,15 @@
                     </span>
                 @endif
             </h1>
-            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Realizado el {{ $pedido->creado_en->format('d/m/Y h:i A') }} por <span class="font-medium text-slate-700 dark:text-slate-300">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span></p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Realizado el {{ $pedido->creado_en->format('d/m/Y h:i A') }} por <span class="font-medium text-slate-700 dark:text-slate-300">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span>
+                @if($pedido->vendedor)
+                    <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
+                        <span class="material-symbols-outlined text-[14px]">point_of_sale</span>
+                        <span>Vendido por: {{ $pedido->vendedor->nombre }}</span>
+                    </span>
+                @endif
+            </p>
         </div>
         
         <div class="flex flex-wrap gap-2">

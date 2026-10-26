@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
+use App\Models\Producto;
+use App\Models\Usuario;
 use App\Services\AuditoriaService;
 use App\Services\PedidoService;
 use Illuminate\Http\Request;
@@ -31,7 +33,7 @@ class PedidoController extends Controller
     public function detalle($id)
     {
         $pedido = Pedido::with([
-            'usuario', 'items.producto', 'items.variante', 'estados.usuario', 'direccion', 'zonaEnvio'
+            'usuario', 'vendedor', 'items.producto', 'items.variante', 'estados.usuario', 'direccion', 'zonaEnvio'
         ])->findOrFail($id);
 
         // Al abrir el pedido por primera vez un administrador, se marca como leído para quitar el badge de Nuevo

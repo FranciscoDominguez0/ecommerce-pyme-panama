@@ -8,6 +8,12 @@
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Gestión de Pedidos</h1>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Administra todas las órdenes de la tienda.</p>
         </div>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.pedidos.crear') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white rounded-xl text-sm font-semibold transition-all shadow-sm shadow-emerald-600/20">
+                <span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+                <span>Nueva Venta / Pedido</span>
+            </a>
+        </div>
     </div>
 
     <!-- Filtros -->
@@ -73,6 +79,12 @@
                             <div class="flex items-center gap-2.5">
                                 <span class="text-sm font-bold text-slate-900 dark:text-white">{{ $pedido->numero_pedido }}</span>
                                 <x-badge-nuevo :condicion="$esNuevo" />
+                                @if($pedido->vendedor)
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20" title="Venta POS / Mostrador registrada por {{ $pedido->vendedor->nombre }}">
+                                        <span class="material-symbols-outlined text-[12px]">point_of_sale</span>
+                                        <span>POS</span>
+                                    </span>
+                                @endif
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
