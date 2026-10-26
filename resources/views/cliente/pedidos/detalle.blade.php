@@ -650,7 +650,6 @@
             hoverPuntuacion: 0,
             comentario: '{{ addslashes($evaluacionPrevia?->comentario ?? '') }}',
             enviando: false,
-            enviadoExito: false,
             etiquetas: {
                 1: 'Malo',
                 2: 'Regular',
@@ -667,7 +666,6 @@
             },
             abrirModal() {
                 this.modalAbierto = true;
-                this.enviadoExito = false;
             },
             cerrarModal() {
                 this.modalAbierto = false;
@@ -695,10 +693,7 @@
                     this.enviando = false;
                     if (data.success) {
                         this.evaluado = true;
-                        this.enviadoExito = true;
-                        setTimeout(() => {
-                            this.cerrarModal();
-                        }, 1800);
+                        this.cerrarModal();
                         if (window.mostrarToast) {
                             window.mostrarToast('success', '¡Gracias por compartir tu opinión!');
                         }
@@ -752,20 +747,8 @@
                         <span class="material-symbols-outlined text-[20px]">close</span>
                     </button>
 
-                    <!-- Estado tras enviar calificación -->
-                    <template x-if="enviadoExito">
-                        <div class="py-6 space-y-3">
-                            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-200 dark:border-emerald-800">
-                                <span class="material-symbols-outlined text-3xl">task_alt</span>
-                            </div>
-                            <h3 class="text-base sm:text-lg font-black text-slate-900 dark:text-white">¡Muchas gracias!</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Tu opinión nos impulsa a seguir mejorando cada día.</p>
-                        </div>
-                    </template>
-
                     <!-- Formulario de calificación -->
-                    <template x-if="!enviadoExito">
-                        <div class="space-y-4">
+                    <div class="space-y-4">
                             <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-500 flex items-center justify-center border border-amber-100 dark:border-amber-800/60 shadow-2xs">
                                 <span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">hotel_class</span>
                             </div>
@@ -821,7 +804,6 @@
                                 </button>
                             </div>
                         </div>
-                    </template>
 
                 </div>
             </div>

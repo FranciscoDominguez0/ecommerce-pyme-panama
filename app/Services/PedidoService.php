@@ -241,9 +241,15 @@ class PedidoService
                 'descuento_aplicado' => 0.00,
             ]);
 
-            // Notificar a los administradores
-            $admins = Usuario::role('super_admin')->get();
-            Notification::send($admins, new NuevoPedidoNotification($pedido));
+            // Notificar a los administradores sin romper la transacción si el servicio de broadcasting/cola está inactivo
+            try {
+                $admins = Usuario::role('super_admin')->get();
+                if ($admins->isNotEmpty()) {
+                    Notification::send($admins, new NuevoPedidoNotification($pedido));
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('No se pudo enviar la notificación de nuevo pedido: ' . $e->getMessage());
+            }
 
             return $pedido;
         });
@@ -299,8 +305,14 @@ class PedidoService
             'comentario' => $comentario,
         ]);
 
-        if ($nuevoEstado === 'pago_confirmado') {
-            app(FacturaService::class)->generarFactura($pedido);
+        // Generar factura si el pago se confirma o avanza en el ciclo de despacho sin factura previa
+        if (in_array($nuevoEstado, ['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'entregado'])) {
+            if (!$pedido->relationLoaded('factura')) {
+                $pedido->load('factura');
+            }
+            if (!$pedido->factura) {
+                app(FacturaService::class)->generarFactura($pedido);
+            }
         }
 
         if (in_array($nuevoEstado, ['cancelado', 'reembolsado'])) {

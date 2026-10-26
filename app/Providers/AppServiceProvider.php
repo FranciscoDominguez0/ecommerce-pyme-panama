@@ -64,12 +64,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Proveedor de contadores de badges para la barra lateral administrativa
         \Illuminate\Support\Facades\View::composer('layouts.partials.admin.sidebar', function ($view) {
-            $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
-                $query->select(\Illuminate\Support\Facades\DB::raw(1))
-                      ->from('estados_pedido')
-                      ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
-                      ->whereNotIn('estados_pedido.estado', ['pendiente', 'pago_confirmado']);
-            })->count();
+            $nuevosPedidosCount = \App\Models\Pedido::whereNull('leido_en')->count();
 
             $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
 

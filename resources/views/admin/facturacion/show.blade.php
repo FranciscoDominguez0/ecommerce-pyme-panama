@@ -198,9 +198,13 @@
                     </div>
                 </dl>
                 <div class="mt-4 pt-4 border-t border-slate-200 dark:border-gray-700">
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2">
-                        <span class="font-medium text-slate-900 dark:text-white">Método de pago:</span> 
-                        <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $factura->metodo_pago) }}</span>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2 flex items-center">
+                        <span class="font-medium text-slate-900 dark:text-white mr-1.5">Método de pago:</span> 
+                        @if(strtolower($factura->metodo_pago) === 'yappy' || (isset($factura->pedido) && strtolower($factura->pedido->metodo_pago) === 'yappy'))
+                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs">
+                        @else
+                            <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $factura->metodo_pago) }}</span>
+                        @endif
                     </p>
                     @if($factura->metodo_pago === 'stripe')
                         @php

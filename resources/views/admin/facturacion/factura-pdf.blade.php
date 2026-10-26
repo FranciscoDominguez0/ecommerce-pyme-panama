@@ -211,6 +211,18 @@
                         @else
                             Stripe
                         @endif
+                    @elseif(strtolower($factura->metodo_pago) === 'yappy' || (isset($factura->pedido) && strtolower($factura->pedido->metodo_pago) === 'yappy'))
+                        @php
+                            $yappyImgPath = public_path('images/pa-yappy.webp');
+                            $yappyImgSrc = file_exists($yappyImgPath) 
+                                ? 'data:image/webp;base64,' . base64_encode(file_get_contents($yappyImgPath)) 
+                                : '';
+                        @endphp
+                        @if($yappyImgSrc)
+                            <img src="{{ $yappyImgSrc }}" alt="Yappy" style="height: 16px; vertical-align: middle; margin-left: 2px;">
+                        @else
+                            Yappy
+                        @endif
                     @else
                         {{ ucfirst(str_replace('_', ' ', $factura->metodo_pago)) }}
                     @endif

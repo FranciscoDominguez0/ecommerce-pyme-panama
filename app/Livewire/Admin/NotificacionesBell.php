@@ -30,12 +30,7 @@ class NotificacionesBell extends Component
                 $this->dispatch('nueva-notificacion-recibida');
             }
 
-            $nuevosPedidosCount = \App\Models\Pedido::whereNotExists(function ($query) {
-                $query->select(\Illuminate\Support\Facades\DB::raw(1))
-                      ->from('estados_pedido')
-                      ->whereColumn('estados_pedido.pedido_id', 'pedidos.id')
-                      ->whereNotIn('estados_pedido.estado', ['pendiente', 'pago_confirmado']);
-            })->count();
+            $nuevosPedidosCount = \App\Models\Pedido::whereNull('leido_en')->count();
             
             $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
 

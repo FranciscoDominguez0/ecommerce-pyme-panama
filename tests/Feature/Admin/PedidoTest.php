@@ -203,4 +203,37 @@ class PedidoTest extends BaseAdminTest
         $this->assertSame(1, EstadoPedido::where('pedido_id', $pedido->id)->where('estado', 'enviado')->count());
         $this->assertSame(1, EstadoPedido::where('pedido_id', $pedido->id)->where('estado', 'entregado')->count());
     }
+
+    public function test_abrir_el_detalle_de_un_pedido_lo_marca_como_leido_y_quita_el_badge_de_nuevo(): void
+    {
+        $admin = $this->crearAdmin();
+        $cliente = $this->crearCliente();
+        $pedido = Pedido::factory()->create([
+            'usuario_id' => $cliente->id,
+            'numero_pedido' => 'PM-NUEVO-001',
+            'leido_en' => null,
+        ]);
+        EstadoPedido::factory()->create(['pedido_id' => $pedido->id, 'estado' => 'pendiente']);
+
+        // Al inicio debe figurar como Nuevo
+        $this->actingAs($admin)
+            ->get('/admin/pedidos')
+            ->assertOk()
+            ->assertSee('Nuevo')
+            ->assertSee('border-l-emerald-500', false);
+
+        // El admin abre el detalle del pedido
+        $this->actingAs($admin)
+            ->get('/admin/pedidos/' . $pedido->id)
+            ->assertOk();
+
+        // El campo leido_en se actualiza
+        $this->assertNotNull($pedido->fresh()->leido_en);
+
+        // Al volver al listado, ya no debe tener el badge ni el borde de nuevo
+        $this->actingAs($admin)
+            ->get('/admin/pedidos')
+            ->assertOk()
+            ->assertDontSee('border-l-emerald-500', false);
+    }
 }

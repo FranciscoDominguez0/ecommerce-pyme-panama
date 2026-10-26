@@ -45,7 +45,7 @@ class FacturaController extends Controller
             });
         }
 
-        $facturas = $query->orderBy('creado_en', 'desc')->paginate(15);
+        $facturas = $query->orderBy('creado_en', 'desc')->paginate(15)->withQueryString();
 
         return view('admin.facturacion.index', compact('facturas'));
     }

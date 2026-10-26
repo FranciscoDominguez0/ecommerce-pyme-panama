@@ -130,6 +130,26 @@ class FacturaControllerAdminTest extends BaseAdminTest
             ->assertSee('$' . number_format($factura->total, 2), false);
     }
 
+    public function test_admin_ve_logo_de_yappy_en_detalle_de_factura_con_metodo_yappy(): void
+    {
+        $admin = $this->crearAdmin();
+        $cliente = $this->crearCliente();
+        $pedido = Pedido::factory()->create([
+            'usuario_id' => $cliente->id,
+            'metodo_pago' => 'yappy',
+        ]);
+        $factura = Factura::factory()->create([
+            'pedido_id' => $pedido->id,
+            'usuario_id' => $cliente->id,
+            'metodo_pago' => 'yappy',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.facturas.show', $factura))
+            ->assertOk()
+            ->assertSee('pa-yappy.webp');
+    }
+
     // =====================================================================
     //  PDF — descarga
     // =====================================================================

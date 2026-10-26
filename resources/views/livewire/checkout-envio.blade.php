@@ -55,6 +55,20 @@
         {{-- Componente de Opciones de Entrega --}}
         <livewire:calculadora-envio />
 
+        @error('metodo_entrega')
+            <div class="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-semibold flex items-center justify-between gap-3 shadow-xs">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px] text-amber-600 shrink-0">warning</span>
+                    <span>{{ $message }}</span>
+                </div>
+                <button type="button" 
+                        wire:click="$dispatch('open-modal', 'modal-calculadora-envio')" 
+                        class="text-xs font-bold text-emerald-700 hover:text-emerald-800 underline uppercase tracking-wider shrink-0">
+                    Cambiar
+                </button>
+            </div>
+        @enderror
+
         <div class="mt-8 flex justify-end">
             <button wire:click="continuarCheckout" class="bg-primary text-on-primary font-bold px-6 py-2.5 rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
                 Continuar al Pago

@@ -78,9 +78,13 @@ class GestionDirecciones extends Component
         ];
 
         if ($this->compact) {
-            $this->seleccion = $this->direcciones->isEmpty()
-                ? 'nueva'
-                : (string) $this->direcciones->first()->id;
+            if (session()->has('checkout_direccion_id')) {
+                $this->seleccion = (string) session('checkout_direccion_id');
+            } else {
+                $this->seleccion = $this->direcciones->isEmpty()
+                    ? 'nueva'
+                    : (string) $this->direcciones->first()->id;
+            }
         }
     }
 

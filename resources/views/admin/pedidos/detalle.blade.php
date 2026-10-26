@@ -60,7 +60,7 @@
         </div>
         
         <div class="flex flex-wrap gap-2">
-            @if($ultimoEstado === 'pendiente' && in_array($pedido->metodo_pago, ['transferencia']))
+            @if($ultimoEstado === 'pendiente')
                 <form action="{{ route('admin.pedidos.aprobar-pago', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
                     @csrf
                     <button type="submit" :disabled="sub" class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 focus:bg-emerald-700 focus:outline-none transition disabled:opacity-75 disabled:cursor-wait">

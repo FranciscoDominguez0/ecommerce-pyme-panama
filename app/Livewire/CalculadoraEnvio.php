@@ -7,6 +7,8 @@ use Livewire\Attributes\On;
 use App\Models\CourierSucursal;
 use App\Models\Direccion;
 use App\Models\ZonaEnvio;
+use App\Services\EnvioService;
+use Illuminate\Support\Facades\Auth;
 
 class CalculadoraEnvio extends Component
 {
@@ -26,6 +28,10 @@ class CalculadoraEnvio extends Component
     {
         $this->requiereEnvio = $requiereEnvio;
         $this->zonasEnvio = ZonaEnvio::where('activo', true)->orderBy('nombre')->get();
+
+        if (Auth::check() && !session()->has('checkout_direccion_id')) {
+            app(EnvioService::class)->sincronizarDireccionCheckoutSiVacio(Auth::id());
+        }
 
         $this->metodo_entrega = session('checkout_metodo_entrega', 'delivery');
         $this->metodo_entrega_modal = $this->metodo_entrega ?: 'delivery';

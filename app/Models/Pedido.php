@@ -33,6 +33,7 @@ class Pedido extends Model
         'notas_cliente',
         'notas_internas',
         'comprobante_pago_ruta',
+        'leido_en',
         'eliminado_en',
     ];
 
@@ -43,6 +44,7 @@ class Pedido extends Model
         'itbms_monto' => 'decimal:2',
         'total' => 'decimal:2',
         'monto_reembolsado' => 'decimal:2',
+        'leido_en' => 'datetime',
         'creado_en' => 'datetime',
         'actualizado_en' => 'datetime',
     ];

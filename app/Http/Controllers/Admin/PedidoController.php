@@ -34,6 +34,20 @@ class PedidoController extends Controller
             'usuario', 'items.producto', 'items.variante', 'estados.usuario', 'direccion', 'zonaEnvio'
         ])->findOrFail($id);
 
+        // Al abrir el pedido por primera vez un administrador, se marca como leído para quitar el badge de Nuevo
+        if (is_null($pedido->leido_en)) {
+            $pedido->update(['leido_en' => now()]);
+        }
+
+        if (Auth::user()) {
+            Auth::user()->unreadNotifications()
+                ->where(function ($q) use ($pedido) {
+                    $q->where('data', 'like', '%"pedido_id":' . $pedido->id . '%')
+                      ->orWhere('data', 'like', '%"pedido_id": ' . $pedido->id . '%');
+                })
+                ->update(['read_at' => now()]);
+        }
+
         // Preparamos los datos de entrega y contacto extraídos de notas internas
         $notasInternas = json_decode($pedido->notas_internas, true) ?? [];
         $metodoEntrega = $notasInternas['metodo_entrega'] ?? 'desconocido';

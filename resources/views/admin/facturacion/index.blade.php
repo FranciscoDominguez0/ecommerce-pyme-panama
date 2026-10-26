@@ -23,7 +23,7 @@
                 <input type="text" name="cliente" id="cliente" value="{{ request('cliente') }}" placeholder="Nombre o email" class="block w-full rounded-md bg-white dark:bg-[#121415] text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
             </div>
 
-            <div class="w-full sm:w-64">
+            <div class="w-full sm:w-48">
                 <label for="estado" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Filtrar por Estado</label>
                 <select name="estado" id="estado" class="block w-full rounded-md bg-white dark:bg-[#121415] text-slate-900 dark:text-white border-slate-300 dark:border-gray-700 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
                     <option value="" {{ request('estado') === null ? 'selected' : '' }}>Todas las facturas</option>
@@ -32,12 +32,12 @@
                 </select>
             </div>
 
-            <div class="w-full sm:w-48">
+            <div class="w-full sm:w-44">
                 <label for="emitida_desde" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Emitida desde</label>
                 <input type="date" name="emitida_desde" id="emitida_desde" value="{{ request('emitida_desde') }}" class="block w-full rounded-md bg-white dark:bg-[#121415] text-slate-900 dark:text-white border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
             </div>
 
-            <div class="w-full sm:w-48">
+            <div class="w-full sm:w-44">
                 <label for="emitida_hasta" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Emitida hasta</label>
                 <input type="date" name="emitida_hasta" id="emitida_hasta" value="{{ request('emitida_hasta') }}" class="block w-full rounded-md bg-white dark:bg-[#121415] text-slate-900 dark:text-white border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500" onchange="this.form.submit()">
             </div>
@@ -121,7 +121,7 @@
                                         <span x-show="sending" style="display: none;" class="material-symbols-outlined text-[18px] animate-spin">sync</span>
                                         @if($factura->reenvios()->count() > 0)
                                         <span x-show="!sending" class="absolute -top-1 -right-1 flex h-3 w-3">
-                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                                             <span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
                                         </span>
                                         @endif
@@ -133,7 +133,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+                        <td colspan="7" class="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                             <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">receipt_long</span>
                             <p>No se encontraron facturas registradas.</p>
                         </td>

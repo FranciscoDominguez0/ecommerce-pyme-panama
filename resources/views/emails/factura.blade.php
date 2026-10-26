@@ -46,6 +46,8 @@
                             <strong>Pago:</strong> 
                             @if(strtolower($factura->metodo_pago) === 'stripe')
                                 <img src="{{ asset('images/stripe.webp') }}" alt="Stripe" style="height: 16px; vertical-align: middle; margin-left: 4px;">
+                            @elseif(strtolower($factura->metodo_pago) === 'yappy' || (isset($factura->pedido) && strtolower($factura->pedido->metodo_pago) === 'yappy'))
+                                <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" style="height: 18px; vertical-align: middle; margin-left: 4px;">
                             @else
                                 {{ ucfirst(str_replace('_', ' ', $factura->metodo_pago)) }}
                             @endif

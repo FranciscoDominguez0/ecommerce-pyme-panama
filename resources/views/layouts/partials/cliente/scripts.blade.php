@@ -7,14 +7,23 @@
         }
     };
 
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('mostrar-toast', (event) => {
-            const data = Array.isArray(event) ? event[0] : (event.detail ? (Array.isArray(event.detail) ? event.detail[0] : event.detail) : event);
-            if (window.mostrarToast && data) {
-                window.mostrarToast(data.tipo || 'info', data.mensaje || '');
-            }
-        });
-    });
+    const registrarListenerToast = () => {
+        if (window.Livewire && !window._toastListenerRegistrado) {
+            window._toastListenerRegistrado = true;
+            Livewire.on('mostrar-toast', (event) => {
+                const data = Array.isArray(event) ? event[0] : (event.detail ? (Array.isArray(event.detail) ? event.detail[0] : event.detail) : event);
+                if (window.mostrarToast && data) {
+                    window.mostrarToast(data.tipo || 'info', data.mensaje || '');
+                }
+            });
+        }
+    };
+
+    if (window.Livewire) {
+        registrarListenerToast();
+    } else {
+        document.addEventListener('livewire:init', registrarListenerToast);
+    }
 
     function handleLoginSkeleton() {
         const skeleton = document.getElementById('global-cliente-skeleton');

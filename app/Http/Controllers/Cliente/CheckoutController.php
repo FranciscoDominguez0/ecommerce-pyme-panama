@@ -47,6 +47,19 @@ class CheckoutController extends Controller
             session(['checkout_iniciado_en' => now()->timestamp]);
         }
 
+        // Sincronizar automáticamente la dirección previa o guardada del usuario si aún no hay una seleccionada
+        $this->envioService->sincronizarDireccionCheckoutSiVacio($usuario->id);
+
+        if (!session()->has('checkout_contacto_nombre')) {
+            session([
+                'checkout_contacto_nombre' => $usuario->nombre,
+                'checkout_contacto_apellido' => $usuario->apellido,
+                'checkout_contacto_email' => $usuario->email,
+                'checkout_contacto_telefono1' => $usuario->telefono,
+                'checkout_contacto_telefono2' => $usuario->telefono2,
+            ]);
+        }
+
         return view('cliente.checkout.direccion', compact('zonasEnvio', 'requiereEnvio', 'carrito'));
     }
 
@@ -55,13 +68,26 @@ class CheckoutController extends Controller
      */
     public function pago(Request $request)
     {
-        $metodoEntrega = session('checkout_metodo_entrega');
+        if (Auth::check() && !session()->has('checkout_direccion_id')) {
+            $this->envioService->sincronizarDireccionCheckoutSiVacio(Auth::id());
+        }
+
+        $metodoEntrega = session('checkout_metodo_entrega', 'delivery');
         $tieneDireccion = session()->has('checkout_direccion_id');
         $tieneCourier = session()->has('checkout_courier_sucursal');
+        $tieneTelefono = !empty(session('checkout_contacto_telefono1')) || (!empty(Auth::user()?->telefono));
+
+        if ($metodoEntrega === 'delivery' && !$tieneDireccion) {
+            return redirect()->route('cliente.checkout.direccion')->with('warning', 'Falta seleccionar la dirección. Haz clic aquí para Cambiar.');
+        }
+
+        if (!$tieneTelefono) {
+            return redirect()->route('cliente.checkout.direccion')->with('warning', 'Falta ingresar el número de teléfono.');
+        }
 
         $tieneContacto = session()->has('checkout_contacto_nombre') && session()->has('checkout_contacto_email');
 
-        if (!$tieneContacto || !$metodoEntrega || ($metodoEntrega === 'delivery' && !$tieneDireccion) || ($metodoEntrega === 'retiro_courier' && !$tieneCourier)) {
+        if (!$tieneContacto || ($metodoEntrega === 'retiro_courier' && !$tieneCourier)) {
             return redirect()->route('cliente.checkout.direccion')->with('warning', 'Completa tus datos de contacto y selecciona una opción de entrega primero.');
         }
 

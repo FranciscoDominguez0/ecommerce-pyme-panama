@@ -32,6 +32,10 @@ class CheckoutEnvio extends Component
         
         $usuario = Auth::user();
         if ($usuario) {
+            if (!session()->has('checkout_direccion_id')) {
+                app(\App\Services\EnvioService::class)->sincronizarDireccionCheckoutSiVacio($usuario->id);
+            }
+
             $this->contacto_nombre = session('checkout_contacto_nombre', $usuario->nombre);
             $this->contacto_apellido = session('checkout_contacto_apellido', $usuario->apellido);
             $this->contacto_email = session('checkout_contacto_email', $usuario->email);
@@ -56,13 +60,71 @@ class CheckoutEnvio extends Component
 
     public function continuarCheckout()
     {
-        $this->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make([
+            'contacto_nombre' => $this->contacto_nombre,
+            'contacto_apellido' => $this->contacto_apellido,
+            'contacto_email' => $this->contacto_email,
+            'contacto_telefono1' => $this->contacto_telefono1,
+            'contacto_telefono2' => $this->contacto_telefono2,
+        ], [
             'contacto_nombre' => 'required|string|max:100',
             'contacto_apellido' => 'required|string|max:100',
             'contacto_email' => 'required|email|max:255',
             'contacto_telefono1' => 'required|string|max:30',
             'contacto_telefono2' => 'nullable|string|max:30',
+        ], [
+            'contacto_nombre.required' => 'El nombre es obligatorio.',
+            'contacto_apellido.required' => 'El apellido es obligatorio.',
+            'contacto_email.required' => 'El correo electrónico es obligatorio.',
+            'contacto_email.email' => 'El correo electrónico no es válido.',
+            'contacto_telefono1.required' => 'El número de teléfono es obligatorio.',
         ]);
+
+        $faltaDireccion = ($this->metodo_entrega === 'delivery' && !session('checkout_direccion_id'));
+        $faltaCourier = ($this->metodo_entrega === 'retiro_courier' && !session('checkout_courier_sucursal'));
+
+        if ($validator->fails() || $faltaDireccion || $faltaCourier) {
+            foreach ($validator->errors()->messages() as $campo => $mensajes) {
+                foreach ($mensajes as $msg) {
+                    $this->addError($campo, $msg);
+                }
+            }
+
+            if ($validator->errors()->has('contacto_telefono1')) {
+                $this->dispatch('mostrar-toast', [
+                    'tipo' => 'warning',
+                    'mensaje' => 'Falta ingresar el número de teléfono.',
+                ]);
+            } elseif ($validator->errors()->has('contacto_nombre') || $validator->errors()->has('contacto_apellido')) {
+                $this->dispatch('mostrar-toast', [
+                    'tipo' => 'warning',
+                    'mensaje' => 'Falta ingresar nombre y apellido de contacto.',
+                ]);
+            } elseif ($validator->errors()->has('contacto_email')) {
+                $this->dispatch('mostrar-toast', [
+                    'tipo' => 'warning',
+                    'mensaje' => 'Falta ingresar un correo electrónico válido.',
+                ]);
+            }
+
+            if ($faltaDireccion) {
+                $this->addError('metodo_entrega', 'Falta seleccionar la dirección.');
+                $this->dispatch('mostrar-toast', [
+                    'tipo' => 'warning',
+                    'mensaje' => 'Falta seleccionar la dirección. <button type="button" onclick="window.dispatchEvent(new CustomEvent(\'open-modal\', {detail: \'modal-calculadora-envio\'}))" class="underline hover:text-emerald-300 ml-1">Haz clic aquí para Cambiar.</button>',
+                ]);
+                $this->dispatch('open-modal', 'modal-calculadora-envio');
+            } elseif ($faltaCourier) {
+                $this->addError('metodo_entrega', 'Falta seleccionar la sucursal de courier.');
+                $this->dispatch('mostrar-toast', [
+                    'tipo' => 'warning',
+                    'mensaje' => 'Falta seleccionar la sucursal de courier. <button type="button" onclick="window.dispatchEvent(new CustomEvent(\'open-modal\', {detail: \'modal-calculadora-envio\'}))" class="underline hover:text-emerald-300 ml-1">Haz clic aquí para Cambiar.</button>',
+                ]);
+                $this->dispatch('open-modal', 'modal-calculadora-envio');
+            }
+
+            return;
+        }
 
         session([
             'checkout_contacto_nombre' => $this->contacto_nombre,
@@ -72,16 +134,6 @@ class CheckoutEnvio extends Component
             'checkout_contacto_telefono2' => $this->contacto_telefono2,
             'checkout_metodo_entrega' => $this->metodo_entrega,
         ]);
-
-        // Asegurar que tengan un método de entrega válido
-        if ($this->metodo_entrega === 'delivery' && !session('checkout_direccion_id')) {
-            $this->addError('metodo_entrega', 'Debes completar tu dirección de envío en el modal.');
-            return;
-        }
-        if ($this->metodo_entrega === 'retiro_courier' && !session('checkout_courier_sucursal')) {
-            $this->addError('metodo_entrega', 'Debes completar tu sucursal de courier en el modal.');
-            return;
-        }
 
         return redirect()->route('cliente.checkout.pago');
     }

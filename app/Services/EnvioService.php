@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Direccion;
+use App\Models\Pedido;
 use App\Models\ZonaEnvio;
 
 class EnvioService
@@ -137,5 +139,80 @@ class EnvioService
         }
 
         return null;
+    }
+
+    /**
+     * Resuelve la dirección inicial para el checkout del usuario.
+     * Prioridad:
+     * 1. Lo último que eligió en un pedido previo.
+     * 2. Dirección predeterminada o última dirección guardada en DB.
+     */
+    public function resolverDireccionInicialCheckout(int $usuarioId): ?Direccion
+    {
+        // 1. Lo último que eligió en un pedido previo
+        $ultimoPedidoConDireccion = Pedido::where('usuario_id', $usuarioId)
+            ->whereNotNull('direccion_id')
+            ->latest('creado_en')
+            ->first();
+
+        if ($ultimoPedidoConDireccion && $ultimoPedidoConDireccion->direccion_id) {
+            $dirPedido = Direccion::with('zonaEnvio')
+                ->where('id', $ultimoPedidoConDireccion->direccion_id)
+                ->sinEliminar()
+                ->first();
+
+            if ($dirPedido) {
+                return $dirPedido;
+            }
+        }
+
+        // 2. Dirección predeterminada o la última dirección guardada
+        return Direccion::with('zonaEnvio')
+            ->where('usuario_id', $usuarioId)
+            ->sinEliminar()
+            ->orderByDesc('es_predeterminada')
+            ->latest('creado_en')
+            ->first();
+    }
+
+    /**
+     * Sincroniza la dirección de checkout en la sesión si está vacía o inválida.
+     */
+    public function sincronizarDireccionCheckoutSiVacio(int $usuarioId): ?Direccion
+    {
+        $direccionActualId = session('checkout_direccion_id');
+
+        if ($direccionActualId) {
+            $direccionValida = Direccion::with('zonaEnvio')
+                ->where('id', $direccionActualId)
+                ->where('usuario_id', $usuarioId)
+                ->sinEliminar()
+                ->first();
+
+            if ($direccionValida) {
+                return $direccionValida;
+            }
+
+            session()->forget(['checkout_direccion_id', 'checkout_zona_envio_id']);
+        }
+
+        $direccion = $this->resolverDireccionInicialCheckout($usuarioId);
+
+        if ($direccion) {
+            $zona = $direccion->zonaEnvioCalculada;
+
+            // Si la dirección no tenía la zona asociada permanentemente, la actualizamos
+            if ($zona && !$direccion->zona_envio_id) {
+                $direccion->update(['zona_envio_id' => $zona->id]);
+            }
+
+            session([
+                'checkout_direccion_id' => (int) $direccion->id,
+                'checkout_zona_envio_id' => $zona ? (int) $zona->id : null,
+                'checkout_metodo_entrega' => session('checkout_metodo_entrega', 'delivery'),
+            ]);
+        }
+
+        return $direccion;
     }
 }
