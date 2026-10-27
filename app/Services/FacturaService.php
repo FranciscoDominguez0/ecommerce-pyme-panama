@@ -45,8 +45,8 @@ class FacturaService
                 'emitida_en' => now(),
             ]);
 
-            // El archivo PDF físico se compila bajo demanda (JIT) en el worker de cola al adjuntarlo
-            // en FacturaMail o al ser consultado/descargado por el usuario, evitando demoras de DomPDF en HTTP.
+            // Compilar y almacenar el archivo PDF de la factura
+            $this->generarPdf($factura);
 
 
             // Envío del correo en segundo plano

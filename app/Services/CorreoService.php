@@ -33,8 +33,8 @@ class CorreoService
         }
 
         try {
-            // Si la cola está configurada (database/redis), se encola en milisegundos a la BD
-            if (config('queue.default') !== 'sync') {
+            // Si la cola está configurada (database/redis) o en pruebas unitarias, se despacha a la cola
+            if (config('queue.default') !== 'sync' || app()->runningUnitTests()) {
                 Mail::to($email)->queue($mailable);
                 self::despertarWorkerSiEsLocal();
                 return;

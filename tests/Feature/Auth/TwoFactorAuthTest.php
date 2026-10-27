@@ -47,7 +47,7 @@ class TwoFactorAuthTest extends TestCase
         $response->assertSessionHas('2fa:user:id', $usuario->id);
         
         // Debe haberse enviado el correo con el código
-        Mail::assertSent(TwoFactorCodeMail::class, function ($mail) use ($usuario) {
+        Mail::assertQueued(TwoFactorCodeMail::class, function ($mail) use ($usuario) {
             return $mail->hasTo($usuario->email);
         });
         

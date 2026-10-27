@@ -63,10 +63,6 @@ class FacturaController extends Controller
             $factura->refresh();
         }
 
-        if (!$factura->pdf_ruta || !Storage::disk('local')->exists($factura->pdf_ruta)) {
-            app(\App\Services\FacturaService::class)->generarPdf($factura);
-            $factura->refresh();
-        }
 
         if ($factura->pdf_ruta && Storage::disk('local')->exists($factura->pdf_ruta)) {
             /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */

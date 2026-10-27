@@ -154,7 +154,7 @@ class FacturaServiceTest extends BaseAdminTest
         $this->assertSame('%PDF-1.4 TEST', Storage::disk('local')->get($factura->pdf_ruta));
 
         // El correo automático se envía al usuario dueño del pedido.
-        Mail::assertSent(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo($pedido->usuario->email));
+        Mail::assertQueued(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo($pedido->usuario->email));
     }
 
     // Reenvío de factura por email
@@ -182,7 +182,7 @@ class FacturaServiceTest extends BaseAdminTest
         $this->assertNotNull($reenvio->enviado_en, 'enviado_en debe quedar poblado con la fecha del reenvío.');
         $this->assertInstanceOf(Factura::class, $reenvio->factura);
 
-        Mail::assertSent(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo('destinatario@example.com'));
+        Mail::assertQueued(FacturaMail::class, fn (FacturaMail $mail) => $mail->hasTo('destinatario@example.com'));
     }
 
     // Anti-duplicación: un pedido no puede tener dos facturas

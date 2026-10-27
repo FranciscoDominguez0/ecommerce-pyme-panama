@@ -208,7 +208,7 @@ class FacturaControllerAdminTest extends BaseAdminTest
         ]);
         $this->assertNotNull(ReenvioFactura::where('factura_id', $factura->id)->first()->enviado_en);
 
-        Mail::assertSent(\App\Mail\FacturaMail::class, fn ($mail) => $mail->hasTo('destinatario@example.com'));
+        Mail::assertQueued(\App\Mail\FacturaMail::class, fn ($mail) => $mail->hasTo('destinatario@example.com'));
     }
 
     public function test_no_se_puede_reenviar_factura_con_email_invalido(): void
