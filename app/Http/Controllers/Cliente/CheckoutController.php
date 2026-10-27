@@ -177,7 +177,9 @@ class CheckoutController extends Controller
             ];
         }
 
-        return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales', 'metodoEntrega', 'courierSucursal', 'infoStripe'));
+        $retiroLocal = $this->envioService->obtenerDatosRetiroLocal();
+
+        return view('cliente.checkout.confirmacion', compact('carrito', 'direccion', 'zonaEnvio', 'metodoPago', 'totales', 'metodoEntrega', 'courierSucursal', 'infoStripe', 'retiroLocal'));
     }
 
     /**

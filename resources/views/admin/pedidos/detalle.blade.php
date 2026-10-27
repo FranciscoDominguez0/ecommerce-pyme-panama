@@ -114,7 +114,6 @@
                     </button>
                 </form>
             @endif
-
         </div>
     </div>
 
@@ -316,8 +315,8 @@
                     @endif
                 </dl>
                 <div class="mt-4 pt-4 border-t border-slate-200 dark:border-gray-700">
-                    <div class="text-sm text-slate-500 dark:text-slate-400 mb-2 flex flex-wrap items-center gap-2">
-                        <span class="font-medium text-slate-900 dark:text-white">Método de pago:</span> 
+                    <p class="text-sm font-medium text-slate-900 dark:text-white mb-2">Método de pago:</p>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 mb-2">
                         @if($pedido->metodo_pago === 'yappy')
                             <div class="inline-flex items-center gap-2">
                                 <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs">
@@ -372,6 +371,16 @@
                         <a href="{{ asset('storage/' . $pedido->comprobante_pago_ruta) }}" target="_blank" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 mt-2">
                             <span class="material-symbols-outlined text-[18px] mr-1">receipt</span> Ver comprobante
                         </a>
+                    @endif
+
+                    @if($pedido->factura)
+                        <div class="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-1.5">
+                            <span class="font-medium text-slate-900 dark:text-white">Factura:</span>
+                            <a href="{{ route('admin.facturas.show', $pedido->factura->id) }}" class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+                                <span>#{{ $pedido->factura->numero }}</span>
+                                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                            </a>
+                        </div>
                     @endif
                 </div>
             </div>

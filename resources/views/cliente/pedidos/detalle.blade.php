@@ -572,8 +572,11 @@
                     @else
                         <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
                             <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Retiro en Local</p>
-                            <p>Sucursal Principal de PyME Panamá</p>
-                            <p>Entrega gratuita en instalaciones.</p>
+                            <p class="font-medium text-slate-800 dark:text-slate-200">{{ $retiroLocal['sucursal'] ?? 'Sucursal de PyME Panamá' }}</p>
+                            <p>{{ $retiroLocal['direccion'] ?? 'Entrega presencial en instalaciones.' }}</p>
+                            @if(!empty($retiroLocal['horario']))
+                                <p class="text-xs text-slate-500">Horario: {{ $retiroLocal['horario'] }}</p>
+                            @endif
                         </div>
                     @endif
                 </div>

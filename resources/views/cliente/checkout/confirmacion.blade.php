@@ -89,8 +89,14 @@
                     </div>
                     <address class="text-xs text-on-surface-variant not-italic flex-1">
                         @if($metodoEntrega === 'retiro_local')
-                            <p class="font-semibold text-on-background mb-1">Retiro en sucursal PYME PANAMA</p>
-                            <p>San Francisco (Ciudad de Panamá)</p>
+                            <p class="font-semibold text-on-background mb-1">Retiro en {{ $retiroLocal['sucursal'] ?? 'Sucursal PYME Panamá' }}</p>
+                            <p>{{ $retiroLocal['direccion'] ?? 'San Francisco (Ciudad de Panamá)' }}</p>
+                            @if(!empty($retiroLocal['horario']))
+                                <p class="text-xs text-on-surface-variant mt-1 font-medium text-emerald-700 dark:text-emerald-400">Horario: {{ $retiroLocal['horario'] }}</p>
+                            @endif
+                            @if(!empty($retiroLocal['telefono']))
+                                <p class="text-xs text-on-surface-variant">Tel: {{ $retiroLocal['telefono'] }}</p>
+                            @endif
                         @elseif($metodoEntrega === 'retiro_courier' && isset($courierSucursal))
                             <p class="font-semibold text-on-background mb-1">Retiro por Courier - {{ $courierSucursal->courier }}</p>
                             <p class="font-bold">{{ $courierSucursal->sucursal }}</p>

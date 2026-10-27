@@ -39,11 +39,11 @@ class ConfiguracionController extends Controller
         Configuracion::guardar('empresa.direccion', $request->direccion, 'empresa', 'Dirección física de la empresa');
         Configuracion::guardar('empresa.telefono', $request->telefono, 'empresa', 'Teléfono de contacto');
         Configuracion::guardar('empresa.correo_contacto', $request->correo_contacto, 'empresa', 'Correo de contacto principal');
-        if ($request->filled('horario')) {
-            Configuracion::guardar('empresa.horario', $request->horario, 'empresa', 'Horario de atención de la sucursal');
+        if ($request->has('horario')) {
+            Configuracion::guardar('empresa.horario', $request->horario ?: 'Lunes a Sábado, 9:00 AM - 6:00 PM', 'empresa', 'Horario de atención de la sucursal');
         }
-        if ($request->filled('sucursal_nombre')) {
-            Configuracion::guardar('empresa.sucursal_nombre', $request->sucursal_nombre, 'empresa', 'Nombre de la sucursal física');
+        if ($request->has('sucursal_nombre')) {
+            Configuracion::guardar('empresa.sucursal_nombre', $request->sucursal_nombre ?: 'Sucursal PyME Panamá - San Francisco', 'empresa', 'Nombre de la sucursal física');
         }
 
         if ($request->hasFile('logo')) {

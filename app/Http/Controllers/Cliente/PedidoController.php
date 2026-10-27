@@ -78,6 +78,8 @@ class PedidoController extends Controller
         $evaluacionPrevia = $pedido->evaluacionUsabilidad;
         $abrirAuto = session('pedido_creado_animacion') || request()->has('calificar');
 
+        $retiroLocal = app(\App\Services\EnvioService::class)->obtenerDatosRetiroLocal();
+
         return view('cliente.pedidos.detalle', compact(
             'pedido',
             'estadosOrdenados',
@@ -85,7 +87,8 @@ class PedidoController extends Controller
             'valoracionesPorProducto',
             'hitosFechas',
             'evaluacionPrevia',
-            'abrirAuto'
+            'abrirAuto',
+            'retiroLocal'
         ));
     }
 

@@ -91,9 +91,25 @@
                     
                     <!-- Address -->
                     <div class="col-span-1 md:col-span-2">
-                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 dark:text-slate-300 mb-1 uppercase tracking-wider" for="direccion">Dirección</label>
-                        <textarea id="direccion" name="direccion" rows="3" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 resize-y">{{ old('direccion', $configuraciones['empresa.direccion'] ?? '') }}</textarea>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="direccion">Dirección física</label>
+                        <textarea id="direccion" name="direccion" rows="2" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 resize-y">{{ old('direccion', $configuraciones['empresa.direccion'] ?? '') }}</textarea>
                         @error('direccion') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Branch Name (Retiro Local) -->
+                    <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="sucursal_nombre">Nombre de la Sucursal (Retiro)</label>
+                        <input type="text" id="sucursal_nombre" name="sucursal_nombre" value="{{ old('sucursal_nombre', $configuraciones['empresa.sucursal_nombre'] ?? 'Sucursal PyME Panamá - San Francisco') }}" placeholder="Ej: Sucursal PyME Panamá - San Francisco" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                        <p class="text-[11px] text-slate-400 mt-1">Nombre mostrado para clientes que eligen retiro en tienda.</p>
+                        @error('sucursal_nombre') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Hours of Operation (Retiro Local) -->
+                    <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1 uppercase tracking-wider" for="horario">Horario de Retiro / Atención</label>
+                        <input type="text" id="horario" name="horario" value="{{ old('horario', $configuraciones['empresa.horario'] ?? 'Lunes a Sábado, 9:00 AM - 6:00 PM') }}" placeholder="Ej: Lunes a Sábado, 9:00 AM - 6:00 PM" class="bg-white dark:bg-[#121415] text-slate-900 dark:text-white block w-full rounded-md border-slate-300 dark:border-gray-700 py-2 px-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                        <p class="text-[11px] text-slate-400 mt-1">Horarios para retiro de pedidos presenciales.</p>
+                        @error('horario') <span class="text-rose-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>
             </div>
