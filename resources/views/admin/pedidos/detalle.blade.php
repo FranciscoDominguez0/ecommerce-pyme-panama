@@ -58,12 +58,6 @@
             </h1>
             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Realizado el {{ $pedido->creado_en->format('d/m/Y h:i A') }} por <span class="font-medium text-slate-700 dark:text-slate-300">{{ $pedido->usuario->nombre ?? 'Desconocido' }}</span>
-                @if($pedido->vendedor)
-                    <span class="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20">
-                        <span class="material-symbols-outlined text-[14px]">point_of_sale</span>
-                        <span>Vendido por: {{ $pedido->vendedor->nombre }}</span>
-                    </span>
-                @endif
             </p>
         </div>
         
@@ -322,14 +316,43 @@
                     @endif
                 </dl>
                 <div class="mt-4 pt-4 border-t border-slate-200 dark:border-gray-700">
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-2 flex items-center">
-                        <span class="font-medium text-slate-900 dark:text-white mr-1.5">Método de pago:</span> 
+                    <div class="text-sm text-slate-500 dark:text-slate-400 mb-2 flex flex-wrap items-center gap-2">
+                        <span class="font-medium text-slate-900 dark:text-white">Método de pago:</span> 
                         @if($pedido->metodo_pago === 'yappy')
-                            <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs">
+                            <div class="inline-flex items-center gap-2">
+                                <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs">
+                                <span class="uppercase font-semibold tracking-wider text-xs">Yappy</span>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'punto_venta')
+                            <div class="inline-flex items-center gap-2">
+                                <div class="inline-flex items-center gap-1.5 bg-white dark:bg-slate-100 rounded-md border border-slate-200 px-2 py-1 shadow-2xs">
+                                    <img src="{{ asset('images/visa-logo.png') }}" alt="Visa" class="h-3.5 w-auto object-contain">
+                                    <img src="{{ asset('images/mastercard-logo.png') }}" alt="Mastercard" class="h-4 w-auto object-contain">
+                                    <img src="{{ asset('images/clave-logo.png') }}" alt="Clave" class="h-3.5 w-auto object-contain rounded-xs">
+                                </div>
+                                <span class="uppercase font-semibold tracking-wider text-xs">Punto de Venta</span>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'efectivo')
+                            <div class="inline-flex items-center gap-2">
+                                <img src="{{ asset('images/efectivo.webp') }}" alt="Efectivo" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs object-contain">
+                                <span class="uppercase font-semibold tracking-wider text-xs">Efectivo</span>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'transferencia')
+                            <div class="inline-flex items-center gap-2">
+                                <img src="{{ asset('images/ach.webp') }}" alt="ACH / Transferencia" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs object-contain">
+                                <span class="uppercase font-semibold tracking-wider text-xs">Transferencia Bancaria</span>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'contra_entrega')
+                            <div class="inline-flex items-center gap-2">
+                                <img src="{{ asset('images/contra-entrega-pago.webp') }}" alt="Contra Entrega" class="h-7 w-auto inline-block bg-white dark:bg-slate-100 rounded-md border border-slate-200 p-1 shadow-2xs object-contain">
+                                <span class="uppercase font-semibold tracking-wider text-xs">Contra Entrega</span>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'stripe')
+                            <span class="uppercase font-semibold tracking-wider text-xs">Tarjeta de Crédito / Débito (Stripe)</span>
                         @else
                             <span class="uppercase font-semibold tracking-wider text-xs">{{ str_replace('_', ' ', $pedido->metodo_pago) }}</span>
                         @endif
-                    </p>
+                    </div>
                     @if($pedido->metodo_pago === 'stripe')
                         @php
                             $detallesTarjeta = $pedido->detalles_tarjeta;

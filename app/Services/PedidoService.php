@@ -210,28 +210,11 @@ class PedidoService
                     'creado_en' => now(),
                 ]);
 
-                // Notificar si el stock llega al mínimo
+                // Notificar si el stock llega al mínimo (en segundo plano)
                 $stockDespues = $stockAntes - $item->cantidad;
                 $stockMinimo = $item->producto->stock_minimo ?? 0;
                 if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
-                    $roles = ['super_admin'];
-                    $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
-                    $roles = array_unique(array_merge($roles, $rolesConfigurados));
-                    
-                    $usuariosNotificar = Usuario::role($roles)->get();
-                    Notification::send($usuariosNotificar, new StockMinimoNotification($item->producto, $item->variante));
-
-                    if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
-                        $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
-                        if (!empty(trim($adicionales))) {
-                            $correos = array_map('trim', explode(',', $adicionales));
-                            foreach ($correos as $correo) {
-                                if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-                                    Notification::route('mail', $correo)->notify(new StockMinimoNotification($item->producto, $item->variante));
-                                }
-                            }
-                        }
-                    }
+                    app(InventarioService::class)->notificarStockMinimo($item->producto, $item->variante);
                 }
             }
 
@@ -244,14 +227,10 @@ class PedidoService
                 'descuento_aplicado' => 0.00,
             ]);
 
-            // Notificar a los administradores sin romper la transacción si el servicio de broadcasting/cola está inactivo
-            try {
-                $admins = Usuario::role('super_admin')->get();
-                if ($admins->isNotEmpty()) {
-                    Notification::send($admins, new NuevoPedidoNotification($pedido));
-                }
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('No se pudo enviar la notificación de nuevo pedido: ' . $e->getMessage());
+            // Notificar a los administradores en segundo plano sin bloquear la respuesta del checkout
+            $admins = Usuario::role('super_admin')->get();
+            if ($admins->isNotEmpty()) {
+                CorreoService::notificarEnSegundoPlano($admins, new NuevoPedidoNotification($pedido), "Nuevo pedido {$pedido->numero_pedido}");
             }
 
             return $pedido;
@@ -327,7 +306,7 @@ class PedidoService
         }
 
         if ($nuevoEstado === 'entregado') {
-            Mail::to($pedido->usuario->email)->send(new PedidoEntregadoMail($pedido));
+            CorreoService::enviarEnSegundoPlano($pedido->usuario, new PedidoEntregadoMail($pedido), "Pedido entregado {$pedido->numero_pedido}");
         }
 
         return $estado;

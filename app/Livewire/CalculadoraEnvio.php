@@ -27,7 +27,7 @@ class CalculadoraEnvio extends Component
     public function mount($requiereEnvio = true)
     {
         $this->requiereEnvio = $requiereEnvio;
-        $this->zonasEnvio = ZonaEnvio::where('activo', true)->orderBy('nombre')->get();
+        $this->zonasEnvio = app(EnvioService::class)->obtenerZonasDelivery();
 
         if (Auth::check() && !session()->has('checkout_direccion_id')) {
             app(EnvioService::class)->sincronizarDireccionCheckoutSiVacio(Auth::id());
@@ -100,20 +100,13 @@ class CalculadoraEnvio extends Component
     public function getCouriersProperty()
     {
         if (!$this->zonaSeleccionada) return [];
-        return CourierSucursal::where('zona', $this->zonaSeleccionada)
-            ->where('activo', true)
-            ->select('courier')
-            ->distinct()
-            ->pluck('courier');
+        return app(EnvioService::class)->obtenerCouriersPorZona($this->zonaSeleccionada);
     }
 
     public function getSucursalesProperty()
     {
         if (!$this->zonaSeleccionada || !$this->courierSeleccionado) return [];
-        return CourierSucursal::where('zona', $this->zonaSeleccionada)
-            ->where('courier', $this->courierSeleccionado)
-            ->where('activo', true)
-            ->get();
+        return app(EnvioService::class)->obtenerSucursales($this->zonaSeleccionada, $this->courierSeleccionado);
     }
 
     /**
@@ -146,10 +139,15 @@ class CalculadoraEnvio extends Component
      */
     public function getZonasCourierProperty()
     {
-        return CourierSucursal::where('activo', true)
-            ->select('zona')
-            ->distinct()
-            ->pluck('zona');
+        return app(EnvioService::class)->obtenerZonasCourier();
+    }
+
+    /**
+     * Obtiene los datos reales de la sucursal física configurada.
+     */
+    public function getRetiroLocalProperty(): array
+    {
+        return app(EnvioService::class)->obtenerDatosRetiroLocal();
     }
 
     public function render()

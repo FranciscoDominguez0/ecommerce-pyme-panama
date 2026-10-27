@@ -45,24 +45,27 @@ class FacturaService
                 'emitida_en' => now(),
             ]);
 
-            $pdfRuta = $this->generarPdf($factura);
+            // El archivo PDF físico se compila bajo demanda (JIT) en el worker de cola al adjuntarlo
+            // en FacturaMail o al ser consultado/descargado por el usuario, evitando demoras de DomPDF en HTTP.
+
 
             // Envío del correo en segundo plano
-            defer(function () use ($factura) {
-                try {
-                    Mail::to($factura->usuario->email)->send(new FacturaMail($factura));
-                    
-                    ReenvioFactura::create([
-                        'factura_id' => $factura->id,
-                        'usuario_id' => $factura->usuario_id,
-                        'email_destino' => $factura->usuario->email,
-                        'mensaje_personalizado' => 'Envío automático inicial',
-                        'enviado_en' => now(),
-                    ]);
-                } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::error('Error al enviar factura por correo (defer): ' . $e->getMessage());
-                }
-            });
+            $emailDestino = $factura->usuario?->email;
+            if ($emailDestino && filter_var($emailDestino, FILTER_VALIDATE_EMAIL)) {
+                CorreoService::enviarEnSegundoPlano(
+                    $emailDestino,
+                    new FacturaMail($factura),
+                    "Factura inicial {$factura->numero}"
+                );
+                
+                ReenvioFactura::create([
+                    'factura_id' => $factura->id,
+                    'usuario_id' => $factura->usuario_id,
+                    'email_destino' => $emailDestino,
+                    'mensaje_personalizado' => 'Envío automático inicial',
+                    'enviado_en' => now(),
+                ]);
+            }
 
             return $factura;
         });
@@ -234,7 +237,11 @@ class FacturaService
             'enviado_en' => now(),
         ]);
 
-        Mail::to($emailDestino)->send(new FacturaMail($factura, $mensajePersonalizado));
+        CorreoService::enviarEnSegundoPlano(
+            $emailDestino,
+            new FacturaMail($factura, $mensajePersonalizado),
+            "Reenvío de factura {$factura->numero}"
+        );
 
         return $reenvio;
     }

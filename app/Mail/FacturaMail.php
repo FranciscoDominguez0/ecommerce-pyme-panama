@@ -8,10 +8,11 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
-class FacturaMail extends Mailable
+class FacturaMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -59,8 +60,17 @@ class FacturaMail extends Mailable
     {
         $attachments = [];
 
-        if ($this->factura->pdf_ruta && Storage::disk('local')->exists($this->factura->pdf_ruta)) {
-            $attachments[] = Attachment::fromStorageDisk('local', $this->factura->pdf_ruta)
+        $pdfRuta = $this->factura->pdf_ruta;
+        if (!$pdfRuta || !Storage::disk('local')->exists($pdfRuta)) {
+            try {
+                $pdfRuta = app(\App\Services\FacturaService::class)->generarPdf($this->factura);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("FacturaMail: No se pudo generar PDF para adjunto: " . $e->getMessage());
+            }
+        }
+
+        if ($pdfRuta && Storage::disk('local')->exists($pdfRuta)) {
+            $attachments[] = Attachment::fromStorageDisk('local', $pdfRuta)
                 ->as('Factura_' . $this->factura->numero . '.pdf')
                 ->withMime('application/pdf');
         }

@@ -30,8 +30,11 @@
             <div class="px-2 sm:px-6">
                 @if($metodo_entrega === 'retiro_local')
                     <ul class="list-disc ml-4 space-y-3 text-[15px] text-slate-800">
-                        <li><strong>Sucursal:</strong> PYME Panamá - San Francisco</li>
-                        <li><strong>Dirección:</strong> Planta Baja, Calle 67 Este <a href="#" class="text-blue-500 hover:underline ml-1">(Ver mapa)</a></li>
+                        <li><strong>Sucursal:</strong> {{ $this->retiroLocal['sucursal'] }}</li>
+                        <li><strong>Dirección:</strong> {{ $this->retiroLocal['direccion'] }}</li>
+                        @if(!empty($this->retiroLocal['horario']))
+                            <li><strong>Horario:</strong> {{ $this->retiroLocal['horario'] }}</li>
+                        @endif
                         <li><strong>Costo de Retiro:</strong> GRATIS</li>
                     </ul>
                 @elseif($metodo_entrega === 'delivery')
@@ -95,9 +98,14 @@
             <div class="min-h-[250px]">
                 @if($metodo_entrega_modal === 'retiro_local')
                     <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-4">
-                        <h4 class="font-semibold text-blue-900 mb-2">Retiro en Sucursal San Francisco</h4>
-                        <p class="text-sm text-blue-800">Dirección: Local Pyme Panamá, Planta Baja, Calle 67 Este, San Francisco, Ciudad de Panamá</p>
-                        <p class="text-sm text-blue-800 mt-1">Horario: Lunes a Sábado, 9:00 AM - 6:00 PM</p>
+                        <h4 class="font-semibold text-blue-900 mb-2">{{ $this->retiroLocal['sucursal'] }}</h4>
+                        <p class="text-sm text-blue-800">Dirección: {{ $this->retiroLocal['direccion'] }}</p>
+                        @if(!empty($this->retiroLocal['horario']))
+                            <p class="text-sm text-blue-800 mt-1">Horario: {{ $this->retiroLocal['horario'] }}</p>
+                        @endif
+                        @if(!empty($this->retiroLocal['telefono']))
+                            <p class="text-xs text-blue-700 mt-1">Teléfono: {{ $this->retiroLocal['telefono'] }}</p>
+                        @endif
                     </div>
                 @elseif($metodo_entrega_modal === 'delivery')
                     @if(Auth::check())
@@ -147,14 +155,10 @@
                                     <label class="block cursor-pointer relative">
                                         <input type="radio" name="sucursal" wire:model.live="sucursalSeleccionada" value="{{ $suc->id }}" class="peer sr-only" />
                                         <div class="p-4 border-2 border-slate-200 rounded-xl peer-checked:border-emerald-500 peer-checked:bg-emerald-50/50 transition-all">
-                                            <div class="pr-8">
+                                            <div>
                                                 <div class="font-bold text-primary mb-1">{{ $suc->sucursal }}</div>
                                                 <div class="text-sm text-slate-600">{{ $suc->direccion }}</div>
-
                                             </div>
-                                        </div>
-                                        <div class="absolute top-4 right-4 text-emerald-500 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none flex items-center justify-center">
-                                            <span class="material-symbols-outlined" style="font-size: 24px;">check_circle</span>
                                         </div>
                                     </label>
                                 @endforeach

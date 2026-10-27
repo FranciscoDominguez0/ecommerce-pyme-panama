@@ -40,7 +40,7 @@ class CheckoutController extends Controller
             return redirect()->route('cliente.carrito')->with('warning', 'Tu carrito está vacío.');
         }
 
-        $zonasEnvio = ZonaEnvio::activo()->get();
+        $zonasEnvio = $this->envioService->obtenerZonasDelivery();
         $requiereEnvio = $this->pedidoService->carritoRequiereEnvioFisico($carrito);
 
         if (!session()->has('checkout_iniciado_en')) {

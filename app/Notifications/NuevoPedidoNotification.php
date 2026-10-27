@@ -4,11 +4,13 @@ namespace App\Notifications;
 
 use App\Models\Pedido;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
 
-class NuevoPedidoNotification extends Notification
+class NuevoPedidoNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     public $pedido;
 

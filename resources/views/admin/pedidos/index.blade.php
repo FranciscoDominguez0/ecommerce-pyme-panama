@@ -80,12 +80,6 @@
                             <div class="flex items-center gap-2.5">
                                 <span class="text-sm font-bold text-slate-900 dark:text-white">{{ $pedido->numero_pedido }}</span>
                                 <x-badge-nuevo :condicion="$esNuevo" />
-                                @if($pedido->vendedor)
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20" title="Venta POS / Mostrador registrada por {{ $pedido->vendedor->nombre }}">
-                                        <span class="material-symbols-outlined text-[12px]">point_of_sale</span>
-                                        <span>POS</span>
-                                    </span>
-                                @endif
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

@@ -26,6 +26,7 @@ Especializada en tecnologia, equipos informaticos, perifericos y servicios IT.
 | [Servidor WebSocket (Laravel Reverb)](#servidor-websocket-laravel-reverb) | Servidor en tiempo real y notificaciones |
 | [Verificacion de la instalacion](#verificacion-de-la-instalacion) | URLs para confirmar que todo funciona |
 | [Seeders y datos de catalogo](#seeders-y-datos-de-catalogo) | Carga de datos iniciales |
+| [Arquitectura y patrones de diseno](#arquitectura-y-patrones-de-diseno) | Strategy (Pagos), Service Layer y Colas en Segundo Plano |
 | [Pruebas automatizadas](#pruebas-automatizadas) | Ejecucion del suite de tests |
 | [Comandos utiles](#comandos-utiles) | Referencia rapida de Artisan y npm |
 | [Despliegue a produccion](#despliegue-a-produccion) | Checklist de despliegue |
@@ -393,6 +394,126 @@ php artisan db:seed --class=CatalogoDemoSeeder --env=testing
 | Stock de productos con variantes | Igual a la suma del stock de sus variantes |
 | Imagenes | No se crean filas en `imagenes_producto`; el storefront muestra un placeholder |
 | Re-ejecucion | Idempotente: `firstOrCreate`/`updateOrCreate` por slug o SKU |
+
+---
+
+## Arquitectura y patrones de diseno
+
+El proyecto implementa patrones de diseno del catalogo GoF y principios SOLID para garantizar mantenibilidad, escalabilidad y un rendimiento óptimo de cara al usuario final.
+
+---
+
+### 1. Patron Strategy (Estrategia) — Pasarelas y Metodos de Pago
+
+Para desacoplar el controlador de checkout (`CheckoutController`) y permitir anadir o modificar metodos de pago sin alterar el flujo central de compra (Principio Open/Closed - OCP), se implemento el **Patron Strategy**.
+
+```
+                           +----------------------+
+                           |  MetodoPagoInterface | (Strategy)
+                           +----------------------+
+                           | + procesar()         |
+                           | + reglasValidacion() |
+                           | + extraerDatos()     |
+                           +----------------------+
+                                      ^
+         +-----------------+----------+----------+-----------------+
+         |                 |                     |                 |
++-----------------+ +-----------------+ +-----------------+ +-----------------+
+| StripeMetodo    | | YappyMetodo     | | Transferencia   | | ContraEntrega   |
+| PagoStrategy    | | PagoStrategy    | | MetodoPago      | | MetodoPago      |
++-----------------+ +-----------------+ +-----------------+ +-----------------+
+         ^
+         | usa
++-----------------+
+|   PagoService   | (Context)  <--- Invocado desde CheckoutController
++-----------------+
+```
+
+#### Componentes del Patron
+
+* **Contrato (`Strategy`)**: [`App\Services\Pagos\Contracts\MetodoPagoInterface`](app/Services/Pagos/Contracts/MetodoPagoInterface.php)
+  Define el contrato unificado para todas las pasarelas:
+  * `procesar(array $contexto): ResultadoPago`: Procesa la transaccion y devuelve un DTO inmutable con estado de exito, mensaje de error y metadatos financieros.
+  * `reglasValidacion(Request $request): array`: Reglas de validacion especificas de la pasarela.
+  * `extraerDatosSesion(Request $request): array`: Extrae y sanitiza tokens o comprobantes antes de persistirlos en sesion.
+  * `codigo(): string`, `nombre(): string` y `activo(): bool`.
+
+* **Estrategias Concretas (`Concrete Strategies`)** ubicadas en `app/Services/Pagos/Metodos/`:
+  | Clase | Pasarela / Metodo | Descripcion |
+  |---|---|---|
+  | `StripeMetodoPago` | **Stripe (Tarjetas)** | Procesa tarjetas de credito/debito internacionales y locales con Payment Intents. |
+  | `YappyMetodoPago` | **Yappy (Banco General)** | Pasarela movil panamena mediante numero celular/tokenizacion. |
+  | `TransferenciaMetodoPago` | **ACH / Deposito** | Transferencia bancaria local con captura y validacion de imagen de comprobante. |
+  | `ContraEntregaMetodoPago` | **Pago Contra Entrega** | Pago presencial en efectivo al recibir el pedido fisicamente. |
+
+* **Contexto (`Context`)**: [`App\Services\PagoService`](app/Services/PagoService.php)
+  Registra dinamicamente todas las estrategias disponibles. El controlador de checkout nunca conoce los detalles de Stripe o Yappy, simplemente ejecuta:
+  ```php
+  $resultadoPago = $pagoService->procesar($metodoPago, $contexto);
+  ```
+
+---
+
+### 2. Patron Service Layer + Proxy Asincrono / Delegator — Colas y Despacho en Segundo Plano
+
+Para evitar que los envios de correo electronico (handshake SMTP con Gmail) y las notificaciones a base de datos/WebSockets congelen las pantallas del usuario o del cajero, se implemento una arquitectura asincrona diferida y encolable.
+
+```
+Peticion HTTP (Venta POS / Checkout Tienda)
+   |
+   v
+[ Transaccion BD: Guardar Pedido + Descontar Stock ]
+   |
+   +---> Responde al Usuario INMEDIATAMENTE (< 50ms)  🚀
+   |
+   +---> Ciclo Diferido (defer / Queue Worker)
+            |
+            +---> [CorreoService] (Proxy Asincrono + Circuit Breaker)
+                     |
+                     +---> Notificar Stock Minimo a Agentes
+                     +---> Generar Factura PDF + Enviar FacturaMail
+                     +---> Notificar Nuevo Pedido por Reverb / BD
+```
+
+#### Componentes del Sistema
+
+* **Servicio Centralizado**: [`App\Services\CorreoService`](app/Services/CorreoService.php)
+  Centraliza el despacho de correos y notificaciones en segundo plano, aislando los controladores y servicios de negocio:
+  ```php
+  // Envio de correo a cliente (Facturas, bienvenida, entregas)
+  CorreoService::enviarEnSegundoPlano($usuario, new FacturaMail($factura), 'Factura inicial');
+
+  // Notificacion a supervisores y agentes por stock bajo o nuevo pedido
+  CorreoService::notificarEnSegundoPlano($admins, new StockMinimoNotification($producto, $variante));
+
+  // Notificacion a correos externos configurados (listas de distribucion)
+  CorreoService::notificarRutaMailEnSegundoPlano($correo, new StockMinimoNotification($producto, $variante));
+
+  // Tareas genericas diferidas
+  CorreoService::despacharEnSegundoPlano(fn () => ..., 'Contexto para logs');
+  ```
+
+* **Mecanismo de Despacho Hibrido (`defer()` + `ShouldQueue`)**:
+  * **Laravel `defer()`**: Ejecuta los envios inmediatamente despues de entregar la respuesta HTTP al navegador (`fastcgi_finish_request` o evento `terminate` del kernel). El usuario no espera los 2 a 4 segundos de latencia de red de Google SMTP.
+  * **Contrato `ShouldQueue` + Trait `SerializesModels`**: Todas las clases Mailables ([`FacturaMail`](app/Mail/FacturaMail.php), [`StockDisponibleMail`](app/Mail/StockDisponibleMail.php), [`PedidoEntregadoMail`](app/Mail/PedidoEntregadoMail.php), [`BienvenidaMailable`](app/Mail/BienvenidaMailable.php), [`TwoFactorCodeMail`](app/Mail/TwoFactorCodeMail.php)) y Notificaciones ([`StockMinimoNotification`](app/Notifications/StockMinimoNotification.php), [`NuevoPedidoNotification`](app/Notifications/NuevoPedidoNotification.php)) implementan `ShouldQueue`.
+  * **Flexibilidad Operativa**:
+    * En **desarrollo local / servidores compartidos** (`QUEUE_CONNECTION=sync`): `defer()` garantiza entrega inmediata al navegador sin obligar a tener un worker corriendo.
+    * En **produccion de alto trafico** (`QUEUE_CONNECTION=database` o `redis`): Al ejecutar `php artisan queue:listen` o `php artisan queue:work`, los correos y notificaciones se encolan de forma persistente en la tabla `jobs` de PostgreSQL.
+
+#### Resiliencia y Patron Circuit Breaker
+
+* **Validacion previa de destinatarios**: Filtra con `filter_var(..., FILTER_VALIDATE_EMAIL)` para no gastar conexiones SMTP en registros huerfanos o correos invalidos.
+* **Aislamiento atómico con `try / catch (\Throwable)`**: Si el servidor SMTP de Gmail experimenta caidas temporales o limites de envio, el error se captura y se envia a `Log::warning()`. **La transaccion de la compra o venta en caja nunca se cae ni muestra un error 500 al cliente**.
+
+#### Modulos Integrados
+
+| Modulo | Ruta | Eventos en Segundo Plano |
+|---|---|---|
+| **Venta Manual / POS** | `/admin/pedidos/crear` | Alertas a agentes por stock bajo y generacion diferida de factura por correo sin bloquear el mostrador. |
+| **Checkout Tienda** | `/checkout/confirmacion` | Notificacion de nuevo pedido a administradores, alerta de stock minimo y factura automatica. |
+| **Facturacion** | `/admin/facturacion` | Emision automatica de PDF/correo y reenvio manual diferido. |
+| **Inventario** | `/admin/inventario` | Notificaciones masivas de stock restaurado a clientes en lista de espera (`procesarNotificacionesStock`). |
+| **Autenticacion** | `/registro`, `/2fa` | Despacho diferido de codigos de seguridad 2FA y correos de bienvenida. |
 
 ---
 

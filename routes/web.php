@@ -21,6 +21,7 @@ use App\Http\Controllers\Cliente\CheckoutController;
 use App\Http\Controllers\Cliente\InicioController;
 use App\Http\Controllers\Cliente\ListaDeseosController;
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
+use App\Http\Controllers\EnvioCalculadoraController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,12 @@ use Illuminate\Support\Facades\Route;
 | Rutas Web - eCommerce PyME Panamá
 |--------------------------------------------------------------------------
 */
+
+// Calculadora y Consultas de Envíos (Reutilizable para Storefront y Administración)
+Route::post('/envio/calcular', [EnvioCalculadoraController::class, 'calcular'])->name('envio.calcular');
+Route::get('/envio/zonas-courier', [EnvioCalculadoraController::class, 'zonasCourier'])->name('envio.zonas-courier');
+Route::get('/envio/couriers-por-zona', [EnvioCalculadoraController::class, 'couriersPorZona'])->name('envio.couriers-por-zona');
+Route::get('/envio/sucursales', [EnvioCalculadoraController::class, 'sucursales'])->name('envio.sucursales');
 
 // 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida, Carrito)
 Route::get('/', [InicioController::class, 'inicio'])->name('inicio');

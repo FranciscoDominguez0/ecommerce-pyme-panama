@@ -61,20 +61,18 @@ class ForgotPasswordController extends Controller
                 'email' => $request->email,
             ]);
 
-            try {
+            $emailDestino = $request->email;
+            \App\Services\CorreoService::despacharEnSegundoPlano(function () use ($usuario, $token, $emailDestino, $resetUrl) {
                 Mail::send('emails.reset-password', [
                     'usuario' => $usuario,
                     'token' => $token,
-                    'email' => $request->email,
+                    'email' => $emailDestino,
                     'resetUrl' => $resetUrl,
-                ], function ($message) use ($request) {
-                    $message->to($request->email)
+                ], function ($message) use ($emailDestino) {
+                    $message->to($emailDestino)
                             ->subject('Restablece tu contraseña - PayMe Panamá');
                 });
-            } catch (\Throwable $e) {
-                // Registro silencioso en logs en caso de que el driver de correo no esté configurado localmente
-                logger()->error('Error al enviar correo de recuperación: ' . $e->getMessage());
-            }
+            }, 'Recuperación de contraseña');
         }
 
         // Mensaje genérico de confirmación por seguridad

@@ -31,12 +31,12 @@ class TwoFactorController extends Controller
             '2fa:remember' => $remember
         ]);
 
-        // Enviar correo
-        try {
-            Mail::to($usuario->email)->send(new TwoFactorCodeMail($code, $usuario->nombre));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error al enviar correo de 2FA: ' . $e->getMessage());
-        }
+        // Enviar correo en segundo plano
+        \App\Services\CorreoService::enviarEnSegundoPlano(
+            $usuario,
+            new TwoFactorCodeMail($code, $usuario->nombre),
+            'Código de verificación 2FA'
+        );
     }
 
     /**
@@ -183,11 +183,11 @@ class TwoFactorController extends Controller
         
         Cache::put('2fa_code_' . $usuario->id, $code, now()->addMinutes(10));
         
-        try {
-            Mail::to($usuario->email)->send(new TwoFactorCodeMail($code, $usuario->nombre));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Error al reenviar correo de 2FA: ' . $e->getMessage());
-        }
+        \App\Services\CorreoService::enviarEnSegundoPlano(
+            $usuario,
+            new TwoFactorCodeMail($code, $usuario->nombre),
+            'Reenvío código 2FA'
+        );
 
         return back()->with('toast_success', 'Se ha enviado un nuevo código a tu correo.');
     }

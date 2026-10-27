@@ -56,6 +56,7 @@ class VentaManualController extends PedidoController
                     'sku' => $p->sku,
                     'precio' => (float) $p->precio,
                     'stock' => (int) $p->stock,
+                    'peso' => (float) ($p->peso ?? 0),
                     'imagen' => $p->imagen_url,
                     'es_digital' => (bool) $p->es_digital,
                     'variantes' => $p->variantes->map(function ($v) use ($p) {
@@ -65,14 +66,23 @@ class VentaManualController extends PedidoController
                             'sku' => $v->sku,
                             'precio' => (float) ($v->precio > 0 ? $v->precio : $p->precio),
                             'stock' => (int) $v->stock,
+                            'peso' => (float) ($v->peso ?? $p->peso ?? 0),
                         ];
                     }),
                 ];
             });
 
-        $zonasEnvio = ZonaEnvio::where('activo', true)->orderBy('nombre')->get();
+        $zonasEnvio = app(\App\Services\EnvioService::class)->obtenerZonasDelivery();
+        $courierSucursales = \App\Models\CourierSucursal::where('activo', true)
+            ->select('id', 'zona', 'courier', 'sucursal', 'direccion', 'tarifa_uno_hasta_7lb')
+            ->orderBy('zona')
+            ->orderBy('courier')
+            ->orderBy('sucursal')
+            ->get();
+        $zonasCourier = app(\App\Services\EnvioService::class)->obtenerZonasCourier();
+        $retiroLocal = app(\App\Services\EnvioService::class)->obtenerDatosRetiroLocal();
 
-        return view('admin.pedidos.crear', compact('clientes', 'productos', 'zonasEnvio'));
+        return view('admin.pedidos.crear', compact('clientes', 'productos', 'zonasEnvio', 'courierSucursales', 'zonasCourier', 'retiroLocal'));
     }
 
     /**
@@ -93,8 +103,9 @@ class VentaManualController extends PedidoController
             'items.*.cantidad' => 'required|integer|min:1',
             'items.*.precio_unitario' => 'nullable|numeric|min:0',
             'metodo_pago' => 'required|string|in:efectivo,yappy,punto_venta,transferencia,contra_entrega',
-            'tipo_entrega' => 'required|string|in:retiro_local,envio_domicilio',
+            'tipo_entrega' => 'required|string|in:retiro_local,envio_domicilio,delivery,retiro_courier',
             'zona_envio_id' => 'nullable|exists:zonas_envio,id',
+            'courier_sucursal_id' => 'nullable|exists:courier_sucursales,id',
             'costo_envio' => 'nullable|numeric|min:0',
             'direccion_exacta' => 'nullable|string|max:255',
             'descuento_manual' => 'nullable|numeric|min:0',
@@ -126,8 +137,15 @@ class VentaManualController extends PedidoController
                 }
             }
 
+            $tipoEntrega = $validated['tipo_entrega'];
+            $metodoEntrega = match($tipoEntrega) {
+                'retiro_local' => 'tienda_fisica',
+                'retiro_courier' => 'retiro_courier',
+                default => 'delivery',
+            };
+
             $direccionId = null;
-            if ($validated['tipo_entrega'] === 'envio_domicilio' && !empty($validated['direccion_exacta'])) {
+            if ($metodoEntrega === 'delivery' && !empty($validated['direccion_exacta'])) {
                 $dir = Direccion::create([
                     'usuario_id' => $usuarioId,
                     'alias' => 'Envío mostrador',
@@ -142,21 +160,27 @@ class VentaManualController extends PedidoController
                 $direccionId = $dir->id;
             }
 
+            $notasInternasData = [
+                'metodo_entrega' => $metodoEntrega,
+                'nota' => $validated['notas_internas'] ?? 'Venta registrada en tienda física (POS).',
+            ];
+
+            if ($metodoEntrega === 'retiro_courier' && !empty($validated['courier_sucursal_id'])) {
+                $notasInternasData['courier_sucursal_id'] = (int) $validated['courier_sucursal_id'];
+            }
+
             $datosVenta = [
                 'usuario_id' => $usuarioId,
                 'items' => $validated['items'],
                 'metodo_pago' => $validated['metodo_pago'],
                 'direccion_id' => $direccionId,
-                'zona_envio_id' => $validated['tipo_entrega'] === 'envio_domicilio' ? ($validated['zona_envio_id'] ?? null) : null,
-                'costo_envio' => $validated['tipo_entrega'] === 'envio_domicilio' ? (float) ($validated['costo_envio'] ?? 0.00) : 0.00,
+                'zona_envio_id' => $metodoEntrega === 'delivery' ? ($validated['zona_envio_id'] ?? null) : null,
+                'costo_envio' => $metodoEntrega === 'tienda_fisica' ? 0.00 : (float) ($validated['costo_envio'] ?? 0.00),
                 'descuento_manual' => (float) ($validated['descuento_manual'] ?? 0.00),
                 'notas_cliente' => $validated['notas_cliente'] ?? null,
-                'notas_internas' => json_encode([
-                    'metodo_entrega' => $validated['tipo_entrega'] === 'envio_domicilio' ? 'delivery' : 'tienda_fisica',
-                    'nota' => $validated['notas_internas'] ?? 'Venta registrada en tienda física (POS).',
-                ], JSON_UNESCAPED_UNICODE),
-                'marcar_pagado' => $request->boolean('marcar_pagado'),
-                'emitir_factura' => $request->boolean('emitir_factura'),
+                'notas_internas' => json_encode($notasInternasData, JSON_UNESCAPED_UNICODE),
+                'marcar_pagado' => $validated['metodo_pago'] === 'contra_entrega' ? false : $request->boolean('marcar_pagado'),
+                'emitir_factura' => $request->boolean('emitir_factura', true),
             ];
 
             // Cualquier administrador o superadmin autenticado queda registrado como el vendedor/autor

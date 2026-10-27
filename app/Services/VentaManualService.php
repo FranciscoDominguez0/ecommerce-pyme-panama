@@ -134,6 +134,13 @@ class VentaManualService
                     'notas' => 'Venta manual procesada por usuario ID ' . $vendedorId,
                     'creado_en' => now(),
                 ]);
+
+                // Notificar a administradores si el stock llegó al mínimo (en segundo plano)
+                $stockDespues = $stockAntes - $iv['cantidad'];
+                $stockMinimo = $iv['producto']->stock_minimo ?? 0;
+                if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
+                    app(InventarioService::class)->notificarStockMinimo($iv['producto'], $iv['variante']);
+                }
             }
 
             // 5. Estado inicial del pedido

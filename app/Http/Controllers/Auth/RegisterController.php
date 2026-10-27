@@ -92,12 +92,12 @@ class RegisterController extends Controller
             \Illuminate\Support\Facades\Log::warning('Error al fusionar carrito en registro: ' . $e->getMessage());
         }
 
-        // Enviar correo de bienvenida
-        try {
-            \Illuminate\Support\Facades\Mail::to($usuario->email)->send(new \App\Mail\BienvenidaMailable($usuario));
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('Error al enviar correo de bienvenida: ' . $e->getMessage());
-        }
+        // Enviar correo de bienvenida en segundo plano
+        \App\Services\CorreoService::enviarEnSegundoPlano(
+            $usuario,
+            new \App\Mail\BienvenidaMailable($usuario),
+            'Bienvenida nuevo cliente'
+        );
 
         return redirect()->intended(route('dashboard'));
     }

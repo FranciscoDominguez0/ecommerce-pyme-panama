@@ -620,6 +620,28 @@
                                     <p class="text-xs text-slate-500 mt-0.5">Banco General / ACH</p>
                                 </div>
                             </div>
+                        @elseif($pedido->metodo_pago === 'punto_venta')
+                            <div class="flex items-center gap-3.5">
+                                <div class="h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-white/95 px-2 py-1 flex items-center justify-center gap-1.5 shrink-0 shadow-2xs">
+                                    <img src="{{ asset('images/visa-logo.png') }}" alt="Visa" class="h-3.5 w-auto object-contain">
+                                    <img src="{{ asset('images/mastercard-logo.png') }}" alt="Mastercard" class="h-4 w-auto object-contain">
+                                    <img src="{{ asset('images/clave-logo.png') }}" alt="Clave" class="h-3.5 w-auto object-contain rounded-xs">
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Punto de Venta</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Tarjeta / Clave en Tienda Física</p>
+                                </div>
+                            </div>
+                        @elseif($pedido->metodo_pago === 'efectivo')
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-white/95 p-1 flex items-center justify-center shrink-0 shadow-2xs">
+                                    <img src="{{ asset('images/efectivo.webp') }}" alt="Efectivo" class="max-h-full max-w-full object-contain">
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Pago en Efectivo</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Pago directo en caja</p>
+                                </div>
+                            </div>
                         @else
                             <div class="flex items-center gap-3.5">
                                 <div class="w-14 h-9 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-1 flex items-center justify-center shrink-0 shadow-2xs">

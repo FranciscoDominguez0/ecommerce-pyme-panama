@@ -2,7 +2,7 @@
 @section('title', 'Nueva Venta')
 
 @section('content')
-<div class="space-y-6 font-sans" x-data="posVentas(@js($clientes), @js($productos), @js($zonasEnvio))">
+<div class="space-y-6 font-sans" x-data="posVentas(@js($clientes), @js($productos), @js($zonasEnvio), @js($courierSucursales), @js($zonasCourier))">
     
     <!-- Encabezado -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -310,49 +310,134 @@
 
                 <!-- SECCIÓN 4: ENTREGA Y LOGÍSTICA -->
                 <div class="card-elevated rounded-xl p-5 border border-slate-200/80 dark:border-gray-700/80 bg-white dark:bg-[#181a1b]">
-                    <div class="pb-3 mb-4 border-b border-slate-100 dark:border-gray-800">
-                        <h2 class="text-sm font-bold text-slate-900 dark:text-white">Tipo de Entrega</h2>
+                    <div class="pb-3 mb-4 border-b border-slate-100 dark:border-gray-800 flex items-center justify-between">
+                        <div>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">Tipo de Entrega</h2>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Selecciona o configura el método de entrega del pedido.</p>
+                        </div>
+                        <button type="button" 
+                                @click="abrirModalEntrega()" 
+                                class="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+                            <span class="material-symbols-outlined text-[16px]">tune</span>
+                            <span>Configurar</span>
+                        </button>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-2 mb-4">
+                    <!-- Botones de Método: Retiro Local, Delivery, Courier -->
+                    <div class="grid grid-cols-3 gap-2 mb-4">
                         <button type="button" 
-                                @click="tipoEntrega = 'retiro_local'; costoEnvio = 0"
-                                :class="tipoEntrega === 'retiro_local' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-center transition-all flex flex-col items-center">
-                            <span class="text-xs">Retiro en Mostrador</span>
+                                @click="seleccionarMetodoEntrega('retiro_local')"
+                                :class="tipoEntrega === 'retiro_local' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold shadow-xs' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
+                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center">
+                            <span class="text-xs">Retiro en Local</span>
                             <span class="text-[10px] text-slate-400 mt-0.5">Gratis ($0.00)</span>
                         </button>
 
                         <button type="button" 
-                                @click="tipoEntrega = 'envio_domicilio'"
-                                :class="tipoEntrega === 'envio_domicilio' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-3 rounded-xl border text-center transition-all flex flex-col items-center">
-                            <span class="text-xs">Envío a Domicilio</span>
-                            <span class="text-[10px] text-slate-400 mt-0.5">Mensajería</span>
+                                @click="seleccionarMetodoEntrega('delivery')"
+                                :class="tipoEntrega === 'delivery' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold shadow-xs' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
+                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center">
+                            <span class="text-xs">Delivery</span>
+                            <span class="text-[10px] text-slate-400 mt-0.5">A Domicilio</span>
+                        </button>
+
+                        <button type="button" 
+                                @click="seleccionarMetodoEntrega('retiro_courier')"
+                                :class="tipoEntrega === 'retiro_courier' ? 'border-[#ff8c69] bg-[#fff5f2] dark:bg-[#331e18] text-[#ff6b3d] font-bold shadow-xs' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
+                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center">
+                            <span class="text-xs">Courier</span>
+                            <span class="text-[10px] text-slate-400 mt-0.5">Por Sucursal</span>
                         </button>
                     </div>
 
                     <input type="hidden" name="tipo_entrega" :value="tipoEntrega">
+                    <input type="hidden" name="courier_sucursal_id" :value="tipoEntrega === 'retiro_courier' ? courierSucursalId : ''">
+                    <input type="hidden" name="zona_envio_id" :value="tipoEntrega === 'delivery' ? zonaEnvioId : ''">
+                    <input type="hidden" name="costo_envio" :value="costoEnvio">
+                    <input type="hidden" name="direccion_exacta" :value="direccionExacta">
 
-                    <!-- Opciones de envío a domicilio -->
-                    <div x-show="tipoEntrega === 'envio_domicilio'" class="space-y-3 pt-2">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Zona de Envío</label>
-                            <select name="zona_envio_id" x-model="zonaEnvioId" @change="actualizarCostoZona()" class="block w-full text-xs rounded-lg border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 focus:border-emerald-500 focus:ring-emerald-500">
-                                <option value="">Seleccionar zona...</option>
-                                <template x-for="z in zonasEnvio" :key="z.id">
-                                    <option :value="z.id" x-text="z.nombre + ' ($' + parseFloat(z.tarifa_base).toFixed(2) + ')'"></option>
-                                </template>
-                            </select>
+                    <!-- Resumen / Configuración según método -->
+                    
+                    <!-- 1. RETIRO EN LOCAL -->
+                    <div x-show="tipoEntrega === 'retiro_local'" class="p-3.5 bg-slate-50 dark:bg-gray-800/60 rounded-xl border border-slate-200 dark:border-gray-700 text-xs space-y-1.5">
+                        <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-semibold">
+                            <span class="material-symbols-outlined text-[18px]">storefront</span>
+                            <span>{{ $retiroLocal['sucursal'] ?? 'Sucursal PYME Panamá' }}</span>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Costo de Envío ($)</label>
-                            <input type="number" step="0.01" min="0" name="costo_envio" x-model.number="costoEnvio" class="block w-full text-xs rounded-lg border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 focus:border-emerald-500 focus:ring-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Dirección Exacta</label>
-                            <textarea name="direccion_exacta" x-model="direccionExacta" rows="2" placeholder="Calle, casa/edificio, corregimiento..." class="block w-full text-xs rounded-lg border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 focus:border-emerald-500 focus:ring-emerald-500"></textarea>
-                        </div>
+                        <p class="text-slate-600 dark:text-slate-300">{{ $retiroLocal['direccion'] ?? 'Dirección configurada de la empresa' }}</p>
+                        @if(!empty($retiroLocal['horario']))
+                            <p class="text-[11px] text-slate-400">Horario: {{ $retiroLocal['horario'] }}</p>
+                        @endif
+                    </div>
+
+                    <!-- 2. DELIVERY A DOMICILIO -->
+                    <div x-show="tipoEntrega === 'delivery'" class="space-y-3 pt-1">
+                        <template x-if="zonaEnvioId && obtenerZonaDeliverySeleccionada()">
+                            <div class="p-3.5 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl border border-emerald-200 dark:border-emerald-800 text-xs space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-emerald-700 dark:text-emerald-400 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-[16px]">local_shipping</span>
+                                        <span>Delivery: <span x-text="obtenerZonaDeliverySeleccionada().nombre"></span></span>
+                                    </span>
+                                    <button type="button" @click="abrirModalEntrega('delivery')" class="text-xs text-emerald-700 dark:text-emerald-400 font-semibold hover:underline">
+                                        Cambiar
+                                    </button>
+                                </div>
+                                <p class="text-slate-700 dark:text-slate-300 font-medium" x-text="direccionExacta || 'Sin dirección exacta especificada'"></p>
+                                <div class="pt-2 border-t border-emerald-200/70 dark:border-emerald-800/60 flex justify-between items-center text-[11px]">
+                                    <span class="text-slate-500">Peso: <strong class="text-slate-800 dark:text-slate-200" x-text="calcularPesoTotalLibras() + ' lbs'"></strong></span>
+                                    <span class="font-bold text-emerald-800 dark:text-emerald-300" x-text="'Costo: $' + parseFloat(costoEnvio || 0).toFixed(2) + ' USD'"></span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="!zonaEnvioId">
+                            <div class="p-4 border-2 border-dashed border-emerald-200 dark:border-emerald-900/50 rounded-xl text-center bg-emerald-50/30 dark:bg-emerald-950/10">
+                                <span class="material-symbols-outlined text-emerald-600 text-3xl mb-1">home_pin</span>
+                                <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">Falta seleccionar la zona de Delivery</p>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Configura la zona metropolitana y dirección de entrega.</p>
+                                <button type="button" 
+                                        @click="abrirModalEntrega('delivery')" 
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors">
+                                    <span class="material-symbols-outlined text-[16px]">add_location_alt</span>
+                                    <span>Configurar Delivery</span>
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- 3. RETIRO EN SUCURSAL DE COURIER -->
+                    <div x-show="tipoEntrega === 'retiro_courier'" class="space-y-3 pt-1">
+                        <template x-if="courierSucursalId && obtenerSucursalCourierSeleccionada()">
+                            <div class="p-3.5 bg-[#fff8f5] dark:bg-[#2a1b16] rounded-xl border border-[#ffd2c2] dark:border-[#52291d] text-xs space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-[#ff6b3d] text-xs uppercase tracking-wider" x-text="'Courier: ' + obtenerSucursalCourierSeleccionada().courier"></span>
+                                    <button type="button" @click="abrirModalEntrega('retiro_courier')" class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold hover:underline">
+                                        Cambiar
+                                    </button>
+                                </div>
+                                <p class="font-bold text-slate-900 dark:text-white" x-text="obtenerSucursalCourierSeleccionada().sucursal"></p>
+                                <p class="text-slate-600 dark:text-slate-300" x-text="obtenerSucursalCourierSeleccionada().direccion"></p>
+                                <div class="pt-2 border-t border-[#ffe0d4] dark:border-[#402016] flex justify-between items-center text-[11px]">
+                                    <span class="text-slate-500">Peso: <strong class="text-slate-800 dark:text-slate-200" x-text="calcularPesoTotalLibras() + ' lbs'"></strong></span>
+                                    <span class="font-bold text-slate-900 dark:text-white" x-text="'Tarifa: $' + parseFloat(costoEnvio || 0).toFixed(2) + ' USD'"></span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="!courierSucursalId">
+                            <div class="p-4 border-2 border-dashed border-orange-200 dark:border-orange-900/50 rounded-xl text-center bg-orange-50/40 dark:bg-orange-950/20">
+                                <span class="material-symbols-outlined text-[#ff6b3d] text-3xl mb-1">local_shipping</span>
+                                <p class="text-xs font-semibold text-slate-800 dark:text-slate-200">Falta seleccionar la sucursal de Courier</p>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Elige entre UnoExpress, Chavale, ServiEntrega u otros.</p>
+                                <button type="button" 
+                                        @click="abrirModalEntrega('retiro_courier')" 
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#ff6b3d] hover:bg-[#e05a2e] text-white rounded-lg text-xs font-bold transition-colors">
+                                    <span class="material-symbols-outlined text-[16px]">add_location_alt</span>
+                                    <span>Seleccionar Sucursal</span>
+                                </button>
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -366,7 +451,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         <!-- Efectivo -->
                         <button type="button" 
-                                @click="metodoPago = 'efectivo'"
+                                @click="seleccionarMetodoPago('efectivo')"
                                 :class="metodoPago === 'efectivo' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
                                 class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
                                 title="Pago en Efectivo">
@@ -375,7 +460,7 @@
 
                         <!-- Punto de Venta / Tarjeta (Visa, Mastercard, Clave) -->
                         <button type="button" 
-                                @click="metodoPago = 'punto_venta'"
+                                @click="seleccionarMetodoPago('punto_venta')"
                                 :class="metodoPago === 'punto_venta' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
                                 class="py-2 px-2 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
                                 title="Tarjeta de Débito / Crédito / Clave">
@@ -388,7 +473,7 @@
 
                         <!-- Yappy -->
                         <button type="button" 
-                                @click="metodoPago = 'yappy'"
+                                @click="seleccionarMetodoPago('yappy')"
                                 :class="metodoPago === 'yappy' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
                                 class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
                                 title="Yappy Comercial">
@@ -397,7 +482,7 @@
 
                         <!-- Transferencia Bancaria / ACH -->
                         <button type="button" 
-                                @click="metodoPago = 'transferencia'"
+                                @click="seleccionarMetodoPago('transferencia')"
                                 :class="metodoPago === 'transferencia' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
                                 class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none"
                                 title="ACH / Transferencia Bancaria">
@@ -406,7 +491,7 @@
 
                         <!-- Contra Entrega -->
                         <button type="button" 
-                                @click="metodoPago = 'contra_entrega'"
+                                @click="seleccionarMetodoPago('contra_entrega')"
                                 :class="metodoPago === 'contra_entrega' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 ring-2 ring-emerald-600/20 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800/40'"
                                 class="py-2.5 px-3 rounded-xl border text-xs transition-all flex items-center justify-center min-h-[64px] h-[64px] overflow-hidden cursor-pointer select-none col-span-2 sm:col-span-1"
                                 title="Pago Contra Entrega">
@@ -461,15 +546,21 @@
 
                     <!-- Opciones de Estado y Factura -->
                     <div class="pt-3 border-t border-slate-100 dark:border-gray-800 space-y-2.5 text-xs">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="marcar_pagado" value="1" x-model="marcarPagado" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                        <label class="flex items-center gap-2" :class="metodoPago === 'contra_entrega' ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'">
+                            <input type="checkbox" 
+                                   name="marcar_pagado" 
+                                   value="1" 
+                                   x-model="marcarPagado" 
+                                   :disabled="metodoPago === 'contra_entrega'"
+                                   class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed">
                             <span class="font-semibold text-slate-700 dark:text-slate-300">Marcar como pagado inmediatamente</span>
                         </label>
+                        <p x-show="metodoPago === 'contra_entrega'" class="text-[11px] text-amber-600 dark:text-amber-400 pl-6">
+                            El cobro se gestionará al momento de la entrega de la orden.
+                        </p>
 
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="emitir_factura" value="1" x-model="emitirFactura" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                            <span class="font-semibold text-slate-700 dark:text-slate-300">Generar factura fiscal de mostrador</span>
-                        </label>
+                        <!-- Factura fiscal generada por defecto -->
+                        <input type="hidden" name="emitir_factura" value="1">
                     </div>
 
                     <!-- Nota interna sencilla (opcional) -->
@@ -565,8 +656,7 @@
                                 </label>
                                 <input type="text" 
                                        x-model="formModal.nombre" 
-                                       placeholder="Ej. Juan" 
-                                       class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder-slate-400"
+                                       class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
                                        required>
                             </div>
                             <div>
@@ -575,8 +665,7 @@
                                 </label>
                                 <input type="text" 
                                        x-model="formModal.apellido" 
-                                       placeholder="Ej. Pérez" 
-                                       class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder-slate-400">
+                                       class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500">
                             </div>
                         </div>
 
@@ -586,8 +675,7 @@
                             </label>
                             <input type="email" 
                                    x-model="formModal.email" 
-                                   placeholder="cliente@ejemplo.com" 
-                                   class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder-slate-400"
+                                   class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
                                    required>
                         </div>
 
@@ -597,8 +685,7 @@
                             </label>
                             <input type="tel" 
                                    x-model="formModal.telefono" 
-                                   placeholder="+507 6000-0000" 
-                                   class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder-slate-400">
+                                   class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500">
                         </div>
                     </div>
 
@@ -621,15 +708,206 @@
             </div>
         </div>
     </div>
+    <!-- ========================================== -->
+    <!-- MODAL: SELECCIONAR TIPO DE ENTREGA         -->
+    <!-- ========================================== -->
+    <div x-show="modalEntrega" 
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         aria-labelledby="modal-entrega-title" 
+         role="dialog" 
+         aria-modal="true"
+         @keydown.escape.window="cerrarModalEntrega()">
+        
+        <div x-show="modalEntrega"
+             x-transition:enter="ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
+             @click="cerrarModalEntrega()"></div>
+
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div x-show="modalEntrega"
+                 x-transition:enter="ease-out duration-200"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1e2122] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl border border-slate-200 dark:border-gray-700">
+                
+                <!-- Cabecera del Modal -->
+                <div class="px-6 pt-5 pb-4 border-b border-slate-100 dark:border-gray-800 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white" id="modal-entrega-title">
+                            Selecciona cómo deseas recibir tu pedido
+                        </h3>
+                    </div>
+                    <button type="button" 
+                            @click="cerrarModalEntrega()" 
+                            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                </div>
+
+                <div class="p-6">
+                    <!-- Tabs de métodos -->
+                    <div class="flex space-x-1 bg-slate-100 dark:bg-gray-800 p-1 rounded-lg mb-6">
+                        <button type="button" 
+                                @click="modalMetodoEntrega = 'retiro_local'" 
+                                :class="modalMetodoEntrega === 'retiro_local' ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-gray-700/50'"
+                                class="flex-1 py-2 text-sm font-medium rounded-md transition-colors">
+                            Retiro en Local
+                        </button>
+                        <button type="button" 
+                                @click="modalMetodoEntrega = 'delivery'" 
+                                :class="modalMetodoEntrega === 'delivery' ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-gray-700/50'"
+                                class="flex-1 py-2 text-sm font-medium rounded-md transition-colors">
+                            Delivery
+                        </button>
+                        <button type="button" 
+                                @click="modalMetodoEntrega = 'retiro_courier'" 
+                                :class="modalMetodoEntrega === 'retiro_courier' ? 'bg-white dark:bg-gray-700 text-emerald-600 dark:text-emerald-400 shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-gray-700/50'"
+                                class="flex-1 py-2 text-sm font-medium rounded-md transition-colors">
+                            Envío por Courier
+                        </button>
+                    </div>
+
+                    <!-- Contenido según Tab -->
+                    <div class="min-h-[220px]">
+                        <!-- TAB 1: RETIRO EN LOCAL -->
+                        <div x-show="modalMetodoEntrega === 'retiro_local'">
+                            <div class="bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 p-4 rounded-xl mb-4 text-xs sm:text-sm">
+                                <h4 class="font-bold text-blue-900 dark:text-blue-300 mb-1 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[18px]">storefront</span>
+                                    <span>{{ $retiroLocal['sucursal'] ?? 'Retiro en Sucursal' }}</span>
+                                </h4>
+                                <p class="text-blue-800 dark:text-blue-300/90 mt-1">Dirección: {{ $retiroLocal['direccion'] ?? 'Dirección configurada de la empresa' }}</p>
+                                @if(!empty($retiroLocal['horario']))
+                                    <p class="text-blue-800 dark:text-blue-300/90 mt-1">Horario: {{ $retiroLocal['horario'] }}</p>
+                                @endif
+                                @if(!empty($retiroLocal['telefono']))
+                                    <p class="text-blue-800 dark:text-blue-300/90 mt-1">Teléfono: {{ $retiroLocal['telefono'] }}</p>
+                                @endif
+                                <div class="mt-3 pt-2 border-t border-blue-200 dark:border-blue-800 font-bold text-emerald-700 dark:text-emerald-400">
+                                    Costo de Retiro: GRATIS ($0.00)
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: DELIVERY -->
+                        <div x-show="modalMetodoEntrega === 'delivery'" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                                    Zona de Envío <span class="text-rose-500">*</span>
+                                </label>
+                                <select x-model="modalZonaEnvioId" class="block w-full text-xs sm:text-sm rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 focus:border-emerald-500 focus:ring-emerald-500">
+                                    <option value="">Selecciona la zona...</option>
+                                    <template x-for="z in zonasEnvio" :key="z.id">
+                                        <option :value="z.id" x-text="z.nombre + ' (Tarifa base: $' + parseFloat(z.costo).toFixed(2) + ')'"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                                    Dirección Exacta
+                                </label>
+                                <textarea x-model="modalDireccionExacta" rows="3" placeholder="Calle, número de casa/edificio, corregimiento, punto de referencia..." class="block w-full text-xs sm:text-sm rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 focus:border-emerald-500 focus:ring-emerald-500"></textarea>
+                            </div>
+
+                            <div class="p-3 bg-slate-50 dark:bg-gray-800/50 rounded-xl border border-slate-200 dark:border-gray-700 flex justify-between items-center text-xs">
+                                <span class="text-slate-500">Peso total de items en venta:</span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200 font-mono" x-text="calcularPesoTotalLibras() + ' lbs'"></span>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: ENVÍO POR COURIER -->
+                        <div x-show="modalMetodoEntrega === 'retiro_courier'" class="space-y-4">
+                            <h3 class="text-base font-bold text-emerald-600 dark:text-emerald-400 mb-2">¿En cuál zona?</h3>
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-800 dark:text-slate-200 w-20 text-xs sm:text-sm shrink-0">Zona:</label>
+                                <select x-model="modalZonaCourier" @change="alCambiarZonaCourierModal()" class="flex-1 border border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs sm:text-sm">
+                                    <option value="">Seleccione una zona</option>
+                                    <template x-for="z in zonasCourier" :key="z">
+                                        <option :value="z" x-text="z"></option>
+                                    </template>
+                                </select>
+                                <span class="text-blue-500 text-xs whitespace-nowrap opacity-60">Ver mapa</span>
+                            </div>
+
+                            <h3 class="text-base font-bold text-emerald-600 dark:text-emerald-400 pt-2 mb-2">¿Con cuál courier?</h3>
+                            <div class="flex items-center gap-3">
+                                <label class="font-bold text-slate-800 dark:text-slate-200 w-20 text-xs sm:text-sm shrink-0">Courier:</label>
+                                <select x-model="modalCourier" @change="alCambiarCourierModal()" :disabled="!modalZonaCourier" class="flex-1 border border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-lg p-2 focus:ring-emerald-500 focus:border-emerald-500 text-xs sm:text-sm disabled:opacity-50">
+                                    <option value="">Por favor seleccione</option>
+                                    <template x-for="c in couriersDisponiblesEnModal()" :key="c">
+                                        <option :value="c" x-text="c"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <h3 class="text-base font-bold text-emerald-600 dark:text-emerald-400 pt-2 mb-2">¿En cuál sucursal?</h3>
+                            <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+                                <template x-if="!modalZonaCourier || !modalCourier">
+                                    <div class="bg-cyan-50 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/50 text-cyan-800 dark:text-cyan-300 p-4 rounded-lg text-xs sm:text-sm">
+                                        Por Favor selecciona el Courier
+                                    </div>
+                                </template>
+
+                                <template x-if="modalZonaCourier && modalCourier">
+                                    <div class="space-y-2">
+                                        <template x-for="suc in sucursalesDisponiblesEnModal()" :key="suc.id">
+                                            <label class="block cursor-pointer relative">
+                                                <input type="radio" name="modal_sucursal_radio" :value="suc.id" x-model="modalSucursalId" class="peer sr-only" />
+                                                <div class="p-3.5 border-2 rounded-xl transition-all"
+                                                     :class="modalSucursalId == suc.id ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 shadow-xs' : 'border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600'">
+                                                    <div>
+                                                        <div class="font-bold text-slate-900 dark:text-white text-xs sm:text-sm mb-0.5" x-text="suc.sucursal"></div>
+                                                        <div class="text-xs text-slate-500 dark:text-slate-400" x-text="suc.direccion"></div>
+                                                        <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-1" x-text="'Tarifa: $' + parseFloat(suc.tarifa_uno_hasta_7lb).toFixed(2) + ' USD (hasta 7 lbs)'"></div>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer del Modal -->
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-gray-800 flex justify-end gap-3">
+                        <button type="button" 
+                                @click="cerrarModalEntrega()" 
+                                class="px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 rounded-xl transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="button" 
+                                @click="confirmarModalEntrega()" 
+                                class="px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-xs transition-colors">
+                            Confirmar Selección
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 @push('scripts')
 <script>
-    function posVentas(clientes, productos, zonasEnvio) {
+    function posVentas(clientes, productos, zonasEnvio, courierSucursales, zonasCourier) {
         return {
             clientes: clientes || [],
-            productos: (productos || []).map(p => ({ ...p, varianteSeleccionadaId: '' })),
+            productos: (productos || []).map(p => ({ ...p, varianteSeleccionadaId: '', peso: parseFloat(p.peso || 0) })),
             zonasEnvio: zonasEnvio || [],
+            courierSucursales: courierSucursales || [],
+            zonasCourier: zonasCourier || [],
 
             clienteSeleccionado: null,
             busquedaCliente: '',
@@ -646,15 +924,26 @@
                 telefono: ''
             },
 
+            // Estado de Entrega y Logística
+            tipoEntrega: 'retiro_local',
+            zonaEnvioId: '',
+            courierSucursalId: '',
+            costoEnvio: 0.00,
+            direccionExacta: '',
+
+            // Estado del modal de entrega
+            modalEntrega: false,
+            modalMetodoEntrega: 'retiro_local',
+            modalZonaCourier: '',
+            modalCourier: '',
+            modalSucursalId: '',
+            modalZonaEnvioId: '',
+            modalDireccionExacta: '',
+
             busquedaProducto: '',
             paginaProducto: 1,
             porPaginaProducto: 15,
             items: [],
-
-            tipoEntrega: 'retiro_local',
-            zonaEnvioId: '',
-            costoEnvio: 0.00,
-            direccionExacta: '',
 
             metodoPago: 'efectivo',
             descuentoManual: 0.00,
@@ -662,6 +951,186 @@
             emitirFactura: true,
             notasInternas: '',
             procesando: false,
+
+            seleccionarMetodoPago(metodo) {
+                this.metodoPago = metodo;
+                if (metodo === 'contra_entrega') {
+                    this.marcarPagado = false;
+                } else {
+                    this.marcarPagado = true;
+                }
+            },
+
+            // Métodos del modal de entrega
+            abrirModalEntrega(metodo) {
+                this.modalMetodoEntrega = metodo || this.tipoEntrega || 'retiro_local';
+                this.modalZonaEnvioId = this.zonaEnvioId;
+                this.modalDireccionExacta = this.direccionExacta;
+                this.modalSucursalId = this.courierSucursalId;
+
+                if (this.courierSucursalId) {
+                    const suc = this.courierSucursales.find(s => s.id == this.courierSucursalId);
+                    if (suc) {
+                        this.modalZonaCourier = suc.zona;
+                        this.modalCourier = suc.courier;
+                    }
+                } else {
+                    this.modalZonaCourier = this.modalZonaCourier || '';
+                    this.modalCourier = this.modalCourier || '';
+                }
+
+                this.modalEntrega = true;
+            },
+
+            cerrarModalEntrega() {
+                this.modalEntrega = false;
+            },
+
+            confirmarModalEntrega() {
+                this.tipoEntrega = this.modalMetodoEntrega;
+
+                if (this.tipoEntrega === 'retiro_local') {
+                    this.courierSucursalId = '';
+                    this.costoEnvio = 0.00;
+                } else if (this.tipoEntrega === 'delivery') {
+                    if (!this.modalZonaEnvioId) {
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast('Por favor selecciona una zona de Delivery.', 'warning');
+                        } else {
+                            alert('Por favor selecciona una zona de Delivery.');
+                        }
+                        return;
+                    }
+                    this.zonaEnvioId = this.modalZonaEnvioId;
+                    this.direccionExacta = this.modalDireccionExacta;
+                    this.courierSucursalId = '';
+                    this.recalcularEnvio();
+                } else if (this.tipoEntrega === 'retiro_courier') {
+                    if (!this.modalSucursalId) {
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast('Por favor selecciona una sucursal de Courier.', 'warning');
+                        } else {
+                            alert('Por favor selecciona una sucursal de Courier.');
+                        }
+                        return;
+                    }
+                    this.courierSucursalId = this.modalSucursalId;
+                    this.recalcularEnvio();
+                }
+
+                this.modalEntrega = false;
+            },
+
+            seleccionarMetodoEntrega(metodo) {
+                this.tipoEntrega = metodo;
+                if (metodo === 'retiro_courier' && !this.courierSucursalId) {
+                    this.abrirModalEntrega('retiro_courier');
+                } else if (metodo === 'delivery' && !this.zonaEnvioId) {
+                    this.abrirModalEntrega('delivery');
+                } else {
+                    this.recalcularEnvio();
+                }
+            },
+
+            alCambiarZonaDelivery() {
+                this.recalcularEnvio();
+            },
+
+            alCambiarZonaCourierModal() {
+                this.modalCourier = '';
+                this.modalSucursalId = '';
+            },
+
+            alCambiarCourierModal() {
+                this.modalSucursalId = '';
+            },
+
+            couriersDisponiblesEnModal() {
+                if (!this.modalZonaCourier) return [];
+                const unicos = new Set();
+                this.courierSucursales.forEach(s => {
+                    if (s.zona === this.modalZonaCourier) {
+                        unicos.add(s.courier);
+                    }
+                });
+                return Array.from(unicos);
+            },
+
+            sucursalesDisponiblesEnModal() {
+                if (!this.modalZonaCourier || !this.modalCourier) return [];
+                return this.courierSucursales.filter(s => s.zona === this.modalZonaCourier && s.courier === this.modalCourier);
+            },
+
+            obtenerZonaDeliverySeleccionada() {
+                if (!this.zonaEnvioId) return null;
+                return this.zonasEnvio.find(z => z.id == this.zonaEnvioId) || null;
+            },
+
+            obtenerSucursalCourierSeleccionada() {
+                if (!this.courierSucursalId) return null;
+                return this.courierSucursales.find(s => s.id == this.courierSucursalId) || null;
+            },
+
+            // Cálculo dinámico de peso acumulado en libras
+            calcularPesoTotalLibras() {
+                let pesoTotalKg = 0;
+                for (const item of this.items) {
+                    const p = this.productos.find(pr => pr.id === item.producto_id);
+                    const pesoUnitario = item.peso || (p ? p.peso : 0) || 0;
+                    pesoTotalKg += (pesoUnitario * item.cantidad);
+                }
+                return Math.ceil(pesoTotalKg * 2.20462);
+            },
+
+            // Recalcular tarifa de envío según método y peso de items
+            recalcularEnvio() {
+                if (this.tipoEntrega === 'retiro_local') {
+                    this.costoEnvio = 0.00;
+                    return;
+                }
+
+                const pesoLbs = this.calcularPesoTotalLibras();
+
+                if (this.tipoEntrega === 'delivery') {
+                    if (!this.zonaEnvioId) {
+                        this.costoEnvio = 0.00;
+                        return;
+                    }
+                    const z = this.zonasEnvio.find(item => item.id == this.zonaEnvioId);
+                    if (!z) {
+                        this.costoEnvio = 0.00;
+                        return;
+                    }
+                    const baseCosto = parseFloat(z.costo || 0);
+                    if (pesoLbs > 10) {
+                        const extra = (pesoLbs - 10) * 0.50;
+                        this.costoEnvio = parseFloat((baseCosto + extra).toFixed(2));
+                    } else {
+                        this.costoEnvio = parseFloat(baseCosto.toFixed(2));
+                    }
+                    return;
+                }
+
+                if (this.tipoEntrega === 'retiro_courier') {
+                    if (!this.courierSucursalId) {
+                        this.costoEnvio = 0.00;
+                        return;
+                    }
+                    const suc = this.courierSucursales.find(s => s.id == this.courierSucursalId);
+                    if (!suc) {
+                        this.costoEnvio = 0.00;
+                        return;
+                    }
+                    const baseCosto = parseFloat(suc.tarifa_uno_hasta_7lb || 0);
+                    if (pesoLbs > 7) {
+                        const extra = (pesoLbs - 7) * 0.50;
+                        this.costoEnvio = parseFloat((baseCosto + extra).toFixed(2));
+                    } else {
+                        this.costoEnvio = parseFloat(baseCosto.toFixed(2));
+                    }
+                    return;
+                }
+            },
 
             // Filtro de clientes (máximo 15 items DOM)
             clientesFiltrados() {
@@ -893,6 +1362,7 @@
                 let varianteNombre = null;
                 let precio = prod.precio;
                 let stock = prod.stock;
+                let peso = prod.peso || 0;
 
                 if (prod.variantes && prod.variantes.length > 0) {
                     if (!prod.varianteSeleccionadaId) {
@@ -909,6 +1379,7 @@
                     varianteNombre = v.nombre;
                     precio = v.precio;
                     stock = v.stock;
+                    peso = v.peso || prod.peso || 0;
                 }
 
                 if (stock <= 0) {
@@ -946,6 +1417,7 @@
                         nombre: prod.nombre,
                         variante_nombre: varianteNombre,
                         precio: precio,
+                        peso: peso,
                         cantidad: 1,
                         stock_disponible: stock,
                         imagen: prod.imagen
@@ -955,6 +1427,8 @@
                         window.mostrarToast(`"${nombreCompleto}" agregado a la venta`, 'success');
                     }
                 }
+
+                this.recalcularEnvio();
             },
 
             cambiarCantidad(item, delta) {
@@ -969,6 +1443,7 @@
                     return;
                 }
                 item.cantidad = nueva;
+                this.recalcularEnvio();
             },
 
             validarCantidad(item) {
@@ -983,6 +1458,7 @@
                         alert('Cantidad ajustada al stock disponible (' + item.stock_disponible + ').');
                     }
                 }
+                this.recalcularEnvio();
             },
 
             eliminarItem(index) {
@@ -992,15 +1468,11 @@
                     const nombre = eliminado.nombre + (eliminado.variante_nombre ? ' (' + eliminado.variante_nombre + ')' : '');
                     window.mostrarToast(`"${nombre}" removido de la venta`, 'info');
                 }
+                this.recalcularEnvio();
             },
 
             actualizarCostoZona() {
-                if (!this.zonaEnvioId) {
-                    this.costoEnvio = 0.00;
-                    return;
-                }
-                const z = this.zonasEnvio.find(item => item.id == this.zonaEnvioId);
-                this.costoEnvio = z ? parseFloat(z.tarifa_base) : 0.00;
+                this.recalcularEnvio();
             },
 
             calcularSubtotal() {
@@ -1043,6 +1515,28 @@
                     } else {
                         alert('Por favor selecciona o crea un cliente para la venta.');
                     }
+                    return;
+                }
+
+                if (this.tipoEntrega === 'delivery' && !this.zonaEnvioId) {
+                    e.preventDefault();
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Por favor selecciona una zona de Delivery.', 'warning');
+                    } else {
+                        alert('Por favor selecciona una zona de Delivery.');
+                    }
+                    this.abrirModalEntrega('delivery');
+                    return;
+                }
+
+                if (this.tipoEntrega === 'retiro_courier' && !this.courierSucursalId) {
+                    e.preventDefault();
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Por favor selecciona una sucursal de Courier.', 'warning');
+                    } else {
+                        alert('Por favor selecciona una sucursal de Courier.');
+                    }
+                    this.abrirModalEntrega('retiro_courier');
                     return;
                 }
 

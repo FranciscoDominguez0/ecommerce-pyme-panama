@@ -189,28 +189,10 @@ class InventarioService
                 'notas'                => $notas,
             ]);
 
-            // Notificar stock mínimo si aplica
+            // Notificar stock mínimo si aplica (en segundo plano)
             $stockMinimo = $producto->stock_minimo ?? 0;
             if ($stockAntes > $stockMinimo && $stockDespues <= $stockMinimo) {
-                $roles = ['super_admin'];
-                $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
-                $roles = array_unique(array_merge($roles, $rolesConfigurados));
-                
-                $usuariosNotificar = Usuario::role($roles)->get();
-                Notification::send($usuariosNotificar, new StockMinimoNotification($producto, $variante));
-
-                // Correos adicionales sin cuenta
-                if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
-                    $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
-                    if (!empty(trim($adicionales))) {
-                        $correos = array_map('trim', explode(',', $adicionales));
-                        foreach ($correos as $correo) {
-                            if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-                                Notification::route('mail', $correo)->notify(new StockMinimoNotification($producto, $variante));
-                            }
-                        }
-                    }
-                }
+                $this->notificarStockMinimo($producto, $variante);
             }
 
             return $movimiento;
@@ -261,28 +243,10 @@ class InventarioService
                 'notas'                => $notas,
             ]);
 
-            // Notificar stock mínimo si aplica (solo si disminuyó y cruzó el umbral)
+            // Notificar stock mínimo si aplica (solo si disminuyó y cruzó el umbral, en segundo plano)
             $stockMinimo = $producto->stock_minimo ?? 0;
             if ($stockAntes > $stockMinimo && $nuevoStock <= $stockMinimo) {
-                $roles = ['super_admin'];
-                $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
-                $roles = array_unique(array_merge($roles, $rolesConfigurados));
-                
-                $usuariosNotificar = Usuario::role($roles)->get();
-                Notification::send($usuariosNotificar, new StockMinimoNotification($producto, $variante));
-
-                // Correos adicionales sin cuenta
-                if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
-                    $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
-                    if (!empty(trim($adicionales))) {
-                        $correos = array_map('trim', explode(',', $adicionales));
-                        foreach ($correos as $correo) {
-                            if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-                                Notification::route('mail', $correo)->notify(new StockMinimoNotification($producto, $variante));
-                            }
-                        }
-                    }
-                }
+                $this->notificarStockMinimo($producto, $variante);
             }
 
             // Notificar a clientes en espera si el producto vuelve a tener stock
@@ -352,22 +316,46 @@ class InventarioService
         }
 
         $productoFresh->load(['imagenes', 'brand', 'categoria']);
-        $enviados = 0;
-
         foreach ($pendientes as $notificacion) {
-            try {
-                \Illuminate\Support\Facades\Mail::to($notificacion->email)->send(new \App\Mail\StockDisponibleMail($productoFresh));
-                $notificacion->update([
-                    'notificado' => true,
-                    'notificado_en' => now(),
-                ]);
-                $enviados++;
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error("Error enviando notificación de stock disponible a {$notificacion->email}: " . $e->getMessage());
-            }
+            CorreoService::enviarEnSegundoPlano(
+                $notificacion->email,
+                new \App\Mail\StockDisponibleMail($productoFresh),
+                "Stock disponible producto #{$productoFresh->id}"
+            );
+            $notificacion->update([
+                'notificado' => true,
+                'notificado_en' => now(),
+            ]);
         }
 
         return $enviados;
+    }
+
+    /**
+     * Notifica en segundo plano a los administradores y correos configurados cuando
+     * un producto o variante ha alcanzado el umbral de stock mínimo.
+     */
+    public function notificarStockMinimo(Producto $producto, ?VarianteProducto $variante = null): void
+    {
+        $roles = ['super_admin'];
+        $rolesConfigurados = json_decode(\App\Models\Configuracion::obtener('notificaciones.stock.email.roles', '[]'), true) ?? [];
+        $roles = array_unique(array_merge($roles, $rolesConfigurados));
+
+        $usuariosNotificar = Usuario::role($roles)->get();
+        if ($usuariosNotificar->isNotEmpty()) {
+            CorreoService::notificarEnSegundoPlano($usuariosNotificar, new StockMinimoNotification($producto, $variante), "Stock mínimo: {$producto->nombre}");
+        }
+
+        // Correos adicionales sin cuenta registrados en la configuración
+        if (\App\Models\Configuracion::obtenerBool('notificaciones.stock.email.activo', false)) {
+            $adicionales = \App\Models\Configuracion::obtener('notificaciones.stock.email.adicionales', '');
+            if (!empty(trim($adicionales))) {
+                $correos = array_map('trim', explode(',', $adicionales));
+                foreach ($correos as $correo) {
+                    CorreoService::notificarRutaMailEnSegundoPlano($correo, new StockMinimoNotification($producto, $variante), "Stock mínimo adicional: {$producto->nombre}");
+                }
+            }
+        }
     }
 
     // Obtiene y unifica productos y variantes con filtros aplicados para exportación

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Configuracion;
 use App\Models\Direccion;
 use App\Models\Pedido;
 use App\Models\ZonaEnvio;
@@ -69,30 +70,61 @@ class EnvioService
         return 0.00;
     }
     /**
-     * Calcula el peso total del carrito en libras.
+     * Calcula el peso total en libras a partir de un Carrito o una lista de items/productos.
+     *
+     * @param mixed $origen \App\Models\Carrito|iterable|null
+     * @return int
      */
-    public function calcularPesoTotalLibras(\App\Models\Carrito $carrito): int
+    public function calcularPesoTotalLibras(mixed $origen): int
     {
+        if (!$origen) {
+            return 0;
+        }
+
+        if ($origen instanceof \App\Models\Carrito) {
+            $items = $origen->items;
+        } elseif (is_iterable($origen)) {
+            $items = $origen;
+        } else {
+            return 0;
+        }
+
         $pesoTotalKg = 0;
-        foreach ($carrito->items as $item) {
-            $peso = $item->producto?->peso ?? 0;
-            $pesoTotalKg += ($peso * $item->cantidad);
+        foreach ($items as $item) {
+            $cantidad = is_array($item) ? ($item['cantidad'] ?? 1) : ($item->cantidad ?? 1);
+            $peso = 0;
+
+            if (is_array($item)) {
+                $peso = (float) ($item['peso'] ?? 0);
+                if ($peso <= 0 && !empty($item['producto_id'])) {
+                    $prod = \App\Models\Producto::find($item['producto_id']);
+                    $peso = (float) ($prod?->peso ?? 0);
+                }
+            } elseif (is_object($item)) {
+                $peso = (float) ($item->producto?->peso ?? $item->peso ?? 0);
+            }
+
+            $pesoTotalKg += ($peso * $cantidad);
         }
 
         return (int) ceil($pesoTotalKg * 2.20462);
     }
 
     /**
-     * Calcula el costo final de envío dependiendo de la zona y el peso del carrito.
+     * Calcula el costo final de envío delivery dependiendo de la zona y el peso del carrito o items.
+     *
+     * @param ZonaEnvio|null $zona
+     * @param mixed $origen Carrito, iterable de items o peso numérico en libras
+     * @return float
      */
-    public function calcularCostoEnvio(?ZonaEnvio $zona, \App\Models\Carrito $carrito): float
+    public function calcularCostoEnvio(?ZonaEnvio $zona, mixed $origen = null): float
     {
         if (!$zona || !$zona->activo) {
             return 0.00;
         }
 
         $baseCosto = (float) $zona->costo;
-        $pesoTotalLbs = $this->calcularPesoTotalLibras($carrito);
+        $pesoTotalLbs = is_numeric($origen) ? (int) ceil($origen) : $this->calcularPesoTotalLibras($origen);
 
         // Aplicar tarifa base hasta 10 libras, luego cobrar recargo por libra extra.
         // Se aplicará a todas las zonas de envío para que el cálculo sea global.
@@ -107,15 +139,21 @@ class EnvioService
         return $baseCosto;
     }
 
-    // Calcula la tarifa de sucursal de courier considerando peso y recargo por libra adicional
-    public function calcularCostoCourier(?\App\Models\CourierSucursal $sucursal, \App\Models\Carrito $carrito): float
+    /**
+     * Calcula la tarifa de sucursal de courier considerando peso y recargo por libra adicional.
+     *
+     * @param \App\Models\CourierSucursal|null $sucursal
+     * @param mixed $origen Carrito, iterable de items o peso numérico en libras
+     * @return float
+     */
+    public function calcularCostoCourier(?\App\Models\CourierSucursal $sucursal, mixed $origen = null): float
     {
         if (!$sucursal) {
             return 0.00;
         }
 
         $baseCosto = (float) $sucursal->tarifa_uno_hasta_7lb;
-        $pesoTotalLbs = $this->calcularPesoTotalLibras($carrito);
+        $pesoTotalLbs = is_numeric($origen) ? (int) ceil($origen) : $this->calcularPesoTotalLibras($origen);
 
         if ($pesoTotalLbs > 7) {
             $librasExtras = $pesoTotalLbs - 7;
@@ -126,19 +164,98 @@ class EnvioService
         return $baseCosto;
     }
 
-    // Resuelve el costo especial de envío según el método de entrega (retiro local, courier, etc.)
-    public function calcularCostoEspecial(string $metodoEntrega, ?int $courierSucursalId, \App\Models\Carrito $carrito): ?float
+    /**
+     * Resuelve el costo especial de envío según el método de entrega (retiro local, courier, etc.)
+     */
+    public function calcularCostoEspecial(string $metodoEntrega, ?int $courierSucursalId, mixed $origen = null): ?float
     {
-        if ($metodoEntrega === 'retiro_local') {
+        if ($metodoEntrega === 'retiro_local' || $metodoEntrega === 'tienda_fisica') {
             return 0.00;
         }
 
         if ($metodoEntrega === 'retiro_courier' && $courierSucursalId) {
             $sucursal = \App\Models\CourierSucursal::find($courierSucursalId);
-            return $this->calcularCostoCourier($sucursal, $carrito);
+            return $this->calcularCostoCourier($sucursal, $origen);
         }
 
         return null;
+    }
+
+    /**
+     * Obtiene los datos reales de la sucursal física configurada de la empresa para retiro en tienda.
+     */
+    public function obtenerDatosRetiroLocal(): array
+    {
+        $nombre = Configuracion::obtener('empresa.nombre', 'PyME Panamá');
+        $sucursalNombre = Configuracion::obtener('empresa.sucursal_nombre', 'Sucursal ' . $nombre . ' - San Francisco');
+        $direccion = Configuracion::obtener('empresa.direccion', 'Local Pyme Panamá, Planta Baja, Calle 67 Este, San Francisco, Ciudad de Panamá');
+        $horario = Configuracion::obtener('empresa.horario', 'Lunes a Sábado, 9:00 AM - 6:00 PM');
+        $telefono = Configuracion::obtener('empresa.telefono', '');
+
+        return [
+            'nombre' => $nombre,
+            'sucursal' => $sucursalNombre,
+            'direccion' => $direccion,
+            'horario' => $horario,
+            'telefono' => $telefono,
+        ];
+    }
+
+    /**
+     * Obtiene las zonas de envío autorizadas para Delivery urbano/metropolitano (las mismas de los usuarios: Panamá y Panamá Oeste).
+     */
+    public function obtenerZonasDelivery(): \Illuminate\Support\Collection
+    {
+        $zonas = ZonaEnvio::where('activo', true)
+            ->where(function ($q) {
+                $q->whereIn('nombre', ['Panamá', 'Panamá Oeste', 'Ciudad de Panamá'])
+                  ->orWhere('nombre', 'ilike', '%Panamá%');
+            })
+            ->orderBy('id', 'asc')
+            ->get();
+
+        if ($zonas->isEmpty()) {
+            return ZonaEnvio::where('activo', true)->orderBy('id', 'asc')->get();
+        }
+
+        return $zonas;
+    }
+
+    /**
+     * Obtiene el listado de zonas disponibles para Courier.
+     */
+    public function obtenerZonasCourier(): \Illuminate\Support\Collection
+    {
+        return \App\Models\CourierSucursal::where('activo', true)
+            ->select('zona')
+            ->distinct()
+            ->orderBy('zona')
+            ->pluck('zona');
+    }
+
+    /**
+     * Obtiene los couriers disponibles en una zona específica.
+     */
+    public function obtenerCouriersPorZona(string $zona): \Illuminate\Support\Collection
+    {
+        return \App\Models\CourierSucursal::where('zona', $zona)
+            ->where('activo', true)
+            ->select('courier')
+            ->distinct()
+            ->orderBy('courier')
+            ->pluck('courier');
+    }
+
+    /**
+     * Obtiene las sucursales disponibles de un courier en una zona.
+     */
+    public function obtenerSucursales(string $zona, string $courier): \Illuminate\Support\Collection
+    {
+        return \App\Models\CourierSucursal::where('zona', $zona)
+            ->where('courier', $courier)
+            ->where('activo', true)
+            ->orderBy('sucursal')
+            ->get();
     }
 
     /**

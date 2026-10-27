@@ -29,6 +29,8 @@ class ConfiguracionController extends Controller
             'direccion' => 'nullable|string',
             'telefono' => 'nullable|string|max:50',
             'correo_contacto' => 'nullable|email|max:150',
+            'horario' => 'nullable|string|max:150',
+            'sucursal_nombre' => 'nullable|string|max:150',
             'logo' => 'nullable|image|max:2048', // max 2MB
         ]);
 
@@ -37,6 +39,12 @@ class ConfiguracionController extends Controller
         Configuracion::guardar('empresa.direccion', $request->direccion, 'empresa', 'Dirección física de la empresa');
         Configuracion::guardar('empresa.telefono', $request->telefono, 'empresa', 'Teléfono de contacto');
         Configuracion::guardar('empresa.correo_contacto', $request->correo_contacto, 'empresa', 'Correo de contacto principal');
+        if ($request->filled('horario')) {
+            Configuracion::guardar('empresa.horario', $request->horario, 'empresa', 'Horario de atención de la sucursal');
+        }
+        if ($request->filled('sucursal_nombre')) {
+            Configuracion::guardar('empresa.sucursal_nombre', $request->sucursal_nombre, 'empresa', 'Nombre de la sucursal física');
+        }
 
         if ($request->hasFile('logo')) {
             $logoAnterior = Configuracion::obtener('empresa.logo_ruta');
