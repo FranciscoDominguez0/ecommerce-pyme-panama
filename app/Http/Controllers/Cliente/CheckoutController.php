@@ -245,7 +245,9 @@ class CheckoutController extends Controller
                 'sesion' => session()->all(),
             ];
 
+            $tInicioPago = microtime(true);
             $resultadoPago = $this->pagoService->procesar($metodoPago, $contextoPago);
+            $tDuracionPago = round(microtime(true) - $tInicioPago, 3);
             $pagoExitoso = $resultadoPago->exitoso;
         }
 
@@ -300,6 +302,7 @@ class CheckoutController extends Controller
                 ]);
             }
 
+            $tInicioPedido = microtime(true);
             $pedido = $this->pedidoService->crearDesdeCarrito(
                 $carrito, 
                 $direccionId, 
@@ -310,6 +313,7 @@ class CheckoutController extends Controller
                 $notasInternas,
                 $costoEnvioEspecial
             );
+            $tDuracionPedido = round(microtime(true) - $tInicioPedido, 3);
 
             if ($stripePiId) {
                 $pedido->update(['stripe_payment_intent_id' => $stripePiId]);
@@ -317,13 +321,18 @@ class CheckoutController extends Controller
 
             // Si el cobro de Stripe fue exitoso en tiempo real, confirmamos el pago de inmediato.
             // Esto genera la factura fiscal PDF y envía el correo con el comprobante al cliente automáticamente.
+            $tDuracionEstado = 0;
             if ($metodoPago === 'stripe' && $pagoExitoso) {
                 $tarjetaTexto = strtoupper(session('checkout_stripe_brand', 'Tarjeta'));
                 $last4Texto = session('checkout_stripe_last4');
                 $comentario = "Pago confirmado automáticamente con Stripe ({$tarjetaTexto}" . ($last4Texto ? " •••• {$last4Texto}" : "") . ").";
 
+                $tInicioEstado = microtime(true);
                 $this->pedidoService->cambiarEstado($pedido, 'pago_confirmado', $usuario->id, $comentario);
+                $tDuracionEstado = round(microtime(true) - $tInicioEstado, 3);
             }
+
+            \Illuminate\Support\Facades\Log::info("CHECKOUT_TIMING: pedido={$pedido->id}, metodo={$metodoPago}, duracion_pago={$tDuracionPago}s, duracion_crear_pedido={$tDuracionPedido}s, duracion_cambio_estado={$tDuracionEstado}s");
 
             // Calcular duración real del checkout
             $inicioCheckout = session('checkout_iniciado_en');

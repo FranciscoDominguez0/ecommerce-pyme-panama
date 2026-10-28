@@ -38,10 +38,10 @@ class FacturaController extends Controller
         }
 
         if ($request->filled('cliente')) {
-            $query->whereHas('usuario', function($q) use ($request) {
+            $query->whereHas('usuario', function ($q) use ($request) {
                 $q->where('nombre', 'like', '%' . $request->cliente . '%')
-                  ->orWhere('apellido', 'like', '%' . $request->cliente . '%')
-                  ->orWhere('email', 'like', '%' . $request->cliente . '%');
+                    ->orWhere('apellido', 'like', '%' . $request->cliente . '%')
+                    ->orWhere('email', 'like', '%' . $request->cliente . '%');
             });
         }
 
@@ -76,7 +76,7 @@ class FacturaController extends Controller
     public function verPdf(Factura $factura)
     {
         if (!$factura->pdf_ruta || !Storage::disk('local')->exists($factura->pdf_ruta)) {
-            app(\App\Services\FacturaService::class)->generarPdf($factura);
+            app(FacturaService::class)->generarPdf($factura);
             $factura->refresh();
         }
 
