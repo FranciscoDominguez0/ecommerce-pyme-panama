@@ -1,16 +1,16 @@
 <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
-<header id="admin-topbar" class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+<header id="admin-topbar" class="sticky top-0 z-40 w-full max-w-full h-14 sm:h-16 px-3.5 sm:px-8 bg-white/95 dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
     
     <!-- Izquierda: botón lateral y migas de pan adaptables -->
     <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
         <!-- Botón de menú hamburguesa (móvil) -->
         <button onclick="toggleSidebar()" class="md:hidden p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Abrir menú">
-            <span class="material-symbols-outlined text-[22px]">menu</span>
+            <span class="material-symbols-outlined text-[22px] w-[22px] h-[22px] overflow-hidden shrink-0 inline-flex items-center justify-center">menu</span>
         </button>
         
         <!-- Botón para alternar barra lateral en escritorio -->
         <button onclick="toggleDesktopSidebar()" class="hidden md:block p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Alternar menú lateral">
-            <span class="material-symbols-outlined text-[22px]" id="desktop-sidebar-icon">menu</span>
+            <span class="material-symbols-outlined text-[22px] w-[22px] h-[22px] overflow-hidden shrink-0 inline-flex items-center justify-center" id="desktop-sidebar-icon">menu</span>
         </button>
 
         <!-- Breadcrumbs de Navegación -->
@@ -22,7 +22,7 @@
         
         <!-- Buscador Global en TopBar -->
         <form id="top-search-form" action="{{ route('admin.productos.index') }}" method="GET" class="relative hidden sm:flex items-center w-56 md:w-72 lg:w-80 group">
-            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px] pointer-events-none">search</span>
+            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px] w-[18px] h-[18px] overflow-hidden shrink-0 inline-flex items-center justify-center pointer-events-none">search</span>
             <input type="text" 
                    name="buscar" 
                    placeholder="Buscar productos, SKU, marca..." 
@@ -33,7 +33,7 @@
                     onclick="window.ModalEscaner.abrir()"
                     title="Escanear Código de Barras"
                     class="absolute right-2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
-                <span class="material-symbols-outlined text-[16px]">barcode_scanner</span>
+                <span class="material-symbols-outlined text-[16px] w-4 h-4 overflow-hidden shrink-0 inline-flex items-center justify-center">barcode_scanner</span>
             </button>
         </form>
 
@@ -68,7 +68,7 @@
                     </span>
                 </div>
 
-                <span class="material-symbols-outlined text-[16px] text-slate-400 hidden sm:inline transition-transform duration-200"
+                <span class="material-symbols-outlined text-[16px] w-4 h-4 overflow-hidden shrink-0 inline-flex items-center justify-center text-slate-400 hidden sm:inline-flex transition-transform duration-200"
                       :class="open ? 'rotate-180' : ''">expand_more</span>
             </button>
 

@@ -128,7 +128,7 @@
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-xs text-slate-500 dark:text-slate-400">
-                                {{ $user->ultimo_login_en ? \Carbon\Carbon::parse($user->ultimo_login_en)->diffForHumans() : 'Nunca' }}
+                                {{ $user->ultimo_login_en ? \Carbon\Carbon::parse($user->ultimo_login_en)->locale('es')->diffForHumans() : 'Nunca' }}
                             </td>
                             <td class="py-3 px-4 text-right">
                                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

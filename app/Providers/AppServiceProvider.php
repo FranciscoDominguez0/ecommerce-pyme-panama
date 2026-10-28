@@ -21,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Idioma global para fechas relativas en español (ej. "hace 3 minutos" en vez de "3 minutes ago")
+        \Carbon\Carbon::setLocale(config('app.locale', 'es'));
+
         if ($this->app->runningInConsole()) {
             @set_time_limit(0);
             @ini_set('max_execution_time', '0');

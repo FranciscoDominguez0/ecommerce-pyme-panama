@@ -48,12 +48,37 @@
         })();
     </script>
 
-    {{-- Estilo crítico inline para pintar el fondo de inmediato sin esperar CSS externo --}}
+    {{-- Estilo crítico inline para pintar el fondo de inmediato y evitar saltos de layout (CLS / FOUT) --}}
     <style id="theme-preload-style">
+        html { scrollbar-gutter: stable; }
         html.dark, html.dark body { background-color: #181a1b !important; color-scheme: dark; }
         html.light, html.light body { background-color: #f8fafc !important; color-scheme: light; }
         @media (prefers-color-scheme: dark) {
             html:not(.light), html:not(.light) body { background-color: #181a1b !important; color-scheme: dark; }
+        }
+        /* Bloqueo estricto anti-FOUT para iconos: evita que el texto de la ligadura se desborde o mueva el layout */
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+            max-width: 1em;
+            max-height: 1em;
+            overflow: hidden;
+            vertical-align: middle;
+            white-space: nowrap;
+            letter-spacing: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            flex-shrink: 0;
+            user-select: none;
         }
     </style>
 
@@ -71,9 +96,9 @@
     <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/plus-jakarta-sans.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
     <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @include('layouts.partials.admin.styles')
 

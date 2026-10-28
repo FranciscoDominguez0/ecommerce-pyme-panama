@@ -108,8 +108,8 @@ class UsabilidadService
 
             $distribucion[$estrella] = $cantidad;
             $distribucionDetallada[$estrella] = [
-                'etiqueta'   => $etiquetas[$estrella],
-                'cantidad'   => $cantidad,
+                'etiqueta' => $etiquetas[$estrella],
+                'cantidad' => $cantidad,
                 'porcentaje' => $porcentaje,
             ];
         }
@@ -131,8 +131,8 @@ class UsabilidadService
         // 5. Eficiencia: Tiempo promedio y extremos de Checkout
         $evaluacionesConTiempo = $evaluaciones->whereNotNull('tiempo_checkout_segundos')->where('tiempo_checkout_segundos', '>', 0);
         $totalConTiempo = $evaluacionesConTiempo->count();
-        $tiempoPromedioCheckout = $totalConTiempo > 0 
-            ? round($evaluacionesConTiempo->avg('tiempo_checkout_segundos')) 
+        $tiempoPromedioCheckout = $totalConTiempo > 0
+            ? round($evaluacionesConTiempo->avg('tiempo_checkout_segundos'))
             : null;
         $tiempoMinCheckout = $totalConTiempo > 0 ? (int) $evaluacionesConTiempo->min('tiempo_checkout_segundos') : null;
         $tiempoMaxCheckout = $totalConTiempo > 0 ? (int) $evaluacionesConTiempo->max('tiempo_checkout_segundos') : null;
@@ -169,8 +169,8 @@ class UsabilidadService
         ];
 
         // 6. Métricas por Dispositivo (Mobile vs Desktop)
-        $evaluacionesMobile = $evaluaciones->filter(fn($e) => strtolower((string)$e->dispositivo) === 'mobile');
-        $evaluacionesDesktop = $evaluaciones->filter(fn($e) => strtolower((string)$e->dispositivo) !== 'mobile');
+        $evaluacionesMobile = $evaluaciones->filter(fn($e) => strtolower((string) $e->dispositivo) === 'mobile');
+        $evaluacionesDesktop = $evaluaciones->filter(fn($e) => strtolower((string) $e->dispositivo) !== 'mobile');
 
         $cantMobile = $evaluacionesMobile->count();
         $cantDesktop = $evaluacionesDesktop->count();

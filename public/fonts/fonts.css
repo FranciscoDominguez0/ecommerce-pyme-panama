@@ -23,13 +23,23 @@
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  max-width: 1em;
+  max-height: 1em;
+  overflow: hidden;
+  vertical-align: middle;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+  flex-shrink: 0;
+  user-select: none;
 }
 
 /* 2. Plus Jakarta Sans (Variable 300..800) */

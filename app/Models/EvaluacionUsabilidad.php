@@ -64,4 +64,19 @@ class EvaluacionUsabilidad extends Model
             default => 'Sin calificar',
         };
     }
+
+    /**
+     * Nombre en español del dispositivo utilizado (Móvil o Escritorio).
+     */
+    public function getNombreDispositivoAttribute(): string
+    {
+        $dispositivo = strtolower((string) $this->dispositivo);
+        if (in_array($dispositivo, ['mobile', 'móvil', 'movil'])) {
+            return 'Móvil';
+        }
+        if (in_array($dispositivo, ['desktop', 'escritorio'])) {
+            return 'Escritorio';
+        }
+        return ucfirst((string) $this->dispositivo) ?: 'No especificado';
+    }
 }

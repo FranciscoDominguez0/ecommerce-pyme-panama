@@ -345,7 +345,7 @@
 
                                 <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap shrink-0 flex items-center gap-1">
                                     <span class="material-symbols-outlined text-[14px]">schedule</span>
-                                    {{ $eval->creado_en->diffForHumans() }}
+                                    {{ $eval->creado_en->locale('es')->diffForHumans() }}
                                 </span>
                             </div>
 
@@ -382,8 +382,8 @@
 
                                 @if($eval->dispositivo)
                                     <span class="inline-flex items-center gap-1 text-[11px] text-slate-500 font-medium">
-                                        <span class="material-symbols-outlined text-[13px]">{{ strtolower($eval->dispositivo) === 'mobile' ? 'smartphone' : 'computer' }}</span>
-                                        {{ $eval->dispositivo }}
+                                        <span class="material-symbols-outlined text-[13px]">{{ in_array(strtolower($eval->dispositivo), ['mobile', 'móvil', 'movil']) ? 'smartphone' : 'computer' }}</span>
+                                        {{ $eval->nombre_dispositivo }}
                                     </span>
                                 @endif
                             </div>

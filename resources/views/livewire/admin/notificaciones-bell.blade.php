@@ -78,7 +78,7 @@
             class="relative p-1.5 rounded-lg transition-colors shrink-0 outline-none"
             :class="open ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800'"
             title="Notificaciones">
-        <span class="material-symbols-outlined text-[20px] transition-transform duration-200 inline-block" 
+        <span class="material-symbols-outlined text-[20px] w-5 h-5 overflow-hidden shrink-0 inline-flex items-center justify-center transition-transform duration-200" 
               :class="{ 'scale-110': open, 'animate-bell-ring text-emerald-500': repicando }">
             notifications
         </span>
@@ -153,7 +153,7 @@
                             </a>
                             <p class="text-[10px] font-medium text-slate-400 mt-1.5 flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[12px]">schedule</span>
-                                {{ $notificacion->created_at->diffForHumans() }}
+                                {{ $notificacion->created_at->locale('es')->diffForHumans() }}
                             </p>
                         </div>
 

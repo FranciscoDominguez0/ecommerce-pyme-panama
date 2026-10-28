@@ -1,6 +1,6 @@
 <nav class="flex items-center gap-1 sm:gap-1.5 text-xs text-slate-500 font-medium min-w-0 flex-nowrap overflow-hidden" aria-label="Breadcrumb">
     <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white dark:hover:text-slate-100 transition-colors shrink-0" title="Panel Principal">
-        <span class="material-symbols-outlined text-[17px] text-slate-400">home</span>
+        <span class="material-symbols-outlined text-[17px] w-[17px] h-[17px] overflow-hidden shrink-0 inline-flex items-center justify-center text-slate-400">home</span>
         <span class="hidden sm:inline">Panel</span>
     </a>
 
@@ -22,7 +22,7 @@
         @endphp
 
         @if($segment2)
-            <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
+            <span class="material-symbols-outlined text-[13px] w-[13px] h-[13px] overflow-hidden shrink-0 inline-flex items-center justify-center text-slate-300">chevron_right</span>
             @if($segment3 && $hasValidModuleRoute)
                 {{-- Si hay un segmento 3 (estamos dentro de una sub-página), el segmento 2 es un enlace navegable --}}
                 <a href="{{ route($moduleRouteName) }}" class="capitalize font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white dark:hover:text-slate-100 transition-colors truncate max-w-[90px] sm:max-w-none">
@@ -37,7 +37,7 @@
         @endif
 
         @if($segment3)
-            <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
+            <span class="material-symbols-outlined text-[13px] w-[13px] h-[13px] overflow-hidden shrink-0 inline-flex items-center justify-center text-slate-300">chevron_right</span>
             <span class="capitalize font-bold text-slate-900 dark:text-slate-100 truncate max-w-[120px] sm:max-w-none">
                 {{ is_numeric($segment3) ? 'Detalle #' . $segment3 : str_replace('-', ' ', $segment3) }}
             </span>
