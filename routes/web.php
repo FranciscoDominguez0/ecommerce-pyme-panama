@@ -197,6 +197,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('admin.productos.destroy');
     Route::post('/productos/{id}/imagenes/{imagenId}/portada', [ProductoController::class, 'hacerPortada'])->name('admin.productos.imagenes.portada');
     Route::post('/productos/{id}/imagenes/reordenar', [ProductoController::class, 'reordenarImagenes'])->name('admin.productos.imagenes.reordenar');
+    Route::post('/productos/{id}/especificaciones', [ProductoController::class, 'guardarEspecificaciones'])->name('admin.productos.especificaciones');
 
 
     // Módulo de Devoluciones
@@ -247,6 +248,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin|super_admin|Admin', \App
         Route::get('/{usuario}/editar', [\App\Http\Controllers\Admin\UsuarioController::class, 'edit'])->name('edit');
         Route::put('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'update'])->name('update');
         Route::delete('/{usuario}', [\App\Http\Controllers\Admin\UsuarioController::class, 'destroy'])->name('destroy');
+        Route::post('/{usuario}/enviar-restablecimiento', [\App\Http\Controllers\Admin\UsuarioController::class, 'enviarEnlaceRestablecimiento'])->name('enviar-restablecimiento');
         
         // Roles (Crear, Editar, Eliminar y Permisos)
         Route::post('/roles', [\App\Http\Controllers\Admin\RolController::class, 'store'])->name('roles.store');

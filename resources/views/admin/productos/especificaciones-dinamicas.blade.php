@@ -113,7 +113,7 @@
                 </div>
 
                 <!-- Body (Scrollable) -->
-                <div class="p-6 overflow-y-auto space-y-8 flex-1">
+                <div id="modal-especificaciones-body" class="p-6 overflow-y-auto space-y-8 flex-1 scroll-smooth">
                     
                     <!-- 1. ESPECIFICACIONES TÉCNICAS (ANIDADAS) -->
                     <div class="space-y-4">
@@ -125,17 +125,17 @@
                                 </h3>
                                 <p class="text-[11px] text-slate-500 dark:text-slate-400">Grupos de características como Modelo, Conectividad, Pantalla, etc.</p>
                             </div>
-                            <button type="button" @click="agregarGrupo()" class="btn-panama-outline text-xs px-2.5 py-1.5 flex items-center gap-1">
+                            <button type="button" @click="agregarGrupo()" class="btn-panama-outline text-xs px-2.5 py-1.5 flex items-center gap-1 cursor-pointer">
                                 <span class="material-symbols-outlined text-[16px]">add_circle</span> Añadir Grupo
                             </button>
                         </div>
                         
                         <div class="space-y-4">
                             <template x-for="(grupoItem, indexGrupo) in especificaciones" :key="indexGrupo">
-                                <div class="border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-2xs">
+                                <div class="card-grupo-especificacion border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-2xs transition-all">
                                     <!-- Cabecera del Grupo -->
                                     <div class="bg-slate-50 dark:bg-gray-800 p-3 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between gap-3">
-                                        <input type="text" x-model="grupoItem.grupo" placeholder="Nombre del Grupo (Ej: Modelo, Pantalla, Batería)" class="input-panama w-full sm:w-1/2 text-xs py-1.5 px-3 rounded-lg border-slate-300 dark:border-gray-600 font-bold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
+                                        <input type="text" x-model="grupoItem.grupo" placeholder="Nombre del Grupo (Ej: Modelo, Pantalla, Batería)" class="input-panama input-nombre-grupo w-full sm:w-1/2 text-xs py-1.5 px-3 rounded-lg border-slate-300 dark:border-gray-600 font-bold bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                         <div class="flex items-center gap-2 shrink-0">
                                             <button type="button" @click="agregarAtributo(indexGrupo)" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 flex items-center gap-0.5">
                                                 <span class="material-symbols-outlined text-[16px]">add</span> Añadir Atributo
@@ -150,7 +150,7 @@
                                     <div class="p-3 space-y-2 bg-white dark:bg-[#181a1b]">
                                         <template x-for="(attr, indexAttr) in grupoItem.atributos" :key="indexAttr">
                                             <div class="flex gap-2 items-center">
-                                                <input type="text" x-model="attr.clave" placeholder="Atributo (Ej: Resolución, Interfaz)" class="input-panama w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700 font-medium bg-slate-50 dark:bg-[#121415] text-slate-900 dark:text-white">
+                                                <input type="text" x-model="attr.clave" placeholder="Atributo (Ej: Resolución, Interfaz)" class="input-panama input-atributo-clave w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700 font-medium bg-slate-50 dark:bg-[#121415] text-slate-900 dark:text-white">
                                                 <input type="text" x-model="attr.valor" placeholder="Valor (Ej: 1920x1080, USB-C)" class="input-panama w-1/2 text-xs py-2 px-3 rounded-lg border-slate-200 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">
                                                 <button type="button" @click="eliminarAtributo(indexGrupo, indexAttr)" class="text-rose-400 hover:text-rose-600 p-1 rounded-md transition-colors" title="Eliminar Atributo">
                                                     <span class="material-symbols-outlined text-[18px]">close</span>
@@ -297,8 +297,16 @@
 
                 <!-- Pie de página -->
                 <div class="p-4 border-t border-slate-200 dark:border-gray-700 flex justify-end gap-2 bg-slate-50 dark:bg-gray-800">
-                    <button type="button" @click="abrirModal = false" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition-colors">
-                        Guardar y Cerrar
+                    <button type="button" @click="abrirModal = false" class="px-4 py-2 border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-gray-700 font-semibold rounded-xl text-sm transition-colors cursor-pointer">
+                        Cancelar
+                    </button>
+                    <button type="button" 
+                            @click="guardarYCerrar()" 
+                            :disabled="guardando"
+                            class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold rounded-xl text-sm transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50">
+                        <span x-show="guardando" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        <span class="material-symbols-outlined text-[18px]" x-show="!guardando">check</span>
+                        <span x-text="guardando ? 'Guardando...' : 'Guardar y Cerrar'">Guardar y Cerrar</span>
                     </button>
                 </div>
             </div>
@@ -307,17 +315,19 @@
 </div>
 
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('especificacionesLogistica', () => ({
-            abrirModal: false,
-            especificaciones: [],
-            
-            // Estado de fletes / dimensiones físicas
-            habilitarFisicas: {{ $habilitarFisicasInicial ? 'true' : 'false' }},
-            peso: '{{ $pesoActual }}',
-            dimension_largo: '{{ $largoActual }}',
-            dimension_ancho: '{{ $anchoActual }}',
-            dimension_alto: '{{ $altoActual }}',
+    function registrarEspecificacionesLogistica() {
+        if (typeof Alpine !== 'undefined' && typeof Alpine.data === 'function') {
+            Alpine.data('especificacionesLogistica', () => ({
+                abrirModal: false,
+                guardando: false,
+                especificaciones: [],
+                
+                // Estado de fletes / dimensiones físicas
+                habilitarFisicas: {{ $habilitarFisicasInicial ? 'true' : 'false' }},
+                peso: '{{ $pesoActual }}',
+                dimension_largo: '{{ $largoActual }}',
+                dimension_ancho: '{{ $anchoActual }}',
+                dimension_alto: '{{ $altoActual }}',
 
             // Estado de garantía
             habilitarGarantia: {{ $habilitarGarantiaInicial ? 'true' : 'false' }},
@@ -364,6 +374,22 @@
             // Acciones para grupos y atributos
             agregarGrupo() {
                 this.especificaciones.push({ grupo: '', atributos: [{ clave: '', valor: '' }] });
+                this.$nextTick(() => {
+                    const grupos = document.querySelectorAll('.card-grupo-especificacion');
+                    const ultimoGrupo = grupos[grupos.length - 1];
+                    if (ultimoGrupo) {
+                        ultimoGrupo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        const inputNombre = ultimoGrupo.querySelector('.input-nombre-grupo');
+                        if (inputNombre) {
+                            setTimeout(() => inputNombre.focus(), 200);
+                        }
+                    } else {
+                        const body = document.getElementById('modal-especificaciones-body');
+                        if (body) {
+                            body.scrollTo({ top: body.scrollHeight, behavior: 'smooth' });
+                        }
+                    }
+                });
             },
             eliminarGrupo(index) {
                 this.especificaciones.splice(index, 1);
@@ -373,6 +399,18 @@
                     this.especificaciones[indexGrupo].atributos = [];
                 }
                 this.especificaciones[indexGrupo].atributos.push({ clave: '', valor: '' });
+                this.$nextTick(() => {
+                    const grupos = document.querySelectorAll('.card-grupo-especificacion');
+                    const grupoTarget = grupos[indexGrupo];
+                    if (grupoTarget) {
+                        const inputs = grupoTarget.querySelectorAll('.input-atributo-clave');
+                        const ultimoInput = inputs[inputs.length - 1];
+                        if (ultimoInput) {
+                            ultimoInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            setTimeout(() => ultimoInput.focus(), 150);
+                        }
+                    }
+                });
             },
             eliminarAtributo(indexGrupo, indexAttr) {
                 this.especificaciones[indexGrupo].atributos.splice(indexAttr, 1);
@@ -420,7 +458,66 @@
                         contacto: this.defaultContacto
                     };
                 }
+            },
+
+            // Guardar cambios directamente en el producto y cerrar el modal con toast de éxito
+            guardarYCerrar() {
+                const productoId = {{ ($esEdicion ?? false) && isset($producto->id) ? (int)$producto->id : 'null' }};
+
+                if (productoId) {
+                    this.guardando = true;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+                    fetch(`/admin/productos/${productoId}/especificaciones`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            especificaciones: this.especificaciones,
+                            habilitar_fisicas: this.habilitarFisicas ? '1' : '0',
+                            peso: this.habilitarFisicas ? this.peso : '',
+                            dimension_largo: this.habilitarFisicas ? this.dimension_largo : '',
+                            dimension_ancho: this.habilitarFisicas ? this.dimension_ancho : '',
+                            dimension_alto: this.habilitarFisicas ? this.dimension_alto : '',
+                            garantia_info: this.habilitarGarantia && this.garantia_info && this.garantia_info.nombre ? this.garantia_info : null
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        this.guardando = false;
+                        if (data.success) {
+                            this.abrirModal = false;
+                            if (typeof window.mostrarToast === 'function') {
+                                window.mostrarToast(data.message || 'Especificaciones, fletes y garantía guardados correctamente.', 'success');
+                            }
+                        } else {
+                            if (typeof window.mostrarToast === 'function') {
+                                window.mostrarToast(data.message || 'Error al guardar especificaciones.', 'error');
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        this.guardando = false;
+                        if (typeof window.mostrarToast === 'function') {
+                            window.mostrarToast('Error de conexión al guardar especificaciones.', 'error');
+                        }
+                    });
+                } else {
+                    this.abrirModal = false;
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Especificaciones configuradas para el nuevo artículo.', 'success');
+                    }
+                }
             }
         }));
-    });
+    }
+}
+
+document.addEventListener('alpine:init', registrarEspecificacionesLogistica);
+if (typeof Alpine !== 'undefined') {
+    registrarEspecificacionesLogistica();
+}
 </script>

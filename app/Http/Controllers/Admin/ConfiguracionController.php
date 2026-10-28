@@ -68,10 +68,10 @@ class ConfiguracionController extends Controller
         $configuraciones = Configuracion::porGrupo('pagos')->pluck('valor', 'clave')->toArray();
         
         $metodos = [
-            'stripe' => ['nombre' => 'Tarjeta de crédito/débito', 'descripcion' => 'Procesado vía pasarela de pago (Stripe)', 'icono' => 'credit_card'],
-            'yappy' => ['nombre' => 'Yappy', 'descripcion' => 'Pagos directos vía Yappy', 'icono' => 'qr_code'],
-            'transferencia' => ['nombre' => 'Transferencia bancaria', 'descripcion' => 'ACH directo', 'icono' => 'account_balance'],
-            'contra_entrega' => ['nombre' => 'Pago contra entrega', 'descripcion' => 'Efectivo al recibir', 'icono' => 'payments'],
+            'stripe' => ['nombre' => 'Tarjeta de crédito/débito', 'descripcion' => 'Procesado vía pasarela de pago (Stripe)', 'icono' => 'credit_card', 'imagen' => 'images/stripe.webp'],
+            'yappy' => ['nombre' => 'Yappy', 'descripcion' => 'Pagos directos vía Yappy', 'icono' => 'qr_code', 'imagen' => 'images/pa-yappy.webp'],
+            'transferencia' => ['nombre' => 'Transferencia bancaria', 'descripcion' => 'ACH directo', 'icono' => 'account_balance', 'imagen' => 'images/ach.webp'],
+            'contra_entrega' => ['nombre' => 'Pago contra entrega', 'descripcion' => 'Efectivo al recibir', 'icono' => 'payments', 'imagen' => 'images/contra-entrega-pago.webp'],
         ];
 
         return view('admin.configuracion.pagos', compact('configuraciones', 'metodos'));

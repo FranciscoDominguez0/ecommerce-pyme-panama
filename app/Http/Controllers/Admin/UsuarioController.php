@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\Usuario;
 use App\Services\UsuarioService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -126,6 +128,23 @@ class UsuarioController extends Controller
 
         return redirect()->route('admin.usuarios.por-rol', $validados['rol_id'])
                          ->with('toast_success', 'Usuario actualizado correctamente.');
+    }
+
+    // Envía enlace de restablecimiento de contraseña al correo del usuario
+    public function enviarEnlaceRestablecimiento(Request $request, Usuario $usuario): RedirectResponse|JsonResponse
+    {
+        $this->usuarioService->enviarEnlaceRestablecimiento($usuario);
+
+        $mensaje = "Enlace de restablecimiento enviado a {$usuario->email}.";
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => $mensaje,
+            ]);
+        }
+
+        return back()->with('toast_success', $mensaje);
     }
 
     // Elimina un usuario con comprobaciones de seguridad

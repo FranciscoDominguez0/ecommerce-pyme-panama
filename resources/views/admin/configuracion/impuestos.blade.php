@@ -51,9 +51,11 @@
                         <h4 class="text-base font-semibold text-slate-900 dark:text-white">Impuesto General (ITBMS)</h4>
                     </div>
                     
-                    <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-4 mb-6 text-sm flex gap-3">
-                        <span class="material-symbols-outlined text-blue-500">info</span>
-                        <p><strong>Nota importante:</strong> Los cambios en la tasa de impuesto solo aplicarán a <strong>nuevas facturas</strong> generadas a partir de ahora. Las facturas ya emitidas mantendrán la tasa que tenían en el momento de su emisión.</p>
+                    <div class="bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-blue-900 dark:text-blue-200 rounded-xl p-4 mb-6 text-sm flex items-start gap-3.5 shadow-2xs">
+                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-xl shrink-0 mt-0.5 select-none">info</span>
+                        <p class="leading-relaxed">
+                            <strong class="font-semibold text-blue-950 dark:text-white">Nota importante:</strong> Los cambios en la tasa de impuesto solo aplicarán a <strong class="font-semibold text-blue-950 dark:text-white">nuevas facturas</strong> generadas a partir de ahora. Las facturas ya emitidas mantendrán la tasa que tenían en el momento de su emisión.
+                        </p>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
@@ -84,7 +86,7 @@
             
             <!-- Acciones al pie -->
             <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex justify-end gap-4 mt-auto rounded-b-xl">
-                <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:bg-gray-700 transition-colors border border-transparent">Cancelar</a>
+                <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:hover:bg-gray-800 transition-colors border border-transparent">Cancelar</a>
                 <button type="submit" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">Guardar cambios</button>
             </div>
         </form>

@@ -104,23 +104,43 @@
                 </div>
                 
                 @if($isEdit)
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Contraseña (Dejar en blanco para no cambiar)</label>
-                            <input name="password" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm text-slate-900 dark:text-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-shadow" placeholder="••••••••" type="password"/>
-                            @error('password') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <div class="p-4 sm:p-5 rounded-xl border border-emerald-100 dark:border-emerald-900/40 bg-gradient-to-r from-emerald-50/50 via-white to-emerald-50/20 dark:from-emerald-950/20 dark:via-transparent dark:to-transparent flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+                        <div class="flex items-start gap-3.5 min-w-0">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100/80 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/60 flex items-center justify-center shrink-0 shadow-2xs">
+                                <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">lock_reset</span>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Restablecer Contraseña</h3>
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white dark:bg-gray-800 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 shadow-2xs truncate">
+                                        <span class="material-symbols-outlined text-[13px] text-emerald-600">mail</span>
+                                        {{ $usuario->email }}
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                    Envía un enlace seguro al correo registrado para que el usuario defina o actualice su contraseña.
+                                </p>
+                            </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Confirmar Contraseña</label>
-                            <input name="password_confirmation" class="w-full bg-white dark:bg-[#121415] border border-slate-300 dark:border-gray-700 rounded-lg p-3 text-sm text-slate-900 dark:text-white focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-shadow" placeholder="••••••••" type="password"/>
-                        </div>
+                        <button type="button" 
+                                id="btn-enviar-restablecimiento"
+                                onclick="enviarEnlaceRestablecimiento(this)"
+                                class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-semibold text-xs tracking-wide shadow-sm hover:shadow transition-all shrink-0 cursor-pointer disabled:opacity-75 disabled:pointer-events-none group">
+                            <span class="spinner-icono hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                            <span class="normal-icono material-symbols-outlined text-[17px] group-hover:translate-x-0.5 transition-transform">send</span>
+                            <span class="btn-texto">Enviar Enlace</span>
+                        </button>
                     </div>
                 @else
-                    <div class="bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 p-4 rounded-lg flex items-start gap-3 border border-blue-200 dark:border-blue-800/30">
-                        <span class="material-symbols-outlined mt-0.5">mark_email_read</span>
-                        <div class="text-sm">
-                            <p class="font-bold mb-1">Configuración de Contraseña</p>
-                            <p>El usuario recibirá un correo electrónico con un enlace seguro para establecer su propia contraseña una vez creada la cuenta.</p>
+                    <div class="p-4 sm:p-5 rounded-xl border border-blue-100 dark:border-blue-900/40 bg-blue-50/40 dark:bg-blue-950/20 flex items-start gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">mark_email_read</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Configuración de Contraseña</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                El usuario recibirá un correo electrónico con un enlace seguro para establecer su propia contraseña una vez creada la cuenta.
+                            </p>
                         </div>
                     </div>
                 @endif
@@ -166,13 +186,18 @@
                         
                         <label class="block cursor-pointer relative" onclick="window.selectRole('{{ $r->id }}')">
                             <input class="peer sr-only" name="rol_id" type="radio" value="{{ $r->id }}" {{ $isSelected ? 'checked' : '' }}/>
-                            <div id="card-{{ $r->id }}" class="p-4 rounded-lg border {{ $isSelected ? 'border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 ' }} transition-colors flex gap-4 items-start">
-                                <div class="mt-0.5 {{ $r->icono_color }}">
-                                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">{{ $r->icono }}</span>
+                            <div id="card-{{ $r->id }}" class="p-4 rounded-xl border transition-all flex gap-3.5 items-start {{ $isSelected ? 'border-emerald-500 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/25 ring-2 ring-emerald-500/20 dark:ring-emerald-500/30 shadow-xs' : 'border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:border-slate-300 dark:hover:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-800/40' }}">
+                                <div class="mt-0.5 {{ $r->icono_color }} p-1.5 rounded-lg bg-slate-100 dark:bg-gray-800 shrink-0">
+                                    <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">{{ $r->icono }}</span>
                                 </div>
-                                <div>
-                                    <div class="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider">{{ $r->nombre ?: $r->name }}</div>
-                                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ $r->descripcion ?? 'Acceso al sistema.' }}</div>
+                                <div class="flex-1 min-w-0">
+                                    <div id="title-{{ $r->id }}" class="text-xs font-bold uppercase tracking-wider {{ $isSelected ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-900 dark:text-white' }}">{{ $r->nombre ?: $r->name }}</div>
+                                    <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">{{ $r->descripcion ?? 'Acceso al sistema.' }}</div>
+                                </div>
+                                <div class="shrink-0 pt-0.5">
+                                    <div id="check-{{ $r->id }}" class="w-5 h-5 rounded-full border flex items-center justify-center transition-all {{ $isSelected ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-slate-300 dark:border-gray-600 bg-transparent' }}">
+                                        <span class="material-symbols-outlined text-[13px] {{ $isSelected ? '' : 'hidden' }}">check</span>
+                                    </div>
                                 </div>
                             </div>
                         </label>
@@ -183,22 +208,111 @@
     </div>
 </form>
 
+@if($isEdit)
+    <!-- Formulario para enviar correo de restablecimiento de contraseña -->
+    <form id="form-enviar-restablecimiento" action="{{ route('admin.usuarios.enviar-restablecimiento', $usuario->id) }}" method="POST" class="hidden">
+        @csrf
+    </form>
+@endif
+
 <script>
     window.selectRole = function(roleId) {
         const rolesIds = @json($roles->pluck('id'));
 
+        const unselectedCardClass = "p-4 rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:border-slate-300 dark:hover:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-800/40 transition-all flex gap-3.5 items-start";
+        const selectedCardClass = "p-4 rounded-xl border border-emerald-500 dark:border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/25 ring-2 ring-emerald-500/20 dark:ring-emerald-500/30 shadow-xs transition-all flex gap-3.5 items-start";
+
         rolesIds.forEach(id => {
             const card = document.getElementById('card-' + id);
+            const check = document.getElementById('check-' + id);
+            const title = document.getElementById('title-' + id);
+
             if (card) {
-                card.className = "p-4 rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors flex gap-4 items-start";
+                card.className = unselectedCardClass;
+            }
+            if (check) {
+                check.className = "w-5 h-5 rounded-full border border-slate-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-all";
+                const icon = check.querySelector('.material-symbols-outlined');
+                if (icon) icon.classList.add('hidden');
+            }
+            if (title) {
+                title.className = "text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white";
             }
         });
 
         const activeCard = document.getElementById('card-' + roleId);
+        const activeCheck = document.getElementById('check-' + roleId);
+        const activeTitle = document.getElementById('title-' + roleId);
+
         if (activeCard) {
-            activeCard.className = "p-4 rounded-lg border border-slate-900 bg-slate-50 dark:bg-transparent ring-1 ring-slate-900 transition-colors flex gap-4 items-start";
+            activeCard.className = selectedCardClass;
+        }
+        if (activeCheck) {
+            activeCheck.className = "w-5 h-5 rounded-full border border-emerald-500 bg-emerald-500 text-white flex items-center justify-center transition-all";
+            const icon = activeCheck.querySelector('.material-symbols-outlined');
+            if (icon) icon.classList.remove('hidden');
+        }
+        if (activeTitle) {
+            activeTitle.className = "text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400";
         }
     };
+
+    @if($isEdit)
+    window.enviarEnlaceRestablecimiento = function(btn) {
+        if (!btn || btn.disabled) return;
+        
+        const originalHtml = btn.innerHTML;
+        const spinner = btn.querySelector('.spinner-icono');
+        const normalIcon = btn.querySelector('.normal-icono');
+        const texto = btn.querySelector('.btn-texto');
+        
+        // Estado de carga visual
+        btn.disabled = true;
+        if (spinner) spinner.classList.remove('hidden');
+        if (normalIcon) normalIcon.classList.add('hidden');
+        if (texto) texto.textContent = 'Enviando enlace...';
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') 
+            || document.querySelector('input[name="_token"]')?.value;
+
+        fetch('{{ route('admin.usuarios.enviar-restablecimiento', $usuario->id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (typeof window.mostrarToast === 'function') {
+                    window.mostrarToast(data.message, 'success');
+                }
+                if (texto) texto.textContent = '¡Enlace Enviado!';
+                if (spinner) spinner.classList.add('hidden');
+                if (normalIcon) {
+                    normalIcon.textContent = 'check_circle';
+                    normalIcon.classList.remove('hidden');
+                }
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }, 3500);
+            } else {
+                throw new Error(data.message || 'Error al enviar');
+            }
+        })
+        .catch(err => {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+            if (typeof window.mostrarToast === 'function') {
+                window.mostrarToast('Ocurrió un error al enviar el enlace. Intente nuevamente.', 'error');
+            }
+        });
+    };
+    @endif
 </script>
 @endsection
 

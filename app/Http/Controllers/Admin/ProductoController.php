@@ -217,6 +217,61 @@ class ProductoController extends Controller
         ]);
     }
 
+    // Guarda especificaciones técnicas, dimensiones de flete y garantía vía AJAX
+    public function guardarEspecificaciones(Request $request, int $id): JsonResponse
+    {
+        $producto = Producto::sinEliminar()->findOrFail($id);
+
+        $habilitarFisicas = $request->boolean('habilitar_fisicas') || $request->input('habilitar_fisicas') === '1';
+        $peso = $habilitarFisicas && is_numeric($request->peso) && (float)$request->peso > 0 ? (float)$request->peso : null;
+        $dimLargo = $habilitarFisicas && is_numeric($request->dimension_largo) && (float)$request->dimension_largo > 0 ? (float)$request->dimension_largo : null;
+        $dimAncho = $habilitarFisicas && is_numeric($request->dimension_ancho) && (float)$request->dimension_ancho > 0 ? (float)$request->dimension_ancho : null;
+        $dimAlto = $habilitarFisicas && is_numeric($request->dimension_alto) && (float)$request->dimension_alto > 0 ? (float)$request->dimension_alto : null;
+
+        $garantiaRaw = $request->input('garantia_info');
+        if (is_string($garantiaRaw)) {
+            $garantiaRaw = json_decode($garantiaRaw, true);
+        }
+        $garantiaInfo = null;
+        if (is_array($garantiaRaw) && !empty($garantiaRaw['nombre'])) {
+            $garantiaInfo = [
+                'nombre' => trim($garantiaRaw['nombre']),
+                'duracion' => trim($garantiaRaw['duracion'] ?? ''),
+                'contacto' => trim($garantiaRaw['contacto'] ?? ''),
+            ];
+        }
+
+        $especificaciones = $request->input('especificaciones');
+        if (is_string($especificaciones)) {
+            $especificaciones = json_decode($especificaciones, true);
+        }
+
+        $producto->update([
+            'especificaciones' => $especificaciones,
+            'peso' => $peso,
+            'dimension_largo' => $dimLargo,
+            'dimension_ancho' => $dimAncho,
+            'dimension_alto' => $dimAlto,
+            'garantia_info' => $garantiaInfo,
+        ]);
+
+        \App\Services\AuditoriaService::registrar(
+            'Productos',
+            'actualizar',
+            "Especificaciones y garantía de '{$producto->nombre}' actualizadas desde el configurador.",
+            null,
+            ['id' => $producto->id, 'especificaciones' => $especificaciones, 'garantia_info' => $garantiaInfo]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Especificaciones, fletes y garantía guardados correctamente.',
+            'especificaciones' => $especificaciones,
+            'garantia_info' => $garantiaInfo,
+            'peso' => $peso,
+        ]);
+    }
+
     private function validarPeticion(Request $request, ?int $id = null): void
     {
         $slugRule = $id ? "unique:productos,slug,{$id}" : "unique:productos,slug";

@@ -77,13 +77,13 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Stock Bajo / Crítico</p>
-                    <h3 class="text-2xl font-extrabold {{ $kpis['stockBajo'] > 0 ? 'text-red-600' : 'text-emerald-600' }} mt-1">{{ $kpis['stockBajo'] }}</h3>
+                    <h3 class="text-2xl font-extrabold {{ $kpis['stockBajo'] > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400' }} mt-1">{{ $kpis['stockBajo'] }}</h3>
                 </div>
-                <div class="w-10 h-10 rounded-xl {{ $kpis['stockBajo'] > 0 ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-600' }} flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl {{ $kpis['stockBajo'] > 0 ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400' : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400' }} flex items-center justify-center">
                     <span class="material-symbols-outlined text-[20px]">{{ $kpis['stockBajo'] > 0 ? 'warning' : 'check_circle' }}</span>
                 </div>
             </div>
-            <div class="mt-3 flex items-center gap-1.5 text-[11px] {{ $kpis['stockBajo'] > 0 ? 'text-red-500' : 'text-emerald-600' }} font-medium">
+            <div class="mt-3 flex items-center gap-1.5 text-[11px] {{ $kpis['stockBajo'] > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400' }} font-medium">
                 @if($kpis['stockBajo'] > 0)
                     <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse inline-block"></span>
                     <span>Requieren atención</span>
@@ -373,17 +373,26 @@
                                     </td>
                                     <td class="px-5 py-3.5 font-mono text-slate-500 dark:text-slate-400 text-[11px]">{{ $producto->sku ?? '—' }}</td>
                                     <td class="px-5 py-3.5 text-slate-400">—</td>
-                                    <td class="px-5 py-3.5">
-                                        <div class="flex items-center gap-2">
-                                            <span class="font-bold tabular-nums {{ $sinStock ? 'text-red-600' : ($stockBajo ? 'text-amber-600' : 'text-slate-800 dark:text-gray-100') }}">
+                                    <td class="px-5 py-3.5 whitespace-nowrap">
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-sm font-bold tabular-nums min-w-[32px] {{ $sinStock ? 'text-rose-600 dark:text-rose-400' : ($stockBajo ? 'text-amber-600 dark:text-amber-400' : 'text-slate-900 dark:text-white') }}">
                                                 {{ $producto->stock }}
                                             </span>
                                             @if($sinStock)
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">Sin Stock</span>
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-2xs">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400 shrink-0"></span>
+                                                    Sin Stock
+                                                </span>
                                             @elseif($stockBajo)
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">Stock Bajo</span>
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/60 shadow-2xs">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 shrink-0 animate-pulse"></span>
+                                                    Stock Bajo
+                                                </span>
                                             @else
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">Disponible</span>
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 shadow-2xs">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0"></span>
+                                                    Disponible
+                                                </span>
                                             @endif
                                         </div>
                                     </td>
@@ -427,17 +436,26 @@
                                         </td>
                                         <td class="px-5 py-3.5 font-mono text-slate-500 dark:text-slate-400 text-[11px]">{{ $variante->sku ?? '—' }}</td>
                                         <td class="px-5 py-3.5 text-slate-500 dark:text-slate-400 text-[11px]">{{ $labelV ?: '—' }}</td>
-                                        <td class="px-5 py-3.5">
-                                            <div class="flex items-center gap-2">
-                                                <span class="font-bold tabular-nums {{ $sinStockV ? 'text-red-600' : ($stockBajoV ? 'text-amber-600' : 'text-slate-800 dark:text-gray-100') }}">
+                                        <td class="px-5 py-3.5 whitespace-nowrap">
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-sm font-bold tabular-nums min-w-[32px] {{ $sinStockV ? 'text-rose-600 dark:text-rose-400' : ($stockBajoV ? 'text-amber-600 dark:text-amber-400' : 'text-slate-900 dark:text-white') }}">
                                                     {{ $variante->stock }}
                                                 </span>
                                                 @if($sinStockV)
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 text-red-600 uppercase tracking-wide">Sin Stock</span>
+                                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/80 dark:border-rose-900/60 shadow-2xs">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400 shrink-0"></span>
+                                                        Sin Stock
+                                                    </span>
                                                 @elseif($stockBajoV)
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 uppercase tracking-wide">Stock Bajo</span>
+                                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/80 dark:border-amber-900/60 shadow-2xs">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400 shrink-0 animate-pulse"></span>
+                                                        Stock Bajo
+                                                    </span>
                                                 @else
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 uppercase tracking-wide">Disponible</span>
+                                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/80 dark:border-emerald-900/60 shadow-2xs">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0"></span>
+                                                        Disponible
+                                                    </span>
                                                 @endif
                                             </div>
                                         </td>

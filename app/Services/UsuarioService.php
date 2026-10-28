@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -83,6 +84,49 @@ class UsuarioService
         );
 
         return $usuario;
+    }
+
+    // Envía correo de restablecimiento de contraseña para que el usuario defina su propia clave
+    public function enviarEnlaceRestablecimiento(Usuario $usuario): bool
+    {
+        $token = Str::random(64);
+
+        // Guardar o actualizar en la tabla password_reset_tokens
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $usuario->email],
+            [
+                'token' => Hash::make($token),
+                'created_at' => now(),
+            ]
+        );
+
+        $resetUrl = route('password.reset', [
+            'token' => $token,
+            'email' => $usuario->email,
+        ]);
+
+        $emailDestino = $usuario->email;
+        CorreoService::despacharEnSegundoPlano(function () use ($usuario, $token, $emailDestino, $resetUrl) {
+            Mail::send('emails.reset-password', [
+                'usuario' => $usuario,
+                'token' => $token,
+                'email' => $emailDestino,
+                'resetUrl' => $resetUrl,
+            ], function ($message) use ($emailDestino) {
+                $message->to($emailDestino)
+                        ->subject('Restablece tu contraseña - PayMe Panamá');
+            });
+        }, 'Restablecimiento de contraseña desde administración');
+
+        AuditoriaService::registrar(
+            'Usuarios',
+            'restablecer_clave',
+            "Se envió enlace de restablecimiento de contraseña a '{$usuario->nombre_completo}' ({$usuario->email}).",
+            null,
+            ['id' => $usuario->id, 'email' => $usuario->email]
+        );
+
+        return true;
     }
 
     // Elimina en cascada segura todas las relaciones dependientes y luego al usuario

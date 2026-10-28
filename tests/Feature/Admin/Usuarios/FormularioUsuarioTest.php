@@ -128,4 +128,42 @@ class FormularioUsuarioTest extends BaseAdminTest
             
         $this->assertEquals(1, $rolesCount);
     }
+
+    /**
+     * Verifica que la vista de edición no contenga los campos manuales de contraseña.
+     */
+    public function test_vista_editar_no_muestra_campos_manuales_de_contrasena(): void
+    {
+        $superAdmin = $this->crearSuperAdmin();
+        $usuario = $this->crearCliente();
+
+        $response = $this->actingAs($superAdmin)
+            ->get(route('admin.usuarios.edit', $usuario->id));
+
+        $response->assertOk();
+        $response->assertDontSee('Contraseña (Dejar en blanco para no cambiar)');
+        $response->assertDontSee('Confirmar Contraseña');
+        $response->assertSee('Restablecer Contraseña');
+        $response->assertSee('Enviar Enlace');
+    }
+
+    /**
+     * Verifica que el endpoint de envío de restablecimiento despache el correo y retorne toast_success.
+     */
+    public function test_puede_enviar_enlace_de_restablecimiento_por_correo(): void
+    {
+        $superAdmin = $this->crearSuperAdmin();
+        $usuario = $this->crearCliente();
+
+        $response = $this->actingAs($superAdmin)
+            ->post(route('admin.usuarios.enviar-restablecimiento', $usuario->id));
+
+        $response->assertRedirect();
+        $response->assertSessionHas('toast_success', "Enlace de restablecimiento enviado a {$usuario->email}.");
+
+        $this->assertDatabaseHas('password_reset_tokens', [
+            'email' => $usuario->email,
+        ]);
+    }
 }
+

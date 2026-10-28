@@ -48,14 +48,21 @@
                 @foreach($metodos as $clave => $metodo)
                 @php
                     $activo = isset($configuraciones["pagos.{$clave}.activo"]) && $configuraciones["pagos.{$clave}.activo"] === 'true';
+                    $imagenMetodo = $metodo['imagen'] ?? match($clave) {
+                        'stripe' => 'images/stripe.webp',
+                        'yappy' => 'images/pa-yappy.webp',
+                        'transferencia' => 'images/ach.webp',
+                        'contra_entrega' => 'images/contra-entrega-pago.webp',
+                        default => null,
+                    };
                 @endphp
-                <div class="flex items-center justify-between p-4 border border-slate-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group {{ !$activo ? 'opacity-75' : '' }}">
+                <div class="flex items-center justify-between p-4 border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-[#181a1b] hover:bg-slate-50 dark:hover:bg-gray-800/40 transition-colors group {{ !$activo ? 'opacity-75' : '' }}">
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-lg bg-slate-100 dark:bg-transparent flex items-center justify-center {{ $activo ? 'text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600' }} transition-colors p-1.5 overflow-hidden">
-                            @if($clave === 'yappy')
-                                <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy" class="w-full h-full object-contain {{ !$activo ? 'grayscale opacity-60' : '' }}">
+                        <div class="w-14 h-12 rounded-xl bg-white dark:bg-slate-100 border border-slate-200 dark:border-slate-300 flex items-center justify-center p-2 overflow-hidden shadow-2xs shrink-0 transition-all">
+                            @if($imagenMetodo)
+                                <img src="{{ asset($imagenMetodo) }}" alt="{{ $metodo['nombre'] }}" class="max-w-full max-h-full object-contain {{ !$activo ? 'grayscale opacity-50' : '' }}">
                             @else
-                                <span class="material-symbols-outlined">{{ $metodo['icono'] }}</span>
+                                <span class="material-symbols-outlined {{ $activo ? 'text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600' }}">{{ $metodo['icono'] }}</span>
                             @endif
                         </div>
                         <div>

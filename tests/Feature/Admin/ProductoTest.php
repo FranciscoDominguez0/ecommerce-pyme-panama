@@ -532,4 +532,41 @@ class ProductoTest extends BaseAdminTest
             ->delete('/admin/productos/999999')
             ->assertNotFound();
     }
+
+    public function test_puede_guardar_especificaciones_y_garantia_via_ajax(): void
+    {
+        $admin = $this->crearAdmin();
+        $producto = Producto::factory()->create();
+
+        $payload = [
+            'especificaciones' => [
+                ['grupo' => 'Rendimiento', 'atributos' => [['clave' => 'Procesador', 'valor' => 'Octa-core']]]
+            ],
+            'habilitar_fisicas' => '1',
+            'peso' => '1.45',
+            'dimension_largo' => '30.0',
+            'dimension_ancho' => '20.0',
+            'dimension_alto' => '2.5',
+            'garantia_info' => [
+                'nombre' => 'Garantía Oficial del Fabricante',
+                'duracion' => '1 Año',
+                'contacto' => 'soporte@marca.com'
+            ]
+        ];
+
+        $respuesta = $this->actingAs($admin)
+            ->postJson("/admin/productos/{$producto->id}/especificaciones", $payload);
+
+        $respuesta->assertOk()
+            ->assertJson([
+                'success' => true,
+                'message' => 'Especificaciones, fletes y garantía guardados correctamente.',
+            ]);
+
+        $producto->refresh();
+        $this->assertEquals(1.45, (float)$producto->peso);
+        $this->assertEquals('Garantía Oficial del Fabricante', $producto->garantia_info['nombre']);
+        $this->assertCount(1, $producto->especificaciones);
+        $this->assertEquals('Rendimiento', $producto->especificaciones[0]['grupo']);
+    }
 }
