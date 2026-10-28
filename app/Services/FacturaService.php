@@ -45,8 +45,11 @@ class FacturaService
                 'emitida_en' => now(),
             ]);
 
-            // Compilar y almacenar el archivo PDF de la factura
-            $this->generarPdf($factura);
+            // Despachar la compilación del PDF a la cola en segundo plano
+            \App\Jobs\GenerarFacturaPdfJob::dispatch($factura);
+            if (config('queue.default') === 'sync' || app()->runningUnitTests()) {
+                $factura->refresh();
+            }
 
 
             // Envío del correo en segundo plano
