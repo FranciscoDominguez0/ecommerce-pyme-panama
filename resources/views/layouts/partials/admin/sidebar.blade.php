@@ -304,6 +304,10 @@
         </nav>
     </div>
 
+    @php
+        $adminCurrentTheme = $serverTheme ?? ($_COOKIE['admin_theme'] ?? request()->cookie('admin_theme', ''));
+        $isAdminDark = ($adminCurrentTheme === 'dark');
+    @endphp
     <!-- Pie del Panel Lateral (Perfil y Tema) -->
     <div class="sidebar-footer px-4 py-4 bg-black/20 flex justify-between items-center transition-all duration-300">
         <div class="sidebar-version text-[10px] font-medium text-slate-500 tracking-wider cursor-default select-none transition-all duration-300">
@@ -313,9 +317,9 @@
                 class="relative inline-flex h-8 w-16 items-center rounded-full bg-slate-900 border border-slate-700 shadow-inner focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:ring-offset-1 focus:ring-offset-slate-800">
             <span class="sr-only">Toggle Dark Mode</span>
             <span id="theme-toggle-thumb" 
-                  class="inline-flex h-6 w-6 transform items-center justify-center rounded-full bg-white translate-x-1 shadow-sm">
-                <span id="theme-toggle-light-icon" class="material-symbols-outlined text-[14px] text-amber-500" style="font-variation-settings: 'FILL' 1;">light_mode</span>
-                <span id="theme-toggle-dark-icon" class="material-symbols-outlined text-[14px] text-slate-800 absolute opacity-0" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
+                  class="inline-flex h-6 w-6 transform items-center justify-center rounded-full shadow-sm {{ $isAdminDark ? 'translate-x-9 bg-slate-800' : 'translate-x-1 bg-white' }}">
+                <span id="theme-toggle-light-icon" class="material-symbols-outlined text-[14px] text-amber-500 absolute {{ $isAdminDark ? 'opacity-0' : 'opacity-100' }}" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+                <span id="theme-toggle-dark-icon" class="material-symbols-outlined text-[14px] text-white absolute {{ $isAdminDark ? 'opacity-100' : 'opacity-0' }}" style="font-variation-settings: 'FILL' 1;">dark_mode</span>
             </span>
         </button>
     </div>

@@ -142,8 +142,8 @@
 </div>
 
 <!-- MODAL: CREAR / EDITAR REGLA DE ENVÍO GRATIS -->
-<div id="modal-envio-gratis" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity">
-    <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700 shadow-2xl max-w-md w-full p-6 space-y-4">
+<div id="modal-envio-gratis" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-xs transition-opacity" onclick="if(event.target === this) cerrarModalEnvioGratis()">
+    <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700 shadow-2xl max-w-md w-full p-6 space-y-4 relative z-10" onclick="event.stopPropagation()">
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-3">
             <h3 id="modal-title-envio" class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="material-symbols-outlined text-emerald-600 text-[20px]">local_shipping</span>
@@ -211,6 +211,9 @@
         const modal = document.getElementById('modal-envio-gratis');
         const form = document.getElementById('form-envio-gratis');
         if (!modal || !form) return;
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
         modal.classList.remove('hidden');
         modal.classList.add('flex');
         document.getElementById('modal-title-envio').textContent = 'Nueva Regla de Envío Gratis';

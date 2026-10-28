@@ -1,5 +1,5 @@
 <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
-<header class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+<header id="admin-topbar" class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
     
     <!-- Left: Toggle & Responsive Breadcrumbs -->
     <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">

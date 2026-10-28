@@ -102,10 +102,42 @@
     // --------------------------------------------------------
     // Interceptor Global de Navegación (Transición Suave)
     // --------------------------------------------------------
+    window.startNavProgressBar = function() {
+        const bar = document.getElementById('top-progress-bar');
+        if (bar) {
+            bar.style.transition = 'none';
+            bar.style.width = '0%';
+            bar.style.opacity = '1';
+            requestAnimationFrame(() => {
+                bar.style.transition = 'width 0.35s cubic-bezier(0.1, 0.6, 0.2, 1), opacity 0.2s ease';
+                bar.style.width = '70%';
+            });
+        }
+        const content = document.getElementById('actual-page-content');
+        if (content) {
+            content.style.transition = 'opacity 0.15s ease';
+            content.style.opacity = '0.85';
+        }
+    };
+
     window.cleanupTransition = function() {
         document.body.classList.remove('navigating');
+        const bar = document.getElementById('top-progress-bar');
+        if (bar) {
+            bar.style.transition = 'width 0.15s ease-out, opacity 0.15s ease-out 0.1s';
+            bar.style.width = '100%';
+            setTimeout(() => {
+                bar.style.opacity = '0';
+                setTimeout(() => {
+                    bar.style.width = '0%';
+                    bar.style.transition = 'none';
+                }, 200);
+            }, 120);
+        }
         const actualContent = document.getElementById('actual-page-content');
         if (actualContent) {
+            actualContent.style.opacity = '1';
+            actualContent.style.transition = '';
             actualContent.classList.remove('page-transitioning');
             setTimeout(() => {
                 actualContent.classList.remove('animate-fade-in-up');
@@ -165,14 +197,10 @@
 
     window.toggleThemeHandler = function() {
         const toggleBtn = document.getElementById('theme-toggle');
-        const thumb = document.getElementById('theme-toggle-thumb');
-        const darkIcon = document.getElementById('theme-toggle-dark-icon');
-        const lightIcon = document.getElementById('theme-toggle-light-icon');
-
-        if (toggleBtn) toggleBtn.classList.add('transition-colors', 'duration-300');
-        if (thumb) thumb.classList.add('transition-transform', 'duration-300');
-        if (darkIcon) darkIcon.classList.add('transition-opacity', 'duration-300');
-        if (lightIcon) lightIcon.classList.add('transition-opacity', 'duration-300');
+        if (toggleBtn) {
+            toggleBtn.classList.add('theme-animating');
+            setTimeout(() => toggleBtn.classList.remove('theme-animating'), 300);
+        }
 
         if (document.documentElement.classList.contains('dark')) {
             document.documentElement.classList.remove('dark');
@@ -200,10 +228,26 @@
         }
 
         function bindSidebarNavLinks() {
-            const sidebarLinks = document.querySelectorAll('#admin-sidebar nav a, a.nav-transition');
+            const sidebarLinks = document.querySelectorAll('#admin-sidebar nav a, #admin-topbar a, a.nav-transition');
             sidebarLinks.forEach(link => {
                 if (!link.dataset.navBound) {
                     link.dataset.navBound = 'true';
+                    link.addEventListener('click', (e) => {
+                        const href = link.getAttribute('href');
+                        // Ignorar clicks con modificadores (Ctrl/Cmd/Shift), anclas o URLs externas
+                        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || link.target === '_blank') return;
+                        if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+                        
+                        // Solo para navegación interna en el mismo origen
+                        try {
+                            const url = new URL(href, window.location.origin);
+                            if (url.origin === window.location.origin && url.pathname !== window.location.pathname) {
+                                window.startNavProgressBar();
+                            }
+                        } catch (err) {
+                            // Ignorar si no es una URL válida
+                        }
+                    });
                 }
             });
         }
@@ -232,6 +276,7 @@
                     document.documentElement.classList.remove('dark');
                     document.documentElement.classList.add('light');
                 }
+                window.updateThemeToggleUI();
             }
 
             document.addEventListener('livewire:navigating', enforceActiveTheme);

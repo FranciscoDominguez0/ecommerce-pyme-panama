@@ -597,9 +597,9 @@ php artisan storage:link
 | **Pasarelas de pago** | Stripe y Yappy son simulaciones puras. Integra los SDKs reales antes de ir a produccion. |
 | **Roles y permisos** | Nunca uses IDs numericos de roles. Usa siempre `assignRole('cliente')` o `hasRole('super_admin')`. Los IDs no son estables entre entornos. |
 
-### Despliegue con Docker (opcional)
+### Despliegue con Docker
 
-El proyecto incluye `Dockerfile` y `compose.yaml` (PostgreSQL 16 + PHP-FPM + Nginx):
+El proyecto incluye `Dockerfile` y `compose.yaml` (PostgreSQL 16 + PHP-FPM + Nginx + Supervisor):
 
 ```bash
 # 1. Copiar el archivo de entorno Docker
@@ -609,6 +609,31 @@ cp .env.docker .env
 
 # 3. Construir y levantar los contenedores
 docker compose up --build -d
+
+# 4. Verificar el estado de los servicios internos (Supervisor)
+docker compose exec app supervisorctl status
+```
+
+#### Procesos administrados por Supervisor dentro del contenedor `app`:
+
+| Proceso | Función |
+|---|---|
+| **`nginx`** | Servidor web interno que recibe las peticiones HTTP/HTTPS, despacha assets estáticos optimizados y redirige las solicitudes dinámicas a PHP-FPM. |
+| **`php-fpm`** | Administrador de procesos FastCGI que compila y ejecuta el código PHP de Laravel (controladores, vistas Blade, Livewire, consultas a PostgreSQL). |
+| **`queue-worker`** | Ejecuta `php artisan queue:work` en segundo plano para procesar tareas asíncronas de la base de datos (envío de correos, códigos 2FA, generación de facturas en PDF). |
+| **`reverb`** | Servidor WebSocket nativo de Laravel (`php artisan reverb:start`) en el puerto 6001 para eventos y notificaciones en tiempo real en la tienda y panel. |
+
+#### Comandos útiles de Supervisor:
+
+```bash
+# Ver estado de los 4 procesos
+docker compose exec app supervisorctl status
+
+# Reiniciar solo el worker de colas (después de desplegar cambios en jobs o correos)
+docker compose exec app supervisorctl restart queue-worker
+
+# Reiniciar todos los servicios dentro de app sin tocar la base de datos
+docker compose exec app supervisorctl restart all
 ```
 
 ---

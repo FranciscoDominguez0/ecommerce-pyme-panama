@@ -479,38 +479,44 @@
     </div>
 
     <!-- Modal Rechazar Pago -->
-    <div id="modal-rechazar" class="fixed inset-0 z-[100] hidden overflow-y-auto font-sans" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="document.getElementById('modal-rechazar').classList.add('hidden')"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white dark:bg-[#181a1b] rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <form action="{{ route('admin.pedidos.rechazar-pago', $pedido->id) }}" method="POST">
-                    @csrf
-                    <div class="bg-white dark:bg-[#181a1b] px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                                <span class="material-symbols-outlined text-red-600">warning</span>
-                            </div>
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Rechazar Pago</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500">¿Estás seguro que deseas rechazar el pago? Por favor, ingresa el motivo para que el cliente lo sepa.</p>
-                                    <textarea name="comentario" rows="3" required class="mt-3 shadow-sm focus:ring-red-500 focus:border-red-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md font-sans" placeholder="Motivo del rechazo..."></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse" x-data="{ sub: false }" @submit="sub = true">
-                        <button type="submit" :disabled="sub" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm font-sans disabled:opacity-75 disabled:cursor-wait">
-                            <span class="material-symbols-outlined mr-1.5 animate-spin text-[18px]" x-show="sub" style="display: none;">progress_activity</span>
-                            <span x-text="sub ? 'Rechazando...' : 'Rechazar Pago'">Rechazar Pago</span>
-                        </button>
-                        <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-[#181a1b] text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm font-sans">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
+    <div id="modal-rechazar" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-xs transition-opacity font-sans" onclick="if(event.target === this) this.classList.add('hidden')" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="relative bg-white dark:bg-[#181a1b] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full p-6 border border-slate-200 dark:border-gray-700 z-10" onclick="event.stopPropagation()">
+            <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-[20px] block">close</span>
+            </button>
+
+            <form action="{{ route('admin.pedidos.rechazar-pago', $pedido->id) }}" method="POST" x-data="{ sub: false }" @submit="sub = true">
+                @csrf
+                <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400 mx-auto shadow-2xs mb-3">
+                    <span class="material-symbols-outlined text-[26px]">warning</span>
+                </div>
+
+                <div class="text-center space-y-1 mb-5">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white" id="modal-title">
+                        Rechazar Pago del Pedido
+                    </h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
+                        ¿Estás seguro que deseas rechazar este pago? Por favor indica el motivo para que el cliente sea notificado.
+                    </p>
+                </div>
+
+                <div class="mb-5">
+                    <label for="comentario_rechazo" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Motivo del Rechazo <span class="text-red-500">*</span>
+                    </label>
+                    <textarea id="comentario_rechazo" name="comentario" rows="3" required class="block w-full rounded-xl border border-slate-300 dark:border-gray-700 bg-white dark:bg-[#121415] text-slate-900 dark:text-white shadow-xs focus:border-rose-500 focus:ring-rose-500 sm:text-xs font-sans placeholder-slate-400 p-3 outline-none" placeholder="Ingresa una justificación clara..."></textarea>
+                </div>
+
+                <div class="flex items-center gap-3 pt-2 border-t border-slate-100 dark:border-gray-700">
+                    <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="flex-1 py-2.5 px-4 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded-xl transition-all cursor-pointer text-center">
+                        Cancelar
+                    </button>
+                    <button type="submit" :disabled="sub" class="flex-1 py-2.5 px-4 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 active:bg-rose-800 rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-75 disabled:cursor-wait">
+                        <span class="material-symbols-outlined text-[16px]" :class="sub ? 'animate-spin' : ''" x-text="sub ? 'progress_activity' : 'cancel'">cancel</span>
+                        <span x-text="sub ? 'Rechazando...' : 'Confirmar Rechazo'">Confirmar Rechazo</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -120,30 +120,57 @@
         }
     }
     
-    /* Barra de progreso de navegación superior */
+    /* Barra de progreso de navegación superior (feedback instantáneo) */
     #top-progress-bar {
         position: fixed;
         top: 0;
         left: 0;
-        height: 3px;
-        background: #10B981;
+        height: 2.5px;
+        background: linear-gradient(90deg, #059669, #10B981, #34D399);
         z-index: 99999;
         width: 0%;
         opacity: 0;
         pointer-events: none;
-        box-shadow: 0 0 10px #10B981, 0 0 4px #10B981;
-    }
-    
-    .navigating #top-progress-bar {
-        opacity: 1;
-        width: 75%;
-        transition: width 15s cubic-bezier(0.1, 0.05, 0, 1);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), 0 0 4px #10B981;
+        transition: width 0.25s ease-out, opacity 0.2s ease;
     }
 
-    /* Animaciones Suaves de Página */
-    /* Transición instantánea sin parpadeo */
-    .page-transitioning {
-        pointer-events: none;
+    /* ── View Transitions API (Navegación nativa ultra suave estilo SPA) ── */
+    @view-transition {
+        navigation: auto;
+    }
+    #admin-sidebar {
+        view-transition-name: admin-sidebar;
+    }
+    #admin-topbar {
+        view-transition-name: admin-topbar;
+    }
+    ::view-transition-old(admin-sidebar),
+    ::view-transition-new(admin-sidebar),
+    ::view-transition-old(admin-topbar),
+    ::view-transition-new(admin-topbar) {
+        animation: none !important;
+        mix-blend-mode: normal;
+    }
+    ::view-transition-old(root) {
+        animation: 90ms cubic-bezier(0.4, 0, 1, 1) both adminFadeOut;
+    }
+    ::view-transition-new(root) {
+        animation: 180ms cubic-bezier(0, 0, 0.2, 1) both adminFadeIn;
+    }
+    @keyframes adminFadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    @keyframes adminFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* ── Modales y Overlays Administrativos por encima de Sidebar y Topbar ── */
+    [id^="modal-"]:not(.hidden),
+    .admin-modal-backdrop {
+        z-index: 9999 !important;
     }
 
     /* Seamless Active Sidebar Item */
@@ -432,8 +459,40 @@
         justify-content: center;
         gap: 0;
     }
-    html.sidebar-collapsed #admin-sidebar .brand-logo-container { margin: 0 auto; }
     html.sidebar-collapsed #admin-sidebar #theme-toggle { transform: scale(0.85); margin: 0 auto; }
+    
+    /* ── Anti-flicker CSS para el switch de tema en el sidebar ── */
+    html.dark #theme-toggle-thumb {
+        transform: translateX(2.25rem) !important;
+        background-color: #1e293b !important;
+    }
+    html.dark #theme-toggle-light-icon {
+        opacity: 0 !important;
+    }
+    html.dark #theme-toggle-dark-icon {
+        opacity: 1 !important;
+        color: #ffffff !important;
+    }
+
+    html:not(.dark) #theme-toggle-thumb {
+        transform: translateX(0.25rem) !important;
+        background-color: #ffffff !important;
+    }
+    html:not(.dark) #theme-toggle-light-icon {
+        opacity: 1 !important;
+    }
+    html:not(.dark) #theme-toggle-dark-icon {
+        opacity: 0 !important;
+    }
+
+    /* Transición suave solo cuando el usuario hace clic activo */
+    #theme-toggle.theme-animating #theme-toggle-thumb {
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease !important;
+    }
+    #theme-toggle.theme-animating #theme-toggle-light-icon,
+    #theme-toggle.theme-animating #theme-toggle-dark-icon {
+        transition: opacity 0.2s ease !important;
+    }
     
     /* Ítem activo en modo colapsado */
     html.sidebar-collapsed #admin-sidebar nav > div > a.sidebar-active-item,

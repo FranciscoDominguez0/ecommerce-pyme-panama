@@ -146,66 +146,111 @@
                         </div>
                     </div>
 
-                    <!-- Listado de catálogo paginado -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        <template x-for="prod in productosPaginados()" :key="prod.id">
-                            <div class="p-3 rounded-xl border border-slate-200 dark:border-gray-700/70 hover:border-emerald-500 dark:hover:border-emerald-500/60 bg-slate-50/50 dark:bg-gray-800/40 transition-all flex flex-col justify-between group">
-                                <div class="flex items-start gap-2.5">
-                                    <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 overflow-hidden shrink-0 flex items-center justify-center">
-                                        <template x-if="prod.imagen">
-                                            <img :src="prod.imagen" :alt="prod.nombre" class="w-full h-full object-cover">
-                                        </template>
-                                        <template x-if="!prod.imagen">
-                                            <span class="material-symbols-outlined text-slate-400 text-xl">image</span>
-                                        </template>
+                    <!-- Listado de catálogo paginado con animación y skeletons suaves 100% estático -->
+                    <div class="relative grid grid-cols-1 min-h-[925px]">
+                        <!-- Skeletons animados durante carga o cambio de página (ocupan la misma celda de grid) -->
+                        <div x-show="cargandoProductos"
+                             x-transition:enter="transition-opacity ease-out duration-250"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition-opacity ease-in duration-200"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             class="col-start-1 row-start-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 z-10 w-full">
+                            <template x-for="i in 15" :key="i">
+                                <div class="p-3 rounded-xl border border-slate-200/80 dark:border-gray-800 bg-white/80 dark:bg-gray-800/60 flex flex-col justify-between animate-pulse h-[175px]">
+                                    <div class="flex items-start gap-2.5">
+                                        <div class="w-12 h-12 rounded-lg bg-slate-200 dark:bg-gray-700/80 shrink-0"></div>
+                                        <div class="min-w-0 flex-1 space-y-2 py-0.5">
+                                            <div class="h-3.5 bg-slate-200 dark:bg-gray-700/80 rounded w-4/5"></div>
+                                            <div class="h-2.5 bg-slate-200 dark:bg-gray-700/60 rounded w-1/2"></div>
+                                            <div class="h-3 bg-emerald-100 dark:bg-emerald-950/40 rounded w-1/3"></div>
+                                        </div>
                                     </div>
-                                    <div class="min-w-0 flex-1">
-                                        <h3 class="text-xs font-bold text-slate-800 dark:text-white truncate" :title="prod.nombre" x-text="prod.nombre"></h3>
-                                        <template x-if="prod.sku">
-                                            <p class="text-[10px] font-mono text-slate-400 dark:text-slate-500 tracking-wider truncate" x-text="'SKU: ' + prod.sku"></p>
-                                        </template>
-                                        <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5" x-text="'$' + prod.precio.toFixed(2)"></p>
-                                        
-                                        <!-- Stock o variantes -->
+                                    <!-- Placeholder para selector de variante -->
+                                    <div class="mt-2.5 h-[30px] flex items-center">
+                                        <div class="h-6 bg-slate-200/60 dark:bg-gray-700/40 rounded-md w-full"></div>
+                                    </div>
+                                    <!-- Placeholder de botón -->
+                                    <div class="mt-2.5 h-8 bg-slate-200/90 dark:bg-gray-700/60 rounded-lg w-full"></div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Grilla de productos reales (altura uniforme garantizada tanto con o sin variantes) -->
+                        <div x-show="!cargandoProductos"
+                             x-transition:enter="transition-opacity ease-out duration-250"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition-opacity ease-in duration-200"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0"
+                             class="col-start-1 row-start-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full">
+                            <template x-for="prod in productosPaginados()" :key="prod.id">
+                                <div class="p-3 rounded-xl border border-slate-200 dark:border-gray-700/70 hover:border-emerald-500 dark:hover:border-emerald-500/60 bg-slate-50/50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800/80 transition-all duration-200 hover:shadow-md flex flex-col justify-between group h-[175px]">
+                                    <div class="flex items-start gap-2.5">
+                                        <div class="w-12 h-12 rounded-lg bg-white dark:bg-gray-700 border border-slate-200 dark:border-gray-600 overflow-hidden shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+                                            <template x-if="prod.imagen">
+                                                <img :src="prod.imagen" :alt="prod.nombre" class="w-full h-full object-cover">
+                                            </template>
+                                            <template x-if="!prod.imagen">
+                                                <span class="material-symbols-outlined text-slate-400 text-xl">image</span>
+                                            </template>
+                                        </div>
+                                        <div class="min-w-0 flex-1">
+                                            <h3 class="text-xs font-bold text-slate-800 dark:text-white truncate" :title="prod.nombre" x-text="prod.nombre"></h3>
+                                            <template x-if="prod.sku">
+                                                <p class="text-[10px] font-mono text-slate-400 dark:text-slate-500 tracking-wider truncate" x-text="'SKU: ' + prod.sku"></p>
+                                            </template>
+                                            <p class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5" x-text="'$' + prod.precio.toFixed(2)"></p>
+                                            
+                                            <!-- Stock o variantes -->
+                                            <template x-if="prod.variantes && prod.variantes.length > 0">
+                                                <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 font-semibold" x-text="prod.variantes.length + ' variantes'"></span>
+                                            </template>
+                                            <template x-if="!prod.variantes || prod.variantes.length === 0">
+                                                <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded font-semibold" 
+                                                      :class="prod.stock > 0 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400'"
+                                                      x-text="prod.stock > 0 ? prod.stock + ' en stock' : 'Agotado'"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+
+                                    <!-- Fila de variante con altura fija h-[30px] para que la tarjeta sea 100% estática -->
+                                    <div class="mt-2.5 h-[30px] flex items-center">
                                         <template x-if="prod.variantes && prod.variantes.length > 0">
-                                            <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 font-semibold" x-text="prod.variantes.length + ' variantes'"></span>
+                                            <select x-model="prod.varianteSeleccionadaId" class="block w-full text-xs rounded-md border-slate-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white py-1 px-2 focus:border-emerald-500 focus:ring-emerald-500">
+                                                <option value="">Seleccionar variante...</option>
+                                                <template x-for="v in prod.variantes" :key="v.id">
+                                                    <option :value="v.id" x-text="(v.nombre || v.sku || 'Variante #' + v.id) + ' ($' + v.precio.toFixed(2) + ' - ' + v.stock + ' disp.)'" :disabled="v.stock <= 0"></option>
+                                                </template>
+                                            </select>
                                         </template>
                                         <template x-if="!prod.variantes || prod.variantes.length === 0">
-                                            <span class="inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded font-semibold" 
-                                                  :class="prod.stock > 0 ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400'"
-                                                  x-text="prod.stock > 0 ? prod.stock + ' en stock' : 'Agotado'"></span>
+                                            <span class="text-[11px] text-slate-400 dark:text-slate-500 italic flex items-center gap-1 pl-0.5">
+                                                <span class="material-symbols-outlined text-[13px] text-slate-400">check_circle</span>
+                                                Presentación única
+                                            </span>
                                         </template>
                                     </div>
+
+                                    <!-- Botón Agregar con altura consistente h-8 -->
+                                    <button type="button" 
+                                            @click="agregarAlCarrito(prod)" 
+                                            :disabled="(prod.variantes && prod.variantes.length > 0 && !prod.varianteSeleccionadaId) || (!prod.variantes?.length && prod.stock <= 0)"
+                                            class="mt-2.5 w-full h-8 px-3 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1 active:scale-95 shadow-sm">
+                                        <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+                                        <span>Agregar</span>
+                                    </button>
                                 </div>
+                            </template>
 
-                                <!-- Selector de variante si tiene variantes -->
-                                <template x-if="prod.variantes && prod.variantes.length > 0">
-                                    <div class="mt-2.5">
-                                        <select x-model="prod.varianteSeleccionadaId" class="block w-full text-xs rounded-md border-slate-200 dark:border-gray-700 dark:bg-gray-900 dark:text-white py-1 px-2 focus:border-emerald-500 focus:ring-emerald-500">
-                                            <option value="">Seleccionar variante...</option>
-                                            <template x-for="v in prod.variantes" :key="v.id">
-                                                <option :value="v.id" x-text="(v.nombre || v.sku || 'Variante #' + v.id) + ' ($' + v.precio.toFixed(2) + ' - ' + v.stock + ' disp.)'" :disabled="v.stock <= 0"></option>
-                                            </template>
-                                        </select>
-                                    </div>
-                                </template>
-
-                                <!-- Botón Agregar -->
-                                <button type="button" 
-                                        @click="agregarAlCarrito(prod)" 
-                                        :disabled="(prod.variantes && prod.variantes.length > 0 && !prod.varianteSeleccionadaId) || (!prod.variantes?.length && prod.stock <= 0)"
-                                        class="mt-2.5 w-full py-1.5 px-3 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1 active:scale-95 shadow-sm">
-                                    <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
-                                    <span>Agregar</span>
-                                </button>
-                            </div>
-                        </template>
-
-                        <template x-if="todosProductosFiltrados().length === 0">
-                            <div class="col-span-full py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
-                                No se encontraron productos con ese término.
-                            </div>
-                        </template>
+                            <template x-if="todosProductosFiltrados().length === 0">
+                                <div class="col-span-full py-8 text-center text-slate-400 dark:text-slate-500 text-xs">
+                                    No se encontraron productos con ese término.
+                                </div>
+                            </template>
+                        </div>
                     </div>
 
                     <!-- Barra de Paginación de Productos (estilo consistente con la app) -->
@@ -217,7 +262,7 @@
                         <div class="flex items-center gap-1.5" x-show="totalPaginasProductos() > 1">
                             <button type="button" 
                                     @click="cambiarPaginaProducto(paginaProducto - 1)" 
-                                    :disabled="paginaProducto === 1" 
+                                    :disabled="paginaProducto === 1 || cargandoProductos" 
                                     class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-700 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all">
                                 Anterior
                             </button>
@@ -226,7 +271,7 @@
 
                             <button type="button" 
                                     @click="cambiarPaginaProducto(paginaProducto + 1)" 
-                                    :disabled="paginaProducto === totalPaginasProductos()" 
+                                    :disabled="paginaProducto === totalPaginasProductos() || cargandoProductos" 
                                     class="px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-slate-50 dark:hover:bg-gray-700 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all">
                                 Siguiente
                             </button>
@@ -309,10 +354,13 @@
             <div class="lg:col-span-5 space-y-6">
 
                 <!-- SECCIÓN 4: ENTREGA Y LOGÍSTICA -->
-                <div class="card-elevated rounded-xl p-5 border border-slate-200/80 dark:border-gray-700/80 bg-white dark:bg-[#181a1b]">
+                <div id="seccion-tipo-entrega" class="card-elevated rounded-xl p-5 border border-slate-200/80 dark:border-gray-700/80 bg-white dark:bg-[#181a1b]">
                     <div class="pb-3 mb-4 border-b border-slate-100 dark:border-gray-800 flex items-center justify-between">
                         <div>
-                            <h2 class="text-sm font-bold text-slate-900 dark:text-white">Tipo de Entrega</h2>
+                            <h2 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                                <span>Tipo de Entrega</span>
+                                <span class="text-rose-500">*</span>
+                            </h2>
                             <p class="text-[11px] text-slate-400 mt-0.5">Selecciona o configura el método de entrega del pedido.</p>
                         </div>
                         <button type="button" 
@@ -328,7 +376,7 @@
                         <button type="button" 
                                 @click="seleccionarMetodoEntrega('retiro_local')"
                                 :class="tipoEntrega === 'retiro_local' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold shadow-xs' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center">
+                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center cursor-pointer">
                             <span class="text-xs">Retiro en Local</span>
                             <span class="text-[10px] text-slate-400 mt-0.5">Gratis ($0.00)</span>
                         </button>
@@ -336,7 +384,7 @@
                         <button type="button" 
                                 @click="seleccionarMetodoEntrega('delivery')"
                                 :class="tipoEntrega === 'delivery' ? 'border-emerald-600 bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 font-bold shadow-xs' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center">
+                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center cursor-pointer">
                             <span class="text-xs">Delivery</span>
                             <span class="text-[10px] text-slate-400 mt-0.5">A Domicilio</span>
                         </button>
@@ -344,7 +392,7 @@
                         <button type="button" 
                                 @click="seleccionarMetodoEntrega('retiro_courier')"
                                 :class="tipoEntrega === 'retiro_courier' ? 'border-[#ff8c69] bg-[#fff5f2] dark:bg-[#331e18] text-[#ff6b3d] font-bold shadow-xs' : 'border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'"
-                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center">
+                                class="py-2.5 px-2 rounded-xl border text-center transition-all flex flex-col items-center cursor-pointer">
                             <span class="text-xs">Courier</span>
                             <span class="text-[10px] text-slate-400 mt-0.5">Por Sucursal</span>
                         </button>
@@ -358,6 +406,17 @@
 
                     <!-- Resumen / Configuración según método -->
                     
+                    <!-- 0. SIN SELECCIONAR (POR DEFECTO) -->
+                    <div x-show="!tipoEntrega" class="p-4 border-2 border-dashed border-slate-200 dark:border-gray-800 rounded-xl text-center bg-slate-50/50 dark:bg-gray-800/30">
+                        <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 text-3xl mb-1">local_shipping</span>
+                        <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Ningún tipo de entrega seleccionado</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5 mb-2.5">Elige arriba entre Retiro en Local, Delivery a Domicilio o Envío por Courier.</p>
+                        <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800/60">
+                            <span class="material-symbols-outlined text-[13px]">warning</span>
+                            Obligatorio para procesar la venta
+                        </span>
+                    </div>
+
                     <!-- 1. RETIRO EN LOCAL -->
                     <div x-show="tipoEntrega === 'retiro_local'" class="p-3.5 bg-slate-50 dark:bg-gray-800/60 rounded-xl border border-slate-200 dark:border-gray-700 text-xs space-y-1.5">
                         <div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-semibold">
@@ -530,7 +589,7 @@
 
                         <div class="flex justify-between text-slate-600 dark:text-slate-400">
                             <span>Costo de Envío</span>
-                            <span class="font-semibold" x-text="'$' + parseFloat(costoEnvio || 0).toFixed(2)"></span>
+                            <span class="font-semibold" x-text="tipoEntrega ? ('$' + parseFloat(costoEnvio || 0).toFixed(2)) : 'Pendiente'"></span>
                         </div>
 
                         <div class="flex justify-between text-slate-600 dark:text-slate-400">
@@ -592,144 +651,149 @@
     <!-- ========================================== -->
     <!-- MODAL: REGISTRAR NUEVO CLIENTE RÁPIDO      -->
     <!-- ========================================== -->
-    <div x-show="modalNuevoCliente" 
-         x-cloak
-         class="fixed inset-0 z-50 overflow-y-auto" 
-         aria-labelledby="modal-nuevo-cliente-title" 
-         role="dialog" 
-         aria-modal="true"
-         @keydown.escape.window="cerrarModalNuevoCliente()">
-        
-        <!-- Backdrop con desenfoque suave -->
-        <div x-show="modalNuevoCliente"
-             x-transition:enter="ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
-             @click="cerrarModalNuevoCliente()"></div>
-
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+    <template x-teleport="body">
+        <div x-show="modalNuevoCliente" 
+             x-cloak
+             class="fixed inset-0 z-[9999] overflow-y-auto flex items-center justify-center p-3 sm:p-6" 
+             aria-labelledby="modal-nuevo-cliente-title" 
+             role="dialog" 
+             aria-modal="true"
+             @keydown.escape.window="cerrarModalNuevoCliente()"
+             style="display: none;">
+            
+            <!-- Backdrop con desenfoque suave a pantalla completa -->
             <div x-show="modalNuevoCliente"
                  x-transition:enter="ease-out duration-200"
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
                  x-transition:leave="ease-in duration-150"
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1e2122] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md border border-slate-200 dark:border-gray-700">
-                
-                <!-- Cabecera del Modal -->
-                <div class="px-6 pt-5 pb-4 border-b border-slate-100 dark:border-gray-800 flex items-center justify-between">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white" id="modal-nuevo-cliente-title">
-                            Nuevo Cliente
-                        </h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                            Completa los datos para registrarlo y seleccionarlo.
-                        </p>
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs transition-opacity"
+                 @click="cerrarModalNuevoCliente()"></div>
+
+            <div class="relative w-full sm:max-w-md my-auto z-10 flex items-center justify-center">
+                <div x-show="modalNuevoCliente"
+                     x-transition:enter="ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="ease-in duration-150"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="relative transform overflow-hidden rounded-2xl bg-white dark:bg-[#1e2122] text-left shadow-2xl transition-all w-full border border-slate-200 dark:border-gray-700">
+                    
+                    <!-- Cabecera del Modal -->
+                    <div class="px-6 pt-5 pb-4 border-b border-slate-100 dark:border-gray-800 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white" id="modal-nuevo-cliente-title">
+                                Nuevo Cliente
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                Completa los datos para registrarlo y seleccionarlo.
+                            </p>
+                        </div>
+                        <button type="button" 
+                                @click="cerrarModalNuevoCliente()" 
+                                class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">close</span>
+                        </button>
                     </div>
-                    <button type="button" 
-                            @click="cerrarModalNuevoCliente()" 
-                            class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5 rounded-lg transition-colors">
-                        <span class="material-symbols-outlined text-[20px]">close</span>
-                    </button>
-                </div>
 
-                <!-- Formulario Modal -->
-                <form @submit.prevent="guardarNuevoClienteModal()">
-                    <div class="p-6 space-y-4">
-                        <!-- Alerta de Error en el Modal -->
-                        <template x-if="errorModalCliente">
-                            <div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 text-xs flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[18px]">error</span>
-                                <span x-text="errorModalCliente"></span>
+                    <!-- Formulario Modal -->
+                    <form @submit.prevent="guardarNuevoClienteModal()">
+                        <div class="p-6 space-y-4">
+                            <!-- Alerta de Error en el Modal -->
+                            <template x-if="errorModalCliente">
+                                <div class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 text-xs flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">error</span>
+                                    <span x-text="errorModalCliente"></span>
+                                </div>
+                            </template>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                                        Nombre <span class="text-rose-500">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           x-model="formModal.nombre" 
+                                           class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
+                                           required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                                        Apellido
+                                    </label>
+                                    <input type="text" 
+                                           x-model="formModal.apellido" 
+                                           class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500">
+                                </div>
                             </div>
-                        </template>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                                    Nombre <span class="text-rose-500">*</span>
+                                    Correo Electrónico <span class="text-rose-500">*</span>
                                 </label>
-                                <input type="text" 
-                                       x-model="formModal.nombre" 
+                                <input type="email" 
+                                       x-model="formModal.email" 
                                        class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
                                        required>
                             </div>
+
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                                    Apellido
+                                    Teléfono / WhatsApp
                                 </label>
-                                <input type="text" 
-                                       x-model="formModal.apellido" 
+                                <input type="tel" 
+                                       x-model="formModal.telefono" 
                                        class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500">
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                                Correo Electrónico <span class="text-rose-500">*</span>
-                            </label>
-                            <input type="email" 
-                                   x-model="formModal.email" 
-                                   class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
-                                   required>
+                        <!-- Footer del Modal -->
+                        <div class="px-6 py-4 bg-slate-50 dark:bg-[#181a1b] border-t border-slate-100 dark:border-gray-800 flex items-center justify-end gap-3 rounded-b-2xl">
+                            <button type="button" 
+                                    @click="cerrarModalNuevoCliente()" 
+                                    :disabled="guardandoCliente"
+                                    class="px-4 py-2 border border-slate-300 dark:border-gray-700 hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition-colors">
+                                Cancelar
+                            </button>
+                            <button type="submit" 
+                                    :disabled="guardandoCliente"
+                                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors disabled:opacity-50">
+                                <span x-show="guardandoCliente" class="animate-spin material-symbols-outlined text-[16px]">progress_activity</span>
+                                <span x-text="guardandoCliente ? 'Guardando...' : 'Guardar Cliente'"></span>
+                            </button>
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-                                Teléfono / WhatsApp
-                            </label>
-                            <input type="tel" 
-                                   x-model="formModal.telefono" 
-                                   class="block w-full rounded-xl border-slate-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white py-2 px-3 text-sm focus:border-emerald-500 focus:ring-emerald-500">
-                        </div>
-                    </div>
-
-                    <!-- Footer del Modal -->
-                    <div class="px-6 py-4 bg-slate-50 dark:bg-[#181a1b] border-t border-slate-100 dark:border-gray-800 flex items-center justify-end gap-3 rounded-b-2xl">
-                        <button type="button" 
-                                @click="cerrarModalNuevoCliente()" 
-                                :disabled="guardandoCliente"
-                                class="px-4 py-2 border border-slate-300 dark:border-gray-700 hover:bg-slate-100 dark:hover:bg-gray-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition-colors">
-                            Cancelar
-                        </button>
-                        <button type="submit" 
-                                :disabled="guardandoCliente"
-                                class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-colors disabled:opacity-50">
-                            <span x-show="guardandoCliente" class="animate-spin material-symbols-outlined text-[16px]">progress_activity</span>
-                            <span x-text="guardandoCliente ? 'Guardando...' : 'Guardar Cliente'"></span>
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </template>
     <!-- ========================================== -->
     <!-- MODAL: SELECCIONAR TIPO DE ENTREGA         -->
     <!-- ========================================== -->
-    <div x-show="modalEntrega" 
-         x-cloak
-         class="fixed inset-0 z-50 overflow-y-auto" 
-         aria-labelledby="modal-entrega-title" 
-         role="dialog" 
-         aria-modal="true"
-         @keydown.escape.window="cerrarModalEntrega()">
-        
-        <div x-show="modalEntrega"
-             x-transition:enter="ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
-             @click="cerrarModalEntrega()"></div>
+    <template x-teleport="body">
+        <div x-show="modalEntrega" 
+             x-cloak
+             class="fixed inset-0 z-[9999] overflow-y-auto flex items-center justify-center p-3 sm:p-6" 
+             aria-labelledby="modal-entrega-title" 
+             role="dialog" 
+             aria-modal="true"
+             @keydown.escape.window="cerrarModalEntrega()"
+             style="display: none;">
+            
+            <div x-show="modalEntrega"
+                 x-transition:enter="ease-out duration-200"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-150"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 bg-slate-900/75 backdrop-blur-xs transition-opacity"
+                 @click="cerrarModalEntrega()"></div>
 
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative w-full sm:max-w-2xl my-auto z-10 flex items-center justify-center">
             <div x-show="modalEntrega"
                  x-transition:enter="ease-out duration-200"
                  x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -778,6 +842,13 @@
 
                     <!-- Contenido según Tab -->
                     <div class="min-h-[220px]">
+                        <!-- TAB 0: SIN SELECCIÓN DENTRO DEL MODAL -->
+                        <div x-show="!modalMetodoEntrega" class="py-12 text-center">
+                            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600 mb-2">touch_app</span>
+                            <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">Selecciona una de las 3 opciones superiores</p>
+                            <p class="text-[11px] text-slate-400 mt-1">Elige entre Retiro en Local, Delivery a Domicilio o Envío por Courier para configurar.</p>
+                        </div>
+
                         <!-- TAB 1: RETIRO EN LOCAL -->
                         <div x-show="modalMetodoEntrega === 'retiro_local'">
                             <div class="bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 p-4 rounded-xl mb-4 text-xs sm:text-sm">
@@ -897,6 +968,7 @@
             </div>
         </div>
     </div>
+</template>
 </div>
 
 @push('scripts')
@@ -924,8 +996,8 @@
                 telefono: ''
             },
 
-            // Estado de Entrega y Logística
-            tipoEntrega: 'retiro_local',
+            // Estado de Entrega y Logística (por defecto ninguno seleccionado)
+            tipoEntrega: '',
             zonaEnvioId: '',
             courierSucursalId: '',
             costoEnvio: 0.00,
@@ -933,7 +1005,7 @@
 
             // Estado del modal de entrega
             modalEntrega: false,
-            modalMetodoEntrega: 'retiro_local',
+            modalMetodoEntrega: '',
             modalZonaCourier: '',
             modalCourier: '',
             modalSucursalId: '',
@@ -943,6 +1015,7 @@
             busquedaProducto: '',
             paginaProducto: 1,
             porPaginaProducto: 15,
+            cargandoProductos: true,
             items: [],
 
             metodoPago: 'efectivo',
@@ -963,7 +1036,7 @@
 
             // Métodos del modal de entrega
             abrirModalEntrega(metodo) {
-                this.modalMetodoEntrega = metodo || this.tipoEntrega || 'retiro_local';
+                this.modalMetodoEntrega = metodo || this.tipoEntrega || '';
                 this.modalZonaEnvioId = this.zonaEnvioId;
                 this.modalDireccionExacta = this.direccionExacta;
                 this.modalSucursalId = this.courierSucursalId;
@@ -987,6 +1060,15 @@
             },
 
             confirmarModalEntrega() {
+                if (!this.modalMetodoEntrega) {
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Por favor selecciona un Tipo de Entrega en las pestañas superiores.', 'warning');
+                    } else {
+                        alert('Por favor selecciona un Tipo de Entrega en las pestañas superiores.');
+                    }
+                    return;
+                }
+
                 this.tipoEntrega = this.modalMetodoEntrega;
 
                 if (this.tipoEntrega === 'retiro_local') {
@@ -1023,7 +1105,10 @@
 
             seleccionarMetodoEntrega(metodo) {
                 this.tipoEntrega = metodo;
-                if (metodo === 'retiro_courier' && !this.courierSucursalId) {
+                if (metodo === 'retiro_local') {
+                    this.costoEnvio = 0.00;
+                    this.courierSucursalId = '';
+                } else if (metodo === 'retiro_courier' && !this.courierSucursalId) {
                     this.abrirModalEntrega('retiro_courier');
                 } else if (metodo === 'delivery' && !this.zonaEnvioId) {
                     this.abrirModalEntrega('delivery');
@@ -1222,6 +1307,10 @@
 
             init() {
                 this.iniciarLectorPistola();
+                // Transición suave y serena al cargar la vista para apreciar el skeleton
+                setTimeout(() => {
+                    this.cargandoProductos = false;
+                }, 450);
             },
 
             iniciarLectorPistola() {
@@ -1352,8 +1441,14 @@
 
             cambiarPaginaProducto(nueva) {
                 const max = this.totalPaginasProductos();
-                if (nueva >= 1 && nueva <= max) {
-                    this.paginaProducto = nueva;
+                if (nueva >= 1 && nueva <= max && nueva !== this.paginaProducto && !this.cargandoProductos) {
+                    this.cargandoProductos = true;
+                    setTimeout(() => {
+                        this.paginaProducto = nueva;
+                        setTimeout(() => {
+                            this.cargandoProductos = false;
+                        }, 60);
+                    }, 350);
                 }
             },
 
@@ -1515,6 +1610,18 @@
                     } else {
                         alert('Por favor selecciona o crea un cliente para la venta.');
                     }
+                    return;
+                }
+
+                if (!this.tipoEntrega) {
+                    e.preventDefault();
+                    if (typeof window.mostrarToast === 'function') {
+                        window.mostrarToast('Por favor selecciona un Tipo de Entrega (Retiro en Local, Delivery o Courier).', 'warning');
+                    } else {
+                        alert('Por favor selecciona un Tipo de Entrega (Retiro en Local, Delivery o Courier).');
+                    }
+                    const sec = document.getElementById('seccion-tipo-entrega');
+                    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     return;
                 }
 

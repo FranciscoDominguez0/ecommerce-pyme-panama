@@ -357,10 +357,20 @@
 
                         <!-- Pie: Pedido y dispositivo -->
                         <div class="pt-3 mt-2 border-t border-slate-100 dark:border-gray-800 flex items-center justify-between text-xs text-slate-400 dark:text-slate-400">
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-gray-800/80 text-slate-600 dark:text-slate-300 font-semibold border border-slate-200/60 dark:border-gray-700/50">
-                                <span class="material-symbols-outlined text-[15px] text-slate-400">receipt_long</span>
-                                Pedido {{ str_starts_with($eval->pedido?->numero_pedido ?? '', '#') ? $eval->pedido?->numero_pedido : '#' . ($eval->pedido?->numero_pedido ?? 'S/N') }}
-                            </span>
+                            @if($eval->pedido)
+                                <a href="{{ route('admin.pedidos.detalle', $eval->pedido->id) }}" 
+                                   title="Ver detalle del pedido"
+                                   class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:text-emerald-800 dark:hover:text-emerald-300 font-bold border border-emerald-200/80 dark:border-emerald-800/60 transition-colors shadow-2xs group">
+                                    <span class="material-symbols-outlined text-[15px] text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">receipt_long</span>
+                                    <span>Pedido {{ str_starts_with($eval->pedido->numero_pedido ?? '', '#') ? $eval->pedido->numero_pedido : '#' . ($eval->pedido->numero_pedido ?? 'S/N') }}</span>
+                                    <span class="material-symbols-outlined text-[13px] opacity-70 group-hover:opacity-100 transition-opacity">open_in_new</span>
+                                </a>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-gray-800/80 text-slate-600 dark:text-slate-300 font-semibold border border-slate-200/60 dark:border-gray-700/50">
+                                    <span class="material-symbols-outlined text-[15px] text-slate-400">receipt_long</span>
+                                    Pedido S/N
+                                </span>
+                            @endif
 
                             <div class="flex items-center gap-3">
                                 @if($eval->tiempo_checkout_segundos)
