@@ -163,7 +163,7 @@
                 
                 <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-700">
                     <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-2">Pedido Relacionado</h3>
-                    <a href="{{ route('admin.pedidos.detalle', $factura->pedido->id) }}" class="inline-flex items-center text-sm text-primary dark:text-blue-400 hover:text-primary dark:text-blue-400/80 font-medium">
+                    <a href="{{ route('admin.pedidos.detalle', $factura->pedido->id) }}" class="inline-flex items-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-semibold hover:underline">
                         {{ $factura->pedido->numero_pedido }}
                         <span class="material-symbols-outlined text-[16px] ml-1">open_in_new</span>
                     </a>

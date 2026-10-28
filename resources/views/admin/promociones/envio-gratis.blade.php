@@ -10,23 +10,28 @@
 @endsection
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6 w-full min-w-0 max-w-full">
 
-    <!-- Header Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#181a1b] p-5 rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs">
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                <span class="material-symbols-outlined text-emerald-600 text-[24px]">local_shipping</span>
-                Promociones Especiales
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Configura promociones de flete bonificado por provincia de cobertura.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Reglas de Envío Gratis</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Configura promociones de flete bonificado por provincia de cobertura.</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" 
+                    onclick="abrirModalEnvioGratis()" 
+                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                <span>Nueva Regla</span>
+            </button>
         </div>
     </div>
 
     <!-- Navigation Tabs (Screen 3 Stitch) -->
     <div class="flex border-b border-slate-200 dark:border-gray-700 gap-6">
         <a href="{{ route('admin.promociones.envio-gratis') }}" 
-           class="pb-3 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-2">
+           class="pb-3 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
             <span class="material-symbols-outlined text-[18px]">local_shipping</span>
             <span>Reglas de Envío Gratis</span>
         </a>
@@ -35,20 +40,6 @@
             <span class="material-symbols-outlined text-[18px]">star</span>
             <span>Producto del Mes</span>
         </a>
-    </div>
-
-    <!-- Main Content Header & Action -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-sm font-extrabold text-slate-900 dark:text-white">Reglas de Envío Gratis por Provincia</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Establece montos mínimos de compra para flete gratis por provincia logística.</p>
-        </div>
-        <button type="button" 
-                onclick="abrirModalEnvioGratis()" 
-                class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center gap-2 cursor-pointer">
-            <span class="material-symbols-outlined text-[18px]">add</span>
-            <span>Nueva Regla</span>
-        </button>
     </div>
 
     <!-- Data Table Card -->

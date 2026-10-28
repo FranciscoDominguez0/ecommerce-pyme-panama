@@ -10,23 +10,21 @@
 @endsection
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6 w-full min-w-0 max-w-full">
 
-    <!-- Header & Action Bar -->
-    <div class="flex items-center justify-between bg-white dark:bg-[#181a1b] p-5 rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs">
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                <span class="material-symbols-outlined text-emerald-600 text-[24px]">local_offer</span>
-                {{ $esEdicion ? "Editar Cupón: {$cupon->codigo}" : 'Configurar Nuevo Cupón' }}
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Define las reglas, vigencia y restricciones del código de descuento.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $esEdicion ? "Editar Cupón: {$cupon->codigo}" : 'Configurar Nuevo Cupón' }}</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Define las reglas, vigencia y restricciones del código de descuento.</p>
         </div>
-
-        <a href="{{ route('admin.promociones.cupones') }}" 
-           class="px-4 py-2 bg-slate-100 dark:bg-transparent hover:bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 shrink-0">
-            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            Volver al listado
-        </a>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('admin.promociones.cupones') }}" 
+               class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-bold transition-all shadow-xs">
+                <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                <span>Volver al listado</span>
+            </a>
+        </div>
     </div>
 
     <!-- Main Grid Form (2 Columns) -->

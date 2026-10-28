@@ -10,23 +10,21 @@
 @endsection
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6 w-full min-w-0 max-w-full">
 
-    <!-- Header & Action Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#181a1b] p-5 rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs">
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                <span class="material-symbols-outlined text-emerald-600 text-[24px]">local_offer</span>
-                Gestión de Cupones
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Administra códigos de descuento, vigencias y límites de uso en la tienda.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Gestión de Cupones</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Administra códigos de descuento, vigencias y límites de uso en la tienda.</p>
         </div>
-
-        <a href="{{ route('admin.promociones.cupones.crear') }}" 
-           class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 group shrink-0">
-            <span class="material-symbols-outlined text-[18px] group-hover:scale-110 transition-transform">add</span>
-            <span>Nuevo Cupón</span>
-        </a>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('admin.promociones.cupones.crear') }}" 
+               class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                <span>Nuevo Cupón</span>
+            </a>
+        </div>
     </div>
 
     <!-- Metrics Bento (3 KPI Cards) -->

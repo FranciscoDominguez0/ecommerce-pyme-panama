@@ -48,10 +48,10 @@
     <!-- Filters & Actions -->
     <div class="card-elevated rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div class="flex flex-wrap gap-2 w-full md:w-auto">
-            <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="px-4 py-2 {{ request('estado') ? 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:hover:bg-gray-700' : 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'pendiente']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'pendiente' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Pendientes</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'aprobada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'aprobada' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Aprobadas</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-100 dark:bg-[#121415] text-slate-900 dark:text-white font-bold' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:hover:bg-gray-700' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
+            <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="px-4 py-2 {{ !request('estado') ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'pendiente']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'pendiente' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Pendientes</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'aprobada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'aprobada' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Aprobadas</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
         </div>
         
         <form action="{{ route('admin.devoluciones.index') }}" method="GET" class="w-full md:w-auto" x-data="adminAutoFilter">
@@ -100,7 +100,7 @@
                         @php
                             $esNuevaDevolucion = $dev->estado === 'pendiente';
                         @endphp
-                        <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 dark:hover:bg-gray-700/50 transition-colors cursor-pointer group {{ $esNuevaDevolucion ? 'bg-emerald-50/40 dark:bg-emerald-500/10 border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}" 
+                        <tr class="hover:bg-slate-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer group {{ $esNuevaDevolucion ? 'bg-emerald-50/40 dark:bg-emerald-500/10 border-l-4 border-l-emerald-500' : 'border-l-4 border-l-transparent' }}" 
                             @click="abrirModal({
                                 id: '{{ $dev->id }}',
                                 pedido_id: '{{ $dev->pedido->id }}',
@@ -135,13 +135,22 @@
                             <td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">{{ $dev->usuario->nombre }} {{ $dev->usuario->apellido }}</td>
                             <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{{ ucfirst($dev->motivo) }}</td>
                             <td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{{ $dev->creado_en->format('d/m/Y') }}</td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($dev->estado === 'pendiente')
-                                    <span class="inline-block px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Pendiente</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400"></span>
+                                        Pendiente
+                                    </span>
                                 @elseif($dev->estado === 'aprobada')
-                                    <span class="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Aprobada</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
+                                        Aprobada
+                                    </span>
                                 @else
-                                    <span class="inline-block px-2.5 py-1 bg-red-50 text-red-700 rounded-full text-[10px] font-bold uppercase tracking-wider">Rechazada</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400"></span>
+                                        Rechazada
+                                    </span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-right">
@@ -187,14 +196,34 @@
             <template x-if="devolucionActiva">
                 <div class="flex flex-col h-full">
                     <!-- Header -->
-                    <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-transparent">
+                    <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-[#181a1b]">
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white" x-text="'Devolución #DEV-' + String(devolucionActiva.id).padStart(4, '0')"></h3>
+                            <div class="flex items-center gap-2.5 flex-wrap">
+                                <h3 class="text-xl font-bold text-slate-900 dark:text-white" x-text="'Devolución #DEV-' + String(devolucionActiva.id).padStart(4, '0')"></h3>
+                                <template x-if="devolucionActiva.estado === 'pendiente'">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 dark:bg-amber-400"></span>
+                                        Pendiente
+                                    </span>
+                                </template>
+                                <template x-if="devolucionActiva.estado === 'aprobada'">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
+                                        Aprobada
+                                    </span>
+                                </template>
+                                <template x-if="devolucionActiva.estado === 'rechazada'">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 dark:bg-rose-400"></span>
+                                        Rechazada
+                                    </span>
+                                </template>
+                            </div>
                             <p class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mt-1">
-                                Pedido asociado: <a :href="'{{ url('admin/pedidos') }}/' + devolucionActiva.pedido_id" class="text-emerald-600 hover:underline" x-text="devolucionActiva.numero_pedido"></a>
+                                Pedido asociado: <a :href="'{{ url('admin/pedidos') }}/' + devolucionActiva.pedido_id" class="text-emerald-600 dark:text-emerald-400 hover:underline" x-text="devolucionActiva.numero_pedido"></a>
                             </p>
                         </div>
-                        <button @click="cerrarModal()" class="text-slate-400 dark:text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-300 transition-colors p-2 rounded-full hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-700 focus:outline-none">
+                        <button @click="cerrarModal()" class="text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors p-2 rounded-full hover:bg-slate-200 dark:hover:bg-gray-700 focus:outline-none">
                             <span class="material-symbols-outlined">close</span>
                         </button>
                     </div>
@@ -281,7 +310,7 @@
                             <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/rechazar'" method="POST" class="flex-1" @submit="validarRechazo">
                                 @csrf
                                 <input type="hidden" name="comentario_admin" value="">
-                                <button type="submit" class="w-full py-2.5 px-4 bg-red-100 hover:bg-red-200 text-red-800 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors text-center border border-red-200">
+                                <button type="submit" class="w-full py-2.5 px-4 bg-red-100 hover:bg-red-200 text-red-800 dark:bg-rose-950/40 dark:hover:bg-rose-900/50 dark:text-rose-300 dark:border-rose-800/50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors text-center border border-red-200">
                                     Rechazar Devolución
                                 </button>
                             </form>

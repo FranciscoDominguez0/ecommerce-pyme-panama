@@ -10,16 +10,13 @@
 @endsection
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6 w-full min-w-0 max-w-full">
 
-    <!-- Header Bar -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-[#181a1b] p-5 rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs">
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                <span class="material-symbols-outlined text-emerald-600 text-[24px]">star</span>
-                Promociones Especiales
-            </h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Destaca un producto estrella con precio promocional en la portada de la tienda.</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Producto del Mes</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Destaca un producto estrella con precio promocional en la portada de la tienda.</p>
         </div>
     </div>
 
@@ -31,18 +28,10 @@
             <span>Reglas de Envío Gratis</span>
         </a>
         <a href="{{ route('admin.promociones.producto-del-mes') }}" 
-           class="pb-3 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-2">
+           class="pb-3 text-xs font-bold border-b-2 border-emerald-600 text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
             <span class="material-symbols-outlined text-[18px]">star</span>
             <span>Producto del Mes</span>
         </a>
-    </div>
-
-    <!-- Main Section Header -->
-    <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-sm font-extrabold text-slate-900 dark:text-white">Producto Destacado del Mes</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Configura el producto con descuento especial de alto impacto.</p>
-        </div>
     </div>
 
     <!-- 12-Columns Split Layout (Screen 3 Stitch: 5 cols Left Card Spotlight, 7 cols Right Form) -->

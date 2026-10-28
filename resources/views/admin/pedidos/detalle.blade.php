@@ -374,7 +374,7 @@
                     @endif
 
                     @if($pedido->factura)
-                        <div class="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-1.5">
+                        <div class="pt-3 mt-3 border-t border-slate-200 dark:border-gray-700 text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
                             <span class="font-medium text-slate-900 dark:text-white">Factura:</span>
                             <a href="{{ route('admin.facturas.show', $pedido->factura->id) }}" class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
                                 <span>#{{ $pedido->factura->numero }}</span>

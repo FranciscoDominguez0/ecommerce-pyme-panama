@@ -12,28 +12,22 @@
 @endsection
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6 w-full min-w-0 max-w-full">
 
-    <!-- ── ENCABEZADO DE SECCIÓN ── -->
-    <div class="card-elevated p-5 sm:p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/20 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <span class="material-symbols-outlined text-[26px]">storefront</span>
-            </div>
-            <div>
-                <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Sucursales Courier</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Administra las agencias de Fletes Chavale y otros couriers disponibles para retiro.
-                </p>
-            </div>
+    {{-- Page Header --}}
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
+        <div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Sucursales Courier</h2>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Administra las agencias de Fletes Chavale y otros couriers disponibles para retiro.</p>
         </div>
-
-        <button type="button" 
-                onclick="abrirModalCrearZona()" 
-                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm hover:shadow cursor-pointer">
-            <span class="material-symbols-outlined text-[18px]">add_circle</span>
-            <span>Nueva Sucursal</span>
-        </button>
+        <div class="flex items-center gap-2">
+            <button type="button" 
+                    onclick="abrirModalCrearZona()" 
+                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer">
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                <span>Nueva Sucursal</span>
+            </button>
+        </div>
     </div>
 
     <!-- ── ESTADO VACÍO ── -->

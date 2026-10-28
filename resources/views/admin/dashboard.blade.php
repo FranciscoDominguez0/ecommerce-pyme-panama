@@ -279,12 +279,12 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
-                        <th class="pb-3 w-10"></th>
-                        <th class="pb-3">Producto</th>
-                        <th class="pb-3">Categoría</th>
-                        <th class="pb-3">Precio</th>
-                        <th class="pb-3 text-center">Stock</th>
-                        <th class="pb-3 text-center">Ventas Totales</th>
+                        <th class="pb-3 pl-2 pr-3 w-12"></th>
+                        <th class="pb-3 pl-1 pr-4">Producto</th>
+                        <th class="pb-3 px-4">Categoría</th>
+                        <th class="pb-3 px-4">Precio</th>
+                        <th class="pb-3 px-4 text-center">Stock</th>
+                        <th class="pb-3 pr-2 pl-4 text-center">Ventas Totales</th>
                     </tr>
                 </thead>
                 <tbody class="text-xs divide-y divide-slate-100 dark:divide-gray-700/80">
@@ -293,7 +293,7 @@
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
                         <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
-                            <td class="py-3">
+                            <td class="py-3 pl-2 pr-3 w-12">
                                 <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
                                         <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="w-full h-full object-cover">
@@ -306,7 +306,7 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="py-3">
+                            <td class="py-3 pl-1 pr-4">
                                 <a href="{{ route('admin.productos.edit', $prod) }}" class="font-bold text-slate-900 dark:text-white hover:text-emerald-600 transition-colors line-clamp-1" title="{{ $prod->nombre }}">
                                     {{ $prod->nombre }}
                                 </a>
@@ -314,16 +314,16 @@
                                     <div class="text-[10px] text-slate-400 font-mono">{{ $prod->sku }}</div>
                                 @endif
                             </td>
-                            <td class="py-3 text-slate-500 dark:text-slate-400 font-medium">
+                            <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">
                                 {{ $prod->categoria->nombre ?? 'Sin categoría' }}
                             </td>
-                            <td class="py-3 font-semibold text-slate-700 dark:text-slate-300">
+                            <td class="py-3 px-4 font-semibold text-slate-700 dark:text-slate-300">
                                 ${{ number_format($prod->precio, 2) }}
                             </td>
-                            <td class="py-3 text-center text-slate-500 dark:text-slate-400">
+                            <td class="py-3 px-4 text-center text-slate-500 dark:text-slate-400">
                                 {{ $prod->stock }} disp.
                             </td>
-                            <td class="py-3 text-center font-extrabold text-emerald-600">
+                            <td class="py-3 pr-2 pl-4 text-center font-extrabold text-emerald-600">
                                 {{ $prod->ventas_totales }}
                             </td>
                         </tr>
