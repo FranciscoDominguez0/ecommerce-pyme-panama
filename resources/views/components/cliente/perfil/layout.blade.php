@@ -9,10 +9,10 @@
 <div class="w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
     <div class="bg-white dark:bg-[#181a1b] border border-outline-variant rounded-2xl shadow-sm overflow-clip md:h-[calc(100vh-140px)] flex flex-col md:flex-row" x-data="{ mobileMenuOpen: false }">
 
-        {{-- LEFT: Profile + Navigation (persisted across routes) --}}
+        {{-- Izquierda: Perfil y navegación --}}
         <aside x-persist="mi-cuenta-sidebar" class="w-full md:w-[32%] md:min-w-[260px] md:max-w-[320px] shrink-0 border-b md:border-b-0 md:border-r border-outline-variant/30 md:p-7 overflow-y-auto md:h-full bg-surface-container-lowest md:bg-transparent">
             
-            {{-- Mobile Toggle --}}
+            {{-- Botón móvil --}}
             <div class="md:hidden flex items-center justify-between p-4 cursor-pointer hover:bg-surface-container-low transition-colors" @click="mobileMenuOpen = !mobileMenuOpen">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant bg-surface-container-low flex items-center justify-center">
@@ -30,7 +30,7 @@
                 <span class="material-symbols-outlined text-outline transition-transform duration-300" :class="mobileMenuOpen ? 'rotate-180' : ''">expand_more</span>
             </div>
 
-            {{-- Collapsible Content --}}
+            {{-- Contenido colapsable --}}
             <div class="p-6 pt-2 md:p-0 md:!block" x-show="mobileMenuOpen" x-transition.opacity style="display: none;">
                 
                 <a href="{{ route('dashboard') }}" wire:navigate
@@ -328,7 +328,7 @@
             </div>
         </aside>
 
-        {{-- RIGHT: Dynamic Content --}}
+        {{-- Derecha: Contenido dinámico --}}
         <div class="flex-1 min-w-0 p-4 md:p-8 overflow-y-auto md:h-full relative">
             {{ $slot }}
         </div>

@@ -32,11 +32,11 @@
                 </svg>
             </div>
 
-            <!-- Left Side: Floating White Card with Register Form (Desliza hacia la izquierda) -->
+            <!-- Lado izquierdo: Tarjeta flotante con formulario de registro -->
             <div class="w-full lg:w-1/2 flex justify-center z-10 my-2 lg:my-0 animate-swap-card-reverse">
                 <div class="w-full max-w-[430px] bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-7 flex flex-col justify-between border border-slate-100">
                     
-                    <!-- Header inside card -->
+                    <!-- Encabezado interior de la tarjeta -->
                     <div class="flex flex-col items-start mb-3 text-left">
                         <div class="flex items-center gap-2.5 mb-4 lg:hidden">
                             <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -50,7 +50,7 @@
                         </p>
                     </div>
 
-                    <!-- Error Alert -->
+                    <!-- Alerta de error -->
                     @if ($errors->any())
                         <div class="mb-3 bg-red-50 text-red-700 p-2.5 rounded-xl flex items-start gap-2 border border-red-200 text-xs" id="error-alert">
                             <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
@@ -217,7 +217,7 @@
                             @enderror
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Botón de envío -->
                         <button class="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] disabled:opacity-75 disabled:cursor-wait text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-xs hover:shadow-md transition-all flex justify-center items-center gap-1.5 group cursor-pointer"
                                 id="submit-register-btn"
                                 type="submit">

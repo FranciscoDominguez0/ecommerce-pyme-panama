@@ -96,12 +96,12 @@
     <input type="hidden" name="dimension_ancho" :value="habilitarFisicas ? dimension_ancho : ''">
     <input type="hidden" name="dimension_alto" :value="habilitarFisicas ? dimension_alto : ''">
 
-    <!-- MODAL ALPINE -->
+    <!-- MODAL CON ALPINE -->
     <template x-teleport="body">
         <div x-show="abrirModal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" x-cloak style="display: none;">
             <div class="bg-white dark:bg-[#181a1b] rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl border border-slate-200 dark:border-gray-700" @click.away="abrirModal = false">
                 
-                <!-- Header -->
+                <!-- Encabezado -->
                 <div class="p-4 border-b border-slate-200 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-gray-800">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-emerald-600 text-[22px]">tune</span>
@@ -295,7 +295,7 @@
 
                 </div>
 
-                <!-- Footer -->
+                <!-- Pie de página -->
                 <div class="p-4 border-t border-slate-200 dark:border-gray-700 flex justify-end gap-2 bg-slate-50 dark:bg-gray-800">
                     <button type="button" @click="abrirModal = false" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition-colors">
                         Guardar y Cerrar

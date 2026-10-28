@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="space-y-6 font-sans">
-    <!-- Header Section -->
+    <!-- Sección de encabezado -->
     <div class="flex items-center justify-between mb-4">
         <a href="{{ route('admin.usuarios.index') }}" class="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700">
             <span class="material-symbols-outlined mr-1 text-[18px]">arrow_back</span>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Columna Izquierda: Info Personal -->
+        <!-- Columna izquierda: Información personal -->
         <div class="flex flex-col gap-6">
             <!-- Tarjeta de Perfil -->
             <div class="card-elevated rounded-xl p-6 flex flex-col items-center text-center">
@@ -131,7 +131,7 @@
 
         <!-- Columna Derecha: Estadísticas y Tablas -->
         <div class="lg:col-span-2 flex flex-col gap-6">
-            <!-- Stats Row -->
+            <!-- Fila de estadísticas -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="card-elevated rounded-xl p-6 flex flex-col justify-center">
                     <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Total Pedidos</span>

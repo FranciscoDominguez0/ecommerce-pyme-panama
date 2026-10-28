@@ -4,12 +4,12 @@
 
 @section('content')
     <div class="flex flex-col items-center">
-        <!-- Minimalist Typographic Error Code -->
+        <!-- Código de error tipográfico minimalista -->
         <div class="relative mb-6 select-none">
             <div class="text-[120px] md:text-[150px] font-extrabold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-rose-700 drop-shadow-sm">
                 500
             </div>
-            <!-- Subtle Overlay Icon -->
+            <!-- Ícono sutil superpuesto -->
             <div class="absolute inset-0 flex items-center justify-center mix-blend-overlay opacity-30">
                 <span class="material-symbols-outlined text-[100px] text-white">warning</span>
             </div>

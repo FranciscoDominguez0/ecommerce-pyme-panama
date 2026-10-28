@@ -1,4 +1,4 @@
-<!-- Floating WhatsApp Button -->
+<!-- Botón flotante de WhatsApp -->
 <a href="https://wa.me/50768118272?text=Hola%2C%20tengo%20una%20consulta%20sobre%20los%20productos%20de%20PayMe%20Panam%C3%A1"
     target="_blank" rel="noopener noreferrer" class="whatsapp-float" title="Chatea con nosotros por WhatsApp">
     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">

@@ -72,7 +72,7 @@
                         <!-- Columna derecha: subcategorías de la categoría en hover -->
                         <div class="flex-1 overflow-y-auto bg-slate-50/60">
 
-                            <!-- Placeholder cuando ninguna categoría está activa -->
+                            <!-- Marcador de posición cuando ninguna categoría está activa -->
                             <div x-show="activeCategory === null"
                                  class="flex flex-col items-center justify-center h-full py-10 text-slate-400"
                                  style="display:flex;">
@@ -119,7 +119,7 @@
 
                 <nav class="flex flex-wrap items-center gap-4 text-sm font-semibold">
 
-                    <!-- Categorías Dropdown -->
+                    <!-- Menú desplegable de categorías -->
                     <div x-data="{ open: false }" class="relative z-30" @click.away="open = false">
                         <button @click="open = !open" class="text-slate-900 hover:text-emerald-700 transition-colors flex items-center gap-1">
                             Categorías <span class="material-symbols-outlined text-[16px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>

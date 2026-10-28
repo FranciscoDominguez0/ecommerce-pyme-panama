@@ -31,7 +31,7 @@
     
     @include('layouts.partials.cliente.mobile-menu')
 
-    <!-- Main Content -->
+    <!-- Contenido principal -->
     <main class="flex-1 relative">
         @php
             $isFromLogin = session()->pull('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '2fa-challenge');

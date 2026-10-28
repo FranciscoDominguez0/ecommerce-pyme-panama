@@ -52,7 +52,7 @@
 
         @yield('content')
 
-        <!-- Footer -->
+        <!-- Pie de página -->
         <div class="mt-16 text-sm text-slate-400 font-medium">
             &copy; {{ date('Y') }} PayMe Panamá. Todos los derechos reservados.
         </div>

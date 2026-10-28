@@ -40,7 +40,7 @@
 
 <div class="space-y-6">
     
-    <!-- Page Header & Action Bar -->
+    <!-- Encabezado de página y barra de acciones -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-gray-700/80 dark:border-slate-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Resumen del Dashboard</h2>
@@ -58,10 +58,10 @@
         </div>
     </div>
 
-    <!-- 4 Essential KPI Cards in 1 Clean Executive Row -->
+    <!-- 4 Tarjetas KPI principales en fila ejecutiva -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         
-        <!-- Card 1: Ventas Totales -->
+        <!-- Tarjeta 1: Ventas Totales -->
         <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
@@ -75,7 +75,7 @@
             <div class="mt-2 h-14 relative z-0 w-full -mx-2" id="spark1"></div>
         </div>
 
-        <!-- Card 2: Total Pedidos -->
+        <!-- Tarjeta 2: Total Pedidos -->
         <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
@@ -89,7 +89,7 @@
             <div class="mt-2 h-14 relative z-0 w-full -mx-2" id="spark2"></div>
         </div>
 
-        <!-- Card 3: Clientes Registrados -->
+        <!-- Tarjeta 3: Clientes Registrados -->
         <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
@@ -103,7 +103,7 @@
             <div class="mt-2 h-14 relative z-0 w-full -mx-2" id="spark3"></div>
         </div>
 
-        <!-- Card 4: Ticket Promedio -->
+        <!-- Tarjeta 4: Ticket Promedio -->
         <div class="card-saas p-4 flex flex-col justify-between relative overflow-hidden hover:border-slate-300 dark:border-gray-700 dark:hover:border-gray-600 transition-all">
             <div class="flex justify-between items-start relative z-10">
                 <div>
@@ -190,7 +190,7 @@
 
     </div>
 
-    <!-- Bottom Layout: Order Management -->
+    <!-- Sección inferior: Gestión de pedidos -->
     <div class="card-saas p-5 flex flex-col">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Gestión de Pedidos</h3>
@@ -265,7 +265,7 @@
         </div>
     </div>
 
-    <!-- Bottom Layout: Top Selling Products -->
+    <!-- Sección inferior: Productos más vendidos -->
     <div class="card-saas p-5 flex flex-col mb-4">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Productos Más Vendidos</h3>

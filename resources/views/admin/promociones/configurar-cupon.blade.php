@@ -12,7 +12,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de la página --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">{{ $esEdicion ? "Editar Cupón: {$cupon->codigo}" : 'Configurar Nuevo Cupón' }}</h2>
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <!-- Main Grid Form (2 Columns) -->
+    <!-- Formulario principal en cuadrícula (2 columnas) -->
     <form action="{{ $esEdicion ? route('admin.promociones.cupones.actualizar', $cupon->id) : route('admin.promociones.cupones.guardar') }}" 
           method="POST" 
           class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -36,10 +36,10 @@
             @method('PUT')
         @endif
 
-        <!-- Left Column: 3 Form Sections (Col-span 2) -->
+        <!-- Columna izquierda: 3 secciones del formulario -->
         <div class="lg:col-span-2 space-y-6">
 
-            <!-- Section 1: Configuración Básica -->
+            <!-- Sección 1: Configuración Básica -->
             <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700/80 p-5 shadow-2xs space-y-4">
                 <div class="flex items-center gap-2.5 border-b border-slate-100 dark:border-gray-700 pb-3">
                     <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shadow-2xs">
@@ -304,7 +304,7 @@
 
         </div>
 
-        <!-- Right Column: Ticket Live Preview (Col-span 1) -->
+        <!-- Columna derecha: Vista previa del cupón en vivo -->
         <div class="space-y-6">
             <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs overflow-hidden sticky top-20">
                 <div class="p-4 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/70 flex items-center justify-between">
@@ -316,9 +316,9 @@
                 </div>
 
                 <div class="p-5 space-y-5">
-                    <!-- Ticket Card Simulation -->
+                    <!-- Simulación de tarjeta de cupón -->
                     <div class="border border-slate-200 dark:border-gray-700 rounded-2xl p-5 bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 dark:from-[#181a1b] dark:via-[#121415] dark:to-emerald-900/10 shadow-xs relative overflow-hidden">
-                        <!-- Top Accent Badge -->
+                        <!-- Distintivo superior destacado -->
                         <div class="flex items-center justify-between mb-4">
                             <span id="preview-tipo-badge" class="px-2.5 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50 rounded-lg text-[10px] font-bold uppercase tracking-wider">
                                 Porcentaje
@@ -342,7 +342,7 @@
                             </div>
                         </div>
 
-                        <!-- Conditions List -->
+                        <!-- Lista de condiciones -->
                         <ul class="space-y-2 text-xs font-medium text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-gray-700/60 pt-3">
                             <li class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-emerald-600 text-[16px]">check_circle</span>

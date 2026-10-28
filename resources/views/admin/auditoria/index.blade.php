@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="space-y-6 font-sans" x-data="auditoriaModal()">
-    <!-- Header -->
+    <!-- Encabezado -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white dark:text-white tracking-tight">Auditoría del Sistema</h1>
@@ -166,7 +166,7 @@
                     <div class="grid grid-cols-2 gap-4"><div class="h-40 bg-slate-100 dark:bg-transparent rounded"></div><div class="h-40 bg-slate-100 dark:bg-transparent rounded"></div></div>
                 </div>
 
-                <!-- Contenido Modal -->
+                <!-- Contenido del modal -->
                 <div x-show="!cargando && logDetalle">
                     <div class="flex justify-between items-start mb-5 pb-4 border-b border-slate-100 dark:border-gray-700 dark:border-gray-700">
                         <div>
@@ -178,7 +178,7 @@
                         </button>
                     </div>
 
-                    <!-- Meta info -->
+                    <!-- Metadatos de la acción -->
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 bg-slate-50 dark:bg-transparent/50 dark:bg-transparent p-4 rounded-xl text-sm border border-slate-100 dark:border-gray-700 dark:border-gray-700">
                         <div><span class="block text-slate-500 dark:text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Módulo</span><span class="font-semibold text-slate-900 dark:text-white dark:text-white" x-text="logDetalle?.modulo"></span></div>
                         <div><span class="block text-slate-500 dark:text-slate-400 dark:text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Acción</span><span class="font-semibold text-slate-900 dark:text-white dark:text-white capitalize" x-text="logDetalle?.accion"></span></div>

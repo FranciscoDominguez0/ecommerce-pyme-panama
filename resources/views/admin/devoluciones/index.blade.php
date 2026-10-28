@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <!-- Filters & Actions -->
+    <!-- Filtros y acciones -->
     <div class="card-elevated rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div class="flex flex-wrap gap-2 w-full md:w-auto">
             <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="px-4 py-2 {{ !request('estado') ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
@@ -66,7 +66,7 @@
     </div>
 
     @if($devoluciones->isEmpty())
-        <!-- Empty State (Screen 4) -->
+        <!-- Estado vacío cuando no hay devoluciones -->
         <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 p-12 flex flex-col items-center justify-center text-center">
             <div class="w-20 h-20 bg-slate-50 dark:bg-transparent rounded-full flex items-center justify-center mb-6">
                 <span class="material-symbols-outlined text-4xl text-slate-300">assignment_return</span>
@@ -80,7 +80,7 @@
             @endif
         </div>
     @else
-        <!-- Table (Screen 2) -->
+        <!-- Tabla de devoluciones registradas -->
         <div class="card-elevated rounded-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
@@ -169,7 +169,7 @@
         </div>
     @endif
 
-    <!-- Side Modal (Detalles) -->
+    <!-- Panel lateral de detalles -->
     <div x-show="modalAbierto" style="display: none;" class="fixed inset-0 z-50 flex justify-end" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
         
         <!-- Background backdrop -->
@@ -183,7 +183,7 @@
              class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" 
              @click="cerrarModal()"></div>
 
-        <!-- Slide-over panel -->
+        <!-- Panel lateral deslizable -->
         <div x-show="modalAbierto" 
              x-transition:enter="transform transition ease-in-out duration-300 sm:duration-500" 
              x-transition:enter-start="translate-x-full" 
@@ -195,7 +195,7 @@
             
             <template x-if="devolucionActiva">
                 <div class="flex flex-col h-full">
-                    <!-- Header -->
+                    <!-- Encabezado -->
                     <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-[#181a1b]">
                         <div>
                             <div class="flex items-center gap-2.5 flex-wrap">
@@ -231,7 +231,7 @@
                     <!-- Body -->
                     <div class="p-6 overflow-y-auto flex-1 bg-white dark:bg-[#181a1b]">
                         
-                        <!-- Info Cliente -->
+                        <!-- Información del cliente -->
                         <div class="mb-6">
                             <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Información del Cliente</h4>
                             <div class="bg-slate-50 dark:bg-transparent p-4 rounded-lg border border-slate-100 dark:border-gray-700">
@@ -284,7 +284,7 @@
                             </div>
                         </template>
 
-                        <!-- Resolución Admin -->
+                        <!-- Resolución de la administración -->
                         <div class="mb-6">
                             <h4 class="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider">Resolución Administrativa</h4>
                             
@@ -304,7 +304,7 @@
                         </div>
                     </div>
 
-                    <!-- Footer Actions -->
+                    <!-- Acciones al pie -->
                     <template x-if="devolucionActiva.estado === 'pendiente'">
                         <div class="p-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex gap-3">
                             <form :action="'{{ url('admin/devoluciones') }}/' + devolucionActiva.id + '/rechazar'" method="POST" class="flex-1" @submit="validarRechazo">

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="flex flex-col items-center">
-        <!-- Minimalist Typographic Error Code -->
+        <!-- Código de error tipográfico minimalista -->
         <div class="text-[120px] md:text-[150px] font-extrabold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-slate-800 to-slate-400 mb-6 drop-shadow-sm select-none">
             404
         </div>

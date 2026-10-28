@@ -1,14 +1,14 @@
 <!-- TopNavBar Ejecutivo (Fijo en la parte superior al hacer scroll) -->
 <header id="admin-topbar" class="sticky top-0 z-40 w-full max-w-full px-3.5 sm:px-8 py-3 bg-white/95 dark:bg-[#181a1b]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-gray-800 shadow-xs flex items-center justify-between gap-2 sm:gap-4 shrink-0">
     
-    <!-- Left: Toggle & Responsive Breadcrumbs -->
+    <!-- Izquierda: botón lateral y migas de pan adaptables -->
     <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
-        <!-- Hamburger Button (Mobile) -->
+        <!-- Botón de menú hamburguesa (móvil) -->
         <button onclick="toggleSidebar()" class="md:hidden p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Abrir menú">
             <span class="material-symbols-outlined text-[22px]">menu</span>
         </button>
         
-        <!-- Desktop Sidebar Toggle -->
+        <!-- Botón para alternar barra lateral en escritorio -->
         <button onclick="toggleDesktopSidebar()" class="hidden md:block p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Alternar menú lateral">
             <span class="material-symbols-outlined text-[22px]" id="desktop-sidebar-icon">menu</span>
         </button>
@@ -17,7 +17,7 @@
         <x-admin-breadcrumb />
     </div>
 
-    <!-- Right: Search, Notifications & User Profile -->
+    <!-- Derecha: búsqueda, notificaciones y perfil de usuario -->
     <div class="flex items-center gap-2 sm:gap-3 text-slate-800 shrink-0 ml-auto">
         
         <!-- Buscador Global en TopBar -->
@@ -42,7 +42,7 @@
 
         <div class="h-4 w-px bg-slate-200 shrink-0"></div>
 
-        <!-- User Profile Badge + Dropdown -->
+        <!-- Perfil de usuario y desplegable -->
         <div class="relative shrink-0" x-data="{ open: false }" @click.outside="open = false">
             {{-- Trigger: Avatar + Nombre --}}
             <button @click="open = !open"
@@ -72,7 +72,7 @@
                       :class="open ? 'rotate-180' : ''">expand_more</span>
             </button>
 
-            {{-- Dropdown Panel --}}
+            {{-- Panel desplegable --}}
             <div x-show="open"
                  x-transition:enter="transition ease-out duration-150"
                  x-transition:enter-start="opacity-0 scale-95 -translate-y-1"

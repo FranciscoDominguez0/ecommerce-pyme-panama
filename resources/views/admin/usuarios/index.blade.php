@@ -3,7 +3,7 @@
 @section('title', 'Usuarios, Roles y Permisos')
 
 @section('content')
-<!-- Page Header -->
+<!-- Encabezado de página -->
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
     <div>
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Usuarios, Roles y Permisos</h1>
@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<!-- Section Title -->
+<!-- Título de la sección -->
 <div class="flex justify-between items-center mb-6">
     <h3 class="text-lg font-bold text-slate-900 dark:text-white">Roles del sistema</h3>
     @can('admin.usuarios.crear')
@@ -22,10 +22,10 @@
     @endcan
 </div>
 
-<!-- Bento Grid for Roles -->
+<!-- Cuadrícula Bento de roles -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach($roles as $role)
-    <!-- Role Card -->
+    <!-- Tarjeta de rol -->
     <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-sm transition-all flex flex-col h-full relative overflow-hidden group">
         <div class="absolute top-0 left-0 w-1 h-full bg-slate-800"></div>
         <div class="flex justify-between items-start mb-4">
@@ -87,7 +87,7 @@
     @endforeach
 </div>
 
-<!-- Recent Users Quick List (Decorative Context) -->
+<!-- Listado rápido de usuarios recientes -->
 <div class="mt-12 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg p-6">
     <div class="flex justify-between items-center border-b border-slate-200 dark:border-gray-700 pb-4 mb-4">
         <h3 class=" text-lg font-semibold text-slate-900 dark:text-white">Usuarios Recientes</h3>
@@ -163,7 +163,7 @@
     </div>
 </dialog>
 
-<!-- Modal Editar Rol -->
+<!-- Modal de edición de rol -->
 <dialog id="editarRolModal" class="p-0 rounded-xl shadow-xl backdrop:bg-slate-900/50 open:animate-in open:fade-in-90 open:zoom-in-95 border border-slate-200 dark:border-gray-700">
     <div class="bg-white dark:bg-[#181a1b] p-6 w-[400px] max-w-[90vw]">
         <div class="flex justify-between items-center mb-6">

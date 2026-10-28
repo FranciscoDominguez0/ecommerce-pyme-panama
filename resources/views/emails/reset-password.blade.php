@@ -102,7 +102,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- Encabezado -->
         <div class="header">
             <div class="logo-badge">
                 @if(isset($message) && file_exists(public_path('images/logo.png')))
@@ -114,7 +114,7 @@
             <h1 class="title">PayMe Panamá</h1>
         </div>
 
-        <!-- Content -->
+        <!-- Contenido -->
         <div class="body">
             <h2 class="greeting">¡Hola, {{ $usuario->nombre ?? 'Estimado usuario' }}!</h2>
             <p class="text">
@@ -135,7 +135,7 @@
             </div>
         </div>
 
-        <!-- Footer -->
+        <!-- Pie de página -->
         <div class="footer">
             © {{ date('Y') }} PayMe Panamá. Todos los derechos reservados.<br>
             Plataforma de Comercio Electrónico y Pagos Seguros.

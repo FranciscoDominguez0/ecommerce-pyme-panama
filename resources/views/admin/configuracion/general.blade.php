@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="space-y-6 font-sans">
-    <!-- Page Header & Sub-nav -->
+    <!-- Encabezado de página y subnavegación -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Configuración General</h1>
@@ -21,7 +21,7 @@
         </nav>
     </div>
 
-    <!-- Settings Card -->
+    <!-- Tarjeta de configuración -->
     <div class="card-elevated rounded-xl overflow-hidden mb-8">
         <div class="px-6 py-5 border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b]">
             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Datos de la empresa</h3>
@@ -114,7 +114,7 @@
                 </div>
             </div>
             
-            <!-- Card Footer Actions -->
+            <!-- Acciones al pie de la tarjeta -->
             <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex flex-col sm:flex-row justify-between items-center gap-4">
                 <span class="text-sm text-slate-500 dark:text-slate-400">Mantén esta información actualizada</span>
                 <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm w-full sm:w-auto">

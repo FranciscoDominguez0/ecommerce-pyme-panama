@@ -10,7 +10,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-11/12 max-w-lg overflow-hidden transform scale-95 transition-transform duration-300 relative"
          id="modal-escaner-content">
         
-        <!-- Header -->
+        <!-- Encabezado -->
         <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-gray-800/50">
             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">barcode_scanner</span>

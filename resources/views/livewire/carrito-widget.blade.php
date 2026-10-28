@@ -1,6 +1,6 @@
 <div class="w-full">
     @if($items->isNotEmpty())
-        <!-- Header -->
+        <!-- Encabezado -->
         <div class="mb-8">
             <h1 class="text-2xl sm:text-3xl font-extrabold text-[#002349] tracking-tight">Carrito de Compras</h1>
             <p class="text-sm text-gray-500 mt-1 font-medium">
@@ -8,10 +8,10 @@
             </p>
         </div>
 
-        <!-- Two Column Layout -->
+        <!-- Disposición en dos columnas -->
         <div class="flex flex-col lg:flex-row gap-8 items-start">
             
-            <!-- Left Column: Lista de Productos -->
+            <!-- Columna izquierda: lista de productos -->
             <div class="flex-1 w-full bg-white border border-gray-200/90 rounded-xl p-4 sm:p-6 shadow-sm">
                 
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Productos</h2>
@@ -26,7 +26,7 @@
                     @endphp
 
                     <div wire:key="cart-item-{{ $item->id }}" class="border-b border-gray-200 py-4 sm:py-6 last:border-0">
-                        <!-- Product Title -->
+                        <!-- Título del producto -->
                         <h3 class="text-sm sm:text-[17px] leading-snug mb-3 sm:mb-4">
                             @if($producto)
                                 <a href="{{ route('cliente.producto.detalle', $producto->slug) }}" wire:navigate class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
@@ -46,7 +46,7 @@
                                      onerror="this.onerror=null; this.src='https://placehold.co/200x200?text=Sin+Imagen';" />
                             </div>
 
-                            <!-- Details & Eliminar -->
+                            <!-- Detalles y eliminación -->
                             <div class="flex-1 min-w-0 flex flex-col sm:flex-row sm:justify-between items-start gap-2.5 sm:gap-4">
                                 <div class="text-[13px] sm:text-[15px] text-gray-800 space-y-1 sm:space-y-1.5 min-w-0 w-full">
                                     
@@ -99,7 +99,7 @@
                                     @endif
                                 </div>
 
-                                <!-- Eliminar Button -->
+                                <!-- Botón para eliminar -->
                                 <div class="shrink-0 self-end sm:self-start pt-1 sm:pt-0">
                                     <button type="button" 
                                             wire:click="eliminar({{ $item->id }})" 
@@ -378,7 +378,7 @@
                             @endif
                         </div>
 
-                        <!-- Info -->
+                        <!-- Información -->
                         <h3 class="text-sm font-bold text-gray-900 line-clamp-2 min-h-[40px] leading-snug">
                             <a href="{{ route('cliente.producto.detalle', $deseo->slug) }}" wire:navigate class="hover:text-[#006148] transition-colors">
                                 {{ $deseo->nombre }}

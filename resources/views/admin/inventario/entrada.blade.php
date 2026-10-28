@@ -12,7 +12,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de página --}}
     <div class="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <a href="{{ route('admin.inventario.index') }}"
            class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent hover:text-slate-700 dark:text-slate-300 transition-colors shrink-0">
@@ -24,13 +24,7 @@
         </div>
     </div>
 
-    {{-- Error --}}
-    @if(session('error'))
-        <div class="flex items-center gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-medium">
-            <span class="material-symbols-outlined text-[18px] text-red-500">error</span>
-            {{ session('error') }}
-        </div>
-    @endif
+    {{-- Errores de validación del formulario --}}
     @if($errors->any())
         <div class="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
             <ul class="list-disc list-inside space-y-1">
@@ -41,7 +35,7 @@
         </div>
     @endif
 
-    {{-- Form Card --}}
+    {{-- Tarjeta del formulario --}}
     <div class="card-elevated rounded-xl p-6 sm:p-8">
         <form method="POST" action="{{ route('admin.inventario.entrada') }}" id="form-entrada">
             @csrf
@@ -145,7 +139,7 @@
                 </div>
             </div>
 
-            {{-- Actions --}}
+            {{-- Acciones y confirmación --}}
             <div class="flex items-center justify-end gap-3 pt-5 border-t border-slate-100 dark:border-gray-700">
                 <a href="{{ route('admin.inventario.index') }}"
                    class="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:text-gray-100 hover:bg-slate-100 dark:bg-transparent rounded-xl transition-colors">

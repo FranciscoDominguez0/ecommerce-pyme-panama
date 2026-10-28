@@ -750,7 +750,7 @@
                             </div>
                         </div>
 
-                        <!-- Footer del Modal -->
+                        <!-- Pie del modal -->
                         <div class="px-6 py-4 bg-slate-50 dark:bg-[#181a1b] border-t border-slate-100 dark:border-gray-800 flex items-center justify-end gap-3 rounded-b-2xl">
                             <button type="button" 
                                     @click="cerrarModalNuevoCliente()" 
@@ -840,9 +840,9 @@
                         </button>
                     </div>
 
-                    <!-- Contenido según Tab -->
+                    <!-- Contenido según pestaña -->
                     <div class="min-h-[220px]">
-                        <!-- TAB 0: SIN SELECCIÓN DENTRO DEL MODAL -->
+                        <!-- PESTAÑA 0: SIN SELECCIÓN EN EL MODAL -->
                         <div x-show="!modalMetodoEntrega" class="py-12 text-center">
                             <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600 mb-2">touch_app</span>
                             <p class="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">Selecciona una de las 3 opciones superiores</p>
@@ -869,7 +869,7 @@
                             </div>
                         </div>
 
-                        <!-- TAB 2: DELIVERY -->
+                        <!-- PESTAÑA 2: ENTREGA A DOMICILIO -->
                         <div x-show="modalMetodoEntrega === 'delivery'" class="space-y-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
@@ -950,7 +950,7 @@
                         </div>
                     </div>
 
-                    <!-- Footer del Modal -->
+                    <!-- Pie del modal -->
                     <div class="mt-6 pt-4 border-t border-slate-100 dark:border-gray-800 flex justify-end gap-3">
                         <button type="button" 
                                 @click="cerrarModalEntrega()" 

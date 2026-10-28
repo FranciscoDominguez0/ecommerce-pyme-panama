@@ -1,4 +1,4 @@
-<!-- Sidebar Admin (Fondo #1F2937) -->
+<!-- Barra lateral de administración (Fondo #1F2937) -->
 <aside id="admin-sidebar" class="w-64 fixed left-0 top-0 h-full bg-[#1F2937] text-slate-200 z-50 transform -translate-x-full md:translate-x-0 transition-all duration-300 ease-in-out shadow-2xl md:shadow-none flex flex-col justify-between select-none">
     
 

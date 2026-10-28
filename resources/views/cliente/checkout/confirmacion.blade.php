@@ -7,7 +7,7 @@
     <!-- Progress Indicator -->
     <div class="mb-12 flex justify-center w-full max-w-3xl mx-auto">
         <div class="flex items-center w-full relative">
-            <!-- Step 1: Address (Completed) -->
+            <!-- Paso 1: Dirección (Completado) -->
             <div class="flex flex-col items-center relative z-10 w-1/3">
                 <a href="{{ route('cliente.checkout.direccion') }}" wire:navigate class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">check</span>
@@ -16,7 +16,7 @@
             </div>
             <!-- Connector 1-2 -->
             <div class="absolute top-4 left-[16.6%] right-[50%] h-[2px] bg-secondary -z-10"></div>
-            <!-- Step 2: Payment (Completed) -->
+            <!-- Paso 2: Pago (Completado) -->
             <div class="flex flex-col items-center relative z-10 w-1/3">
                 <a href="{{ route('cliente.checkout.pago') }}" wire:navigate class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center mb-2 hover:bg-secondary-container hover:text-on-secondary-container transition-colors shadow-sm">
                     <span class="material-symbols-outlined text-[18px]">check</span>
@@ -25,7 +25,7 @@
             </div>
             <!-- Connector 2-3 -->
             <div class="absolute top-4 left-[50%] right-[16.6%] h-[2px] bg-secondary -z-10"></div>
-            <!-- Step 3: Confirmation (Active) -->
+            <!-- Paso 3: Confirmación (Activo) -->
             <div class="flex flex-col items-center relative z-10 w-1/3">
                 <div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-xl font-semibold mb-2 shadow-[0_4px_20px_rgba(0,35,73,0.12)]">3</div>
                 <span class="font-label-caps text-xs font-semibold uppercase tracking-wide text-primary text-center">Confirmación</span>
@@ -39,7 +39,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- Detalles del pedido (Left Column) -->
+        <!-- Detalles del pedido (columna izquierda) -->
         <div class="lg:col-span-8 space-y-6">
             
             <!-- Items del Carrito -->
@@ -168,7 +168,7 @@
 
         </div>
 
-        <!-- Resumen de Costos (Right Column) -->
+        <!-- Resumen de costos (columna derecha) -->
         <div class="lg:col-span-4">
             <form id="form-confirmar-pedido" action="{{ route('cliente.checkout.procesar') }}" method="POST">
                 @csrf

@@ -99,7 +99,7 @@
                                 </div>
                             </td>
 
-                            <!-- Logotipo Preview -->
+                            <!-- Vista previa del logotipo -->
                             <td class="py-3.5 px-3 text-center">
                                 <div class="w-20 h-9 mx-auto rounded-lg bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/80 shadow-2xs flex items-center justify-center p-1.5 overflow-hidden">
                                     {!! $brand->logo_html !!}

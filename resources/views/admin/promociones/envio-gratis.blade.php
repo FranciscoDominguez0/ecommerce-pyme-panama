@@ -12,7 +12,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de la página --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Reglas de Envío Gratis</h2>
@@ -42,7 +42,7 @@
         </a>
     </div>
 
-    <!-- Data Table Card -->
+    <!-- Tarjeta de tabla de datos -->
     <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -196,7 +196,7 @@
                 <span>Activar regla inmediatamente</span>
             </label>
 
-            <!-- Actions -->
+            <!-- Botones de acción -->
             <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100 dark:border-gray-700">
                 <button type="button" onclick="cerrarModalEnvioGratis()" class="px-4 py-2 bg-slate-100 dark:bg-gray-800 hover:bg-slate-200 dark:hover:bg-gray-700 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-xl transition-colors cursor-pointer">Cancelar</button>
                 <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer">Guardar Regla</button>

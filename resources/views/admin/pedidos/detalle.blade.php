@@ -478,7 +478,7 @@
         </div>
     </div>
 
-    <!-- Modal Rechazar Pago -->
+    <!-- Modal para rechazar comprobante de pago -->
     <div id="modal-rechazar" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4 bg-slate-900/75 backdrop-blur-xs transition-opacity font-sans" onclick="if(event.target === this) this.classList.add('hidden')" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="relative bg-white dark:bg-[#181a1b] rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all max-w-lg w-full p-6 border border-slate-200 dark:border-gray-700 z-10" onclick="event.stopPropagation()">
             <button type="button" onclick="document.getElementById('modal-rechazar').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer">

@@ -1,4 +1,4 @@
-<!-- Footer -->
+<!-- Pie de página -->
 <footer class="bg-[#002349] text-white pt-10 pb-6 border-t border-white/10 mt-auto">
     <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -25,7 +25,7 @@
                 </ul>
             </div>
 
-            <!-- Customer Service -->
+            <!-- Atención al Cliente -->
             <div>
                 <h4 class="text-[11px] font-bold text-white uppercase tracking-wider mb-3 text-[#8af5be]">Soporte
                 </h4>

@@ -14,7 +14,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de la página --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Sucursales Courier</h2>

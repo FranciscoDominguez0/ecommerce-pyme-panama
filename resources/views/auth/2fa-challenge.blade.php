@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-slot name="title">Verificación de Seguridad - PayMe Panamá</x-slot>
 
-    <!-- Main Content Canvas: Mismo estilo que Login/Registro -->
+    <!-- Lienzo principal: mismo estilo que acceso y registro -->
     <main class="w-full max-w-4xl lg:max-w-5xl my-auto px-2 sm:px-4">
         <div class="relative overflow-hidden flex flex-col lg:flex-row items-center justify-between lg:glass-card lg:rounded-3xl lg:sm:rounded-[36px] lg:shadow-xl lg:border lg:border-slate-200/90 lg:p-4 lg:sm:p-6 lg:p-10 lg:min-h-[580px] lg:bg-[linear-gradient(135deg,#f0fdf4_0%,#f8fafc_50%,#ecfdf5_100%)]">
             
@@ -47,11 +47,11 @@
                 </div>
             </div>
 
-            <!-- Right Side: Floating White Card with Form Content -->
+            <!-- Lado derecho: Tarjeta flotante con formulario -->
             <div class="w-full lg:w-1/2 flex justify-center z-10 mt-4 lg:mt-0 animate-swap-card">
                 <div class="w-full max-w-[420px] bg-white rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col justify-between border border-slate-100">
                     
-                    <!-- Header inside card -->
+                    <!-- Encabezado interior de la tarjeta -->
                     <div class="flex flex-col items-start mb-5 text-left">
                         <div class="flex items-center gap-2.5 mb-4 lg:hidden">
                             <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -65,7 +65,7 @@
                         </p>
                     </div>
 
-                    <!-- Toast messages handling for resend success/warnings -->
+                    <!-- Manejo de avisos para reenvío y confirmación -->
                     @if (session('toast_success'))
                         <div class="mb-4 bg-emerald-50 text-emerald-800 border border-emerald-200 p-3 rounded-xl flex items-start gap-2 text-xs">
                             <span class="material-symbols-outlined shrink-0 text-emerald-600 text-base" style="font-variation-settings: 'FILL' 1;">check_circle</span>
@@ -84,7 +84,7 @@
                         </div>
                     @endif
 
-                    <!-- Error Alert -->
+                    <!-- Alerta de error -->
                     <div id="error-alert" class="hidden mb-4 bg-red-50 text-red-700 p-3 rounded-xl flex items-start gap-2 border border-red-200 text-xs">
                         <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
                         <div class="flex-1">
@@ -99,7 +99,7 @@
                     <form method="POST" action="{{ route('2fa.verify') }}" class="flex flex-col gap-5" id="2fa-form" x-data="{ isVerifying: false }" @submit.prevent="isVerifying = true; submitVerify($event, () => isVerifying = false)">
                         @csrf
 
-                        <!-- Code Input -->
+                        <!-- Campo para código -->
                         <div class="flex flex-col gap-2 items-center">
                             <label class="text-xs font-semibold text-slate-700 uppercase tracking-widest" for="code">
                                 Código de Acceso
@@ -108,22 +108,22 @@
                                 <div class="flex justify-center gap-2 sm:gap-3 w-full" x-data="otpComponent()">
                                     <input type="hidden" name="code" :value="code">
                                     
-                                    <!-- Input 1 -->
+                                    <!-- Dígito 1 -->
                                     <input type="text" x-ref="input0" inputmode="numeric" maxlength="1" required
                                            class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-emerald-600 focus:ring-emerald-500/20 @enderror"
                                            @input="handleInput(0, $event)" @keydown.backspace="handleBackspace(0, $event)" @paste="handlePaste($event)">
                                            
-                                    <!-- Input 2 -->
+                                    <!-- Dígito 2 -->
                                     <input type="text" x-ref="input1" inputmode="numeric" maxlength="1" required
                                            class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-emerald-600 focus:ring-emerald-500/20 @enderror"
                                            @input="handleInput(1, $event)" @keydown.backspace="handleBackspace(1, $event)" @paste="handlePaste($event)">
                                            
-                                    <!-- Input 3 -->
+                                    <!-- Dígito 3 -->
                                     <input type="text" x-ref="input2" inputmode="numeric" maxlength="1" required
                                            class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-emerald-600 focus:ring-emerald-500/20 @enderror"
                                            @input="handleInput(2, $event)" @keydown.backspace="handleBackspace(2, $event)" @paste="handlePaste($event)">
                                            
-                                    <!-- Input 4 -->
+                                    <!-- Dígito 4 -->
                                     <input type="text" x-ref="input3" inputmode="numeric" maxlength="1" required
                                            class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border-2 bg-slate-50 text-slate-900 focus:bg-white focus:outline-none transition-all @error('code') border-red-500 focus:border-red-500 focus:ring-red-500/20 @else border-slate-200 focus:border-emerald-600 focus:ring-emerald-500/20 @enderror"
                                            @input="handleInput(3, $event)" @keydown.backspace="handleBackspace(3, $event)" @paste="handlePaste($event)">
@@ -135,7 +135,7 @@
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Botón de envío -->
                         <button class="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] disabled:opacity-75 disabled:cursor-wait text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-xs hover:shadow-md transition-all flex justify-center items-center gap-2 group cursor-pointer"
                                 type="submit"
                                 :disabled="isVerifying">

@@ -80,7 +80,6 @@ class FacturaService
      */
     public function generarPdf(Factura $factura): string
     {
-        $tInicio = microtime(true);
         $factura->load(['pedido.items.producto.imagenes', 'pedido.items.variante', 'usuario', 'pedido.direccion']);
         $itemsFactura = $this->prepararItemsParaPdf($factura);
         $datosEmpresa = $this->prepararDatosEmpresaParaPdf();
@@ -95,9 +94,6 @@ class FacturaService
         Storage::disk('local')->put($pdfRuta, $pdf->output());
 
         $factura->update(['pdf_ruta' => $pdfRuta]);
-
-        $tDuracion = round(microtime(true) - $tInicio, 3);
-        \Illuminate\Support\Facades\Log::info("FACTURA_PDF_TIMING: Factura {$factura->numero} generada en {$tDuracion}s");
 
         return $pdfRuta;
     }

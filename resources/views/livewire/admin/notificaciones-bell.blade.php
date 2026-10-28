@@ -68,7 +68,7 @@
         <audio id="notification-sound" src="{{ asset('sounds/Notificacion.mp3') }}" preload="auto" style="display: none;"></audio>
     </div>
 
-    <!-- Notifications Toggle Button -->
+    <!-- Botón selector de notificaciones -->
     <button @click="open = !open" 
             class="relative p-1.5 rounded-lg transition-colors shrink-0 outline-none"
             :class="open ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800'"
@@ -85,7 +85,7 @@
         @endif
     </button>
 
-    <!-- Dropdown Panel -->
+    <!-- Panel desplegable -->
     <div x-show="open"
          x-transition:enter="transition ease-out duration-200"
          x-transition:enter-start="opacity-0 scale-95 translate-y-2"
@@ -96,7 +96,7 @@
          style="display:none;"
          class="absolute right-0 sm:-right-2 top-full mt-3 w-80 sm:w-96 bg-white dark:bg-[#181a1b] rounded-2xl shadow-xl border border-slate-100 dark:border-gray-700 py-2 z-[100] origin-top-right overflow-hidden">
         
-        <!-- Header -->
+        <!-- Encabezado -->
         <div class="px-4 py-3 border-b border-slate-100 dark:border-gray-700 flex items-center justify-between bg-white/50 dark:bg-[#181a1b]/50 backdrop-blur-sm">
             <h3 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 Notificaciones
@@ -111,7 +111,7 @@
             @endif
         </div>
 
-        <!-- List -->
+        <!-- Listado -->
         <div class="max-h-[400px] overflow-y-auto overscroll-contain">
             @forelse($notificaciones as $notificacion)
                 <div class="px-4 py-3 hover:bg-slate-50 dark:hover:bg-gray-800 transition-colors border-b border-slate-50 dark:border-gray-700/50 last:border-0 relative group {{ is_null($notificacion->read_at) ? 'bg-slate-50/50 dark:bg-gray-800/50' : '' }}">
@@ -120,7 +120,7 @@
                     @endif
                     
                     <div class="flex items-start gap-3">
-                        <!-- Icon -->
+                        <!-- Ícono -->
                         <div class="shrink-0 mt-1 flex items-center justify-center w-8 h-8 rounded-full shadow-sm border
                             @if($notificacion->data['tipo'] === 'nuevo_pedido') bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800/50 text-blue-600 dark:text-blue-400
                             @elseif($notificacion->data['tipo'] === 'stock_minimo') bg-amber-50 dark:bg-amber-900/20 border-amber-100 dark:border-amber-800/50 text-amber-600 dark:text-amber-400
@@ -134,7 +134,7 @@
                             </span>
                         </div>
                         
-                        <!-- Content -->
+                        <!-- Contenido -->
                         <div class="flex-1 min-w-0">
                             <a href="#" 
                                wire:click.prevent="leerYRedirigir('{{ $notificacion->id }}', '{{ $notificacion->data['url'] ?? '#' }}')"
@@ -173,7 +173,7 @@
             @endforelse
         </div>
         
-        <!-- Footer -->
+        <!-- Pie de página -->
         @if(count($notificaciones) > 0)
             <div class="px-4 py-2.5 border-t border-slate-100 dark:border-gray-700 bg-slate-50/50 dark:bg-[#181a1b]/50 text-center">
                 <a href="#" class="text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center justify-center gap-1 group">

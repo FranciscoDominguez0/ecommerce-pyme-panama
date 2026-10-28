@@ -16,7 +16,7 @@
 
 @section('content')
 <div class="space-y-6 font-sans">
-    <!-- Page Header & Tabs -->
+    <!-- Encabezado de página y pestañas -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Configuración de Impuestos</h1>
@@ -33,7 +33,7 @@
         </nav>
     </div>
 
-    <!-- Main Card -->
+    <!-- Tarjeta principal -->
     <div class="card-elevated rounded-xl overflow-hidden mb-8">
         <div class="px-6 py-5 border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b]">
             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Configuración de Impuestos</h3>
@@ -45,7 +45,7 @@
             @method('PUT')
             
             <div class="p-6 flex flex-col gap-8">
-                <!-- Section 1: Impuestos Generales -->
+                <!-- Sección 1: Impuestos Generales -->
                 <section>
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="text-base font-semibold text-slate-900 dark:text-white">Impuesto General (ITBMS)</h4>
@@ -82,7 +82,7 @@
                 </section>
             </div>
             
-            <!-- Footer Actions -->
+            <!-- Acciones al pie -->
             <div class="px-6 py-4 border-t border-slate-200 dark:border-gray-700 bg-slate-50 dark:bg-transparent flex justify-end gap-4 mt-auto rounded-b-xl">
                 <a href="{{ route('admin.configuracion.general') }}" class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:bg-gray-700 transition-colors border border-transparent">Cancelar</a>
                 <button type="submit" class="px-5 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">Guardar cambios</button>

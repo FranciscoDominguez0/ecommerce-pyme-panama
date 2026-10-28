@@ -17,14 +17,14 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de la página --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Gestión de Inventario</h2>
             <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">Controla el stock, registra movimientos y consulta el historial de cambios.</p>
         </div>
         <div class="flex items-center gap-2">
-            {{-- Dropdown: Registrar movimiento --}}
+            {{-- Menú desplegable: Registrar movimiento --}}
             <div class="relative" x-data="{ open: false }" @click.outside="open = false">
                 <button @click="open = !open"
                         class="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    {{-- Tab Navigation --}}
+    {{-- Navegación por pestañas --}}
     <div class="flex items-center gap-1 border-b border-slate-200 dark:border-gray-700">
         <a href="{{ route('admin.inventario.index') }}"
            class="px-4 py-2.5 text-xs font-bold transition-all border-b-2 {{ !isset($vista) || $vista !== 'stock' ? 'border-slate-900 text-slate-900 dark:text-white' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300' }}">
@@ -148,11 +148,11 @@
     @if(!isset($vista) || $vista !== 'stock')
         {{-- ═══════════ HISTORIAL DE MOVIMIENTOS ═══════════ --}}
         <div class="card-elevated rounded-xl overflow-hidden">
-            {{-- Filter bar --}}
+            {{-- Barra de filtros --}}
             <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
                 <h3 class="text-sm font-extrabold text-slate-800 dark:text-gray-100">Historial de Movimientos</h3>
                 <form method="GET" action="{{ route('admin.inventario.index') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto" x-data="adminAutoFilter">
-                    {{-- Search --}}
+                    {{-- Buscador --}}
                     <div class="flex items-center bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 focus-within:border-slate-400 w-full sm:w-52">
                         <span class="material-symbols-outlined text-slate-400 text-[16px] mr-1.5">search</span>
                         <input type="text" name="q" value="{{ request('q') }}" x-on:input="autoSubmit()"
@@ -179,7 +179,7 @@
                 </form>
             </div>
 
-            {{-- Table --}}
+            {{-- Tabla de registros --}}
             <div class="overflow-x-auto">
                 <table class="w-full text-left min-w-[760px]">
                     <thead>
@@ -226,7 +226,7 @@
                                     </div>
                                 </td>
 
-                                {{-- Tipo badge --}}
+                                {{-- Distintivo de tipo --}}
                                 <td class="px-5 py-3.5 whitespace-nowrap">
                                     @if($mov->tipo === 'entrada')
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800/60 uppercase tracking-wide">
@@ -296,7 +296,7 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
+            {{-- Paginación --}}
             @if($movimientos->total() > 0)
                 <div class="px-6 py-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/40">
                     {{ $movimientos->links('vendor.pagination.admin-tailwind') }}
@@ -307,7 +307,7 @@
     @else
         {{-- ═══════════ STOCK ACTUAL ═══════════ --}}
         <div class="card-elevated rounded-xl overflow-hidden">
-            {{-- Filter bar --}}
+            {{-- Barra de filtros --}}
             <div class="p-4 sm:p-5 border-b border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/50 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
                 <h3 class="text-sm font-extrabold text-slate-800 dark:text-gray-100">Stock Actual</h3>
                 <form method="GET" action="{{ route('admin.inventario.stock') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto" x-data="adminAutoFilter">
@@ -338,7 +338,7 @@
                 </form>
             </div>
 
-            {{-- Table --}}
+            {{-- Tabla de registros --}}
             <div class="overflow-x-auto">
                 <table class="w-full text-left min-w-[760px]">
                     <thead>
@@ -476,7 +476,7 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
+            {{-- Paginación --}}
             @if($productos->total() > 0)
                 <div class="px-6 py-4 border-t border-slate-100 dark:border-gray-700 bg-slate-50 dark:bg-transparent/40">
                     {{ $productos->links('vendor.pagination.admin-tailwind') }}
@@ -493,7 +493,7 @@
          role="dialog"
          aria-modal="true">
         <div class="bg-white dark:bg-[#181a1b] rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-gray-700 space-y-5 animate-in fade-in zoom-in-95 duration-150 relative z-10 text-left my-auto">
-            {{-- Header --}}
+            {{-- Encabezado --}}
             <div class="flex items-start justify-between gap-3">
                 <div class="flex items-center gap-3">
                     <div id="mdm-icono-container" class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0">
@@ -601,7 +601,7 @@
                 </div>
             </div>
 
-            {{-- Footer --}}
+            {{-- Pie de página --}}
             <div class="pt-2 flex justify-end">
                 <button type="button" 
                         onclick="window.cerrarModalDetalleMovimiento()" 

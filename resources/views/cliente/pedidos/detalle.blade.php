@@ -178,7 +178,7 @@
             </div>
         </div>
 
-        {{-- CARD 3: Historial del Pedido (Order Timeline vertical) --}}
+        {{-- Tarjeta 3: Cronología vertical del pedido --}}
         <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
             <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white pb-4 mb-6 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
                 <span class="material-symbols-outlined text-emerald-600 text-[22px]">history</span>

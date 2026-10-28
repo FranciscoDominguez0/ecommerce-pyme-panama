@@ -5,7 +5,7 @@
     'pdfOnclick' => null,
 ])
 
-<!-- Dropdown Exportar -->
+<!-- Menú desplegable para exportar -->
 <div x-data="{ open: false }" class="relative inline-block text-left z-30">
     <button type="button" @click="open = !open" @click.away="open = false" 
             class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 hover:bg-slate-50 dark:bg-transparent hover:border-slate-300 dark:border-gray-600 transition-all shadow-xs h-full w-full justify-center sm:w-auto">

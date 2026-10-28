@@ -7,7 +7,7 @@
             <div class="flex justify-center w-full">
                 <div class="flex flex-wrap justify-center gap-1">
 
-                    {{-- Previous Page Link --}}
+                    {{-- Enlace a la página anterior --}}
                     @if ($paginator->onFirstPage())
                         <span aria-disabled="true" aria-label="Anterior">
                             <span class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-50 border border-slate-200 rounded-lg cursor-not-allowed" aria-hidden="true">
@@ -24,7 +24,7 @@
                         </a>
                     @endif
 
-                    {{-- Pagination Elements --}}
+                    {{-- Elementos de la paginación --}}
                     @foreach ($elements as $element)
                         {{-- "Three Dots" Separator --}}
                         @if (is_string($element))
@@ -49,7 +49,7 @@
                         @endif
                     @endforeach
 
-                    {{-- Next Page Link --}}
+                    {{-- Enlace a la página siguiente --}}
                     @if ($paginator->hasMorePages())
                         <a href="{{ $paginator->nextPageUrl() }}" rel="next" wire:navigate class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg shadow-xs hover:bg-slate-100 transition-colors" aria-label="Siguiente">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

@@ -22,7 +22,7 @@
             <div
                 class="relative z-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col lg:flex-row items-center gap-0 min-h-[420px]">
 
-                <!-- Left: Copy -->
+                <!-- Izquierda: Textos y llamados a la acción -->
                 <div class="flex-1 flex flex-col justify-center gap-6 py-10 lg:py-14 pr-0 lg:pr-10">
 
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight">
@@ -77,7 +77,7 @@
 
                 </div>
 
-                <!-- Right: GIF hero slider -->
+                <!-- Derecha: Slider visual de portada -->
                 <div class="w-full lg:w-[52%] shrink-0 self-stretch min-h-[320px] lg:min-h-full relative overflow-hidden"
                     id="heroSlider">
 
@@ -215,7 +215,7 @@
                     </p>
                 </div>
 
-                {{-- Steps: layout horizontal tipo pipeline --}}
+                {{-- Pasos del proceso en disposición horizontal --}}
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 relative">
 
                     {{-- Línea de progreso desktop --}}
@@ -359,7 +359,7 @@
         =========================================== -->
         <section class="w-full overflow-hidden relative" id="bannerCarousel" style="max-height:340px;">
 
-            <!-- Slides wrapper -->
+            <!-- Contenedor de diapositivas -->
             <div id="bannerTrack" class="flex transition-transform duration-700 ease-in-out" style="will-change:transform;">
                 @foreach ([
                         'BANNERS AGOSTO_Mesa de trabajo 1.webp',

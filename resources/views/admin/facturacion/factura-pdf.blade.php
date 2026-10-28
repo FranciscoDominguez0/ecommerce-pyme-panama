@@ -273,15 +273,7 @@
                 @endforeach
             @else
                 @foreach($factura->pedido->items as $item)
-                @php
-                    $imgRuta = null;
-                    if ($item->variante && !empty($item->variante->imagen_ruta)) {
-                        $imgRuta = $item->variante->imagen_ruta;
-                    } elseif ($item->producto) {
-                        $imgPrinc = $item->producto->imagenPrincipal();
-                        $imgRuta = $imgPrinc ? $imgPrinc->ruta : null;
-                    }
-                    $imgBase64 = app(\App\Services\FacturaService::class)->resolverImagenBase64($imgRuta);
+                    $imgBase64 = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="100%" height="100%" fill="%23f1f5f9"/></svg>';
                 @endphp
                 <tr>
                     <td class="text-center">{{ $item->cantidad }}</td>

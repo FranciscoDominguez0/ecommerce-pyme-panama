@@ -39,7 +39,7 @@
 
 @if($fullScreen)
 <div class="fixed inset-0 z-[100] flex transition-opacity duration-300 w-full h-full">
-    <!-- Fake Sidebar: siempre oscuro -->
+    <!-- Barra lateral simulada (siempre oscura) -->
     <div class="hidden md:flex w-64 bg-[#1F2937] h-full shrink-0 flex-col border-r border-gray-700/60 shadow-2xl relative overflow-hidden">
         <div class="h-16 border-b border-gray-700/60 w-full flex items-center px-5">
             <div class="h-9 w-9 bg-gray-600/50 rounded-xl shimmer-bg"></div>
@@ -54,7 +54,7 @@
         </div>
     </div>
     
-    <!-- Fake Main Area: responde a dark/light -->
+    <!-- Área principal simulada (responde a claro/oscuro) -->
     <div class="flex-1 flex flex-col h-full min-w-0 bg-[#F8FAFC] dark:bg-[#121415]">
         <!-- Fake Topbar -->
         <div class="h-16 bg-white dark:bg-[#181a1b] border-b border-slate-200 dark:border-gray-700/80 shadow-xs shrink-0 w-full flex items-center px-8 justify-between relative overflow-hidden">
@@ -65,7 +65,7 @@
                 <div class="h-8 w-8 bg-slate-200 dark:bg-gray-700/80 rounded-full shimmer-bg stagger-2"></div>
             </div>
         </div>
-        <!-- Main Content Skeleton -->
+        <!-- Estructura simulada del contenido -->
         <div class="flex-1 px-4 sm:px-8 py-6 w-full max-w-[1500px] mx-auto flex flex-col gap-6">
             @include('components.partials.skeleton-content')
         </div>

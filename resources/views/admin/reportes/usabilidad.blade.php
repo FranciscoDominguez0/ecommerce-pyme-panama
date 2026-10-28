@@ -216,9 +216,9 @@
                 </div>
             </div>
 
-            <!-- Dispositivos Mobile vs Desktop -->
+            <!-- Dispositivos móviles vs escritorio -->
             <div class="grid grid-cols-2 gap-3 pt-1">
-                <!-- Mobile -->
+                <!-- Vista para móviles -->
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#202326] border border-slate-200 dark:border-gray-700">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
@@ -236,7 +236,7 @@
                     </span>
                 </div>
 
-                <!-- Desktop -->
+                <!-- Vista para escritorio -->
                 <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#202326] border border-slate-200 dark:border-gray-700">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">

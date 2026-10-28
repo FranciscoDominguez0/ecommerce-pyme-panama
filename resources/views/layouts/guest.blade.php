@@ -14,7 +14,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo-192.png') }}">
 
-    <!-- Default Laravel Font: Figtree & Material Symbols (Local) -->
+    <!-- Tipografía del sistema y símbolos de Material -->
     <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
 
     <!-- Tailwind CSS compilado vía Vite -->
@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <!-- Main Slot Content -->
+    <!-- Contenido del slot principal -->
     <div class="relative z-10 w-full flex flex-col items-center justify-center py-6 px-4">
         {{ $slot }}
     </div>

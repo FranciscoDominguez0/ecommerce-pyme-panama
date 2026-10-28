@@ -12,7 +12,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de la página --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Gestión de Cupones</h2>
@@ -29,7 +29,7 @@
 
     <!-- Metrics Bento (3 KPI Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- Card 1: Total Cupones -->
+        <!-- Tarjeta 1: Total de cupones -->
         <div class="bg-white dark:bg-[#181a1b] rounded-2xl p-5 border border-slate-200 dark:border-gray-700/80 shadow-2xs relative overflow-hidden group">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-100/50 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
             <div class="flex items-center justify-between mb-3 relative z-10">
@@ -42,7 +42,7 @@
             <div class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-1 relative z-10">Registrados en el sistema</div>
         </div>
 
-        <!-- Card 2: Cupones Activos -->
+        <!-- Tarjeta 2: Cupones activos -->
         <div class="bg-white dark:bg-[#181a1b] rounded-2xl p-5 border border-slate-200 dark:border-gray-700/80 shadow-2xs relative overflow-hidden group">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-emerald-100/60 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
             <div class="flex items-center justify-between mb-3 relative z-10">
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <!-- Card 3: Descuentos Aplicados -->
+        <!-- Tarjeta 3: Descuentos aplicados -->
         <div class="bg-white dark:bg-[#181a1b] rounded-2xl p-5 border border-slate-200 dark:border-gray-700/80 shadow-2xs relative overflow-hidden group">
             <div class="absolute -right-4 -top-4 w-20 h-20 bg-amber-100/40 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
             <div class="flex items-center justify-between mb-3 relative z-10">
@@ -72,12 +72,12 @@
         </div>
     </div>
 
-    <!-- Data Table & Filter Toolbar -->
+    <!-- Tabla de datos y barra de filtros -->
     <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700/80 shadow-2xs overflow-hidden">
         
-        <!-- Table Toolbar -->
+        <!-- Barra de herramientas de la tabla -->
         <div class="p-4 border-b border-slate-100 dark:border-gray-700 flex flex-col md:flex-row gap-3 items-center justify-between bg-slate-50 dark:bg-transparent/50">
-            <!-- Filter Pills -->
+            <!-- Píldoras de filtrado -->
             <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
                 <a href="{{ route('admin.promociones.cupones', array_merge(request()->except('tipo', 'page'), ['tipo' => 'all'])) }}"
                    class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all {{ $filtroTipo === 'all' ? 'bg-slate-900 text-white shadow-2xs' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent' }}">
@@ -97,7 +97,7 @@
                 </a>
             </div>
 
-            <!-- Search input -->
+            <!-- Campo de búsqueda -->
             <form action="{{ route('admin.promociones.cupones') }}" method="GET" class="relative w-full md:w-72" x-data="adminAutoFilter">
                 @if($filtroTipo !== 'all')
                     <input type="hidden" name="tipo" value="{{ $filtroTipo }}">
@@ -112,7 +112,7 @@
             </form>
         </div>
 
-        <!-- Table -->
+        <!-- Tabla de registros -->
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -250,7 +250,7 @@
                                         <span class="material-symbols-outlined text-[18px]">edit</span>
                                     </a>
 
-                                    <!-- Toggle Estado -->
+                                    <!-- Alternador de estado -->
                                     <form action="{{ route('admin.promociones.cupones.toggle', $cupon->id) }}" method="POST" class="inline">
                                         @csrf
                                         <button type="submit" 

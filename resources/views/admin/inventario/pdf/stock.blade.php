@@ -283,7 +283,7 @@
         </tr>
     </table>
 
-    <!-- FOOTER PÁGINAS -->
+    <!-- PIE DE PÁGINA -->
     <div class="footer">
         Documento Confidencial | PAYME PANAMÁ, S.A. | RUC: 155698745-2-2023 DV 85 | Página <span class="page-number"></span>
     </div>

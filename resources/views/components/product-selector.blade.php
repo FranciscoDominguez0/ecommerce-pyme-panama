@@ -6,7 +6,7 @@
         class="w-full p-3 border {{ $error ? 'border-red-400' : 'border-slate-200 dark:border-gray-700 hover:border-emerald-500' }} rounded-xl bg-white dark:bg-[#181a1b] text-left flex items-center justify-between shadow-sm group transition-all">
     
     <div class="flex items-center gap-3 min-w-0" id="preview-container-{{ $id }}">
-        {{-- Empty state --}}
+        {{-- Estado vacío --}}
         <div id="empty-state-{{ $id }}" class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg bg-slate-50 dark:bg-transparent border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-400 shrink-0">
                 <span class="material-symbols-outlined text-[20px]">inventory_2</span>
@@ -14,7 +14,7 @@
             <span class="text-sm font-semibold text-slate-500">Seleccionar producto…</span>
         </div>
 
-        {{-- Selected state (Hidden by default) --}}
+        {{-- Estado seleccionado (oculto por defecto) --}}
         <div id="selected-state-{{ $id }}" class="hidden items-center gap-3 min-w-0">
             <div class="w-10 h-10 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden bg-slate-100 dark:bg-transparent flex items-center justify-center shrink-0" id="img-container-{{ $id }}">
                 <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>

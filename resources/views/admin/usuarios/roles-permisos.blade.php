@@ -7,7 +7,7 @@
     @csrf
     @method('PUT')
 
-    <!-- Header / Summary Section -->
+    <!-- Sección de encabezado y resumen -->
     <div class="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
         <div>
             <div class="flex items-center gap-3 mb-2">
@@ -47,7 +47,7 @@
         </button>
     </div>
 
-    <!-- super_admin warning removed as per user request -->
+    <!-- Aviso de super_admin omitido por diseño -->
 
     <!-- Grupos de Módulos (Definidos en Blade) -->
     @php
@@ -96,7 +96,7 @@
         }
     @endphp
 
-    <!-- Permissions Content Area (Unified Table with Accordions) -->
+    <!-- Área de contenido de permisos (tabla con acordeones) -->
     <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden ml-[4.5rem] md:ml-0 mb-12">
         <div class="overflow-x-auto overflow-y-auto max-h-[65vh] xl:max-h-[75vh]">
             <table class="w-full text-left border-collapse">
@@ -115,7 +115,7 @@
                     @if($modulosDelGrupo->isEmpty()) @continue @endif
                     
                     <tbody x-data="{ open: true }" class="border-b border-slate-200 dark:border-gray-700">
-                        <!-- Group Header Row -->
+                        <!-- Fila de encabezado de grupo -->
                         <tr @click="open = !open" class="bg-slate-50 dark:bg-transparent hover:bg-slate-100 dark:hover:bg-gray-700/30 cursor-pointer transition-colors group">
                             <td colspan="6" class="py-3 px-6">
                                 <div class="flex items-center gap-2">
@@ -180,7 +180,7 @@
         </div>
     </div>
 
-    <!-- Otros Permisos Section -->
+    <!-- Sección de otros permisos -->
     <div class="ml-[4.5rem] md:ml-0 mb-24 grid grid-cols-1 md:grid-cols-2 gap-8">
         
         <!-- Especiales de Admin -->

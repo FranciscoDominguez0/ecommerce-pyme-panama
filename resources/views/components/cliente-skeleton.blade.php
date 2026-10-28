@@ -2,7 +2,7 @@
 
 <div id="global-cliente-skeleton" class="{{ $fullScreen ? 'fixed inset-0 z-[100] bg-[#F8F9FF]' : 'w-full h-full' }} flex flex-col pointer-events-none transition-opacity duration-300">
     
-    <!-- Skeleton Top Navbar -->
+    <!-- Barra de navegación superior simulada -->
     <div class="h-15 py-2.5 px-4 sm:px-6 lg:px-8 bg-white dark:bg-[#181a1b] border-b border-gray-200/80 shadow-xs flex items-center justify-between shrink-0">
         <!-- Logo Area -->
         <div class="flex items-center gap-3">
@@ -10,7 +10,7 @@
             <div class="w-32 h-6 bg-gray-200 rounded animate-pulse hidden md:block"></div>
         </div>
         
-        <!-- Search Area -->
+        <!-- Área de búsqueda -->
         <div class="hidden md:flex flex-1 max-w-md mx-4">
             <div class="w-full h-9 bg-gray-100 rounded-lg animate-pulse"></div>
         </div>
@@ -23,12 +23,12 @@
         </div>
     </div>
 
-    <!-- Skeleton Main Content -->
+    <!-- Contenido principal simulado -->
     <div class="flex-1 px-4 sm:px-6 lg:px-8 py-8 w-full max-w-[1600px] mx-auto">
-        <!-- Hero/Header area -->
+        <!-- Área de cabecera principal simulada -->
         <div class="w-full h-32 md:h-48 bg-gray-200 rounded-xl mb-8 animate-pulse"></div>
         
-        <!-- Grid of products/cards -->
+        <!-- Cuadrícula de productos simulada -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @for($i = 0; $i < 8; $i++)
             <div class="bg-white dark:bg-[#181a1b] p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col h-72">

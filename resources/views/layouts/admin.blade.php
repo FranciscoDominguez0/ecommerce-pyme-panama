@@ -94,12 +94,12 @@
 
     @include('layouts.partials.admin.sidebar')
 
-    <!-- Main Content Area -->
+    <!-- Área de contenido principal -->
     <div id="main-content" class="md:ml-64 flex-1 flex flex-col min-h-screen min-w-0 w-full max-w-full transition-all duration-300 ease-in-out">
         
         @include('layouts.partials.admin.topbar')
 
-        <!-- Main Body -->
+        <!-- Cuerpo principal -->
         <main class="flex-1 px-3.5 sm:px-8 py-4 sm:py-5 max-w-[1500px] w-full min-w-0 mx-auto relative">
             <div id="actual-page-content" class="w-full h-full {{ $isFromLogin ? 'opacity-0' : '' }}">
                 @yield('content')

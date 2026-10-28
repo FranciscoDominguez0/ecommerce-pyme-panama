@@ -12,7 +12,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de la página --}}
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <div>
             <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Producto del Mes</h2>
@@ -34,13 +34,13 @@
         </a>
     </div>
 
-    <!-- 12-Columns Split Layout (Screen 3 Stitch: 5 cols Left Card Spotlight, 7 cols Right Form) -->
+    <!-- Diseño en 12 columnas (5 cols tarjeta destacada, 7 cols formulario) -->
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
         
-        <!-- Left Spotlight Preview Card (5 cols) -->
+        <!-- Columna izquierda: Tarjeta destacada de vista previa -->
         <div class="md:col-span-5 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/80 rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
             <div>
-                <!-- Image Container with Discount Badge -->
+                <!-- Contenedor de imagen con distintivo de descuento -->
                 <div class="w-full h-56 bg-slate-50 dark:bg-transparent rounded-xl mb-4 overflow-hidden relative border border-slate-100 dark:border-gray-700 flex items-center justify-center">
                     @if($promocionActual && $promocionActual->producto)
                         @php
@@ -65,7 +65,7 @@
                     </div>
                 </div>
 
-                <!-- Info -->
+                <!-- Información -->
                 <div class="text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-1" id="spotlight-sku">
                     SKU: {{ $promocionActual->producto->sku ?? 'PROD-001' }}
                 </div>
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <!-- Right Settings Form Panel (7 cols) -->
+        <!-- Columna derecha: Panel de ajustes del formulario -->
         <div class="md:col-span-7 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/80 rounded-2xl p-6 shadow-2xs flex flex-col justify-between">
             <form action="{{ route('admin.promociones.producto-del-mes.guardar') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
@@ -207,7 +207,7 @@
                     <span>Activar promoción inmediatamente en portada</span>
                 </label>
 
-                <!-- Actions -->
+                <!-- Botones de acción -->
                 <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-gray-700">
                     <button type="submit" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-[18px]">save</span>

@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-slot name="title">Recuperar Contraseña - PayMe Panamá</x-slot>
 
-    <!-- Main Content Canvas: Mismo estilo que Login/Registro -->
+    <!-- Lienzo principal: mismo estilo que acceso y registro -->
     <main class="w-full max-w-4xl lg:max-w-5xl my-auto px-2 sm:px-4">
         <div class="relative overflow-hidden flex flex-col lg:flex-row items-center justify-between lg:glass-card lg:rounded-3xl lg:sm:rounded-[36px] lg:shadow-xl lg:border lg:border-slate-200/90 lg:p-4 lg:sm:p-6 lg:p-10 lg:min-h-[580px] lg:bg-[linear-gradient(135deg,#f0fdf4_0%,#f8fafc_50%,#ecfdf5_100%)]">
             
@@ -47,11 +47,11 @@
                 </div>
             </div>
 
-            <!-- Right Side: Floating White Card with Form Content -->
+            <!-- Lado derecho: Tarjeta flotante con formulario -->
             <div class="w-full lg:w-1/2 flex justify-center z-10 mt-4 lg:mt-0 auth-card-slide-up">
                 <div class="w-full max-w-[420px] bg-white rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col justify-between border border-slate-100">
                     
-                    <!-- Header inside card -->
+                    <!-- Encabezado interior de la tarjeta -->
                     <div class="flex flex-col items-start mb-5 text-left">
                         <div class="flex items-center gap-2.5 mb-4 lg:hidden">
                             <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -75,7 +75,7 @@
                         </div>
                     @endif
 
-                    <!-- Error Alert -->
+                    <!-- Alerta de error -->
                     @if ($errors->any())
                         <div class="mb-4 bg-red-50 text-red-700 p-3 rounded-xl flex items-start gap-2 border border-red-200 text-xs" id="error-alert">
                             <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
@@ -115,7 +115,7 @@
                             @enderror
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Botón de envío -->
                         <button class="w-full mt-2 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-xs hover:shadow-md transition-all flex justify-center items-center gap-1.5 group"
                                 type="submit"
                                 onclick="if(this.form.checkValidity()) { this.disabled=true; this.innerHTML='<span class=\'material-symbols-outlined animate-spin\'>progress_activity</span> Enviando...'; this.form.submit(); }">
@@ -124,7 +124,7 @@
                         </button>
                     </form>
 
-                    <!-- Back to Login Link -->
+                    <!-- Enlace para volver al inicio de sesión -->
                     <div class="mt-4 text-center border-t border-slate-100 pt-3">
                         <a class="inline-flex items-center justify-center gap-1.5 text-xs text-slate-500 hover:text-emerald-600 font-medium transition-colors"
                            href="{{ route('login') }}" wire:navigate>

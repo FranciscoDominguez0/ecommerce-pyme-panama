@@ -22,7 +22,7 @@
          class="fixed inset-0 bg-black/50 backdrop-blur-2xs transition-opacity z-50"
          x-cloak></div>
 
-    <!-- Panel Lateral Drawer (Slide-over) -->
+    <!-- Panel lateral deslizable (drawer) -->
     <div x-show="abierto" 
          x-transition:enter="transform transition ease-in-out duration-300"
          x-transition:enter-start="translate-x-full"
@@ -35,7 +35,7 @@
         
         <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col h-full border-l border-gray-200">
             
-            <!-- Header del Drawer -->
+            <!-- Encabezado del panel lateral -->
             <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between bg-white sticky top-0 z-10">
                 <div class="flex items-center gap-2.5 text-[#002349]">
                     <span class="material-symbols-outlined text-[24px]">shopping_cart</span>
@@ -138,7 +138,7 @@
                 @endforelse
             </div>
 
-            <!-- Footer del Drawer -->
+            <!-- Pie del panel lateral -->
             @if(count($items) > 0)
                 <div class="p-5 border-t border-gray-200 bg-gray-50/70 space-y-4">
                     

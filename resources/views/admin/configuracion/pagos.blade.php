@@ -16,7 +16,7 @@
 
 @section('content')
 <div class="space-y-6 font-sans">
-    <!-- Page Header & Sub-nav -->
+    <!-- Encabezado de página y subnavegación -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Configuración de Pagos</h1>
@@ -33,7 +33,7 @@
         </nav>
     </div>
 
-    <!-- Content Card -->
+    <!-- Tarjeta de contenido -->
     <div class="card-elevated rounded-xl overflow-hidden mb-8">
         <div class="px-6 py-5 border-b border-slate-200 dark:border-gray-700 bg-white dark:bg-[#181a1b]">
             <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Métodos de pago disponibles</h3>

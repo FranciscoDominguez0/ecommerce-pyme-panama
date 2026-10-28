@@ -1,11 +1,11 @@
 <x-guest-layout>
     <x-slot name="title">Iniciar Sesión - PayMe Panamá</x-slot>
 
-    <!-- Main Content Canvas: Inspired by Reference with Brand Colors -->
+    <!-- Lienzo principal con colores de identidad corporativa -->
     <main class="w-full max-w-4xl lg:max-w-5xl my-auto px-2 sm:px-4">
         <div class="relative overflow-hidden flex flex-col lg:flex-row items-center justify-between lg:glass-card lg:rounded-3xl lg:sm:rounded-[36px] lg:shadow-xl lg:border lg:border-slate-200/90 lg:p-4 lg:sm:p-6 lg:p-10 lg:min-h-[580px] lg:bg-[linear-gradient(135deg,#f0fdf4_0%,#f8fafc_50%,#ecfdf5_100%)]">
             
-            <!-- Ambient Fluid Organic Waves (Background of Left Side - Estilo claro) -->
+            <!-- Ondas decorativas de fondo (lado izquierdo estilo claro) -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden">
                 <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl"></div>
                 <div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 rounded-full bg-teal-200/35 blur-3xl"></div>
@@ -47,11 +47,11 @@
                 </div>
             </div>
 
-            <!-- Right Side: Floating White Card with Form Content -->
+            <!-- Lado derecho: Tarjeta flotante con formulario -->
             <div class="w-full lg:w-1/2 flex justify-center z-10 mt-4 lg:mt-0 animate-swap-card">
                 <div class="w-full max-w-[420px] bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 flex flex-col justify-between border border-slate-100">
                     
-                    <!-- Header inside card (sin logo duplicado) -->
+                    <!-- Encabezado de la tarjeta (sin logo duplicado) -->
                     <div class="flex flex-col items-start mb-5 text-left">
                         <div class="flex items-center gap-2.5 mb-4 lg:hidden">
                             <x-application-logo :boxed="false" size="default" class="w-8 h-8" />
@@ -75,7 +75,7 @@
                         </div>
                     @endif
 
-                    <!-- Error Alert -->
+                    <!-- Alerta de error -->
                     <div class="{{ $errors->any() ? '' : 'hidden' }} mb-4 bg-red-50 text-red-700 p-3 rounded-xl flex items-start gap-2 border border-red-200 text-xs" id="error-alert">
                         <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
                         <div class="flex-1">
@@ -89,7 +89,7 @@
                         </button>
                     </div>
 
-                    <!-- Login Form (Email & Password First) -->
+                    <!-- Formulario de inicio de sesión -->
                     <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-3" id="login-form" x-data="{ isSubmitting: false }" @submit.prevent="isSubmitting = true; submitLogin($event, () => isSubmitting = false)">
                         @csrf
 
@@ -159,7 +159,7 @@
                             @endif
                         </div>
 
-                        <!-- Submit Button -->
+                        <!-- Botón de envío -->
                         <button class="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] disabled:opacity-75 disabled:cursor-wait text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-xs hover:shadow-md transition-all flex justify-center items-center gap-1.5 group cursor-pointer"
                                 type="submit"
                                 :disabled="isSubmitting">
@@ -204,7 +204,7 @@
                         <span>Continuar con Google</span>
                     </a>
 
-                    <!-- Register Footer Link -->
+                    <!-- Enlace de registro al pie -->
                     <div class="mt-3 text-center border-t border-slate-100 pt-3">
                         <p class="text-xs text-slate-500">
                             ¿No tienes una cuenta?

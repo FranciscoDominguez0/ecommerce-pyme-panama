@@ -12,7 +12,7 @@
 @section('content')
 <div class="space-y-6 w-full min-w-0 max-w-full">
 
-    {{-- Page Header --}}
+    {{-- Encabezado de página --}}
     <div class="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-gray-700/80">
         <a href="{{ route('admin.inventario.index') }}"
            class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:bg-transparent hover:text-slate-700 dark:text-slate-300 transition-colors shrink-0">
@@ -26,13 +26,7 @@
         </div>
     </div>
 
-    {{-- Errors --}}
-    @if(session('error'))
-        <div class="flex items-center gap-3 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-medium">
-            <span class="material-symbols-outlined text-[18px] text-red-500">error</span>
-            {{ session('error') }}
-        </div>
-    @endif
+    {{-- Errores de validación del formulario --}}
     @if($errors->any())
         <div class="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
             <ul class="list-disc list-inside space-y-1">
@@ -43,10 +37,10 @@
         </div>
     @endif
 
-    {{-- Two-column bento layout --}}
+    {{-- Disposición de dos columnas estilo Bento --}}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-        {{-- LEFT: Main form --}}
+        {{-- Columna izquierda: Formulario principal --}}
         <div class="lg:col-span-7 card-elevated rounded-xl p-6 sm:p-8">
             <form method="POST" action="{{ route('admin.inventario.ajuste') }}" id="form-ajuste">
                 @csrf
@@ -108,7 +102,7 @@
                     </select>
                 </div>
 
-                {{-- Notes --}}
+                {{-- Notas internas del ajuste --}}
                 <div class="mb-6">
                     <label for="notas" class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
                         Notas internas <span class="text-slate-400 font-normal">(opcional)</span>
@@ -118,7 +112,7 @@
                               class="w-full px-4 py-2.5 border border-slate-200 dark:border-gray-700 rounded-xl bg-white dark:bg-[#121415] text-sm text-slate-700 dark:text-slate-300 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-all resize-none">{{ old('notas') }}</textarea>
                 </div>
 
-                {{-- Actions --}}
+                {{-- Acciones y confirmación --}}
                 <div class="flex items-center justify-end gap-3 pt-5 border-t border-slate-100 dark:border-gray-700">
                     <a href="{{ route('admin.inventario.index') }}"
                        class="px-5 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:text-gray-100 hover:bg-slate-100 dark:bg-transparent rounded-xl transition-colors">
@@ -133,23 +127,23 @@
             </form>
         </div>
 
-        {{-- RIGHT: Live preview panel --}}
+        {{-- Columna derecha: Panel de vista previa en tiempo real --}}
         <div class="lg:col-span-5 space-y-4">
 
-            {{-- Preview card --}}
+            {{-- Tarjeta de vista previa --}}
             <div class="card-elevated rounded-xl p-6 space-y-5">
                 <div class="flex items-center gap-2 mb-1">
                     <span class="material-symbols-outlined text-[18px] text-amber-500">sync_alt</span>
                     <h3 class="text-sm font-extrabold text-slate-800 dark:text-gray-100">Vista previa del ajuste</h3>
                 </div>
 
-                {{-- Before --}}
+                {{-- Stock previo --}}
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Stock actual</p>
                     <p id="preview-antes" class="text-3xl font-extrabold text-slate-700 dark:text-slate-300 tabular-nums">—</p>
                 </div>
 
-                {{-- Arrow + difference --}}
+                {{-- Flecha e indicador de diferencia --}}
                 <div id="preview-diff-wrap" class="hidden">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-slate-300 text-[20px]">arrow_downward</span>
@@ -159,21 +153,20 @@
                     </div>
                 </div>
 
-                {{-- After --}}
+                {{-- Nuevo stock resultante --}}
                 <div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nuevo stock</p>
                     <p id="preview-nuevo" class="text-4xl font-extrabold tabular-nums text-slate-900 dark:text-white">—</p>
                 </div>
 
-                {{-- Divider + stock minimo info --}}
+                {{-- Divisor e información de stock mínimo --}}
                 <div class="pt-3 border-t border-slate-100 dark:border-gray-700 flex items-center justify-between text-xs">
                     <span class="text-slate-400">Stock mínimo configurado</span>
                     <span id="preview-minimo" class="font-bold text-slate-600 dark:text-slate-400">—</span>
                 </div>
             </div>
 
-
-            {{-- Low stock warning (conditional) --}}
+            {{-- Advertencia condicional si el stock queda bajo el mínimo --}}
             <div id="alerta-stock-bajo" class="hidden bg-red-50 border border-red-200 rounded-xl p-4">
                 <div class="flex items-start gap-2.5">
                     <span class="material-symbols-outlined text-red-500 text-[18px] shrink-0 mt-0.5">warning</span>

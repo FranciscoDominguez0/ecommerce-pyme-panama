@@ -9,7 +9,7 @@
         @endif
     </a>
 
-    <!-- Cart Button (Abre Drawer Lateral) -->
+    <!-- Botón del carrito (abre el panel lateral) -->
     <button type="button" 
             onclick="if(window.Livewire) { Livewire.dispatch('abrir-carrito-drawer'); } else { window.dispatchEvent(new CustomEvent('abrir-carrito')); }" 
             class="relative p-1.5 text-gray-600 hover:text-[#006148] transition-colors cursor-pointer" 

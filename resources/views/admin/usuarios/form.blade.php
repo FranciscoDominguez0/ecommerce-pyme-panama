@@ -38,17 +38,17 @@
         </div>
     </div>
 
-    <!-- Form Layout (Bento Grid approach) -->
+    <!-- Diseño del formulario (cuadrícula Bento) -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Column 1: Personal & Security (Spans 2 cols on Desktop) -->
+        <!-- Columna 1: Datos personales y seguridad -->
         <div class="lg:col-span-2 flex flex-col gap-6">
             
-            <!-- Section 1: Personal Info -->
+            <!-- Sección 1: Información personal -->
             <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-8 shadow-sm">
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-100 dark:border-gray-700 pb-4">Información Personal</h2>
                 <div class="flex flex-col md:flex-row gap-8 mb-6">
                     
-                    <!-- Avatar Upload -->
+                    <!-- Carga de avatar -->
                     <div class="flex flex-col items-center justify-start space-y-3 w-32 shrink-0">
                         <div class="w-24 h-24 rounded-full bg-slate-50 dark:bg-transparent border border-dashed border-slate-300 dark:border-gray-700 flex items-center justify-center text-slate-400 hover:bg-slate-100 dark:hover:bg-gray-800 hover:border-slate-400 cursor-pointer transition-all group overflow-hidden relative">
                             @if($isEdit && $usuario->foto_perfil_ruta)
@@ -64,7 +64,7 @@
                         <input type="file" name="foto_perfil" class="hidden">
                     </div>
 
-                    <!-- Core Details Grid -->
+                    <!-- Cuadrícula de detalles principales -->
                     <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-1">
                             <label class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nombre(s) <span class="text-red-500">*</span></label>
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <!-- Section 2: Security -->
+            <!-- Sección 2: Seguridad -->
             <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-8 shadow-sm">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-4 mb-6">
                     <div>
@@ -127,10 +127,10 @@
             </div>
         </div>
 
-        <!-- Column 2: Role & Status (Spans 1 col) -->
+        <!-- Columna 2: Rol y estado -->
         <div class="flex flex-col gap-6">
             
-            <!-- Section 3: Status Toggle -->
+            <!-- Sección 3: Selector de estado -->
             <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-6 shadow-sm flex items-center justify-between">
                 <div>
                     <h3 class="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider">Estado del Usuario</h3>
@@ -155,7 +155,7 @@
                 </label>
             </div>
 
-            <!-- Section 4: Role Selection -->
+            <!-- Sección 4: Selección de rol -->
             <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Asignación de Rol</h2>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Seleccione el nivel de acceso operativo para este usuario.</p>

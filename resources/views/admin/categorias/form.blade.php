@@ -57,7 +57,7 @@
         <!-- Columna Izquierda / Principal (2 columnas) -->
         <div class="lg:col-span-2 space-y-6">
 
-            <!-- Card 1: Datos Básicos -->
+            <!-- Tarjeta 1: Datos básicos -->
             <div class="card-elevated rounded-xl p-5 sm:p-6 space-y-5">
                 <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-gray-700">
                     <span class="material-symbols-outlined text-[18px] text-emerald-600">category</span>
@@ -127,7 +127,7 @@
                            value="{{ old('padre_id', $categoria->padre_id) }}">
 
                     <div id="contenedor-padre-card" class="relative">
-                        <!-- Card Padre Seleccionado -->
+                        <!-- Tarjeta de categoría padre seleccionada -->
                         <div id="card-padre-activo" class="hidden items-center justify-between p-2.5 bg-emerald-50/80 border border-emerald-200 rounded-xl hover:border-emerald-300 transition-all min-h-[48px]">
                             <div class="flex items-center gap-3 min-w-0">
                                 <div class="w-8 h-8 rounded-lg bg-emerald-100 border border-emerald-200/80 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
@@ -154,7 +154,7 @@
                             </div>
                         </div>
 
-                        <!-- Card Sin Padre (Categoría Raíz / Ninguna) -->
+                        <!-- Tarjeta de categoría raíz (sin padre) -->
                         <button type="button" 
                                 id="btn-abrir-modal-padres" 
                                 onclick="abrirModalPadres()" 
@@ -209,14 +209,14 @@
         <!-- Columna Derecha / Ajustes Secundarios (1 columna) -->
         <div class="space-y-6">
 
-            <!-- Card 2: Visibilidad & Orden -->
+            <!-- Tarjeta 2: Visibilidad y orden -->
             <div class="card-elevated rounded-xl p-5 sm:p-6 space-y-5">
                 <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100 dark:border-gray-700">
                     <span class="material-symbols-outlined text-[18px] text-slate-700 dark:text-slate-300">tune</span>
                     <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Estado y Publicación</h3>
                 </div>
 
-                <!-- Toggle Estado Activo -->
+                <!-- Alternador de estado activo -->
                 <div class="p-3.5 rounded-lg bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700/80 flex items-center justify-between gap-3">
                     <div>
                         <span class="text-xs font-bold text-slate-900 dark:text-white block">Categoría Activa</span>
@@ -273,7 +273,7 @@
                     <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Imagen de Portada</h3>
                 </div>
 
-                <!-- Preview Actual / Nuevo -->
+                <!-- Vista previa actual o nueva -->
                 <div class="space-y-3">
                     <div id="image-preview-container" class="w-full h-44 rounded-xl bg-slate-50 dark:bg-transparent border-2 border-dashed border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:border-gray-700 transition-colors flex flex-col items-center justify-center overflow-hidden relative group shadow-2xs">
                         @if($categoria->imagen_ruta)
@@ -352,7 +352,7 @@
 <div id="modal-padres-categoria" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity">
     <div class="bg-white dark:bg-[#181a1b] rounded-2xl border border-slate-200 dark:border-gray-700 shadow-2xl max-w-lg w-full p-6 space-y-4 transform transition-all flex flex-col max-h-[90vh]">
         
-        <!-- Header -->
+        <!-- Encabezado -->
         <div class="flex items-center justify-between border-b border-slate-100 dark:border-gray-700 pb-3.5">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100/80 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
@@ -411,7 +411,7 @@
             <!-- Generado dinámicamente mediante JS -->
         </div>
 
-        <!-- Empty State en búsqueda -->
+        <!-- Estado vacío al buscar -->
         <div id="empty-state-padres" class="hidden text-center py-8 space-y-2">
             <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-transparent text-slate-400 flex items-center justify-center mx-auto">
                 <span class="material-symbols-outlined text-[24px]">search_off</span>
@@ -420,7 +420,7 @@
             <p class="text-[11px] text-slate-400">Intenta buscar con otro término de búsqueda.</p>
         </div>
 
-        <!-- Footer Modal -->
+        <!-- Pie del modal -->
         <div class="flex items-center justify-between border-t border-slate-100 dark:border-gray-700 pt-3">
             <span id="contador-padres-modal" class="text-[11px] text-slate-400 font-medium">Categorías disponibles</span>
             <button type="button" onclick="cerrarModalPadres()" class="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">

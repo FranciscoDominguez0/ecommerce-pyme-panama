@@ -350,7 +350,7 @@
 
             </div>
 
-        </div> <!-- Cierra grid superior -->
+        </div> <!-- Cierre de la cuadrícula superior -->
 
         <!-- CONTENIDO INFERIOR: Specs a la izquierda, Relacionados a la derecha -->
         <div class="grid lg:grid-cols-12 gap-8 md:gap-12 mt-8 md:mt-12">
@@ -524,8 +524,19 @@
                     </div>
 
                     @php
-                        $est = $estadisticasValoracion ?? app(\App\Services\ValoracionService::class)->obtenerEstadisticasProducto($producto->id);
-                        $valoracionesListado = $producto->valoracionesAprobadas;
+                        // Estadísticas de valoración provistas por el controlador
+                        $est = $estadisticasValoracion ?? [
+                            'promedio' => 0.0,
+                            'total' => 0,
+                            'distribucion' => [
+                                5 => ['cantidad' => 0, 'porcentaje' => 0],
+                                4 => ['cantidad' => 0, 'porcentaje' => 0],
+                                3 => ['cantidad' => 0, 'porcentaje' => 0],
+                                2 => ['cantidad' => 0, 'porcentaje' => 0],
+                                1 => ['cantidad' => 0, 'porcentaje' => 0],
+                            ]
+                        ];
+                        $valoracionesListado = $producto->valoracionesAprobadas ?? collect();
                     @endphp
 
                     @if($est['total'] > 0)

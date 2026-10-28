@@ -39,7 +39,7 @@
                                 @endif
                             </template>
 
-                            <!-- Overlay Hover -->
+                            <!-- Capa superpuesta al pasar el cursor -->
                             <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity border-4 border-transparent">
                                 <span class="material-symbols-outlined text-white text-3xl">photo_camera</span>
                             </div>

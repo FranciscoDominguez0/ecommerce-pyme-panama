@@ -1,4 +1,4 @@
-<!-- Main Navigation Bar -->
+<!-- Barra de navegación principal -->
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/80 shadow-xs">
     <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-15 py-2.5 gap-4">
@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            <!-- Search Bar -->
+            <!-- Barra de búsqueda -->
             <div class="hidden md:flex flex-1 max-w-md mx-4 relative" x-data="predictiveSearch()">
                 <form action="{{ route('cliente.catalogo') }}" method="GET" class="w-full relative">
                     <input type="text" name="buscar" id="global-search-input" value="{{ request('buscar') }}" 
@@ -128,12 +128,12 @@
                 }
             </script>
 
-            <!-- Navigation Links & User Menu -->
+            <!-- Enlaces de navegación y menú de usuario -->
             <div class="flex items-center gap-3">
                 <!-- Badges y Enlaces Dinámicos de Carrito y Deseos -->
                 <livewire:navbar-badges />
 
-                <!-- User Authentication -->
+                <!-- Autenticación de usuario -->
                 @auth
                     <div class="flex items-center gap-2">
                         @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
@@ -160,7 +160,7 @@
                                       :class="open ? 'rotate-180' : ''">expand_more</span>
                             </button>
 
-                            {{-- Dropdown Panel --}}
+                            {{-- Panel desplegable --}}
                             <div x-show="open"
                                  x-transition:enter="transition ease-out duration-150"
                                  x-transition:enter-start="opacity-0 scale-95 -translate-y-1"

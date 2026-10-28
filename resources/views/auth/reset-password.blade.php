@@ -1,9 +1,9 @@
 <x-guest-layout>
     <x-slot name="title">Restablecer Contraseña - PayMe Panamá</x-slot>
 
-    <!-- Main Content Canvas -->
+    <!-- Lienzo principal de contenido -->
     <main class="w-full max-w-md fade-in-up">
-        <!-- Logo Header -->
+        <!-- Logotipo de cabecera -->
         <div class="flex flex-col items-center mb-5">
             <x-application-logo :boxed="true" class="mb-2.5" />
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900 text-center tracking-tight">
@@ -14,9 +14,9 @@
             </p>
         </div>
 
-        <!-- Reset Password Card -->
+        <!-- Tarjeta de restablecimiento de contraseña -->
         <div class="glass-card rounded-xl p-5 sm:p-6 w-full transition-all duration-200">
-            <!-- Error Alert -->
+            <!-- Alerta de error -->
             @if ($errors->any())
                 <div class="mb-4 bg-red-50 text-red-700 p-3 rounded-lg flex items-start gap-2 border border-red-200 text-xs" id="error-alert">
                     <span class="material-symbols-outlined shrink-0 text-red-600 text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
@@ -111,7 +111,7 @@
                     </p>
                 </div>
 
-                <!-- Submit Button -->
+                <!-- Botón de envío -->
                 <button class="w-full mt-1.5 bg-primary-container hover:bg-primary-container/90 active:scale-[0.99] text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-lg shadow-sm hover:shadow transition-all flex justify-center items-center gap-1.5 group"
                         id="submit-reset-btn"
                         type="submit">
@@ -120,7 +120,7 @@
                 </button>
             </form>
 
-            <!-- Back to Login Link -->
+            <!-- Enlace para volver al inicio de sesión -->
             <div class="mt-4 text-center border-t border-gray-100 pt-3">
                 <a class="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-gray-900 font-medium transition-colors"
                    href="{{ route('login') }}">

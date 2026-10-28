@@ -50,7 +50,7 @@
             </div>
         </div>
 
-        {{-- Edit Mode --}}
+        {{-- Modo de edición --}}
         <form id="datos-form" action="{{ route('cliente.perfil.datos.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')

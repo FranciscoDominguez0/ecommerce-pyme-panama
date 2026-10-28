@@ -3,7 +3,7 @@
 @section('title', 'Detalle de Rol: ' . $rol->name)
 
 @section('content')
-<!-- Header Section -->
+<!-- Sección de encabezado -->
 <div class="mb-8 flex flex-col md:flex-row md:items-start justify-between gap-6">
     <div>
         <div class="flex items-center gap-3 mb-2">
@@ -41,10 +41,10 @@
     </nav>
 </div>
 
-<!-- Users Section -->
+<!-- Sección de usuarios -->
 <div class="ml-9 md:ml-0">
     @if($usuarios->isEmpty())
-        <!-- Empty State Container -->
+        <!-- Contenedor de estado vacío -->
         <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl p-8 sm:p-16 flex flex-col items-center justify-center text-center min-h-[400px]">
             <div class="w-48 h-48 mb-6 opacity-80 flex items-center justify-center">
                 <!-- Icono representativo para el estado vacío -->
@@ -81,7 +81,7 @@
             </div>
         </div>
         
-        <!-- Data Table -->
+        <!-- Tabla de datos -->
         <div class="bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[600px]">

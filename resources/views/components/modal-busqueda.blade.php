@@ -16,7 +16,7 @@
     
     <div class="bg-white dark:bg-[#181a1b] rounded-2xl shadow-2xl border border-slate-100 dark:border-gray-700/80 w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150 relative z-10">
         
-        <!-- Modal Header -->
+        <!-- Encabezado del modal -->
         <div class="px-4 py-3 border-b border-slate-100 dark:border-gray-700/80 flex items-center justify-between bg-slate-50/70 dark:bg-transparent shrink-0">
             <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-2xs">
