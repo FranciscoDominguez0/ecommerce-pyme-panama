@@ -15,6 +15,8 @@ class PedidoEntregadoMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public bool $deleteWhenMissingModels = true;
+
     public Pedido $pedido;
 
     /**

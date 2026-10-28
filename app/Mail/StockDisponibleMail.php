@@ -14,6 +14,8 @@ class StockDisponibleMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public bool $deleteWhenMissingModels = true;
+
     public Producto $producto;
 
     /**

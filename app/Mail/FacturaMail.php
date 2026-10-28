@@ -16,6 +16,8 @@ class FacturaMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public bool $deleteWhenMissingModels = true;
+
     public Factura $factura;
     public ?string $mensajePersonalizado;
 

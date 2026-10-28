@@ -146,7 +146,35 @@ class FacturaService
             return $ruta;
         }
 
-        // 2. URL externa (http:// o https://)
+        // 2. Si la ruta contiene un dominio (incluido el de la propia app) o prefijo /storage/
+        $appUrl = config('app.url');
+        $rutaLimpia = $ruta;
+        if (!empty($appUrl) && str_starts_with($rutaLimpia, $appUrl)) {
+            $rutaLimpia = substr($rutaLimpia, strlen($appUrl));
+        }
+
+        // Si la URL apunta a /storage/... resolver directamente desde el disco sin peticiones HTTP
+        if (str_contains($rutaLimpia, 'storage/')) {
+            $subPath = preg_replace('/^.*storage\//', '', $rutaLimpia);
+            $localPath = storage_path('app/public/' . ltrim($subPath, '/'));
+            if (file_exists($localPath)) {
+                return $this->convertirArchivoABase64($localPath);
+            }
+        }
+
+        // 3. Almacenamiento local directo (storage/app/public o public/)
+        $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $rutaLimpia);
+        $localPath = storage_path('app/public/' . $cleanRoute);
+        if (file_exists($localPath)) {
+            return $this->convertirArchivoABase64($localPath);
+        }
+
+        $publicPath = public_path(ltrim($rutaLimpia, '/'));
+        if (file_exists($publicPath)) {
+            return $this->convertirArchivoABase64($publicPath);
+        }
+
+        // 4. URL verdaderamente externa (http:// o https://) - con timeout defensivo de 1.5s
         if (str_starts_with($ruta, 'http://') || str_starts_with($ruta, 'https://')) {
             try {
                 $ctx = stream_context_create([
@@ -155,7 +183,7 @@ class FacturaService
                         'verify_peer_name' => false,
                     ],
                     'http' => [
-                        'timeout' => 5,
+                        'timeout' => 1.5,
                         'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\nAccept: image/*\r\n"
                     ]
                 ]);
@@ -194,34 +222,24 @@ class FacturaService
             return $fallback;
         }
 
-        // 3. Almacenamiento local (storage/ o public)
-        $cleanRoute = preg_replace('/^\/?(storage\/)?/', '', $ruta);
-        $localPath = storage_path('app/public/' . $cleanRoute);
-        if (file_exists($localPath)) {
-            $ext = strtolower(pathinfo($localPath, PATHINFO_EXTENSION));
-            $mime = match ($ext) {
-                'png' => 'image/png',
-                'gif' => 'image/gif',
-                'webp' => 'image/webp',
-                'svg' => 'image/svg+xml',
-                default => 'image/jpeg',
-            };
-            return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($localPath));
-        }
-
-        $publicPath = public_path(ltrim($ruta, '/'));
-        if (file_exists($publicPath)) {
-            $ext = strtolower(pathinfo($publicPath, PATHINFO_EXTENSION));
-            $mime = match ($ext) {
-                'png' => 'image/png',
-                'gif' => 'image/gif',
-                'webp' => 'image/webp',
-                default => 'image/jpeg',
-            };
-            return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($publicPath));
-        }
-
         return $fallback;
+    }
+
+    /**
+     * Convierte un archivo local a formato Data URI Base64.
+     */
+    protected function convertirArchivoABase64(string $ruta): string
+    {
+        $ext = strtolower(pathinfo($ruta, PATHINFO_EXTENSION));
+        $mime = match ($ext) {
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webp' => 'image/webp',
+            'svg' => 'image/svg+xml',
+            default => 'image/jpeg',
+        };
+
+        return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($ruta));
     }
 
     /**

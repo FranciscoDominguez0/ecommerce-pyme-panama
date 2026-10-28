@@ -12,6 +12,8 @@ class NuevoPedidoNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public bool $deleteWhenMissingModels = true;
+
     public $pedido;
 
     /**

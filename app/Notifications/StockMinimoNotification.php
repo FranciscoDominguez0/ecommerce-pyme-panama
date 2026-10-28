@@ -14,6 +14,8 @@ class StockMinimoNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public bool $deleteWhenMissingModels = true;
+
     public $producto;
     public $variante;
 
