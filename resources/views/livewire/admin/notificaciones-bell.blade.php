@@ -38,30 +38,35 @@
          window.addEventListener('click', desbloquear, { once: true });
          window.addEventListener('keydown', desbloquear, { once: true });
          window.addEventListener('touchstart', desbloquear, { once: true });
+        window.__adminNotificationHandler = (notification) => {
+            sonarCampana();
+            $wire.cargarNotificaciones(true);
+        };
 
-         const setupEcho = () => {
-             if (window.Echo && !window._reverbBound) {
-                 window._reverbBound = true;
-                 window.Echo.private(`App.Models.Usuario.{{ auth()->id() }}`)
-                     .notification((notification) => {
-                         sonarCampana();
-                         $wire.cargarNotificaciones(false);
-                     });
-             }
-         };
+        const setupEcho = () => {
+            if (window.Echo && !window._reverbBound) {
+                window._reverbBound = true;
+                window.Echo.private(`App.Models.Usuario.{{ auth()->id() }}`)
+                    .notification((notification) => {
+                        if (typeof window.__adminNotificationHandler === 'function') {
+                            window.__adminNotificationHandler(notification);
+                        }
+                    });
+            }
+        };
 
-         if (window.Echo) { 
-             setupEcho(); 
-         } else { 
-             let checkEcho = setInterval(() => {
-                 if (window.Echo) {
-                     clearInterval(checkEcho);
-                     setupEcho();
-                 }
-             }, 200);
-             setTimeout(() => clearInterval(checkEcho), 10000);
-         }
-     ">
+        if (window.Echo) { 
+            setupEcho(); 
+        } else { 
+            let checkEcho = setInterval(() => {
+                if (window.Echo) {
+                    clearInterval(checkEcho);
+                    setupEcho();
+                }
+            }, 200);
+            setTimeout(() => clearInterval(checkEcho), 10000);
+        }
+    ">
      
     <!-- Audio para notificaciones con wire:ignore -->
     <div wire:ignore>

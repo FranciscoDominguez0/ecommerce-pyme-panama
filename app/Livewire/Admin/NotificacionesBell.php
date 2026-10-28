@@ -28,13 +28,16 @@ class NotificacionesBell extends Component
             
             if ($playAudio) {
                 $this->dispatch('nueva-notificacion-recibida');
+
+                // Invalidamos la caché breve del sidebar para reflejar el cambio inmediato
+                \Illuminate\Support\Facades\Cache::forget('sidebar_pedidos_count');
+                \Illuminate\Support\Facades\Cache::forget('sidebar_devoluciones_count');
+
+                $nuevosPedidosCount = \App\Models\Pedido::whereNull('leido_en')->count();
+                $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
+
+                $this->dispatch('actualizar-badges-sidebar', pedidos: $nuevosPedidosCount, devoluciones: $nuevasDevolucionesCount);
             }
-
-            $nuevosPedidosCount = \App\Models\Pedido::whereNull('leido_en')->count();
-            
-            $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
-
-            $this->dispatch('actualizar-badges-sidebar', pedidos: $nuevosPedidosCount, devoluciones: $nuevasDevolucionesCount);
         }
     }
 

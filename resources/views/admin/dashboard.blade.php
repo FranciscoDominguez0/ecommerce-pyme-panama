@@ -342,9 +342,17 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/apexcharts.min.js') }}"></script>
 <script>
 (function() {
+    let dashboardCharts = [];
+
+    function destruirGraficos() {
+        dashboardCharts.forEach(chart => {
+            try { chart.destroy(); } catch (e) {}
+        });
+        dashboardCharts = [];
+    }
+
     function renderDashboardCharts() {
         if (typeof ApexCharts === 'undefined') {
             setTimeout(renderDashboardCharts, 50);
@@ -352,9 +360,12 @@
         }
 
         const spark1 = document.querySelector("#spark1");
-        if (!spark1 || spark1.dataset.rendered === "1") return; // Evitar duplicados
+        if (!spark1 || spark1.dataset.rendered === "1") return; // Evitamos duplicar instancias
 
-        // Marcar como renderizados y limpiar contenedores por si acaso (para navegación SPA)
+        // Destruimos gráficos anteriores antes de recrear para evitar fugas de memoria
+        destruirGraficos();
+
+        // Marcamos como renderizados
         document.querySelectorAll("#spark1, #spark2, #spark3, #spark4, #mainChart").forEach(el => {
             if (el) {
                 el.dataset.rendered = "1";
@@ -400,97 +411,107 @@
             }
         };
 
-        // 1. Sparkline - Sales (Emerald)
-        new ApexCharts(document.querySelector("#spark1"), {
+        // 1. Sparkline - Ventas (Emerald)
+        const c1 = new ApexCharts(document.querySelector("#spark1"), {
             ...sparklineOptions,
             colors: ['#059669'], // emerald-600
             series: [{ name: 'Ventas', data: ventas7Dias }]
-        }).render();
+        });
+        c1.render();
+        dashboardCharts.push(c1);
 
-        // 2. Sparkline - Orders (Blue)
-        new ApexCharts(document.querySelector("#spark2"), {
+        // 2. Sparkline - Pedidos (Azul)
+        const c2 = new ApexCharts(document.querySelector("#spark2"), {
             ...sparklineOptions,
             colors: ['#2563eb'], // blue-600
             series: [{ name: 'Pedidos', data: pedidos7Dias }]
-        }).render();
+        });
+        c2.render();
+        dashboardCharts.push(c2);
 
-        // 3. Sparkline - Customers (Purple)
-        new ApexCharts(document.querySelector("#spark3"), {
+        // 3. Sparkline - Clientes (Morado)
+        const c3 = new ApexCharts(document.querySelector("#spark3"), {
             ...sparklineOptions,
             colors: ['#9333ea'], // purple-600
             series: [{ name: 'Clientes', data: clientes7Dias }]
-        }).render();
+        });
+        c3.render();
+        dashboardCharts.push(c3);
 
-        // 4. Sparkline - AOV (Orange)
-        new ApexCharts(document.querySelector("#spark4"), {
+        // 4. Sparkline - Ticket Promedio (Naranja)
+        const c4 = new ApexCharts(document.querySelector("#spark4"), {
             ...sparklineOptions,
             colors: ['#ea580c'], // orange-600
             series: [{ name: 'Ticket Promedio', data: aov7Dias }]
-        }).render();
+        });
+        c4.render();
+        dashboardCharts.push(c4);
 
-            const isDark = document.documentElement.classList.contains('dark');
-            
-            // 5. Main Chart (Sales Overview)
-            const mainChartOptions = {
-                series: [
-                    { name: 'Ingresos', data: ventasMeses },
-                    { name: 'Pedidos', data: ordenesMeses }
-                ],
-                chart: {
-                    height: 300,
-                    type: 'area',
-                    toolbar: { show: false },
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    background: 'transparent'
-                },
-                colors: isDark ? ['#10b981', '#64748b'] : ['#10b981', '#cbd5e1'], // emerald-500, slate-500/300
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        opacityFrom: 0.4,
-                        opacityTo: 0,
-                        stops: [0, 100]
+        const isDark = document.documentElement.classList.contains('dark');
+        
+        // 5. Gráfico Principal (Resumen de ventas y pedidos)
+        const mainChartOptions = {
+            series: [
+                { name: 'Ingresos', data: ventasMeses },
+                { name: 'Pedidos', data: ordenesMeses }
+            ],
+            chart: {
+                height: 300,
+                type: 'area',
+                toolbar: { show: false },
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                background: 'transparent'
+            },
+            colors: isDark ? ['#10b981', '#64748b'] : ['#10b981', '#cbd5e1'],
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.4,
+                    opacityTo: 0,
+                    stops: [0, 100]
+                }
+            },
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth', width: 2 },
+            xaxis: {
+                categories: mesesLabels,
+                axisBorder: { show: false },
+                axisTicks: { show: false },
+                labels: {
+                    style: { colors: isDark ? '#94a3b8' : '#64748b', fontSize: '11px', fontWeight: 600 }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: { colors: isDark ? '#94a3b8' : '#64748b', fontSize: '11px', fontWeight: 600 },
+                    formatter: function(val, index) {
+                        return val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
                     }
-                },
-                dataLabels: { enabled: false },
-                stroke: { curve: 'smooth', width: 2 },
-                xaxis: {
-                    categories: mesesLabels,
-                    axisBorder: { show: false },
-                    axisTicks: { show: false },
-                    labels: {
-                        style: { colors: isDark ? '#94a3b8' : '#64748b', fontSize: '11px', fontWeight: 600 } // slate-400 / 500
-                    }
-                },
-                yaxis: {
-                    labels: {
-                        style: { colors: isDark ? '#94a3b8' : '#64748b', fontSize: '11px', fontWeight: 600 },
-                        formatter: function(val, index) {
-                            return val >= 1000 ? (val/1000).toFixed(1) + 'k' : val;
-                        }
-                    }
-                },
-                grid: {
-                    borderColor: isDark ? '#374151' : '#e2e8f0', // gray-700 / 200
-                    strokeDashArray: 4,
-                    xaxis: { lines: { show: true } },
-                    yaxis: { lines: { show: true } }
-                },
-                legend: { show: false },
-                theme: { mode: isDark ? 'dark' : 'light' }
-            };
+                }
+            },
+            grid: {
+                borderColor: isDark ? '#374151' : '#e2e8f0',
+                strokeDashArray: 4,
+                xaxis: { lines: { show: true } },
+                yaxis: { lines: { show: true } }
+            },
+            legend: { show: false },
+            theme: { mode: isDark ? 'dark' : 'light' }
+        };
 
-        new ApexCharts(document.querySelector("#mainChart"), mainChartOptions).render();
+        const cMain = new ApexCharts(document.querySelector("#mainChart"), mainChartOptions);
+        cMain.render();
+        dashboardCharts.push(cMain);
     }
 
-    // Ejecutar inicialmente (esperará a que ApexCharts cargue)
+    // Ejecutamos inicialmente
     renderDashboardCharts();
 
-    // Re-ejecutar si Livewire hace una navegación SPA (wire:navigate)
+    // Re-ejecutar si Livewire hace navegación
     document.addEventListener('livewire:navigated', function() {
         document.querySelectorAll("#spark1, #spark2, #spark3, #spark4, #mainChart").forEach(el => {
-            if (el) el.dataset.rendered = "0"; // Reset para permitir redibujado
+            if (el) el.dataset.rendered = "0";
         });
         renderDashboardCharts();
     });
@@ -498,10 +519,13 @@
     // Re-renderizar si el tema cambia
     window.addEventListener('theme-changed', function() {
         document.querySelectorAll("#spark1, #spark2, #spark3, #spark4, #mainChart").forEach(el => {
-            if (el) el.dataset.rendered = "0"; // Reset para permitir redibujado
+            if (el) el.dataset.rendered = "0";
         });
         renderDashboardCharts();
     });
+
+    // Liberamos memoria cuando el usuario navega a otro módulo
+    window.addEventListener('pagehide', destruirGraficos);
 })();
 </script>
 @endpush

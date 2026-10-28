@@ -7,27 +7,41 @@
     {{-- Script inline prioritario anti-parpadeo --}}
     <script>
         (function() {
+            var lastSavedTheme = null;
             function applyTheme() {
                 var theme = localStorage.getItem('color-theme');
                 if (!theme) {
                     theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 var cl = document.documentElement.classList;
-                if (theme === 'dark') {
-                    if (!cl.contains('dark')) cl.add('dark');
-                    if (cl.contains('light')) cl.remove('light');
-                } else {
-                    if (cl.contains('dark')) cl.remove('dark');
-                    if (!cl.contains('light')) cl.add('light');
+                var needsDark = (theme === 'dark');
+                var hasDark = cl.contains('dark');
+                var hasLight = cl.contains('light');
+
+                if (needsDark && (!hasDark || hasLight)) {
+                    cl.add('dark');
+                    cl.remove('light');
+                } else if (!needsDark && (hasDark || !hasLight)) {
+                    cl.remove('dark');
+                    cl.add('light');
                 }
-                document.cookie = "admin_theme=" + theme + ";path=/;max-age=31536000;SameSite=Lax";
+
+                if (lastSavedTheme !== theme) {
+                    lastSavedTheme = theme;
+                    document.cookie = "admin_theme=" + theme + ";path=/;max-age=31536000;SameSite=Lax";
+                }
             }
             applyTheme();
 
             // Evitar que morphs de Livewire o navegación quiten la clase antes del render
             if (window.MutationObserver && !window.__themeObserver) {
                 window.__themeObserver = new MutationObserver(function() {
-                    applyTheme();
+                    var theme = localStorage.getItem('color-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                    var cl = document.documentElement.classList;
+                    var isCorrect = (theme === 'dark') ? (cl.contains('dark') && !cl.contains('light')) : (!cl.contains('dark') && cl.contains('light'));
+                    if (!isCorrect) {
+                        applyTheme();
+                    }
                 });
                 window.__themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
             }

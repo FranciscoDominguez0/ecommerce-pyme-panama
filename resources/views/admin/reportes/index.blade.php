@@ -636,6 +636,23 @@
                     stroke: { colors: strokeColors }
                 });
             });
+
+            // Destruimos instancias al salir de la página para liberar memoria
+            function destruirGraficosReportes() {
+                const charts = [window.revenueChart, window.expenseChart, window.sourcesChart, window.pagosChart, window.estadosChart];
+                charts.forEach(c => {
+                    if (c && typeof c.destroy === 'function') {
+                        try { c.destroy(); } catch (e) {}
+                    }
+                });
+                window.revenueChart = null;
+                window.expenseChart = null;
+                window.sourcesChart = null;
+                window.pagosChart = null;
+                window.estadosChart = null;
+            }
+
+            window.addEventListener('pagehide', destruirGraficosReportes);
         });
     </script>
 @endpush

@@ -94,14 +94,17 @@
         searchInput.setAttribute('placeholder', '');
         type();
         
-        searchInput.addEventListener('blur', function() {
-            if (this.value.trim() === '') {
-                clearTimeout(searchInput.typewriterTimeout);
-                isDeleting = false;
-                charIndex = 0;
-                type();
-            }
-        });
+        if (!searchInput.dataset.typewriterBound) {
+            searchInput.dataset.typewriterBound = 'true';
+            searchInput.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    clearTimeout(searchInput.typewriterTimeout);
+                    isDeleting = false;
+                    charIndex = 0;
+                    type();
+                }
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', initTypewriterSearch);

@@ -62,11 +62,15 @@ class AppServiceProvider extends ServiceProvider
             $view->with('globalCats', $globalCats);
         });
 
-        // Proveedor de contadores de badges para la barra lateral administrativa
+        // Proveedor de contadores de badges para la barra lateral administrativa (con caché breve para agilizar la navegación)
         \Illuminate\Support\Facades\View::composer('layouts.partials.admin.sidebar', function ($view) {
-            $nuevosPedidosCount = \App\Models\Pedido::whereNull('leido_en')->count();
+            $nuevosPedidosCount = \Illuminate\Support\Facades\Cache::remember('sidebar_pedidos_count', 15, function () {
+                return \App\Models\Pedido::whereNull('leido_en')->count();
+            });
 
-            $nuevasDevolucionesCount = \App\Models\Devolucion::where('estado', 'pendiente')->count();
+            $nuevasDevolucionesCount = \Illuminate\Support\Facades\Cache::remember('sidebar_devoluciones_count', 15, function () {
+                return \App\Models\Devolucion::where('estado', 'pendiente')->count();
+            });
 
             $view->with([
                 'nuevosPedidosCount' => $nuevosPedidosCount,

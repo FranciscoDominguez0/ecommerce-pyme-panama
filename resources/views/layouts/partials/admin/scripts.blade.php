@@ -327,12 +327,18 @@
         if (!window.__adminSidebarTooltipInited) {
             window.__adminSidebarTooltipInited = true;
 
+            let lastHoveredElement = null;
+
             document.addEventListener('mouseover', (e) => {
                 if (!document.documentElement.classList.contains('sidebar-collapsed') || window.innerWidth < 768) return;
                 
                 const target = e.target.closest('#admin-sidebar a, #admin-sidebar button');
                 if (target) {
-                    window.dispatchEvent(new CustomEvent('sidebar-hover', { detail: target.closest('.nav-group') || target }));
+                    const groupOrTarget = target.closest('.nav-group') || target;
+                    if (groupOrTarget !== lastHoveredElement) {
+                        lastHoveredElement = groupOrTarget;
+                        window.dispatchEvent(new CustomEvent('sidebar-hover', { detail: groupOrTarget }));
+                    }
                     if (target.closest('.nav-group')) return;
 
                     const tooltip = document.getElementById('sidebar-tooltip-container');
@@ -362,7 +368,10 @@
 
             document.addEventListener('mouseout', (e) => {
                 const target = e.target.closest('#admin-sidebar a, #admin-sidebar button');
-                if (target) {
+                if (target && (!e.relatedTarget || !target.contains(e.relatedTarget))) {
+                    if (lastHoveredElement === (target.closest('.nav-group') || target)) {
+                        lastHoveredElement = null;
+                    }
                     const tooltip = document.getElementById('sidebar-tooltip-container');
                     if (tooltip) {
                         tooltip.classList.add('opacity-0');

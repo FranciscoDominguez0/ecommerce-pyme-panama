@@ -32,38 +32,59 @@ class DashboardService
             ->where('creado_en', '>=', Carbon::now()->startOfMonth())
             ->count();
 
-        // 2. Datos para Sparklines (Últimos 7 días)
+        // 2. Datos para Sparklines (Últimos 7 días y 7 días anteriores agrupados)
         $ventas7Dias = [];
         $pedidos7Dias = [];
         $clientes7Dias = [];
         $aov7Dias = [];
         $diasLabels = [];
 
-        // Porcentajes de crecimiento vs 7 días anteriores
+        $fechaInicio14Dias = Carbon::now()->subDays(13)->startOfDay();
+
+        // Agrupamos en consultas únicas para evitar decenas de peticiones a la base de datos
+        $ventasPorDia = Factura::where('estado', 'emitida')
+            ->where('emitida_en', '>=', $fechaInicio14Dias)
+            ->selectRaw('DATE(emitida_en) as fecha, SUM(total) as total')
+            ->groupBy('fecha')
+            ->pluck('total', 'fecha');
+
+        $pedidosPorDia = Pedido::where('creado_en', '>=', $fechaInicio14Dias)
+            ->selectRaw('DATE(creado_en) as fecha, COUNT(*) as total')
+            ->groupBy('fecha')
+            ->pluck('total', 'fecha');
+
+        $clientesPorDia = Usuario::role('cliente')
+            ->where('creado_en', '>=', $fechaInicio14Dias)
+            ->selectRaw('DATE(creado_en) as fecha, COUNT(*) as total')
+            ->groupBy('fecha')
+            ->pluck('total', 'fecha');
+
         $ventas7DiasAnteriores = 0;
         $pedidos7DiasAnteriores = 0;
         $clientes7DiasAnteriores = 0;
 
         for ($i = 6; $i >= 0; $i--) {
             $dia = Carbon::now()->subDays($i);
+            $diaKey = $dia->toDateString();
             $diasLabels[] = $dia->locale('es')->isoFormat('ddd');
-            
-            $ventasDia = (float) Factura::where('estado', 'emitida')->whereDate('emitida_en', $dia)->sum('total');
+
+            $ventasDia = (float) ($ventasPorDia[$diaKey] ?? 0);
             $ventas7Dias[] = $ventasDia;
-            
-            $pedidosDia = Pedido::whereDate('creado_en', $dia)->count();
+
+            $pedidosDia = (int) ($pedidosPorDia[$diaKey] ?? 0);
             $pedidos7Dias[] = $pedidosDia;
-            
-            $clientesDia = Usuario::role('cliente')->whereDate('creado_en', $dia)->count();
+
+            $clientesDia = (int) ($clientesPorDia[$diaKey] ?? 0);
             $clientes7Dias[] = $clientesDia;
-            
+
             $aov7Dias[] = $pedidosDia > 0 ? round($ventasDia / $pedidosDia, 2) : 0;
 
             // Días anteriores (para % de crecimiento)
             $diaAnterior = Carbon::now()->subDays($i + 7);
-            $ventas7DiasAnteriores += (float) Factura::where('estado', 'emitida')->whereDate('emitida_en', $diaAnterior)->sum('total');
-            $pedidos7DiasAnteriores += Pedido::whereDate('creado_en', $diaAnterior)->count();
-            $clientes7DiasAnteriores += Usuario::role('cliente')->whereDate('creado_en', $diaAnterior)->count();
+            $diaAnteriorKey = $diaAnterior->toDateString();
+            $ventas7DiasAnteriores += (float) ($ventasPorDia[$diaAnteriorKey] ?? 0);
+            $pedidos7DiasAnteriores += (int) ($pedidosPorDia[$diaAnteriorKey] ?? 0);
+            $clientes7DiasAnteriores += (int) ($clientesPorDia[$diaAnteriorKey] ?? 0);
         }
 
         $ventasTotal7Dias = array_sum($ventas7Dias);
@@ -74,25 +95,31 @@ class DashboardService
         $crecimientoPedidos = $pedidos7DiasAnteriores > 0 ? round((($pedidosTotal7Dias - $pedidos7DiasAnteriores) / $pedidos7DiasAnteriores) * 100, 1) : 100;
         $crecimientoClientes = $clientes7DiasAnteriores > 0 ? round((($clientesTotal7Dias - $clientes7DiasAnteriores) / $clientes7DiasAnteriores) * 100, 1) : 100;
 
-        // 3. Datos para Gráfico Principal (Últimos 6 meses: Ingresos y Órdenes)
+        // 3. Datos para Gráfico Principal (Últimos 6 meses agrupados)
         $ventasMeses = [];
         $ordenesMeses = [];
         $mesesLabels = [];
+
+        $fechaInicio6Meses = Carbon::now()->subMonths(5)->startOfMonth();
+
+        $ventasPorMes = Factura::where('estado', 'emitida')
+            ->where('emitida_en', '>=', $fechaInicio6Meses)
+            ->selectRaw("TO_CHAR(emitida_en, 'YYYY-MM') as mes, SUM(total) as total")
+            ->groupBy('mes')
+            ->pluck('total', 'mes');
+
+        $ordenesPorMes = Pedido::where('creado_en', '>=', $fechaInicio6Meses)
+            ->selectRaw("TO_CHAR(creado_en, 'YYYY-MM') as mes, COUNT(*) as total")
+            ->groupBy('mes')
+            ->pluck('total', 'mes');
+
         for ($i = 5; $i >= 0; $i--) {
             $mes = Carbon::now()->subMonths($i);
+            $mesKey = $mes->format('Y-m');
             $mesesLabels[] = $mes->locale('es')->isoFormat('MMM');
-            
-            $ventasMes = Factura::where('estado', 'emitida')->whereBetween('emitida_en', [
-                $mes->copy()->startOfMonth(),
-                $mes->copy()->endOfMonth(),
-            ])->sum('total') ?: 0;
-            $ventasMeses[] = (float) $ventasMes;
 
-            $ordenesMes = Pedido::whereBetween('creado_en', [
-                $mes->copy()->startOfMonth(),
-                $mes->copy()->endOfMonth(),
-            ])->count();
-            $ordenesMeses[] = $ordenesMes;
+            $ventasMeses[] = (float) ($ventasPorMes[$mesKey] ?? 0);
+            $ordenesMeses[] = (int) ($ordenesPorMes[$mesKey] ?? 0);
         }
 
         // 4. Transacciones / Pedidos Recientes (Reales de la base de datos)

@@ -48,10 +48,10 @@
     <!-- Filtros y acciones -->
     <div class="card-elevated rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
         <div class="flex flex-wrap gap-2 w-full md:w-auto">
-            <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="px-4 py-2 {{ !request('estado') ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'pendiente']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'pendiente' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Pendientes</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'aprobada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'aprobada' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Aprobadas</a>
-            <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" wire:navigate class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
+            <a href="{{ route('admin.devoluciones.index') }}" class="px-4 py-2 {{ !request('estado') ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Todos</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'pendiente']) }}" class="px-4 py-2 {{ request('estado') === 'pendiente' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Pendientes</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'aprobada']) }}" class="px-4 py-2 {{ request('estado') === 'aprobada' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Aprobadas</a>
+            <a href="{{ route('admin.devoluciones.index', ['estado' => 'rechazada']) }}" class="px-4 py-2 {{ request('estado') === 'rechazada' ? 'bg-slate-900 text-white dark:bg-emerald-600 dark:text-white font-bold shadow-sm' : 'bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800' }} rounded-lg text-xs tracking-wider uppercase transition-colors">Rechazadas</a>
         </div>
         
         <form action="{{ route('admin.devoluciones.index') }}" method="GET" class="w-full md:w-auto" x-data="adminAutoFilter">
@@ -68,13 +68,13 @@
     @if($devoluciones->isEmpty())
         <!-- Estado vacío cuando no hay devoluciones -->
         <div class="bg-white dark:bg-[#181a1b] rounded-xl border border-slate-200 dark:border-gray-700 p-12 flex flex-col items-center justify-center text-center">
-            <div class="w-20 h-20 bg-slate-50 dark:bg-transparent rounded-full flex items-center justify-center mb-6">
+            <div class="w-20 h-20 bg-slate-50 dark:transparent rounded-full flex items-center justify-center mb-6">
                 <span class="material-symbols-outlined text-4xl text-slate-300">assignment_return</span>
             </div>
             <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">No hay devoluciones</h3>
             <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto">No se encontraron solicitudes de devolución con los filtros actuales. Todas las solicitudes de clientes aparecerán aquí.</p>
             @if(request('buscar') || request('estado'))
-                <a href="{{ route('admin.devoluciones.index') }}" wire:navigate class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">
+                <a href="{{ route('admin.devoluciones.index') }}" class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium">
                     Limpiar Filtros
                 </a>
             @endif
