@@ -3,6 +3,7 @@
 namespace Tests\Feature\Inventario;
 
 use App\Models\MovimientoInventario;
+use App\Models\NotificacionStock;
 use App\Models\Producto;
 use App\Models\VarianteProducto;
 use PHPUnit\Framework\Attributes\Test;
@@ -161,5 +162,32 @@ class EntradaInventarioTest extends BaseAdminTest
                 'motivo'      => 'Prueba',
             ])
             ->assertSessionHasErrors('variante_id');
+    }
+
+    #[Test]
+    public function una_entrada_con_clientes_en_espera_de_stock_procesa_las_notificaciones_sin_errores(): void
+    {
+        $admin = $this->crearAdmin();
+        $producto = Producto::factory()->create(['stock' => 0]);
+
+        $notificacion = NotificacionStock::create([
+            'producto_id'   => $producto->id,
+            'email'         => 'cliente@ejemplo.com',
+            'notificado'    => false,
+            'notificado_en' => null,
+        ]);
+
+        $this->actingAs($admin)
+            ->post('/admin/inventario/entrada', [
+                'producto_id' => $producto->id,
+                'cantidad'    => 8,
+                'motivo'      => 'Compra / Adquisición',
+            ])
+            ->assertRedirect(route('admin.inventario.index'))
+            ->assertSessionHas('success');
+
+        $this->assertSame(8, $producto->fresh()->stock);
+        $this->assertTrue($notificacion->fresh()->notificado);
+        $this->assertNotNull($notificacion->fresh()->notificado_en);
     }
 }

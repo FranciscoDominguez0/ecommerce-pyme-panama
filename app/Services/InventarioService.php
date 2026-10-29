@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\VarianteProducto;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\StockMinimoNotification;
 use Exception;
@@ -315,17 +316,23 @@ class InventarioService
             return 0;
         }
 
+        $enviados = 0;
         $productoFresh->load(['imagenes', 'brand', 'categoria']);
         foreach ($pendientes as $notificacion) {
-            CorreoService::enviarEnSegundoPlano(
-                $notificacion->email,
-                new \App\Mail\StockDisponibleMail($productoFresh),
-                "Stock disponible producto #{$productoFresh->id}"
-            );
-            $notificacion->update([
-                'notificado' => true,
-                'notificado_en' => now(),
-            ]);
+            try {
+                CorreoService::enviarEnSegundoPlano(
+                    $notificacion->email,
+                    new \App\Mail\StockDisponibleMail($productoFresh),
+                    "Stock disponible producto #{$productoFresh->id}"
+                );
+                $notificacion->update([
+                    'notificado' => true,
+                    'notificado_en' => now(),
+                ]);
+                $enviados++;
+            } catch (\Throwable $e) {
+                Log::warning("InventarioService: Error procesando notificación de stock #{$notificacion->id}: " . $e->getMessage());
+            }
         }
 
         return $enviados;
