@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Sucursales de Courier — Panel de Administración')
+@section('title', 'Sucursales de Courier')
 
 @section('breadcrumbs')
     <span class="hidden sm:inline-flex items-center gap-1.5 text-slate-500 dark:text-slate-400">

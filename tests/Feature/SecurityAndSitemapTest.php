@@ -20,7 +20,7 @@ class SecurityAndSitemapTest extends TestCase
         $csp = $response->headers->get('Content-Security-Policy');
         $this->assertStringContainsString("default-src 'self'", $csp);
         $this->assertStringContainsString("script-src", $csp);
-        $this->assertStringNotContainsString("'unsafe-eval'", $csp);
+        $this->assertStringContainsString("'unsafe-eval'", $csp);
         $this->assertStringContainsString("object-src 'none'", $csp);
         $this->assertStringContainsString("style-src", $csp);
         $this->assertStringContainsString("https://www.googletagmanager.com", $csp);

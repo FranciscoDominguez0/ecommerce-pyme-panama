@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', ($esEdicion ? 'Editar Cupón' : 'Configurar Cupón') . ' — PayMe Panamá')
+@section('title', $esEdicion ? 'Editar Cupón' : 'Configurar Cupón')
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>

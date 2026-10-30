@@ -1,6 +1,6 @@
 {{-- resources/views/admin/auditoria/index.blade.php --}}
 @extends('layouts.admin')
-@section('title', 'Auditoría del Sistema - PayMe')
+@section('title', 'Auditoría del Sistema')
 
 @section('content')
 <div class="space-y-6 font-sans" x-data="auditoriaModal()">

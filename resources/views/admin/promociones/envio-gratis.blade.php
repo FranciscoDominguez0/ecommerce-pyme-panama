@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Reglas de Envío Gratis — PayMe Panamá')
+@section('title', 'Reglas de Envío Gratis')
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>

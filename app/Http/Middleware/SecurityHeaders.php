@@ -61,11 +61,11 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', implode(', ', $permissions));
 
         // Content-Security-Policy (CSP)
-        // Soporta Livewire 4, Alpine.js ('unsafe-inline'), Google Tag Manager,
+        // Soporta Livewire 4, Alpine.js ('unsafe-eval', 'unsafe-inline'), Google Tag Manager,
         // Cloudflare Insights, Stripe, Cloudflare Turnstile, Reverb WebSockets (ws/wss) y Cloudinary
         $csp = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://js.stripe.com https://unpkg.com",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://js.stripe.com https://unpkg.com",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' data: https://fonts.gstatic.com",
             "img-src 'self' data: blob: https:",

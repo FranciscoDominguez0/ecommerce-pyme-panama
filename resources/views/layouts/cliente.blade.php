@@ -8,8 +8,14 @@
 
     @php
         $siteTitle = (config('app.name') && config('app.name') !== 'Laravel') ? config('app.name') : 'PayMe Panamá — Equipos IT';
+        $viewTitle = trim($__env->yieldContent('title'));
+        if (!empty($viewTitle)) {
+            $pageTitle = str_contains($viewTitle, 'PayMe') ? $viewTitle : ($viewTitle . ' — ' . $siteTitle);
+        } else {
+            $pageTitle = $siteTitle;
+        }
     @endphp
-    <title>@hasSection('title')@yield('title') — {{ $siteTitle }}@else{{ $siteTitle }}@endif</title>
+    <title>{{ $pageTitle }}</title>
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">

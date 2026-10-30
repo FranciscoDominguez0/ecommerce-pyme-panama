@@ -1,6 +1,6 @@
 @extends('layouts.cliente')
 
-@section('title', ($producto->nombre ?? 'Detalle del Producto') . ' - PayMe Panamá')
+@section('title', $producto->nombre ?? 'Detalle del Producto')
 
 @section('content')
 <div class="min-h-screen bg-slate-50 py-6 sm:py-10">

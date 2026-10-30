@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+    [x-cloak] {
+        display: none !important;
+    }
     html.dark {
         color-scheme: dark;
     }

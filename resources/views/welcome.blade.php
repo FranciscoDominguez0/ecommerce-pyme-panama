@@ -1,6 +1,6 @@
 @extends('layouts.cliente')
 
-@section('title', 'PayMe Panamá - Equipos Informáticos & Soluciones Tecnológicas')
+@section('title', 'Equipos Informáticos & Soluciones Tecnológicas')
 
 @section('content')
     <div class="space-y-12 sm:space-y-16 pb-16">

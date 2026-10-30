@@ -20,6 +20,7 @@
          x-transition:leave-end="opacity-0"
          @click="abierto = false; $wire.cerrar();"
          class="fixed inset-0 bg-black/50 backdrop-blur-2xs transition-opacity z-50"
+         style="display: none;"
          x-cloak></div>
 
     <!-- Panel lateral deslizable (drawer) -->
@@ -31,6 +32,7 @@
          x-transition:leave-start="translate-x-0"
          x-transition:leave-end="translate-x-full"
          class="fixed inset-y-0 right-0 max-w-full flex pl-10 z-50 pointer-events-auto"
+         style="display: none;"
          x-cloak>
         
         <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col h-full border-l border-gray-200">

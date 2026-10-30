@@ -1,6 +1,6 @@
 @extends('layouts.cliente')
 
-@section('title', 'Política de Privacidad - PayMe Panamá')
+@section('title', 'Política de Privacidad')
 
 @section('content')
 <div class="min-h-screen bg-white py-12 sm:py-20">

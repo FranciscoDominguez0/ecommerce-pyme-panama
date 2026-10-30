@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Producto del Mes — PayMe Panamá')
+@section('title', 'Producto del Mes')
 
 @section('breadcrumbs')
     <span class="material-symbols-outlined text-[13px] text-slate-300 shrink-0">chevron_right</span>
