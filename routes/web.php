@@ -22,6 +22,7 @@ use App\Http\Controllers\Cliente\InicioController;
 use App\Http\Controllers\Cliente\ListaDeseosController;
 use App\Http\Controllers\Cliente\PedidoController as ClientePedidoController;
 use App\Http\Controllers\EnvioCalculadoraController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,15 @@ Route::get('/envio/couriers-por-zona', [EnvioCalculadoraController::class, 'cour
 Route::get('/envio/sucursales', [EnvioCalculadoraController::class, 'sucursales'])->name('envio.sucursales');
 
 // 1. Rutas públicas de la Tienda (Catálogo, Producto, Bienvenida, Carrito)
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/.well-known/security.txt', function () {
+    $ruta = public_path('.well-known/security.txt');
+    if (file_exists($ruta)) {
+        return response(file_get_contents($ruta), 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+    }
+    return response("Contact: mailto:seguridad@rsfsecure.site\nExpires: 2027-12-31T23:59:59.000Z\n", 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+});
+Route::get('/security.txt', fn () => redirect('/.well-known/security.txt', 301));
 Route::get('/', [InicioController::class, 'inicio'])->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');

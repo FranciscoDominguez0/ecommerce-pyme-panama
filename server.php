@@ -61,6 +61,7 @@ if ($uri !== '/' && file_exists($publicPath.$uri) && !is_dir($publicPath.$uri)) 
         return false;
     }
 
+    header('X-Content-Type-Options: nosniff');
     header('Cache-Control: '.$cacheControl);
     if (isset($contentTypes[$extension])) {
         header('Content-Type: '.$contentTypes[$extension]);

@@ -35,14 +35,21 @@ class RegisterController extends Controller
      */
     public function registrar(Request $request): RedirectResponse
     {
-        $request->validate([
+        $reglas = [
             'nombre' => ['required', 'string', 'max:100'],
             'apellido' => ['required', 'string', 'max:100'],
             'telefono' => ['nullable', 'string', 'max:30'],
             'email' => ['required', 'string', 'email', 'max:150', 'unique:usuarios,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'terms' => ['accepted'],
-        ], [
+        ];
+
+        // Se exige el token de Cloudflare Turnstile salvo en entorno de pruebas automatizadas o local
+        if (!app()->environment(['local', 'testing'])) {
+            $reglas['cf-turnstile-response'] = ['required', 'string'];
+        }
+
+        $request->validate($reglas, [
             'nombre.required' => 'El nombre es obligatorio.',
             'apellido.required' => 'El apellido es obligatorio.',
             'email.required' => 'El correo electrónico es obligatorio.',
@@ -52,7 +59,19 @@ class RegisterController extends Controller
             'password.min' => 'La contraseña debe contener al menos 8 caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
             'terms.accepted' => 'Debe aceptar los términos y condiciones para registrarse.',
+            'cf-turnstile-response.required' => 'Por favor, complete la verificación de seguridad.',
         ]);
+
+        // Verificamos el token de Cloudflare Turnstile directamente
+        $turnstileResponse = $request->input('cf-turnstile-response');
+        if (!app()->environment(['local', 'testing']) || $turnstileResponse !== null) {
+            $turnstileService = app(\App\Services\TurnstileService::class);
+            if (!$turnstileService->verificar($turnstileResponse, $request->ip())) {
+                return back()->withInput()->withErrors([
+                    'cf-turnstile-response' => 'Error en la verificación de seguridad (Captcha). Por favor, inténtelo de nuevo.'
+                ]);
+            }
+        }
 
         $usuario = Usuario::create([
             'nombre' => $request->nombre,

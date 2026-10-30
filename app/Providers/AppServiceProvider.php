@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Services\CarritoService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +36,15 @@ class AppServiceProvider extends ServiceProvider
             // En producción forzamos HTTPS para evitar Mixed Content (iconos y CSS rotos en VPS)
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
+
+        // Limitadores de tasa para prevenir ataques de fuerza bruta y registros automatizados
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
+        });
+
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip());
+        });
 
         \App\Models\Usuario::observe(\App\Observers\UsuarioObserver::class);
         \App\Models\Producto::observe(\App\Observers\ProductoObserver::class);

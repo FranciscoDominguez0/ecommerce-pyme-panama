@@ -16,12 +16,14 @@ Route::middleware('guest')->group(function () {
     // Registro
     Route::get('register', [RegisterController::class, 'mostrarFormularioRegistro'])
         ->name('register');
-    Route::post('register', [RegisterController::class, 'registrar']);
+    Route::post('register', [RegisterController::class, 'registrar'])
+        ->middleware('throttle:register');
 
     // Inicio de Sesión
     Route::get('login', [LoginController::class, 'mostrarFormularioLogin'])
         ->name('login');
-    Route::post('login', [LoginController::class, 'iniciarSesion']);
+    Route::post('login', [LoginController::class, 'iniciarSesion'])
+        ->middleware('throttle:login');
 
     // Inicio de Sesión con Google
     Route::get('auth/google', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'redirigir'])

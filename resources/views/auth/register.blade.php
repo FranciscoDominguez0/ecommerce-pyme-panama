@@ -217,6 +217,14 @@
                             @enderror
                         </div>
 
+                        <!-- Cloudflare Turnstile CAPTCHA -->
+                        <div class="flex justify-center my-1.5">
+                            <div id="turnstile-register-container" class="cf-turnstile flex justify-center w-full scale-[0.85] sm:scale-100 origin-center -mx-4 sm:mx-0" data-sitekey="{{ config('services.turnstile.key') }}" data-theme="light" data-size="flexible" data-language="es"></div>
+                        </div>
+                        @error('cf-turnstile-response')
+                            <p class="text-[11px] text-red-600 font-medium text-center -mt-1">{{ $message }}</p>
+                        @enderror
+
                         <!-- Botón de envío -->
                         <button class="w-full mt-1 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] disabled:opacity-75 disabled:cursor-wait text-white font-semibold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-xs hover:shadow-md transition-all flex justify-center items-center gap-1.5 group cursor-pointer"
                                 id="submit-register-btn"
@@ -339,4 +347,7 @@
             document.addEventListener('livewire:navigated', bindHandlers);
         })();
     </script>
+
+    <!-- Cloudflare Turnstile API -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </x-guest-layout>

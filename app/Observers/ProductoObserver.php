@@ -4,12 +4,14 @@ namespace App\Observers;
 
 use App\Models\Producto;
 use App\Services\AuditoriaService;
+use Illuminate\Support\Facades\Cache;
 
 class ProductoObserver
 {
     public function created(Producto $producto)
     {
         AuditoriaService::registrar('Productos', 'creado', "Producto '{$producto->nombre}' creado.", null, $producto->getAttributes());
+        Cache::forget('sitemap_xml');
     }
 
     public function updated(Producto $producto)
@@ -31,10 +33,13 @@ class ProductoObserver
         if ($producto->stock > 0) {
             app(\App\Services\InventarioService::class)->procesarNotificacionesStock($producto);
         }
+
+        Cache::forget('sitemap_xml');
     }
 
     public function deleted(Producto $producto)
     {
         AuditoriaService::registrar('Productos', 'eliminado', "Producto '{$producto->nombre}' eliminado.", $producto->getAttributes(), null);
+        Cache::forget('sitemap_xml');
     }
 }

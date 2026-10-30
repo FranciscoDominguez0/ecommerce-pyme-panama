@@ -10,12 +10,15 @@ return Application::configure(basePath: dirname(__DIR__))
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
         channels: __DIR__.'/../routes/channels.php',
-        health: '/up',
+        health: env('HEALTH_CHECK_ENABLED', false) ? '/up' : null,
     )
     ->withMiddleware(function (Middleware $middleware): void {
         // Confiar en el proxy inverso (Nginx Proxy Manager) para que
         // Laravel genere URLs https:// correctas aunque reciba HTTP interno
         $middleware->trustProxies(at: '*');
+
+        // Cabeceras HTTP de seguridad global (CSP, Permissions-Policy, nosniff, etc.)
+        $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
 
         $middleware->web(append: [
             \Illuminate\Session\Middleware\AuthenticateSession::class,

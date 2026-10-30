@@ -4,12 +4,14 @@ namespace App\Observers;
 
 use App\Models\Categoria;
 use App\Services\AuditoriaService;
+use Illuminate\Support\Facades\Cache;
 
 class CategoriaObserver
 {
     public function created(Categoria $categoria)
     {
         AuditoriaService::registrar('Catálogo', 'creado', "Categoría '{$categoria->nombre}' creada.", null, $categoria->getAttributes());
+        Cache::forget('sitemap_xml');
     }
 
     public function updated(Categoria $categoria)
@@ -18,10 +20,12 @@ class CategoriaObserver
         $original = array_intersect_key($categoria->getOriginal(), $cambios);
 
         AuditoriaService::registrar('Catálogo', 'actualizado', "Categoría '{$categoria->nombre}' actualizada.", $original, $cambios);
+        Cache::forget('sitemap_xml');
     }
 
     public function deleted(Categoria $categoria)
     {
         AuditoriaService::registrar('Catálogo', 'eliminado', "Categoría '{$categoria->nombre}' eliminada.", $categoria->getAttributes(), null);
+        Cache::forget('sitemap_xml');
     }
 }

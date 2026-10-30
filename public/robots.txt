@@ -1,2 +1,10 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /carrito
+Disallow: /checkout
+Disallow: /cuenta
+Disallow: /mi-cuenta/
+Disallow: /buscar-predictivo
+
+Sitemap: https://pyme.rsfsecure.site/sitemap.xml

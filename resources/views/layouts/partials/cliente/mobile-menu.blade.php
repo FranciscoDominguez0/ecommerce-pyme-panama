@@ -25,7 +25,7 @@
                     </div>
                     
                     <div class="overflow-y-auto flex-1 p-5 space-y-5">
-                        <a href="{{ route('dashboard') }}" wire:navigate class="block text-slate-800 font-medium text-sm pb-4 border-b border-slate-100">Inicio</a>
+                        <a href="{{ route('inicio') }}" wire:navigate class="block text-slate-800 font-medium text-sm pb-4 border-b border-slate-100">Inicio</a>
                         
                         <div x-data="{ catOpen: false }" class="pb-4 border-b border-slate-100">
                             <button @click="catOpen = !catOpen" class="w-full flex items-center justify-between text-slate-800 font-medium text-sm">

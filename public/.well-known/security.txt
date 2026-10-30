@@ -1,0 +1,5 @@
+Contact: mailto:seguridad@rsfsecure.site
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: es, en
+Canonical: https://pyme.rsfsecure.site/.well-known/security.txt
+Policy: https://pyme.rsfsecure.site/politicas-de-privacidad
