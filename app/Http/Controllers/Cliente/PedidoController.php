@@ -80,6 +80,19 @@ class PedidoController extends Controller
 
         $retiroLocal = app(\App\Services\EnvioService::class)->obtenerDatosRetiroLocal();
 
+        // Extraer datos de entrega y courier desde notas_internas
+        $notasInternas = json_decode($pedido->notas_internas, true);
+        if (is_array($notasInternas)) {
+            $metodoEntrega = $notasInternas['metodo_entrega'] ?? ($pedido->direccion_id ? 'delivery' : 'retiro_local');
+            $contacto = $notasInternas['contacto'] ?? null;
+            $courierSucursalId = $notasInternas['courier_sucursal_id'] ?? null;
+        } else {
+            $metodoEntrega = $pedido->direccion_id ? 'delivery' : 'retiro_local';
+            $contacto = null;
+            $courierSucursalId = null;
+        }
+        $sucursalCourier = $courierSucursalId ? \App\Models\CourierSucursal::find($courierSucursalId) : null;
+
         return view('cliente.pedidos.detalle', compact(
             'pedido',
             'estadosOrdenados',
@@ -88,7 +101,10 @@ class PedidoController extends Controller
             'hitosFechas',
             'evaluacionPrevia',
             'abrirAuto',
-            'retiroLocal'
+            'retiroLocal',
+            'metodoEntrega',
+            'contacto',
+            'sucursalCourier'
         ));
     }
 

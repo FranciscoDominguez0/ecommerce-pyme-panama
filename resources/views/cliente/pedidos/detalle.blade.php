@@ -253,7 +253,7 @@
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Empresa Logística</span>
                     <p class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
-                        <span>Logística PyME Panamá</span>
+                        <span>{{ (($metodoEntrega ?? '') === 'retiro_courier' && isset($sucursalCourier)) ? $sucursalCourier->courier : 'Logística PyME Panamá' }}</span>
                     </p>
                     <span class="text-[11px] text-slate-500 font-mono mt-0.5 block">Guía: #{{ $pedido->numero_pedido }}</span>
                 </div>
@@ -276,7 +276,13 @@
                 <div>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Zona de Destino</span>
                     <p class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100">
-                        {{ $pedido->zonaEnvio?->nombre ?? ($pedido->direccion?->provincia ?? 'Panamá') }}
+                        @if(($metodoEntrega ?? '') === 'retiro_courier' && isset($sucursalCourier))
+                            {{ $sucursalCourier->zona }} ({{ $sucursalCourier->courier }})
+                        @elseif(($metodoEntrega ?? '') === 'retiro_local')
+                            Retiro en Local
+                        @else
+                            {{ $pedido->zonaEnvio?->nombre ?? ($pedido->direccion?->provincia ?? 'Panamá') }}
+                        @endif
                     </p>
                 </div>
             </div>
@@ -552,11 +558,62 @@
             <div class="bg-white dark:bg-[#1f2327] rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs flex flex-col justify-between">
                 <div>
                     <h3 class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">location_on</span>
-                        <span>Dirección de Entrega</span>
+                        <span class="material-symbols-outlined text-emerald-600 text-[20px]">
+                            @if(($metodoEntrega ?? '') === 'retiro_courier')
+                                local_shipping
+                            @elseif(($metodoEntrega ?? '') === 'retiro_local')
+                                storefront
+                            @else
+                                location_on
+                            @endif
+                        </span>
+                        <span>
+                            @if(($metodoEntrega ?? '') === 'retiro_courier')
+                                Retiro en Courier
+                            @elseif(($metodoEntrega ?? '') === 'retiro_local')
+                                Retiro en Local
+                            @else
+                                Dirección de Entrega
+                            @endif
+                        </span>
                     </h3>
 
-                    @if($pedido->direccion)
+                    @if(($metodoEntrega ?? '') === 'retiro_courier' && isset($sucursalCourier))
+                        <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
+                            <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                                {{ $sucursalCourier->courier }} — {{ $sucursalCourier->sucursal }}
+                            </p>
+                            <p class="font-medium text-slate-800 dark:text-slate-200">{{ $sucursalCourier->zona }}</p>
+                            <p>{{ $sucursalCourier->direccion }}</p>
+                            @if($sucursalCourier->telefono)
+                                <p class="text-slate-500 pt-1.5 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[15px]">call</span>
+                                    <span>{{ $sucursalCourier->telefono }}</span>
+                                </p>
+                            @endif
+                            @if(!empty($contacto['nombre']))
+                                <p class="text-xs text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800 mt-2">
+                                    Reclama: <strong class="text-slate-700 dark:text-slate-300">{{ $contacto['nombre'] }} {{ $contacto['apellido'] ?? '' }}</strong>
+                                    @if(!empty($contacto['telefono1'])) · Tel: {{ $contacto['telefono1'] }} @endif
+                                </p>
+                            @endif
+                        </div>
+                    @elseif(($metodoEntrega ?? '') === 'retiro_local' || (!$pedido->direccion && ($metodoEntrega ?? '') !== 'delivery'))
+                        <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
+                            <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Retiro en Local</p>
+                            <p class="font-medium text-slate-800 dark:text-slate-200">{{ $retiroLocal['sucursal'] ?? 'Sucursal de PyME Panamá' }}</p>
+                            <p>{{ $retiroLocal['direccion'] ?? 'Entrega presencial en instalaciones.' }}</p>
+                            @if(!empty($retiroLocal['horario']))
+                                <p class="text-xs text-slate-500">Horario: {{ $retiroLocal['horario'] }}</p>
+                            @endif
+                            @if(!empty($retiroLocal['telefono']))
+                                <p class="text-slate-500 pt-1.5 flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-[15px]">call</span>
+                                    <span>{{ $retiroLocal['telefono'] }}</span>
+                                </p>
+                            @endif
+                        </div>
+                    @elseif($pedido->direccion)
                         <div class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 space-y-1.5">
                             <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{{ $pedido->direccion->nombre_receptor }}</p>
                             <p>{{ $pedido->direccion->direccion_exacta }}</p>
@@ -574,9 +631,6 @@
                             <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">Retiro en Local</p>
                             <p class="font-medium text-slate-800 dark:text-slate-200">{{ $retiroLocal['sucursal'] ?? 'Sucursal de PyME Panamá' }}</p>
                             <p>{{ $retiroLocal['direccion'] ?? 'Entrega presencial en instalaciones.' }}</p>
-                            @if(!empty($retiroLocal['horario']))
-                                <p class="text-xs text-slate-500">Horario: {{ $retiroLocal['horario'] }}</p>
-                            @endif
                         </div>
                     @endif
                 </div>

@@ -212,7 +212,8 @@ class CheckoutController extends Controller
         }
 
         $costoEnvioEspecial = $this->envioService->calcularCostoEspecial($metodoEntrega, $courierSucursalId, $carrito);
-        $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvio, $carrito->cupon, $costoEnvioEspecial);
+        $zonaEnvioEfectiva = ($metodoEntrega === 'delivery') ? $zonaEnvio : null;
+        $totales = $this->pedidoService->calcularTotales($carrito, $zonaEnvioEfectiva, $carrito->cupon, $costoEnvioEspecial);
         $pagoExitoso = false;
         $resultadoPago = null;
 
@@ -303,12 +304,15 @@ class CheckoutController extends Controller
             }
 
             $tInicioPedido = microtime(true);
+            $direccionFinalId = ($metodoEntrega === 'delivery') ? $direccionId : null;
+            $zonaEnvioFinal = ($metodoEntrega === 'delivery') ? $zonaEnvio : null;
+
             $pedido = $this->pedidoService->crearDesdeCarrito(
                 $carrito, 
-                $direccionId, 
+                $direccionFinalId, 
                 $metodoPago, 
                 $request->notas_cliente,
-                $zonaEnvio,
+                $zonaEnvioFinal,
                 $comprobanteRuta,
                 $notasInternas,
                 $costoEnvioEspecial
@@ -344,6 +348,10 @@ class CheckoutController extends Controller
                 'checkout_iniciado_en',
                 'checkout_direccion_id',
                 'checkout_zona_envio_id',
+                'checkout_metodo_entrega',
+                'checkout_courier_zona',
+                'checkout_courier_courier',
+                'checkout_courier_sucursal',
                 'checkout_metodo_pago',
                 'checkout_comprobante_ruta',
                 'checkout_stripe_pm',

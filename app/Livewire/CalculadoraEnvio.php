@@ -54,6 +54,17 @@ class CalculadoraEnvio extends Component
         $this->dispatch('envioActualizado');
     }
 
+    public function updatedZonaSeleccionada()
+    {
+        $this->courierSeleccionado = '';
+        $this->sucursalSeleccionada = '';
+    }
+
+    public function updatedCourierSeleccionado()
+    {
+        $this->sucursalSeleccionada = '';
+    }
+
     public function updatedMetodoEntrega($value)
     {
         if ($value === 'delivery') {
