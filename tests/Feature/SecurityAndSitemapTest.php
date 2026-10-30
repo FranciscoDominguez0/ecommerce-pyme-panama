@@ -20,6 +20,8 @@ class SecurityAndSitemapTest extends TestCase
         $csp = $response->headers->get('Content-Security-Policy');
         $this->assertStringContainsString("default-src 'self'", $csp);
         $this->assertStringContainsString("script-src", $csp);
+        $this->assertStringNotContainsString("'unsafe-eval'", $csp);
+        $this->assertStringContainsString("object-src 'none'", $csp);
         $this->assertStringContainsString("style-src", $csp);
         $this->assertStringContainsString("https://www.googletagmanager.com", $csp);
         $this->assertStringContainsString("https://js.stripe.com", $csp);
@@ -70,6 +72,27 @@ class SecurityAndSitemapTest extends TestCase
         $responseRegister = $this->post('/register', []);
         $this->assertTrue($responseRegister->headers->has('X-RateLimit-Limit'));
         $this->assertSame(3, (int) $responseRegister->headers->get('X-RateLimit-Limit'));
+    }
+
+    #[Test]
+    public function peticiones_excesivas_a_login_retornan_429_too_many_requests(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', ['email' => 'intento@ejemplo.com', 'password' => 'invalido']);
+        }
+
+        $responseExcedido = $this->post('/login', ['email' => 'intento@ejemplo.com', 'password' => 'invalido']);
+        $responseExcedido->assertStatus(429);
+    }
+
+    #[Test]
+    public function archivos_sensibles_devuelven_404_para_evitar_reconocimiento(): void
+    {
+        $this->get('/.env')->assertNotFound();
+        $this->get('/.git/config')->assertNotFound();
+        $this->get('/laravel.log')->assertNotFound();
+        $this->get('/composer.json')->assertNotFound();
+        $this->get('/phpunit.xml')->assertNotFound();
     }
 
     #[Test]

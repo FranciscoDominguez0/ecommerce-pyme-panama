@@ -20,6 +20,12 @@ class SecurityHeaders
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Devolver 404 (en vez de 403) para peticiones a archivos sensibles para evitar reconocimiento pasivo
+        $uri = $request->getRequestUri();
+        if (preg_match('#(^|/)(\.env|\.git|\.svn|.*\.log|composer\.(json|lock)|package\.json|phpunit\.xml)#i', $uri)) {
+            abort(404);
+        }
+
         $response = $next($request);
 
         // Previene la interpretación errónea de tipos MIME (MIME-sniffing)
@@ -55,18 +61,18 @@ class SecurityHeaders
         $response->headers->set('Permissions-Policy', implode(', ', $permissions));
 
         // Content-Security-Policy (CSP)
-        // Soporta Livewire 4, Alpine.js ('unsafe-eval', 'unsafe-inline'), Google Tag Manager,
+        // Soporta Livewire 4, Alpine.js ('unsafe-inline'), Google Tag Manager,
         // Cloudflare Insights, Stripe, Cloudflare Turnstile, Reverb WebSockets (ws/wss) y Cloudinary
         $csp = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://js.stripe.com https://unpkg.com",
+            "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://js.stripe.com https://unpkg.com",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' data: https://fonts.gstatic.com",
             "img-src 'self' data: blob: https:",
             "media-src 'self' https://res.cloudinary.com data: blob:",
             "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://api.stripe.com https://challenges.cloudflare.com ws: wss:",
             "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com",
-            "object-src 'self'",
+            "object-src 'none'",
             "base-uri 'self'",
             "form-action 'self' https://checkout.stripe.com",
         ];
