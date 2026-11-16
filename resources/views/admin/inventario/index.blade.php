@@ -534,8 +534,8 @@
 
             {{-- Tarjeta Producto --}}
             <div class="flex items-center gap-3.5 p-3.5 bg-slate-50 dark:bg-[#121415] rounded-2xl border border-slate-100 dark:border-gray-800">
-                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white dark:bg-[#181a1b] flex items-center justify-center">
-                    <img id="mdm-img" src="" alt="" class="w-full h-full object-cover hidden">
+                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white dark:bg-[#181a1b] flex items-center justify-center relative">
+                    <img id="mdm-img" src="" alt="" class="w-full h-full object-cover hidden" style="display: none;">
                     <span id="mdm-placeholder-img" class="material-symbols-outlined text-slate-400 dark:text-gray-500 text-[22px]">inventory_2</span>
                 </div>
                 <div class="min-w-0 flex-1">
@@ -700,14 +700,30 @@
 
         const imgEl = document.getElementById('mdm-img');
         const placeholderImg = document.getElementById('mdm-placeholder-img');
-        if (m.producto_imagen) {
-            imgEl.src = m.producto_imagen;
-            imgEl.classList.remove('hidden');
-            placeholderImg.classList.add('hidden');
+
+        const alternarImagenProducto = (url) => {
+            if (url) {
+                imgEl.src = url;
+                imgEl.style.setProperty('display', 'block', 'important');
+                imgEl.classList.remove('hidden');
+                placeholderImg.style.setProperty('display', 'none', 'important');
+                placeholderImg.classList.add('hidden');
+            } else {
+                imgEl.src = '';
+                imgEl.style.setProperty('display', 'none', 'important');
+                imgEl.classList.add('hidden');
+                placeholderImg.style.setProperty('display', 'inline-flex', 'important');
+                placeholderImg.classList.remove('hidden');
+            }
+        };
+
+        if (m.producto_imagen && !m.producto_imagen.includes('placeholder-product.png')) {
+            alternarImagenProducto(m.producto_imagen);
+            imgEl.onerror = function() {
+                alternarImagenProducto(null);
+            };
         } else {
-            imgEl.src = '';
-            imgEl.classList.add('hidden');
-            placeholderImg.classList.remove('hidden');
+            alternarImagenProducto(null);
         }
 
         const varBadge = document.getElementById('mdm-variante-badge');
