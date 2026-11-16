@@ -359,13 +359,21 @@
             <div class="lg:col-span-8 space-y-8">
                 
                 <!-- Descripción Completa -->
-                @if($producto->descripcion)
+                @php
+                    $descRaw = $producto->descripcion ?? '';
+                    $tieneHtml = preg_match('/<[a-z][\s\S]*>/i', $descRaw);
+                @endphp
+                @if(!empty(trim(strip_tags($descRaw))))
                     <div class="bg-white rounded-md border border-slate-200 shadow-sm p-4 sm:p-6 space-y-4">
                         <h2 class="text-lg font-bold text-slate-900 pb-2">
                             Descripción y Especificaciones Técnicas
                         </h2>
-                        <div class="text-sm text-slate-700 leading-relaxed px-2 markdown-content">
-                            {!! \Illuminate\Support\Str::markdown($producto->descripcion ?? '', ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
+                        <div class="text-sm text-slate-700 leading-relaxed px-2 rich-text-content">
+                            @if($tieneHtml)
+                                {!! $descRaw !!}
+                            @else
+                                {!! nl2br(e($descRaw)) !!}
+                            @endif
                         </div>
                     </div>
                 @endif
