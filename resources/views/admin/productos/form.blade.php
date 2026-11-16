@@ -510,15 +510,6 @@
                                             class="w-7 h-7 hover:bg-slate-200 dark:hover:bg-gray-700 rounded text-slate-700 dark:text-slate-200 transition-colors flex items-center justify-center cursor-pointer">
                                         <span class="material-symbols-outlined text-[17px]">link_off</span>
                                     </button>
-
-                                    {{-- Limpiar formato --}}
-                                    <button type="button" 
-                                            onmousedown="event.preventDefault()" 
-                                            onclick="ejecutarComandoEditor('removeFormat')" 
-                                            title="Limpiar formato"
-                                            class="w-7 h-7 ml-auto hover:bg-slate-200 dark:hover:bg-gray-700 rounded text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors flex items-center justify-center cursor-pointer">
-                                        <span class="material-symbols-outlined text-[17px]">format_clear</span>
-                                    </button>
                                 </div>
 
                                 {{-- Lienzo editable WYSIWYG --}}
