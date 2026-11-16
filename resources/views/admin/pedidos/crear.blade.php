@@ -140,7 +140,7 @@
                                     @click="abrirEscanerCamara()" 
                                     title="Escanear código de barras con la cámara"
                                     class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-2xs">
-                                <span class="material-symbols-outlined text-[16px]">barcode_scanner</span>
+                                <span class="material-symbols-outlined icon-barcode text-[16px] select-none" style="width: auto !important; height: auto !important; max-width: none !important; max-height: none !important; overflow: visible !important; line-height: 1 !important;">barcode_scanner</span>
                                 <span class="hidden sm:inline text-[11px] font-bold">Escanear</span>
                             </button>
                         </div>

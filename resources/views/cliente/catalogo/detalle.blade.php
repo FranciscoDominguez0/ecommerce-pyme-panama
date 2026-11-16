@@ -364,8 +364,8 @@
                         <h2 class="text-lg font-bold text-slate-900 pb-2">
                             Descripción y Especificaciones Técnicas
                         </h2>
-                        <div class="text-sm text-slate-700 leading-relaxed whitespace-pre-line px-2">
-                            {{ $producto->descripcion }}
+                        <div class="text-sm text-slate-700 leading-relaxed px-2 markdown-content">
+                            {!! \Illuminate\Support\Str::markdown($producto->descripcion ?? '', ['html_input' => 'strip', 'allow_unsafe_links' => false]) !!}
                         </div>
                     </div>
                 @endif

@@ -410,28 +410,94 @@
 
                             <!-- Descripción Detallada -->
                             <div>
-                                <label for="descripcion"
-                                    class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                                    Descripción Detallada & Especificaciones
-                                </label>
-
-                                <!-- Barra de herramientas simulada -->
-                                <div
-                                    class="flex items-center gap-1 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 border-b-0 rounded-t-xl px-3 py-1.5 text-slate-500 dark:text-slate-400 text-xs">
-                                    <button type="button" class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded font-bold">B</button>
-                                    <button type="button"
-                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded italic font-serif">I</button>
-                                    <span class="text-slate-300 mx-1">|</span>
-                                    <button type="button"
-                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded material-symbols-outlined text-[16px]">format_list_bulleted</button>
-                                    <button type="button"
-                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded material-symbols-outlined text-[16px]">link</button>
-                                    <button type="button"
-                                        class="p-1 hover:bg-slate-200 dark:bg-gray-700 rounded material-symbols-outlined text-[16px]">image</button>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label for="descripcion"
+                                        class="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                                        Descripción Detallada & Especificaciones
+                                    </label>
+                                    <span class="text-[10px] text-slate-400 font-medium hidden sm:inline">
+                                        Formato Markdown enriquecido
+                                    </span>
                                 </div>
+
+                                <!-- Barra de herramientas de formato enriquecido -->
+                                <div
+                                    class="flex flex-wrap items-center gap-1 bg-slate-50 dark:bg-gray-800/80 border border-slate-200 dark:border-gray-700 border-b-0 rounded-t-xl px-2.5 py-1.5 text-slate-600 dark:text-slate-300 text-xs select-none">
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('bold')" 
+                                            title="Negrita (**texto**) [Ctrl+B]"
+                                            class="px-2 py-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded font-black text-slate-800 dark:text-slate-100 transition-colors cursor-pointer text-xs leading-none">
+                                        B
+                                    </button>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('italic')" 
+                                            title="Cursiva (*texto*) [Ctrl+I]"
+                                            class="px-2 py-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded italic font-serif text-slate-800 dark:text-slate-100 transition-colors cursor-pointer text-xs leading-none">
+                                        I
+                                    </button>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('heading')" 
+                                            title="Encabezado / Título (###)"
+                                            class="px-2 py-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded font-bold text-slate-800 dark:text-slate-100 transition-colors cursor-pointer text-[11px] leading-none">
+                                        H3
+                                    </button>
+                                    <span class="text-slate-300 dark:text-gray-600 mx-0.5">|</span>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('bullet')" 
+                                            title="Lista con viñetas (- elemento)"
+                                            class="p-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded text-slate-700 dark:text-slate-200 transition-colors cursor-pointer flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[17px] leading-none">format_list_bulleted</span>
+                                    </button>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('numbered')" 
+                                            title="Lista numerada (1. elemento)"
+                                            class="p-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded text-slate-700 dark:text-slate-200 transition-colors cursor-pointer flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[17px] leading-none">format_list_numbered</span>
+                                    </button>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('quote')" 
+                                            title="Cita o nota destacada (> nota)"
+                                            class="p-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded text-slate-700 dark:text-slate-200 transition-colors cursor-pointer flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[17px] leading-none">format_quote</span>
+                                    </button>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('code')" 
+                                            title="Código o modelo (`código`)"
+                                            class="p-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded text-slate-700 dark:text-slate-200 transition-colors cursor-pointer flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[17px] leading-none">code</span>
+                                    </button>
+                                    <span class="text-slate-300 dark:text-gray-600 mx-0.5">|</span>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('link')" 
+                                            title="Insertar enlace web ([texto](url))"
+                                            class="p-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded text-slate-700 dark:text-slate-200 transition-colors cursor-pointer flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[17px] leading-none">link</span>
+                                    </button>
+                                    <button type="button" 
+                                            onclick="aplicarMarkdown('image')" 
+                                            title="Insertar imagen externa (![alt](url))"
+                                            class="p-1 hover:bg-slate-200 dark:hover:bg-gray-700 active:bg-slate-300 rounded text-slate-700 dark:text-slate-200 transition-colors cursor-pointer flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-[17px] leading-none">image</span>
+                                    </button>
+
+                                    <!-- Botón Vista Previa / Edición -->
+                                    <button type="button" 
+                                            id="btn-toggle-preview" 
+                                            onclick="alternarVistaPreviaDescripcion()" 
+                                            title="Previsualizar formato enriquecido"
+                                            class="ml-auto inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-200/70 dark:hover:bg-gray-700 rounded-lg transition-colors cursor-pointer">
+                                        <span class="material-symbols-outlined text-[16px] leading-none" id="preview-icon">visibility</span>
+                                        <span id="preview-text">Vista previa</span>
+                                    </button>
+                                </div>
+
                                 <textarea id="descripcion" name="descripcion" rows="8"
-                                    placeholder="Escribe la descripción completa, características técnicas y especificaciones..."
+                                    placeholder="Escribe la descripción completa, características técnicas y especificaciones (usa la barra de arriba para dar formato en negrita, listas, títulos...)"
                                     class="input-panama w-full text-xs rounded-b-xl rounded-t-none border-slate-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-emerald-500/20 p-3 bg-white dark:bg-[#121415] text-slate-900 dark:text-white">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
+
+                                <div id="descripcion-preview-box"
+                                     class="hidden input-panama w-full min-h-[192px] max-h-[380px] overflow-y-auto text-xs rounded-b-xl rounded-t-none border border-slate-200 dark:border-gray-700 p-4 bg-slate-50/50 dark:bg-[#121415] text-slate-800 dark:text-slate-100 markdown-content">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -860,12 +926,266 @@
             }
         });
 
+        // ── EDITOR DE TEXTO ENRIQUECIDO / MARKDOWN ──
+        function renderMarkdownClient(md) {
+            if (!md || !md.trim()) {
+                return '<p class="text-slate-400 italic">No hay contenido de descripción para previsualizar.</p>';
+            }
+            // 1. Escapar caracteres HTML para seguridad
+            let text = md
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // 2. Encabezados
+            text = text.replace(/^### (.*$)/gim, '<h3 class="text-base font-bold text-slate-900 dark:text-white mt-3 mb-1">$1</h3>');
+            text = text.replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold text-slate-900 dark:text-white mt-4 mb-2">$1</h2>');
+            text = text.replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold text-slate-900 dark:text-white mt-5 mb-2">$1</h1>');
+
+            // 3. Negrita y cursiva
+            text = text.replace(/\*\*(.*?)\*\*/gim, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>');
+            text = text.replace(/\*(.*?)\*/gim, '<em class="italic">$1</em>');
+
+            // 4. Bloques de cita
+            text = text.replace(/^\&gt; (.*$)/gim, '<blockquote class="border-l-4 border-emerald-500 pl-3 py-1 my-2 bg-emerald-50/50 dark:bg-emerald-950/20 italic text-slate-700 dark:text-slate-300 rounded-r">$1</blockquote>');
+
+            // 5. Enlaces e imágenes
+            text = text.replace(/!\[([^\]]*)\]\((https?:\/\/[^\)]+)\)/gim, '<img src="$2" alt="$1" class="max-w-full max-h-60 rounded-lg object-contain my-2 border border-slate-200 dark:border-gray-700">');
+            text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-emerald-600 dark:text-emerald-400 underline hover:text-emerald-700 font-medium">$1</a>');
+
+            // 6. Código en línea
+            text = text.replace(/`([^`]+)`/gim, '<code class="px-1.5 py-0.5 bg-slate-200 dark:bg-gray-800 rounded text-slate-800 dark:text-slate-200 font-mono text-[11px]">$1</code>');
+
+            // 7. Listas desordenadas (- o *)
+            text = text.replace(/(?:^|\n)(?:[-*]\s+.+(?:\n|$))+/g, function(match) {
+                const items = match.trim().split('\n').map(line => {
+                    const clean = line.replace(/^[-*]\s+/, '');
+                    return `<li class="my-0.5 leading-relaxed">${clean}</li>`;
+                }).join('');
+                return `\n<ul class="list-disc pl-5 my-2 space-y-0.5 text-slate-700 dark:text-slate-300">${items}</ul>\n`;
+            });
+
+            // 8. Listas ordenadas (1. , 2. )
+            text = text.replace(/(?:^|\n)(?:\d+\.\s+.+(?:\n|$))+/g, function(match) {
+                const items = match.trim().split('\n').map(line => {
+                    const clean = line.replace(/^\d+\.\s+/, '');
+                    return `<li class="my-0.5 leading-relaxed">${clean}</li>`;
+                }).join('');
+                return `\n<ol class="list-decimal pl-5 my-2 space-y-0.5 text-slate-700 dark:text-slate-300">${items}</ol>\n`;
+            });
+
+            // 9. Párrafos y saltos de línea (respetando bloques HTML)
+            const lines = text.split('\n');
+            const processed = [];
+
+            for (let line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('<h') || trimmed.startsWith('<ul') || trimmed.startsWith('</ul') ||
+                    trimmed.startsWith('<ol') || trimmed.startsWith('</ol') || trimmed.startsWith('<li') ||
+                    trimmed.startsWith('<blockquote') || trimmed.startsWith('</blockquote') ||
+                    trimmed.startsWith('<img')) {
+                    processed.push(trimmed);
+                } else if (trimmed === '') {
+                    processed.push('<br/>');
+                } else {
+                    processed.push(`<p class="leading-relaxed my-1">${trimmed}</p>`);
+                }
+            }
+
+            return processed.join('\n');
+        }
+
+        window.aplicarMarkdown = function(tipo) {
+            const textarea = document.getElementById('descripcion');
+            if (!textarea) return;
+
+            // Si está en modo vista previa, volver a edición primero
+            const previewBox = document.getElementById('descripcion-preview-box');
+            if (previewBox && !previewBox.classList.contains('hidden')) {
+                alternarVistaPreviaDescripcion();
+            }
+
+            textarea.focus();
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            let replacement = '';
+            let cursorOffsetStart = 0;
+            let cursorOffsetEnd = 0;
+
+            switch (tipo) {
+                case 'bold':
+                    if (selectedText) {
+                        replacement = `**${selectedText}**`;
+                        cursorOffsetStart = start + 2;
+                        cursorOffsetEnd = end + 2;
+                    } else {
+                        replacement = '**texto en negrita**';
+                        cursorOffsetStart = start + 2;
+                        cursorOffsetEnd = start + 18;
+                    }
+                    break;
+
+                case 'italic':
+                    if (selectedText) {
+                        replacement = `*${selectedText}*`;
+                        cursorOffsetStart = start + 1;
+                        cursorOffsetEnd = end + 1;
+                    } else {
+                        replacement = '*texto en cursiva*';
+                        cursorOffsetStart = start + 1;
+                        cursorOffsetEnd = start + 17;
+                    }
+                    break;
+
+                case 'heading':
+                    if (selectedText) {
+                        replacement = `### ${selectedText}`;
+                        cursorOffsetStart = start + 4;
+                        cursorOffsetEnd = end + 4;
+                    } else {
+                        replacement = '### Encabezado\n';
+                        cursorOffsetStart = start + 4;
+                        cursorOffsetEnd = start + 14;
+                    }
+                    break;
+
+                case 'bullet':
+                    if (selectedText) {
+                        const lines = selectedText.split('\n');
+                        replacement = lines.map(line => line.startsWith('- ') ? line : `- ${line}`).join('\n');
+                        cursorOffsetStart = start;
+                        cursorOffsetEnd = start + replacement.length;
+                    } else {
+                        replacement = '- Característica 1\n- Característica 2\n';
+                        cursorOffsetStart = start + 2;
+                        cursorOffsetEnd = start + 18;
+                    }
+                    break;
+
+                case 'numbered':
+                    if (selectedText) {
+                        const lines = selectedText.split('\n');
+                        replacement = lines.map((line, idx) => `${idx + 1}. ${line.replace(/^\d+\.\s*/, '')}`).join('\n');
+                        cursorOffsetStart = start;
+                        cursorOffsetEnd = start + replacement.length;
+                    } else {
+                        replacement = '1. Primer paso o especificación\n2. Segundo paso o especificación\n';
+                        cursorOffsetStart = start + 3;
+                        cursorOffsetEnd = start + 32;
+                    }
+                    break;
+
+                case 'quote':
+                    if (selectedText) {
+                        const lines = selectedText.split('\n');
+                        replacement = lines.map(line => `> ${line}`).join('\n');
+                        cursorOffsetStart = start;
+                        cursorOffsetEnd = start + replacement.length;
+                    } else {
+                        replacement = '> Nota destacada o garantía...\n';
+                        cursorOffsetStart = start + 2;
+                        cursorOffsetEnd = start + 30;
+                    }
+                    break;
+
+                case 'code':
+                    if (selectedText) {
+                        replacement = `\`${selectedText}\``;
+                        cursorOffsetStart = start + 1;
+                        cursorOffsetEnd = end + 1;
+                    } else {
+                        replacement = '`código o modelo`';
+                        cursorOffsetStart = start + 1;
+                        cursorOffsetEnd = start + 17;
+                    }
+                    break;
+
+                case 'link':
+                    let linkText = selectedText || 'enlace';
+                    const url = prompt('Ingresa la dirección web (URL):', 'https://');
+                    if (url === null) return;
+                    replacement = `[${linkText}](${url.trim() || 'https://'})`;
+                    cursorOffsetStart = start;
+                    cursorOffsetEnd = start + replacement.length;
+                    break;
+
+                case 'image':
+                    let altText = selectedText || 'Descripción de la imagen';
+                    const imgUrl = prompt('Ingresa la URL de la imagen externa:', 'https://');
+                    if (imgUrl === null) return;
+                    replacement = `![${altText}](${imgUrl.trim() || 'https://'})`;
+                    cursorOffsetStart = start;
+                    cursorOffsetEnd = start + replacement.length;
+                    break;
+            }
+
+            // Insertar texto preservando historial de deshacer si es posible
+            if (document.execCommand && typeof document.execCommand === 'function') {
+                textarea.setSelectionRange(start, end);
+                if (!document.execCommand('insertText', false, replacement)) {
+                    textarea.setRangeText(replacement, start, end, 'select');
+                }
+            } else {
+                textarea.setRangeText(replacement, start, end, 'select');
+            }
+
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+            textarea.setSelectionRange(cursorOffsetStart, cursorOffsetEnd);
+            textarea.focus();
+        };
+
+        window.alternarVistaPreviaDescripcion = function() {
+            const textarea = document.getElementById('descripcion');
+            const previewBox = document.getElementById('descripcion-preview-box');
+            const previewBtn = document.getElementById('btn-toggle-preview');
+            const previewIcon = document.getElementById('preview-icon');
+            const previewText = document.getElementById('preview-text');
+            if (!textarea || !previewBox) return;
+
+            const estaEnVistaPrevia = !previewBox.classList.contains('hidden');
+
+            if (estaEnVistaPrevia) {
+                previewBox.classList.add('hidden');
+                textarea.classList.remove('hidden');
+                textarea.focus();
+                if (previewIcon) previewIcon.textContent = 'visibility';
+                if (previewText) previewText.textContent = 'Vista previa';
+                if (previewBtn) {
+                    previewBtn.classList.remove('bg-emerald-100', 'text-emerald-700', 'dark:bg-emerald-950/60', 'dark:text-emerald-400');
+                }
+            } else {
+                previewBox.innerHTML = renderMarkdownClient(textarea.value);
+                textarea.classList.add('hidden');
+                previewBox.classList.remove('hidden');
+                if (previewIcon) previewIcon.textContent = 'edit_note';
+                if (previewText) previewText.textContent = 'Modo edición';
+                if (previewBtn) {
+                    previewBtn.classList.add('bg-emerald-100', 'text-emerald-700', 'dark:bg-emerald-950/60', 'dark:text-emerald-400');
+                }
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             calcularMargen();
 
             const descCortaInput = document.getElementById('descripcion_corta');
             if (descCortaInput) {
                 actualizarContador(descCortaInput, 'contador-desc-corta', 180);
+            }
+
+            const descArea = document.getElementById('descripcion');
+            if (descArea) {
+                descArea.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+                        e.preventDefault();
+                        aplicarMarkdown('bold');
+                    } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') {
+                        e.preventDefault();
+                        aplicarMarkdown('italic');
+                    }
+                });
             }
 
             const marcaInicial = document.getElementById('input-marca-valor')?.value;

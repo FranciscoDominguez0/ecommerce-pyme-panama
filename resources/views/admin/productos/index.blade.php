@@ -127,8 +127,8 @@
                     <button type="button" 
                             onclick="window.ModalEscaner.abrir('sku', 'form-filtro-productos')"
                             title="Escanear Código"
-                            class="absolute left-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1.5 rounded hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
-                        <span class="material-symbols-outlined text-[18px]">barcode_scanner</span>
+                            class="absolute left-1 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 w-7 h-7 rounded hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10 cursor-pointer">
+                        <span class="material-symbols-outlined icon-barcode text-[19px] select-none" style="width: auto !important; height: auto !important; max-width: none !important; max-height: none !important; overflow: visible !important; line-height: 1 !important;">barcode_scanner</span>
                     </button>
                     
                     <input type="text" 

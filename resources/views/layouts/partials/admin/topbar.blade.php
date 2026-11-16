@@ -32,8 +32,8 @@
             <button type="button" 
                     onclick="window.ModalEscaner.abrir()"
                     title="Escanear Código de Barras"
-                    class="absolute right-2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10">
-                <span class="material-symbols-outlined text-[16px] w-4 h-4 overflow-hidden shrink-0 inline-flex items-center justify-center">barcode_scanner</span>
+                    class="absolute right-2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 w-7 h-7 rounded-lg hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10 cursor-pointer">
+                <span class="material-symbols-outlined icon-barcode text-[20px] select-none" style="width: auto !important; height: auto !important; max-width: none !important; max-height: none !important; overflow: visible !important; line-height: 1 !important;">barcode_scanner</span>
             </button>
         </form>
 

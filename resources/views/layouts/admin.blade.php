@@ -80,6 +80,16 @@
             flex-shrink: 0;
             user-select: none;
         }
+        /* Iconos anchos o de escáner sin recorte */
+        .material-symbols-outlined.icon-barcode,
+        .material-symbols-outlined.icon-wide,
+        .material-symbols-outlined[class*="barcode"] {
+            width: auto !important;
+            height: auto !important;
+            max-width: none !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
     </style>
 
     <meta charset="utf-8"/>
