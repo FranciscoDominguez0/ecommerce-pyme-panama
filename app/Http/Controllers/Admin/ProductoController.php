@@ -176,8 +176,6 @@ class ProductoController extends Controller
             $this->productoService->guardarVariantes($request, $producto);
         });
 
-        $this->inventarioService->procesarNotificacionesStock($producto);
-
         return redirect()->route('admin.productos.edit', ['id' => $id] + request()->query())->with('success', 'Producto actualizado correctamente.');
     }
 

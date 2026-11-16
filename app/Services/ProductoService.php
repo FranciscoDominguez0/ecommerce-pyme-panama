@@ -238,9 +238,11 @@ class ProductoService
     // Actualiza la posición de las imágenes
     public function reordenarImagenes(Producto $producto, array $orden): void
     {
-        foreach ($orden as $posicion => $imagenId) {
-            $producto->imagenes()->where('id', $imagenId)->update(['orden' => $posicion + 1]);
-        }
+        \Illuminate\Support\Facades\DB::transaction(function () use ($producto, $orden) {
+            foreach ($orden as $posicion => $imagenId) {
+                $producto->imagenes()->where('id', $imagenId)->update(['orden' => $posicion + 1]);
+            }
+        });
     }
 
     private function aplicarOrdenGaleria(array $ordenGaleria, Producto $producto, array $archivosCreados, array $urlsCreadas): void

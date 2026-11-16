@@ -302,7 +302,7 @@
                 const ordenFinal = Array.from(grid.querySelectorAll('.item-imagen')).map(c => c.dataset.id || c.dataset.dbId || c.dataset.nuevoId).join(',');
                 if (ordenFinal !== ordenInicialDrag) {
                     sincronizarArchivosYOrden();
-                    guardarNuevoOrden(true);
+                    guardarNuevoOrden(false);
                 }
             }
 
@@ -321,23 +321,76 @@
         sincronizarArchivosYOrden();
     }
 
+    // Optimiza imágenes pesadas en el navegador antes de subir para que el guardado sea instantáneo
+    function optimizarImagenParaSubida(file) {
+        if (!file.type.startsWith('image/') || file.type === 'image/svg+xml' || file.size <= 450 * 1024) {
+            return Promise.resolve(file);
+        }
+
+        return new Promise((resolve) => {
+            const img = new Image();
+            const blobUrl = URL.createObjectURL(file);
+            img.onload = () => {
+                URL.revokeObjectURL(blobUrl);
+                let w = img.width;
+                let h = img.height;
+                const maxDim = 1600;
+
+                if (w > maxDim || h > maxDim) {
+                    if (w > h) {
+                        h = Math.round((h * maxDim) / w);
+                        w = maxDim;
+                    } else {
+                        w = Math.round((w * maxDim) / h);
+                        h = maxDim;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, w, h);
+
+                const format = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+                canvas.toBlob((blob) => {
+                    if (blob && blob.size < file.size) {
+                        const optFile = new File([blob], file.name, {
+                            type: format,
+                            lastModified: Date.now()
+                        });
+                        resolve(optFile);
+                    } else {
+                        resolve(file);
+                    }
+                }, format, 0.85);
+            };
+            img.onerror = () => {
+                URL.revokeObjectURL(blobUrl);
+                resolve(file);
+            };
+            img.src = blobUrl;
+        });
+    }
+
     // Carga de archivos locales con vista previa inmediata
-    function handleSeleccionArchivos(input) {
-        const files = Array.from(input.files || []);
-        if (files.length === 0) return;
+    async function handleSeleccionArchivos(input) {
+        const rawFiles = Array.from(input.files || []);
+        if (rawFiles.length === 0) return;
 
         const grid = document.getElementById('grid-imagenes-producto');
         const empty = document.getElementById('empty-state-galeria');
         if (empty) empty.remove();
 
-        files.forEach((file) => {
+        for (const rawFile of rawFiles) {
+            const file = await optimizarImagenParaSubida(rawFile);
             const fileUid = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
             archivosLocales.push({ id: fileUid, file: file, name: file.name });
 
             const src = URL.createObjectURL(file);
             const esPrimera = grid.querySelectorAll('.item-imagen').length === 0;
             crearCardImagenHtml(src, file.name, esPrimera, false, fileUid);
-        });
+        }
 
         actualizarContadorGaleria();
         sincronizarArchivosYOrden();
@@ -495,7 +548,7 @@
 
         sincronizarArchivosYOrden();
 
-        // Si ya existe en base de datos, guardamos por AJAX
+        // Si ya existe en base de datos, guardamos por AJAX silenciosamente
         if (productoId && dbId) {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             fetch(`/admin/productos/${productoId}/imagenes/${dbId}/portada`, {
@@ -506,26 +559,16 @@
                     'Accept': 'application/json'
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success && typeof window.mostrarToast === 'function') {
-                    window.mostrarToast(data.message || 'Imagen establecida como portada correctamente.', 'success');
-                }
-            })
             .catch(() => {
                 if (typeof window.mostrarToast === 'function') {
                     window.mostrarToast('Error al conectar con el servidor para fijar portada.', 'error');
                 }
             });
-        } else {
-            if (typeof window.mostrarToast === 'function') {
-                window.mostrarToast('Imagen seleccionada como portada.', 'success');
-            }
         }
     }
 
-    // Guarda el orden de las imágenes
-    function guardarNuevoOrden(notificar = true) {
+    // Guarda el orden de las imágenes de forma silenciosa en segundo plano
+    function guardarNuevoOrden(notificar = false) {
         const grid = document.getElementById('grid-imagenes-producto');
         if (!grid) return;
 
@@ -535,7 +578,7 @@
         const productoId = grid.dataset.productoId;
         const ordenDbIds = cards.map(c => c.dataset.dbId).filter(Boolean);
 
-        // Si todas las imágenes ya están en base de datos, guardamos por AJAX
+        // Si todas las imágenes ya están en base de datos, guardamos por AJAX silenciosamente
         if (productoId && ordenDbIds.length > 0 && ordenDbIds.length === cards.length) {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             fetch(`/admin/productos/${productoId}/imagenes/reordenar`, {
@@ -554,7 +597,7 @@
                 }
             })
             .catch(() => {
-                if (notificar && typeof window.mostrarToast === 'function') {
+                if (typeof window.mostrarToast === 'function') {
                     window.mostrarToast('Error al guardar el nuevo orden de imágenes.', 'error');
                 }
             });
@@ -636,7 +679,7 @@
         if (card && card.previousElementSibling && card.previousElementSibling.classList.contains('item-imagen')) {
             card.parentNode.insertBefore(card, card.previousElementSibling);
             sincronizarArchivosYOrden();
-            guardarNuevoOrden(true);
+            guardarNuevoOrden(false);
         }
     }
 
@@ -646,7 +689,7 @@
         if (card && card.nextElementSibling && card.nextElementSibling.classList.contains('item-imagen')) {
             card.parentNode.insertBefore(card.nextElementSibling, card);
             sincronizarArchivosYOrden();
-            guardarNuevoOrden(true);
+            guardarNuevoOrden(false);
         }
     }
 
@@ -675,11 +718,17 @@
     document.addEventListener('DOMContentLoaded', inicializarTodasLasCards);
     document.addEventListener('livewire:navigated', inicializarTodasLasCards);
 
-    // Sincronización antes de guardar el formulario
+    // Sincronización y estado de carga visual antes de guardar el formulario
     const formProducto = document.getElementById('form-producto');
     if (formProducto) {
         formProducto.addEventListener('submit', function() {
             sincronizarArchivosYOrden();
+            const btnSubmit = formProducto.querySelector('button[type="submit"]');
+            if (btnSubmit && !btnSubmit.disabled) {
+                btnSubmit.disabled = true;
+                btnSubmit.classList.add('opacity-80', 'cursor-wait');
+                btnSubmit.innerHTML = `<span>Guardando cambios...</span>`;
+            }
         });
     }
 </script>
