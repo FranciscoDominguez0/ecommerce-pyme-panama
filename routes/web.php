@@ -47,6 +47,11 @@ Route::get('/.well-known/security.txt', function () {
     return response("Contact: mailto:seguridad@rsfsecure.site\nExpires: 2027-12-31T23:59:59.000Z\n", 200, ['Content-Type' => 'text/plain; charset=utf-8']);
 });
 Route::get('/security.txt', fn () => redirect('/.well-known/security.txt', 301));
+
+// Verificación Loader.io
+Route::get('/loaderio-8694520be756eb92d06db24d0b8dcf10{ext?}', function () {
+    return response('loaderio-8694520be756eb92d06db24d0b8dcf10', 200, ['Content-Type' => 'text/plain; charset=utf-8']);
+})->where('ext', '(\.txt|\.html|/)?');
 Route::get('/', [InicioController::class, 'inicio'])->name('inicio');
 
 Route::get('/catalogo', [CatalogoController::class, 'index'])->name('cliente.catalogo');
