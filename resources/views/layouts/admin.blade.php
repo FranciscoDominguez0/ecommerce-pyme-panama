@@ -80,6 +80,10 @@
             flex-shrink: 0;
             user-select: none;
         }
+        .material-symbols-outlined.hidden,
+        .material-symbols-outlined[hidden] {
+            display: none !important;
+        }
         /* Iconos anchos o de escáner sin recorte */
         .material-symbols-outlined.icon-barcode,
         .material-symbols-outlined.icon-wide,
