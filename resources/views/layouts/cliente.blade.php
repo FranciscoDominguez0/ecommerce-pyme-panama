@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     @include('layouts.partials.google-tag')
     <meta charset="utf-8" />
@@ -22,7 +23,8 @@
     <link rel="apple-touch-icon" href="{{ asset('images/logo-192.png') }}">
 
     <!-- Precarga de fuentes locales críticas (Cero latencia / Anti-FOUT) -->
-    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2"
+        crossorigin>
     <link rel="preload" href="{{ asset('fonts/plus-jakarta-sans.woff2') }}" as="font" type="font/woff2" crossorigin>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -34,10 +36,13 @@
     @livewireStyles
     @stack('styles')
 </head>
-<body class="bg-[#F8F9FF] text-[#0b1c30] flex flex-col min-h-screen text-sm antialiased selection:bg-[#8af5be] selection:text-[#00714b]" x-data="{ mobileMenuOpen: false }">
+
+<body
+    class="bg-[#F8F9FF] text-[#0b1c30] flex flex-col min-h-screen text-sm antialiased selection:bg-[#8af5be] selection:text-[#00714b]"
+    x-data="{ mobileMenuOpen: false }">
 
     @include('layouts.partials.cliente.header')
-    
+
     @include('layouts.partials.cliente.mobile-menu')
 
     <!-- Contenido principal -->
@@ -45,7 +50,7 @@
         @php
             $isFromLogin = session()->pull('is_from_login', false) || str_contains(request()->headers->get('referer', ''), '/login') || str_contains(request()->headers->get('referer', ''), '2fa-challenge');
         @endphp
-        
+
         <!-- Esqueleto de Carga (Solo post-login) -->
         @if($isFromLogin)
             <div id="global-cliente-skeleton" class="absolute inset-0 z-[60] bg-[#F8F9FF] transition-opacity duration-300">
@@ -53,26 +58,28 @@
             </div>
         @endif
 
-        <div id="actual-page-content" class="w-full transition-opacity duration-300 {{ $isFromLogin ? 'opacity-0' : 'opacity-100' }}">
+        <div id="actual-page-content"
+            class="w-full transition-opacity duration-300 {{ $isFromLogin ? 'opacity-0' : 'opacity-100' }}">
             @yield('content')
         </div>
     </main>
 
     @include('layouts.partials.cliente.whatsapp-button')
-    
+
     @include('layouts.partials.cliente.footer')
 
     <!-- Componentes Globales -->
     @persist('carrito-drawer')
-        <livewire:carrito-drawer />
+    <livewire:carrito-drawer />
     @endpersist
     <x-toast-alert />
     <x-modal-articulo-agregado />
 
     @livewireScripts
-    
+
     @include('layouts.partials.cliente.scripts')
-    
+
     @stack('scripts')
 </body>
+
 </html>
