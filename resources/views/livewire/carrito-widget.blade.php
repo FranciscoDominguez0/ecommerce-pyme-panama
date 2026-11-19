@@ -69,8 +69,10 @@
                                         <span>${{ number_format((float)$item->precio_unitario, 2) }} USD</span>
                                     </div>
                                     
-                                    <!-- Selector interactivo de cantidad instantáneo -->
-                                    <div class="flex items-center gap-2 pt-1" x-data="{ cantidadLocal: {{ $item->cantidad }} }">
+                                    <!-- Selector interactivo de cantidad con control estricto de stock -->
+                                    <div wire:key="cart-item-qty-{{ $item->id }}-{{ $item->cantidad }}-{{ $stock }}"
+                                         class="flex items-center gap-2 pt-1" 
+                                         x-data="{ cantidadLocal: {{ $item->cantidad }}, stockMax: {{ (int) $stock }} }">
                                         <span class="font-bold text-gray-900 text-xs sm:text-sm">Cantidad:</span> 
                                         
                                         <div class="inline-flex items-center bg-gray-50 border border-gray-300 rounded-lg shadow-2xs overflow-hidden">
@@ -92,13 +94,15 @@
                                                 {{ $item->cantidad }}
                                             </span>
 
-                                            <!-- Botón incrementar -->
+                                            <!-- Botón incrementar (bloqueado estrictamente si alcanza el stock máximo) -->
                                             <button type="button" 
-                                                    @click="cantidadLocal++"
+                                                    @click="if (cantidadLocal < stockMax) { cantidadLocal++; } else { $event.preventDefault(); }"
                                                     wire:click="incrementar({{ $item->id }})" 
+                                                    :disabled="cantidadLocal >= stockMax"
                                                     wire:loading.attr="disabled"
-                                                    class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-200 text-gray-700 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-                                                    title="Aumentar cantidad">
+                                                    :class="cantidadLocal >= stockMax ? 'opacity-40 cursor-not-allowed bg-gray-100 text-gray-400' : 'hover:bg-gray-200 text-gray-700 cursor-pointer'"
+                                                    class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center transition-colors"
+                                                    :title="cantidadLocal >= stockMax ? 'Límite de stock alcanzado (' + stockMax + ' disponibles)' : 'Aumentar cantidad'">
                                                 <span class="material-symbols-outlined text-[15px] sm:text-[17px]">add</span>
                                             </button>
                                         </div>
