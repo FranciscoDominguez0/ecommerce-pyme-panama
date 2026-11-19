@@ -79,7 +79,8 @@
                             <!-- Selector de Cantidad y Enlace de Eliminar -->
                             <div class="flex items-center justify-between mt-2 pt-1">
                                 <!-- Caja de Cantidad [ -  1  + ] -->
-                                <div x-data="{ cant: {{ $item['cantidad'] }} }"
+                                <div wire:key="drawer-item-qty-{{ $item['id'] }}-{{ $item['cantidad'] }}-{{ $item['stock_max'] }}"
+                                    x-data="{ cant: {{ $item['cantidad'] }}, max: {{ (int) $item['stock_max'] }} }"
                                     class="inline-flex items-center border border-gray-300 rounded-md bg-white text-xs font-semibold">
                                     <button type="button" 
                                         @click="if (cant > 1) cant--"
@@ -95,10 +96,13 @@
                                         {{ $item['cantidad'] }}
                                     </span>
                                     <button type="button" 
-                                        @click="cant++"
+                                        @click="if (cant < max) { cant++; } else { $event.preventDefault(); }"
                                         wire:click="incrementar({{ $item['id'] }})"
+                                        :disabled="cant >= max"
                                         wire:loading.attr="disabled"
-                                        class="w-7 h-7 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors disabled:opacity-40 cursor-pointer">
+                                        :class="cant >= max ? 'opacity-40 cursor-not-allowed bg-gray-100' : 'hover:bg-gray-100 cursor-pointer text-gray-600'"
+                                        class="w-7 h-7 flex items-center justify-center transition-colors"
+                                        :title="cant >= max ? 'Límite de stock alcanzado (' + max + ' disponibles)' : 'Aumentar cantidad'">
                                         +
                                     </button>
                                 </div>
