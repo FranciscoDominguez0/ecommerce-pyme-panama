@@ -25,6 +25,30 @@
         document.addEventListener('livewire:init', registrarListenerToast);
     }
 
+    // Sincronizar badges de carrito y lista de deseos al usar el historial del navegador (atrás/adelante)
+    let navegacionPorHistorial = false;
+
+    window.addEventListener('popstate', () => {
+        navegacionPorHistorial = true;
+    });
+
+    document.addEventListener('livewire:navigated', () => {
+        if (navegacionPorHistorial) {
+            navegacionPorHistorial = false;
+            if (window.Livewire) {
+                Livewire.dispatch('carrito-actualizado');
+                Livewire.dispatch('deseos-actualizado');
+            }
+        }
+    });
+
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted && window.Livewire) {
+            Livewire.dispatch('carrito-actualizado');
+            Livewire.dispatch('deseos-actualizado');
+        }
+    });
+
     function handleLoginSkeleton() {
         const skeleton = document.getElementById('global-cliente-skeleton');
         const actualContent = document.getElementById('actual-page-content');

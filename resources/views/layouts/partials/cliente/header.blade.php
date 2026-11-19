@@ -131,7 +131,9 @@
             <!-- Enlaces de navegación y menú de usuario -->
             <div class="flex items-center gap-3">
                 <!-- Badges y Enlaces Dinámicos de Carrito y Deseos -->
-                <livewire:navbar-badges />
+                @persist('navbar-badges')
+                    <livewire:navbar-badges />
+                @endpersist
 
                 <!-- Autenticación de usuario -->
                 @auth

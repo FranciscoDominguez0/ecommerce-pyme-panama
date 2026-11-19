@@ -63,7 +63,9 @@
     @include('layouts.partials.cliente.footer')
 
     <!-- Componentes Globales -->
-    <livewire:carrito-drawer />
+    @persist('carrito-drawer')
+        <livewire:carrito-drawer />
+    @endpersist
     <x-toast-alert />
     <x-modal-articulo-agregado />
 
