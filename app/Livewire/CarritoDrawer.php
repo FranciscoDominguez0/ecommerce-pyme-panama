@@ -104,6 +104,7 @@ class CarritoDrawer extends Component
             $this->cargarCarrito();
             $this->dispatch('carrito-actualizado');
         } else {
+            $this->cargarCarrito();
             $this->dispatch('mostrar-toast', ['tipo' => 'warning', 'mensaje' => $res['mensaje']]);
         }
     }
@@ -119,6 +120,7 @@ class CarritoDrawer extends Component
             $this->cargarCarrito();
             $this->dispatch('carrito-actualizado');
         } else {
+            $this->cargarCarrito();
             $this->dispatch('mostrar-toast', ['tipo' => 'warning', 'mensaje' => $res['mensaje']]);
         }
     }
