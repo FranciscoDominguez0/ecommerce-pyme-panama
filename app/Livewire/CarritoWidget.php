@@ -3,9 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\Direccion;
+use App\Models\ItemCarrito;
 use App\Models\Producto;
 use App\Models\ZonaEnvio;
 use App\Services\CarritoService;
+use App\Services\EnvioService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -27,27 +29,25 @@ class CarritoWidget extends Component
     {
         $usuarioId = Auth::id();
         $sesionId = session()->getId();
-        $carrito = $carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
-        $item = $carrito->items()->with(['producto', 'variante'])->find($itemId);
+        $item = ItemCarrito::with(['producto', 'variante'])->find($itemId);
 
         if (!$item) {
             return;
         }
 
-        $stockDisponible = $item->stock_disponible;
         $nuevaCantidad = $item->cantidad + 1;
+        $resultado = $carritoService->actualizarCantidad($itemId, $nuevaCantidad, $usuarioId, $sesionId);
 
-        if ($nuevaCantidad > $stockDisponible) {
-            $this->stockAdvertencias[$itemId] = "Solo quedan {$stockDisponible} unidades disponibles";
+        if (!$resultado['exito']) {
+            $this->stockAdvertencias[$itemId] = $resultado['mensaje'];
             $this->dispatch('mostrar-toast', [
                 'tipo' => 'warning',
-                'mensaje' => "Stock insuficiente: solo quedan {$stockDisponible} unidades disponibles.",
+                'mensaje' => $resultado['mensaje'],
             ]);
             return;
         }
 
         unset($this->stockAdvertencias[$itemId]);
-        $carritoService->actualizarCantidad($itemId, $nuevaCantidad, $usuarioId, $sesionId);
         $this->dispatch('carrito-actualizado');
     }
 
@@ -58,8 +58,7 @@ class CarritoWidget extends Component
     {
         $usuarioId = Auth::id();
         $sesionId = session()->getId();
-        $carrito = $carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
-        $item = $carrito->items()->find($itemId);
+        $item = ItemCarrito::find($itemId);
 
         if (!$item) {
             return;
@@ -159,6 +158,7 @@ class CarritoWidget extends Component
                     ->where('usuario_id', $usuarioId)
                     ->where('producto_id', $productoId)
                     ->delete();
+                cache()->forget("carrito_widget_deseos_{$usuarioId}");
                 $this->dispatch('deseos-actualizado');
             }
 
@@ -188,6 +188,7 @@ class CarritoWidget extends Component
                 ->where('producto_id', $productoId)
                 ->delete();
 
+            cache()->forget("carrito_widget_deseos_{$usuarioId}");
             $this->dispatch('deseos-actualizado');
 
             $this->dispatch('mostrar-toast', [
@@ -257,8 +258,10 @@ class CarritoWidget extends Component
                 }
             }
 
-            // Fallback: Si no ha elegido nada, estimamos usando la tarifa de Panamá o la primera zona disponible
-            $zonaFallback = ZonaEnvio::where('nombre', 'like', '%Panamá%')->first() ?? ZonaEnvio::first();
+            // Fallback: Estimamos usando la tarifa de Panamá o la primera zona disponible (con caché en memoria)
+            $zonaFallback = cache()->remember('zona_envio_fallback_panama', 3600, function () {
+                return ZonaEnvio::where('nombre', 'like', '%Panamá%')->first() ?? ZonaEnvio::first();
+            });
 
             return [
                 'costo' => $zonaFallback ? (float) $envioService->calcularCostoEnvio($zonaFallback, $carrito) : 0.00,
@@ -269,8 +272,16 @@ class CarritoWidget extends Component
         }
     }
 
+    #[\Livewire\Attributes\On('deseos-actualizado')]
+    public function invalidarDeseosCache(): void
+    {
+        if (Auth::id()) {
+            cache()->forget("carrito_widget_deseos_" . Auth::id());
+        }
+    }
+
     #[\Livewire\Attributes\On('envioActualizado')]
-    public function render(CarritoService $carritoService, \App\Services\EnvioService $envioService)
+    public function render(CarritoService $carritoService, EnvioService $envioService)
     {
         $usuarioId = Auth::id();
         $sesionId = session()->getId();
@@ -291,10 +302,26 @@ class CarritoWidget extends Component
 
         $resumen = $carritoService->calcularTotal($carrito, $this->costoEnvio, $ubicacion['zona_id']);
 
-        // Obtener productos de la lista de deseos
-        $productosDeseos = collect();
-        if ($usuarioId) {
-            $productosDeseos = Producto::with(['imagenes', 'categoria', 'brand'])
+        // Obtener productos de la lista de deseos con caché para no sobrecargar cada incremento/decremento
+        $productosDeseos = $this->obtenerProductosDeseos($usuarioId);
+
+        // Obtener productos relacionados de forma estable con caché
+        $productosRelacionados = $this->obtenerProductosRelacionados($items);
+
+        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'productosRelacionados', 'ubicacion'));
+    }
+
+    /**
+     * Obtiene los productos de la lista de deseos con caché de corta duración.
+     */
+    protected function obtenerProductosDeseos(?int $usuarioId): \Illuminate\Support\Collection
+    {
+        if (!$usuarioId) {
+            return collect();
+        }
+
+        return cache()->remember("carrito_widget_deseos_{$usuarioId}", 120, function () use ($usuarioId) {
+            return Producto::with(['imagenes', 'categoria', 'brand'])
                 ->sinEliminar()
                 ->where('activo', true)
                 ->whereIn('id', function ($query) use ($usuarioId) {
@@ -304,12 +331,7 @@ class CarritoWidget extends Component
                 })
                 ->take(4)
                 ->get();
-        }
-
-        // Obtener productos relacionados de forma estable para que no cambien al aplicar cupones ni recargar
-        $productosRelacionados = $this->obtenerProductosRelacionados($items);
-
-        return view('livewire.carrito-widget', compact('carrito', 'items', 'resumen', 'productosDeseos', 'productosRelacionados', 'ubicacion'));
+        });
     }
 
     /**
@@ -318,59 +340,60 @@ class CarritoWidget extends Component
      */
     protected function obtenerProductosRelacionados($items): \Illuminate\Support\Collection
     {
-        $productosIdsEnCarrito = $items->pluck('producto.id')->all();
+        $productosIdsEnCarrito = $items->pluck('producto.id')->filter()->sort()->values()->all();
+        $cacheKey = 'carrito_widget_rel_' . md5(json_encode($productosIdsEnCarrito));
 
-        // Si ya tenemos IDs calculados previamente en el componente y no están en el carrito, los conservamos
-        if (!empty($this->productosRelacionadosIds)) {
-            $idsValidos = array_values(array_diff($this->productosRelacionadosIds, $productosIdsEnCarrito));
-            if (count($idsValidos) >= 3) {
-                return Producto::with(['imagenes', 'categoria', 'brand'])
-                    ->sinEliminar()
-                    ->where('activo', true)
-                    ->whereIn('id', array_slice($idsValidos, 0, 3))
-                    ->get();
+        return cache()->remember($cacheKey, 300, function () use ($items, $productosIdsEnCarrito) {
+            if (!empty($this->productosRelacionadosIds)) {
+                $idsValidos = array_values(array_diff($this->productosRelacionadosIds, $productosIdsEnCarrito));
+                if (count($idsValidos) >= 3) {
+                    return Producto::with(['imagenes', 'categoria', 'brand'])
+                        ->sinEliminar()
+                        ->where('activo', true)
+                        ->whereIn('id', array_slice($idsValidos, 0, 3))
+                        ->get();
+                }
             }
-        }
 
-        // Si es la primera carga o no hay suficientes, calculamos una lista determinista
-        $productosRelacionados = collect();
-        if ($items->count() > 0) {
-            $categoriasIds = $items->pluck('producto.categoria_id')->unique()->filter();
+            $productosRelacionados = collect();
+            if ($items->count() > 0) {
+                $categoriasIds = $items->pluck('producto.categoria_id')->unique()->filter();
 
-            $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
-                ->sinEliminar()
-                ->where('activo', true)
-                ->whereIn('categoria_id', $categoriasIds)
-                ->whereNotIn('id', $productosIdsEnCarrito)
-                ->orderByDesc('destacado')
-                ->orderByDesc('id')
-                ->take(3)
-                ->get();
-
-            if ($productosRelacionados->count() < 3) {
-                $mas = Producto::with(['imagenes', 'categoria', 'brand'])
+                $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
                     ->sinEliminar()
                     ->where('activo', true)
-                    ->whereNotIn('id', array_merge($productosIdsEnCarrito, $productosRelacionados->pluck('id')->all()))
+                    ->whereIn('categoria_id', $categoriasIds)
+                    ->whereNotIn('id', $productosIdsEnCarrito)
                     ->orderByDesc('destacado')
                     ->orderByDesc('id')
-                    ->take(3 - $productosRelacionados->count())
+                    ->take(3)
                     ->get();
-                $productosRelacionados = $productosRelacionados->concat($mas);
+
+                if ($productosRelacionados->count() < 3) {
+                    $mas = Producto::with(['imagenes', 'categoria', 'brand'])
+                        ->sinEliminar()
+                        ->where('activo', true)
+                        ->whereNotIn('id', array_merge($productosIdsEnCarrito, $productosRelacionados->pluck('id')->all()))
+                        ->orderByDesc('destacado')
+                        ->orderByDesc('id')
+                        ->take(3 - $productosRelacionados->count())
+                        ->get();
+                    $productosRelacionados = $productosRelacionados->concat($mas);
+                }
+            } else {
+                $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
+                    ->sinEliminar()
+                    ->where('activo', true)
+                    ->orderByDesc('destacado')
+                    ->orderByDesc('id')
+                    ->take(3)
+                    ->get();
             }
-        } else {
-            $productosRelacionados = Producto::with(['imagenes', 'categoria', 'brand'])
-                ->sinEliminar()
-                ->where('activo', true)
-                ->orderByDesc('destacado')
-                ->orderByDesc('id')
-                ->take(3)
-                ->get();
-        }
 
-        $this->productosRelacionadosIds = $productosRelacionados->pluck('id')->all();
+            $this->productosRelacionadosIds = $productosRelacionados->pluck('id')->all();
 
-        return $productosRelacionados;
+            return $productosRelacionados;
+        });
     }
 }
 

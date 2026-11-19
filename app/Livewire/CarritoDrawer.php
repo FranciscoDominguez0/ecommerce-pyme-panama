@@ -46,7 +46,10 @@ class CarritoDrawer extends Component
     #[On('carrito-actualizado')]
     public function sincronizar()
     {
-        $this->cargarCarrito();
+        // Solo recargar datos pesados si el drawer está actualmente abierto
+        if ($this->abierto) {
+            $this->cargarCarrito();
+        }
     }
 
     public function cargarCarrito()

@@ -20,23 +20,27 @@ class NavbarBadges extends Component
     }
 
     #[On('carrito-actualizado')]
-    #[On('deseos-actualizado')]
-    public function actualizarCantidades()
+    public function actualizarCarrito()
     {
         $usuarioId = Auth::id();
         $sesionId = Session::getId();
 
-        // Obtener cantidad de carrito
         $carritoService = app(CarritoService::class);
         $carrito = $carritoService->obtenerOCrearCarrito($usuarioId, $sesionId);
         $this->cantidadCarrito = $carrito ? $carrito->cantidad_total : 0;
+    }
 
-        // Obtener cantidad de lista de deseos
-        if ($usuarioId) {
-            $this->cantidadDeseos = ListaDeseos::where('usuario_id', $usuarioId)->count();
-        } else {
-            $this->cantidadDeseos = 0;
-        }
+    #[On('deseos-actualizado')]
+    public function actualizarDeseos()
+    {
+        $usuarioId = Auth::id();
+        $this->cantidadDeseos = $usuarioId ? ListaDeseos::where('usuario_id', $usuarioId)->count() : 0;
+    }
+
+    public function actualizarCantidades()
+    {
+        $this->actualizarCarrito();
+        $this->actualizarDeseos();
     }
 
     public function render()

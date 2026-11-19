@@ -69,22 +69,45 @@
                                         <span>${{ number_format((float)$item->precio_unitario, 2) }} USD</span>
                                     </div>
                                     
-                                    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5" x-data="{ editando: false }">
-                                        <span class="font-bold text-gray-900">Cantidad:</span> 
+                                    <!-- Selector interactivo de cantidad instantáneo -->
+                                    <div class="flex items-center gap-2 pt-1" x-data="{ cantidadLocal: {{ $item->cantidad }} }">
+                                        <span class="font-bold text-gray-900 text-xs sm:text-sm">Cantidad:</span> 
                                         
-                                        <div x-show="!editando" class="flex items-center gap-1">
-                                            <span>{{ $item->cantidad }}</span>
-                                            <button type="button" @click="editando = true" class="text-blue-600 hover:text-blue-800 hover:underline ml-1 cursor-pointer">(Cambiar)</button>
+                                        <div class="inline-flex items-center bg-gray-50 border border-gray-300 rounded-lg shadow-2xs overflow-hidden">
+                                            <!-- Botón decrementar -->
+                                            <button type="button" 
+                                                    @click="if (cantidadLocal > 1) cantidadLocal--"
+                                                    wire:click="decrementar({{ $item->id }})" 
+                                                    wire:loading.attr="disabled"
+                                                    class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-200 text-gray-700 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                                                    title="Reducir cantidad">
+                                                <span class="material-symbols-outlined text-[15px] sm:text-[17px]">remove</span>
+                                            </button>
+
+                                            <!-- Contador numérico reactivo -->
+                                            <span class="w-8 sm:w-10 text-center text-xs sm:text-sm font-mono font-bold border-x border-gray-300 h-7 sm:h-8 flex items-center justify-center bg-white text-gray-900 select-none"
+                                                  wire:loading.class="opacity-60"
+                                                  wire:target="incrementar({{ $item->id }}), decrementar({{ $item->id }})"
+                                                  x-text="cantidadLocal">
+                                                {{ $item->cantidad }}
+                                            </span>
+
+                                            <!-- Botón incrementar -->
+                                            <button type="button" 
+                                                    @click="cantidadLocal++"
+                                                    wire:click="incrementar({{ $item->id }})" 
+                                                    wire:loading.attr="disabled"
+                                                    class="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-200 text-gray-700 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                                                    title="Aumentar cantidad">
+                                                <span class="material-symbols-outlined text-[15px] sm:text-[17px]">add</span>
+                                            </button>
                                         </div>
-                                        
-                                        <div x-show="editando" x-cloak class="flex items-center gap-2 ml-1">
-                                            <div class="inline-flex items-center bg-gray-50 border border-gray-300 rounded shadow-xs">
-                                                <button type="button" wire:click="decrementar({{ $item->id }})" class="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[14px] sm:text-[16px]">remove</span></button>
-                                                <span class="w-7 sm:w-8 text-center text-xs sm:text-sm font-mono border-x border-gray-300 h-6 sm:h-7 flex items-center justify-center bg-white">{{ $item->cantidad }}</span>
-                                                <button type="button" wire:click="incrementar({{ $item->id }})" class="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded hover:bg-gray-200 transition-colors cursor-pointer text-gray-700"><span class="material-symbols-outlined text-[14px] sm:text-[16px]">add</span></button>
-                                            </div>
-                                            <button type="button" @click="editando = false" class="text-xs text-blue-600 hover:underline cursor-pointer">Listo</button>
-                                        </div>
+
+                                        <!-- Indicador visual sutil de actualización en segundo plano -->
+                                        <span wire:loading wire:target="incrementar({{ $item->id }}), decrementar({{ $item->id }})" 
+                                              class="inline-flex items-center text-[#006148] ml-1">
+                                            <span class="material-symbols-outlined text-[15px] animate-spin">progress_activity</span>
+                                        </span>
                                     </div>
 
                                     <div class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 pt-0.5">
@@ -103,10 +126,15 @@
                                 <div class="shrink-0 self-end sm:self-start pt-1 sm:pt-0">
                                     <button type="button" 
                                             wire:click="eliminar({{ $item->id }})" 
-                                            class="inline-flex items-center gap-1 text-[#d93025] hover:text-[#b3261e] hover:underline text-xs sm:text-[15px] font-medium cursor-pointer" 
+                                            wire:loading.attr="disabled"
+                                            class="inline-flex items-center gap-1 text-[#d93025] hover:text-[#b3261e] hover:underline text-xs sm:text-[15px] font-medium cursor-pointer disabled:opacity-40" 
                                             title="Eliminar producto">
                                         <span class="material-symbols-outlined text-[16px] sm:hidden">delete</span>
-                                        <span>Eliminar</span>
+                                        <span wire:loading.remove wire:target="eliminar({{ $item->id }})">Eliminar</span>
+                                        <span wire:loading wire:target="eliminar({{ $item->id }})" class="inline-flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
+                                            <span>Quitando...</span>
+                                        </span>
                                     </button>
                                 </div>
                             </div>
@@ -144,7 +172,9 @@
                 <livewire:calculadora-envio />
 
                 <!-- Resumen de Orden Sticky -->
-                <div class="bg-white border border-gray-200/90 rounded-2xl p-6 shadow-xs sticky top-24 space-y-5">
+                <div class="bg-white border border-gray-200/90 rounded-2xl p-6 shadow-xs sticky top-24 space-y-5 transition-opacity"
+                     wire:loading.class="opacity-70"
+                     wire:target="incrementar, decrementar, eliminar">
                     
                     <h2 class="text-lg font-bold text-[#002349] pb-3 border-b border-gray-100 flex items-center justify-between">
                         <span>Resumen de Orden</span>
