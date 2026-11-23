@@ -32,10 +32,9 @@
 
         @if($img && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'data:image') || str_starts_with($img->ruta, 'storage/')))
             <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}"
-                alt="{{ $prod->nombre }}"
-                width="180" height="180"
-                class="h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                @if($priority) loading="eager" fetchpriority="high" @else loading="lazy" decoding="async" @endif>
+                alt="{{ $prod->nombre }}" width="180" height="180"
+                class="h-full object-contain group-hover:scale-105 transition-transform duration-300" @if($priority)
+                loading="eager" fetchpriority="high" @else loading="lazy" decoding="async" @endif>
         @elseif($img && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
             <div
                 class="h-full flex items-center justify-center svg-container group-hover:scale-105 transition-transform duration-300">
@@ -88,7 +87,7 @@
             </a>
         </h3>
 
-        <span class="text-[11px] font-medium text-slate-400 block">
+        <span class="text-[11px] font-medium text-slate-500 block">
             SKU: {{ $prod->sku }}
         </span>
 
@@ -97,7 +96,7 @@
                 <span class="material-symbols-outlined star-filled text-[14px] text-amber-400"
                     style="font-variation-settings: 'FILL' 1;">star</span>
                 <span>{{ number_format($prod->promedio_calificacion, 1) }}</span>
-                <span class="text-slate-400 font-normal">({{ $prod->total_valoraciones }})</span>
+                <span class="text-slate-500 font-normal">({{ $prod->total_valoraciones }})</span>
             </div>
         @endif
 
@@ -105,7 +104,7 @@
             @if($prod->tienePromocionOPrecioOferta())
                 <div class="text-lg font-extrabold text-emerald-700">
                     ${{ number_format($prod->precioFinalPromocional(), 2) }}</div>
-                <div class="text-[11px] text-slate-400 line-through">${{ number_format($prod->precio, 2) }}</div>
+                <div class="text-[11px] text-slate-500 line-through">${{ number_format($prod->precio, 2) }}</div>
             @else
                 <div class="text-lg font-extrabold text-emerald-700">${{ number_format($prod->precio, 2) }}</div>
             @endif

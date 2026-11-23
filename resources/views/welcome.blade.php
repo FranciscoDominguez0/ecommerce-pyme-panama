@@ -369,6 +369,7 @@
                     ] as $banner)
                     <div class="w-full shrink-0" style="min-width:100%;">
                         <img src="{{ asset('images/Banners/' . $banner) }}" alt="Banner promocional PayMe Panamá"
+                            width="1200" height="340"
                             class="w-full object-cover block" style="max-height:340px; object-position:center;" 
                             loading="lazy" decoding="async" />
                     </div>
@@ -378,11 +379,11 @@
             <!-- Arrows -->
             <button id="bannerPrev" aria-label="Anterior"
                 class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/65 text-white flex items-center justify-center transition-all backdrop-blur-sm">
-                <span class="material-symbols-outlined text-[22px]">chevron_left</span>
+                <span class="material-symbols-outlined text-[22px]" aria-hidden="true">chevron_left</span>
             </button>
             <button id="bannerNext" aria-label="Siguiente"
                 class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/65 text-white flex items-center justify-center transition-all backdrop-blur-sm">
-                <span class="material-symbols-outlined text-[22px]">chevron_right</span>
+                <span class="material-symbols-outlined text-[22px]" aria-hidden="true">chevron_right</span>
             </button>
 
             <!-- Dots -->
