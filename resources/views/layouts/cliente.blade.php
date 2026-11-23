@@ -2,24 +2,7 @@
 <html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <!-- Polyfill preventivo para mitigar advertencias de APIs obsoletas evaluadas por scripts externos (Cloudflare) -->
-    <script data-navigate-once>
-        (function() {
-            try {
-                if (typeof window.StorageType !== 'undefined') {
-                    var _st = { temporary: 0, persistent: 1 };
-                    try { Object.defineProperty(window, 'StorageType', { value: _st, configurable: true, writable: true }); } catch (_) {}
-                }
-                if (typeof window.webkitStorageInfo !== 'undefined') {
-                    var _wsi = { TEMPORARY: 0, PERSISTENT: 1, queryUsageAndQuota: function(){}, requestQuota: function(){} };
-                    try { Object.defineProperty(window, 'webkitStorageInfo', { value: _wsi, configurable: true, writable: true }); } catch (_) {}
-                }
-                if ('fence' in window) {
-                    try { Object.defineProperty(window, 'fence', { value: null, configurable: true, writable: true }); } catch (_) {}
-                }
-            } catch (_) {}
-        })();
-    </script>
+    @include('layouts.partials.anti-deprecation-shim')
     @include('layouts.partials.google-tag')
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
