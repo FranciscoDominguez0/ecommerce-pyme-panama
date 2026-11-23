@@ -51,6 +51,7 @@
                         <div
                             class="w-20 h-20 shrink-0 bg-gray-50 border border-gray-200 rounded-xl overflow-hidden p-1.5 flex items-center justify-center">
                             <img src="{{ $item['imagen_url'] }}" alt="{{ $item['nombre'] }}"
+                                width="80" height="80" style="aspect-ratio: 1/1;" loading="lazy" decoding="async"
                                 class="w-full h-full object-contain"
                                 onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=Sin+Imagen';" />
                         </div>

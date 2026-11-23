@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html class="{{ $serverTheme === 'dark' ? 'dark' : ($serverTheme === 'light' ? 'light' : '') }}" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    @include('layouts.partials.anti-deprecation-shim')
     {{-- Script inline prioritario anti-parpadeo --}}
     <script>
         (function() {

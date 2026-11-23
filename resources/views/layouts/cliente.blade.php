@@ -2,6 +2,7 @@
 <html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    @include('layouts.partials.anti-deprecation-shim')
     @include('layouts.partials.google-tag')
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
