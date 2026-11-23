@@ -13,13 +13,14 @@
         <!-- Encabezado -->
         <div class="px-6 py-4 border-b border-slate-100 dark:border-gray-700 flex justify-between items-center bg-slate-50 dark:bg-gray-800/50">
             <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400">barcode_scanner</span>
+                <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400" aria-hidden="true">barcode_scanner</span>
                 Escanear Código
             </h3>
             <button type="button" 
                     onclick="window.ModalEscaner.cerrar()"
+                    aria-label="Cerrar modal"
                     class="text-slate-400 hover:text-rose-500 transition-colors p-1 rounded-full hover:bg-rose-50 dark:hover:bg-rose-900/30">
-                <span class="material-symbols-outlined text-[20px]">close</span>
+                <span class="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
             </button>
         </div>
 
@@ -36,7 +37,7 @@
     </div>
 </div>
 
-<script src="https://unpkg.com/html5-qrcode" defer></script>
+{{-- Carga bajo demanda solo cuando el usuario abre el escáner para evitar 106 KB innecesarios en cada carga --}}
 
 <script>
     (function() {
@@ -95,7 +96,15 @@
                 }
                 
                 if (typeof Html5Qrcode === 'undefined') {
-                    setTimeout(() => this.iniciarScanner(), 400);
+                    if (!document.getElementById('html5-qrcode-lib')) {
+                        const script = document.createElement('script');
+                        script.id = 'html5-qrcode-lib';
+                        script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+                        script.onload = () => { this.iniciarScanner(); };
+                        document.head.appendChild(script);
+                    } else {
+                        setTimeout(() => this.iniciarScanner(), 300);
+                    }
                     return;
                 }
                 

@@ -65,13 +65,13 @@ export default {
             },
 
             fontFamily: {
-                sans: ['Figtree', 'Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif', ...defaultTheme.fontFamily.sans],
-                'headline-md': ['Figtree', 'sans-serif'],
-                'display-lg': ['Figtree', 'sans-serif'],
-                'body-lg': ['Figtree', 'sans-serif'],
-                'body-md': ['Figtree', 'sans-serif'],
-                'label-caps': ['Figtree', 'sans-serif'],
-                'numeric-data': ['Figtree', 'sans-serif'],
+                sans: ['Plus Jakarta Sans', 'Figtree', 'ui-sans-serif', 'system-ui', 'sans-serif', ...defaultTheme.fontFamily.sans],
+                'headline-md': ['Plus Jakarta Sans', 'sans-serif'],
+                'display-lg': ['Plus Jakarta Sans', 'sans-serif'],
+                'body-lg': ['Plus Jakarta Sans', 'sans-serif'],
+                'body-md': ['Plus Jakarta Sans', 'sans-serif'],
+                'label-caps': ['Plus Jakarta Sans', 'sans-serif'],
+                'numeric-data': ['Plus Jakarta Sans', 'sans-serif'],
             },
 
             spacing: {
