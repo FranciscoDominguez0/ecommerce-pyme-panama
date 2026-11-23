@@ -5,12 +5,12 @@
     <div class="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
         <!-- Botón de menú hamburguesa (móvil) -->
         <button onclick="toggleSidebar()" class="md:hidden p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Abrir menú">
-            <span class="material-symbols-outlined text-[22px] w-[22px] h-[22px] overflow-hidden shrink-0 inline-flex items-center justify-center">menu</span>
+            <span class="material-symbols-outlined text-[22px] w-[22px] h-[22px] overflow-hidden shrink-0 inline-flex items-center justify-center" aria-hidden="true">menu</span>
         </button>
         
         <!-- Botón para alternar barra lateral en escritorio -->
         <button onclick="toggleDesktopSidebar()" class="hidden md:block p-1.5 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors shrink-0" aria-label="Alternar menú lateral">
-            <span class="material-symbols-outlined text-[22px] w-[22px] h-[22px] overflow-hidden shrink-0 inline-flex items-center justify-center" id="desktop-sidebar-icon">menu</span>
+            <span class="material-symbols-outlined text-[22px] w-[22px] h-[22px] overflow-hidden shrink-0 inline-flex items-center justify-center" id="desktop-sidebar-icon" aria-hidden="true">menu</span>
         </button>
 
         <!-- Breadcrumbs de Navegación -->
@@ -22,9 +22,10 @@
         
         <!-- Buscador Global en TopBar -->
         <form id="top-search-form" action="{{ route('admin.productos.index') }}" method="GET" class="relative hidden sm:flex items-center w-56 md:w-72 lg:w-80 group">
-            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px] w-[18px] h-[18px] overflow-hidden shrink-0 inline-flex items-center justify-center pointer-events-none">search</span>
+            <span class="material-symbols-outlined absolute left-3 text-slate-400 text-[18px] w-[18px] h-[18px] overflow-hidden shrink-0 inline-flex items-center justify-center pointer-events-none" aria-hidden="true">search</span>
             <input type="text" 
                    name="buscar" 
+                   aria-label="Buscar productos, SKU o marca"
                    placeholder="Buscar productos, SKU, marca..." 
                    class="w-full pl-9 pr-10 py-1.5 text-xs bg-slate-100/90 dark:bg-gray-800 border border-slate-200/80 dark:border-gray-700/80 rounded-xl focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none">
             
@@ -32,8 +33,9 @@
             <button type="button" 
                     onclick="window.ModalEscaner.abrir()"
                     title="Escanear Código de Barras"
+                    aria-label="Escanear código de barras"
                     class="absolute right-2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 w-7 h-7 rounded-lg hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center z-10 cursor-pointer">
-                <span class="material-symbols-outlined icon-barcode text-[20px] select-none" style="width: auto !important; height: auto !important; max-width: none !important; max-height: none !important; overflow: visible !important; line-height: 1 !important;">barcode_scanner</span>
+                <span class="material-symbols-outlined icon-barcode text-[20px] select-none" style="width: auto !important; height: auto !important; max-width: none !important; max-height: none !important; overflow: visible !important; line-height: 1 !important;" aria-hidden="true">barcode_scanner</span>
             </button>
         </form>
 
@@ -47,11 +49,17 @@
             {{-- Trigger: Avatar + Nombre --}}
             <button @click="open = !open"
                     class="flex items-center gap-2 sm:gap-2.5 rounded-xl px-2 py-1.5 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors cursor-pointer select-none"
-                    :aria-expanded="open">
+                    :aria-expanded="open"
+                    aria-label="Menú de usuario"
+                    aria-haspopup="true">
 
                 @if(Auth::user() && Auth::user()->foto_perfil_ruta)
                     <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}"
                          alt="Foto de perfil"
+                         width="32"
+                         height="32"
+                         loading="lazy"
+                         decoding="async"
                          class="w-8 h-8 rounded-full object-cover shadow-xs ring-2 ring-slate-100 shrink-0">
                 @else
                     <div class="w-8 h-8 rounded-full bg-[#09111e] text-white font-bold flex items-center justify-center text-xs shadow-xs ring-2 ring-slate-100 shrink-0">
@@ -69,7 +77,8 @@
                 </div>
 
                 <span class="material-symbols-outlined text-[16px] w-4 h-4 overflow-hidden shrink-0 inline-flex items-center justify-center text-slate-400 hidden sm:inline-flex transition-transform duration-200"
-                      :class="open ? 'rotate-180' : ''">expand_more</span>
+                      :class="open ? 'rotate-180' : ''"
+                      aria-hidden="true">expand_more</span>
             </button>
 
             {{-- Panel desplegable --}}

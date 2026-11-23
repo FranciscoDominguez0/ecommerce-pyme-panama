@@ -40,7 +40,7 @@
                         <a href="#catalogo"
                             class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg font-bold text-[11px] sm:text-sm text-white transition-all shadow-lg hover:brightness-110 active:scale-95 whitespace-nowrap"
                             style="background:#22c55e;">
-                            <span class="material-symbols-outlined text-[16px] sm:text-[18px]">shopping_bag</span>
+                            <span class="material-symbols-outlined text-[16px] sm:text-[18px]" aria-hidden="true">shopping_bag</span>
                             <span>Explorar Catálogo</span>
                         </a>
 
@@ -48,14 +48,14 @@
                             <a href="{{ route('register') }}" wire:navigate
                                 class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg font-bold text-[11px] sm:text-sm text-white border transition-all hover:bg-white/10 active:scale-95 whitespace-nowrap"
                                 style="border-color:rgba(255,255,255,0.3);">
-                                <span class="material-symbols-outlined text-[16px] sm:text-[18px]">person_add</span>
+                                <span class="material-symbols-outlined text-[16px] sm:text-[18px]" aria-hidden="true">person_add</span>
                                 <span>Crear Cuenta</span>
                             </a>
                         @else
                             <a href="{{ route('dashboard') }}" wire:navigate
                                 class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg font-bold text-[11px] sm:text-sm text-white border transition-all hover:bg-white/10 active:scale-95 whitespace-nowrap"
                                 style="border-color:rgba(255,255,255,0.3);">
-                                <span class="material-symbols-outlined text-[16px] sm:text-[18px]">account_circle</span>
+                                <span class="material-symbols-outlined text-[16px] sm:text-[18px]" aria-hidden="true">account_circle</span>
                                 <span>Ir a Mi Cuenta</span>
                             </a>
                         @endguest
@@ -65,11 +65,11 @@
                     <div class="pt-3 border-t flex flex-wrap items-center gap-4 text-xs"
                         style="border-color:rgba(255,255,255,0.1);">
                         <div class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-base" style="color:#22c55e;">verified</span>
+                            <span class="material-symbols-outlined text-base" style="color:#22c55e;" aria-hidden="true">verified</span>
                             <span class="text-slate-300 text-[11px] font-semibold">Garantía Local en Panamá</span>
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <span class="material-symbols-outlined text-base" style="color:#22c55e;">local_shipping</span>
+                            <span class="material-symbols-outlined text-base" style="color:#22c55e;" aria-hidden="true">local_shipping</span>
                             <span class="text-slate-300 text-[11px] font-semibold">Envíos a las 10 Provincias</span>
                         </div>
                     </div>

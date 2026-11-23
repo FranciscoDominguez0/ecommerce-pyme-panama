@@ -48,11 +48,11 @@
         </div>
         <div class="flex items-center gap-3">
             <div class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg text-xs font-medium text-slate-700 dark:text-slate-300 shadow-xs">
-                <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500 dark:text-slate-400">calendar_today</span>
+                <span class="material-symbols-outlined text-[16px] text-slate-400 dark:text-slate-500" aria-hidden="true">calendar_today</span>
                 <span>Últimos 7 días</span>
             </div>
             <a href="{{ url('/') }}" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 dark:bg-gray-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 dark:hover:bg-gray-600 transition-colors shadow-xs">
-                <span class="material-symbols-outlined text-[16px]">storefront</span>
+                <span class="material-symbols-outlined text-[16px]" aria-hidden="true">storefront</span>
                 <span>Ver Tienda</span>
             </a>
         </div>
@@ -166,7 +166,7 @@
                 @forelse($transaccionesRecientes as $pedido)
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-100 dark:border-emerald-800/50">
-                            <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">receipt_long</span>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-bold text-slate-900 dark:text-white truncate">
@@ -196,7 +196,7 @@
             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Gestión de Pedidos</h3>
             <a href="{{ url('/admin/pedidos') }}" class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors flex items-center gap-1">
                 <span>Ver todos</span>
-                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                <span class="material-symbols-outlined text-[14px]" aria-hidden="true">arrow_forward</span>
             </a>
         </div>
 
@@ -271,7 +271,7 @@
             <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white">Productos Más Vendidos</h3>
             <a href="{{ url('/admin/productos') }}" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1">
                 <span>Ir al catálogo</span>
-                <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                <span class="material-symbols-outlined text-[14px]" aria-hidden="true">arrow_forward</span>
             </a>
         </div>
 
@@ -296,13 +296,13 @@
                             <td class="py-3 pl-2 pr-3 w-12">
                                 <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
-                                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="w-full h-full object-cover">
+                                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" width="40" height="40" loading="lazy" decoding="async" class="w-full h-full object-cover">
                                     @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
                                         <div class="w-6 h-6 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
                                     @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
-                                        <span class="material-symbols-outlined text-[20px] text-slate-700 dark:text-slate-300">{{ $imgPrincipal->ruta }}</span>
+                                        <span class="material-symbols-outlined text-[20px] text-slate-700 dark:text-slate-300" aria-hidden="true">{{ $imgPrincipal->ruta }}</span>
                                     @else
-                                        <img src="{{ asset('images/placeholder-product.png') }}" class="w-full h-full object-cover" alt="{{ $prod->nombre }}">
+                                        <img src="{{ asset('images/placeholder-product.png') }}" width="40" height="40" loading="lazy" decoding="async" class="w-full h-full object-cover" alt="{{ $prod->nombre }}">
                                     @endif
                                 </div>
                             </td>
@@ -311,7 +311,7 @@
                                     {{ $prod->nombre }}
                                 </a>
                                 @if($prod->sku)
-                                    <div class="text-[10px] text-slate-400 font-mono">{{ $prod->sku }}</div>
+                                    <div class="text-[10px] text-slate-600 dark:text-slate-400 font-mono">{{ $prod->sku }}</div>
                                 @endif
                             </td>
                             <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">
@@ -353,10 +353,14 @@
         dashboardCharts = [];
     }
 
-    function renderDashboardCharts() {
-        if (typeof ApexCharts === 'undefined') {
-            setTimeout(renderDashboardCharts, 50);
-            return;
+    async function renderDashboardCharts() {
+        if (typeof ApexCharts === 'undefined' || !window.ApexCharts) {
+            if (window.loadApexCharts) {
+                await window.loadApexCharts();
+            } else {
+                setTimeout(renderDashboardCharts, 50);
+                return;
+            }
         }
 
         const spark1 = document.querySelector("#spark1");

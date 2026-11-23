@@ -7,8 +7,9 @@
             <div class="flex items-center gap-3 shrink-0">
                 <!-- Hamburger (Solo móvil) -->
                 <button @click="mobileMenuOpen = true"
+                    aria-label="Abrir menú de navegación"
                     class="md:hidden p-1 text-slate-700 hover:text-[#006148] transition-colors">
-                    <span class="material-symbols-outlined text-[26px]">menu</span>
+                    <span class="material-symbols-outlined text-[26px]" aria-hidden="true">menu</span>
                 </button>
 
                 <div class="hidden md:flex items-center gap-2.5">
@@ -27,13 +28,14 @@
             <div class="hidden md:flex flex-1 max-w-md mx-4 relative" x-data="predictiveSearch()">
                 <form action="{{ route('cliente.catalogo') }}" method="GET" class="w-full relative">
                     <input type="text" name="buscar" id="global-search-input" value="{{ request('buscar') }}"
-                        placeholder="Buscar productos, categorías..." autocomplete="off" x-model="query"
+                        placeholder="Buscar productos, categorías..." aria-label="Buscar productos y categorías" autocomplete="off" x-model="query"
                         @input.debounce.300ms="fetchResults" @focus="open = true" @click.outside="open = false"
                         @keydown.escape.window="open = false"
                         class="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 focus:bg-white focus:ring-1 focus:ring-[#006148] focus:border-[#006148] transition-all" />
                     <button type="submit"
+                        aria-label="Buscar"
                         class="absolute left-2.5 top-2 text-gray-400 hover:text-[#006148] transition-colors">
-                        <span class="material-symbols-outlined text-[16px]">search</span>
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">search</span>
                     </button>
                 </form>
 
@@ -44,7 +46,7 @@
 
                     <template x-if="loading">
                         <div class="p-4 text-center text-xs text-gray-500 flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined animate-spin text-[16px]">progress_activity</span>
+                            <span class="material-symbols-outlined animate-spin text-[16px]" aria-hidden="true">progress_activity</span>
                             <span>Buscando...</span>
                         </div>
                     </template>
@@ -64,12 +66,12 @@
                                             <div
                                                 class="w-10 h-10 rounded-md border border-gray-100 bg-white shrink-0 overflow-hidden flex items-center justify-center">
                                                 <template x-if="producto.imagen">
-                                                    <img :src="producto.imagen" :alt="producto.nombre"
+                                                    <img :src="producto.imagen" :alt="producto.nombre" width="40" height="40" loading="lazy" decoding="async"
                                                         class="w-full h-full object-cover">
                                                 </template>
                                                 <template x-if="!producto.imagen">
                                                     <span
-                                                        class="material-symbols-outlined text-gray-300 text-[18px]">image</span>
+                                                        class="material-symbols-outlined text-gray-300 text-[18px]" aria-hidden="true">image</span>
                                                 </template>
                                             </div>
                                             <div class="flex-1 min-w-0">
@@ -89,7 +91,7 @@
                                 <a :href="'{{ route('cliente.catalogo') }}?buscar=' + encodeURIComponent(query)"
                                     class="text-[11px] font-bold text-[#002349] inline-flex items-center gap-1">
                                     Ver todos los resultados
-                                    <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                                    <span class="material-symbols-outlined text-[14px]" aria-hidden="true">arrow_forward</span>
                                 </a>
                             </div>
                         </div>
@@ -98,7 +100,7 @@
                     <template x-if="!loading && !results.length && query.length >= 2">
                         <div class="p-6 text-center">
                             <span
-                                class="material-symbols-outlined text-gray-300 text-[32px] mb-2 block">search_off</span>
+                                class="material-symbols-outlined text-gray-300 text-[32px] mb-2 block" aria-hidden="true">search_off</span>
                             <p class="text-xs text-gray-500 font-medium">No se encontraron productos para "<span
                                     x-text="query" class="text-gray-800 font-bold"></span>"</p>
                         </div>
@@ -150,7 +152,7 @@
                         @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
                             <a href="{{ route('admin.dashboard') }}"
                                 class="hidden sm:inline-flex items-center gap-1 py-1 px-2.5 rounded-lg bg-[#002349] text-white text-xs font-semibold hover:bg-[#00132b] transition-colors">
-                                <span class="material-symbols-outlined text-[14px]">admin_panel_settings</span>
+                                <span class="material-symbols-outlined text-[14px]" aria-hidden="true">admin_panel_settings</span>
                                 <span>Panel Admin</span>
                             </a>
                         @endif
@@ -158,9 +160,11 @@
                         <div class="relative shrink-0" x-data="{ open: false }" @click.outside="open = false">
                             <button @click="open = !open"
                                 class="flex items-center gap-2 py-0.5 pl-0.5 pr-3.5 rounded-full bg-gray-100 hover:bg-gray-200 text-sm font-bold text-[#002349] transition-colors cursor-pointer select-none"
-                                :aria-expanded="open">
+                                :aria-expanded="open"
+                                aria-label="Menú de usuario"
+                                aria-haspopup="true">
                                 @if(Auth::user()->foto_perfil_ruta)
-                                    <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Perfil"
+                                    <img src="{{ asset(Auth::user()->foto_perfil_ruta) }}" alt="Perfil" width="36" height="36" loading="lazy" decoding="async"
                                         class="w-9 h-9 rounded-full object-cover shadow-sm border border-white shrink-0">
                                 @else
                                     <div
@@ -171,7 +175,8 @@
                                 <span>{{ Auth::user() ? strtok(Auth::user()->nombre, ' ') : 'Usuario' }}</span>
                                 <span
                                     class="material-symbols-outlined text-[16px] text-gray-500 hidden sm:inline transition-transform duration-200"
-                                    :class="open ? 'rotate-180' : ''">expand_more</span>
+                                    :class="open ? 'rotate-180' : ''"
+                                    aria-hidden="true">expand_more</span>
                             </button>
 
                             {{-- Panel desplegable --}}
@@ -186,7 +191,7 @@
                                 {{-- Mi Perfil --}}
                                 <a href="{{ route('cliente.perfil.datos') }}" wire:navigate
                                     class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#006148] transition-colors">
-                                    <span class="material-symbols-outlined text-[18px] text-gray-400">person</span>
+                                    <span class="material-symbols-outlined text-[18px] text-gray-400" aria-hidden="true">person</span>
                                     Mi Perfil
                                 </a>
 
@@ -197,7 +202,7 @@
                                     @csrf
                                     <button type="submit"
                                         class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 transition-colors">
-                                        <span class="material-symbols-outlined text-[18px] text-red-400">logout</span>
+                                        <span class="material-symbols-outlined text-[18px] text-red-400" aria-hidden="true">logout</span>
                                         Cerrar sesión
                                     </button>
                                 </form>

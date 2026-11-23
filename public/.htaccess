@@ -55,16 +55,19 @@
     </If>
 </IfModule>
 
-# Non-fingerprinted static assets (fonts, logo, icons, favicon): 1 week.
-# User-uploaded content (storage/, uploads/): 1 day (it can change).
+# Non-fingerprinted static assets (fonts, logo, icons, favicon, audio): 1 year for fonts/audio, 1 week for icons/svg.
+# User-uploaded content (storage/, uploads/): 30 days.
 <IfModule mod_headers.c>
     <FilesMatch "\.(woff2?|ttf|otf|eot|mp3|wav|ogg)$">
-        Header set Cache-Control "public, max-age=604800"
+        Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
     <FilesMatch "\.(svg|png|jpe?g|gif|webp|ico)$">
         <If "%{REQUEST_URI} =~ m#^/(storage|uploads)/#">
-            Header set Cache-Control "public, max-age=86400"
+            Header set Cache-Control "public, max-age=2592000"
         </If>
+        <Else>
+            Header set Cache-Control "public, max-age=604800"
+        </Else>
     </FilesMatch>
     <FilesMatch "\.(js|css)$">
         <If "%{REQUEST_URI} !~ m#^/build/assets/#">

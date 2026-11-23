@@ -20,8 +20,8 @@
                 </h4>
                 <ul class="space-y-1.5 text-xs text-gray-300">
                     <li><a href="{{ url('/') }}" wire:navigate class="hover:text-white transition-colors">Inicio</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Catálogo de Productos</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Ofertas Especiales</a></li>
+                    <li><a href="{{ route('cliente.catalogo') }}" wire:navigate class="hover:text-white transition-colors">Catálogo de Productos</a></li>
+                    <li><a href="{{ route('cliente.catalogo', ['ofertas' => 1]) }}" wire:navigate class="hover:text-white transition-colors">Ofertas Especiales</a></li>
                 </ul>
             </div>
 
@@ -30,8 +30,8 @@
                 <h4 class="text-[11px] font-bold text-white uppercase tracking-wider mb-3 text-[#8af5be]">Soporte
                 </h4>
                 <ul class="space-y-1.5 text-xs text-gray-300">
-                    <li><a href="#" class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
-                    <li><a href="#" class="hover:text-white transition-colors">Políticas de Envío</a></li>
+                    <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
+                    <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Políticas de Envío</a></li>
                     <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Términos y
                                 Condiciones</a></li>
                     <li><a href="{{ route('privacidad') }}" wire:navigate class="hover:text-white transition-colors">Políticas de Privacidad</a></li>
@@ -48,34 +48,34 @@
                     <!-- Yappy Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Yappy Comercial Panamá">
-                        <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy Panamá"
+                        <img src="{{ asset('images/pa-yappy.webp') }}" alt="Yappy Panamá" width="56" height="32" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                     <!-- Visa Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Visa">
-                        <img src="{{ asset('images/VISA-Logo.webp') }}" alt="Visa"
+                        <img src="{{ asset('images/VISA-Logo.webp') }}" alt="Visa" width="56" height="32" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                     <!-- Mastercard Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Mastercard">
-                        <img src="{{ asset('images/mastercard-logo.png') }}" alt="Mastercard"
+                        <img src="{{ asset('images/mastercard-logo.png') }}" alt="Mastercard" width="56" height="32" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                     <!-- Sistema Clave Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-0.5 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Sistema Clave Panamá">
-                        <img src="{{ asset('images/clave-logo.png') }}" alt="Sistema Clave Panamá"
+                        <img src="{{ asset('images/clave-logo.png') }}" alt="Sistema Clave Panamá" width="56" height="32" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                 </div>
                 <div class="pt-1 flex items-center gap-1.5 text-emerald-400 text-xs font-medium">
-                    <span class="material-symbols-outlined text-[15px]">verified_user</span>
+                    <span class="material-symbols-outlined text-[15px]" aria-hidden="true">verified_user</span>
                     <span>Garantía & Respaldo Local</span>
                 </div>
             </div>

@@ -43,14 +43,14 @@ if ($uri !== '/' && file_exists($publicPath.$uri) && !is_dir($publicPath.$uri)) 
         // Assets de Vite con hash: cache largo e inmutable
         $cacheControl = 'public, max-age=31536000, immutable';
     } elseif (preg_match('#\.(woff2?|ttf|otf|eot)(\?.*)?$#', $uri)) {
-        // Fuentes locales: 1 semana
-        $cacheControl = 'public, max-age=604800';
+        // Fuentes locales: inmutables a largo plazo
+        $cacheControl = 'public, max-age=31536000, immutable';
     } elseif (preg_match('#\.(mp3|wav|ogg)$#', $uri)) {
-        // Audio de notificaciones y efectos: 1 semana
-        $cacheControl = 'public, max-age=604800';
+        // Audio de notificaciones y efectos: inmutable
+        $cacheControl = 'public, max-age=31536000, immutable';
     } elseif (preg_match('#^/(storage|uploads)/.*\.(svg|png|jpe?g|gif|webp|ico)$#', $uri)) {
-        // Contenido subido por usuarios: 1 día (puede cambiar)
-        $cacheControl = 'public, max-age=86400';
+        // Contenido subido por usuarios / fotos de productos: 30 días
+        $cacheControl = 'public, max-age=2592000';
     } elseif (preg_match('#\.(svg|png|jpe?g|gif|webp|ico)$#', $uri)) {
         // Imágenes/íconos estáticos: 1 semana
         $cacheControl = 'public, max-age=604800';

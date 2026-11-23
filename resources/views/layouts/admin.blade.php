@@ -98,6 +98,7 @@
 
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Panel de administración de PayMe Panamá para gestión de productos, inventario, pedidos y métricas de comercio electrónico."/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
