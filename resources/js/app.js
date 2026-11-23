@@ -1,8 +1,25 @@
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
-import ApexCharts from 'apexcharts';
 
-window.ApexCharts = ApexCharts;
+// Carga perezosa (lazy load) de ApexCharts: se divide automáticamente en un chunk
+// separado para no penalizar el peso inicial ni el rendimiento en páginas sin gráficos.
+window.loadApexCharts = async function() {
+    if (!window.ApexCharts) {
+        const module = await import('apexcharts');
+        window.ApexCharts = module.default;
+    }
+    return window.ApexCharts;
+};
+
+// Si la vista actual contiene contenedores de gráficos, inicializar de inmediato
+if (document.querySelector('#spark1, #mainChart, #revenueChart, [data-chart]')) {
+    window.loadApexCharts();
+}
+document.addEventListener('livewire:navigated', () => {
+    if (document.querySelector('#spark1, #mainChart, #revenueChart, [data-chart]')) {
+        window.loadApexCharts();
+    }
+});
 
 if (!window.Livewire && !document.querySelector('[wire\\:snapshot]')) {
     Alpine.plugin(collapse);

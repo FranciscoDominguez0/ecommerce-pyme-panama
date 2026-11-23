@@ -18,12 +18,19 @@
         'lg' => 'w-10 h-10',
         'xl' => 'w-12 h-12',
     ][$size] ?? 'w-8 h-8';
+
+    $pixelSizes = [
+        'sm' => 24,
+        'default' => 32,
+        'lg' => 40,
+        'xl' => 48,
+    ][$size] ?? 32;
 @endphp
 
 @if ($boxed)
     <div class="w-12 h-12 rounded-xl shadow-sm bg-white dark:bg-[#181a1b] p-2 flex items-center justify-center border border-gray-200 shrink-0">
         @if ($hasCustomLogo)
-            <img src="{{ asset($customLogoPath) }}" alt="{{ config('app.name', 'PayMe Panamá') }}" {{ $attributes->merge(['class' => $sizeClasses . ' object-contain']) }}>
+            <img src="{{ asset($customLogoPath) }}" alt="{{ config('app.name', 'PayMe Panamá') }}" width="{{ $pixelSizes }}" height="{{ $pixelSizes }}" decoding="async" {{ $attributes->merge(['class' => $sizeClasses . ' object-contain']) }}>
         @else
             <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" {{ $attributes->merge(['class' => $sizeClasses . ' text-primary dark:text-blue-400-container']) }}>
                 <rect width="40" height="40" rx="10" fill="#002349"/>
@@ -35,7 +42,7 @@
     </div>
 @else
     @if ($hasCustomLogo)
-        <img src="{{ asset($customLogoPath) }}" alt="{{ config('app.name', 'PayMe Panamá') }}" {{ $attributes->merge(['class' => $sizeClasses . ' object-contain']) }}>
+        <img src="{{ asset($customLogoPath) }}" alt="{{ config('app.name', 'PayMe Panamá') }}" width="{{ $pixelSizes }}" height="{{ $pixelSizes }}" decoding="async" {{ $attributes->merge(['class' => $sizeClasses . ' object-contain']) }}>
     @else
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" {{ $attributes->merge(['class' => $sizeClasses . ' text-primary dark:text-blue-400-container']) }}>
             <rect width="40" height="40" rx="10" fill="#002349"/>

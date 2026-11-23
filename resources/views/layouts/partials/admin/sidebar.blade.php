@@ -19,8 +19,8 @@
                     <span class="text-[10px] font-medium text-slate-400 tracking-wide block">Panel Administrativo</span>
                 </div>
             </a>
-            <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
-                <span class="material-symbols-outlined text-[20px]">close</span>
+            <button onclick="toggleSidebar()" aria-label="Cerrar menú" class="md:hidden text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+                <span class="material-symbols-outlined text-[20px]" aria-hidden="true">close</span>
             </button>
         </div>
 

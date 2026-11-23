@@ -1,5 +1,5 @@
 <!-- Tarjeta individual de producto -->
-@props(['prod'])
+@props(['prod', 'priority' => false])
 
 @php
     $img = $prod->imagenPrincipal();
@@ -9,11 +9,13 @@
 
     <!-- Indicador de stock (verde si hay, rojo si está agotado) -->
     @if($prod->stock > 0)
-        <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white dark:bg-[#181a1b] shadow-xs">
+        <div
+            class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white dark:bg-[#181a1b] shadow-xs">
             <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
         </div>
     @else
-        <div class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white dark:bg-[#181a1b] shadow-xs">
+        <div
+            class="absolute top-4 right-4 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white dark:bg-[#181a1b] shadow-xs">
             <div class="w-2 h-2 rounded-full bg-rose-500"></div>
         </div>
     @endif
@@ -31,8 +33,9 @@
         @if($img && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'data:image') || str_starts_with($img->ruta, 'storage/')))
             <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}"
                 alt="{{ $prod->nombre }}"
+                width="180" height="180"
                 class="h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                loading="lazy" decoding="async">
+                @if($priority) loading="eager" fetchpriority="high" @else loading="lazy" decoding="async" @endif>
         @elseif($img && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
             <div
                 class="h-full flex items-center justify-center svg-container group-hover:scale-105 transition-transform duration-300">
@@ -40,9 +43,10 @@
             </div>
         @elseif($img && !empty($img->ruta))
             <span
-                class="material-symbols-outlined text-[64px] text-slate-600 dark:text-slate-400 group-hover:scale-105 transition-transform duration-300">{{ $img->ruta }}</span>
+                class="material-symbols-outlined text-[64px] text-slate-600 dark:text-slate-400 group-hover:scale-105 transition-transform duration-300"
+                aria-hidden="true">{{ $img->ruta }}</span>
         @else
-            <span class="material-symbols-outlined text-[64px] text-slate-300">image</span>
+            <span class="material-symbols-outlined text-[64px] text-slate-300" aria-hidden="true">image</span>
         @endif
     </div>
 
@@ -52,26 +56,26 @@
         <!-- Botón Carrito -->
         <button type="button" onclick="agregarAlCarritoListado({{ $prod->id }})"
             class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-emerald-600 transition-colors tooltip-trigger"
-            title="Añadir al carrito">
-            <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+            title="Añadir al carrito" aria-label="Añadir {{ $prod->nombre }} al carrito">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">shopping_cart</span>
         </button>
         <!-- Botón Deseos -->
         <button type="button" onclick="agregarDeseoListado({{ $prod->id }})"
             class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
-            title="Añadir a deseos">
-            <span class="material-symbols-outlined text-[18px]">favorite</span>
+            title="Añadir a deseos" aria-label="Añadir {{ $prod->nombre }} a la lista de deseos">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
         </button>
         <!-- Botón Compartir -->
         <button type="button" onclick="copiarLink('{{ route('cliente.producto.detalle', $prod->slug) }}')"
             class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
-            title="Copiar enlace">
-            <span class="material-symbols-outlined text-[18px]">share</span>
+            title="Copiar enlace" aria-label="Copiar enlace de {{ $prod->nombre }}">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">share</span>
         </button>
         <!-- Botón Ver Detalle -->
         <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" wire:navigate
             class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
-            title="Vista rápida">
-            <span class="material-symbols-outlined text-[18px]">visibility</span>
+            title="Vista rápida" aria-label="Ver detalles de {{ $prod->nombre }}">
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">visibility</span>
         </a>
     </div>
 
@@ -90,7 +94,8 @@
 
         @if($prod->relationLoaded('valoracionesAprobadas') && $prod->total_valoraciones > 0)
             <div class="flex items-center justify-center gap-1 text-[11px] text-amber-500 font-bold">
-                <span class="material-symbols-outlined star-filled text-[14px] text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="material-symbols-outlined star-filled text-[14px] text-amber-400"
+                    style="font-variation-settings: 'FILL' 1;">star</span>
                 <span>{{ number_format($prod->promedio_calificacion, 1) }}</span>
                 <span class="text-slate-400 font-normal">({{ $prod->total_valoraciones }})</span>
             </div>

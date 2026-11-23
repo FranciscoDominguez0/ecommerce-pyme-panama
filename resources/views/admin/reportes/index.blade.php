@@ -428,7 +428,15 @@
             setTimeout(() => { form.action = actionOriginal; form.target = "_self"; form.removeChild(inputReporte); }, 100);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        async function initReportesCharts() {
+            if (typeof ApexCharts === 'undefined' || !window.ApexCharts) {
+                if (window.loadApexCharts) {
+                    await window.loadApexCharts();
+                } else {
+                    setTimeout(initReportesCharts, 50);
+                    return;
+                }
+            }
 
             const fontConfig = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
 
@@ -653,7 +661,14 @@
             }
 
             window.addEventListener('pagehide', destruirGraficosReportes);
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initReportesCharts);
+        } else {
+            initReportesCharts();
+        }
+        document.addEventListener('livewire:navigated', initReportesCharts);
     </script>
 @endpush
 
