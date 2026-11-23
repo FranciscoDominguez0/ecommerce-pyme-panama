@@ -7,14 +7,14 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}" data-navigate-once></script>
     <script data-navigate-once>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', '{{ $gaId }}');
 
         // Helper profesional de E-commerce para Google Analytics 4
         window.gtagEcommerce = {
-            viewItem: function(item) {
+            viewItem: function (item) {
                 if (typeof gtag !== 'function' || !item) return;
                 gtag('event', 'view_item', {
                     currency: 'USD',
@@ -29,7 +29,7 @@
                     }]
                 });
             },
-            addToCart: function(item, quantity) {
+            addToCart: function (item, quantity) {
                 if (typeof gtag !== 'function' || !item) return;
                 quantity = Number(quantity || 1);
                 gtag('event', 'add_to_cart', {
@@ -45,7 +45,7 @@
                     }]
                 });
             },
-            beginCheckout: function(total, items) {
+            beginCheckout: function (total, items) {
                 if (typeof gtag !== 'function') return;
                 gtag('event', 'begin_checkout', {
                     currency: 'USD',
@@ -53,7 +53,7 @@
                     items: items || []
                 });
             },
-            purchase: function(order) {
+            purchase: function (order) {
                 if (typeof gtag !== 'function' || !order) return;
                 gtag('event', 'purchase', {
                     transaction_id: String(order.id || ''),
@@ -68,7 +68,7 @@
         };
 
         // Registro de páginas vistas al navegar con Livewire (wire:navigate)
-        (function() {
+        (function () {
             if (window._googleTagNavigatedInited) return;
             window._googleTagNavigatedInited = true;
             let cargaInicial = true;

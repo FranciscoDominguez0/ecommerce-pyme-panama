@@ -54,27 +54,27 @@
         class="flex items-center justify-center gap-3 -mt-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <!-- Botón Carrito -->
         <button type="button" onclick="agregarAlCarritoListado({{ $prod->id }})"
-            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-emerald-600 transition-colors tooltip-trigger"
+            class="w-11 h-11 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-emerald-700 transition-colors tooltip-trigger"
             title="Añadir al carrito" aria-label="Añadir {{ $prod->nombre }} al carrito">
-            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">shopping_cart</span>
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">shopping_cart</span>
         </button>
         <!-- Botón Deseos -->
         <button type="button" onclick="agregarDeseoListado({{ $prod->id }})"
-            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
+            class="w-11 h-11 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-rose-500 transition-colors tooltip-trigger"
             title="Añadir a deseos" aria-label="Añadir {{ $prod->nombre }} a la lista de deseos">
-            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">favorite</span>
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">favorite</span>
         </button>
         <!-- Botón Compartir -->
         <button type="button" onclick="copiarLink('{{ route('cliente.producto.detalle', $prod->slug) }}')"
-            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
+            class="w-11 h-11 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-blue-600 transition-colors tooltip-trigger"
             title="Copiar enlace" aria-label="Copiar enlace de {{ $prod->nombre }}">
-            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">share</span>
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">share</span>
         </button>
         <!-- Botón Ver Detalle -->
         <a href="{{ route('cliente.producto.detalle', $prod->slug) }}" wire:navigate
-            class="w-10 h-10 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
+            class="w-11 h-11 rounded-full bg-white dark:bg-[#181a1b] shadow-md border border-slate-100 dark:border-gray-700/80 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:text-white hover:bg-slate-800 transition-colors tooltip-trigger"
             title="Vista rápida" aria-label="Ver detalles de {{ $prod->nombre }}">
-            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">visibility</span>
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">visibility</span>
         </a>
     </div>
 
@@ -115,11 +115,11 @@
 
 @pushOnce('scripts')
     <script data-navigate-once>
-        (function() {
+        (function () {
             if (window._productoCardScriptsInited) return;
             window._productoCardScriptsInited = true;
 
-            window.agregarAlCarritoListado = function(productoId) {
+            window.agregarAlCarritoListado = function (productoId) {
                 fetch("{{ route('cliente.carrito.agregar') }}", {
                     method: 'POST',
                     headers: {
@@ -167,7 +167,7 @@
                     });
             };
 
-            window.agregarDeseoListado = function(productoId) {
+            window.agregarDeseoListado = function (productoId) {
                 fetch(`/lista-deseos/agregar/${productoId}`, {
                     method: 'POST',
                     headers: {
@@ -205,7 +205,7 @@
                     });
             };
 
-            window.copiarLink = function(url) {
+            window.copiarLink = function (url) {
                 if (navigator.clipboard && window.isSecureContext) {
                     navigator.clipboard.writeText(url).then(() => {
                         if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
