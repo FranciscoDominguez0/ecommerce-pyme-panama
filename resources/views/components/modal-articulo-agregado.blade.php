@@ -36,7 +36,7 @@
             <!-- Miniatura del Producto -->
             <div
                 class="w-16 h-16 sm:w-20 sm:h-20 bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700/90 rounded-xl p-1.5 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs">
-                <img id="{{ $id }}-img" src="" alt="Producto" class="max-w-full max-h-full object-contain"
+                <img id="{{ $id }}-img" src="" alt="Producto" width="80" height="80" style="aspect-ratio: 1/1;" class="max-w-full max-h-full object-contain"
                     onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=Producto';">
             </div>
 

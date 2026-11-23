@@ -48,28 +48,28 @@
                     <!-- Yappy Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Yappy Comercial Panamá">
-                        <img src="{{ asset('images/pa-yappy.webp') }}?v=2" alt="Yappy Panamá" width="56" height="32" loading="lazy" decoding="async"
+                        <img src="{{ asset('images/pa-yappy.webp') }}?v=2" alt="Yappy Panamá" width="56" height="32" style="aspect-ratio: 56/32;" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                     <!-- Visa Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Visa">
-                        <img src="{{ asset('images/VISA-Logo.webp') }}?v=2" alt="Visa" width="56" height="32" loading="lazy" decoding="async"
+                        <img src="{{ asset('images/VISA-Logo.webp') }}?v=2" alt="Visa" width="56" height="32" style="aspect-ratio: 56/32;" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                     <!-- Mastercard Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-1 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Mastercard">
-                        <img src="{{ asset('images/mastercard-logo.png') }}?v=2" alt="Mastercard" width="56" height="32" loading="lazy" decoding="async"
+                        <img src="{{ asset('images/mastercard-logo.png') }}?v=2" alt="Mastercard" width="56" height="32" style="aspect-ratio: 56/32;" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 
                     <!-- Sistema Clave Official Logo -->
                     <div class="w-14 h-8 bg-white rounded-lg flex items-center justify-center p-0.5 shadow-xs border border-white/20 hover:scale-105 transition-transform overflow-hidden shrink-0"
                         title="Sistema Clave Panamá">
-                        <img src="{{ asset('images/clave-logo.png') }}?v=2" alt="Sistema Clave Panamá" width="56" height="32" loading="lazy" decoding="async"
+                        <img src="{{ asset('images/clave-logo.png') }}?v=2" alt="Sistema Clave Panamá" width="56" height="32" style="aspect-ratio: 56/32;" loading="lazy" decoding="async"
                             class="max-h-full max-w-full w-auto h-auto object-contain block" />
                     </div>
 

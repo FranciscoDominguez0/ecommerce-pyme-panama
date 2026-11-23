@@ -21,7 +21,7 @@
                         @endphp
                         <div class="brand-logo-card-m" title="{{ $nombre }}">
                             @if(!empty($logo))
-                                <img src="{{ $logo ? $logo . '?v=2' : '' }}" alt="{{ $nombre }}" width="120" height="48" loading="lazy" decoding="async" class="brand-logo-img-m" />
+                                <img src="{{ $logo ? $logo . '?v=2' : '' }}" alt="{{ $nombre }}" width="120" height="48" style="aspect-ratio: 120/48;" loading="lazy" decoding="async" class="brand-logo-img-m" />
                             @else
                                 <span class="text-xs font-black uppercase text-slate-700 dark:text-slate-300 tracking-wider">{{ $nombre }}</span>
                             @endif
@@ -81,6 +81,7 @@
         max-height: 100%;
         width: auto;
         height: auto;
+        aspect-ratio: 120 / 48;
         object-fit: contain;
         display: block;
     }
