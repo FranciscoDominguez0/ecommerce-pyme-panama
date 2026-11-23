@@ -32,8 +32,8 @@
 
         @if($img && (str_starts_with($img->ruta, 'http') || str_starts_with($img->ruta, '/storage') || str_starts_with($img->ruta, 'data:image') || str_starts_with($img->ruta, 'storage/')))
             <img src="{{ str_starts_with($img->ruta, 'storage/') ? asset($img->ruta) : $img->ruta }}"
-                alt="{{ $prod->nombre }}" width="180" height="180"
-                class="h-full object-contain group-hover:scale-105 transition-transform duration-300" @if($priority)
+                alt="{{ $prod->nombre }}" width="180" height="180" style="aspect-ratio: 1/1;"
+                class="max-h-full max-w-full w-auto h-full object-contain aspect-square group-hover:scale-105 transition-transform duration-300" @if($priority)
                 loading="eager" fetchpriority="high" @else loading="lazy" decoding="async" @endif>
         @elseif($img && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
             <div

@@ -113,6 +113,7 @@
                                 @if(!empty($foto['src']))
                                     <img src="{{ $foto['src'] }}" 
                                          alt="Miniatura {{ $foto['index'] + 1 }}" 
+                                         width="64" height="64" style="aspect-ratio: 1/1;" loading="lazy" decoding="async"
                                          class="h-full w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-200 pointer-events-none">
                                 @elseif($foto['es_svg'])
                                     <div class="h-7 w-7 flex items-center justify-center svg-container pointer-events-none">{!! $foto['ruta'] !!}</div>
@@ -681,7 +682,7 @@
                                 <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 hover:border-emerald-500 transition-colors">
                                     <div class="h-32 bg-white flex items-center justify-center overflow-hidden">
                                         @if($relImg && (str_starts_with($relImg->ruta, 'http') || str_starts_with($relImg->ruta, 'storage/') || str_starts_with($relImg->ruta, '/storage')))
-                                            <img src="{{ str_starts_with($relImg->ruta, 'storage/') ? asset($relImg->ruta) : $relImg->ruta }}" alt="{{ $rel->nombre }}" class="h-full object-contain mix-blend-multiply">
+                                            <img src="{{ str_starts_with($relImg->ruta, 'storage/') ? asset($relImg->ruta) : $relImg->ruta }}" alt="{{ $rel->nombre }}" width="128" height="128" style="aspect-ratio: 1/1;" loading="lazy" decoding="async" class="h-full object-contain mix-blend-multiply">
                                         @elseif($relImg && (str_starts_with($relImg->ruta, '<svg') || str_contains($relImg->ruta, '</svg>')))
                                             <div class="h-full flex items-center justify-center svg-container">{!! $relImg->ruta !!}</div>
                                         @elseif($relImg && !empty($relImg->ruta))
