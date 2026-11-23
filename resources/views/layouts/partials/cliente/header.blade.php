@@ -109,7 +109,7 @@
             </div>
 
             <!-- Script de Alpine.js para la búsqueda predictiva -->
-            <script>
+            <script data-navigate-once>
                 function predictiveSearch() {
                     return {
                         open: false,

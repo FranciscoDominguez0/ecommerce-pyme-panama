@@ -81,8 +81,11 @@
     </div>
 </div>
 
-<script>
+<script data-navigate-once>
     (function() {
+        if (window._modalArticuloAgregadoInited) return;
+        window._modalArticuloAgregadoInited = true;
+
         const id = '{{ $id }}';
 
         window.ModalArticuloAgregado = {

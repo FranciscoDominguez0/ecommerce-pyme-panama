@@ -114,116 +114,120 @@
 </div>
 
 @pushOnce('scripts')
-    <script>
-        function agregarAlCarritoListado(productoId) {
-            fetch("{{ route('cliente.carrito.agregar') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    producto_id: productoId,
-                    variante_producto_id: null,
-                    cantidad: 1
-                })
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.exito) {
-                        if (window.Livewire) {
-                            Livewire.dispatch('carrito-actualizado');
-                        }
-                        if (window.ModalArticuloAgregado) {
-                            window.ModalArticuloAgregado.abrir({
-                                id: productoId,
-                                nombre: data.producto_nombre,
-                                imagen: data.producto_imagen,
-                                precio: '{{ $prod->precio_oferta ?? $prod->precio }}',
-                                cantidad: 1,
-                                cantidadTotal: data.cantidad_total || 1,
-                                variante: data.variante_texto
-                            });
-                        } else if (window.mostrarToast) {
-                            window.mostrarToast('success', data.mensaje);
-                        }
-                    } else {
-                        if (window.mostrarToast) {
-                            window.mostrarToast('warning', data.mensaje || 'Stock insuficiente');
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    if (window.mostrarToast) {
-                        window.mostrarToast('error', 'Error al agregar el producto al carrito.');
-                    }
-                });
-        }
+    <script data-navigate-once>
+        (function() {
+            if (window._productoCardScriptsInited) return;
+            window._productoCardScriptsInited = true;
 
-        function agregarDeseoListado(productoId) {
-            fetch(`/lista-deseos/agregar/${productoId}`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-                .then(res => {
-                    if (res.status === 401) {
-                        window.location.href = "{{ route('login') }}";
-                        return;
-                    }
-                    return res.json();
+            window.agregarAlCarritoListado = function(productoId) {
+                fetch("{{ route('cliente.carrito.agregar') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        producto_id: productoId,
+                        variante_producto_id: null,
+                        cantidad: 1
+                    })
                 })
-                .then(data => {
-                    if (data && data.exito) {
-                        if (window.Livewire) {
-                            Livewire.dispatch('deseos-actualizado');
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.exito) {
+                            if (window.Livewire) {
+                                Livewire.dispatch('carrito-actualizado');
+                            }
+                            if (window.ModalArticuloAgregado) {
+                                window.ModalArticuloAgregado.abrir({
+                                    id: productoId,
+                                    nombre: data.producto_nombre,
+                                    imagen: data.producto_imagen,
+                                    precio: data.item ? data.item.precio_unitario : 0,
+                                    cantidad: 1,
+                                    cantidadTotal: data.cantidad_total || 1,
+                                    variante: data.variante_texto
+                                });
+                            } else if (window.mostrarToast) {
+                                window.mostrarToast('success', data.mensaje);
+                            }
+                        } else {
+                            if (window.mostrarToast) {
+                                window.mostrarToast('warning', data.mensaje || 'Stock insuficiente');
+                            }
                         }
+                    })
+                    .catch(err => {
+                        console.error(err);
                         if (window.mostrarToast) {
-                            window.mostrarToast('success', data.mensaje);
+                            window.mostrarToast('error', 'Error al agregar el producto al carrito.');
                         }
-                    } else if (data) {
-                        if (window.mostrarToast) {
-                            window.mostrarToast('info', data.mensaje);
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    if (window.mostrarToast) {
-                        window.mostrarToast('error', 'No se pudo guardar en la lista de deseos.');
-                    }
-                });
-        }
+                    });
+            };
 
-        function copiarLink(url) {
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(url).then(() => {
-                    if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
-                });
-            } else {
-                // Fallback for non-https / older browsers
-                let textArea = document.createElement("textarea");
-                textArea.value = url;
-                textArea.style.position = "fixed";
-                textArea.style.left = "-999999px";
-                textArea.style.top = "-999999px";
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
-                } catch (err) {
-                    console.error('Fallback copy failed', err);
+            window.agregarDeseoListado = function(productoId) {
+                fetch(`/lista-deseos/agregar/${productoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(res => {
+                        if (res.status === 401) {
+                            window.location.href = "{{ route('login') }}";
+                            return;
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        if (data && data.exito) {
+                            if (window.Livewire) {
+                                Livewire.dispatch('deseos-actualizado');
+                            }
+                            if (window.mostrarToast) {
+                                window.mostrarToast('success', data.mensaje);
+                            }
+                        } else if (data) {
+                            if (window.mostrarToast) {
+                                window.mostrarToast('info', data.mensaje);
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        if (window.mostrarToast) {
+                            window.mostrarToast('error', 'No se pudo guardar en la lista de deseos.');
+                        }
+                    });
+            };
+
+            window.copiarLink = function(url) {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
+                    });
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = url;
+                    textArea.style.position = "fixed";
+                    textArea.style.left = "-999999px";
+                    textArea.style.top = "-999999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        if (window.mostrarToast) window.mostrarToast('success', 'Enlace copiado al portapapeles');
+                    } catch (err) {
+                        console.error('Fallback copy failed', err);
+                    }
+                    textArea.remove();
                 }
-                textArea.remove();
-            }
-        }
+            };
+        })();
     </script>
 @endPushOnce
