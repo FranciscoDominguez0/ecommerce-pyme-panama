@@ -1,4 +1,4 @@
-﻿@props(['marcas'])
+@props(['marcas'])
 
 <section class="py-10 bg-transparent">
     <div class="max-w-container-max mx-auto">
