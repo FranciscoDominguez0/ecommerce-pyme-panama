@@ -40,6 +40,15 @@ class SecurityHeaders
         // HSTS (HTTP Strict Transport Security): Fuerza conexiones HTTPS por 1 año e incluye subdominios
         $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
+        // Origin isolation (COOP): Aísla el contexto de navegación (Lighthouse Best Practices)
+        $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+
+        // Protección de recursos cruzados (CORP)
+        $response->headers->set('Cross-Origin-Resource-Policy', 'same-origin');
+
+        // Restringe políticas de dominios cruzados
+        $response->headers->set('X-Permitted-Cross-Domain-Policies', 'none');
+
         // Elimina posibles cabeceras con el hostname interno o proxy
         $response->headers->remove('X-Served-By');
         $response->headers->remove('x-served-by');

@@ -1,4 +1,7 @@
-<div id="toast-container" class="fixed top-20 z-[100000] flex flex-col items-center gap-3 pointer-events-none w-full px-4 sm:max-w-md" style="left: 50%; transform: translateX(calc(-50% + var(--sidebar-offset, 0px) / 2));" aria-live="polite" aria-atomic="true">
+<div id="toast-container"
+    class="fixed top-20 z-[100000] flex flex-col items-center gap-3 pointer-events-none w-full px-4 sm:max-w-md"
+    style="left: 50%; transform: translateX(calc(-50% + var(--sidebar-offset, 0px) / 2));" aria-live="polite"
+    aria-atomic="true">
     @php
         $toasts = [];
         if (session('success')) {
@@ -32,8 +35,8 @@
         @php
             $tipo = $t['tipo'];
             $mensaje = $t['mensaje'];
-            
-            $config = match($tipo) {
+
+            $config = match ($tipo) {
                 'error' => [
                     'border' => 'border-rose-500/40 dark:border-rose-500/60',
                     'icon_color' => 'text-rose-400 dark:text-rose-300',
@@ -61,31 +64,30 @@
             };
         @endphp
 
-        <div id="toast-session-{{ $idx }}" 
-             data-toast
-             data-duration="4000"
-             style="opacity: 0; transform: translateY(-16px) scale(0.96);"
-             class="pointer-events-auto flex items-center gap-3.5 pl-2.5 pr-4 py-2.5 rounded-2xl bg-slate-900/95 dark:bg-[#252a30] dark:border-slate-600/80 backdrop-blur-md {{ $config['border'] }} border shadow-2xl shadow-slate-900/50 dark:shadow-[0_10px_30px_rgba(0,0,0,0.6)] text-white relative overflow-hidden transition-all duration-300 w-full max-w-sm">
-            
+        <div id="toast-session-{{ $idx }}" data-toast data-duration="4000"
+            style="opacity: 0; transform: translateY(-16px) scale(0.96);"
+            class="pointer-events-auto flex items-center gap-3.5 pl-2.5 pr-4 py-2.5 rounded-2xl bg-slate-900/95 dark:bg-[#252a30] dark:border-slate-600/80 backdrop-blur-md {{ $config['border'] }} border shadow-2xl shadow-slate-900/50 dark:shadow-[0_10px_30px_rgba(0,0,0,0.6)] text-white relative overflow-hidden transition-all duration-300 w-full max-w-sm">
+
             <div class="{{ $config['icon_bg'] }} w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-[22px] {{ $config['icon_color'] }}" style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
+                <span class="material-symbols-outlined text-[22px] {{ $config['icon_color'] }}"
+                    style="font-variation-settings: 'FILL' 1;">{{ $config['icon'] }}</span>
             </div>
-            
+
             <div class="flex-1 leading-tight tracking-wide">
                 @if(is_array($mensaje))
                     <div class="text-[13px] font-bold text-white">{{ $mensaje['title'] ?? 'Atención' }}</div>
                     @if(isset($mensaje['message']))
-                        <div class="text-[11.5px] font-medium text-slate-300 dark:text-slate-200 mt-0.5">{!! $mensaje['message'] !!}</div>
+                        <div class="text-[11.5px] font-medium text-slate-300 dark:text-slate-200 mt-0.5">{!! $mensaje['message'] !!}
+                        </div>
                     @endif
                 @else
                     <div class="text-[13px] font-bold text-white">{!! $mensaje !!}</div>
                 @endif
             </div>
-            
-            <button type="button" 
-                    onclick="cerrarToast(this.closest('[data-toast]'))" 
-                    class="opacity-60 hover:opacity-100 transition-opacity p-1.5 shrink-0 rounded-lg hover:bg-slate-700/50 dark:hover:bg-slate-600/50 text-slate-300 hover:text-white" 
-                    aria-label="Cerrar notificación">
+
+            <button type="button" onclick="cerrarToast(this.closest('[data-toast]'))"
+                class="opacity-60 hover:opacity-100 transition-opacity p-1.5 shrink-0 rounded-lg hover:bg-slate-700/50 dark:hover:bg-slate-600/50 text-slate-300 hover:text-white"
+                aria-label="Cerrar notificación">
                 <span class="material-symbols-outlined text-[18px]">close</span>
             </button>
         </div>
@@ -93,7 +95,7 @@
 </div>
 
 <script data-navigate-once>
-    (function() {
+    (function () {
         if (window._toastAlertComponenteInited) return;
         window._toastAlertComponenteInited = true;
 
@@ -118,7 +120,7 @@
             });
         };
 
-        window.iniciarTemporizadorToast = function(toast, duracion = 4000) {
+        window.iniciarTemporizadorToast = function (toast, duracion = 4000) {
             if (!toast) return;
             const timeoutId = setTimeout(() => {
                 window.cerrarToast(toast);
@@ -127,16 +129,16 @@
             toast.dataset.timeoutId = timeoutId;
         };
 
-        window.cerrarToast = function(toast) {
+        window.cerrarToast = function (toast) {
             if (!toast) return;
             if (toast.dataset.timeoutId) {
                 clearTimeout(Number(toast.dataset.timeoutId));
             }
-            
+
             toast.style.opacity = '0';
             toast.style.transform = 'translateY(-16px) scale(0.96)';
             toast.style.marginBottom = `-${toast.offsetHeight}px`;
-            
+
             setTimeout(() => {
                 toast.remove();
             }, 300);
@@ -144,13 +146,13 @@
 
         // Ejecutar inmediatamente
         inicializarToasts();
-        
+
         // Ejecutar en DOMContentLoaded o navegación Livewire
         document.addEventListener('DOMContentLoaded', inicializarToasts);
         document.addEventListener('livewire:navigated', inicializarToasts);
 
         // API JavaScript Global reutilizable
-        window.mostrarToast = function(arg1, arg2 = 'success', duracion = 4000) {
+        window.mostrarToast = function (arg1, arg2 = 'success', duracion = 4000) {
             let container = document.getElementById('toast-container');
             if (!container) {
                 container = document.createElement('div');
@@ -240,4 +242,3 @@
         };
     })();
 </script>
-

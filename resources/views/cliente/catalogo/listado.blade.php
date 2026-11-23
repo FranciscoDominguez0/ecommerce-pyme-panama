@@ -25,7 +25,7 @@
                 <!-- Botón Productos: 2 columnas (categorías | subcategorías) -->
                 <div x-data="{ open: false, activeCategory: null }" class="relative z-40" @click.away="open = false; activeCategory = null">
                     <button @click="open = !open"
-                            class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-4 py-2 flex items-center justify-between sm:justify-start gap-2 text-sm font-bold cursor-pointer transition-colors">
+                            class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg px-4 py-2.5 flex items-center justify-between sm:justify-start gap-2 text-sm font-bold cursor-pointer transition-colors min-h-[44px]">
                         <span class="flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
@@ -153,7 +153,7 @@
                 <div class="flex flex-wrap gap-2">
                     @foreach($categoriasPills as $cat)
                         <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate
-                           class="flex items-center gap-2 px-4 py-2 rounded-lg border {{ $categoriaSlug === $cat->slug ? 'border-emerald-500 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:shadow-xs' }} transition-all text-xs font-semibold">
+                           class="flex items-center gap-2 px-4 py-2.5 rounded-lg border {{ $categoriaSlug === $cat->slug ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-bold' : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:shadow-xs' }} transition-all text-xs font-semibold min-h-[40px]">
                             @if($cat->imagen_ruta)
                                 <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="" width="20" height="20" loading="lazy" decoding="async" class="w-5 h-5 object-contain">
                             @else
@@ -196,10 +196,10 @@
                 <!-- Encabezado de Filtros -->
                 <div class="hidden sm:flex items-center justify-between border-b border-slate-100 pb-3">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[18px] text-emerald-600">tune</span>
+                        <span class="material-symbols-outlined text-[18px] text-emerald-700">tune</span>
                         <span>Filtrar Resultados</span>
                     </h3>
-                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-[11px] font-semibold text-emerald-700 hover:underline py-1 px-1.5 inline-block">
+                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-xs font-bold text-emerald-800 hover:underline py-2 px-2.5 inline-flex items-center min-h-[36px]">
                         Limpiar todo
                     </a>
                 </div>
@@ -230,9 +230,9 @@
                         </button>
                         <div x-show="open" x-collapse class="space-y-1 text-xs">
                             <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" wire:navigate
-                               class="flex items-center justify-between px-2.5 py-2 my-0.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900 bg-emerald-50/60' : 'text-slate-700 hover:bg-slate-50' }} transition-colors min-h-[36px]">
+                               class="flex items-center justify-between px-2.5 py-2.5 my-0.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900 bg-emerald-50/60' : 'text-slate-700 hover:bg-slate-50' }} transition-colors min-h-[40px]">
                                 <span class="flex items-center gap-2">
-                                    <input type="radio" id="cat-radio-all" name="categoria_radio" aria-label="Todos los productos" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                    <input type="radio" id="cat-radio-all" name="categoria_radio" aria-label="Todos los productos" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="w-4 h-4 text-emerald-600 border-slate-300 focus:ring-emerald-500">
                                     Todos los productos
                                 </span>
                             </a>
@@ -240,15 +240,15 @@
                                 <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => $cat->slug])) }}" wire:navigate
                                    x-show="verMas || {{ $index }} < 5"
                                    {!! $index >= 5 ? 'style="display:none;"' : '' !!}
-                                   class="flex items-center justify-between px-2.5 py-2 my-0.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900 bg-emerald-50/60' : 'text-slate-700 hover:bg-slate-50' }} transition-colors min-h-[36px]">
+                                   class="flex items-center justify-between px-2.5 py-2.5 my-0.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900 bg-emerald-50/60' : 'text-slate-700 hover:bg-slate-50' }} transition-colors min-h-[40px]">
                                     <span class="flex items-center gap-2">
-                                        <input type="radio" id="cat-radio-{{ $cat->id }}" name="categoria_radio" aria-label="{{ $cat->nombre }}" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                        <input type="radio" id="cat-radio-{{ $cat->id }}" name="categoria_radio" aria-label="{{ $cat->nombre }}" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="w-4 h-4 text-emerald-600 border-slate-300 focus:ring-emerald-500">
                                         {{ $cat->nombre }} <span class="text-slate-500 font-normal">({{ $cat->total_productos_count ?? $cat->productos_count }})</span>
                                     </span>
                                 </a>
                             @endforeach
                             @if(count($categorias) > 5)
-                                <button type="button" @click="verMas = !verMas" class="text-emerald-700 hover:underline font-semibold mt-2 px-2.5 py-2 text-[11px] block text-left">
+                                <button type="button" @click="verMas = !verMas" class="text-emerald-800 hover:underline font-bold mt-2 px-2.5 py-2.5 text-xs inline-flex items-center min-h-[40px] text-left">
                                     <span x-text="verMas ? '- Ver menos' : '+ Ver más'"></span>
                                 </button>
                             @endif
@@ -293,16 +293,16 @@
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label for="filtro-min-precio" class="text-[10px] text-slate-500 font-medium block">Mínimo</label>
-                                <input type="number" id="filtro-min-precio" name="min_precio" aria-label="Precio mínimo" value="{{ $precioMin > 0 ? $precioMin : '' }}" placeholder="$0" class="text-xs w-full rounded-xl border-slate-200 py-1.5 px-2">
+                                <input type="number" id="filtro-min-precio" name="min_precio" aria-label="Precio mínimo" value="{{ $precioMin > 0 ? $precioMin : '' }}" placeholder="$0" class="text-xs w-full rounded-xl border-slate-200 py-2.5 px-2 min-h-[40px]">
                             </div>
                             <div>
                                 <label for="filtro-max-precio" class="text-[10px] text-slate-500 font-medium block">Máximo</label>
-                                <input type="number" id="filtro-max-precio" name="max_precio" aria-label="Precio máximo" value="{{ $precioMax < 2000 ? $precioMax : '' }}" placeholder="$2000" class="text-xs w-full rounded-xl border-slate-200 py-1.5 px-2">
+                                <input type="number" id="filtro-max-precio" name="max_precio" aria-label="Precio máximo" value="{{ $precioMax < 2000 ? $precioMax : '' }}" placeholder="$2000" class="text-xs w-full rounded-xl border-slate-200 py-2.5 px-2 min-h-[40px]">
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="hidden sm:block w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors">
+                    <button type="submit" class="hidden sm:block w-full py-3 px-4 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-sm font-bold shadow-xs transition-colors min-h-[44px] cursor-pointer">
                         Aplicar Filtros
                     </button>
                 </form>
@@ -319,7 +319,7 @@
 
                     <div class="flex items-center gap-2">
                         <label for="filtro-orden" class="text-xs text-slate-500 font-medium">Ordenar por:</label>
-                        <select id="filtro-orden" aria-label="Ordenar productos" onchange="window.location.href = this.value" class="text-xs rounded-xl border border-slate-200 dark:border-gray-700 py-1.5 px-3 bg-slate-50 dark:bg-[#181a1b] font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                        <select id="filtro-orden" aria-label="Ordenar productos" onchange="window.location.href = this.value" class="text-xs rounded-xl border border-slate-200 dark:border-gray-700 py-2 min-h-[40px] px-3 bg-slate-50 dark:bg-[#181a1b] font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'relevancia'])) }}" @selected($orden === 'relevancia')>Relevancia / Destacados</option>
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'precio_asc'])) }}" @selected($orden === 'precio_asc')>Menor Precio</option>
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'precio_desc'])) }}" @selected($orden === 'precio_desc')>Mayor Precio</option>
