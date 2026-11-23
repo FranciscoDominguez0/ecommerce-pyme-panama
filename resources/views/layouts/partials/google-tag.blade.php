@@ -4,8 +4,8 @@
 
 @if(!empty($gaId))
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
-    <script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}" data-navigate-once></script>
+    <script data-navigate-once>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -69,6 +69,8 @@
 
         // Registro de páginas vistas al navegar con Livewire (wire:navigate)
         (function() {
+            if (window._googleTagNavigatedInited) return;
+            window._googleTagNavigatedInited = true;
             let cargaInicial = true;
             document.addEventListener('livewire:navigated', function () {
                 if (cargaInicial) {

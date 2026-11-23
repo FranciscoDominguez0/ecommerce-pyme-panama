@@ -1,4 +1,10 @@
-<script>
+<script data-navigate-once>
+(function () {
+    // Evitar múltiples ejecuciones de inicialización en el ciclo de vida SPA
+    if (window.__clienteScriptsInited) return;
+    window.__clienteScriptsInited = true;
+
+    // Función global para abrir el Drawer del Carrito desde cualquier vista o botón
     window.abrirCarritoDrawer = function () {
         if (window.Livewire) {
             Livewire.dispatch('abrir-carrito-drawer');
@@ -7,7 +13,8 @@
         }
     };
 
-    const registrarListenerToast = () => {
+    // Registrar listener para eventos toast emitidos por Livewire
+    function registrarListenerToast() {
         if (window.Livewire && !window._toastListenerRegistrado) {
             window._toastListenerRegistrado = true;
             Livewire.on('mostrar-toast', (event) => {
@@ -17,7 +24,7 @@
                 }
             });
         }
-    };
+    }
 
     if (window.Livewire) {
         registrarListenerToast();
@@ -49,7 +56,8 @@
         }
     });
 
-    function handleLoginSkeleton() {
+    // Control de skeleton tras login
+    window.handleLoginSkeleton = function () {
         const skeleton = document.getElementById('global-cliente-skeleton');
         const actualContent = document.getElementById('actual-page-content');
         
@@ -63,9 +71,10 @@
                 }, 300);
             }, 800);
         }
-    }
+    };
 
-    function initTypewriterSearch() {
+    // Efecto de máquina de escribir en el input de búsqueda del header
+    window.initTypewriterSearch = function () {
         const searchInput = document.getElementById('global-search-input');
         if (!searchInput) return;
 
@@ -129,11 +138,20 @@
                 }
             });
         }
-    }
+    };
 
-    document.addEventListener('DOMContentLoaded', initTypewriterSearch);
-    document.addEventListener('livewire:navigated', initTypewriterSearch);
-    
-    document.addEventListener('DOMContentLoaded', handleLoginSkeleton);
-    document.addEventListener('livewire:navigated', handleLoginSkeleton);
+    document.addEventListener('DOMContentLoaded', () => {
+        window.initTypewriterSearch();
+        window.handleLoginSkeleton();
+    });
+
+    document.addEventListener('livewire:navigated', () => {
+        window.initTypewriterSearch();
+        window.handleLoginSkeleton();
+    });
+
+    // Ejecución inmediata inicial
+    window.initTypewriterSearch();
+    window.handleLoginSkeleton();
+})();
 </script>

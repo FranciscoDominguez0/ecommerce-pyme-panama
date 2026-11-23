@@ -92,8 +92,11 @@
     @endforeach
 </div>
 
-<script>
+<script data-navigate-once>
     (function() {
+        if (window._toastAlertComponenteInited) return;
+        window._toastAlertComponenteInited = true;
+
         // Asegurar que el contenedor esté directamente en document.body para evitar que quede atrapado bajo el header
         const asegurarContenedorEnBody = () => {
             const container = document.getElementById('toast-container');
