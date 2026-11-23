@@ -274,7 +274,7 @@
                                         <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}" aria-label="{{ $marca->name }}" {{ in_array($marca->id, request('marca', [])) ? 'checked' : '' }} onchange="document.querySelectorAll('input[name=\'marca[]\']').forEach(cb => { if(cb !== this) cb.checked = false; }); this.form.submit()">
                                         <div class="h-12 border border-slate-200 rounded p-1.5 flex items-center justify-center peer-checked:border-emerald-600 peer-checked:shadow-sm transition-all bg-white hover:border-slate-300">
                                             @if($marca->logo_url)
-                                                <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" width="48" height="32" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain transition-all">
+                                                <img src="{{ $marca->logo_url ? $marca->logo_url . '?v=2' : '' }}" alt="{{ $marca->name }}" width="48" height="32" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain transition-all">
                                             @else
                                                 <span class="text-[9px] font-bold text-slate-600 text-center uppercase truncate w-full">{{ $marca->name }}</span>
                                             @endif
