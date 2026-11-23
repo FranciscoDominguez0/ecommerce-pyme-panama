@@ -52,12 +52,8 @@ class CatalogoController extends Controller
         $precioMax     = (float) $request->input('max_precio', self::PRECIO_MAXIMO_FILTRO);
         $orden         = $request->input('orden', 'relevancia');
 
-        $categorias = \Illuminate\Support\Facades\Cache::remember('catalogo_categorias_raices', 300, function () {
-            return Categoria::raicesConConteoDeProductos();
-        });
-        $marcas = \Illuminate\Support\Facades\Cache::remember('catalogo_marcas_verificadas', 300, function () {
-            return Brand::where('verified', true)->orderBy('name')->get();
-        });
+        $categorias    = Categoria::raicesConConteoDeProductos();
+        $marcas        = Brand::where('verified', true)->orderBy('name')->get();
 
         // Resolvemos la categoría activa una sola vez para evitar queries duplicadas.
         $categoriaActiva = $categoriaSlug !== 'all'
