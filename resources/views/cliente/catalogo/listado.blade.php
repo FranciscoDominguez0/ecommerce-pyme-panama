@@ -1,6 +1,7 @@
 @extends('layouts.cliente')
 
 @section('title', 'Catálogo de Productos')
+@section('meta_description', 'Explora nuestro catálogo de productos tecnológicos, laptops, componentes, periféricos y accesorios con entrega en todo Panamá.')
 
 @section('content')
 <div class="min-h-screen bg-slate-50 py-6 sm:py-10">
@@ -56,7 +57,7 @@
                                     <span class="flex items-center gap-3">
                                         @if($cat->imagen_ruta)
                                             <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}"
-                                                 alt="" class="w-5 h-5 object-contain shrink-0">
+                                                 alt="" width="20" height="20" loading="lazy" decoding="async" class="w-5 h-5 object-contain shrink-0">
                                         @else
                                             <span class="material-symbols-outlined text-[18px] text-emerald-500 shrink-0">category</span>
                                         @endif
@@ -154,7 +155,7 @@
                         <a href="{{ route('cliente.catalogo', ['categoria' => $cat->slug]) }}" wire:navigate
                            class="flex items-center gap-2 px-4 py-2 rounded-lg border {{ $categoriaSlug === $cat->slug ? 'border-emerald-500 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:shadow-xs' }} transition-all text-xs font-semibold">
                             @if($cat->imagen_ruta)
-                                <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="{{ $cat->nombre }}" class="w-5 h-5 object-contain">
+                                <img src="{{ str_starts_with($cat->imagen_ruta, 'http') ? $cat->imagen_ruta : asset($cat->imagen_ruta) }}" alt="" width="20" height="20" loading="lazy" decoding="async" class="w-5 h-5 object-contain">
                             @else
                                 <span class="material-symbols-outlined text-[18px] text-emerald-500">category</span>
                             @endif
@@ -206,14 +207,16 @@
                 <form method="GET" action="{{ route('cliente.catalogo') }}" class="space-y-5">
                     <!-- 1. Búsqueda de Texto -->
                     <div class="block lg:hidden">
-                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                        <label for="buscar-movil" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                             Buscar
                         </label>
                         <div class="relative">
-                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]" aria-hidden="true">search</span>
                             <input type="text"
+                                   id="buscar-movil"
                                    name="buscar"
                                    placeholder="Nombre, SKU..."
+                                   aria-label="Buscar producto por nombre o SKU"
                                    value="{{ $buscar }}"
                                    class="pl-9 text-xs w-full rounded-xl border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/20 py-2">
                         </div>
@@ -221,15 +224,15 @@
 
                     <!-- 2. Categorías -->
                     <div class="hidden sm:block space-y-2 border-t border-slate-100 pt-4" x-data="{ verMas: false, open: true }">
-                        <h4 @click="open = !open" class="text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between cursor-pointer">
-                            Categorías
-                            <span class="material-symbols-outlined text-[18px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
-                        </h4>
+                        <button type="button" @click="open = !open" aria-label="Alternar filtro de categorías" class="w-full text-xs font-bold text-slate-700 tracking-wider mb-2 flex items-center justify-between cursor-pointer">
+                            <span>Categorías</span>
+                            <span class="material-symbols-outlined text-[18px] transition-transform" :class="open ? 'rotate-180' : ''" aria-hidden="true">expand_more</span>
+                        </button>
                         <div x-show="open" x-collapse class="space-y-1 text-xs">
                             <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" wire:navigate
                                class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                 <span class="flex items-center gap-2">
-                                    <input type="radio" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                    <input type="radio" aria-label="Todos los productos" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
                                     Todos los productos
                                 </span>
                             </a>
@@ -239,7 +242,7 @@
                                    {!! $index >= 5 ? 'style="display:none;"' : '' !!}
                                    class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
                                     <span class="flex items-center gap-2">
-                                        <input type="radio" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                        <input type="radio" aria-label="{{ $cat->nombre }}" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
                                         {{ $cat->nombre }} <span class="text-slate-400 font-normal">({{ $cat->total_productos_count ?? $cat->productos_count }})</span>
                                     </span>
                                 </a>
@@ -254,24 +257,24 @@
 
                     <!-- 3. Marcas -->
                     <div x-data="{ open: {{ count(request('marca', [])) > 0 ? 'true' : 'false' }}, searchBrand: '' }" class="hidden sm:block space-y-3 border-t border-slate-100 pt-4">
-                        <h4 @click="open = !open" class="text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
-                            Marcas
-                            <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''">expand_more</span>
-                        </h4>
+                        <button type="button" @click="open = !open" aria-label="Alternar filtro de marcas" class="w-full text-[14px] font-bold text-slate-900 mb-2 flex items-center justify-between cursor-pointer">
+                            <span>Marcas</span>
+                            <span class="material-symbols-outlined text-[20px] transition-transform" :class="open ? 'rotate-180' : ''" aria-hidden="true">expand_more</span>
+                        </button>
 
                         <div x-show="open" x-collapse>
                             <div class="relative mb-4">
-                                <input type="text" x-model="searchBrand" placeholder="Search Brands" class="w-full border-0 border-b border-slate-200 text-sm py-2 pl-1 pr-8 focus:ring-0 focus:border-slate-400 placeholder-slate-300">
-                                <span class="material-symbols-outlined absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 text-[20px]">search</span>
+                                <input type="text" x-model="searchBrand" placeholder="Search Brands" aria-label="Buscar marcas" class="w-full border-0 border-b border-slate-200 text-sm py-2 pl-1 pr-8 focus:ring-0 focus:border-slate-400 placeholder-slate-300">
+                                <span class="material-symbols-outlined absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 text-[20px]" aria-hidden="true">search</span>
                             </div>
 
                             <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
                                 @foreach($marcas as $marca)
                                     <label x-show="searchBrand === '' || '{{ strtolower($marca->name) }}'.includes(searchBrand.toLowerCase())" class="relative group cursor-pointer">
-                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}" {{ in_array($marca->id, request('marca', [])) ? 'checked' : '' }} onchange="document.querySelectorAll('input[name=\'marca[]\']').forEach(cb => { if(cb !== this) cb.checked = false; }); this.form.submit()">
+                                        <input type="checkbox" class="peer sr-only" name="marca[]" value="{{ $marca->id }}" aria-label="{{ $marca->name }}" {{ in_array($marca->id, request('marca', [])) ? 'checked' : '' }} onchange="document.querySelectorAll('input[name=\'marca[]\']').forEach(cb => { if(cb !== this) cb.checked = false; }); this.form.submit()">
                                         <div class="h-12 border border-slate-200 rounded p-1.5 flex items-center justify-center peer-checked:border-emerald-600 peer-checked:shadow-sm transition-all bg-white hover:border-slate-300">
                                             @if($marca->logo_url)
-                                                <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" class="max-h-full max-w-full object-contain transition-all">
+                                                <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" width="48" height="32" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain transition-all">
                                             @else
                                                 <span class="text-[9px] font-bold text-slate-400 text-center uppercase truncate w-full">{{ $marca->name }}</span>
                                             @endif
@@ -289,12 +292,12 @@
                         </h4>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <span class="text-[10px] text-slate-400">Mínimo</span>
-                                <input type="number" name="min_precio" value="{{ $precioMin > 0 ? $precioMin : '' }}" placeholder="$0" class="text-xs w-full rounded-xl border-slate-200 py-1.5 px-2">
+                                <label for="filtro-min-precio" class="text-[10px] text-slate-500 font-medium block">Mínimo</label>
+                                <input type="number" id="filtro-min-precio" name="min_precio" aria-label="Precio mínimo" value="{{ $precioMin > 0 ? $precioMin : '' }}" placeholder="$0" class="text-xs w-full rounded-xl border-slate-200 py-1.5 px-2">
                             </div>
                             <div>
-                                <span class="text-[10px] text-slate-400">Máximo</span>
-                                <input type="number" name="max_precio" value="{{ $precioMax < 2000 ? $precioMax : '' }}" placeholder="$2000" class="text-xs w-full rounded-xl border-slate-200 py-1.5 px-2">
+                                <label for="filtro-max-precio" class="text-[10px] text-slate-500 font-medium block">Máximo</label>
+                                <input type="number" id="filtro-max-precio" name="max_precio" aria-label="Precio máximo" value="{{ $precioMax < 2000 ? $precioMax : '' }}" placeholder="$2000" class="text-xs w-full rounded-xl border-slate-200 py-1.5 px-2">
                             </div>
                         </div>
                     </div>
@@ -315,8 +318,8 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <span class="text-xs text-slate-400">Ordenar por:</span>
-                        <select onchange="window.location.href = this.value" class="text-xs rounded-xl border border-slate-200 dark:border-gray-700 py-1.5 px-3 bg-slate-50 dark:bg-[#181a1b] font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                        <label for="filtro-orden" class="text-xs text-slate-500 font-medium">Ordenar por:</label>
+                        <select id="filtro-orden" aria-label="Ordenar productos" onchange="window.location.href = this.value" class="text-xs rounded-xl border border-slate-200 dark:border-gray-700 py-1.5 px-3 bg-slate-50 dark:bg-[#181a1b] font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'relevancia'])) }}" @selected($orden === 'relevancia')>Relevancia / Destacados</option>
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'precio_asc'])) }}" @selected($orden === 'precio_asc')>Menor Precio</option>
                             <option value="{{ route('cliente.catalogo', array_merge(request()->query(), ['orden' => 'precio_desc'])) }}" @selected($orden === 'precio_desc')>Mayor Precio</option>
@@ -329,7 +332,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     @forelse($productos as $prod)
-                        <x-producto-card :prod="$prod" />
+                        <x-producto-card :prod="$prod" :priority="$loop->first" />
                     @empty
                         <div class="col-span-full py-16 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
                             <span class="material-symbols-outlined text-[48px] text-slate-300 mx-auto">search_off</span>

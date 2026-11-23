@@ -24,8 +24,8 @@
     }
 
     body {
-        font-family: 'Figtree', sans-serif;
-        letter-spacing: -0.015em;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        letter-spacing: -0.011em;
     }
 
     .material-symbols-outlined {

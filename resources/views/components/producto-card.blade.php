@@ -1,5 +1,5 @@
 <!-- Tarjeta individual de producto -->
-@props(['prod'])
+@props(['prod', 'priority' => false])
 
 @php
     $img = $prod->imagenPrincipal();
@@ -33,7 +33,7 @@
                 alt="{{ $prod->nombre }}"
                 width="180" height="180"
                 class="h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                loading="lazy" decoding="async">
+                @if($priority) loading="eager" fetchpriority="high" @else loading="lazy" decoding="async" @endif>
         @elseif($img && (str_starts_with($img->ruta, '<svg') || str_contains($img->ruta, '</svg>')))
             <div
                 class="h-full flex items-center justify-center svg-container group-hover:scale-105 transition-transform duration-300">
