@@ -3,7 +3,7 @@ import collapse from '@alpinejs/collapse';
 
 // Carga perezosa (lazy load) de ApexCharts: se divide automáticamente en un chunk
 // separado para no penalizar el peso inicial ni el rendimiento en páginas sin gráficos.
-window.loadApexCharts = async function() {
+window.loadApexCharts = async function () {
     if (!window.ApexCharts) {
         const module = await import('apexcharts');
         window.ApexCharts = module.default;

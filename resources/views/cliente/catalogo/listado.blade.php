@@ -199,7 +199,7 @@
                         <span class="material-symbols-outlined text-[18px] text-emerald-600">tune</span>
                         <span>Filtrar Resultados</span>
                     </h3>
-                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-[11px] font-semibold text-emerald-700 hover:underline">
+                    <a href="{{ route('cliente.catalogo') }}" wire:navigate class="text-[11px] font-semibold text-emerald-700 hover:underline py-1 px-1.5 inline-block">
                         Limpiar todo
                     </a>
                 </div>
@@ -230,9 +230,9 @@
                         </button>
                         <div x-show="open" x-collapse class="space-y-1 text-xs">
                             <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => 'all'])) }}" wire:navigate
-                               class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
+                               class="flex items-center justify-between px-2.5 py-2 my-0.5 rounded-lg {{ $categoriaSlug === 'all' ? 'font-bold text-slate-900 bg-emerald-50/60' : 'text-slate-700 hover:bg-slate-50' }} transition-colors min-h-[36px]">
                                 <span class="flex items-center gap-2">
-                                    <input type="radio" aria-label="Todos los productos" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                    <input type="radio" id="cat-radio-all" name="categoria_radio" aria-label="Todos los productos" {{ $categoriaSlug === 'all' ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
                                     Todos los productos
                                 </span>
                             </a>
@@ -240,15 +240,15 @@
                                 <a href="{{ route('cliente.catalogo', array_merge(request()->query(), ['categoria' => $cat->slug])) }}" wire:navigate
                                    x-show="verMas || {{ $index }} < 5"
                                    {!! $index >= 5 ? 'style="display:none;"' : '' !!}
-                                   class="flex items-center justify-between px-2.5 py-1.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900' : 'text-slate-600 hover:bg-slate-50' }} transition-colors">
+                                   class="flex items-center justify-between px-2.5 py-2 my-0.5 rounded-lg {{ $categoriaSlug === $cat->slug ? 'font-bold text-slate-900 bg-emerald-50/60' : 'text-slate-700 hover:bg-slate-50' }} transition-colors min-h-[36px]">
                                     <span class="flex items-center gap-2">
-                                        <input type="radio" aria-label="{{ $cat->nombre }}" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
-                                        {{ $cat->nombre }} <span class="text-slate-400 font-normal">({{ $cat->total_productos_count ?? $cat->productos_count }})</span>
+                                        <input type="radio" id="cat-radio-{{ $cat->id }}" name="categoria_radio" aria-label="{{ $cat->nombre }}" {{ $categoriaSlug === $cat->slug ? 'checked' : '' }} class="text-blue-600 border-slate-300 focus:ring-blue-500">
+                                        {{ $cat->nombre }} <span class="text-slate-500 font-normal">({{ $cat->total_productos_count ?? $cat->productos_count }})</span>
                                     </span>
                                 </a>
                             @endforeach
                             @if(count($categorias) > 5)
-                                <button type="button" @click="verMas = !verMas" class="text-emerald-700 hover:underline font-semibold mt-2 px-2.5 py-1 text-[11px] block text-left">
+                                <button type="button" @click="verMas = !verMas" class="text-emerald-700 hover:underline font-semibold mt-2 px-2.5 py-2 text-[11px] block text-left">
                                     <span x-text="verMas ? '- Ver menos' : '+ Ver más'"></span>
                                 </button>
                             @endif
@@ -264,8 +264,8 @@
 
                         <div x-show="open" x-collapse>
                             <div class="relative mb-4">
-                                <input type="text" x-model="searchBrand" placeholder="Search Brands" aria-label="Buscar marcas" class="w-full border-0 border-b border-slate-200 text-sm py-2 pl-1 pr-8 focus:ring-0 focus:border-slate-400 placeholder-slate-300">
-                                <span class="material-symbols-outlined absolute right-1 top-1/2 -translate-y-1/2 text-slate-300 text-[20px]" aria-hidden="true">search</span>
+                                <input type="text" id="filtro-buscar-marcas" name="buscar_marca" x-model="searchBrand" placeholder="Buscar marcas..." aria-label="Buscar marcas" class="w-full border-0 border-b border-slate-200 text-sm py-2 pl-1 pr-8 focus:ring-0 focus:border-slate-400 placeholder-slate-400">
+                                <span class="material-symbols-outlined absolute right-1 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]" aria-hidden="true">search</span>
                             </div>
 
                             <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
@@ -276,7 +276,7 @@
                                             @if($marca->logo_url)
                                                 <img src="{{ $marca->logo_url }}" alt="{{ $marca->name }}" width="48" height="32" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain transition-all">
                                             @else
-                                                <span class="text-[9px] font-bold text-slate-400 text-center uppercase truncate w-full">{{ $marca->name }}</span>
+                                                <span class="text-[9px] font-bold text-slate-600 text-center uppercase truncate w-full">{{ $marca->name }}</span>
                                             @endif
                                         </div>
                                     </label>
@@ -337,7 +337,7 @@
                         <div class="col-span-full py-16 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
                             <span class="material-symbols-outlined text-[48px] text-slate-300 mx-auto">search_off</span>
                             <h3 class="text-sm font-bold text-slate-700 mt-2">No encontramos productos con estos filtros</h3>
-                            <p class="text-xs text-slate-400 mt-1">Intenta con otros términos de búsqueda o categorías.</p>
+                            <p class="text-xs text-slate-500 mt-1">Intenta con otros términos de búsqueda o categorías.</p>
                             <a href="{{ route('cliente.catalogo') }}" wire:navigate class="inline-block mt-4 text-xs font-semibold text-emerald-700 hover:underline">
                                 Ver todo el catálogo
                             </a>
