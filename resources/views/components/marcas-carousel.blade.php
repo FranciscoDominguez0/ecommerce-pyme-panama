@@ -8,7 +8,7 @@
 
         <div class="brands-slider-outer">
             <button class="brands-arrow brands-arrow-left" id="brandsPrev" aria-label="Anterior">
-                <span class="material-symbols-outlined">chevron_left</span>
+                <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
             </button>
 
             <div class="brands-viewport" id="brandsViewport">
@@ -21,7 +21,7 @@
                         @endphp
                         <div class="brand-logo-card-m" title="{{ $nombre }}">
                             @if(!empty($logo))
-                                <img src="{{ $logo }}" alt="{{ $nombre }}" loading="lazy" class="brand-logo-img-m" />
+                                <img src="{{ $logo }}" alt="{{ $nombre }}" width="120" height="48" loading="lazy" decoding="async" class="brand-logo-img-m" />
                             @else
                                 <span class="text-xs font-black uppercase text-slate-700 dark:text-slate-300 tracking-wider">{{ $nombre }}</span>
                             @endif
@@ -31,7 +31,7 @@
             </div>
 
             <button class="brands-arrow brands-arrow-right" id="brandsNext" aria-label="Siguiente">
-                <span class="material-symbols-outlined">chevron_right</span>
+                <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
             </button>
         </div>
     </div>
