@@ -149,7 +149,8 @@
         const skeleton = document.getElementById('global-admin-skeleton-wrapper');
         const actualContent = document.getElementById('actual-page-content');
         
-        if (skeleton && !skeleton.classList.contains('hidden')) {
+        if (skeleton && !skeleton.classList.contains('hidden') && !skeleton.dataset.fading) {
+            skeleton.dataset.fading = 'true';
             setTimeout(() => {
                 if (actualContent) {
                     actualContent.classList.remove('opacity-0');
@@ -160,11 +161,12 @@
                 
                 setTimeout(() => {
                     skeleton.classList.add('hidden');
+                    skeleton.remove();
                     if (actualContent) {
                         setTimeout(() => actualContent.classList.remove('animate-fade-in-up'), 400);
                     }
                 }, 300);
-            }, 800);
+            }, 500);
         }
     };
 

@@ -61,15 +61,17 @@
             const skeleton = document.getElementById('global-cliente-skeleton');
             const actualContent = document.getElementById('actual-page-content');
 
-            if (skeleton && actualContent && !skeleton.classList.contains('hidden')) {
+            if (skeleton && actualContent && !skeleton.classList.contains('hidden') && !skeleton.dataset.fading) {
+                skeleton.dataset.fading = 'true';
                 setTimeout(() => {
                     skeleton.style.opacity = '0';
                     actualContent.classList.remove('opacity-0');
                     actualContent.classList.add('opacity-100');
                     setTimeout(() => {
                         skeleton.classList.add('hidden');
+                        skeleton.remove();
                     }, 300);
-                }, 800);
+                }, 500);
             }
         };
 

@@ -59,16 +59,6 @@
     <!-- Sistema Global de Alertas y Notificaciones Toast -->
     <x-toast-alert />
 
-    <!-- Skeletons Transition Overlays (compartido para login y 2fa) -->
-    <div id="skeleton-container" class="hidden">
-        <div id="admin-skeleton-wrapper" class="hidden">
-            <x-admin-skeleton :fullScreen="true" />
-        </div>
-        <div id="cliente-skeleton-wrapper" class="hidden">
-            <x-cliente-skeleton :fullScreen="true" />
-        </div>
-    </div>
-
     <script>
         (function() {
             let googlePopup = null;
@@ -90,20 +80,7 @@
                     }
                 } catch (e) {}
 
-                // Activar skeletons de transición suave si existen
-                const skeletonContainer = document.getElementById('skeleton-container');
-                const adminWrapper = document.getElementById('admin-skeleton-wrapper');
-                const clienteWrapper = document.getElementById('cliente-skeleton-wrapper');
-
-                if (skeletonContainer) {
-                    skeletonContainer.classList.remove('hidden');
-                    if (url.includes('/admin')) {
-                        if (adminWrapper) adminWrapper.classList.remove('hidden');
-                    } else {
-                        if (clienteWrapper) clienteWrapper.classList.remove('hidden');
-                    }
-                }
-
+                // Redirección directa e instantánea sin skeletons prematuros en la vista de acceso
                 window.location.href = url;
             }
 
@@ -217,15 +194,11 @@
 
         // BFCache fix global para cuando el usuario presiona el botón "Atrás" del navegador
         window.addEventListener('pageshow', (event) => {
-            const mainContent = document.querySelector('main.fade-in-up');
-            const skeletonContainer = document.getElementById('skeleton-container');
+            const mainContent = document.querySelector('main');
             const bgGradients = document.querySelector('.fixed.inset-0.pointer-events-none');
             const backBtn = document.getElementById('back-to-store-btn');
             
-            if (mainContent && skeletonContainer) {
-                skeletonContainer.classList.add('hidden');
-                document.getElementById('admin-skeleton-wrapper').classList.add('hidden');
-                document.getElementById('cliente-skeleton-wrapper').classList.add('hidden');
+            if (mainContent) {
                 mainContent.classList.remove('hidden');
                 if (bgGradients) bgGradients.classList.remove('hidden');
                 if (backBtn) backBtn.classList.remove('hidden');
