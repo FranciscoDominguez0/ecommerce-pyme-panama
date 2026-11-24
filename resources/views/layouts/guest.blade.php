@@ -70,14 +70,150 @@
     </div>
 
     <script>
-        function openGoogleSignIn(event, url) {
-            event.preventDefault();
-            const width = 500;
-            const height = 600;
-            const left = window.screenX + (window.outerWidth - width) / 2;
-            const top = window.screenY + (window.outerHeight - height) / 2;
-            window.open(url, 'GoogleSignIn', `width=${width},height=${height},left=${left},top=${top},toolbar=0,scrollbars=1,status=1,resizable=1,location=1,menuBar=0`);
-        }
+        (function() {
+            let googlePopup = null;
+            let googlePollTimer = null;
+            let authProcessing = false;
+
+            function handleGoogleAuthSuccess(url) {
+                if (authProcessing) return;
+                authProcessing = true;
+
+                if (googlePollTimer) {
+                    clearInterval(googlePollTimer);
+                    googlePollTimer = null;
+                }
+
+                try {
+                    if (googlePopup && !googlePopup.closed) {
+                        googlePopup.close();
+                    }
+                } catch (e) {}
+
+                // Activar skeletons de transición suave si existen
+                const skeletonContainer = document.getElementById('skeleton-container');
+                const adminWrapper = document.getElementById('admin-skeleton-wrapper');
+                const clienteWrapper = document.getElementById('cliente-skeleton-wrapper');
+
+                if (skeletonContainer) {
+                    skeletonContainer.classList.remove('hidden');
+                    if (url.includes('/admin')) {
+                        if (adminWrapper) adminWrapper.classList.remove('hidden');
+                    } else {
+                        if (clienteWrapper) clienteWrapper.classList.remove('hidden');
+                    }
+                }
+
+                window.location.href = url;
+            }
+
+            function handleGoogleAuthError(message) {
+                if (googlePollTimer) {
+                    clearInterval(googlePollTimer);
+                    googlePollTimer = null;
+                }
+
+                try {
+                    if (googlePopup && !googlePopup.closed) {
+                        googlePopup.close();
+                    }
+                } catch (e) {}
+
+                const errorAlert = document.getElementById('error-alert');
+                if (errorAlert) {
+                    errorAlert.classList.remove('hidden');
+                    const msgEl = errorAlert.querySelector('p.opacity-95') || errorAlert.querySelector('.message-text');
+                    if (msgEl) msgEl.textContent = message || 'Error al iniciar sesión con Google.';
+                } else if (window.Toast) {
+                    window.Toast.fire({ icon: 'error', title: message || 'Error al iniciar sesión con Google.' });
+                }
+            }
+
+            // Exponer en window para que el popup pueda invocarlo directamente si el opener está disponible
+            window.handleGoogleAuthSuccess = handleGoogleAuthSuccess;
+            window.handleGoogleAuthError = handleGoogleAuthError;
+
+            // 1. Canal BroadcastChannel (para ventanas del mismo origen sin opener)
+            try {
+                if ('BroadcastChannel' in window) {
+                    const bc = new BroadcastChannel('payme_auth_google');
+                    bc.onmessage = function(ev) {
+                        if (!ev.data) return;
+                        if (ev.data.type === 'GOOGLE_AUTH_SUCCESS' && ev.data.url) {
+                            handleGoogleAuthSuccess(ev.data.url);
+                        } else if (ev.data.type === 'GOOGLE_AUTH_ERROR') {
+                            handleGoogleAuthError(ev.data.error);
+                        }
+                    };
+                }
+            } catch (e) {}
+
+            // 2. Evento Storage en localStorage (respaldo clave para Brave Shields y aislamiento estricto)
+            window.addEventListener('storage', function(ev) {
+                if (ev.key === 'payme_google_auth_result' && ev.newValue) {
+                    try {
+                        const data = JSON.parse(ev.newValue);
+                        if (data && (Date.now() - (data.timestamp || 0) < 60000)) {
+                            localStorage.removeItem('payme_google_auth_result');
+                            if (data.type === 'GOOGLE_AUTH_SUCCESS' && data.url) {
+                                handleGoogleAuthSuccess(data.url);
+                            } else if (data.type === 'GOOGLE_AUTH_ERROR') {
+                                handleGoogleAuthError(data.error);
+                            }
+                        }
+                    } catch (e) {}
+                }
+            });
+
+            // 3. Manejador para abrir el popup de Google
+            window.openGoogleSignIn = function(event, url) {
+                if (event) event.preventDefault();
+
+                const width = 500;
+                const height = 650;
+                const left = window.screenX + (window.outerWidth - width) / 2;
+                const top = window.screenY + (window.outerHeight - height) / 2;
+
+                try {
+                    localStorage.removeItem('payme_google_auth_result');
+                } catch (e) {}
+
+                const popupUrl = url.includes('?') ? (url + '&popup=1') : (url + '?popup=1');
+
+                if (googlePopup && !googlePopup.closed) {
+                    googlePopup.focus();
+                    return;
+                }
+
+                googlePopup = window.open(
+                    popupUrl,
+                    'GoogleSignIn',
+                    `width=${width},height=${height},left=${left},top=${top},toolbar=0,scrollbars=1,status=1,resizable=1,location=1,menuBar=0`
+                );
+
+                if (googlePollTimer) clearInterval(googlePollTimer);
+
+                // Polling cada 500ms para verificar si la ventana se cerró
+                googlePollTimer = setInterval(function() {
+                    if (!googlePopup || googlePopup.closed) {
+                        clearInterval(googlePollTimer);
+                        googlePollTimer = null;
+
+                        // Revisar si quedó resultado en localStorage
+                        try {
+                            const raw = localStorage.getItem('payme_google_auth_result');
+                            if (raw) {
+                                const data = JSON.parse(raw);
+                                if (data && data.type === 'GOOGLE_AUTH_SUCCESS' && data.url && (Date.now() - (data.timestamp || 0) < 60000)) {
+                                    localStorage.removeItem('payme_google_auth_result');
+                                    handleGoogleAuthSuccess(data.url);
+                                }
+                            }
+                        } catch (e) {}
+                    }
+                }, 500);
+            };
+        })();
 
         // BFCache fix global para cuando el usuario presiona el botón "Atrás" del navegador
         window.addEventListener('pageshow', (event) => {
