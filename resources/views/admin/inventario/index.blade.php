@@ -204,11 +204,11 @@
                                 {{-- Producto --}}
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-2xs">
+                                        <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-2xs hover:border-emerald-500 hover:shadow-xs transition-all">
                                             @if($mov->producto?->imagen_url)
-                                                <img src="{{ $mov->producto->imagen_url }}" alt="{{ $mov->producto->nombre }}" class="w-full h-full object-cover">
+                                                <img src="{{ $mov->producto->imagen_url }}" alt="{{ $mov->producto->nombre }}" class="w-full h-full object-contain p-0.5 transition-transform duration-200 hover:scale-105" style="image-rendering: -webkit-optimize-contrast;">
                                             @else
-                                                <span class="material-symbols-outlined text-slate-400 text-[18px]">inventory_2</span>
+                                                <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
                                             @endif
                                         </div>
                                         <div class="min-w-0">
@@ -361,9 +361,9 @@
                                 <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                                     <td class="px-5 py-3.5">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-12 h-12 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-transparent flex items-center justify-center shadow-sm">
+                                            <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-2xs hover:border-emerald-500 hover:shadow-xs transition-all">
                                                 @if($producto->imagenes->isNotEmpty())
-                                                    <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                                                    <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-contain p-0.5 transition-transform duration-200 hover:scale-105" style="image-rendering: -webkit-optimize-contrast;">
                                                 @else
                                                     <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
                                                 @endif
@@ -422,11 +422,11 @@
                                     <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                                         <td class="px-5 py-3.5">
                                             <div class="flex items-center gap-3">
-                                                <div class="w-12 h-12 rounded-lg border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-transparent flex items-center justify-center shadow-sm">
+                                                <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 dark:border-gray-700 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-2xs hover:border-emerald-500 hover:shadow-xs transition-all">
                                                     @if($variante->imagen_ruta)
-                                                        <img src="{{ asset('storage/' . $variante->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                                                        <img src="{{ asset('storage/' . $variante->imagen_ruta) }}" alt="{{ $producto->nombre }}" class="w-full h-full object-contain p-0.5 transition-transform duration-200 hover:scale-105" style="image-rendering: -webkit-optimize-contrast;">
                                                     @elseif($producto->imagenes->isNotEmpty())
-                                                        <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-cover">
+                                                        <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" class="w-full h-full object-contain p-0.5 transition-transform duration-200 hover:scale-105" style="image-rendering: -webkit-optimize-contrast;">
                                                     @else
                                                         <span class="material-symbols-outlined text-slate-400 text-[20px]">inventory_2</span>
                                                     @endif
@@ -534,8 +534,8 @@
 
             {{-- Tarjeta Producto --}}
             <div class="flex items-center gap-3.5 p-3.5 bg-slate-50 dark:bg-[#121415] rounded-2xl border border-slate-100 dark:border-gray-800">
-                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white dark:bg-[#181a1b] flex items-center justify-center relative">
-                    <img id="mdm-img" src="" alt="" class="w-full h-full object-cover hidden" style="display: none;">
+                <div id="mdm-img-container" class="w-12 h-12 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shrink-0 bg-white flex items-center justify-center relative shadow-2xs">
+                    <img id="mdm-img" src="" alt="" class="w-full h-full object-contain p-0.5 hidden" style="display: none; image-rendering: -webkit-optimize-contrast;">
                     <span id="mdm-placeholder-img" class="material-symbols-outlined text-slate-400 dark:text-gray-500 text-[22px]">inventory_2</span>
                 </div>
                 <div class="min-w-0 flex-1">
