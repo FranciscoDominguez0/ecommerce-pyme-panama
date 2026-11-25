@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <!-- Script de Alpine.js para la búsqueda predictiva -->
+            <!-- Script de Alpine.js para la búsqueda predictiva con debounce de 300ms y cancelación de peticiones previas -->
             <script data-navigate-once>
                 function predictiveSearch() {
                     return {
@@ -117,24 +117,45 @@
                         query: '{{ request('buscar') }}',
                         results: [],
                         loading: false,
+                        debounceTimer: null,
+                        abortController: null,
                         fetchResults() {
-                            if (this.query.length < 2) {
+                            const trimmed = (this.query || '').trim();
+                            if (trimmed.length < 2) {
+                                clearTimeout(this.debounceTimer);
+                                if (this.abortController) {
+                                    this.abortController.abort();
+                                    this.abortController = null;
+                                }
                                 this.results = [];
+                                this.loading = false;
                                 this.open = false;
                                 return;
                             }
-                            this.loading = true;
-                            this.open = true;
-                            fetch('{{ route('cliente.buscar-predictivo') }}?buscar=' + encodeURIComponent(this.query))
-                                .then(res => res.json())
-                                .then(data => {
-                                    this.results = data;
-                                    this.loading = false;
+
+                            clearTimeout(this.debounceTimer);
+                            this.debounceTimer = setTimeout(() => {
+                                if (this.abortController) {
+                                    this.abortController.abort();
+                                }
+                                this.abortController = new AbortController();
+                                this.loading = true;
+                                this.open = true;
+
+                                fetch('{{ route('cliente.buscar-predictivo') }}?buscar=' + encodeURIComponent(trimmed), {
+                                    signal: this.abortController.signal
                                 })
-                                .catch(() => {
-                                    this.results = [];
-                                    this.loading = false;
-                                });
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        this.results = data;
+                                        this.loading = false;
+                                    })
+                                    .catch(err => {
+                                        if (err && err.name === 'AbortError') return;
+                                        this.results = [];
+                                        this.loading = false;
+                                    });
+                            }, 300);
                         }
                     }
                 }

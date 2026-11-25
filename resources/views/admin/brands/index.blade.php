@@ -36,7 +36,7 @@
                     <input type="text" 
                            name="buscar" 
                            value="{{ $busqueda }}" 
-                           x-on:input="autoSubmit()"
+                           x-on:input.debounce.300ms="autoSubmit()"
                            placeholder="Buscar marca por nombre o slug..." 
                            class="bg-transparent border-none focus:ring-0 w-full text-xs text-slate-800 dark:text-gray-100 placeholder:text-slate-400 p-0 ml-2 outline-none"/>
                     @if(!empty($busqueda))

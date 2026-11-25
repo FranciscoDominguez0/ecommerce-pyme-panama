@@ -155,7 +155,7 @@
                     {{-- Buscador --}}
                     <div class="flex items-center bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 focus-within:border-slate-400 w-full sm:w-52">
                         <span class="material-symbols-outlined text-slate-400 text-[16px] mr-1.5">search</span>
-                        <input type="text" name="q" value="{{ request('q') }}" x-on:input="autoSubmit()"
+                        <input type="text" name="q" value="{{ request('q') }}" x-on:input.debounce.300ms="autoSubmit()"
                                placeholder="Buscar producto o motivo…"
                                class="bg-transparent border-none focus:ring-0 text-xs text-slate-700 dark:text-slate-300 w-full p-0 placeholder-slate-400 dark:placeholder-gray-500">
                     </div>
@@ -313,7 +313,7 @@
                 <form method="GET" action="{{ route('admin.inventario.stock') }}" class="flex flex-wrap items-center gap-2 w-full sm:w-auto" x-data="adminAutoFilter">
                     <div class="flex items-center bg-white dark:bg-[#181a1b] border border-slate-200 dark:border-gray-700 rounded-lg px-3 py-1.5 focus-within:border-slate-400 w-full sm:w-56">
                         <span class="material-symbols-outlined text-slate-400 text-[16px] mr-1.5">search</span>
-                        <input type="text" name="q" value="{{ request('q') }}" x-on:input="autoSubmit()"
+                        <input type="text" name="q" value="{{ request('q') }}" x-on:input.debounce.300ms="autoSubmit()"
                                placeholder="Buscar SKU o nombre…"
                                class="bg-transparent border-none focus:ring-0 text-xs text-slate-700 dark:text-slate-300 w-full p-0 placeholder-slate-400 dark:placeholder-gray-500">
                     </div>

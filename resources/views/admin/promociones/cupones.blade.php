@@ -106,7 +106,7 @@
                 <input type="text" 
                        name="buscar" 
                        value="{{ $busqueda }}" 
-                       x-on:input="autoSubmit()"
+                       x-on:input.debounce.300ms="autoSubmit()"
                        placeholder="Buscar por código..." 
                        class="w-full pl-9 pr-3 py-1.5 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none">
             </form>
