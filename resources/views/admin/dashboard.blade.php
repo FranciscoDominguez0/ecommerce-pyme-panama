@@ -279,7 +279,7 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-gray-700 text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
-                        <th class="pb-3 pl-2 pr-3 w-12"></th>
+                        <th class="pb-3 pl-2 pr-3 w-14"></th>
                         <th class="pb-3 pl-1 pr-4">Producto</th>
                         <th class="pb-3 px-4">Categoría</th>
                         <th class="pb-3 px-4">Precio</th>
@@ -293,16 +293,16 @@
                             $imgPrincipal = $prod->imagenPrincipal();
                         @endphp
                         <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors">
-                            <td class="py-3 pl-2 pr-3 w-12">
-                                <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center shrink-0 border border-slate-200 dark:border-gray-700 overflow-hidden shadow-xs">
+                            <td class="py-3 pl-2 pr-3 w-14">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 dark:border-gray-700 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs hover:border-emerald-500 hover:shadow-xs transition-all">
                                     @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
-                                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" width="40" height="40" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" width="48" height="48" loading="lazy" decoding="async" class="w-full h-full object-contain p-0.5 transition-transform duration-200 hover:scale-105" style="image-rendering: -webkit-optimize-contrast;">
                                     @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
-                                        <div class="w-6 h-6 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
+                                        <div class="w-7 h-7 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
                                     @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
-                                        <span class="material-symbols-outlined text-[20px] text-slate-700 dark:text-slate-300" aria-hidden="true">{{ $imgPrincipal->ruta }}</span>
+                                        <span class="material-symbols-outlined text-[24px] text-slate-700 dark:text-slate-300" aria-hidden="true">{{ $imgPrincipal->ruta }}</span>
                                     @else
-                                        <img src="{{ asset('images/placeholder-product.png') }}" width="40" height="40" loading="lazy" decoding="async" class="w-full h-full object-cover" alt="{{ $prod->nombre }}">
+                                        <img src="{{ asset('images/placeholder-product.png') }}" width="48" height="48" loading="lazy" decoding="async" class="w-full h-full object-contain p-0.5" alt="{{ $prod->nombre }}">
                                     @endif
                                 </div>
                             </td>

@@ -193,7 +193,7 @@
             <table class="w-full text-left border-collapse min-w-[850px]">
                 <thead>
                     <tr class="border-b border-slate-100 dark:border-gray-700 text-[11px] font-semibold text-slate-400 uppercase tracking-wider bg-slate-50 dark:bg-transparent/50">
-                        <th class="py-3.5 px-4 w-10 text-center"></th>
+                        <th class="py-3.5 px-3 w-14 text-center"></th>
                         <th class="py-3.5 px-4">Producto & SKU</th>
                         <th class="py-3.5 px-4">Precio (USD/PAB)</th>
                         <th class="py-3.5 px-4">Inventario & Variantes</th>
@@ -210,16 +210,28 @@
                         <tr class="hover:bg-slate-50 dark:bg-transparent dark:hover:bg-gray-700/30 transition-colors group">
                             
                             <!-- Miniatura / Ícono del Producto -->
-                            <td class="py-3 px-4 text-center w-12">
-                                <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-transparent border border-slate-200 dark:border-gray-700 flex items-center justify-center text-slate-600 dark:text-slate-400 overflow-hidden shrink-0">
-                                    @if($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/')))
-                                        <img src="{{ str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta }}" alt="{{ $prod->nombre }}" class="w-full h-full object-cover">
+                            <td class="py-3 px-3 text-center w-14">
+                                @php
+                                    $imgUrl = null;
+                                    if ($imgPrincipal && (str_starts_with($imgPrincipal->ruta, 'http') || str_starts_with($imgPrincipal->ruta, '/storage') || str_starts_with($imgPrincipal->ruta, 'data:image') || str_starts_with($imgPrincipal->ruta, 'storage/'))) {
+                                        $imgUrl = str_starts_with($imgPrincipal->ruta, 'storage/') ? asset($imgPrincipal->ruta) : $imgPrincipal->ruta;
+                                    }
+                                @endphp
+                                <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 dark:border-gray-700 flex items-center justify-center overflow-hidden shrink-0 shadow-2xs hover:border-emerald-500 hover:shadow-xs transition-all mx-auto relative @if($imgUrl) cursor-pointer group/thumb @endif"
+                                     @if($imgUrl) onclick="abrirPreviewImagen('{{ $imgUrl }}', '{{ addslashes($prod->nombre) }}', '{{ $prod->sku }}', '{{ route('admin.productos.edit', $prod->id) }}')" title="Clic para ampliar imagen" @endif>
+                                    @if($imgUrl)
+                                        <img src="{{ $imgUrl }}" 
+                                             alt="{{ $prod->nombre }}" 
+                                             loading="lazy" 
+                                             decoding="async" 
+                                             class="w-full h-full object-contain p-0.5 transition-transform duration-200 group-hover/thumb:scale-105"
+                                             style="image-rendering: -webkit-optimize-contrast;">
                                     @elseif($imgPrincipal && (str_starts_with($imgPrincipal->ruta, '<svg') || str_contains($imgPrincipal->ruta, '</svg>')))
                                         <div class="w-7 h-7 flex items-center justify-center svg-container">{!! $imgPrincipal->ruta !!}</div>
                                     @elseif($imgPrincipal && !empty($imgPrincipal->ruta))
                                         <span class="material-symbols-outlined text-[24px] text-slate-700 dark:text-slate-300">{{ $imgPrincipal->ruta }}</span>
                                     @else
-                                        <span class="material-symbols-outlined text-[24px] text-slate-400">image</span>
+                                        <span class="material-symbols-outlined text-[24px] text-slate-300 dark:text-slate-600">image</span>
                                     @endif
                                 </div>
                             </td>
@@ -375,8 +387,87 @@
 
     </div>
 
+    <!-- Modal para visualización de imagen en alta resolución -->
+    <div id="modal-preview-imagen" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 transition-all duration-200" role="dialog" aria-modal="true" style="backdrop-filter: blur(4px); background-color: rgba(15, 23, 42, 0.75);">
+        <div class="relative bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-700 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all flex flex-col max-h-[90vh]">
+            <!-- Encabezado del modal -->
+            <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-gray-800">
+                <div class="pr-4">
+                    <h3 id="modal-preview-titulo" class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white line-clamp-1"></h3>
+                    <p id="modal-preview-sku" class="text-[10px] sm:text-[11px] font-mono text-slate-400 mt-0.5"></p>
+                </div>
+                <button type="button" onclick="cerrarPreviewImagen()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors" title="Cerrar (Esc)">
+                    <span class="material-symbols-outlined text-[20px]">close</span>
+                </button>
+            </div>
+
+            <!-- Contenedor de la imagen en alta definición -->
+            <div class="p-6 bg-slate-50 dark:bg-gray-950 flex items-center justify-center overflow-auto min-h-[250px]">
+                <img id="modal-preview-img" src="" alt="Vista previa" class="max-w-full max-h-[55vh] object-contain rounded-lg drop-shadow-md transition-all">
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="px-5 py-3 bg-white dark:bg-gray-900 border-t border-slate-100 dark:border-gray-800 flex items-center justify-between gap-3">
+                <a id="modal-preview-link" href="#" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-2xs">
+                    <span class="material-symbols-outlined text-[16px]">edit</span>
+                    <span>Editar producto</span>
+                </a>
+                <button type="button" onclick="cerrarPreviewImagen()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+        (function() {
+            window.abrirPreviewImagen = function(url, nombre, sku, editUrl) {
+                const modal = document.getElementById('modal-preview-imagen');
+                const img = document.getElementById('modal-preview-img');
+                const titulo = document.getElementById('modal-preview-titulo');
+                const skuEl = document.getElementById('modal-preview-sku');
+                const link = document.getElementById('modal-preview-link');
+
+                if (!modal || !img) return;
+
+                img.src = url;
+                if (titulo) titulo.textContent = nombre || 'Producto';
+                if (skuEl) skuEl.textContent = sku ? ('SKU: ' + sku) : '';
+                if (link && editUrl) link.href = editUrl;
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            };
+
+            window.cerrarPreviewImagen = function() {
+                const modal = document.getElementById('modal-preview-imagen');
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            };
+
+            // Cerrar al hacer clic en el backdrop
+            document.addEventListener('click', function(e) {
+                const modal = document.getElementById('modal-preview-imagen');
+                if (modal && !modal.classList.contains('hidden') && e.target === modal) {
+                    window.cerrarPreviewImagen();
+                }
+            });
+
+            // Cerrar con Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    window.cerrarPreviewImagen();
+                }
+            });
+        })();
+    </script>
+@endpush
 
 
 
