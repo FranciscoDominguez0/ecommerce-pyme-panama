@@ -113,7 +113,7 @@
                     <input type="text" 
                            name="buscar" 
                            value="{{ $buscar }}" 
-                           x-on:input="autoSubmit()"
+                           x-on:input.debounce.300ms="autoSubmit()"
                            placeholder="Ej. MacBook Air, Teclado, Impresora..." 
                            class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>
@@ -134,7 +134,7 @@
                     <input type="text" 
                            name="sku" 
                            value="{{ $buscarSku }}" 
-                           x-on:input="autoSubmit()"
+                           x-on:input.debounce.300ms="autoSubmit()"
                            placeholder="PROD-001..." 
                            class="w-full pl-10 pr-3 py-2 bg-slate-50 dark:bg-transparent border border-slate-200 dark:border-gray-700 rounded-xl text-xs text-slate-800 dark:text-gray-100 font-mono placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all">
                 </div>

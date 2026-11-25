@@ -11,7 +11,7 @@
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Consulta el estado, historial y detalle de todas tus compras.</p>
         </div>
         
-        <form method="GET" action="{{ route('cliente.perfil.pedidos.index') }}" class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto shrink-0 items-start sm:items-center" x-data="{ submitTimeout: null, autoSubmit() { clearTimeout(this.submitTimeout); this.submitTimeout = setTimeout(() => this.$el.closest('form').submit(), 500); } }">
+        <form method="GET" action="{{ route('cliente.perfil.pedidos.index') }}" class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto shrink-0 items-start sm:items-center" x-data="{ submitTimeout: null, autoSubmit() { clearTimeout(this.submitTimeout); this.submitTimeout = setTimeout(() => this.$el.closest('form').submit(), 300); } }">
             
             {{-- Filtros de estado por pestañas tipo pill --}}
             <div class="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/60 w-full sm:w-auto overflow-x-auto">
@@ -32,7 +32,7 @@
             {{-- Buscador en tiempo real --}}
             <div class="relative w-full sm:w-64">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
-                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar por pedido o producto..." @input="autoSubmit()"
+                <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="Buscar por pedido o producto..." @input.debounce.300ms="autoSubmit()"
                     class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 outline-none transition-all">
             </div>
             
