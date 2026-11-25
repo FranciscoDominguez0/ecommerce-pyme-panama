@@ -42,7 +42,7 @@
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
                     </span>
-                    <input type="text" name="q" id="q" value="{{ request('q') }}" x-on:input="autoSubmit()" placeholder="N° Pedido o Cliente" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
+                    <input type="text" name="q" id="q" value="{{ request('q') }}" x-on:input.debounce.300ms="autoSubmit()" placeholder="N° Pedido o Cliente" class="block w-full rounded-md border-slate-300 dark:border-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-white py-2 pl-9 pr-3 text-sm focus:border-emerald-500 focus:outline-none focus:ring-emerald-500">
                 </div>
             </div>
             @if((request('estado') && request('estado') !== 'todos') || request('q'))

@@ -57,7 +57,7 @@
         <form action="{{ route('admin.devoluciones.index') }}" method="GET" class="w-full md:w-auto" x-data="adminAutoFilter">
             <div class="relative">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                <input type="text" name="buscar" value="{{ request('buscar') }}" x-on:input="autoSubmit()" placeholder="Buscar por pedido o cliente..." class="w-full md:w-64 pl-10 pr-4 py-2 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-slate-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-slate-400 transition-all">
+                <input type="text" name="buscar" value="{{ request('buscar') }}" x-on:input.debounce.300ms="autoSubmit()" placeholder="Buscar por pedido o cliente..." class="w-full md:w-64 pl-10 pr-4 py-2 bg-white dark:bg-[#121415] border border-slate-200 dark:border-gray-700 rounded-lg text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none focus:border-slate-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-slate-400 transition-all">
                 @if(request('estado'))
                     <input type="hidden" name="estado" value="{{ request('estado') }}">
                 @endif

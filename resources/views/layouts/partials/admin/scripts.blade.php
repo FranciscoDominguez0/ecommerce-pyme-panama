@@ -418,7 +418,7 @@
                         clearTimeout(this.debounceTimer);
                         this.debounceTimer = setTimeout(() => {
                             this.$root.submit();
-                        }, 800);
+                        }, 300);
                     },
                     init() {
                         let focusedName = sessionStorage.getItem('focusedElement');

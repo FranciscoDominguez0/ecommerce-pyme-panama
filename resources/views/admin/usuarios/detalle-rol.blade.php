@@ -71,7 +71,7 @@
                     <input type="text" name="buscar" value="{{ $busqueda ?? '' }}" placeholder="Buscar por nombre, apellido, email..." 
                         class="w-full pl-9 pr-3 py-2 text-xs bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-lg focus:bg-white dark:focus:bg-gray-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all outline-none"
                         x-ref="searchInput"
-                        x-on:input="autoSubmit()">
+                        x-on:input.debounce.300ms="autoSubmit()">
                 </form>
 
                 <a href="{{ route('admin.usuarios.create', $rol->id) }}" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2 tracking-wide shrink-0">
