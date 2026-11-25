@@ -410,8 +410,10 @@
 
 @push('scripts')
     <script>
-        function exportar(formato) {
+        // Función de exportación expuesta globalmente para botones inline
+        window.exportar = function(formato) {
             const form = document.getElementById('form-filtros');
+            if (!form) return;
             const actionOriginal = form.action;
             const inputReporte = document.createElement('input');
             inputReporte.type = 'hidden';
@@ -426,249 +428,286 @@
             form.submit();
 
             setTimeout(() => { form.action = actionOriginal; form.target = "_self"; form.removeChild(inputReporte); }, 100);
-        }
+        };
 
-        async function initReportesCharts() {
-            if (typeof ApexCharts === 'undefined' || !window.ApexCharts) {
-                if (window.loadApexCharts) {
-                    await window.loadApexCharts();
-                } else {
-                    setTimeout(initReportesCharts, 50);
-                    return;
-                }
-            }
+        (function () {
+            let reportesCharts = [];
+            let isRendering = false;
 
-            const fontConfig = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
-
-            // 1. Revenue Overview (Línea suave con marcadores)
-            @if(count($ventasPorPeriodo) > 0)
-                window.revenueChart = new ApexCharts(document.querySelector("#revenueChart"), {
-                    series: [{
-                        name: 'Ingresos',
-                        data: @json(collect($ventasPorPeriodo)->pluck('total'))
-                    }],
-                    chart: { type: 'area', height: 260, toolbar: { show: false }, background: 'transparent', ...fontConfig },
-                    colors: ['#059669'], // emerald-600 (color verde corporativo)
-                    fill: {
-                        type: 'gradient',
-                        gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0, stops: [0, 100] }
-                    },
-                    dataLabels: { enabled: false },
-                    stroke: { curve: 'smooth', width: 3 },
-                    markers: {
-                        size: 5,
-                        colors: ['#ffffff'],
-                        strokeColors: '#059669',
-                        strokeWidth: 2,
-                        hover: { size: 7 }
-                    },
-                    xaxis: {
-                        categories: @json(collect($ventasPorPeriodo)->pluck('etiqueta')),
-                        axisBorder: { show: false }, axisTicks: { show: false },
-                        labels: { 
-                            style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 },
-                            hideOverlappingLabels: true,
-                            showDuplicates: false,
-                            rotate: -45
-                        },
-                        tickAmount: 6
-                    },
-                    yaxis: {
-                        labels: {
-                            style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 },
-                            formatter: function (val) { return val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val; }
-                        }
-                    },
-                    grid: { borderColor: '#f1f5f9', strokeDashArray: 0, xaxis: { lines: { show: false } }, yaxis: { lines: { show: true } } },
-                    theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
-                });
-                window.revenueChart.render();
-            @endif
-
-            // 2. Expense By (Ingresos vs Descuentos - Barras Agrupadas)
-            @if(count($ventasPorPeriodo) > 0)
-                window.expenseChart = new ApexCharts(document.querySelector("#expenseChart"), {
-                    series: [
-                        {
-                            name: 'Ingresos',
-                            data: @json(collect($ventasPorPeriodo)->pluck('total'))
-                        },
-                        {
-                            name: 'Descuentos',
-                            data: @json(collect($ventasPorPeriodo)->pluck('descuentos'))
-                        }
-                    ],
-                    chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent', ...fontConfig },
-                    colors: ['#059669', '#cbd5e1'], // emerald-600 y slate-300
-                    plotOptions: { bar: { borderRadius: 3, columnWidth: '45%' } },
-                    dataLabels: { enabled: false },
-                    xaxis: {
-                        categories: @json(collect($ventasPorPeriodo)->pluck('etiqueta')),
-                        axisBorder: { show: false }, axisTicks: { show: false },
-                        labels: { 
-                            style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 },
-                            hideOverlappingLabels: true,
-                            showDuplicates: false,
-                            rotate: -45
-                        },
-                        tickAmount: 6
-                    },
-                    yaxis: { show: false }, // Ocultar Y axis para limpiar el diseño como en la imagen
-                    legend: { show: false }, // Ocultar leyenda
-                    grid: { borderColor: '#f1f5f9', strokeDashArray: 0, xaxis: { lines: { show: false } }, yaxis: { lines: { show: true } } },
-                    theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
-                });
-                window.expenseChart.render();
-            @endif
-
-            // 3. Income Sources (Fuentes por Categoría - Pastel)
-            @if(count($ventasPorCategoria) > 0)
-                window.sourcesChart = new ApexCharts(document.querySelector("#sourcesChart"), {
-                    series: @json(collect($ventasPorCategoria)->pluck('total_ventas')),
-                    labels: @json(collect($ventasPorCategoria)->pluck('categoria')),
-                    chart: { type: 'donut', height: 260, background: 'transparent', ...fontConfig },
-                    colors: ['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a'], // Tonos de verde y grises (estilo imagen)
-                    dataLabels: { 
-                        enabled: true,
-                        formatter: function (val) {
-                            return Math.round(val) + "%"
-                        },
-                        style: {
-                            fontSize: '10px',
-                            fontWeight: 'bold',
-                            colors: ['#ffffff']
-                        }
-                    },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                size: '70%',
-                                labels: {
-                                    show: true,
-                                    name: {
-                                        show: true,
-                                        fontSize: '11px',
-                                        color: '#94a3b8'
-                                    },
-                                    value: {
-                                        show: true,
-                                        fontSize: '16px',
-                                        fontWeight: 'bold',
-                                        color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#0f172a',
-                                        formatter: function (val) {
-                                            return "$" + val
-                                        }
-                                    },
-                                    total: {
-                                        show: true,
-                                        label: 'Total',
-                                        color: '#94a3b8',
-                                        formatter: function (w) {
-                                            return "$" + w.globals.seriesTotals.reduce((a, b) => {
-                                                return a + b
-                                            }, 0).toFixed(2)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    legend: { position: 'bottom', fontSize: '11px', labels: { colors: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569' } },
-                    stroke: { show: true, colors: document.documentElement.classList.contains('dark') ? ['#181a1b'] : ['#ffffff'], width: 2 },
-                    theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
-                });
-                window.sourcesChart.render();
-            @endif
-
-            // 4. Pagos Chart (Barras horizontales)
-            @if(count($ventasPorMetodoPago) > 0)
-                window.pagosChart = new ApexCharts(document.querySelector("#pagosChart"), {
-                    series: [{
-                        name: 'Ingresos',
-                        data: @json(collect($ventasPorMetodoPago)->pluck('total_ventas'))
-                    }],
-                    chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent', ...fontConfig },
-                    colors: ['#6366f1'], // indigo-500
-                    plotOptions: { bar: { borderRadius: 3, horizontal: true } },
-                    dataLabels: { enabled: false },
-                    xaxis: {
-                        categories: @json(collect($ventasPorMetodoPago)->pluck('metodo')),
-                        labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 } }
-                    },
-                    yaxis: {
-                        labels: { style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 } }
-                    },
-                    grid: { borderColor: document.documentElement.classList.contains('dark') ? '#334155' : '#f1f5f9', strokeDashArray: 0 },
-                    theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
-                });
-                window.pagosChart.render();
-            @endif
-
-            // 5. Estados Chart (Pie)
-            @if(count($estadosFacturas) > 0)
-                window.estadosChart = new ApexCharts(document.querySelector("#estadosChart"), {
-                    series: @json(collect($estadosFacturas)->pluck('cantidad')),
-                    labels: @json(collect($estadosFacturas)->pluck('estado')),
-                    chart: { type: 'pie', height: 260, background: 'transparent', ...fontConfig },
-                    colors: ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6'], 
-                    dataLabels: { enabled: true, style: { fontSize: '10px', fontWeight: 'bold' }, dropShadow: { enabled: false } },
-                    legend: { position: 'bottom', fontSize: '11px', labels: { colors: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569' } },
-                    stroke: { show: true, colors: document.documentElement.classList.contains('dark') ? ['#181a1b'] : ['#ffffff'], width: 2 },
-                    theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
-                });
-                window.estadosChart.render();
-            @endif
-
-            // Escuchar evento de cambio de tema global
-            window.addEventListener('theme-changed', function() {
-                const isDark = document.documentElement.classList.contains('dark');
-                const newMode = isDark ? 'dark' : 'light';
-                const gridColor = isDark ? '#334155' : '#f1f5f9';
-                const legendColor = isDark ? '#cbd5e1' : '#475569';
-                const strokeColors = isDark ? ['#181a1b'] : ['#ffffff'];
-
-                if(window.revenueChart) window.revenueChart.updateOptions({ theme: { mode: newMode }, chart: { background: 'transparent' } });
-                if(window.expenseChart) window.expenseChart.updateOptions({ theme: { mode: newMode }, chart: { background: 'transparent' } });
-                if(window.sourcesChart) window.sourcesChart.updateOptions({ 
-                    theme: { mode: newMode },
-                    chart: { background: 'transparent' },
-                    legend: { labels: { colors: legendColor } },
-                    stroke: { colors: strokeColors },
-                    plotOptions: { pie: { donut: { labels: { value: { color: isDark ? '#ffffff' : '#0f172a' } } } } }
-                });
-                if(window.pagosChart) window.pagosChart.updateOptions({ theme: { mode: newMode }, chart: { background: 'transparent' }, grid: { borderColor: gridColor } });
-                if(window.estadosChart) window.estadosChart.updateOptions({ 
-                    theme: { mode: newMode },
-                    chart: { background: 'transparent' },
-                    legend: { labels: { colors: legendColor } },
-                    stroke: { colors: strokeColors }
-                });
-            });
-
-            // Destruimos instancias al salir de la página para liberar memoria
             function destruirGraficosReportes() {
-                const charts = [window.revenueChart, window.expenseChart, window.sourcesChart, window.pagosChart, window.estadosChart];
-                charts.forEach(c => {
+                reportesCharts.forEach(c => {
                     if (c && typeof c.destroy === 'function') {
                         try { c.destroy(); } catch (e) {}
                     }
                 });
-                window.revenueChart = null;
-                window.expenseChart = null;
-                window.sourcesChart = null;
-                window.pagosChart = null;
-                window.estadosChart = null;
+                reportesCharts = [];
             }
 
-            window.addEventListener('pagehide', destruirGraficosReportes);
-        }
+            async function initReportesCharts() {
+                // Verificar si existen los contenedores en el DOM actual
+                const containers = ["#revenueChart", "#expenseChart", "#sourcesChart", "#pagosChart", "#estadosChart"];
+                const revenueEl = document.querySelector("#revenueChart");
+                if (!revenueEl) return;
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initReportesCharts);
-        } else {
-            initReportesCharts();
-        }
-        document.addEventListener('livewire:navigated', initReportesCharts);
+                // Evitar doble renderizado si ya fue renderizado o si ya tiene canvas generado
+                if (revenueEl.dataset.rendered === "1" || revenueEl.querySelector('.apexcharts-canvas')) {
+                    return;
+                }
+
+                if (isRendering) return;
+                isRendering = true;
+
+                if (typeof ApexCharts === 'undefined' || !window.ApexCharts) {
+                    if (window.loadApexCharts) {
+                        await window.loadApexCharts();
+                    } else {
+                        isRendering = false;
+                        setTimeout(initReportesCharts, 50);
+                        return;
+                    }
+                }
+
+                // Doble chequeo post-async para evitar condición de carrera
+                if (revenueEl.dataset.rendered === "1" || revenueEl.querySelector('.apexcharts-canvas')) {
+                    isRendering = false;
+                    return;
+                }
+
+                // Destruir instancias previas y limpiar DOM de cada contenedor
+                destruirGraficosReportes();
+                containers.forEach(selector => {
+                    const el = document.querySelector(selector);
+                    if (el) {
+                        el.dataset.rendered = "1";
+                        el.innerHTML = '';
+                    }
+                });
+
+                const fontConfig = { fontFamily: "'Plus Jakarta Sans', sans-serif" };
+
+                // 1. Revenue Overview (Línea suave con marcadores)
+                @if(count($ventasPorPeriodo) > 0)
+                    const revTarget = document.querySelector("#revenueChart");
+                    if (revTarget) {
+                        const revChart = new ApexCharts(revTarget, {
+                            series: [{
+                                name: 'Ingresos',
+                                data: @json(collect($ventasPorPeriodo)->pluck('total'))
+                            }],
+                            chart: { type: 'area', height: 260, toolbar: { show: false }, background: 'transparent', ...fontConfig },
+                            colors: ['#059669'],
+                            fill: {
+                                type: 'gradient',
+                                gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0, stops: [0, 100] }
+                            },
+                            dataLabels: { enabled: false },
+                            stroke: { curve: 'smooth', width: 3 },
+                            markers: {
+                                size: 5,
+                                colors: ['#ffffff'],
+                                strokeColors: '#059669',
+                                strokeWidth: 2,
+                                hover: { size: 7 }
+                            },
+                            xaxis: {
+                                categories: @json(collect($ventasPorPeriodo)->pluck('etiqueta')),
+                                axisBorder: { show: false }, axisTicks: { show: false },
+                                labels: { 
+                                    style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 },
+                                    hideOverlappingLabels: true,
+                                    showDuplicates: false,
+                                    rotate: -45
+                                },
+                                tickAmount: 6
+                            },
+                            yaxis: {
+                                labels: {
+                                    style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 },
+                                    formatter: function (val) { return val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val; }
+                                }
+                            },
+                            grid: { borderColor: '#f1f5f9', strokeDashArray: 0, xaxis: { lines: { show: false } }, yaxis: { lines: { show: true } } },
+                            theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
+                        });
+                        revChart.render();
+                        reportesCharts.push(revChart);
+                    }
+                @endif
+
+                // 2. Expense By (Ingresos vs Descuentos - Barras Agrupadas)
+                @if(count($ventasPorPeriodo) > 0)
+                    const expTarget = document.querySelector("#expenseChart");
+                    if (expTarget) {
+                        const expChart = new ApexCharts(expTarget, {
+                            series: [
+                                {
+                                    name: 'Ingresos',
+                                    data: @json(collect($ventasPorPeriodo)->pluck('total'))
+                                },
+                                {
+                                    name: 'Descuentos',
+                                    data: @json(collect($ventasPorPeriodo)->pluck('descuentos'))
+                                }
+                            ],
+                            chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent', ...fontConfig },
+                            colors: ['#059669', '#cbd5e1'],
+                            plotOptions: { bar: { borderRadius: 3, columnWidth: '45%' } },
+                            dataLabels: { enabled: false },
+                            xaxis: {
+                                categories: @json(collect($ventasPorPeriodo)->pluck('etiqueta')),
+                                axisBorder: { show: false }, axisTicks: { show: false },
+                                labels: { 
+                                    style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 },
+                                    hideOverlappingLabels: true,
+                                    showDuplicates: false,
+                                    rotate: -45
+                                },
+                                tickAmount: 6
+                            },
+                            yaxis: { show: false },
+                            legend: { show: false },
+                            grid: { borderColor: '#f1f5f9', strokeDashArray: 0, xaxis: { lines: { show: false } }, yaxis: { lines: { show: true } } },
+                            theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
+                        });
+                        expChart.render();
+                        reportesCharts.push(expChart);
+                    }
+                @endif
+
+                // 3. Income Sources (Fuentes por Categoría - Pastel)
+                @if(count($ventasPorCategoria) > 0)
+                    const srcTarget = document.querySelector("#sourcesChart");
+                    if (srcTarget) {
+                        const srcChart = new ApexCharts(srcTarget, {
+                            series: @json(collect($ventasPorCategoria)->pluck('total_ventas')),
+                            labels: @json(collect($ventasPorCategoria)->pluck('categoria')),
+                            chart: { type: 'donut', height: 260, background: 'transparent', ...fontConfig },
+                            colors: ['#059669', '#10b981', '#34d399', '#6ee7b7', '#a7f3d0', '#cbd5e1', '#94a3b8', '#64748b', '#475569', '#334155', '#1e293b', '#0f172a'],
+                            dataLabels: { 
+                                enabled: true,
+                                formatter: function (val) {
+                                    return Math.round(val) + "%";
+                                },
+                                style: {
+                                    fontSize: '10px',
+                                    fontWeight: 'bold',
+                                    colors: ['#ffffff']
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    donut: {
+                                        size: '70%',
+                                        labels: {
+                                            show: true,
+                                            name: {
+                                                show: true,
+                                                fontSize: '11px',
+                                                color: '#94a3b8'
+                                            },
+                                            value: {
+                                                show: true,
+                                                fontSize: '16px',
+                                                fontWeight: 'bold',
+                                                color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#0f172a',
+                                                formatter: function (val) {
+                                                    return "$" + val;
+                                                }
+                                            },
+                                            total: {
+                                                show: true,
+                                                label: 'Total',
+                                                color: '#94a3b8',
+                                                formatter: function (w) {
+                                                    return "$" + w.globals.seriesTotals.reduce((a, b) => {
+                                                        return a + b;
+                                                    }, 0).toFixed(2);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            legend: { position: 'bottom', fontSize: '11px', labels: { colors: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569' } },
+                            stroke: { show: true, colors: document.documentElement.classList.contains('dark') ? ['#181a1b'] : ['#ffffff'], width: 2 },
+                            theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
+                        });
+                        srcChart.render();
+                        reportesCharts.push(srcChart);
+                    }
+                @endif
+
+                // 4. Pagos Chart (Barras horizontales)
+                @if(count($ventasPorMetodoPago) > 0)
+                    const pagTarget = document.querySelector("#pagosChart");
+                    if (pagTarget) {
+                        const pagChart = new ApexCharts(pagTarget, {
+                            series: [{
+                                name: 'Ingresos',
+                                data: @json(collect($ventasPorMetodoPago)->pluck('total_ventas'))
+                            }],
+                            chart: { type: 'bar', height: 260, toolbar: { show: false }, background: 'transparent', ...fontConfig },
+                            colors: ['#6366f1'],
+                            plotOptions: { bar: { borderRadius: 3, horizontal: true } },
+                            dataLabels: { enabled: false },
+                            xaxis: {
+                                categories: @json(collect($ventasPorMetodoPago)->pluck('metodo')),
+                                labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 600 } }
+                            },
+                            yaxis: {
+                                labels: { style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 } }
+                            },
+                            grid: { borderColor: document.documentElement.classList.contains('dark') ? '#334155' : '#f1f5f9', strokeDashArray: 0 },
+                            theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
+                        });
+                        pagChart.render();
+                        reportesCharts.push(pagChart);
+                    }
+                @endif
+
+                // 5. Estados Chart (Pie)
+                @if(count($estadosFacturas) > 0)
+                    const estTarget = document.querySelector("#estadosChart");
+                    if (estTarget) {
+                        const estChart = new ApexCharts(estTarget, {
+                            series: @json(collect($estadosFacturas)->pluck('cantidad')),
+                            labels: @json(collect($estadosFacturas)->pluck('estado')),
+                            chart: { type: 'pie', height: 260, background: 'transparent', ...fontConfig },
+                            colors: ['#10b981', '#f59e0b', '#ef4444', '#8b5cf6'], 
+                            dataLabels: { enabled: true, style: { fontSize: '10px', fontWeight: 'bold' }, dropShadow: { enabled: false } },
+                            legend: { position: 'bottom', fontSize: '11px', labels: { colors: document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569' } },
+                            stroke: { show: true, colors: document.documentElement.classList.contains('dark') ? ['#181a1b'] : ['#ffffff'], width: 2 },
+                            theme: { mode: document.documentElement.classList.contains('dark') ? 'dark' : 'light' }
+                        });
+                        estChart.render();
+                        reportesCharts.push(estChart);
+                    }
+                @endif
+
+                isRendering = false;
+            }
+
+            // Escuchadores de eventos únicos
+            function resetAndRender() {
+                document.querySelectorAll("#revenueChart, #expenseChart, #sourcesChart, #pagosChart, #estadosChart").forEach(el => {
+                    if (el) el.dataset.rendered = "0";
+                });
+                initReportesCharts();
+            }
+
+            window.addEventListener('theme-changed', resetAndRender);
+            window.addEventListener('pagehide', destruirGraficosReportes);
+            document.addEventListener('livewire:navigating', destruirGraficosReportes);
+
+            // Inicialización única al cargar o navegar
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initReportesCharts);
+            } else {
+                initReportesCharts();
+            }
+
+            document.addEventListener('livewire:navigated', resetAndRender);
+        })();
     </script>
 @endpush
 
