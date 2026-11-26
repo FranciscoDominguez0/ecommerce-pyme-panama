@@ -362,4 +362,31 @@ class Producto extends Model
 
         return \App\Helpers\BrandHelper::obtenerLogoHtml($this->marca, $this->marca_logo);
     }
+
+    /**
+     * Retorna la URL directa del logotipo oficial de la marca para preloading y skeletons.
+     */
+    public function getMarcaLogoUrlAttribute(): ?string
+    {
+        if ($this->brand && $this->brand->logo_url) {
+            return $this->brand->logo_url;
+        }
+
+        if (!empty($this->marca_logo)) {
+            if (str_starts_with($this->marca_logo, 'http://') || str_starts_with($this->marca_logo, 'https://') || str_starts_with($this->marca_logo, 'data:image')) {
+                return $this->marca_logo;
+            }
+            return asset(ltrim($this->marca_logo, '/'));
+        }
+
+        $rutaImagen = \App\Helpers\BrandHelper::obtenerRutaImagenMarca($this->marca);
+        if ($rutaImagen) {
+            if (str_starts_with($rutaImagen, 'http://') || str_starts_with($rutaImagen, 'https://') || str_starts_with($rutaImagen, 'data:image')) {
+                return $rutaImagen;
+            }
+            return asset(ltrim($rutaImagen, '/'));
+        }
+
+        return null;
+    }
 }
