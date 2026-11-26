@@ -297,7 +297,7 @@ class PedidoService
             }
         }
 
-        if (in_array($nuevoEstado, ['cancelado', 'reembolsado'])) {
+        if (in_array($nuevoEstado, ['cancelado', 'reembolsado', 'pago_rechazado', 'devolucion_aprobada'])) {
             app(FacturaService::class)->anularFactura($pedido);
         }
 

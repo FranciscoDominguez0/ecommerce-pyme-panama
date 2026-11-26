@@ -170,11 +170,15 @@
                             'anulada' => '#ba1a1a', // Rojo error
                             default => '#43474e',
                         };
+                        $pedEstado = $factura->pedido?->ultimoEstado?->estado;
+                        $estadoPedidoTexto = $pedEstado && in_array($pedEstado, ['cancelado', 'reembolsado', 'pago_rechazado'])
+                            ? ' (' . strtoupper(str_replace('_', ' ', $pedEstado)) . ')'
+                            : '';
                     @endphp
                     <strong>Nº de Factura:</strong> {{ $factura->numero }}<br>
                     <strong>Fecha de Emisión:</strong> {{ $factura->emitida_en->format('d M, Y') }}<br>
                     <strong>Vencimiento:</strong> {{ $factura->emitida_en->addDays(15)->format('d M, Y') }}<br>
-                    <strong>Pedido Relacionado:</strong> {{ $factura->pedido->numero_pedido }}<br>
+                    <strong>Pedido Relacionado:</strong> {{ $factura->pedido->numero_pedido }}{{ $estadoPedidoTexto }}<br>
                     <strong>Estado:</strong> <span class="badge" style="color: {{ $colorEstado }};">{{ strtoupper(str_replace('_', ' ', $factura->estado)) }}</span>
                 </div>
             </td>

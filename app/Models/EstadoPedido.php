@@ -21,6 +21,20 @@ class EstadoPedido extends Model
         'comentario',
     ];
 
+    /**
+     * Sincronización automática: anula la factura asociada si el pedido entra en estado cancelado o afín.
+     */
+    protected static function booted()
+    {
+        static::created(function (EstadoPedido $estadoPedido) {
+            if (in_array($estadoPedido->estado, ['cancelado', 'reembolsado', 'pago_rechazado', 'devolucion_aprobada'])) {
+                if ($estadoPedido->pedido) {
+                    app(\App\Services\FacturaService::class)->anularFactura($estadoPedido->pedido);
+                }
+            }
+        });
+    }
+
     public function pedido(): BelongsTo
     {
         return $this->belongsTo(Pedido::class, 'pedido_id');
