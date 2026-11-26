@@ -374,12 +374,25 @@
                     @endif
 
                     @if($pedido->factura)
-                        <div class="pt-3 mt-3 border-t border-slate-200 dark:border-gray-700 text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                            <span class="font-medium text-slate-900 dark:text-white">Factura:</span>
-                            <a href="{{ route('admin.facturas.show', $pedido->factura->id) }}" class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
-                                <span>#{{ $pedido->factura->numero }}</span>
-                                <span class="material-symbols-outlined text-[15px]">open_in_new</span>
-                            </a>
+                        <div class="pt-3 mt-3 border-t border-slate-200 dark:border-gray-700 text-sm text-slate-500 dark:text-slate-400 flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="font-medium text-slate-900 dark:text-white">Factura:</span>
+                                <a href="{{ route('admin.facturas.show', $pedido->factura->id) }}" class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400 hover:underline">
+                                    <span>#{{ $pedido->factura->numero }}</span>
+                                    <span class="material-symbols-outlined text-[15px]">open_in_new</span>
+                                </a>
+                            </div>
+                            @if($pedido->factura->estado === 'emitida')
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Emitida
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-800">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                    Anulada
+                                </span>
+                            @endif
                         </div>
                     @endif
                 </div>

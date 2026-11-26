@@ -163,10 +163,32 @@
                 
                 <div class="mt-4 pt-4 border-t border-slate-100 dark:border-gray-700">
                     <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-2">Pedido Relacionado</h3>
-                    <a href="{{ route('admin.pedidos.detalle', $factura->pedido->id) }}" class="inline-flex items-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-semibold hover:underline">
-                        {{ $factura->pedido->numero_pedido }}
-                        <span class="material-symbols-outlined text-[16px] ml-1">open_in_new</span>
-                    </a>
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <a href="{{ route('admin.pedidos.detalle', $factura->pedido->id) }}" class="inline-flex items-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-semibold hover:underline">
+                            {{ $factura->pedido->numero_pedido }}
+                            <span class="material-symbols-outlined text-[16px] ml-1">open_in_new</span>
+                        </a>
+                        @php
+                            $estadoPedido = $factura->pedido->ultimoEstado?->estado ?? 'pendiente';
+                            $claseBadgePedido = match($estadoPedido) {
+                                'cancelado' => 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800',
+                                'reembolsado' => 'bg-slate-100 text-slate-700 border-slate-300 dark:bg-gray-800 dark:text-slate-400',
+                                'entregado' => 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400',
+                                'pago_confirmado' => 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400',
+                                default => 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-gray-800 dark:text-slate-300',
+                            };
+                            $dotColor = match($estadoPedido) {
+                                'cancelado' => 'bg-rose-500',
+                                'entregado' => 'bg-emerald-500',
+                                'pago_confirmado' => 'bg-blue-500',
+                                default => 'bg-slate-400',
+                            };
+                        @endphp
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border {{ $claseBadgePedido }}">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $dotColor }}"></span>
+                            {{ ucfirst(str_replace('_', ' ', $estadoPedido)) }}
+                        </span>
+                    </div>
                 </div>
             </div>
 

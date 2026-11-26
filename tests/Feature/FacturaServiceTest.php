@@ -207,6 +207,76 @@ class FacturaServiceTest extends BaseAdminTest
         $this->assertDatabaseCount('estados_pedido', 2);
     }
 
+    public function test_cancelar_pedido_actualiza_estado_de_factura_a_anulada(): void
+    {
+        $this->prepararGeneracionDeFactura();
+
+        $pedido = Pedido::factory()->create();
+        $servicio = app(PedidoService::class);
+
+        $servicio->cambiarEstado($pedido, 'pago_confirmado');
+        $this->assertDatabaseHas('facturas', [
+            'pedido_id' => $pedido->id,
+            'estado' => 'emitida',
+        ]);
+
+        $servicio->cambiarEstado($pedido, 'cancelado', null, 'Pedido cancelado por el cliente.');
+
+        $this->assertDatabaseHas('facturas', [
+            'pedido_id' => $pedido->id,
+            'estado' => 'anulada',
+        ]);
+        $this->assertSame('anulada', $pedido->fresh()->factura->estado);
+    }
+
+    public function test_crear_estado_cancelado_directamente_anula_factura(): void
+    {
+        $this->prepararGeneracionDeFactura();
+
+        $pedido = Pedido::factory()->create();
+        app(PedidoService::class)->cambiarEstado($pedido, 'pago_confirmado');
+
+        $this->assertDatabaseHas('facturas', [
+            'pedido_id' => $pedido->id,
+            'estado' => 'emitida',
+        ]);
+
+        // Inserción directa de EstadoPedido sin pasar por PedidoService
+        \App\Models\EstadoPedido::create([
+            'pedido_id' => $pedido->id,
+            'estado' => 'cancelado',
+            'comentario' => 'Cancelación directa',
+        ]);
+
+        $this->assertDatabaseHas('facturas', [
+            'pedido_id' => $pedido->id,
+            'estado' => 'anulada',
+        ]);
+        $this->assertSame('anulada', $pedido->fresh()->factura->estado);
+    }
+
+    public function test_rechazar_pago_anula_factura_emitida(): void
+    {
+        $this->prepararGeneracionDeFactura();
+
+        $pedido = Pedido::factory()->create();
+        $servicio = app(PedidoService::class);
+
+        $servicio->cambiarEstado($pedido, 'pago_confirmado');
+        $this->assertDatabaseHas('facturas', [
+            'pedido_id' => $pedido->id,
+            'estado' => 'emitida',
+        ]);
+
+        $servicio->cambiarEstado($pedido, 'pago_rechazado', null, 'Comprobante inválido.');
+
+        $this->assertDatabaseHas('facturas', [
+            'pedido_id' => $pedido->id,
+            'estado' => 'anulada',
+        ]);
+        $this->assertSame('anulada', $pedido->fresh()->factura->estado);
+    }
+
     // Helpers
 
     /**

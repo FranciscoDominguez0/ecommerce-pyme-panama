@@ -26,6 +26,13 @@ class FacturaController extends Controller
             abort(403, 'No tienes permiso para ver esta factura.');
         }
 
+        $factura->load('pedido.ultimoEstado');
+        $estadoPedido = $factura->pedido?->ultimoEstado?->estado;
+        if (in_array($estadoPedido, ['cancelado', 'reembolsado', 'pago_rechazado', 'devolucion_aprobada']) && $factura->estado !== 'anulada') {
+            $facturaService->anularFactura($factura->pedido);
+            $factura->refresh();
+        }
+
         if ($request->has('regenerar') || !$factura->pdf_ruta || !Storage::disk('local')->exists($factura->pdf_ruta)) {
             $facturaService->generarPdf($factura);
             $factura->refresh();

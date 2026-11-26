@@ -281,8 +281,14 @@
             <div class="doc-title uppercase">TICKET / RECIBO POS</div>
             <div class="doc-number">No. {{ $factura->numero }}</div>
             @if($factura->pedido)
+                @php
+                    $pedEstadoTicket = $factura->pedido->ultimoEstado?->estado;
+                    $pedEstadoSuffix = in_array($pedEstadoTicket, ['cancelado', 'reembolsado', 'pago_rechazado']) 
+                        ? ' [' . strtoupper($pedEstadoTicket) . ']' 
+                        : '';
+                @endphp
                 <div style="font-size: 8px; color: #000000; margin-top: 1px;">
-                    Pedido Ref: <span class="bold">{{ $factura->pedido->numero_pedido }}</span>
+                    Pedido Ref: <span class="bold">{{ $factura->pedido->numero_pedido }}{{ $pedEstadoSuffix }}</span>
                 </div>
             @endif
         </div>
