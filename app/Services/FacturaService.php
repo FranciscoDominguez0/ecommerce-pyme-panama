@@ -270,16 +270,28 @@ class FacturaService
     /**
      * Anula la factura asociada a un pedido.
      */
-    public function anularFactura(Pedido $pedido): void
+    public function anularFactura(Pedido $pedido): ?Factura
     {
-        $factura = Factura::where('pedido_id', $pedido->id)->first();
+        $factura = $pedido->relationLoaded('factura') && $pedido->factura
+            ? $pedido->factura
+            : Factura::where('pedido_id', $pedido->id)->first();
         
         if ($factura && $factura->estado !== 'anulada') {
             $factura->update(['estado' => 'anulada']);
             
-            // Regenerar el PDF para que muestre el estado "ANULADA"
-            $this->generarPdf($factura);
+            try {
+                // Regenerar el PDF para que muestre el estado "ANULADA"
+                $this->generarPdf($factura);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning("No se pudo regenerar el PDF para la factura anulada {$factura->numero}: " . $e->getMessage());
+            }
+
+            if ($pedido->relationLoaded('factura')) {
+                $pedido->setRelation('factura', $factura);
+            }
         }
+
+        return $factura;
     }
 
     /**

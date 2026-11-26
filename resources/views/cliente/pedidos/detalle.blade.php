@@ -95,17 +95,29 @@
                 {{-- Acciones a la derecha en español --}}
                 <div class="flex flex-wrap items-center gap-2.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800">
                     @if($pedido->factura)
-                        <a href="{{ route('cliente.facturas.pdf', $pedido->factura->id) }}" target="_blank"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs">
-                            <span class="material-symbols-outlined text-[16px]">download</span>
-                            <span>Descargar Factura</span>
-                        </a>
+                        @if($pedido->factura->estado === 'anulada')
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-xs font-semibold text-rose-700 dark:text-rose-400 shadow-2xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                Factura Anulada
+                            </span>
+                            <a href="{{ route('cliente.facturas.pdf', $pedido->factura->id) }}" target="_blank"
+                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 transition-colors shadow-2xs" title="Descargar comprobante de anulación">
+                                <span class="material-symbols-outlined text-[15px]">download</span>
+                                <span>PDF</span>
+                            </a>
+                        @else
+                            <a href="{{ route('cliente.facturas.pdf', $pedido->factura->id) }}" target="_blank"
+                               class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs">
+                                <span class="material-symbols-outlined text-[16px]">download</span>
+                                <span>Descargar Factura</span>
+                            </a>
 
-                        <button type="button" onclick="imprimirReciboPdf('{{ route('cliente.facturas.pdf', [$pedido->factura->id, 'modo' => 'inline']) }}')"
-                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs cursor-pointer">
-                            <span class="material-symbols-outlined text-[16px]">print</span>
-                            <span>Imprimir Recibo</span>
-                        </button>
+                            <button type="button" onclick="imprimirReciboPdf('{{ route('cliente.facturas.pdf', [$pedido->factura->id, 'modo' => 'inline']) }}')"
+                                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 hover:border-emerald-600 hover:text-emerald-600 transition-colors shadow-2xs cursor-pointer">
+                                <span class="material-symbols-outlined text-[16px]">print</span>
+                                <span>Imprimir Recibo</span>
+                            </button>
+                        @endif
                     @endif
 
                     @if(in_array($ultimoEstado, ['pago_confirmado', 'en_preparacion', 'listo_para_envio', 'enviado', 'en_transito', 'entregado']) && $ultimoEstado !== 'reembolsado')

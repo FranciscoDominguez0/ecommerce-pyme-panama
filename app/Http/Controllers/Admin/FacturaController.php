@@ -19,7 +19,7 @@ class FacturaController extends Controller
 
     public function index(Request $request)
     {
-        $query = Factura::with(['pedido', 'usuario']);
+        $query = Factura::with(['pedido.ultimoEstado', 'usuario']);
 
         if ($request->filled('numero')) {
             $query->where('numero', 'like', '%' . $request->numero . '%');
@@ -52,17 +52,30 @@ class FacturaController extends Controller
 
     public function show(Factura $factura)
     {
-        $factura->load(['pedido.items.producto', 'usuario', 'reenvios.usuario', 'pedido.direccion']);
+        $factura->load(['pedido.items.producto', 'pedido.ultimoEstado', 'usuario', 'reenvios.usuario', 'pedido.direccion']);
+
+        // Sincronización defensiva: si el pedido asociado está cancelado o reembolsado y la factura aún figura emitida
+        $estadoPedido = $factura->pedido?->ultimoEstado?->estado;
+        if (in_array($estadoPedido, ['cancelado', 'reembolsado', 'pago_rechazado', 'devolucion_aprobada']) && $factura->estado !== 'anulada') {
+            $this->facturaService->anularFactura($factura->pedido);
+            $factura->refresh();
+        }
+
         return view('admin.facturacion.show', compact('factura'));
     }
 
     public function descargarPdf(Factura $factura, Request $request)
     {
+        $estadoPedido = $factura->pedido?->ultimoEstado?->estado;
+        if (in_array($estadoPedido, ['cancelado', 'reembolsado', 'pago_rechazado', 'devolucion_aprobada']) && $factura->estado !== 'anulada') {
+            $this->facturaService->anularFactura($factura->pedido);
+            $factura->refresh();
+        }
+
         if ($request->has('regenerar')) {
             $this->facturaService->generarPdf($factura);
             $factura->refresh();
         }
-
 
         if ($factura->pdf_ruta && Storage::disk('local')->exists($factura->pdf_ruta)) {
             /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
@@ -75,6 +88,12 @@ class FacturaController extends Controller
 
     public function verPdf(Factura $factura)
     {
+        $estadoPedido = $factura->pedido?->ultimoEstado?->estado;
+        if (in_array($estadoPedido, ['cancelado', 'reembolsado', 'pago_rechazado', 'devolucion_aprobada']) && $factura->estado !== 'anulada') {
+            $this->facturaService->anularFactura($factura->pedido);
+            $factura->refresh();
+        }
+
         if (!$factura->pdf_ruta || !Storage::disk('local')->exists($factura->pdf_ruta)) {
             app(FacturaService::class)->generarPdf($factura);
             $factura->refresh();
