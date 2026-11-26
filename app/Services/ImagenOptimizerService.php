@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Servicio de optimización y generación de miniaturas responsivas para imágenes.
@@ -41,13 +42,25 @@ class ImagenOptimizerService
 
         $relativoStorage = substr($rutaLimpia, strlen('storage/'));
         
-        // Ubicar el archivo físico en el disco público de Laravel
-        $rutaFisicaOriginal = storage_path('app/public/' . $relativoStorage);
-        if (!file_exists($rutaFisicaOriginal)) {
-            $rutaFisicaOriginal = public_path('storage/' . $relativoStorage);
+        // Ubicar el archivo físico en el disco público de Laravel (compatible con Storage::fake)
+        $rutaFisicaOriginal = null;
+        try {
+            $diskPath = Storage::disk('public')->path($relativoStorage);
+            if (file_exists($diskPath) && !is_dir($diskPath)) {
+                $rutaFisicaOriginal = $diskPath;
+            }
+        } catch (\Throwable $e) {}
+
+        if (!$rutaFisicaOriginal) {
+            $storagePath = storage_path('app/public/' . $relativoStorage);
+            if (file_exists($storagePath) && !is_dir($storagePath)) {
+                $rutaFisicaOriginal = $storagePath;
+            } elseif (file_exists(public_path('storage/' . $relativoStorage))) {
+                $rutaFisicaOriginal = public_path('storage/' . $relativoStorage);
+            }
         }
 
-        if (!file_exists($rutaFisicaOriginal) || is_dir($rutaFisicaOriginal)) {
+        if (!$rutaFisicaOriginal || !file_exists($rutaFisicaOriginal) || is_dir($rutaFisicaOriginal)) {
             return asset($rutaLimpia);
         }
 
@@ -56,8 +69,16 @@ class ImagenOptimizerService
         $filename = $pathInfo['filename'] ?? '';
 
         // Definir la ruta del thumbnail en caché
-        $thumbRelativo = $dirName . '/thumbs/' . $filename . "_{$ancho}x{$alto}.webp";
-        $thumbFisico = storage_path('app/public/' . $thumbRelativo);
+        $thumbRelativo = ($dirName && $dirName !== '.' ? $dirName . '/' : '') . 'thumbs/' . $filename . "_{$ancho}x{$alto}.webp";
+        
+        $thumbFisico = null;
+        try {
+            $thumbFisico = Storage::disk('public')->path($thumbRelativo);
+        } catch (\Throwable $e) {}
+
+        if (!$thumbFisico) {
+            $thumbFisico = storage_path('app/public/' . $thumbRelativo);
+        }
 
         // Si ya existe en caché, retornarlo inmediatamente
         if (file_exists($thumbFisico) && filesize($thumbFisico) > 0) {
