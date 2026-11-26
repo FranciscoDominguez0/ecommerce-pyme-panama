@@ -65,16 +65,11 @@
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
     <FilesMatch "\.(svg|png|jpe?g|gif|webp|ico)$">
-        <If "%{REQUEST_URI} =~ m#^/(storage|uploads)/#">
-            Header set Cache-Control "public, max-age=2592000"
-        </If>
-        <Else>
-            Header set Cache-Control "public, max-age=604800"
-        </Else>
+        Header set Cache-Control "public, max-age=2592000"
     </FilesMatch>
     <FilesMatch "\.(js|css)$">
         <If "%{REQUEST_URI} !~ m#^/build/assets/#">
-            Header set Cache-Control "public, max-age=604800"
+            Header set Cache-Control "public, max-age=2592000"
         </If>
     </FilesMatch>
 </IfModule>

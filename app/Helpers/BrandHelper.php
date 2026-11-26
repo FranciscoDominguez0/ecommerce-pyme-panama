@@ -58,7 +58,7 @@ class BrandHelper
     public static function obtenerLogoHtml(?string $marca, ?string $customLogoUrl = null): string
     {
         if (!empty($customLogoUrl)) {
-            return '<img src="' . htmlspecialchars($customLogoUrl) . '" alt="' . htmlspecialchars($marca ?? 'Marca') . '" class="h-6 max-h-7 max-w-[85px] object-contain select-none">';
+            return '<img src="' . htmlspecialchars($customLogoUrl) . '" alt="' . htmlspecialchars($marca ?? 'Marca') . '" width="85" height="28" loading="lazy" decoding="async" class="h-6 max-h-7 max-w-[85px] object-contain select-none">';
         }
 
         if (empty($marca)) {

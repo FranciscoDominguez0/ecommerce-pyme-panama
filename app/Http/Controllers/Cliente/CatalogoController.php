@@ -320,7 +320,9 @@ class CatalogoController extends Controller
             ]]);
         }
 
-        $imagenesJson = $todasImagenes->map(function ($foto, int $index) {
+        $optimizer = app(\App\Services\ImagenOptimizerService::class);
+
+        $imagenesJson = $todasImagenes->map(function ($foto, int $index) use ($optimizer) {
             $ruta      = (string) ($foto->ruta ?? '');
             $esUrl     = str_starts_with($ruta, 'http') || str_starts_with($ruta, 'data:image');
             $esStorage = str_starts_with($ruta, 'storage/') || str_starts_with($ruta, '/storage');
@@ -334,11 +336,19 @@ class CatalogoController extends Controller
                 $src = $ruta;
             }
 
+            $thumb = '';
+            if ($esStorage) {
+                $thumb = $optimizer->obtenerThumbnailUrl($ruta, 128, 128);
+            } elseif ($src) {
+                $thumb = $src;
+            }
+
             return [
                 'index'        => $index,
                 'id'           => $foto->id ?? $index,
                 'ruta'         => $ruta,
                 'src'          => $src,
+                'thumb'        => $thumb ?: $src,
                 'es_svg'       => $esSvg,
                 'es_icono'     => $esIcono,
                 'es_principal' => (bool) ($foto->es_principal ?? false),

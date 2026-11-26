@@ -2,6 +2,16 @@
 
 @section('title', $producto->nombre ?? 'Detalle del Producto')
 
+@php
+    $fotoInicial = $imagenesJson[$indiceInicial] ?? $imagenesJson[0] ?? null;
+@endphp
+
+@if($fotoInicial && !empty($fotoInicial['src']))
+    @push('head')
+        <link rel="preload" as="image" href="{{ $fotoInicial['src'] }}" fetchpriority="high">
+    @endpush
+@endif
+
 @section('content')
 <div class="min-h-screen bg-slate-50 py-6 sm:py-10">
     <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -81,7 +91,23 @@
                          onmousemove="manejarZoomLupa(event)" 
                          onmouseleave="resetearZoomLupa()"
                          class="w-full h-full flex items-center justify-center relative cursor-crosshair overflow-hidden transition-all duration-300">
-                        {{-- Se rellena dinámicamente con JavaScript desde el estado inicial --}}
+                        {{-- Renderizado inicial directo desde Blade para descubrimiento LCP inmediato (fetchpriority=high y cero CLS) --}}
+                        @if($fotoInicial && !empty($fotoInicial['src']))
+                            <img id="img-zoom-target" 
+                                 src="{{ $fotoInicial['src'] }}" 
+                                 width="600" 
+                                 height="600" 
+                                 fetchpriority="high"
+                                 loading="eager"
+                                 decoding="async"
+                                 style="aspect-ratio: 1/1;"
+                                 class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-transform duration-150 ease-out" 
+                                 alt="{{ $producto->nombre }} - Foto {{ $indiceInicial + 1 }}">
+                        @elseif($fotoInicial && $fotoInicial['es_svg'])
+                            <div class="max-h-full max-w-full flex items-center justify-center svg-container">{!! $fotoInicial['ruta'] !!}</div>
+                        @elseif($fotoInicial)
+                            <span class="material-symbols-outlined text-[150px] text-slate-700">{{ $fotoInicial['ruta'] }}</span>
+                        @endif
                     </div>
 
                     {{-- Botón Siguiente (>) --}}
@@ -111,7 +137,7 @@
                                     class="h-16 w-16 sm:h-18 sm:w-18 shrink-0 rounded-2xl bg-white border-2 {{ $foto['index'] === $indiceInicial ? 'border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm scale-105' : 'border-slate-200/90 hover:border-slate-400 opacity-70 hover:opacity-100' }} flex items-center justify-center p-2 transition-all duration-200 relative group overflow-hidden">
                                 
                                 @if(!empty($foto['src']))
-                                    <img src="{{ $foto['src'] }}" 
+                                    <img src="{{ $foto['thumb'] ?? $foto['src'] }}" 
                                          alt="Miniatura {{ $foto['index'] + 1 }}" 
                                          width="64" height="64" style="aspect-ratio: 1/1;" loading="lazy" decoding="async"
                                          class="h-full w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-200 pointer-events-none">
@@ -752,17 +778,24 @@
         }
 
         setTimeout(() => {
-            if (foto.src) {
-                visor.innerHTML = `
-                    <img id="img-zoom-target" 
-                         src="${foto.src}" 
-                         class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-transform duration-150 ease-out" 
-                         alt="{{ $producto->nombre }} - Foto ${indiceActual + 1}">
-                `;
-            } else if (foto.es_svg) {
-                visor.innerHTML = `<div class="max-h-full max-w-full flex items-center justify-center svg-container">${foto.ruta}</div>`;
-            } else {
-                visor.innerHTML = `<span class="material-symbols-outlined text-[150px] text-slate-700">${foto.ruta}</span>`;
+            const yaRenderizado = !animar && document.getElementById('img-zoom-target');
+            if (!yaRenderizado) {
+                if (foto.src) {
+                    visor.innerHTML = `
+                        <img id="img-zoom-target" 
+                             src="${foto.src}" 
+                             width="600"
+                             height="600"
+                             style="aspect-ratio: 1/1;"
+                             decoding="async"
+                             class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-transform duration-150 ease-out" 
+                             alt="{{ $producto->nombre }} - Foto ${indiceActual + 1}">
+                    `;
+                } else if (foto.es_svg) {
+                    visor.innerHTML = `<div class="max-h-full max-w-full flex items-center justify-center svg-container">${foto.ruta}</div>`;
+                } else {
+                    visor.innerHTML = `<span class="material-symbols-outlined text-[150px] text-slate-700">${foto.ruta}</span>`;
+                }
             }
 
             // Actualizar lightbox si está abierto
