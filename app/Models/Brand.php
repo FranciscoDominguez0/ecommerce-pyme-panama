@@ -97,7 +97,7 @@ class Brand extends Model
     {
         $url = $this->logo_url;
         if ($url) {
-            return '<img src="' . $url . '" alt="' . htmlspecialchars($this->name) . '" width="85" height="28" loading="lazy" decoding="async" class="h-6 max-h-7 max-w-[85px] object-contain select-none">';
+            return '<img src="' . $url . '" alt="' . htmlspecialchars($this->name) . '" width="85" height="28" loading="eager" decoding="async" class="h-6 max-h-7 max-w-[85px] object-contain select-none">';
         }
 
         return '<span class="px-2 py-0.5 rounded bg-slate-900 text-white text-[11px] font-black tracking-wider uppercase">' . htmlspecialchars($this->name ?: 'Oficial') . '</span>';

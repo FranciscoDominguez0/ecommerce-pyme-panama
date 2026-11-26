@@ -106,4 +106,20 @@ class ProductoOfertaTest extends TestCase
 
         $this->assertEquals(0, $producto->porcentajeDescuentoPromocional());
     }
+
+    public function test_marca_logo_url_retorna_url_correcta_para_preloading(): void
+    {
+        $productoUrl = new Producto([
+            'marca_logo' => 'https://cdn.example.com/msi-logo.png',
+        ]);
+        $this->assertEquals('https://cdn.example.com/msi-logo.png', $productoUrl->marca_logo_url);
+
+        $productoLocal = new Producto([
+            'marca_logo' => 'images/Marcas/msi.webp',
+        ]);
+        $this->assertStringContainsString('images/Marcas/msi.webp', $productoLocal->marca_logo_url);
+
+        $productoVacio = new Producto();
+        $this->assertNull($productoVacio->marca_logo_url);
+    }
 }

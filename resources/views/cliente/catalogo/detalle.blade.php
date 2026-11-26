@@ -4,13 +4,17 @@
 
 @php
     $fotoInicial = $imagenesJson[$indiceInicial] ?? $imagenesJson[0] ?? null;
+    $logoMarcaUrl = $producto->marca_logo_url;
 @endphp
 
-@if($fotoInicial && !empty($fotoInicial['src']))
-    @push('head')
+@push('head')
+    @if($fotoInicial && !empty($fotoInicial['src']))
         <link rel="preload" as="image" href="{{ $fotoInicial['src'] }}" fetchpriority="high">
-    @endpush
-@endif
+    @endif
+    @if($logoMarcaUrl)
+        <link rel="preload" as="image" href="{{ $logoMarcaUrl }}">
+    @endif
+@endpush
 
 @section('content')
 <div class="min-h-screen bg-slate-50 py-6 sm:py-10">
@@ -90,7 +94,16 @@
                     <div id="imagen-principal-visor" 
                          onmousemove="manejarZoomLupa(event)" 
                          onmouseleave="resetearZoomLupa()"
-                         class="w-full h-full flex items-center justify-center relative cursor-crosshair overflow-hidden transition-all duration-300">
+                         class="w-full h-full flex items-center justify-center relative cursor-crosshair overflow-hidden">
+                        
+                        {{-- Skeleton Shimmer de Carga para el Visor Principal --}}
+                        <div id="visor-skeleton" class="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 z-0">
+                            <div class="w-48 h-48 sm:w-64 sm:h-64 rounded-3xl bg-slate-100/90 animate-pulse flex flex-col items-center justify-center gap-2 text-slate-300/80 border border-slate-200/50 shadow-inner">
+                                <span class="material-symbols-outlined text-4xl sm:text-5xl animate-bounce text-slate-300" style="animation-duration: 2.2s;">photo_camera</span>
+                                <div class="w-20 h-2 bg-slate-200 rounded-full"></div>
+                            </div>
+                        </div>
+
                         {{-- Renderizado inicial directo desde Blade para descubrimiento LCP inmediato (fetchpriority=high y cero CLS) --}}
                         @if($fotoInicial && !empty($fotoInicial['src']))
                             <img id="img-zoom-target" 
@@ -101,12 +114,13 @@
                                  loading="eager"
                                  decoding="async"
                                  style="aspect-ratio: 1/1;"
-                                 class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-transform duration-150 ease-out" 
+                                 onload="window.manejarCargaImagenVisor?.(this)"
+                                 class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-all duration-200 ease-out relative z-10 opacity-0" 
                                  alt="{{ $producto->nombre }} - Foto {{ $indiceInicial + 1 }}">
                         @elseif($fotoInicial && $fotoInicial['es_svg'])
-                            <div class="max-h-full max-w-full flex items-center justify-center svg-container">{!! $fotoInicial['ruta'] !!}</div>
+                            <div class="max-h-full max-w-full flex items-center justify-center svg-container relative z-10">{!! $fotoInicial['ruta'] !!}</div>
                         @elseif($fotoInicial)
-                            <span class="material-symbols-outlined text-[150px] text-slate-700">{{ $fotoInicial['ruta'] }}</span>
+                            <span class="material-symbols-outlined text-[150px] text-slate-700 relative z-10">{{ $fotoInicial['ruta'] }}</span>
                         @endif
                     </div>
 
@@ -137,18 +151,23 @@
                                     class="h-16 w-16 sm:h-18 sm:w-18 shrink-0 rounded-2xl bg-white border-2 {{ $foto['index'] === $indiceInicial ? 'border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm scale-105' : 'border-slate-200/90 hover:border-slate-400 opacity-70 hover:opacity-100' }} flex items-center justify-center p-2 transition-all duration-200 relative group overflow-hidden">
                                 
                                 @if(!empty($foto['src']))
+                                    {{-- Skeleton pulsante para miniatura --}}
+                                    <div class="thumb-skeleton absolute inset-1.5 bg-slate-100 animate-pulse rounded-xl pointer-events-none transition-opacity duration-200"></div>
                                     <img src="{{ $foto['thumb'] ?? $foto['src'] }}" 
                                          alt="Miniatura {{ $foto['index'] + 1 }}" 
-                                         width="64" height="64" style="aspect-ratio: 1/1;" loading="lazy" decoding="async"
-                                         class="h-full w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-200 pointer-events-none">
+                                         width="64" height="64" style="aspect-ratio: 1/1;" 
+                                         loading="{{ $loop->index < 4 ? 'eager' : 'lazy' }}" 
+                                         decoding="async"
+                                         onload="this.previousElementSibling?.classList.add('opacity-0'); setTimeout(() => this.previousElementSibling?.remove(), 250); this.classList.remove('opacity-0');"
+                                         class="h-full w-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-200 pointer-events-none relative z-10 opacity-0">
                                 @elseif($foto['es_svg'])
-                                    <div class="h-7 w-7 flex items-center justify-center svg-container pointer-events-none">{!! $foto['ruta'] !!}</div>
+                                    <div class="h-7 w-7 flex items-center justify-center svg-container pointer-events-none relative z-10">{!! $foto['ruta'] !!}</div>
                                 @else
-                                    <span class="material-symbols-outlined text-[26px] text-slate-700 pointer-events-none">{{ $foto['ruta'] }}</span>
+                                    <span class="material-symbols-outlined text-[26px] text-slate-700 pointer-events-none relative z-10">{{ $foto['ruta'] }}</span>
                                 @endif
 
                                 @if($foto['es_principal'])
-                                    <span class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-emerald-500" title="Imagen Principal"></span>
+                                    <span class="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-emerald-500 z-20" title="Imagen Principal"></span>
                                 @endif
                             </button>
                         @endforeach
@@ -340,9 +359,24 @@
                         Código: <span class="text-blue-600 font-normal">{{ $producto->sku ?: 'PTL-LEV-493' }}</span>
                     </div>
 
-                    <!-- Marca (Logo en Recuadro + Nombre) -->
+                    <!-- Marca (Logo en Recuadro con Skeleton + Nombre) -->
                     <div class="flex items-center gap-3 my-0.5">
-                        @if($producto->marca_logo_html)
+                        @if($logoMarcaUrl)
+                            <div class="relative h-9 w-20 px-1.5 py-0.5 rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs shrink-0 overflow-hidden">
+                                {{-- Skeleton pulsante mientras carga el logo --}}
+                                <div id="marca-logo-skeleton" class="absolute inset-0 bg-slate-100 animate-pulse flex items-center justify-center pointer-events-none transition-opacity duration-300">
+                                    <div class="w-10 h-3 bg-slate-200 rounded-sm"></div>
+                                </div>
+                                <img src="{{ $logoMarcaUrl }}" 
+                                     alt="{{ $producto->marca ?: 'Marca' }}" 
+                                     width="85" 
+                                     height="28" 
+                                     loading="eager" 
+                                     decoding="async" 
+                                     onload="this.previousElementSibling?.classList.add('opacity-0'); setTimeout(() => this.previousElementSibling?.remove(), 250); this.classList.remove('opacity-0');"
+                                     class="h-6 max-h-7 max-w-[85px] object-contain select-none opacity-0 transition-opacity duration-200 relative z-10">
+                            </div>
+                        @elseif($producto->marca_logo_html)
                             <div class="h-9 w-20 px-1.5 py-0.5 rounded border border-slate-200 bg-white flex items-center justify-center shadow-2xs shrink-0">
                                 {!! $producto->marca_logo_html !!}
                             </div>
@@ -764,69 +798,155 @@
     let indiceActual = {{ $indiceInicial }};
     const totalImagenes = galeriaImagenes.length;
 
-    // Renderizar imagen en el visor principal con transición suave
+    // Caché en memoria de objetos Image para precarga instantánea (0ms de espera)
+    const cacheImagenes = {};
+
+    // Ocultar skeleton y revelar imagen con transición suave
+    function manejarCargaImagenVisor(img) {
+        if (!img) return;
+        img.classList.remove('opacity-0');
+        img.classList.add('opacity-100');
+        const skeleton = document.getElementById('visor-skeleton');
+        if (skeleton) {
+            skeleton.classList.add('opacity-0');
+        }
+    }
+
+    // Precargar todas las fotos de la galería en segundo plano tan pronto el navegador esté inactivo
+    function precargarGaleriaCompleta() {
+        if (!galeriaImagenes || galeriaImagenes.length <= 1) return;
+
+        const tareaPrecarga = () => {
+            galeriaImagenes.forEach((foto, idx) => {
+                if (foto.src) {
+                    const img = new Image();
+                    img.decoding = 'async';
+                    img.src = foto.src;
+                    cacheImagenes[foto.src] = img;
+                }
+            });
+        };
+
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(tareaPrecarga, { timeout: 1200 });
+        } else {
+            setTimeout(tareaPrecarga, 150);
+        }
+    }
+
+    // Actualizar estados visuales de las miniaturas inferiores
+    function actualizarMiniaturas(indice) {
+        galeriaImagenes.forEach((_, idx) => {
+            const btn = document.getElementById(`miniatura-btn-${idx}`);
+            if (btn) {
+                if (idx === indice) {
+                    btn.className = 'h-16 w-16 sm:h-18 sm:w-18 shrink-0 rounded-2xl bg-white border-2 border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm scale-105 flex items-center justify-center p-2 transition-all duration-200 relative group overflow-hidden';
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    btn.className = 'h-16 w-16 sm:h-18 sm:w-18 shrink-0 rounded-2xl bg-white border-2 border-slate-200/90 hover:border-slate-400 opacity-70 hover:opacity-100 flex items-center justify-center p-2 transition-all duration-200 relative group overflow-hidden';
+                }
+            }
+        });
+    }
+
+    // Renderizar imagen en el visor principal sin retardos artificiales
     function renderizarVisor(indice, animar = true) {
         if (!galeriaImagenes || galeriaImagenes.length === 0) return;
         indiceActual = (indice + totalImagenes) % totalImagenes;
         const foto = galeriaImagenes[indiceActual];
         const visor = document.getElementById('imagen-principal-visor');
+        const skeleton = document.getElementById('visor-skeleton');
         if (!visor) return;
 
-        if (animar) {
-            visor.style.opacity = '0';
-            visor.style.transform = 'scale(0.96)';
+        // Actualizar miniaturas, contador y lightbox de inmediato
+        actualizarMiniaturas(indiceActual);
+        const contadorEl = document.getElementById('visor-contador-texto');
+        if (contadorEl) {
+            contadorEl.textContent = `${indiceActual + 1} / ${totalImagenes}`;
+        }
+        actualizarLightboxContenido();
+
+        if (!foto.src) {
+            if (skeleton) skeleton.classList.add('opacity-0');
+            if (foto.es_svg) {
+                visor.innerHTML = `<div class="max-h-full max-w-full flex items-center justify-center svg-container relative z-10">${foto.ruta}</div>`;
+            } else {
+                visor.innerHTML = `<span class="material-symbols-outlined text-[150px] text-slate-700 relative z-10">${foto.ruta}</span>`;
+            }
+            return;
         }
 
-        setTimeout(() => {
-            const yaRenderizado = !animar && document.getElementById('img-zoom-target');
-            if (!yaRenderizado) {
-                if (foto.src) {
-                    visor.innerHTML = `
-                        <img id="img-zoom-target" 
-                             src="${foto.src}" 
-                             width="600"
-                             height="600"
-                             style="aspect-ratio: 1/1;"
-                             decoding="async"
-                             class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-transform duration-150 ease-out" 
-                             alt="{{ $producto->nombre }} - Foto ${indiceActual + 1}">
-                    `;
-                } else if (foto.es_svg) {
-                    visor.innerHTML = `<div class="max-h-full max-w-full flex items-center justify-center svg-container">${foto.ruta}</div>`;
-                } else {
-                    visor.innerHTML = `<span class="material-symbols-outlined text-[150px] text-slate-700">${foto.ruta}</span>`;
+        let imgActual = document.getElementById('img-zoom-target');
+
+        // Verificar si la imagen ya está cargada en memoria
+        let imgCachada = cacheImagenes[foto.src];
+        if (!imgCachada) {
+            imgCachada = new Image();
+            imgCachada.src = foto.src;
+            cacheImagenes[foto.src] = imgCachada;
+        }
+
+        const estaLista = imgCachada.complete && imgCachada.naturalWidth > 0;
+
+        if (estaLista) {
+            // Cambio instantáneo (0ms): la imagen ya está en memoria
+            if (skeleton) skeleton.classList.add('opacity-0');
+            if (imgActual) {
+                if (animar) {
+                    imgActual.style.opacity = '0.4';
+                    imgActual.style.transform = 'scale(0.97)';
                 }
+                imgActual.src = foto.src;
+                imgActual.alt = `{{ $producto->nombre }} - Foto ${indiceActual + 1}`;
+                requestAnimationFrame(() => {
+                    imgActual.classList.remove('opacity-0');
+                    imgActual.style.opacity = '1';
+                    imgActual.style.transform = 'scale(1)';
+                });
+            } else {
+                visor.innerHTML = `
+                    <div id="visor-skeleton" class="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 opacity-0 z-0">
+                        <div class="w-48 h-48 sm:w-64 sm:h-64 rounded-3xl bg-slate-100/90 animate-pulse flex flex-col items-center justify-center gap-2 text-slate-300 border border-slate-200/50 shadow-inner">
+                            <span class="material-symbols-outlined text-4xl sm:text-5xl animate-bounce text-slate-300">photo_camera</span>
+                        </div>
+                    </div>
+                    <img id="img-zoom-target" 
+                         src="${foto.src}" 
+                         width="600" 
+                         height="600" 
+                         style="aspect-ratio: 1/1;"
+                         decoding="async"
+                         class="max-h-full max-w-full object-contain mix-blend-multiply select-none transition-all duration-200 ease-out relative z-10 opacity-100" 
+                         alt="{{ $producto->nombre }} - Foto ${indiceActual + 1}">
+                `;
+            }
+        } else {
+            // Aún descargando: mostrar skeleton mientras carga
+            if (skeleton) skeleton.classList.remove('opacity-0');
+            if (imgActual) {
+                imgActual.classList.add('opacity-0');
             }
 
-            // Actualizar lightbox si está abierto
-            actualizarLightboxContenido();
-
-            // Actualizar texto del contador
-            const contadorEl = document.getElementById('visor-contador-texto');
-            if (contadorEl) {
-                contadorEl.textContent = `${indiceActual + 1} / ${totalImagenes}`;
-            }
-
-            // Actualizar estado activo en las miniaturas
-            galeriaImagenes.forEach((_, idx) => {
-                const btn = document.getElementById(`miniatura-btn-${idx}`);
-                if (btn) {
-                    if (idx === indiceActual) {
-                        btn.className = 'h-16 w-16 sm:h-18 sm:w-18 shrink-0 rounded-2xl bg-white border-2 border-emerald-500 ring-2 ring-emerald-500/20 shadow-sm scale-105 flex items-center justify-center p-2 transition-all duration-200 relative group overflow-hidden';
-                        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            imgCachada.onload = () => {
+                if (galeriaImagenes[indiceActual]?.src === foto.src) {
+                    if (skeleton) skeleton.classList.add('opacity-0');
+                    if (imgActual) {
+                        imgActual.src = foto.src;
+                        imgActual.alt = `{{ $producto->nombre }} - Foto ${indiceActual + 1}`;
+                        imgActual.classList.remove('opacity-0');
+                        imgActual.style.opacity = '1';
+                        imgActual.style.transform = 'scale(1)';
                     } else {
-                        btn.className = 'h-16 w-16 sm:h-18 sm:w-18 shrink-0 rounded-2xl bg-white border-2 border-slate-200/90 hover:border-slate-400 opacity-70 hover:opacity-100 flex items-center justify-center p-2 transition-all duration-200 relative group overflow-hidden';
+                        renderizarVisor(indiceActual, false);
                     }
                 }
-            });
+            };
 
-            if (animar) {
-                requestAnimationFrame(() => {
-                    visor.style.opacity = '1';
-                    visor.style.transform = 'scale(1)';
-                });
-            }
-        }, animar ? 120 : 0);
+            imgCachada.onerror = () => {
+                if (skeleton) skeleton.classList.add('opacity-0');
+                if (imgActual) imgActual.classList.remove('opacity-0');
+            };
+        }
     }
 
     // Navegación con botones Anterior / Siguiente
@@ -1160,13 +1280,29 @@
         });
     }
 
-    // Renderizar imagen inicial (ejecución inmediata: ya estamos al final del body,
-    // funciona tanto en carga inicial como al llegar vía wire:navigate)
-    renderizarVisor(indiceActual, false);
+    // Renderizar imagen inicial o verificar si ya está completa en el DOM
+    const imgInicialDOM = document.getElementById('img-zoom-target');
+    if (imgInicialDOM && imgInicialDOM.complete && imgInicialDOM.naturalWidth > 0) {
+        manejarCargaImagenVisor(imgInicialDOM);
+    } else {
+        renderizarVisor(indiceActual, false);
+    }
+
+    // Verificar si el logo de la marca ya cargó
+    const logoMarcaDOM = document.querySelector('img[src="{{ $logoMarcaUrl }}"]');
+    if (logoMarcaDOM && logoMarcaDOM.complete && logoMarcaDOM.naturalWidth > 0) {
+        const logoSkeleton = document.getElementById('marca-logo-skeleton');
+        if (logoSkeleton) logoSkeleton.remove();
+        logoMarcaDOM.classList.remove('opacity-0');
+    }
+
+    // Disparar precarga en segundo plano de las restantes fotos de la galería
+    precargarGaleriaCompleta();
 
     // Exponer las funciones usadas por los atributos inline (onclick/onmousemove/...)
     // al scope global, re-enlazándolas en cada carga para que apunten a la
     // galería del producto actual tras una navegación SPA.
+    window.manejarCargaImagenVisor = manejarCargaImagenVisor;
     window.abrirLightbox = abrirLightbox;
     window.navegarImagen = navegarImagen;
     window.irAImagen = irAImagen;
