@@ -217,6 +217,14 @@
                                     Mi Perfil
                                 </a>
 
+                                {{-- Centro de Ayuda --}}
+                                <a href="https://pymedoc.rsfsecure.site/cliente/" target="_blank" rel="noopener noreferrer"
+                                    class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#006148] transition-colors">
+                                    <span class="material-symbols-outlined text-[18px] text-gray-400"
+                                        aria-hidden="true">help_outline</span>
+                                    Centro de Ayuda
+                                </a>
+
                                 <div class="my-1 h-px bg-gray-100 mx-3"></div>
 
                                 {{-- Cerrar sesión --}}

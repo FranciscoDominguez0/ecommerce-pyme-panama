@@ -47,6 +47,16 @@
                                 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                             </a>
                         </div>
+                        
+                        <div class="pt-2">
+                            <a href="https://pymedoc.rsfsecure.site/cliente/" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between text-slate-700 hover:text-emerald-700 font-medium text-sm">
+                                <span class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px] text-slate-400">help_outline</span>
+                                    <span>Centro de Ayuda</span>
+                                </span>
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">open_in_new</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

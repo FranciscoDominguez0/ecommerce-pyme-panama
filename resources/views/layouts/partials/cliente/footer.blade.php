@@ -30,6 +30,10 @@
                 <h4 class="text-[11px] font-bold text-white uppercase tracking-wider mb-3 text-[#8af5be]">Soporte
                 </h4>
                 <ul class="space-y-1.5 text-xs text-gray-300">
+                    <li><a href="https://pymedoc.rsfsecure.site/cliente/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-1 text-gray-300 hover:text-emerald-300">
+                        <span>Centro de Ayuda</span>
+                        <svg class="w-3 h-3 text-emerald-400 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a></li>
                     <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Preguntas Frecuentes</a></li>
                     <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Políticas de Envío</a></li>
                     <li><a href="{{ route('terminos') }}" wire:navigate class="hover:text-white transition-colors">Términos y
