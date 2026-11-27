@@ -42,6 +42,14 @@
         <!-- Notifications Livewire Component -->
         <livewire:admin.notificaciones-bell />
 
+        <!-- Enlace al Manual de Administración -->
+        <a href="https://pymedoc.rsfsecure.site/admin/" target="_blank" rel="noopener noreferrer"
+           title="Manual de Administración"
+           aria-label="Manual de Administración"
+           class="text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[20px]" aria-hidden="true">help</span>
+        </a>
+
         <div class="h-4 w-px bg-slate-200 shrink-0"></div>
 
         <!-- Perfil de usuario y desplegable -->
